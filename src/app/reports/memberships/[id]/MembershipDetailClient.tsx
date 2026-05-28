@@ -22,10 +22,11 @@ export default function MembershipDetailClient({ id }: { id: string }) {
         const membership = await fetchMembershipDetail(id);
         setData(membership);
         setCurrentMonth(new Date(membership.startDate)); // Start calendar at membership start date
-      } catch (error) {
-        showAlert("Failed to load membership details", "error");
+      } catch (err) {
+        showAlert("Data Error", "Failed to load the membership details from the server.", "error");
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     }
     loadData();
   // eslint-disable-next-line react-hooks/exhaustive-deps

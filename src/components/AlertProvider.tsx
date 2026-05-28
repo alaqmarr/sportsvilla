@@ -12,10 +12,35 @@ interface AlertContextType {
 const AlertContext = createContext<AlertContextType | undefined>(undefined);
 
 export function AlertProvider({ children }: { children: ReactNode }) {
-  const [alert, setAlert] = useState<{ message: string; type: AlertType } | null>(null);
+  const [alert, setAlert] = useState<{ title: string; message: string; type: AlertType } | null>(null);
 
-  const showAlert = (message: string, type: AlertType = "info") => {
-    setAlert({ message, type });
+  const showAlert = (titleOrMessage: string, messageOrType?: string, type?: AlertType) => {
+    let title = "";
+    let message = "";
+    let alertType: AlertType = "info";
+
+    if (type !== undefined) {
+      // 3 args: title, message, type
+      title = titleOrMessage;
+      message = messageOrType as string;
+      alertType = type;
+    } else if (messageOrType === "success" || messageOrType === "error" || messageOrType === "info") {
+      // 2 args: message, type
+      message = titleOrMessage;
+      alertType = messageOrType as AlertType;
+      title = alertType === 'success' ? 'Success' : alertType === 'error' ? 'Error' : 'Information';
+    } else if (messageOrType) {
+      // 2 args: title, message (default info)
+      title = titleOrMessage;
+      message = messageOrType;
+      alertType = "info";
+    } else {
+      // 1 arg: message
+      message = titleOrMessage;
+      alertType = "info";
+      title = 'Information';
+    }
+    setAlert({ title, message, type: alertType });
   };
 
   const closeAlert = () => {
@@ -26,7 +51,7 @@ export function AlertProvider({ children }: { children: ReactNode }) {
     <AlertContext.Provider value={{ showAlert }}>
       {children}
       {alert && (
-        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-[9999]">
+        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-[9999] p-4">
           <div className="bg-[#161923] border border-[#2a2d3e] rounded-xl p-8 w-full max-w-sm shadow-2xl text-center">
             <div className="flex justify-center mb-6">
               {alert.type === 'success' && <FiCheckCircle size={64} className="text-emerald-400" />}
@@ -34,9 +59,9 @@ export function AlertProvider({ children }: { children: ReactNode }) {
               {alert.type === 'info' && <FiInfo size={64} className="text-blue-400" />}
             </div>
             <h2 className="text-xl font-bold font-['Outfit'] text-white mb-3">
-              {alert.type === 'success' ? 'Success!' : alert.type === 'error' ? 'Oops, an Error!' : 'Information'}
+              {alert.title}
             </h2>
-            <p className="text-gray-400 text-base mb-8">{alert.message}</p>
+            <p className="text-gray-400 text-sm mb-8">{alert.message}</p>
             <button
               className={`w-full rounded-lg px-5 py-3 text-sm font-semibold cursor-pointer transition-colors ${
                 alert.type === 'error'

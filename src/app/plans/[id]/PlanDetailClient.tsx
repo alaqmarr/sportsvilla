@@ -20,10 +20,11 @@ export default function PlanDetailClient({ id }: { id: string }) {
       try {
         const data = await fetchPlanDetail(id);
         setPlan(data);
-      } catch (error) {
-        showAlert("Failed to load plan details", "error");
+      } catch (err) {
+        showAlert("Data Error", "Failed to load the detailed information for this plan.", "error");
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     }
     loadData();
   // eslint-disable-next-line react-hooks/exhaustive-deps

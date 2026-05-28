@@ -26,8 +26,8 @@ export default function MembershipReportClient() {
       const data = await fetchMembershipReports(startDate, endDate);
       setMemberships(data);
       setHasSearched(true);
-    } catch (error) {
-      showAlert("Failed to fetch membership data", "error");
+    } catch (err) {
+      showAlert("Data Error", "Failed to fetch membership data from the server. Please try again.", "error");
     }
     setLoading(false);
   };

@@ -41,15 +41,16 @@ export default function ReportClient() {
     try {
       const data = await fetchAttendanceReport(searchMobile);
       if (!data) {
-        showAlert("No member found with this number.", "error");
+        showAlert("Not Found", "We couldn't find any member registered with this mobile number.", "error");
         setReportData(null);
       } else {
         setReportData(data);
       }
     } catch (err) {
-      showAlert("Error fetching report", "error");
+      showAlert("Search Failed", "An unexpected error occurred while fetching the member's report.", "error");
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   }
 
   function getMembershipStats(m: any, allAttendances: any[]) {

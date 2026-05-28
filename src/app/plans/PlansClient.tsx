@@ -35,13 +35,15 @@ export default function PlansClient({ initialPlans, sports }: { initialPlans: an
     try {
       if (editingId) {
         await updatePlan(editingId, { name, sportId, durationInDays, price, slotsPerDay });
-        showAlert("Plan updated successfully!", "success");
+        showAlert("Plan Updated", `The membership plan '${name}' has been successfully updated.`, "success");
       } else {
-        await createPlan({ name, sportId, durationInDays, price, slotsPerDay });
-        showAlert("Plan created successfully!", "success");
+        await createPlan({ name, sportId, durationInDays: Number(durationInDays), price: Number(price), slotsPerDay: Number(slotsPerDay) });
+        showAlert("Plan Created", `A new membership plan '${name}' has been added to the catalog.`, "success");
       }
       setShowModal(false); window.location.reload();
-    } catch (err) { showAlert("Failed to save plan", "error"); }
+    } catch (err) {
+      showAlert("Save Failed", "There was an error saving the membership plan. Please verify the details.", "error");
+    }
     setLoading(false);
   }
 
@@ -50,8 +52,10 @@ export default function PlansClient({ initialPlans, sports }: { initialPlans: an
     try {
       await deletePlan(id);
       setPlans(plans.filter(p => p.id !== id));
-      showAlert("Plan deleted!", "success");
-    } catch (err) { showAlert("Failed to delete plan", "error"); }
+      showAlert("Plan Deleted", "The membership plan has been permanently removed.", "success");
+    } catch (err) {
+      showAlert("Deletion Blocked", "Cannot delete this plan because there are active members currently enrolled in it.", "error");
+    }
   }
 
   return (

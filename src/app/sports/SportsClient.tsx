@@ -30,13 +30,15 @@ export default function SportsClient({ initialSports }: { initialSports: any[] }
     try {
       if (editingId) {
         await updateSport(editingId, { name, description });
-        showAlert("Sport updated successfully!", "success");
+        showAlert("Sport Updated", `The details for '${name}' have been successfully updated.`, "success");
       } else {
         await createSport({ name, description });
-        showAlert("Sport created successfully!", "success");
+        showAlert("Sport Added", `The sport '${name}' has been successfully added to your catalog.`, "success");
       }
       setShowModal(false); window.location.reload();
-    } catch (err) { showAlert("Failed to save sport", "error"); }
+    } catch (err) {
+      showAlert("Save Failed", "There was an unexpected error while trying to save this sport.", "error");
+    }
     setLoading(false);
   }
 
@@ -45,8 +47,10 @@ export default function SportsClient({ initialSports }: { initialSports: any[] }
     try {
       await deleteSport(id);
       setSports(sports.filter(s => s.id !== id));
-      showAlert("Sport deleted!", "success");
-    } catch (err) { showAlert("Failed to delete sport", "error"); }
+      showAlert("Sport Deleted", "The sport has been permanently removed.", "success");
+    } catch (err) {
+      showAlert("Deletion Blocked", "Cannot delete this sport because it is currently linked to active membership plans or turfs.", "error");
+    }
   }
 
   return (

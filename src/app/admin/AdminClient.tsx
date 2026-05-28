@@ -22,9 +22,9 @@ export default function AdminClient({ initialAdmins }: { initialAdmins: any[] })
       setName("");
       setEmail("");
       setPassword("");
-      showAlert("Admin created!", "success");
+      showAlert("Admin Created", `The admin account '${name}' has been successfully created.`, "success");
     } catch (err) {
-      showAlert("Failed to create admin", "error");
+      showAlert("Creation Failed", "There was an error creating the admin account. The username might already be in use.", "error");
     }
     setLoading(false);
   }
@@ -34,9 +34,9 @@ export default function AdminClient({ initialAdmins }: { initialAdmins: any[] })
     try {
       await deleteAdmin(id);
       setAdmins(admins.filter(a => a.id !== id));
-      showAlert("Admin deleted!", "success");
+      showAlert("Admin Deleted", "The admin account has been permanently removed.", "success");
     } catch (err) {
-      showAlert("Failed to delete admin", "error");
+      showAlert("Deletion Failed", "Cannot delete this admin account right now.", "error");
     }
   }
 

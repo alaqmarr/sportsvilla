@@ -27,15 +27,15 @@ export default function AttendanceReportClient({ plans }: { plans: any[] }) {
       const data = await fetchAdvancedAttendance(startDate, endDate, startTime, endTime, selectedPlanId);
       setAttendances(data);
       setHasSearched(true);
-    } catch (error) {
-      showAlert("Failed to fetch attendance data", "error");
+    } catch (err) {
+      showAlert("Data Error", "Failed to fetch attendance data from the server. Please try again later.", "error");
     }
     setLoading(false);
   };
 
   const handleExportCSV = () => {
     if (attendances.length === 0) {
-      showAlert("No data to export", "info");
+      showAlert("Export Failed", "There is no attendance data available to export for the selected filters.", "info");
       return;
     }
 

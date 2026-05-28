@@ -60,14 +60,14 @@ export default function MembersClient({ initialMembers, plans }: { initialMember
     try {
       if (editingId) {
         await updateMember(editingId, { name, mobile, email });
-        showAlert("Member updated successfully!", "success");
+        showAlert("Update Successful", "The member's profile has been updated in the database.", "success");
       } else {
         await createMember({ name, mobile, email });
-        showAlert("Member registered successfully!", "success");
+        showAlert("Registration Complete", `${name} has been successfully registered to Sportsvilla!`, "success");
       }
       setShowMemberModal(false); window.location.reload();
     } catch (err) {
-      showAlert("Failed to save member details.", "error");
+      showAlert("Registration Failed", "We couldn't save the member details. Please check the information and try again.", "error");
     }
     setLoading(false);
   }
@@ -77,18 +77,18 @@ export default function MembersClient({ initialMembers, plans }: { initialMember
     try {
       await deleteMember(id);
       setMembers(members.filter(m => m.id !== id));
-      showAlert("Member deleted permanently.", "success");
+      showAlert("Member Deleted", "The member has been permanently removed from the system.", "success");
     } catch(err) {
-      showAlert("Cannot delete member. They may have active plans.", "error");
+      showAlert("Deletion Blocked", "Cannot delete this member because they have active or past memberships tied to their account.", "error");
     }
   }
 
   async function handleAssignPlan(e: React.FormEvent) {
     e.preventDefault();
-    if (!assignMobile || !assignPlanId) return showAlert("Mobile number and plan are required", "error");
+    if (!assignMobile || !assignPlanId) return showAlert("Missing Information", "Please provide both a mobile number and select a plan to continue.", "error");
     
     if (!existingAssignMember && !assignName) {
-      return showAlert("Member doesn't exist. Please provide their Name to create them.", "error");
+      return showAlert("Name Required", "This mobile number is new. Please provide a Full Name to register them automatically.", "error");
     }
 
     setAssignLoading(true);
@@ -100,10 +100,10 @@ export default function MembersClient({ initialMembers, plans }: { initialMember
         planId: assignPlanId, 
         startDate 
       });
-      showAlert("Membership Plan assigned successfully!", "success");
+      showAlert("Plan Assigned", "The membership plan has been successfully activated for this member.", "success");
       setShowPlanModal(false); window.location.reload();
     } catch (err: any) {
-      showAlert(err.message || "Failed to assign membership plan", "error");
+      showAlert("Assignment Failed", err.message || "There was an issue assigning the membership plan. Please try again.", "error");
     }
     setAssignLoading(false);
   }
@@ -127,8 +127,8 @@ export default function MembersClient({ initialMembers, plans }: { initialMember
       const doc = new jsPDF({ orientation: "landscape", unit: "px", format: [856, 540] });
       doc.addImage(canvas.toDataURL('image/png'), 'PNG', 0, 0, 856, 540);
       doc.save(`Sportsvilla_ID_${idCardData.name.replace(/\s+/g, '_')}.pdf`);
-      showAlert("ID Card PDF Downloaded!", "success");
-    } catch(e) { showAlert("Error generating PDF", "error"); }
+      showAlert("PDF Downloaded", "The high-resolution ID Card PDF has been downloaded to your device.", "success");
+    } catch(e) { showAlert("Export Failed", "We encountered an error while generating the PDF.", "error"); }
     setGeneratingIdCard(false);
   }
 
@@ -141,8 +141,8 @@ export default function MembersClient({ initialMembers, plans }: { initialMember
       a.href = canvas.toDataURL('image/png');
       a.download = `Sportsvilla_ID_${idCardData.name.replace(/\s+/g, '_')}.png`;
       a.click();
-      showAlert("ID Card Image Downloaded!", "success");
-    } catch(e) { showAlert("Error generating PNG", "error"); }
+      showAlert("Image Downloaded", "The high-resolution ID Card image has been downloaded to your device.", "success");
+    } catch(e) { showAlert("Export Failed", "We encountered an error while generating the image.", "error"); }
     setGeneratingIdCard(false);
   }
 
@@ -173,7 +173,7 @@ export default function MembersClient({ initialMembers, plans }: { initialMember
               text: text,
               files: [file]
             });
-            showAlert("Shared successfully!", "success");
+            showAlert("Share Successful", "The ID card has been shared directly via your device.", "success");
             setGeneratingIdCard(false);
             return;
           } catch (err) {
@@ -186,8 +186,8 @@ export default function MembersClient({ initialMembers, plans }: { initialMember
           await navigator.clipboard.write([
             new ClipboardItem({ 'image/png': blob })
           ]);
-          showAlert("ID Card copied to clipboard! Just paste it in the WhatsApp chat.", "info");
-          setTimeout(() => fallbackWhatsApp(text), 1500);
+          showAlert("Image Copied", "The ID Card image has been copied to your clipboard. Just paste it into the WhatsApp chat that opens next!", "info");
+          setTimeout(() => fallbackWhatsApp(text), 2000);
         } catch (err) {
           // 3. Ultimate Fallback: Just open text
           fallbackWhatsApp(text);
@@ -197,7 +197,7 @@ export default function MembersClient({ initialMembers, plans }: { initialMember
       }, 'image/png');
       
     } catch(e) {
-      showAlert("Error preparing share", "error");
+      showAlert("Share Failed", "We encountered an unexpected error while preparing the ID Card for sharing.", "error");
       setGeneratingIdCard(false);
     }
   }

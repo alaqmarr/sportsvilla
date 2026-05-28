@@ -22,12 +22,12 @@ export default function AttendanceClient({ initialRecords }: { initialRecords: a
     try {
       const data = await fetchMemberByMobile(searchMobile);
       if (!data) {
-        showAlert("Member not found", "error");
+        showAlert("Member Not Found", "We couldn't find a member matching this mobile number.", "error");
         setMember(null);
       } else {
         setMember(data);
       }
-    } catch (err) { showAlert("Error searching member", "error"); }
+    } catch (err) { showAlert("Error", "An error occurred while searching for the member.", "error"); }
     setLoading(false);
   }
 
@@ -40,7 +40,7 @@ export default function AttendanceClient({ initialRecords }: { initialRecords: a
         membershipPlanId: planId,
         sportId: sportId
       });
-      showAlert("Check-in successful!", "success");
+      showAlert("Check-in Successful", "Member has been successfully checked in.", "success");
       
       // Update local timeline
       setRecords([newRecord, ...records]);
@@ -49,7 +49,7 @@ export default function AttendanceClient({ initialRecords }: { initialRecords: a
       setMember(null);
       setMobile("");
     } catch (err: any) {
-      showAlert(err.message || "Failed to mark attendance", "error");
+      showAlert("Check-in Failed", err.message || "There was an issue marking the attendance.", "error");
     }
     setProcessingId("");
   }

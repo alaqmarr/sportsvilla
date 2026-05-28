@@ -31,13 +31,15 @@ export default function TurfsClient({ initialTurfs }: { initialTurfs: any[] }) {
     try {
       if (editingId) {
         await updateTurf(editingId, { name, location, parentTurfId: parentTurfId || null });
-        showAlert("Turf updated!", "success");
+        showAlert("Turf Updated", `The details for '${name}' have been successfully updated.`, "success");
       } else {
         await createTurf({ name, location, parentTurfId: parentTurfId || null });
-        showAlert("Turf created!", "success");
+        showAlert("Turf Created", `The new turf '${name}' has been successfully created.`, "success");
       }
       setShowModal(false); window.location.reload();
-    } catch (err) { showAlert("Failed to save turf", "error"); }
+    } catch (err) {
+      showAlert("Save Failed", "There was an unexpected error while trying to save this turf.", "error");
+    }
     setLoading(false);
   }
 
@@ -46,8 +48,10 @@ export default function TurfsClient({ initialTurfs }: { initialTurfs: any[] }) {
     try {
       await deleteTurf(id);
       setTurfs(turfs.filter(t => t.id !== id));
-      showAlert("Turf deleted!", "success");
-    } catch (err) { showAlert("Failed to delete turf", "error"); }
+      showAlert("Turf Deleted", "The turf has been permanently removed.", "success");
+    } catch (err) {
+      showAlert("Deletion Blocked", "Cannot delete this turf because there are active sessions or children turfs linked to it.", "error");
+    }
   }
 
   return (
