@@ -40,48 +40,43 @@ a {
   background: rgba(255, 255, 255, 0.2);
 }
 
-/* Premium ID Card Styles - Apple Wallet / Obsidian Glassmorphic */
+/* Premium ID Card Styles - Native High Res CR80 */
 .id-card-wrapper {
-  width: 380px;
-  height: 240px;
+  width: 856px;
+  height: 540px;
   background: linear-gradient(135deg, #18191c 0%, #0d0e12 100%);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 20px;
+  border: 2px solid rgba(255, 255, 255, 0.08);
+  border-radius: 0px;
   color: white;
-  font-family: 'Outfit', sans-serif;
+  font-family: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   position: relative;
   overflow: hidden;
-  box-shadow: 
-    0 20px 40px -10px rgba(0, 0, 0, 0.7), 
-    inset 0 1px 0 rgba(255, 255, 255, 0.15),
-    inset 0 0 20px rgba(249, 115, 22, 0.05);
+  box-sizing: border-box;
 }
 
 /* Background Accents */
 .id-card-wrapper::before {
   content: '';
   position: absolute;
-  top: -60px;
-  right: -60px;
-  width: 250px;
-  height: 250px;
+  top: -150px;
+  right: -150px;
+  width: 500px;
+  height: 500px;
   background: radial-gradient(circle, rgba(249, 115, 22, 0.18) 0%, transparent 60%);
   border-radius: 50%;
   pointer-events: none;
-  filter: blur(20px);
 }
 
 .id-card-wrapper::after {
   content: '';
   position: absolute;
-  bottom: -60px;
-  left: -60px;
-  width: 200px;
-  height: 200px;
+  bottom: -150px;
+  left: -150px;
+  width: 450px;
+  height: 450px;
   background: radial-gradient(circle, rgba(16, 185, 129, 0.12) 0%, transparent 60%);
   border-radius: 50%;
   pointer-events: none;
-  filter: blur(20px);
 }
 
 /* Texture Overlay */
@@ -95,7 +90,7 @@ a {
 
 /* Inner Container for html2canvas padding fix */
 .id-card-inner {
-  padding: 24px;
+  padding: 48px;
   width: 100%;
   height: 100%;
   display: flex;
@@ -115,31 +110,30 @@ a {
 .id-card-brand-group {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 16px;
 }
 
 .id-card-logo-icon {
-  width: 24px;
-  height: 24px;
+  width: 56px;
+  height: 56px;
   background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
-  border-radius: 6px;
+  border-radius: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 4px 10px rgba(249, 115, 22, 0.3);
 }
 
 .id-card-logo-icon svg {
   color: white;
-  width: 14px;
-  height: 14px;
+  width: 32px;
+  height: 32px;
 }
 
 .id-card-brand {
-  font-family: 'Outfit', sans-serif;
+  font-family: ui-sans-serif, system-ui, sans-serif;
   font-weight: 800;
-  font-size: 20px;
-  letter-spacing: 3px;
+  font-size: 42px;
+  letter-spacing: 4px;
   color: #ffffff;
   text-transform: uppercase;
 }
@@ -147,77 +141,71 @@ a {
 .id-card-badge {
   background: rgba(16, 185, 129, 0.1);
   color: #34d399;
-  border: 1px solid rgba(52, 211, 153, 0.3);
-  font-size: 11px;
+  border: 2px solid rgba(52, 211, 153, 0.3);
+  font-size: 24px;
   font-weight: 800;
   text-transform: uppercase;
-  letter-spacing: 1.5px;
-  padding: 6px 10px;
-  border-radius: 12px;
-  box-shadow: 0 0 10px rgba(16, 185, 129, 0.1);
-  font-family: 'Outfit', sans-serif;
+  letter-spacing: 2px;
+  padding: 12px 24px;
+  border-radius: 30px;
+  font-family: ui-sans-serif, system-ui, sans-serif;
 }
 
 .id-card-body {
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
-  margin-top: 10px;
+  margin-top: 20px;
 }
 
-/* Ensure spaces aren't swallowed by using word-spacing */
 .id-card-name {
-  font-family: 'Outfit', sans-serif;
-  font-size: 26px;
+  font-family: ui-sans-serif, system-ui, sans-serif;
+  font-size: 56px;
   font-weight: 800;
-  margin-bottom: 16px;
-  word-spacing: 2px;
+  margin-bottom: 32px;
   line-height: 1.1;
   color: #ffffff;
-  letter-spacing: -0.5px;
+  letter-spacing: -1px;
 }
 
 .id-card-details-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 16px 24px;
+  gap: 32px 48px;
 }
 
 .id-card-detail-group {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 8px;
 }
 
 .id-card-label {
-  font-size: 10px;
+  font-size: 20px;
   text-transform: uppercase;
-  letter-spacing: 1.5px;
+  letter-spacing: 2px;
   color: #94a3b8;
   font-weight: 700;
-  font-family: 'Inter', sans-serif;
 }
 
 .id-card-value {
-  font-size: 14px;
+  font-size: 32px;
   font-weight: 600;
   color: #e2e8f0;
-  font-family: 'Inter', sans-serif;
 }
 
 .id-card-qr-container {
   background: white;
-  padding: 8px;
-  border-radius: 12px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4), 0 0 0 4px rgba(255, 255, 255, 0.05);
+  padding: 16px;
+  border-radius: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
-  transform: translateY(-5px);
+  transform: translateY(-10px);
 }
 
 .id-card-qr {
-  width: 80px;
-  height: 80px;
+  width: 160px;
+  height: 160px;
   display: block;
 }
