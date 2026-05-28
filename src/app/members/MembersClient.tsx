@@ -155,7 +155,7 @@ export default function MembersClient({ initialMembers, plans }: { initialMember
     setGeneratingIdCard(true);
     try {
       const portalUrl = window.location.origin + "/m/" + idCardData.mobile;
-      const text = `Hi ${idCardData.name},\n\nWelcome to Sportsvilla! \n\nYou can view your Digital ID Card, active memberships, and check-in history directly from your personal portal here:\n${portalUrl}`;
+      const text = `🏆 *Welcome to Sportsvilla, ${idCardData.name}!* 🏆\n\nWe are thrilled to have you onboard. Your premium membership is now active!\n\n📲 *Access your Digital ID & Portal:*\n${portalUrl}\n\n_Use this link to view your Digital ID Card, track your check-ins, and manage your active memberships._\n\nSee you at the club! 🏃‍♂️💨`;
       
       const canvas = await generateCanvas();
       if (!canvas) throw new Error("No canvas");
@@ -396,18 +396,30 @@ export default function MembersClient({ initialMembers, plans }: { initialMember
             
             <div className="flex justify-center mb-6 sm:mb-8 transform scale-[0.75] sm:scale-[0.85] origin-top h-[165px] sm:h-[180px]">
               <div ref={idCardRef} className="id-card-wrapper" style={{ margin: '0 auto' }}>
+                <div className="id-card-texture"></div>
                 <div className="id-card-inner">
                   <div className="id-card-header">
-                    <div className="id-card-brand">SPORTSVILLA</div>
-                    <div className="id-card-badge">Premium</div>
+                    <div className="id-card-brand-group">
+                      <div className="id-card-logo-icon">
+                        <svg stroke="currentColor" fill="none" strokeWidth="2.5" viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round" xmlns="http://www.w3.org/2000/svg"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+                      </div>
+                      <div className="id-card-brand">SPORTSVILLA</div>
+                    </div>
+                    <div className="id-card-badge">Pro Member</div>
                   </div>
                   <div className="id-card-body">
-                    <div style={{ flex: 1 }}>
+                    <div style={{ flex: 1, paddingRight: '16px' }}>
                       <div className="id-card-name">{idCardData.name}</div>
-                      <div className="id-card-label">Mobile</div>
-                      <div className="id-card-value">{idCardData.mobile}</div>
-                      <div className="id-card-label">Member Since</div>
-                      <div className="id-card-value">{format(new Date(idCardData.joinDate), 'MMM d, yyyy')}</div>
+                      <div className="id-card-details-grid">
+                        <div className="id-card-detail-group">
+                          <div className="id-card-label">Mobile</div>
+                          <div className="id-card-value">{idCardData.mobile}</div>
+                        </div>
+                        <div className="id-card-detail-group">
+                          <div className="id-card-label">Member Since</div>
+                          <div className="id-card-value">{format(new Date(idCardData.joinDate), 'MMM d, yyyy')}</div>
+                        </div>
+                      </div>
                     </div>
                     <div>
                       {qrCodeData && (
