@@ -51,7 +51,7 @@ export default function PortalClient({ member, activePlans, expiredPlans, attend
         </div>
 
         {/* The ID Card */}
-        <div className="flex justify-center mb-10" style={{ transform: 'scale(0.4)', transformOrigin: 'top center', height: '216px' }}>
+        <div className="flex justify-center w-full mb-10">
           <div className="id-card-wrapper" style={{ margin: '0 auto' }}>
               <div className="id-card-texture"></div>
               <div className="id-card-inner">

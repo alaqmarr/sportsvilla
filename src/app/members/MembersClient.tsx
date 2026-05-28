@@ -116,7 +116,7 @@ export default function MembersClient({ initialMembers, plans }: { initialMember
 
   async function generateCanvas() {
     if (!idCardRef.current) return null;
-    return await html2canvas(idCardRef.current, { scale: 2, useCORS: true, backgroundColor: null });
+    return await html2canvas(idCardRef.current, { scale: 4, useCORS: true, backgroundColor: null });
   }
 
   async function downloadPDF() {
@@ -394,7 +394,7 @@ export default function MembersClient({ initialMembers, plans }: { initialMember
               <button className="text-gray-500 hover:text-white cursor-pointer bg-transparent border-none text-xl" onClick={() => setShowIdCardModal(false)}><FiX /></button>
             </div>
             
-            <div className="flex justify-center mb-6 sm:mb-8" style={{ transform: 'scale(0.4)', transformOrigin: 'top center', height: '216px' }}>
+            <div className="flex justify-center w-full mb-6 sm:mb-8">
               <div ref={idCardRef} className="id-card-wrapper" style={{ margin: '0 auto' }}>
                 <div className="id-card-texture"></div>
                 <div className="id-card-inner">

@@ -40,12 +40,14 @@ a {
   background: rgba(255, 255, 255, 0.2);
 }
 
-/* Premium ID Card Styles - Native High Res CR80 */
+/* Premium ID Card Styles - Responsive CR80 using Container Queries */
 .id-card-wrapper {
-  width: 856px;
-  height: 540px;
+  container-type: inline-size;
+  width: 100%;
+  max-width: 420px;
+  aspect-ratio: 856 / 540;
   background: linear-gradient(135deg, #18191c 0%, #0d0e12 100%);
-  border: 2px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 0px;
   color: white;
   font-family: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
@@ -58,10 +60,10 @@ a {
 .id-card-wrapper::before {
   content: '';
   position: absolute;
-  top: -150px;
-  right: -150px;
-  width: 500px;
-  height: 500px;
+  top: -17.5cqw;
+  right: -17.5cqw;
+  width: 58.4cqw;
+  height: 58.4cqw;
   background: radial-gradient(circle, rgba(249, 115, 22, 0.18) 0%, transparent 60%);
   border-radius: 50%;
   pointer-events: none;
@@ -70,10 +72,10 @@ a {
 .id-card-wrapper::after {
   content: '';
   position: absolute;
-  bottom: -150px;
-  left: -150px;
-  width: 450px;
-  height: 450px;
+  bottom: -17.5cqw;
+  left: -17.5cqw;
+  width: 52.5cqw;
+  height: 52.5cqw;
   background: radial-gradient(circle, rgba(16, 185, 129, 0.12) 0%, transparent 60%);
   border-radius: 50%;
   pointer-events: none;
@@ -88,9 +90,9 @@ a {
   z-index: 1;
 }
 
-/* Inner Container for html2canvas padding fix */
+/* Inner Container */
 .id-card-inner {
-  padding: 48px;
+  padding: 5.6cqw;
   width: 100%;
   height: 100%;
   display: flex;
@@ -110,14 +112,14 @@ a {
 .id-card-brand-group {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 1.86cqw;
 }
 
 .id-card-logo-icon {
-  width: 56px;
-  height: 56px;
+  width: 6.54cqw;
+  height: 6.54cqw;
   background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
-  border-radius: 12px;
+  border-radius: 1.4cqw;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -125,15 +127,15 @@ a {
 
 .id-card-logo-icon svg {
   color: white;
-  width: 32px;
-  height: 32px;
+  width: 3.73cqw;
+  height: 3.73cqw;
 }
 
 .id-card-brand {
   font-family: ui-sans-serif, system-ui, sans-serif;
   font-weight: 800;
-  font-size: 42px;
-  letter-spacing: 4px;
+  font-size: 4.9cqw;
+  letter-spacing: 0.46cqw;
   color: #ffffff;
   text-transform: uppercase;
 }
@@ -142,12 +144,12 @@ a {
   background: rgba(16, 185, 129, 0.1);
   color: #34d399;
   border: 2px solid rgba(52, 211, 153, 0.3);
-  font-size: 24px;
+  font-size: 2.8cqw;
   font-weight: 800;
   text-transform: uppercase;
-  letter-spacing: 2px;
-  padding: 12px 24px;
-  border-radius: 30px;
+  letter-spacing: 0.23cqw;
+  padding: 1.4cqw 2.8cqw;
+  border-radius: 3.5cqw;
   font-family: ui-sans-serif, system-ui, sans-serif;
 }
 
@@ -155,57 +157,57 @@ a {
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
-  margin-top: 20px;
+  margin-top: 2.33cqw;
 }
 
 .id-card-name {
   font-family: ui-sans-serif, system-ui, sans-serif;
-  font-size: 56px;
+  font-size: 6.54cqw;
   font-weight: 800;
-  margin-bottom: 32px;
+  margin-bottom: 3.73cqw;
   line-height: 1.1;
   color: #ffffff;
-  letter-spacing: -1px;
+  letter-spacing: -0.1cqw;
 }
 
 .id-card-details-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 32px 48px;
+  gap: 3.73cqw 5.6cqw;
 }
 
 .id-card-detail-group {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 0.93cqw;
 }
 
 .id-card-label {
-  font-size: 20px;
+  font-size: 2.33cqw;
   text-transform: uppercase;
-  letter-spacing: 2px;
+  letter-spacing: 0.23cqw;
   color: #94a3b8;
   font-weight: 700;
 }
 
 .id-card-value {
-  font-size: 32px;
+  font-size: 3.73cqw;
   font-weight: 600;
   color: #e2e8f0;
 }
 
 .id-card-qr-container {
   background: white;
-  padding: 16px;
-  border-radius: 20px;
+  padding: 1.86cqw;
+  border-radius: 2.33cqw;
   display: flex;
   align-items: center;
   justify-content: center;
-  transform: translateY(-10px);
+  transform: translateY(-1.16cqw);
 }
 
 .id-card-qr {
-  width: 160px;
-  height: 160px;
+  width: 18.69cqw;
+  height: 18.69cqw;
   display: block;
 }
