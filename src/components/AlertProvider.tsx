@@ -6,7 +6,7 @@ import { FiCheckCircle, FiXCircle, FiInfo } from "react-icons/fi";
 type AlertType = "success" | "error" | "info";
 
 interface AlertContextType {
-  showAlert: (message: string, type?: AlertType) => void;
+  showAlert: (titleOrMessage: string, messageOrType?: string, type?: AlertType) => void;
 }
 
 const AlertContext = createContext<AlertContextType | undefined>(undefined);
