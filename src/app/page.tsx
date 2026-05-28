@@ -3,30 +3,32 @@ import { FiUsers, FiActivity, FiCheckCircle } from "react-icons/fi";
 import { format } from "date-fns";
 
 export default async function Dashboard() {
-  const totalMembers = await prisma.member.count();
-  const activePlans = await prisma.memberMembership.count({
-    where: { status: "ACTIVE", endDate: { gte: new Date() } }
-  });
-  
   const todayStart = new Date();
   todayStart.setHours(0,0,0,0);
-  const todaysAttendance = await prisma.attendance.count({
-    where: { date: { gte: todayStart } }
-  });
-
+  
   const nextWeek = new Date();
   nextWeek.setDate(nextWeek.getDate() + 7);
-  const expiringMemberships = await prisma.memberMembership.findMany({
-    where: {
-      status: "ACTIVE",
-      endDate: {
-        gte: new Date(),
-        lte: nextWeek
-      }
-    },
-    include: { member: true, membershipPlan: { include: { sport: true } } },
-    orderBy: { endDate: "asc" }
-  });
+
+  const [totalMembers, activePlans, todaysAttendance, expiringMemberships] = await Promise.all([
+    prisma.member.count(),
+    prisma.memberMembership.count({
+      where: { status: "ACTIVE", endDate: { gte: new Date() } }
+    }),
+    prisma.attendance.count({
+      where: { date: { gte: todayStart } }
+    }),
+    prisma.memberMembership.findMany({
+      where: {
+        status: "ACTIVE",
+        endDate: {
+          gte: new Date(),
+          lte: nextWeek
+        }
+      },
+      include: { member: true, membershipPlan: { include: { sport: true } } },
+      orderBy: { endDate: "asc" }
+    })
+  ]);
 
   return (
     <div>
