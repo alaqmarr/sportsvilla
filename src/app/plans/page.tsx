@@ -5,6 +5,16 @@ export default async function PlansPage() {
   const plans = await prisma.membershipPlan.findMany({
     include: {
       sport: true,
+      _count: {
+        select: {
+          memberships: {
+            where: {
+              status: "ACTIVE",
+              endDate: { gte: new Date() }
+            }
+          }
+        }
+      }
     },
     orderBy: { createdAt: "desc" }
   });

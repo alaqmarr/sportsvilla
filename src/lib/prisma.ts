@@ -4,10 +4,11 @@ import { PrismaClient } from '../generated/client/client';
 
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
-});
+  ssl : { rejectUnauthorized: false }
+}) 
 const adapter = new PrismaPg(pool);
 const globalForPrisma = globalThis as unknown as {
-  prisma: PrismaClient | undefined;
+  prisma: PrismaClient| undefined;
 };
 
 export const prisma =

@@ -1,5 +1,17 @@
-import ReportClient from "./ReportClient";
+import { prisma } from "@/lib/prisma";
+import AttendanceReportClient from "./AttendanceReportClient";
 
-export default function AttendanceReportPage() {
-  return <ReportClient />;
+export const dynamic = "force-dynamic";
+
+export default async function AttendanceReportPage() {
+  const plans = await prisma.membershipPlan.findMany({
+    include: {
+      sport: true,
+    },
+    orderBy: {
+      name: "asc",
+    },
+  });
+
+  return <AttendanceReportClient plans={plans} />;
 }

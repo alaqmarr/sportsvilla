@@ -1,12 +1,14 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { createPlan, updatePlan, deletePlan } from "./actions";
 import { useAlert } from "@/components/AlertProvider";
-import { FiTrash2, FiEdit2, FiPlus, FiX, FiCheck, FiLayers } from "react-icons/fi";
+import { FiTrash2, FiEdit2, FiPlus, FiX, FiCheck, FiLayers, FiUsers } from "react-icons/fi";
 
 export default function PlansClient({ initialPlans, sports }: { initialPlans: any[], sports: any[] }) {
   const { showAlert } = useAlert();
+  const router = useRouter();
   const [plans, setPlans] = useState(initialPlans);
   const [showModal, setShowModal] = useState(false);
   
@@ -112,7 +114,18 @@ export default function PlansClient({ initialPlans, sports }: { initialPlans: an
               <li className="flex items-center gap-3">
                 <FiCheck className="text-emerald-400 text-lg flex-shrink-0" /> Access to {plan.sport.name} facilities
               </li>
+              <li className="flex items-center gap-3 text-orange-400 font-semibold mt-2 pt-2 border-t border-[#2a2d3e]">
+                <FiUsers className="text-lg flex-shrink-0" /> {plan._count?.memberships || 0} Active Enrollments
+              </li>
             </ul>
+            <div className="mt-6 pt-4 border-t border-[#2a2d3e]">
+              <button
+                onClick={() => router.push(`/plans/${plan.id}`)}
+                className="w-full bg-[#1c1f2e] hover:bg-[#2a2d3e] text-white border border-[#2a2d3e] rounded-lg px-4 py-2.5 text-sm font-semibold transition-colors cursor-pointer"
+              >
+                View Plan Details
+              </button>
+            </div>
           </div>
         ))}
       </div>

@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useAlert } from "@/components/AlertProvider";
 import { fetchAttendanceReport } from "./actions";
-import { format } from "date-fns";
+import { format, startOfMonth, endOfMonth, startOfWeek, endOfWeek, eachDayOfInterval, isSameMonth, isSameDay, addMonths, subMonths, isBefore, isAfter, startOfDay } from "date-fns";
 import { FiSearch, FiUser, FiCalendar, FiClock, FiActivity } from "react-icons/fi";
 
 export default function ReportClient() {
@@ -11,6 +11,28 @@ export default function ReportClient() {
   const [mobile, setMobile] = useState("");
   const [loading, setLoading] = useState(false);
   const [reportData, setReportData] = useState<any>(null);
+  const [currentMonth, setCurrentMonth] = useState(new Date());
+
+  const prevMonth = () => setCurrentMonth(subMonths(currentMonth, 1));
+  const nextMonth = () => setCurrentMonth(addMonths(currentMonth, 1));
+
+  const monthStart = startOfMonth(currentMonth);
+  const monthEnd = endOfMonth(currentMonth);
+  const startDateCalendar = startOfWeek(monthStart);
+  const endDateCalendar = endOfWeek(monthEnd);
+  const dateFormat = "d";
+  const rows = [];
+  
+  let days = [];
+  let day = startDateCalendar;
+  let formattedDate = "";
+  
+  while (day <= endDateCalendar) {
+    for (let i = 0; i < 7; i++) {
+      days.push(day);
+      day = new Date(day.getTime() + 24 * 60 * 60 * 1000); // add 1 day
+    }
+  }
 
   async function handleSearch(searchMobile: string) {
     if (searchMobile.length !== 10) return;
@@ -57,7 +79,7 @@ export default function ReportClient() {
   return (
     <div>
       <div className="mb-8">
-        <h1 className="text-2xl font-bold font-['Outfit'] text-white">Attendance Report</h1>
+        <h1 className="text-2xl font-bold font-['Outfit'] text-white">Member Report</h1>
         <p className="text-gray-500 mt-1 text-sm">View detailed check-in history and plan statistics for any member.</p>
       </div>
 
@@ -158,51 +180,85 @@ export default function ReportClient() {
             </div>
           </div>
 
-          {/* Detailed Attendance Timeline */}
+          {/* Calendar View */}
           <div className="lg:col-span-7">
             <div className="bg-[#161923] border border-[#2a2d3e] rounded-xl overflow-hidden flex flex-col h-[calc(100vh-160px)]">
               <div className="px-6 py-4 border-b border-[#2a2d3e] flex justify-between items-center shrink-0">
                 <h3 className="font-semibold font-['Outfit'] text-white flex items-center gap-2">
-                  <FiClock className="text-orange-400" /> Check-in Log
+                  <FiCalendar className="text-orange-400" /> Attendance Calendar
                 </h3>
-                <div className="bg-blue-500/10 text-blue-400 border border-blue-500/20 px-3 py-1 rounded-full text-xs font-semibold">
-                  {reportData.attendances.length} TOTAL VISITS
+                <div className="flex items-center gap-4">
+                  <button onClick={prevMonth} className="text-gray-400 hover:text-white transition-colors">&larr;</button>
+                  <span className="text-white font-bold font-['Outfit']">{format(currentMonth, 'MMMM yyyy')}</span>
+                  <button onClick={nextMonth} className="text-gray-400 hover:text-white transition-colors">&rarr;</button>
                 </div>
               </div>
               
-              <div className="flex-1 overflow-y-auto p-6 custom-scrollbar">
-                {reportData.attendances.length === 0 ? (
-                  <div className="h-full flex flex-col items-center justify-center gap-3">
-                    <FiClock size={28} className="text-gray-700" />
-                    <p className="text-gray-600 text-sm">No attendance records found.</p>
-                  </div>
-                ) : (
-                  <div className="relative border-l-2 border-[#2a2d3e] ml-3 pl-6 flex flex-col gap-6">
-                    {reportData.attendances.map((record: any) => (
-                      <div key={record.id} className="relative">
-                        <div className="absolute -left-[31px] top-1 w-3 h-3 rounded-full bg-emerald-500 ring-4 ring-[#161923]"></div>
-                        <div className="bg-[#1c1f2e] border border-[#2a2d3e] rounded-xl p-4 flex justify-between items-center">
-                          <div>
-                            <div className="text-white font-semibold flex items-center gap-2 mb-1">
-                              {format(new Date(record.date), 'EEEE, MMMM d, yyyy')}
-                            </div>
-                            <div className="inline-flex items-center gap-1 text-[10px] font-semibold uppercase tracking-wider text-orange-400 bg-orange-500/10 px-2 py-0.5 rounded-full mt-1">
-                              {record.sport?.name || record.membershipPlan?.sport?.name || 'Sport'}
-                            </div>
-                            {record.notes && (
-                              <div className="text-sm text-gray-400 mt-2 italic">Note: {record.notes}</div>
-                            )}
-                          </div>
-                          <div className="text-right shrink-0">
-                            <div className="text-xl font-bold font-['Outfit'] text-white leading-none">
-                              {format(new Date(record.date), 'h:mm a')}
-                            </div>
-                          </div>
+              <div className="flex-1 overflow-y-auto p-4 custom-scrollbar">
+                <div className="grid grid-cols-7 gap-2 mb-2">
+                  {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(d => (
+                    <div key={d} className="text-center text-xs font-semibold text-gray-500 uppercase tracking-wider">{d}</div>
+                  ))}
+                </div>
+                <div className="grid grid-cols-7 gap-2">
+                  {days.map((d, idx) => {
+                    const isCurrentMonth = isSameMonth(d, monthStart);
+                    
+                    // Check if member has attendance on this day
+                    const dayAttendances = reportData?.attendances?.filter((a: any) => isSameDay(new Date(a.date), d)) || [];
+                    const attended = dayAttendances.length > 0;
+                    
+                    // Check if day is expected (within active membership bounds and <= today)
+                    let expected = false;
+                    const today = startOfDay(new Date());
+                    
+                    if (reportData?.memberships) {
+                      for (const m of reportData.memberships) {
+                        const mStart = startOfDay(new Date(m.startDate));
+                        const mEnd = startOfDay(new Date(m.endDate));
+                        if (d >= mStart && d <= mEnd && d <= today) {
+                          expected = true;
+                          break;
+                        }
+                      }
+                    }
+                    
+                    const missed = expected && !attended;
+
+                    return (
+                      <div 
+                        key={idx} 
+                        className={`min-h-[80px] rounded-lg p-2 flex flex-col border ${
+                          !isCurrentMonth 
+                            ? 'opacity-30 bg-[#0f1117] border-transparent' 
+                            : attended
+                              ? 'bg-emerald-500/10 border-emerald-500/30'
+                              : missed
+                                ? 'bg-red-500/10 border-red-500/20'
+                                : 'bg-[#1c1f2e] border-[#2a2d3e]'
+                        }`}
+                      >
+                        <div className={`text-right text-xs font-bold ${isCurrentMonth ? (attended ? 'text-emerald-400' : missed ? 'text-red-400' : 'text-gray-500') : 'text-gray-600'}`}>
+                          {format(d, 'd')}
+                        </div>
+                        <div className="flex-1 mt-1 flex flex-col gap-1 overflow-hidden">
+                          {attended ? (
+                            dayAttendances.map((a: any) => (
+                              <div key={a.id} className="text-[9px] leading-tight flex flex-col gap-0.5 mb-1">
+                                <span className="font-bold text-white">{format(new Date(a.date), 'h:mm a')}</span>
+                                <span className="text-emerald-400 font-semibold truncate uppercase tracking-wide">
+                                  {a.sport?.name || a.membershipPlan?.sport?.name || 'SPORT'}
+                                </span>
+                              </div>
+                            ))
+                          ) : missed ? (
+                            <div className="text-[10px] text-red-500 font-bold uppercase tracking-wider mt-auto text-center">Absent</div>
+                          ) : null}
                         </div>
                       </div>
-                    ))}
-                  </div>
-                )}
+                    );
+                  })}
+                </div>
               </div>
             </div>
           </div>

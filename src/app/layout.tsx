@@ -4,7 +4,7 @@ import "./globals.css";
 import { usePathname } from "next/navigation";
 import { AlertProvider } from "@/components/AlertProvider";
 import { useState, useEffect } from "react";
-import { FiHome, FiUsers, FiMapPin, FiActivity, FiLayers, FiShield, FiFileText, FiMenu, FiX } from "react-icons/fi";
+import { FiHome, FiUsers, FiMapPin, FiActivity, FiLayers, FiShield, FiFileText, FiMenu, FiX, FiUser, FiCalendar } from "react-icons/fi";
 import LinkComponent from "next/link"; // Alias to avoid conflict
 
 export default function RootLayout({
@@ -43,7 +43,9 @@ export default function RootLayout({
     { href: "/plans", label: "Memberships", icon: <FiLayers /> },
     { href: "/members", label: "Members Directory", icon: <FiUsers /> },
     { href: "/attendance", label: "Attendance Kiosk", icon: <FiShield /> },
-    { href: "/reports/attendance", label: "Attendance Report", icon: <FiFileText /> },
+    { href: "/reports/member", label: "Member Reports", icon: <FiUser /> },
+    { href: "/reports/attendance", label: "Attendance Reports", icon: <FiCalendar /> },
+    { href: "/reports/memberships", label: "Membership Reports", icon: <FiLayers /> },
   ];
 
   return (
