@@ -1,0 +1,102 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/client"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Admin {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  name      String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Member {
+  id          String             @id @default(cuid())
+  mobile      String             @unique
+  name        String
+  email       String?
+  joinDate    DateTime           @default(now())
+  memberships MemberMembership[]
+  attendances Attendance[]
+  createdAt   DateTime           @default(now())
+  updatedAt   DateTime           @updatedAt
+}
+
+model Sport {
+  id               String            @id @default(cuid())
+  name             String
+  description      String?
+  turfs            TurfSport[]
+  membershipPlans  MembershipPlan[]
+  attendances      Attendance[]
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+}
+
+model Turf {
+  id            String       @id @default(cuid())
+  name          String
+  location      String?
+  parentTurfId  String?
+  parentTurf    Turf?        @relation("TurfHierarchy", fields: [parentTurfId], references: [id])
+  childTurfs    Turf[]       @relation("TurfHierarchy")
+  sports        TurfSport[]
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+}
+
+model TurfSport {
+  turfId   String
+  sportId  String
+  turf     Turf   @relation(fields: [turfId], references: [id])
+  sport    Sport  @relation(fields: [sportId], references: [id])
+  
+  @@id([turfId, sportId])
+}
+
+model MembershipPlan {
+  id             String             @id @default(cuid())
+  name           String
+  sportId        String
+  sport          Sport              @relation(fields: [sportId], references: [id])
+  durationInDays Int
+  price          Float
+  slotsPerDay    Int                @default(1)
+  memberships    MemberMembership[]
+  attendances    Attendance[]
+  createdAt      DateTime           @default(now())
+  updatedAt      DateTime           @updatedAt
+}
+
+model MemberMembership {
+  id               String         @id @default(cuid())
+  memberId         String
+  member           Member         @relation(fields: [memberId], references: [id])
+  membershipPlanId String
+  membershipPlan   MembershipPlan @relation(fields: [membershipPlanId], references: [id])
+  startDate        DateTime
+  endDate          DateTime
+  status           String         @default("ACTIVE") // ACTIVE, EXPIRED, CANCELLED
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
+}
+
+model Attendance {
+  id        String   @id @default(cuid())
+  memberId  String
+  member    Member   @relation(fields: [memberId], references: [id])
+  date      DateTime @default(now())
+  status    String   @default("PRESENT")
+  sportId   String?  // Optional: what sport they played
+  sport     Sport?   @relation(fields: [sportId], references: [id])
+  membershipPlanId String?
+  membershipPlan   MembershipPlan? @relation(fields: [membershipPlanId], references: [id])
+  notes     String?
+  createdAt DateTime @default(now())
+}
