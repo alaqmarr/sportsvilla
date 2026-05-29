@@ -1,5 +1,4 @@
 "use client";
-
 import { useState } from "react";
 import { createSport, updateSport, deleteSport } from "./actions";
 import { useAlert } from "@/components/AlertProvider";
