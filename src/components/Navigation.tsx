@@ -61,6 +61,7 @@ export function Navigation({ children }: { children: React.ReactNode }) {
     { href: "/plans", label: "Memberships", icon: <FiLayers /> },
     { href: "/members", label: "Members Directory", icon: <FiUsers /> },
     { href: "/attendance", label: "Attendance Kiosk", icon: <FiShield /> },
+    { href: "/admin", label: "Manage Admins", icon: <FiShield /> },
     { href: "/reports/member", label: "Member Reports", icon: <FiUser /> },
     { href: "/reports/attendance", label: "Attendance Reports", icon: <FiCalendar /> },
     { href: "/reports/memberships", label: "Membership Reports", icon: <FiLayers /> },

@@ -1,14 +1,16 @@
 "use server";
 import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
+import bcrypt from "bcryptjs";
 
 export async function createAdmin(data: { name: string; email: string; password: string }) {
-  // In production, password should be hashed with bcrypt. For this MVP, we store as-is.
+  const hashedPassword = await bcrypt.hash(data.password, 10);
+  
   const admin = await prisma.admin.create({
     data: {
       name: data.name,
       email: data.email,
-      password: data.password, // IMPORTANT: hash this in production
+      password: hashedPassword,
     },
     select: { id: true, name: true, email: true, createdAt: true }
   });
