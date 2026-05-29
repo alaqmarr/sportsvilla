@@ -487,7 +487,6 @@ export type TurfCreateOrConnectWithoutParentTurfInput = {
 
 export type TurfCreateManyParentTurfInputEnvelope = {
   data: Prisma.TurfCreateManyParentTurfInput | Prisma.TurfCreateManyParentTurfInput[]
-  skipDuplicates?: boolean
 }
 
 export type TurfUpsertWithoutChildTurfsInput = {
@@ -1417,7 +1416,6 @@ export type TurfCreateManyArgs<ExtArgs extends runtime.Types.Extensions.Internal
    * The data used to create many Turfs.
    */
   data: Prisma.TurfCreateManyInput | Prisma.TurfCreateManyInput[]
-  skipDuplicates?: boolean
 }
 
 /**
@@ -1436,7 +1434,6 @@ export type TurfCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions
    * The data used to create many Turfs.
    */
   data: Prisma.TurfCreateManyInput | Prisma.TurfCreateManyInput[]
-  skipDuplicates?: boolean
   /**
    * Choose, which related nodes to fetch as well
    */

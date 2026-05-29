@@ -540,7 +540,6 @@ export type AttendanceCreateOrConnectWithoutMemberInput = {
 
 export type AttendanceCreateManyMemberInputEnvelope = {
   data: Prisma.AttendanceCreateManyMemberInput | Prisma.AttendanceCreateManyMemberInput[]
-  skipDuplicates?: boolean
 }
 
 export type AttendanceUpsertWithWhereUniqueWithoutMemberInput = {
@@ -600,7 +599,6 @@ export type AttendanceCreateOrConnectWithoutSportInput = {
 
 export type AttendanceCreateManySportInputEnvelope = {
   data: Prisma.AttendanceCreateManySportInput | Prisma.AttendanceCreateManySportInput[]
-  skipDuplicates?: boolean
 }
 
 export type AttendanceUpsertWithWhereUniqueWithoutSportInput = {
@@ -646,7 +644,6 @@ export type AttendanceCreateOrConnectWithoutMembershipPlanInput = {
 
 export type AttendanceCreateManyMembershipPlanInputEnvelope = {
   data: Prisma.AttendanceCreateManyMembershipPlanInput | Prisma.AttendanceCreateManyMembershipPlanInput[]
-  skipDuplicates?: boolean
 }
 
 export type AttendanceUpsertWithWhereUniqueWithoutMembershipPlanInput = {
@@ -1541,7 +1538,6 @@ export type AttendanceCreateManyArgs<ExtArgs extends runtime.Types.Extensions.In
    * The data used to create many Attendances.
    */
   data: Prisma.AttendanceCreateManyInput | Prisma.AttendanceCreateManyInput[]
-  skipDuplicates?: boolean
 }
 
 /**
@@ -1560,7 +1556,6 @@ export type AttendanceCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Exte
    * The data used to create many Attendances.
    */
   data: Prisma.AttendanceCreateManyInput | Prisma.AttendanceCreateManyInput[]
-  skipDuplicates?: boolean
   /**
    * Choose, which related nodes to fetch as well
    */

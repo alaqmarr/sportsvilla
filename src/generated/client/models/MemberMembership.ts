@@ -496,7 +496,6 @@ export type MemberMembershipCreateOrConnectWithoutMemberInput = {
 
 export type MemberMembershipCreateManyMemberInputEnvelope = {
   data: Prisma.MemberMembershipCreateManyMemberInput | Prisma.MemberMembershipCreateManyMemberInput[]
-  skipDuplicates?: boolean
 }
 
 export type MemberMembershipUpsertWithWhereUniqueWithoutMemberInput = {
@@ -556,7 +555,6 @@ export type MemberMembershipCreateOrConnectWithoutMembershipPlanInput = {
 
 export type MemberMembershipCreateManyMembershipPlanInputEnvelope = {
   data: Prisma.MemberMembershipCreateManyMembershipPlanInput | Prisma.MemberMembershipCreateManyMembershipPlanInput[]
-  skipDuplicates?: boolean
 }
 
 export type MemberMembershipUpsertWithWhereUniqueWithoutMembershipPlanInput = {
@@ -1403,7 +1401,6 @@ export type MemberMembershipCreateManyArgs<ExtArgs extends runtime.Types.Extensi
    * The data used to create many MemberMemberships.
    */
   data: Prisma.MemberMembershipCreateManyInput | Prisma.MemberMembershipCreateManyInput[]
-  skipDuplicates?: boolean
 }
 
 /**
@@ -1422,7 +1419,6 @@ export type MemberMembershipCreateManyAndReturnArgs<ExtArgs extends runtime.Type
    * The data used to create many MemberMemberships.
    */
   data: Prisma.MemberMembershipCreateManyInput | Prisma.MemberMembershipCreateManyInput[]
-  skipDuplicates?: boolean
   /**
    * Choose, which related nodes to fetch as well
    */

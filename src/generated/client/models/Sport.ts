@@ -1321,7 +1321,6 @@ export type SportCreateManyArgs<ExtArgs extends runtime.Types.Extensions.Interna
    * The data used to create many Sports.
    */
   data: Prisma.SportCreateManyInput | Prisma.SportCreateManyInput[]
-  skipDuplicates?: boolean
 }
 
 /**
@@ -1340,7 +1339,6 @@ export type SportCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extension
    * The data used to create many Sports.
    */
   data: Prisma.SportCreateManyInput | Prisma.SportCreateManyInput[]
-  skipDuplicates?: boolean
 }
 
 /**

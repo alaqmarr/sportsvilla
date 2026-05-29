@@ -582,7 +582,6 @@ export type MembershipPlanCreateOrConnectWithoutSportInput = {
 
 export type MembershipPlanCreateManySportInputEnvelope = {
   data: Prisma.MembershipPlanCreateManySportInput | Prisma.MembershipPlanCreateManySportInput[]
-  skipDuplicates?: boolean
 }
 
 export type MembershipPlanUpsertWithWhereUniqueWithoutSportInput = {
@@ -1575,7 +1574,6 @@ export type MembershipPlanCreateManyArgs<ExtArgs extends runtime.Types.Extension
    * The data used to create many MembershipPlans.
    */
   data: Prisma.MembershipPlanCreateManyInput | Prisma.MembershipPlanCreateManyInput[]
-  skipDuplicates?: boolean
 }
 
 /**
@@ -1594,7 +1592,6 @@ export type MembershipPlanCreateManyAndReturnArgs<ExtArgs extends runtime.Types.
    * The data used to create many MembershipPlans.
    */
   data: Prisma.MembershipPlanCreateManyInput | Prisma.MembershipPlanCreateManyInput[]
-  skipDuplicates?: boolean
   /**
    * Choose, which related nodes to fetch as well
    */

@@ -359,7 +359,6 @@ export type TurfSportCreateOrConnectWithoutSportInput = {
 
 export type TurfSportCreateManySportInputEnvelope = {
   data: Prisma.TurfSportCreateManySportInput | Prisma.TurfSportCreateManySportInput[]
-  skipDuplicates?: boolean
 }
 
 export type TurfSportUpsertWithWhereUniqueWithoutSportInput = {
@@ -401,7 +400,6 @@ export type TurfSportCreateOrConnectWithoutTurfInput = {
 
 export type TurfSportCreateManyTurfInputEnvelope = {
   data: Prisma.TurfSportCreateManyTurfInput | Prisma.TurfSportCreateManyTurfInput[]
-  skipDuplicates?: boolean
 }
 
 export type TurfSportUpsertWithWhereUniqueWithoutTurfInput = {
@@ -1164,7 +1162,6 @@ export type TurfSportCreateManyArgs<ExtArgs extends runtime.Types.Extensions.Int
    * The data used to create many TurfSports.
    */
   data: Prisma.TurfSportCreateManyInput | Prisma.TurfSportCreateManyInput[]
-  skipDuplicates?: boolean
 }
 
 /**
@@ -1183,7 +1180,6 @@ export type TurfSportCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Exten
    * The data used to create many TurfSports.
    */
   data: Prisma.TurfSportCreateManyInput | Prisma.TurfSportCreateManyInput[]
-  skipDuplicates?: boolean
   /**
    * Choose, which related nodes to fetch as well
    */
