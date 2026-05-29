@@ -1,8 +1,9 @@
 "use client";
 import { usePathname, useRouter } from "next/navigation";
 import { useState, useEffect, useRef } from "react";
-import { FiHome, FiUsers, FiMapPin, FiActivity, FiLayers, FiShield, FiFileText, FiMenu, FiX, FiUser, FiCalendar, FiServer } from "react-icons/fi";
-import LinkComponent from "next/link"; // Alias to avoid conflict
+import { FiHome, FiUsers, FiMapPin, FiActivity, FiLayers, FiShield, FiFileText, FiMenu, FiX, FiUser, FiCalendar, FiServer, FiLogOut } from "react-icons/fi";
+import { signOut } from "next-auth/react";
+import LinkComponent from "next/link";
 
 export function Navigation({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -132,6 +133,15 @@ export function Navigation({ children }: { children: React.ReactNode }) {
             </LinkComponent>
           ))}
         </nav>
+        <div className="mt-auto pt-6 pb-2 border-t border-[#2a2d3e]">
+          <button 
+            onClick={() => signOut()}
+            className="flex w-full items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-gray-400 hover:bg-red-500/10 hover:text-red-400 transition-colors cursor-pointer border-none bg-transparent"
+          >
+            <FiLogOut className="text-lg" />
+            Sign Out
+          </button>
+        </div>
       </aside>
       
       <main className="flex-1 p-4 lg:p-10 w-full lg:max-w-[calc(100vw-16rem)] overflow-x-hidden">
