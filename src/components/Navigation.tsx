@@ -1,13 +1,15 @@
 "use client";
-import { usePathname } from "next/navigation";
-import { useState, useEffect } from "react";
+import { usePathname, useRouter } from "next/navigation";
+import { useState, useEffect, useRef } from "react";
 import { FiHome, FiUsers, FiMapPin, FiActivity, FiLayers, FiShield, FiFileText, FiMenu, FiX, FiUser, FiCalendar, FiServer } from "react-icons/fi";
 import LinkComponent from "next/link"; // Alias to avoid conflict
 
 export function Navigation({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
+  const router = useRouter();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [currentTime, setCurrentTime] = useState("");
+  const lastSyncRef = useRef<number>(Date.now());
 
   // Close sidebar on route change
   useEffect(() => {
@@ -22,6 +24,29 @@ export function Navigation({ children }: { children: React.ReactNode }) {
     }, 1000);
     return () => clearInterval(timer);
   }, []);
+
+  // Global Auto-Sync Polling
+  useEffect(() => {
+    // Only poll if not on the public member portal
+    if (pathname.startsWith('/m/')) return;
+
+    const interval = setInterval(async () => {
+      try {
+        const res = await fetch("/api/sync", { cache: "no-store" });
+        if (res.ok) {
+          const data = await res.json();
+          if (data.latest > lastSyncRef.current) {
+            lastSyncRef.current = data.latest;
+            router.refresh();
+          }
+        }
+      } catch (e) {
+        // ignore fetch errors silently
+      }
+    }, 2000); // Check for new data every 2 seconds
+
+    return () => clearInterval(interval);
+  }, [pathname, router]);
 
   // If we are on the public member portal, don't show the admin sidebar
   if (pathname.startsWith('/m/')) {

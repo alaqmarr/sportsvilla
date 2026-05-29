@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic';
 
 import { fetchServerStats } from "./actions";
 import ServerUsageClient from "./ServerUsageClient";

@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic';
 import PlanDetailClient from "./PlanDetailClient";
 
 

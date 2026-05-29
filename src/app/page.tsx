@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic';
 import { formatIST } from "../lib/dateUtils";
 import { prisma } from "@/lib/prisma";
 import { FiUsers, FiActivity, FiCheckCircle } from "react-icons/fi";
