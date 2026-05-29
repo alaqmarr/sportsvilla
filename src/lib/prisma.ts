@@ -1,12 +1,8 @@
-import { Pool } from 'pg';
-import { PrismaPg } from '@prisma/adapter-pg';
+import { PrismaBetterSqlite3 } from '@prisma/adapter-better-sqlite3';
 import { PrismaClient } from '../generated/client/client';
 
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-  ssl : { rejectUnauthorized: false }
-}) 
-const adapter = new PrismaPg(pool);
+const adapter = new PrismaBetterSqlite3({ url: process.env.DATABASE_URL?.replace('file:', '') || './dev.db' });
+
 const globalForPrisma = globalThis as unknown as {
   prisma: PrismaClient| undefined;
 };
