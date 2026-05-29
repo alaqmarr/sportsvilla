@@ -1,8 +1,9 @@
+import { formatIST } from "../../../lib/dateUtils";
 "use client";
 
 import { useState, useEffect } from "react";
 import { fetchAdvancedAttendance } from "./actions";
-import { format } from "date-fns";
+
 import { FiDownload, FiSearch, FiCalendar, FiClock, FiUser, FiActivity } from "react-icons/fi";
 import { useAlert } from "@/components/AlertProvider";
 
@@ -42,8 +43,8 @@ export default function AttendanceReportClient({ plans }: { plans: any[] }) {
     const headers = ["Date", "Time", "Member Name", "Mobile", "Membership Plan", "Sport", "Notes"];
     
     const rows = attendances.map(record => {
-      const date = format(new Date(record.date), 'yyyy-MM-dd');
-      const time = format(new Date(record.date), 'HH:mm:ss');
+      const date = formatIST(new Date(record.date), 'yyyy-MM-dd');
+      const time = formatIST(new Date(record.date), 'HH:mm:ss');
       const name = record.member?.name || "";
       const mobile = record.member?.mobile || "";
       const plan = record.membershipPlan?.name || "";
@@ -192,8 +193,8 @@ export default function AttendanceReportClient({ plans }: { plans: any[] }) {
                   attendances.map(record => (
                     <tr key={record.id} className="hover:bg-[#1c1f2e] transition-colors">
                       <td className="px-6 py-4">
-                        <div className="text-white font-semibold">{format(new Date(record.date), 'MMM d, yyyy')}</div>
-                        <div className="text-gray-500 text-xs mt-0.5">{format(new Date(record.date), 'h:mm a')}</div>
+                        <div className="text-white font-semibold">{formatIST(new Date(record.date), 'MMM d, yyyy')}</div>
+                        <div className="text-gray-500 text-xs mt-0.5">{formatIST(new Date(record.date), 'h:mm a')}</div>
                       </td>
                       <td className="px-6 py-4">
                         <div className="flex items-center gap-3">

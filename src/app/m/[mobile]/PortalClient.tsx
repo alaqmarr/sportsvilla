@@ -1,6 +1,7 @@
+import { formatIST } from "../../../lib/dateUtils";
 "use client";
 
-import { format, startOfMonth, endOfMonth, startOfWeek, endOfWeek, isSameMonth, isSameDay, addMonths, subMonths, startOfDay } from "date-fns";
+import { startOfMonth, endOfMonth, startOfWeek, endOfWeek, isSameMonth, isSameDay, addMonths, subMonths, startOfDay } from "date-fns";
 
 import { useEffect, useState } from "react";
 import QRCodeLib from "qrcode";
@@ -74,7 +75,7 @@ export default function PortalClient({ member, activePlans, expiredPlans, attend
                       </div>
                       <div className="id-card-detail-group">
                         <div className="id-card-label">Member Since</div>
-                        <div className="id-card-value">{format(new Date(member.joinDate), 'MMM d, yyyy')}</div>
+                        <div className="id-card-value">{formatIST(new Date(member.joinDate), 'MMM d, yyyy')}</div>
                       </div>
                     </div>
                   </div>
@@ -106,7 +107,7 @@ export default function PortalClient({ member, activePlans, expiredPlans, attend
                   <div className="font-semibold text-emerald-600 text-sm">{m.membershipPlan.sport.name}</div>
                   <div className="text-sm text-gray-700 font-medium">{m.membershipPlan.name}</div>
                   <div className="text-xs text-gray-400 mt-1 flex items-center gap-1">
-                    <FiCalendar /> Expires: {format(new Date(m.endDate), 'PP')}
+                    <FiCalendar /> Expires: {formatIST(new Date(m.endDate), 'PP')}
                   </div>
                 </div>
                 <div className="text-right">
@@ -135,9 +136,9 @@ export default function PortalClient({ member, activePlans, expiredPlans, attend
                     <div className="text-xs text-gray-400 mt-0.5">{att.membershipPlan?.name || 'N/A'}</div>
                   </div>
                   <div className="text-right">
-                    <div className="text-sm font-semibold text-gray-700">{format(new Date(att.date), 'MMM d, yyyy')}</div>
+                    <div className="text-sm font-semibold text-gray-700">{formatIST(new Date(att.date), 'MMM d, yyyy')}</div>
                     <div className="text-xs text-emerald-500 font-medium flex items-center gap-1 justify-end mt-0.5">
-                      <FiCheckCircle /> {format(new Date(att.date), 'h:mm a')}
+                      <FiCheckCircle /> {formatIST(new Date(att.date), 'h:mm a')}
                     </div>
                   </div>
                 </div>
@@ -153,7 +154,7 @@ export default function PortalClient({ member, activePlans, expiredPlans, attend
         <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden mb-10">
           <div className="px-4 py-3 border-b border-gray-100 flex justify-between items-center bg-gray-50">
             <button onClick={prevMonth} className="text-gray-500 hover:text-orange-500 transition-colors bg-transparent border-none font-bold text-lg cursor-pointer">&larr;</button>
-            <span className="font-bold font-['Outfit'] text-gray-800 tracking-wide text-sm">{format(currentMonth, 'MMMM yyyy')}</span>
+            <span className="font-bold font-['Outfit'] text-gray-800 tracking-wide text-sm">{formatIST(currentMonth, 'MMMM yyyy')}</span>
             <button onClick={nextMonth} className="text-gray-500 hover:text-orange-500 transition-colors bg-transparent border-none font-bold text-lg cursor-pointer">&rarr;</button>
           </div>
           <div className="p-4">
@@ -183,12 +184,12 @@ export default function PortalClient({ member, activePlans, expiredPlans, attend
                     }`}
                   >
                     <div className={`text-right text-[10px] sm:text-xs font-bold ${isCurrentMonth ? (attendedDay ? 'text-emerald-600' : 'text-gray-500') : 'text-gray-400'}`}>
-                      {format(d, 'd')}
+                      {formatIST(d, 'd')}
                     </div>
                     <div className="flex-1 flex flex-col gap-0.5 mt-1 overflow-hidden">
                       {attendedDay && dayAttendances.map((a: any) => (
-                        <div key={a.id} className="text-[8px] sm:text-[9px] text-emerald-700 bg-emerald-100/50 rounded px-1 py-0.5 font-bold flex items-center justify-center truncate" title={format(new Date(a.date), 'h:mm a')}>
-                          <FiCheckCircle size={8} className="mr-0.5 shrink-0" /> {format(new Date(a.date), 'h:mm a')}
+                        <div key={a.id} className="text-[8px] sm:text-[9px] text-emerald-700 bg-emerald-100/50 rounded px-1 py-0.5 font-bold flex items-center justify-center truncate" title={formatIST(new Date(a.date), 'h:mm a')}>
+                          <FiCheckCircle size={8} className="mr-0.5 shrink-0" /> {formatIST(new Date(a.date), 'h:mm a')}
                         </div>
                       ))}
                     </div>

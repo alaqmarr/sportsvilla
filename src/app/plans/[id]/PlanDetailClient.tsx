@@ -1,8 +1,9 @@
+import { formatIST } from "../../../lib/dateUtils";
 "use client";
 
 import { useState, useEffect } from "react";
 import { fetchPlanDetail } from "./actions";
-import { format, startOfDay } from "date-fns";
+import { startOfDay } from "date-fns";
 import { FiArrowLeft, FiUser, FiCalendar, FiClock, FiActivity, FiLayers, FiCheckCircle, FiXCircle } from "react-icons/fi";
 import { useRouter } from "next/navigation";
 import { useAlert } from "@/components/AlertProvider";
@@ -136,7 +137,7 @@ export default function PlanDetailClient({ id }: { id: string }) {
                         </div>
                       </td>
                       <td className="px-6 py-4 text-gray-300 text-sm">
-                        {format(new Date(m.startDate), 'MMM d, yy')} - {format(new Date(m.endDate), 'MMM d, yy')}
+                        {formatIST(new Date(m.startDate), 'MMM d, yy')} - {formatIST(new Date(m.endDate), 'MMM d, yy')}
                       </td>
                       <td className="px-6 py-4">
                         {activeTab === 'ACTIVE' ? (

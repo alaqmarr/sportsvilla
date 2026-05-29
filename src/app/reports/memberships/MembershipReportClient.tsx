@@ -1,9 +1,10 @@
+import { formatIST } from "../../../lib/dateUtils";
 "use client";
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { fetchMembershipReports } from "./actions";
-import { format, startOfDay } from "date-fns";
+import { startOfDay } from "date-fns";
 import { FiDownload, FiSearch, FiLayers, FiAward } from "react-icons/fi";
 import { useAlert } from "@/components/AlertProvider";
 
@@ -165,7 +166,7 @@ export default function MembershipReportClient() {
                         <td className="px-6 py-4">
                           <div className="text-white font-medium text-sm">{m.membershipPlan.name}</div>
                           <div className="text-gray-500 text-xs mt-0.5 inline-flex items-center px-1.5 py-0.5 bg-[#0f1117] border border-[#2a2d3e] rounded">
-                            {format(new Date(m.startDate), 'MMM d, yy')} - {format(new Date(m.endDate), 'MMM d, yy')}
+                            {formatIST(new Date(m.startDate), 'MMM d, yy')} - {formatIST(new Date(m.endDate), 'MMM d, yy')}
                           </div>
                         </td>
                         <td className="px-6 py-4">

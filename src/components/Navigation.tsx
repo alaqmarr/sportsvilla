@@ -8,11 +8,21 @@ import LinkComponent from "next/link"; // Alias to avoid conflict
 export function Navigation({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [currentTime, setCurrentTime] = useState("");
 
   // Close sidebar on route change
   useEffect(() => {
     setIsSidebarOpen(false);
   }, [pathname]);
+
+  // Update IST Clock
+  useEffect(() => {
+    setCurrentTime(new Date().toLocaleTimeString('en-IN', { timeZone: 'Asia/Kolkata', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true }) + " IST");
+    const timer = setInterval(() => {
+      setCurrentTime(new Date().toLocaleTimeString('en-IN', { timeZone: 'Asia/Kolkata', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true }) + " IST");
+    }, 1000);
+    return () => clearInterval(timer);
+  }, []);
 
   // If we are on the public member portal, don't show the admin sidebar
   if (pathname.startsWith('/m/')) {
@@ -35,8 +45,15 @@ export function Navigation({ children }: { children: React.ReactNode }) {
     <div className="flex flex-col lg:flex-row min-h-screen bg-[#0f1117] overflow-x-hidden">
       {/* Mobile Topbar */}
       <div className="lg:hidden bg-[#161923] border-b border-[#2a2d3e] p-4 flex justify-between items-center sticky top-0 z-40">
-        <div className="font-['Outfit'] text-lg font-black text-orange-500 tracking-wider uppercase">
-          SPORTSVILLA
+        <div className="flex flex-col">
+          <div className="font-['Outfit'] text-lg font-black text-orange-500 tracking-wider uppercase">
+            SPORTSVILLA
+          </div>
+          {currentTime && (
+            <div className="text-[10px] font-medium text-gray-500 mt-0.5">
+              {currentTime}
+            </div>
+          )}
         </div>
         <button onClick={() => setIsSidebarOpen(!isSidebarOpen)} className="text-white p-2">
           {isSidebarOpen ? <FiX size={24} /> : <FiMenu size={24} />}
@@ -51,21 +68,27 @@ export function Navigation({ children }: { children: React.ReactNode }) {
         />
       )}
 
-      {/* Sidebar */}
       <aside className={`
         w-64 bg-[#161923] border-r border-[#2a2d3e] p-6 flex flex-col gap-2 shrink-0 h-screen fixed lg:sticky top-0 z-50 transition-transform duration-300
         ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
       `}>
-        <div className="flex justify-between items-center mb-8 px-3">
-          <div className="font-['Outfit'] text-xl font-black text-orange-500 tracking-wider uppercase hidden lg:block">
-            SPORTSVILLA
+        <div className="flex flex-col mb-8 px-3">
+          <div className="flex justify-between items-center">
+            <div className="font-['Outfit'] text-xl font-black text-orange-500 tracking-wider uppercase hidden lg:block">
+              SPORTSVILLA
+            </div>
+            <div className="font-['Outfit'] text-xl font-black text-orange-500 tracking-wider uppercase lg:hidden">
+              MENU
+            </div>
+            <button onClick={() => setIsSidebarOpen(false)} className="text-gray-400 lg:hidden">
+              <FiX size={24} />
+            </button>
           </div>
-          <div className="font-['Outfit'] text-xl font-black text-orange-500 tracking-wider uppercase lg:hidden">
-            MENU
-          </div>
-          <button onClick={() => setIsSidebarOpen(false)} className="text-gray-400 lg:hidden">
-            <FiX size={24} />
-          </button>
+          {currentTime && (
+            <div className="text-xs font-medium text-gray-500 mt-1 hidden lg:block">
+              {currentTime}
+            </div>
+          )}
         </div>
         
         <nav className="flex flex-col gap-2 flex-1 overflow-y-auto">

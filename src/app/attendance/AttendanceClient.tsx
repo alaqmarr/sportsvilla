@@ -1,9 +1,10 @@
+import { formatIST } from "../../lib/dateUtils";
 "use client";
 
 import { useState } from "react";
 import { fetchMemberByMobile, markAttendance } from "./actions";
 import { useAlert } from "@/components/AlertProvider";
-import { format } from "date-fns";
+
 import { FiCheckCircle, FiSearch, FiUser, FiCamera, FiX, FiClock, FiActivity } from "react-icons/fi";
 import { Html5QrcodeScanner } from "html5-qrcode";
 
@@ -143,7 +144,7 @@ export default function AttendanceClient({ initialRecords }: { initialRecords: a
                 <div>
                   <h2 className="text-2xl font-bold font-['Outfit'] text-white">{member.name}</h2>
                   <p className="text-gray-500 text-sm flex items-center gap-2 mt-1">
-                    <FiUser className="text-emerald-400" /> {member.mobile} <span className="opacity-50">•</span> Joined {format(new Date(member.joinDate), 'yyyy')}
+                    <FiUser className="text-emerald-400" /> {member.mobile} <span className="opacity-50">•</span> Joined {formatIST(new Date(member.joinDate), 'yyyy')}
                   </p>
                 </div>
               </div>
@@ -241,8 +242,8 @@ export default function AttendanceClient({ initialRecords }: { initialRecords: a
 
                       {/* Time */}
                       <div className="text-right shrink-0 pl-2">
-                        <div className="text-xl font-bold font-['Outfit'] text-white leading-none">{format(new Date(record.date), 'h:mm')}</div>
-                        <div className="text-[10px] font-semibold tracking-wider text-gray-500 uppercase mt-0.5">{format(new Date(record.date), 'a')}</div>
+                        <div className="text-xl font-bold font-['Outfit'] text-white leading-none">{formatIST(new Date(record.date), 'h:mm')}</div>
+                        <div className="text-[10px] font-semibold tracking-wider text-gray-500 uppercase mt-0.5">{formatIST(new Date(record.date), 'a')}</div>
                       </div>
                     </div>
                   ))}

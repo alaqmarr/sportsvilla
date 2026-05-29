@@ -1,9 +1,10 @@
+import { formatIST } from "../../lib/dateUtils";
 "use client";
 
 import { useState, useRef } from "react";
 import { createMember, updateMember, deleteMember, assignPlan } from "./actions";
 import { useAlert } from "@/components/AlertProvider";
-import { format } from "date-fns";
+
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import QRCodeLib from "qrcode";
@@ -249,7 +250,7 @@ export default function MembersClient({ initialMembers, plans }: { initialMember
                         </div>
                         <div>
                           <div className="font-semibold text-white">{member.name}</div>
-                          <div className="text-xs text-gray-500 mt-0.5">Joined {format(new Date(member.joinDate), 'MMM d, yyyy')}</div>
+                          <div className="text-xs text-gray-500 mt-0.5">Joined {formatIST(new Date(member.joinDate), 'MMM d, yyyy')}</div>
                         </div>
                       </div>
                     </td>
@@ -265,7 +266,7 @@ export default function MembersClient({ initialMembers, plans }: { initialMember
                             <div key={m.id} className={`text-xs py-1 px-3 rounded-md flex justify-between items-center ${isActive ? 'bg-emerald-500/10 border border-emerald-500/20 text-emerald-400' : 'bg-[#1c1f2e] border border-[#2a2d3e] text-gray-500 opacity-60'}`}>
                               <span className="font-bold tracking-wide uppercase">{m.membershipPlan?.sport?.name}</span>
                               <span className="opacity-80 font-medium tracking-tight">
-                                Expires: {format(new Date(m.endDate), 'MMM d')}
+                                Expires: {formatIST(new Date(m.endDate), 'MMM d')}
                               </span>
                             </div>
                           );
@@ -417,7 +418,7 @@ export default function MembersClient({ initialMembers, plans }: { initialMember
                         </div>
                         <div className="id-card-detail-group">
                           <div className="id-card-label">Member Since</div>
-                          <div className="id-card-value">{format(new Date(idCardData.joinDate), 'MMM d, yyyy')}</div>
+                          <div className="id-card-value">{formatIST(new Date(idCardData.joinDate), 'MMM d, yyyy')}</div>
                         </div>
                       </div>
                     </div>

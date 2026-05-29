@@ -1,8 +1,9 @@
+import { formatIST } from "../../../../lib/dateUtils";
 "use client";
 
 import { useState, useEffect } from "react";
 import { fetchMembershipDetail } from "./actions";
-import { format, startOfMonth, endOfMonth, startOfWeek, endOfWeek, isSameMonth, isSameDay, addMonths, subMonths, startOfDay, isBefore, isAfter } from "date-fns";
+import { startOfMonth, endOfMonth, startOfWeek, endOfWeek, isSameMonth, isSameDay, addMonths, subMonths, startOfDay, isBefore, isAfter } from "date-fns";
 import { FiArrowLeft, FiUser, FiCalendar, FiClock, FiActivity, FiLayers } from "react-icons/fi";
 import { useRouter } from "next/navigation";
 import { useAlert } from "@/components/AlertProvider";
@@ -128,7 +129,7 @@ export default function MembershipDetailClient({ id }: { id: string }) {
             <h3 className="text-gray-400 font-semibold text-sm uppercase tracking-wider">Duration</h3>
           </div>
           <div className="text-xl font-bold text-white font-['Outfit']">{data.membershipPlan.durationInDays} Days</div>
-          <div className="text-xs text-gray-500 mt-1 font-medium">{format(new Date(data.startDate), 'MMM d')} - {format(new Date(data.endDate), 'MMM d, yyyy')}</div>
+          <div className="text-xs text-gray-500 mt-1 font-medium">{formatIST(new Date(data.startDate), 'MMM d')} - {formatIST(new Date(data.endDate), 'MMM d, yyyy')}</div>
         </div>
 
         <div className="bg-[#161923] border border-[#2a2d3e] rounded-xl p-5 shadow-lg relative overflow-hidden">
@@ -165,7 +166,7 @@ export default function MembershipDetailClient({ id }: { id: string }) {
           </div>
           <div className="flex items-center gap-4 bg-[#1c1f2e] px-4 py-2 rounded-lg border border-[#2a2d3e]">
             <button onClick={prevMonth} className="text-gray-400 hover:text-white transition-colors cursor-pointer bg-transparent border-none">&larr;</button>
-            <span className="text-white font-bold font-['Outfit'] w-32 text-center tracking-wider">{format(currentMonth, 'MMMM yyyy')}</span>
+            <span className="text-white font-bold font-['Outfit'] w-32 text-center tracking-wider">{formatIST(currentMonth, 'MMMM yyyy')}</span>
             <button onClick={nextMonth} className="text-gray-400 hover:text-white transition-colors cursor-pointer bg-transparent border-none">&rarr;</button>
           </div>
         </div>
@@ -210,14 +211,14 @@ export default function MembershipDetailClient({ id }: { id: string }) {
                     }`}
                   >
                     <div className={`text-right text-xs font-bold ${isCurrentMonth ? (attendedDay ? 'text-emerald-400' : missedDay ? 'text-red-400' : 'text-gray-500') : 'text-gray-600'}`}>
-                      {format(d, 'd')}
+                      {formatIST(d, 'd')}
                     </div>
                     <div className="flex-1 mt-1.5 flex flex-col gap-1 overflow-hidden">
                       {attendedDay ? (
                         dayAttendances.map((a: any) => (
                           <div key={a.id} className="text-[10px] leading-tight flex flex-col gap-0.5 mb-1.5 bg-emerald-500/20 px-2 py-1.5 rounded border border-emerald-500/30">
                             <span className="font-bold text-white flex items-center gap-1">
-                              <FiClock size={10} className="text-emerald-400"/> {format(new Date(a.date), 'h:mm a')}
+                              <FiClock size={10} className="text-emerald-400"/> {formatIST(new Date(a.date), 'h:mm a')}
                             </span>
                           </div>
                         ))

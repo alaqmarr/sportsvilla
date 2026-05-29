@@ -1,6 +1,8 @@
+export const dynamic = 'force-dynamic';
+import { formatIST } from "../lib/dateUtils";
 import { prisma } from "@/lib/prisma";
 import { FiUsers, FiActivity, FiCheckCircle } from "react-icons/fi";
-import { format } from "date-fns";
+
 
 export default async function Dashboard() {
   const todayStart = new Date();
@@ -89,7 +91,7 @@ export default async function Dashboard() {
                   </div>
                 </div>
                 <div className="text-right">
-                  <div className="text-sm font-semibold text-red-400">{format(new Date(m.endDate), 'MMM d, yyyy')}</div>
+                  <div className="text-sm font-semibold text-red-400">{formatIST(new Date(m.endDate), 'MMM d, yyyy')}</div>
                   <div className="text-xs text-gray-500 mt-0.5">{m.membershipPlan?.sport?.name} Plan</div>
                 </div>
               </div>

@@ -1,9 +1,10 @@
+import { formatIST } from "../../../lib/dateUtils";
 "use client";
 
 import { useState } from "react";
 import { useAlert } from "@/components/AlertProvider";
 import { fetchAttendanceReport } from "./actions";
-import { format, startOfMonth, endOfMonth, startOfWeek, endOfWeek, eachDayOfInterval, isSameMonth, isSameDay, addMonths, subMonths, isBefore, isAfter, startOfDay } from "date-fns";
+import { startOfMonth, endOfMonth, startOfWeek, endOfWeek, eachDayOfInterval, isSameMonth, isSameDay, addMonths, subMonths, isBefore, isAfter, startOfDay } from "date-fns";
 import { FiSearch, FiUser, FiCalendar, FiClock, FiActivity } from "react-icons/fi";
 
 export default function ReportClient() {
@@ -156,7 +157,7 @@ export default function ReportClient() {
                           </div>
                         </div>
                         <div className="text-xs text-gray-500 flex items-center gap-1 mb-4">
-                          <FiCalendar /> {format(new Date(m.startDate), 'MMM d, yy')} - {format(new Date(m.endDate), 'MMM d, yy')}
+                          <FiCalendar /> {formatIST(new Date(m.startDate), 'MMM d, yy')} - {formatIST(new Date(m.endDate), 'MMM d, yy')}
                         </div>
 
                         <div className="grid grid-cols-3 gap-2 bg-black/20 rounded-lg p-3 border border-[#2a2d3e]">
@@ -190,7 +191,7 @@ export default function ReportClient() {
                 </h3>
                 <div className="flex items-center gap-4">
                   <button onClick={prevMonth} className="text-gray-400 hover:text-white transition-colors">&larr;</button>
-                  <span className="text-white font-bold font-['Outfit']">{format(currentMonth, 'MMMM yyyy')}</span>
+                  <span className="text-white font-bold font-['Outfit']">{formatIST(currentMonth, 'MMMM yyyy')}</span>
                   <button onClick={nextMonth} className="text-gray-400 hover:text-white transition-colors">&rarr;</button>
                 </div>
               </div>
@@ -240,13 +241,13 @@ export default function ReportClient() {
                         }`}
                       >
                         <div className={`text-right text-xs font-bold ${isCurrentMonth ? (attended ? 'text-emerald-400' : missed ? 'text-red-400' : 'text-gray-500') : 'text-gray-600'}`}>
-                          {format(d, 'd')}
+                          {formatIST(d, 'd')}
                         </div>
                         <div className="flex-1 mt-1 flex flex-col gap-1 overflow-hidden">
                           {attended ? (
                             dayAttendances.map((a: any) => (
                               <div key={a.id} className="text-[9px] leading-tight flex flex-col gap-0.5 mb-1">
-                                <span className="font-bold text-white">{format(new Date(a.date), 'h:mm a')}</span>
+                                <span className="font-bold text-white">{formatIST(new Date(a.date), 'h:mm a')}</span>
                                 <span className="text-emerald-400 font-semibold truncate uppercase tracking-wide">
                                   {a.sport?.name || a.membershipPlan?.sport?.name || 'SPORT'}
                                 </span>
