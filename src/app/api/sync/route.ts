@@ -7,15 +7,15 @@ export async function GET() {
   try {
     const [member, attendance, plan, sport, turf] = await Promise.all([
       prisma.member.findFirst({ orderBy: { updatedAt: 'desc' }, select: { updatedAt: true } }),
-      prisma.attendance.findFirst({ orderBy: { scannedAt: 'desc' }, select: { scannedAt: true } }),
-      prisma.plan.findFirst({ orderBy: { updatedAt: 'desc' }, select: { updatedAt: true } }),
+      prisma.attendance.findFirst({ orderBy: { createdAt: 'desc' }, select: { createdAt: true } }),
+      prisma.membershipPlan.findFirst({ orderBy: { updatedAt: 'desc' }, select: { updatedAt: true } }),
       prisma.sport.findFirst({ orderBy: { updatedAt: 'desc' }, select: { updatedAt: true } }),
       prisma.turf.findFirst({ orderBy: { updatedAt: 'desc' }, select: { updatedAt: true } }),
     ]);
 
     const times = [
       member?.updatedAt?.getTime() || 0,
-      attendance?.scannedAt?.getTime() || 0,
+      attendance?.createdAt?.getTime() || 0,
       plan?.updatedAt?.getTime() || 0,
       sport?.updatedAt?.getTime() || 0,
       turf?.updatedAt?.getTime() || 0,
