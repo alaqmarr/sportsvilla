@@ -6,7 +6,7 @@ export async function createSport(data: { name: string; description: string }) {
   const sport = await prisma.sport.create({
     data: { name: data.name, description: data.description },
   });
-  revalidatePath("/sports");
+  revalidatePath("/", "layout");
   return sport;
 }
 
@@ -15,11 +15,11 @@ export async function updateSport(id: string, data: { name: string; description:
     where: { id },
     data: { name: data.name, description: data.description },
   });
-  revalidatePath("/sports");
+  revalidatePath("/", "layout");
   return sport;
 }
 
 export async function deleteSport(id: string) {
   await prisma.sport.delete({ where: { id } });
-  revalidatePath("/sports");
+  revalidatePath("/", "layout");
 }

@@ -14,7 +14,7 @@ export async function createTurf(data: { name: string; location: string; parentT
       childTurfs: true,
     }
   });
-  revalidatePath("/turfs");
+  revalidatePath("/", "layout");
   return turf;
 }
 
@@ -27,11 +27,11 @@ export async function updateTurf(id: string, data: { name: string; location: str
       parentTurfId: data.parentTurfId || null,
     },
   });
-  revalidatePath("/turfs");
+  revalidatePath("/", "layout");
   return turf;
 }
 
 export async function deleteTurf(id: string) {
   await prisma.turf.delete({ where: { id } });
-  revalidatePath("/turfs");
+  revalidatePath("/", "layout");
 }

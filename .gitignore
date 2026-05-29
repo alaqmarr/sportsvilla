@@ -17,6 +17,8 @@
 /.next/
 /out/
 
+*.db
+
 # production
 /build
 
@@ -41,5 +43,5 @@ yarn-error.log*
 next-env.d.ts
 
 /src/generated/prisma
-prisma/dev.db  
-prisma/dev.db-journal 
+prisma/dev.db
+prisma/dev.db-journal

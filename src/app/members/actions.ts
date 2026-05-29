@@ -12,7 +12,7 @@ export async function createMember(data: { name: string; mobile: string; email?:
     },
     include: { memberships: { include: { membershipPlan: { include: { sport: true } } } } }
   });
-  revalidatePath("/members");
+  revalidatePath("/", "layout");
   return member;
 }
 
@@ -25,13 +25,13 @@ export async function updateMember(id: string, data: { name: string; mobile: str
       email: data.email || null,
     },
   });
-  revalidatePath("/members");
+  revalidatePath("/", "layout");
   return member;
 }
 
 export async function deleteMember(id: string) {
   await prisma.member.delete({ where: { id } });
-  revalidatePath("/members");
+  revalidatePath("/", "layout");
 }
 
 export async function assignPlan(data: { mobile: string; name?: string; email?: string; planId: string; startDate: string }) {
@@ -77,7 +77,7 @@ export async function assignPlan(data: { mobile: string; name?: string; email?: 
     include: { membershipPlan: true }
   });
   
-  revalidatePath("/members");
-  revalidatePath("/attendance");
+  revalidatePath("/", "layout");
+  revalidatePath("/", "layout");
   return memberMembership;
 }

@@ -104,7 +104,7 @@ export async function markAttendance(data: { memberId: string; sportId: string; 
     }
   });
 
-  revalidatePath("/attendance");
-  revalidatePath("/");
+  revalidatePath("/", "layout");
+  revalidatePath("/", "layout");
   return attendance;
 }

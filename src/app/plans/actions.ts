@@ -15,7 +15,7 @@ export async function createPlan(data: { name: string; sportId: string; duration
       sport: true,
     }
   });
-  revalidatePath("/plans");
+  revalidatePath("/", "layout");
   return plan;
 }
 
@@ -30,11 +30,11 @@ export async function updatePlan(id: string, data: { name: string; sportId: stri
       slotsPerDay: data.slotsPerDay,
     },
   });
-  revalidatePath("/plans");
+  revalidatePath("/", "layout");
   return plan;
 }
 
 export async function deletePlan(id: string) {
   await prisma.membershipPlan.delete({ where: { id } });
-  revalidatePath("/plans");
+  revalidatePath("/", "layout");
 }

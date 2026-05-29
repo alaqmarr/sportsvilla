@@ -12,11 +12,11 @@ export async function createAdmin(data: { name: string; email: string; password:
     },
     select: { id: true, name: true, email: true, createdAt: true }
   });
-  revalidatePath("/admin");
+  revalidatePath("/", "layout");
   return admin;
 }
 
 export async function deleteAdmin(id: string) {
   await prisma.admin.delete({ where: { id } });
-  revalidatePath("/admin");
+  revalidatePath("/", "layout");
 }
