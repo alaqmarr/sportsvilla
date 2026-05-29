@@ -1,7 +1,7 @@
 "use client";
 import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
-import { FiHome, FiUsers, FiMapPin, FiActivity, FiLayers, FiShield, FiFileText, FiMenu, FiX, FiUser, FiCalendar } from "react-icons/fi";
+import { FiHome, FiUsers, FiMapPin, FiActivity, FiLayers, FiShield, FiFileText, FiMenu, FiX, FiUser, FiCalendar, FiServer } from "react-icons/fi";
 import LinkComponent from "next/link"; // Alias to avoid conflict
 
 export function Navigation({ children }: { children: React.ReactNode }) {
@@ -38,6 +38,7 @@ export function Navigation({ children }: { children: React.ReactNode }) {
     { href: "/reports/member", label: "Member Reports", icon: <FiUser /> },
     { href: "/reports/attendance", label: "Attendance Reports", icon: <FiCalendar /> },
     { href: "/reports/memberships", label: "Membership Reports", icon: <FiLayers /> },
+    { href: "/server", label: "Server Health", icon: <FiServer /> },
   ];
 
   return (
