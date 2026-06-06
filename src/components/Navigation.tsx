@@ -50,7 +50,7 @@ export function Navigation({ children }: { children: React.ReactNode }) {
   }, [pathname, router]);
 
   // If we are on the public member portal, don't show the admin sidebar
-  if (pathname.startsWith('/m/')) {
+  if (pathname.startsWith('/m/') || pathname === '/m') {
     return <>{children}</>;
   }
 

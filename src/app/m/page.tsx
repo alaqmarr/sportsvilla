@@ -1,13 +1,20 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useState, useEffect, Suspense } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import toast from "react-hot-toast";
 
-export default function MemberEntryPage() {
+function EntryForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [mobile, setMobile] = useState("");
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (searchParams.get("error") === "notfound") {
+      toast.error("No member found with this mobile number.");
+    }
+  }, [searchParams]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -66,5 +73,13 @@ export default function MemberEntryPage() {
         </form>
       </div>
     </div>
+  );
+}
+
+export default function MemberEntryPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-[#0f1117]"></div>}>
+      <EntryForm />
+    </Suspense>
   );
 }

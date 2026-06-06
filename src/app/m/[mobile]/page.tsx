@@ -1,6 +1,6 @@
 export const dynamic = 'force-dynamic';
 import { prisma } from "@/lib/prisma";
-import { notFound } from "next/navigation";
+import { redirect } from "next/navigation";
 import PortalClient from "./PortalClient";
 
 export default async function MemberPortal({ params }: { params: Promise<{ mobile: string }> }) {
@@ -25,7 +25,7 @@ export default async function MemberPortal({ params }: { params: Promise<{ mobil
   });
 
   if (!member) {
-    return notFound();
+    redirect("/m?error=notfound");
   }
 
   // Filter active and expired plans
