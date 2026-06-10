@@ -1,6 +1,7 @@
 "use server";
 import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
+import { formatIST } from "@/lib/dateUtils";
 
 export async function fetchSportsForCheckin() {
   return await prisma.sport.findMany();
@@ -14,7 +15,7 @@ export async function lookupTicket(query: string) {
         { qrCode: query },
         { booking: { member: { mobile: query } } }
       ],
-      status: "VALID", // Only look for tickets that haven't been consumed or cancelled
+      status: { not: "CANCELLED" }
     },
     include: {
       booking: {
@@ -30,15 +31,20 @@ export async function lookupTicket(query: string) {
   return tickets;
 }
 
-export async function confirmTicketCheckin(ticketId: string, deskSportId: string) {
-  const ticket = await prisma.ticket.findUnique({
-    where: { id: ticketId },
+export async function confirmTicketCheckin(ticketIdOrQrCode: string, deskSportId: string) {
+  const ticket = await prisma.ticket.findFirst({
+    where: {
+      OR: [
+        { id: ticketIdOrQrCode },
+        { qrCode: ticketIdOrQrCode }
+      ]
+    },
     include: { booking: { include: { turf: true } } }
   });
 
-  if (!ticket) throw new Error("Ticket not found.");
-  if (ticket.status !== "VALID") throw new Error(`Ticket is already ${ticket.status}.`);
-  if (ticket.booking.sportId !== deskSportId) throw new Error("Ticket is not for the selected sport.");
+  if (!ticket) return { error: "Ticket not found." };
+  if (ticket.status !== "VALID") return { error: `Ticket is already ${ticket.status}.` };
+  if (ticket.booking.sportId !== deskSportId) return { error: "Ticket is not for the selected sport." };
 
   // Check validity dates
   const now = new Date();
@@ -54,21 +60,38 @@ export async function confirmTicketCheckin(ticketId: string, deskSportId: string
   const earlyAllowTime = new Date(startTime.getTime() - 60 * 60000);
 
   if (now < earlyAllowTime) {
-    throw new Error("Too early to check-in. Booking starts at " + startTime.toLocaleTimeString());
+    return { error: "Too early to check-in. Booking starts at " + formatIST(startTime, 'h:mm a') };
   }
 
   if (now > validityEnd) {
-    throw new Error("Ticket has expired.");
+    return { error: "Ticket has expired." };
   }
 
   // Process checkin
   await prisma.ticket.update({
-    where: { id: ticketId },
+    where: { id: ticket.id },
     data: {
       status: "CHECKED_IN",
       usedAt: new Date()
     }
   });
+
+  const sport = await prisma.sport.findUnique({ where: { id: ticket.booking.sportId } });
+  if (sport && sport.rewardPointsPerCheckin > 0) {
+    await prisma.member.update({
+      where: { id: ticket.booking.memberId },
+      data: { loyaltyPoints: { increment: sport.rewardPointsPerCheckin } }
+    });
+    await prisma.loyaltyHistory.create({
+      data: {
+        memberId: ticket.booking.memberId,
+        points: sport.rewardPointsPerCheckin,
+        type: "EARNED",
+        source: "CHECKIN",
+        description: `Earned for checking into booking: ${sport.name}`
+      }
+    });
+  }
 
   revalidatePath("/", "layout");
   return { success: true };

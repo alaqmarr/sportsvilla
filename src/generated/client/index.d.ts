@@ -29,6 +29,11 @@ export type Setting = $Result.DefaultSelection<Prisma.$SettingPayload>
  */
 export type Member = $Result.DefaultSelection<Prisma.$MemberPayload>
 /**
+ * Model LoyaltyHistory
+ * 
+ */
+export type LoyaltyHistory = $Result.DefaultSelection<Prisma.$LoyaltyHistoryPayload>
+/**
  * Model Sport
  * 
  */
@@ -229,6 +234,16 @@ export class PrismaClient<
     * ```
     */
   get member(): Prisma.MemberDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.loyaltyHistory`: Exposes CRUD operations for the **LoyaltyHistory** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more LoyaltyHistories
+    * const loyaltyHistories = await prisma.loyaltyHistory.findMany()
+    * ```
+    */
+  get loyaltyHistory(): Prisma.LoyaltyHistoryDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.sport`: Exposes CRUD operations for the **Sport** model.
@@ -766,6 +781,7 @@ export namespace Prisma {
     Admin: 'Admin',
     Setting: 'Setting',
     Member: 'Member',
+    LoyaltyHistory: 'LoyaltyHistory',
     Sport: 'Sport',
     Turf: 'Turf',
     TurfSport: 'TurfSport',
@@ -791,7 +807,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "admin" | "setting" | "member" | "sport" | "turf" | "turfSport" | "membershipPlan" | "memberMembership" | "attendance" | "booking" | "payment" | "displaySession" | "ticket"
+      modelProps: "admin" | "setting" | "member" | "loyaltyHistory" | "sport" | "turf" | "turfSport" | "membershipPlan" | "memberMembership" | "attendance" | "booking" | "payment" | "displaySession" | "ticket"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1014,6 +1030,80 @@ export namespace Prisma {
           count: {
             args: Prisma.MemberCountArgs<ExtArgs>
             result: $Utils.Optional<MemberCountAggregateOutputType> | number
+          }
+        }
+      }
+      LoyaltyHistory: {
+        payload: Prisma.$LoyaltyHistoryPayload<ExtArgs>
+        fields: Prisma.LoyaltyHistoryFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.LoyaltyHistoryFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LoyaltyHistoryPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.LoyaltyHistoryFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LoyaltyHistoryPayload>
+          }
+          findFirst: {
+            args: Prisma.LoyaltyHistoryFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LoyaltyHistoryPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.LoyaltyHistoryFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LoyaltyHistoryPayload>
+          }
+          findMany: {
+            args: Prisma.LoyaltyHistoryFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LoyaltyHistoryPayload>[]
+          }
+          create: {
+            args: Prisma.LoyaltyHistoryCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LoyaltyHistoryPayload>
+          }
+          createMany: {
+            args: Prisma.LoyaltyHistoryCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.LoyaltyHistoryCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LoyaltyHistoryPayload>[]
+          }
+          delete: {
+            args: Prisma.LoyaltyHistoryDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LoyaltyHistoryPayload>
+          }
+          update: {
+            args: Prisma.LoyaltyHistoryUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LoyaltyHistoryPayload>
+          }
+          deleteMany: {
+            args: Prisma.LoyaltyHistoryDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.LoyaltyHistoryUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.LoyaltyHistoryUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LoyaltyHistoryPayload>[]
+          }
+          upsert: {
+            args: Prisma.LoyaltyHistoryUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LoyaltyHistoryPayload>
+          }
+          aggregate: {
+            args: Prisma.LoyaltyHistoryAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateLoyaltyHistory>
+          }
+          groupBy: {
+            args: Prisma.LoyaltyHistoryGroupByArgs<ExtArgs>
+            result: $Utils.Optional<LoyaltyHistoryGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.LoyaltyHistoryCountArgs<ExtArgs>
+            result: $Utils.Optional<LoyaltyHistoryCountAggregateOutputType> | number
           }
         }
       }
@@ -1868,6 +1958,7 @@ export namespace Prisma {
     admin?: AdminOmit
     setting?: SettingOmit
     member?: MemberOmit
+    loyaltyHistory?: LoyaltyHistoryOmit
     sport?: SportOmit
     turf?: TurfOmit
     turfSport?: TurfSportOmit
@@ -1961,12 +2052,14 @@ export namespace Prisma {
     memberships: number
     attendances: number
     bookings: number
+    loyaltyHistory: number
   }
 
   export type MemberCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     memberships?: boolean | MemberCountOutputTypeCountMembershipsArgs
     attendances?: boolean | MemberCountOutputTypeCountAttendancesArgs
     bookings?: boolean | MemberCountOutputTypeCountBookingsArgs
+    loyaltyHistory?: boolean | MemberCountOutputTypeCountLoyaltyHistoryArgs
   }
 
   // Custom InputTypes
@@ -1999,6 +2092,13 @@ export namespace Prisma {
    */
   export type MemberCountOutputTypeCountBookingsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: BookingWhereInput
+  }
+
+  /**
+   * MemberCountOutputType without action
+   */
+  export type MemberCountOutputTypeCountLoyaltyHistoryArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: LoyaltyHistoryWhereInput
   }
 
 
@@ -4401,6 +4501,7 @@ export namespace Prisma {
     memberships?: boolean | Member$membershipsArgs<ExtArgs>
     attendances?: boolean | Member$attendancesArgs<ExtArgs>
     bookings?: boolean | Member$bookingsArgs<ExtArgs>
+    loyaltyHistory?: boolean | Member$loyaltyHistoryArgs<ExtArgs>
     _count?: boolean | MemberCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["member"]>
 
@@ -4442,6 +4543,7 @@ export namespace Prisma {
     memberships?: boolean | Member$membershipsArgs<ExtArgs>
     attendances?: boolean | Member$attendancesArgs<ExtArgs>
     bookings?: boolean | Member$bookingsArgs<ExtArgs>
+    loyaltyHistory?: boolean | Member$loyaltyHistoryArgs<ExtArgs>
     _count?: boolean | MemberCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type MemberIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -4453,6 +4555,7 @@ export namespace Prisma {
       memberships: Prisma.$MemberMembershipPayload<ExtArgs>[]
       attendances: Prisma.$AttendancePayload<ExtArgs>[]
       bookings: Prisma.$BookingPayload<ExtArgs>[]
+      loyaltyHistory: Prisma.$LoyaltyHistoryPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -4860,6 +4963,7 @@ export namespace Prisma {
     memberships<T extends Member$membershipsArgs<ExtArgs> = {}>(args?: Subset<T, Member$membershipsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MemberMembershipPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     attendances<T extends Member$attendancesArgs<ExtArgs> = {}>(args?: Subset<T, Member$attendancesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AttendancePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     bookings<T extends Member$bookingsArgs<ExtArgs> = {}>(args?: Subset<T, Member$bookingsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BookingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    loyaltyHistory<T extends Member$loyaltyHistoryArgs<ExtArgs> = {}>(args?: Subset<T, Member$loyaltyHistoryArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LoyaltyHistoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -5360,6 +5464,30 @@ export namespace Prisma {
   }
 
   /**
+   * Member.loyaltyHistory
+   */
+  export type Member$loyaltyHistoryArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LoyaltyHistory
+     */
+    select?: LoyaltyHistorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LoyaltyHistory
+     */
+    omit?: LoyaltyHistoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LoyaltyHistoryInclude<ExtArgs> | null
+    where?: LoyaltyHistoryWhereInput
+    orderBy?: LoyaltyHistoryOrderByWithRelationInput | LoyaltyHistoryOrderByWithRelationInput[]
+    cursor?: LoyaltyHistoryWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: LoyaltyHistoryScalarFieldEnum | LoyaltyHistoryScalarFieldEnum[]
+  }
+
+  /**
    * Member without action
    */
   export type MemberDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -5379,19 +5507,1151 @@ export namespace Prisma {
 
 
   /**
+   * Model LoyaltyHistory
+   */
+
+  export type AggregateLoyaltyHistory = {
+    _count: LoyaltyHistoryCountAggregateOutputType | null
+    _avg: LoyaltyHistoryAvgAggregateOutputType | null
+    _sum: LoyaltyHistorySumAggregateOutputType | null
+    _min: LoyaltyHistoryMinAggregateOutputType | null
+    _max: LoyaltyHistoryMaxAggregateOutputType | null
+  }
+
+  export type LoyaltyHistoryAvgAggregateOutputType = {
+    points: number | null
+  }
+
+  export type LoyaltyHistorySumAggregateOutputType = {
+    points: number | null
+  }
+
+  export type LoyaltyHistoryMinAggregateOutputType = {
+    id: string | null
+    memberId: string | null
+    points: number | null
+    type: string | null
+    source: string | null
+    description: string | null
+    createdAt: Date | null
+  }
+
+  export type LoyaltyHistoryMaxAggregateOutputType = {
+    id: string | null
+    memberId: string | null
+    points: number | null
+    type: string | null
+    source: string | null
+    description: string | null
+    createdAt: Date | null
+  }
+
+  export type LoyaltyHistoryCountAggregateOutputType = {
+    id: number
+    memberId: number
+    points: number
+    type: number
+    source: number
+    description: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type LoyaltyHistoryAvgAggregateInputType = {
+    points?: true
+  }
+
+  export type LoyaltyHistorySumAggregateInputType = {
+    points?: true
+  }
+
+  export type LoyaltyHistoryMinAggregateInputType = {
+    id?: true
+    memberId?: true
+    points?: true
+    type?: true
+    source?: true
+    description?: true
+    createdAt?: true
+  }
+
+  export type LoyaltyHistoryMaxAggregateInputType = {
+    id?: true
+    memberId?: true
+    points?: true
+    type?: true
+    source?: true
+    description?: true
+    createdAt?: true
+  }
+
+  export type LoyaltyHistoryCountAggregateInputType = {
+    id?: true
+    memberId?: true
+    points?: true
+    type?: true
+    source?: true
+    description?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type LoyaltyHistoryAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which LoyaltyHistory to aggregate.
+     */
+    where?: LoyaltyHistoryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of LoyaltyHistories to fetch.
+     */
+    orderBy?: LoyaltyHistoryOrderByWithRelationInput | LoyaltyHistoryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: LoyaltyHistoryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` LoyaltyHistories from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` LoyaltyHistories.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned LoyaltyHistories
+    **/
+    _count?: true | LoyaltyHistoryCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: LoyaltyHistoryAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: LoyaltyHistorySumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: LoyaltyHistoryMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: LoyaltyHistoryMaxAggregateInputType
+  }
+
+  export type GetLoyaltyHistoryAggregateType<T extends LoyaltyHistoryAggregateArgs> = {
+        [P in keyof T & keyof AggregateLoyaltyHistory]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateLoyaltyHistory[P]>
+      : GetScalarType<T[P], AggregateLoyaltyHistory[P]>
+  }
+
+
+
+
+  export type LoyaltyHistoryGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: LoyaltyHistoryWhereInput
+    orderBy?: LoyaltyHistoryOrderByWithAggregationInput | LoyaltyHistoryOrderByWithAggregationInput[]
+    by: LoyaltyHistoryScalarFieldEnum[] | LoyaltyHistoryScalarFieldEnum
+    having?: LoyaltyHistoryScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: LoyaltyHistoryCountAggregateInputType | true
+    _avg?: LoyaltyHistoryAvgAggregateInputType
+    _sum?: LoyaltyHistorySumAggregateInputType
+    _min?: LoyaltyHistoryMinAggregateInputType
+    _max?: LoyaltyHistoryMaxAggregateInputType
+  }
+
+  export type LoyaltyHistoryGroupByOutputType = {
+    id: string
+    memberId: string
+    points: number
+    type: string
+    source: string
+    description: string | null
+    createdAt: Date
+    _count: LoyaltyHistoryCountAggregateOutputType | null
+    _avg: LoyaltyHistoryAvgAggregateOutputType | null
+    _sum: LoyaltyHistorySumAggregateOutputType | null
+    _min: LoyaltyHistoryMinAggregateOutputType | null
+    _max: LoyaltyHistoryMaxAggregateOutputType | null
+  }
+
+  type GetLoyaltyHistoryGroupByPayload<T extends LoyaltyHistoryGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<LoyaltyHistoryGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof LoyaltyHistoryGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], LoyaltyHistoryGroupByOutputType[P]>
+            : GetScalarType<T[P], LoyaltyHistoryGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type LoyaltyHistorySelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    memberId?: boolean
+    points?: boolean
+    type?: boolean
+    source?: boolean
+    description?: boolean
+    createdAt?: boolean
+    member?: boolean | MemberDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["loyaltyHistory"]>
+
+  export type LoyaltyHistorySelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    memberId?: boolean
+    points?: boolean
+    type?: boolean
+    source?: boolean
+    description?: boolean
+    createdAt?: boolean
+    member?: boolean | MemberDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["loyaltyHistory"]>
+
+  export type LoyaltyHistorySelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    memberId?: boolean
+    points?: boolean
+    type?: boolean
+    source?: boolean
+    description?: boolean
+    createdAt?: boolean
+    member?: boolean | MemberDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["loyaltyHistory"]>
+
+  export type LoyaltyHistorySelectScalar = {
+    id?: boolean
+    memberId?: boolean
+    points?: boolean
+    type?: boolean
+    source?: boolean
+    description?: boolean
+    createdAt?: boolean
+  }
+
+  export type LoyaltyHistoryOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "memberId" | "points" | "type" | "source" | "description" | "createdAt", ExtArgs["result"]["loyaltyHistory"]>
+  export type LoyaltyHistoryInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    member?: boolean | MemberDefaultArgs<ExtArgs>
+  }
+  export type LoyaltyHistoryIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    member?: boolean | MemberDefaultArgs<ExtArgs>
+  }
+  export type LoyaltyHistoryIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    member?: boolean | MemberDefaultArgs<ExtArgs>
+  }
+
+  export type $LoyaltyHistoryPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "LoyaltyHistory"
+    objects: {
+      member: Prisma.$MemberPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      memberId: string
+      points: number
+      type: string
+      source: string
+      description: string | null
+      createdAt: Date
+    }, ExtArgs["result"]["loyaltyHistory"]>
+    composites: {}
+  }
+
+  type LoyaltyHistoryGetPayload<S extends boolean | null | undefined | LoyaltyHistoryDefaultArgs> = $Result.GetResult<Prisma.$LoyaltyHistoryPayload, S>
+
+  type LoyaltyHistoryCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<LoyaltyHistoryFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: LoyaltyHistoryCountAggregateInputType | true
+    }
+
+  export interface LoyaltyHistoryDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['LoyaltyHistory'], meta: { name: 'LoyaltyHistory' } }
+    /**
+     * Find zero or one LoyaltyHistory that matches the filter.
+     * @param {LoyaltyHistoryFindUniqueArgs} args - Arguments to find a LoyaltyHistory
+     * @example
+     * // Get one LoyaltyHistory
+     * const loyaltyHistory = await prisma.loyaltyHistory.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends LoyaltyHistoryFindUniqueArgs>(args: SelectSubset<T, LoyaltyHistoryFindUniqueArgs<ExtArgs>>): Prisma__LoyaltyHistoryClient<$Result.GetResult<Prisma.$LoyaltyHistoryPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one LoyaltyHistory that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {LoyaltyHistoryFindUniqueOrThrowArgs} args - Arguments to find a LoyaltyHistory
+     * @example
+     * // Get one LoyaltyHistory
+     * const loyaltyHistory = await prisma.loyaltyHistory.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends LoyaltyHistoryFindUniqueOrThrowArgs>(args: SelectSubset<T, LoyaltyHistoryFindUniqueOrThrowArgs<ExtArgs>>): Prisma__LoyaltyHistoryClient<$Result.GetResult<Prisma.$LoyaltyHistoryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first LoyaltyHistory that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LoyaltyHistoryFindFirstArgs} args - Arguments to find a LoyaltyHistory
+     * @example
+     * // Get one LoyaltyHistory
+     * const loyaltyHistory = await prisma.loyaltyHistory.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends LoyaltyHistoryFindFirstArgs>(args?: SelectSubset<T, LoyaltyHistoryFindFirstArgs<ExtArgs>>): Prisma__LoyaltyHistoryClient<$Result.GetResult<Prisma.$LoyaltyHistoryPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first LoyaltyHistory that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LoyaltyHistoryFindFirstOrThrowArgs} args - Arguments to find a LoyaltyHistory
+     * @example
+     * // Get one LoyaltyHistory
+     * const loyaltyHistory = await prisma.loyaltyHistory.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends LoyaltyHistoryFindFirstOrThrowArgs>(args?: SelectSubset<T, LoyaltyHistoryFindFirstOrThrowArgs<ExtArgs>>): Prisma__LoyaltyHistoryClient<$Result.GetResult<Prisma.$LoyaltyHistoryPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more LoyaltyHistories that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LoyaltyHistoryFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all LoyaltyHistories
+     * const loyaltyHistories = await prisma.loyaltyHistory.findMany()
+     * 
+     * // Get first 10 LoyaltyHistories
+     * const loyaltyHistories = await prisma.loyaltyHistory.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const loyaltyHistoryWithIdOnly = await prisma.loyaltyHistory.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends LoyaltyHistoryFindManyArgs>(args?: SelectSubset<T, LoyaltyHistoryFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LoyaltyHistoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a LoyaltyHistory.
+     * @param {LoyaltyHistoryCreateArgs} args - Arguments to create a LoyaltyHistory.
+     * @example
+     * // Create one LoyaltyHistory
+     * const LoyaltyHistory = await prisma.loyaltyHistory.create({
+     *   data: {
+     *     // ... data to create a LoyaltyHistory
+     *   }
+     * })
+     * 
+     */
+    create<T extends LoyaltyHistoryCreateArgs>(args: SelectSubset<T, LoyaltyHistoryCreateArgs<ExtArgs>>): Prisma__LoyaltyHistoryClient<$Result.GetResult<Prisma.$LoyaltyHistoryPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many LoyaltyHistories.
+     * @param {LoyaltyHistoryCreateManyArgs} args - Arguments to create many LoyaltyHistories.
+     * @example
+     * // Create many LoyaltyHistories
+     * const loyaltyHistory = await prisma.loyaltyHistory.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends LoyaltyHistoryCreateManyArgs>(args?: SelectSubset<T, LoyaltyHistoryCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many LoyaltyHistories and returns the data saved in the database.
+     * @param {LoyaltyHistoryCreateManyAndReturnArgs} args - Arguments to create many LoyaltyHistories.
+     * @example
+     * // Create many LoyaltyHistories
+     * const loyaltyHistory = await prisma.loyaltyHistory.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many LoyaltyHistories and only return the `id`
+     * const loyaltyHistoryWithIdOnly = await prisma.loyaltyHistory.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends LoyaltyHistoryCreateManyAndReturnArgs>(args?: SelectSubset<T, LoyaltyHistoryCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LoyaltyHistoryPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a LoyaltyHistory.
+     * @param {LoyaltyHistoryDeleteArgs} args - Arguments to delete one LoyaltyHistory.
+     * @example
+     * // Delete one LoyaltyHistory
+     * const LoyaltyHistory = await prisma.loyaltyHistory.delete({
+     *   where: {
+     *     // ... filter to delete one LoyaltyHistory
+     *   }
+     * })
+     * 
+     */
+    delete<T extends LoyaltyHistoryDeleteArgs>(args: SelectSubset<T, LoyaltyHistoryDeleteArgs<ExtArgs>>): Prisma__LoyaltyHistoryClient<$Result.GetResult<Prisma.$LoyaltyHistoryPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one LoyaltyHistory.
+     * @param {LoyaltyHistoryUpdateArgs} args - Arguments to update one LoyaltyHistory.
+     * @example
+     * // Update one LoyaltyHistory
+     * const loyaltyHistory = await prisma.loyaltyHistory.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends LoyaltyHistoryUpdateArgs>(args: SelectSubset<T, LoyaltyHistoryUpdateArgs<ExtArgs>>): Prisma__LoyaltyHistoryClient<$Result.GetResult<Prisma.$LoyaltyHistoryPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more LoyaltyHistories.
+     * @param {LoyaltyHistoryDeleteManyArgs} args - Arguments to filter LoyaltyHistories to delete.
+     * @example
+     * // Delete a few LoyaltyHistories
+     * const { count } = await prisma.loyaltyHistory.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends LoyaltyHistoryDeleteManyArgs>(args?: SelectSubset<T, LoyaltyHistoryDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more LoyaltyHistories.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LoyaltyHistoryUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many LoyaltyHistories
+     * const loyaltyHistory = await prisma.loyaltyHistory.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends LoyaltyHistoryUpdateManyArgs>(args: SelectSubset<T, LoyaltyHistoryUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more LoyaltyHistories and returns the data updated in the database.
+     * @param {LoyaltyHistoryUpdateManyAndReturnArgs} args - Arguments to update many LoyaltyHistories.
+     * @example
+     * // Update many LoyaltyHistories
+     * const loyaltyHistory = await prisma.loyaltyHistory.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more LoyaltyHistories and only return the `id`
+     * const loyaltyHistoryWithIdOnly = await prisma.loyaltyHistory.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends LoyaltyHistoryUpdateManyAndReturnArgs>(args: SelectSubset<T, LoyaltyHistoryUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LoyaltyHistoryPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one LoyaltyHistory.
+     * @param {LoyaltyHistoryUpsertArgs} args - Arguments to update or create a LoyaltyHistory.
+     * @example
+     * // Update or create a LoyaltyHistory
+     * const loyaltyHistory = await prisma.loyaltyHistory.upsert({
+     *   create: {
+     *     // ... data to create a LoyaltyHistory
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the LoyaltyHistory we want to update
+     *   }
+     * })
+     */
+    upsert<T extends LoyaltyHistoryUpsertArgs>(args: SelectSubset<T, LoyaltyHistoryUpsertArgs<ExtArgs>>): Prisma__LoyaltyHistoryClient<$Result.GetResult<Prisma.$LoyaltyHistoryPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of LoyaltyHistories.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LoyaltyHistoryCountArgs} args - Arguments to filter LoyaltyHistories to count.
+     * @example
+     * // Count the number of LoyaltyHistories
+     * const count = await prisma.loyaltyHistory.count({
+     *   where: {
+     *     // ... the filter for the LoyaltyHistories we want to count
+     *   }
+     * })
+    **/
+    count<T extends LoyaltyHistoryCountArgs>(
+      args?: Subset<T, LoyaltyHistoryCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], LoyaltyHistoryCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a LoyaltyHistory.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LoyaltyHistoryAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends LoyaltyHistoryAggregateArgs>(args: Subset<T, LoyaltyHistoryAggregateArgs>): Prisma.PrismaPromise<GetLoyaltyHistoryAggregateType<T>>
+
+    /**
+     * Group by LoyaltyHistory.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LoyaltyHistoryGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends LoyaltyHistoryGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: LoyaltyHistoryGroupByArgs['orderBy'] }
+        : { orderBy?: LoyaltyHistoryGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, LoyaltyHistoryGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetLoyaltyHistoryGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the LoyaltyHistory model
+   */
+  readonly fields: LoyaltyHistoryFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for LoyaltyHistory.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__LoyaltyHistoryClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    member<T extends MemberDefaultArgs<ExtArgs> = {}>(args?: Subset<T, MemberDefaultArgs<ExtArgs>>): Prisma__MemberClient<$Result.GetResult<Prisma.$MemberPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the LoyaltyHistory model
+   */
+  interface LoyaltyHistoryFieldRefs {
+    readonly id: FieldRef<"LoyaltyHistory", 'String'>
+    readonly memberId: FieldRef<"LoyaltyHistory", 'String'>
+    readonly points: FieldRef<"LoyaltyHistory", 'Int'>
+    readonly type: FieldRef<"LoyaltyHistory", 'String'>
+    readonly source: FieldRef<"LoyaltyHistory", 'String'>
+    readonly description: FieldRef<"LoyaltyHistory", 'String'>
+    readonly createdAt: FieldRef<"LoyaltyHistory", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * LoyaltyHistory findUnique
+   */
+  export type LoyaltyHistoryFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LoyaltyHistory
+     */
+    select?: LoyaltyHistorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LoyaltyHistory
+     */
+    omit?: LoyaltyHistoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LoyaltyHistoryInclude<ExtArgs> | null
+    /**
+     * Filter, which LoyaltyHistory to fetch.
+     */
+    where: LoyaltyHistoryWhereUniqueInput
+  }
+
+  /**
+   * LoyaltyHistory findUniqueOrThrow
+   */
+  export type LoyaltyHistoryFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LoyaltyHistory
+     */
+    select?: LoyaltyHistorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LoyaltyHistory
+     */
+    omit?: LoyaltyHistoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LoyaltyHistoryInclude<ExtArgs> | null
+    /**
+     * Filter, which LoyaltyHistory to fetch.
+     */
+    where: LoyaltyHistoryWhereUniqueInput
+  }
+
+  /**
+   * LoyaltyHistory findFirst
+   */
+  export type LoyaltyHistoryFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LoyaltyHistory
+     */
+    select?: LoyaltyHistorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LoyaltyHistory
+     */
+    omit?: LoyaltyHistoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LoyaltyHistoryInclude<ExtArgs> | null
+    /**
+     * Filter, which LoyaltyHistory to fetch.
+     */
+    where?: LoyaltyHistoryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of LoyaltyHistories to fetch.
+     */
+    orderBy?: LoyaltyHistoryOrderByWithRelationInput | LoyaltyHistoryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for LoyaltyHistories.
+     */
+    cursor?: LoyaltyHistoryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` LoyaltyHistories from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` LoyaltyHistories.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of LoyaltyHistories.
+     */
+    distinct?: LoyaltyHistoryScalarFieldEnum | LoyaltyHistoryScalarFieldEnum[]
+  }
+
+  /**
+   * LoyaltyHistory findFirstOrThrow
+   */
+  export type LoyaltyHistoryFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LoyaltyHistory
+     */
+    select?: LoyaltyHistorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LoyaltyHistory
+     */
+    omit?: LoyaltyHistoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LoyaltyHistoryInclude<ExtArgs> | null
+    /**
+     * Filter, which LoyaltyHistory to fetch.
+     */
+    where?: LoyaltyHistoryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of LoyaltyHistories to fetch.
+     */
+    orderBy?: LoyaltyHistoryOrderByWithRelationInput | LoyaltyHistoryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for LoyaltyHistories.
+     */
+    cursor?: LoyaltyHistoryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` LoyaltyHistories from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` LoyaltyHistories.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of LoyaltyHistories.
+     */
+    distinct?: LoyaltyHistoryScalarFieldEnum | LoyaltyHistoryScalarFieldEnum[]
+  }
+
+  /**
+   * LoyaltyHistory findMany
+   */
+  export type LoyaltyHistoryFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LoyaltyHistory
+     */
+    select?: LoyaltyHistorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LoyaltyHistory
+     */
+    omit?: LoyaltyHistoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LoyaltyHistoryInclude<ExtArgs> | null
+    /**
+     * Filter, which LoyaltyHistories to fetch.
+     */
+    where?: LoyaltyHistoryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of LoyaltyHistories to fetch.
+     */
+    orderBy?: LoyaltyHistoryOrderByWithRelationInput | LoyaltyHistoryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing LoyaltyHistories.
+     */
+    cursor?: LoyaltyHistoryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` LoyaltyHistories from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` LoyaltyHistories.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of LoyaltyHistories.
+     */
+    distinct?: LoyaltyHistoryScalarFieldEnum | LoyaltyHistoryScalarFieldEnum[]
+  }
+
+  /**
+   * LoyaltyHistory create
+   */
+  export type LoyaltyHistoryCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LoyaltyHistory
+     */
+    select?: LoyaltyHistorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LoyaltyHistory
+     */
+    omit?: LoyaltyHistoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LoyaltyHistoryInclude<ExtArgs> | null
+    /**
+     * The data needed to create a LoyaltyHistory.
+     */
+    data: XOR<LoyaltyHistoryCreateInput, LoyaltyHistoryUncheckedCreateInput>
+  }
+
+  /**
+   * LoyaltyHistory createMany
+   */
+  export type LoyaltyHistoryCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many LoyaltyHistories.
+     */
+    data: LoyaltyHistoryCreateManyInput | LoyaltyHistoryCreateManyInput[]
+  }
+
+  /**
+   * LoyaltyHistory createManyAndReturn
+   */
+  export type LoyaltyHistoryCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LoyaltyHistory
+     */
+    select?: LoyaltyHistorySelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the LoyaltyHistory
+     */
+    omit?: LoyaltyHistoryOmit<ExtArgs> | null
+    /**
+     * The data used to create many LoyaltyHistories.
+     */
+    data: LoyaltyHistoryCreateManyInput | LoyaltyHistoryCreateManyInput[]
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LoyaltyHistoryIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * LoyaltyHistory update
+   */
+  export type LoyaltyHistoryUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LoyaltyHistory
+     */
+    select?: LoyaltyHistorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LoyaltyHistory
+     */
+    omit?: LoyaltyHistoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LoyaltyHistoryInclude<ExtArgs> | null
+    /**
+     * The data needed to update a LoyaltyHistory.
+     */
+    data: XOR<LoyaltyHistoryUpdateInput, LoyaltyHistoryUncheckedUpdateInput>
+    /**
+     * Choose, which LoyaltyHistory to update.
+     */
+    where: LoyaltyHistoryWhereUniqueInput
+  }
+
+  /**
+   * LoyaltyHistory updateMany
+   */
+  export type LoyaltyHistoryUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update LoyaltyHistories.
+     */
+    data: XOR<LoyaltyHistoryUpdateManyMutationInput, LoyaltyHistoryUncheckedUpdateManyInput>
+    /**
+     * Filter which LoyaltyHistories to update
+     */
+    where?: LoyaltyHistoryWhereInput
+    /**
+     * Limit how many LoyaltyHistories to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * LoyaltyHistory updateManyAndReturn
+   */
+  export type LoyaltyHistoryUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LoyaltyHistory
+     */
+    select?: LoyaltyHistorySelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the LoyaltyHistory
+     */
+    omit?: LoyaltyHistoryOmit<ExtArgs> | null
+    /**
+     * The data used to update LoyaltyHistories.
+     */
+    data: XOR<LoyaltyHistoryUpdateManyMutationInput, LoyaltyHistoryUncheckedUpdateManyInput>
+    /**
+     * Filter which LoyaltyHistories to update
+     */
+    where?: LoyaltyHistoryWhereInput
+    /**
+     * Limit how many LoyaltyHistories to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LoyaltyHistoryIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * LoyaltyHistory upsert
+   */
+  export type LoyaltyHistoryUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LoyaltyHistory
+     */
+    select?: LoyaltyHistorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LoyaltyHistory
+     */
+    omit?: LoyaltyHistoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LoyaltyHistoryInclude<ExtArgs> | null
+    /**
+     * The filter to search for the LoyaltyHistory to update in case it exists.
+     */
+    where: LoyaltyHistoryWhereUniqueInput
+    /**
+     * In case the LoyaltyHistory found by the `where` argument doesn't exist, create a new LoyaltyHistory with this data.
+     */
+    create: XOR<LoyaltyHistoryCreateInput, LoyaltyHistoryUncheckedCreateInput>
+    /**
+     * In case the LoyaltyHistory was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<LoyaltyHistoryUpdateInput, LoyaltyHistoryUncheckedUpdateInput>
+  }
+
+  /**
+   * LoyaltyHistory delete
+   */
+  export type LoyaltyHistoryDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LoyaltyHistory
+     */
+    select?: LoyaltyHistorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LoyaltyHistory
+     */
+    omit?: LoyaltyHistoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LoyaltyHistoryInclude<ExtArgs> | null
+    /**
+     * Filter which LoyaltyHistory to delete.
+     */
+    where: LoyaltyHistoryWhereUniqueInput
+  }
+
+  /**
+   * LoyaltyHistory deleteMany
+   */
+  export type LoyaltyHistoryDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which LoyaltyHistories to delete
+     */
+    where?: LoyaltyHistoryWhereInput
+    /**
+     * Limit how many LoyaltyHistories to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * LoyaltyHistory without action
+   */
+  export type LoyaltyHistoryDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LoyaltyHistory
+     */
+    select?: LoyaltyHistorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LoyaltyHistory
+     */
+    omit?: LoyaltyHistoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LoyaltyHistoryInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Model Sport
    */
 
   export type AggregateSport = {
     _count: SportCountAggregateOutputType | null
+    _avg: SportAvgAggregateOutputType | null
+    _sum: SportSumAggregateOutputType | null
     _min: SportMinAggregateOutputType | null
     _max: SportMaxAggregateOutputType | null
+  }
+
+  export type SportAvgAggregateOutputType = {
+    rewardPointsPerCheckin: number | null
+  }
+
+  export type SportSumAggregateOutputType = {
+    rewardPointsPerCheckin: number | null
   }
 
   export type SportMinAggregateOutputType = {
     id: string | null
     name: string | null
     description: string | null
+    rewardPointsPerCheckin: number | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -5400,6 +6660,7 @@ export namespace Prisma {
     id: string | null
     name: string | null
     description: string | null
+    rewardPointsPerCheckin: number | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -5408,16 +6669,26 @@ export namespace Prisma {
     id: number
     name: number
     description: number
+    rewardPointsPerCheckin: number
     createdAt: number
     updatedAt: number
     _all: number
   }
 
 
+  export type SportAvgAggregateInputType = {
+    rewardPointsPerCheckin?: true
+  }
+
+  export type SportSumAggregateInputType = {
+    rewardPointsPerCheckin?: true
+  }
+
   export type SportMinAggregateInputType = {
     id?: true
     name?: true
     description?: true
+    rewardPointsPerCheckin?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -5426,6 +6697,7 @@ export namespace Prisma {
     id?: true
     name?: true
     description?: true
+    rewardPointsPerCheckin?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -5434,6 +6706,7 @@ export namespace Prisma {
     id?: true
     name?: true
     description?: true
+    rewardPointsPerCheckin?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -5477,6 +6750,18 @@ export namespace Prisma {
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
+     * Select which fields to average
+    **/
+    _avg?: SportAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: SportSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
      * Select which fields to find the minimum value
     **/
     _min?: SportMinAggregateInputType
@@ -5507,6 +6792,8 @@ export namespace Prisma {
     take?: number
     skip?: number
     _count?: SportCountAggregateInputType | true
+    _avg?: SportAvgAggregateInputType
+    _sum?: SportSumAggregateInputType
     _min?: SportMinAggregateInputType
     _max?: SportMaxAggregateInputType
   }
@@ -5515,9 +6802,12 @@ export namespace Prisma {
     id: string
     name: string
     description: string | null
+    rewardPointsPerCheckin: number
     createdAt: Date
     updatedAt: Date
     _count: SportCountAggregateOutputType | null
+    _avg: SportAvgAggregateOutputType | null
+    _sum: SportSumAggregateOutputType | null
     _min: SportMinAggregateOutputType | null
     _max: SportMaxAggregateOutputType | null
   }
@@ -5540,6 +6830,7 @@ export namespace Prisma {
     id?: boolean
     name?: boolean
     description?: boolean
+    rewardPointsPerCheckin?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     turfs?: boolean | Sport$turfsArgs<ExtArgs>
@@ -5553,6 +6844,7 @@ export namespace Prisma {
     id?: boolean
     name?: boolean
     description?: boolean
+    rewardPointsPerCheckin?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["sport"]>
@@ -5561,6 +6853,7 @@ export namespace Prisma {
     id?: boolean
     name?: boolean
     description?: boolean
+    rewardPointsPerCheckin?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["sport"]>
@@ -5569,11 +6862,12 @@ export namespace Prisma {
     id?: boolean
     name?: boolean
     description?: boolean
+    rewardPointsPerCheckin?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type SportOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "description" | "createdAt" | "updatedAt", ExtArgs["result"]["sport"]>
+  export type SportOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "description" | "rewardPointsPerCheckin" | "createdAt" | "updatedAt", ExtArgs["result"]["sport"]>
   export type SportInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     turfs?: boolean | Sport$turfsArgs<ExtArgs>
     membershipPlans?: boolean | Sport$membershipPlansArgs<ExtArgs>
@@ -5596,6 +6890,7 @@ export namespace Prisma {
       id: string
       name: string
       description: string | null
+      rewardPointsPerCheckin: number
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["sport"]>
@@ -6028,6 +7323,7 @@ export namespace Prisma {
     readonly id: FieldRef<"Sport", 'String'>
     readonly name: FieldRef<"Sport", 'String'>
     readonly description: FieldRef<"Sport", 'String'>
+    readonly rewardPointsPerCheckin: FieldRef<"Sport", 'Int'>
     readonly createdAt: FieldRef<"Sport", 'DateTime'>
     readonly updatedAt: FieldRef<"Sport", 'DateTime'>
   }
@@ -8872,6 +10168,8 @@ export namespace Prisma {
     price: number | null
     slotsPerDay: number | null
     familySize: number | null
+    rewardPointsOnPurchase: number | null
+    rewardPointsPerCheckin: number | null
   }
 
   export type MembershipPlanSumAggregateOutputType = {
@@ -8879,6 +10177,8 @@ export namespace Prisma {
     price: number | null
     slotsPerDay: number | null
     familySize: number | null
+    rewardPointsOnPurchase: number | null
+    rewardPointsPerCheckin: number | null
   }
 
   export type MembershipPlanMinAggregateOutputType = {
@@ -8890,6 +10190,8 @@ export namespace Prisma {
     slotsPerDay: number | null
     isFamilyPlan: boolean | null
     familySize: number | null
+    rewardPointsOnPurchase: number | null
+    rewardPointsPerCheckin: number | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -8903,6 +10205,8 @@ export namespace Prisma {
     slotsPerDay: number | null
     isFamilyPlan: boolean | null
     familySize: number | null
+    rewardPointsOnPurchase: number | null
+    rewardPointsPerCheckin: number | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -8916,6 +10220,8 @@ export namespace Prisma {
     slotsPerDay: number
     isFamilyPlan: number
     familySize: number
+    rewardPointsOnPurchase: number
+    rewardPointsPerCheckin: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -8927,6 +10233,8 @@ export namespace Prisma {
     price?: true
     slotsPerDay?: true
     familySize?: true
+    rewardPointsOnPurchase?: true
+    rewardPointsPerCheckin?: true
   }
 
   export type MembershipPlanSumAggregateInputType = {
@@ -8934,6 +10242,8 @@ export namespace Prisma {
     price?: true
     slotsPerDay?: true
     familySize?: true
+    rewardPointsOnPurchase?: true
+    rewardPointsPerCheckin?: true
   }
 
   export type MembershipPlanMinAggregateInputType = {
@@ -8945,6 +10255,8 @@ export namespace Prisma {
     slotsPerDay?: true
     isFamilyPlan?: true
     familySize?: true
+    rewardPointsOnPurchase?: true
+    rewardPointsPerCheckin?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -8958,6 +10270,8 @@ export namespace Prisma {
     slotsPerDay?: true
     isFamilyPlan?: true
     familySize?: true
+    rewardPointsOnPurchase?: true
+    rewardPointsPerCheckin?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -8971,6 +10285,8 @@ export namespace Prisma {
     slotsPerDay?: true
     isFamilyPlan?: true
     familySize?: true
+    rewardPointsOnPurchase?: true
+    rewardPointsPerCheckin?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -9071,6 +10387,8 @@ export namespace Prisma {
     slotsPerDay: number
     isFamilyPlan: boolean
     familySize: number | null
+    rewardPointsOnPurchase: number
+    rewardPointsPerCheckin: number
     createdAt: Date
     updatedAt: Date
     _count: MembershipPlanCountAggregateOutputType | null
@@ -9103,6 +10421,8 @@ export namespace Prisma {
     slotsPerDay?: boolean
     isFamilyPlan?: boolean
     familySize?: boolean
+    rewardPointsOnPurchase?: boolean
+    rewardPointsPerCheckin?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     sport?: boolean | SportDefaultArgs<ExtArgs>
@@ -9120,6 +10440,8 @@ export namespace Prisma {
     slotsPerDay?: boolean
     isFamilyPlan?: boolean
     familySize?: boolean
+    rewardPointsOnPurchase?: boolean
+    rewardPointsPerCheckin?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     sport?: boolean | SportDefaultArgs<ExtArgs>
@@ -9134,6 +10456,8 @@ export namespace Prisma {
     slotsPerDay?: boolean
     isFamilyPlan?: boolean
     familySize?: boolean
+    rewardPointsOnPurchase?: boolean
+    rewardPointsPerCheckin?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     sport?: boolean | SportDefaultArgs<ExtArgs>
@@ -9148,11 +10472,13 @@ export namespace Prisma {
     slotsPerDay?: boolean
     isFamilyPlan?: boolean
     familySize?: boolean
+    rewardPointsOnPurchase?: boolean
+    rewardPointsPerCheckin?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type MembershipPlanOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "sportId" | "durationInDays" | "price" | "slotsPerDay" | "isFamilyPlan" | "familySize" | "createdAt" | "updatedAt", ExtArgs["result"]["membershipPlan"]>
+  export type MembershipPlanOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "sportId" | "durationInDays" | "price" | "slotsPerDay" | "isFamilyPlan" | "familySize" | "rewardPointsOnPurchase" | "rewardPointsPerCheckin" | "createdAt" | "updatedAt", ExtArgs["result"]["membershipPlan"]>
   export type MembershipPlanInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     sport?: boolean | SportDefaultArgs<ExtArgs>
     memberships?: boolean | MembershipPlan$membershipsArgs<ExtArgs>
@@ -9182,6 +10508,8 @@ export namespace Prisma {
       slotsPerDay: number
       isFamilyPlan: boolean
       familySize: number | null
+      rewardPointsOnPurchase: number
+      rewardPointsPerCheckin: number
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["membershipPlan"]>
@@ -9618,6 +10946,8 @@ export namespace Prisma {
     readonly slotsPerDay: FieldRef<"MembershipPlan", 'Int'>
     readonly isFamilyPlan: FieldRef<"MembershipPlan", 'Boolean'>
     readonly familySize: FieldRef<"MembershipPlan", 'Int'>
+    readonly rewardPointsOnPurchase: FieldRef<"MembershipPlan", 'Int'>
+    readonly rewardPointsPerCheckin: FieldRef<"MembershipPlan", 'Int'>
     readonly createdAt: FieldRef<"MembershipPlan", 'DateTime'>
     readonly updatedAt: FieldRef<"MembershipPlan", 'DateTime'>
   }
@@ -12362,11 +13692,15 @@ export namespace Prisma {
   export type BookingAvgAggregateOutputType = {
     price: number | null
     participantCount: number | null
+    pointsRedeemed: number | null
+    discountAmount: number | null
   }
 
   export type BookingSumAggregateOutputType = {
     price: number | null
     participantCount: number | null
+    pointsRedeemed: number | null
+    discountAmount: number | null
   }
 
   export type BookingMinAggregateOutputType = {
@@ -12380,6 +13714,8 @@ export namespace Prisma {
     paymentStatus: string | null
     status: string | null
     participantCount: number | null
+    pointsRedeemed: number | null
+    discountAmount: number | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -12395,6 +13731,8 @@ export namespace Prisma {
     paymentStatus: string | null
     status: string | null
     participantCount: number | null
+    pointsRedeemed: number | null
+    discountAmount: number | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -12410,6 +13748,8 @@ export namespace Prisma {
     paymentStatus: number
     status: number
     participantCount: number
+    pointsRedeemed: number
+    discountAmount: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -12419,11 +13759,15 @@ export namespace Prisma {
   export type BookingAvgAggregateInputType = {
     price?: true
     participantCount?: true
+    pointsRedeemed?: true
+    discountAmount?: true
   }
 
   export type BookingSumAggregateInputType = {
     price?: true
     participantCount?: true
+    pointsRedeemed?: true
+    discountAmount?: true
   }
 
   export type BookingMinAggregateInputType = {
@@ -12437,6 +13781,8 @@ export namespace Prisma {
     paymentStatus?: true
     status?: true
     participantCount?: true
+    pointsRedeemed?: true
+    discountAmount?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -12452,6 +13798,8 @@ export namespace Prisma {
     paymentStatus?: true
     status?: true
     participantCount?: true
+    pointsRedeemed?: true
+    discountAmount?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -12467,6 +13815,8 @@ export namespace Prisma {
     paymentStatus?: true
     status?: true
     participantCount?: true
+    pointsRedeemed?: true
+    discountAmount?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -12569,6 +13919,8 @@ export namespace Prisma {
     paymentStatus: string
     status: string
     participantCount: number
+    pointsRedeemed: number
+    discountAmount: number
     createdAt: Date
     updatedAt: Date
     _count: BookingCountAggregateOutputType | null
@@ -12603,6 +13955,8 @@ export namespace Prisma {
     paymentStatus?: boolean
     status?: boolean
     participantCount?: boolean
+    pointsRedeemed?: boolean
+    discountAmount?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     turf?: boolean | TurfDefaultArgs<ExtArgs>
@@ -12624,6 +13978,8 @@ export namespace Prisma {
     paymentStatus?: boolean
     status?: boolean
     participantCount?: boolean
+    pointsRedeemed?: boolean
+    discountAmount?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     turf?: boolean | TurfDefaultArgs<ExtArgs>
@@ -12642,6 +13998,8 @@ export namespace Prisma {
     paymentStatus?: boolean
     status?: boolean
     participantCount?: boolean
+    pointsRedeemed?: boolean
+    discountAmount?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     turf?: boolean | TurfDefaultArgs<ExtArgs>
@@ -12660,11 +14018,13 @@ export namespace Prisma {
     paymentStatus?: boolean
     status?: boolean
     participantCount?: boolean
+    pointsRedeemed?: boolean
+    discountAmount?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type BookingOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "turfId" | "memberId" | "sportId" | "startTime" | "endTime" | "price" | "paymentStatus" | "status" | "participantCount" | "createdAt" | "updatedAt", ExtArgs["result"]["booking"]>
+  export type BookingOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "turfId" | "memberId" | "sportId" | "startTime" | "endTime" | "price" | "paymentStatus" | "status" | "participantCount" | "pointsRedeemed" | "discountAmount" | "createdAt" | "updatedAt", ExtArgs["result"]["booking"]>
   export type BookingInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     turf?: boolean | TurfDefaultArgs<ExtArgs>
     member?: boolean | MemberDefaultArgs<ExtArgs>
@@ -12704,6 +14064,8 @@ export namespace Prisma {
       paymentStatus: string
       status: string
       participantCount: number
+      pointsRedeemed: number
+      discountAmount: number
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["booking"]>
@@ -13144,6 +14506,8 @@ export namespace Prisma {
     readonly paymentStatus: FieldRef<"Booking", 'String'>
     readonly status: FieldRef<"Booking", 'String'>
     readonly participantCount: FieldRef<"Booking", 'Int'>
+    readonly pointsRedeemed: FieldRef<"Booking", 'Int'>
+    readonly discountAmount: FieldRef<"Booking", 'Float'>
     readonly createdAt: FieldRef<"Booking", 'DateTime'>
     readonly updatedAt: FieldRef<"Booking", 'DateTime'>
   }
@@ -16897,10 +18261,24 @@ export namespace Prisma {
   export type MemberScalarFieldEnum = (typeof MemberScalarFieldEnum)[keyof typeof MemberScalarFieldEnum]
 
 
+  export const LoyaltyHistoryScalarFieldEnum: {
+    id: 'id',
+    memberId: 'memberId',
+    points: 'points',
+    type: 'type',
+    source: 'source',
+    description: 'description',
+    createdAt: 'createdAt'
+  };
+
+  export type LoyaltyHistoryScalarFieldEnum = (typeof LoyaltyHistoryScalarFieldEnum)[keyof typeof LoyaltyHistoryScalarFieldEnum]
+
+
   export const SportScalarFieldEnum: {
     id: 'id',
     name: 'name',
     description: 'description',
+    rewardPointsPerCheckin: 'rewardPointsPerCheckin',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -16942,6 +18320,8 @@ export namespace Prisma {
     slotsPerDay: 'slotsPerDay',
     isFamilyPlan: 'isFamilyPlan',
     familySize: 'familySize',
+    rewardPointsOnPurchase: 'rewardPointsOnPurchase',
+    rewardPointsPerCheckin: 'rewardPointsPerCheckin',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -16988,6 +18368,8 @@ export namespace Prisma {
     paymentStatus: 'paymentStatus',
     status: 'status',
     participantCount: 'participantCount',
+    pointsRedeemed: 'pointsRedeemed',
+    discountAmount: 'discountAmount',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -17205,6 +18587,7 @@ export namespace Prisma {
     memberships?: MemberMembershipListRelationFilter
     attendances?: AttendanceListRelationFilter
     bookings?: BookingListRelationFilter
+    loyaltyHistory?: LoyaltyHistoryListRelationFilter
   }
 
   export type MemberOrderByWithRelationInput = {
@@ -17219,6 +18602,7 @@ export namespace Prisma {
     memberships?: MemberMembershipOrderByRelationAggregateInput
     attendances?: AttendanceOrderByRelationAggregateInput
     bookings?: BookingOrderByRelationAggregateInput
+    loyaltyHistory?: LoyaltyHistoryOrderByRelationAggregateInput
   }
 
   export type MemberWhereUniqueInput = Prisma.AtLeast<{
@@ -17236,6 +18620,7 @@ export namespace Prisma {
     memberships?: MemberMembershipListRelationFilter
     attendances?: AttendanceListRelationFilter
     bookings?: BookingListRelationFilter
+    loyaltyHistory?: LoyaltyHistoryListRelationFilter
   }, "id">
 
   export type MemberOrderByWithAggregationInput = {
@@ -17268,6 +18653,73 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"Member"> | Date | string
   }
 
+  export type LoyaltyHistoryWhereInput = {
+    AND?: LoyaltyHistoryWhereInput | LoyaltyHistoryWhereInput[]
+    OR?: LoyaltyHistoryWhereInput[]
+    NOT?: LoyaltyHistoryWhereInput | LoyaltyHistoryWhereInput[]
+    id?: StringFilter<"LoyaltyHistory"> | string
+    memberId?: StringFilter<"LoyaltyHistory"> | string
+    points?: IntFilter<"LoyaltyHistory"> | number
+    type?: StringFilter<"LoyaltyHistory"> | string
+    source?: StringFilter<"LoyaltyHistory"> | string
+    description?: StringNullableFilter<"LoyaltyHistory"> | string | null
+    createdAt?: DateTimeFilter<"LoyaltyHistory"> | Date | string
+    member?: XOR<MemberScalarRelationFilter, MemberWhereInput>
+  }
+
+  export type LoyaltyHistoryOrderByWithRelationInput = {
+    id?: SortOrder
+    memberId?: SortOrder
+    points?: SortOrder
+    type?: SortOrder
+    source?: SortOrder
+    description?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    member?: MemberOrderByWithRelationInput
+  }
+
+  export type LoyaltyHistoryWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: LoyaltyHistoryWhereInput | LoyaltyHistoryWhereInput[]
+    OR?: LoyaltyHistoryWhereInput[]
+    NOT?: LoyaltyHistoryWhereInput | LoyaltyHistoryWhereInput[]
+    memberId?: StringFilter<"LoyaltyHistory"> | string
+    points?: IntFilter<"LoyaltyHistory"> | number
+    type?: StringFilter<"LoyaltyHistory"> | string
+    source?: StringFilter<"LoyaltyHistory"> | string
+    description?: StringNullableFilter<"LoyaltyHistory"> | string | null
+    createdAt?: DateTimeFilter<"LoyaltyHistory"> | Date | string
+    member?: XOR<MemberScalarRelationFilter, MemberWhereInput>
+  }, "id">
+
+  export type LoyaltyHistoryOrderByWithAggregationInput = {
+    id?: SortOrder
+    memberId?: SortOrder
+    points?: SortOrder
+    type?: SortOrder
+    source?: SortOrder
+    description?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    _count?: LoyaltyHistoryCountOrderByAggregateInput
+    _avg?: LoyaltyHistoryAvgOrderByAggregateInput
+    _max?: LoyaltyHistoryMaxOrderByAggregateInput
+    _min?: LoyaltyHistoryMinOrderByAggregateInput
+    _sum?: LoyaltyHistorySumOrderByAggregateInput
+  }
+
+  export type LoyaltyHistoryScalarWhereWithAggregatesInput = {
+    AND?: LoyaltyHistoryScalarWhereWithAggregatesInput | LoyaltyHistoryScalarWhereWithAggregatesInput[]
+    OR?: LoyaltyHistoryScalarWhereWithAggregatesInput[]
+    NOT?: LoyaltyHistoryScalarWhereWithAggregatesInput | LoyaltyHistoryScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"LoyaltyHistory"> | string
+    memberId?: StringWithAggregatesFilter<"LoyaltyHistory"> | string
+    points?: IntWithAggregatesFilter<"LoyaltyHistory"> | number
+    type?: StringWithAggregatesFilter<"LoyaltyHistory"> | string
+    source?: StringWithAggregatesFilter<"LoyaltyHistory"> | string
+    description?: StringNullableWithAggregatesFilter<"LoyaltyHistory"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"LoyaltyHistory"> | Date | string
+  }
+
   export type SportWhereInput = {
     AND?: SportWhereInput | SportWhereInput[]
     OR?: SportWhereInput[]
@@ -17275,6 +18727,7 @@ export namespace Prisma {
     id?: StringFilter<"Sport"> | string
     name?: StringFilter<"Sport"> | string
     description?: StringNullableFilter<"Sport"> | string | null
+    rewardPointsPerCheckin?: IntFilter<"Sport"> | number
     createdAt?: DateTimeFilter<"Sport"> | Date | string
     updatedAt?: DateTimeFilter<"Sport"> | Date | string
     turfs?: TurfSportListRelationFilter
@@ -17287,6 +18740,7 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     description?: SortOrderInput | SortOrder
+    rewardPointsPerCheckin?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     turfs?: TurfSportOrderByRelationAggregateInput
@@ -17302,6 +18756,7 @@ export namespace Prisma {
     NOT?: SportWhereInput | SportWhereInput[]
     name?: StringFilter<"Sport"> | string
     description?: StringNullableFilter<"Sport"> | string | null
+    rewardPointsPerCheckin?: IntFilter<"Sport"> | number
     createdAt?: DateTimeFilter<"Sport"> | Date | string
     updatedAt?: DateTimeFilter<"Sport"> | Date | string
     turfs?: TurfSportListRelationFilter
@@ -17314,11 +18769,14 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     description?: SortOrderInput | SortOrder
+    rewardPointsPerCheckin?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: SportCountOrderByAggregateInput
+    _avg?: SportAvgOrderByAggregateInput
     _max?: SportMaxOrderByAggregateInput
     _min?: SportMinOrderByAggregateInput
+    _sum?: SportSumOrderByAggregateInput
   }
 
   export type SportScalarWhereWithAggregatesInput = {
@@ -17328,6 +18786,7 @@ export namespace Prisma {
     id?: StringWithAggregatesFilter<"Sport"> | string
     name?: StringWithAggregatesFilter<"Sport"> | string
     description?: StringNullableWithAggregatesFilter<"Sport"> | string | null
+    rewardPointsPerCheckin?: IntWithAggregatesFilter<"Sport"> | number
     createdAt?: DateTimeWithAggregatesFilter<"Sport"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Sport"> | Date | string
   }
@@ -17484,6 +18943,8 @@ export namespace Prisma {
     slotsPerDay?: IntFilter<"MembershipPlan"> | number
     isFamilyPlan?: BoolFilter<"MembershipPlan"> | boolean
     familySize?: IntNullableFilter<"MembershipPlan"> | number | null
+    rewardPointsOnPurchase?: IntFilter<"MembershipPlan"> | number
+    rewardPointsPerCheckin?: IntFilter<"MembershipPlan"> | number
     createdAt?: DateTimeFilter<"MembershipPlan"> | Date | string
     updatedAt?: DateTimeFilter<"MembershipPlan"> | Date | string
     sport?: XOR<SportScalarRelationFilter, SportWhereInput>
@@ -17500,6 +18961,8 @@ export namespace Prisma {
     slotsPerDay?: SortOrder
     isFamilyPlan?: SortOrder
     familySize?: SortOrderInput | SortOrder
+    rewardPointsOnPurchase?: SortOrder
+    rewardPointsPerCheckin?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     sport?: SportOrderByWithRelationInput
@@ -17519,6 +18982,8 @@ export namespace Prisma {
     slotsPerDay?: IntFilter<"MembershipPlan"> | number
     isFamilyPlan?: BoolFilter<"MembershipPlan"> | boolean
     familySize?: IntNullableFilter<"MembershipPlan"> | number | null
+    rewardPointsOnPurchase?: IntFilter<"MembershipPlan"> | number
+    rewardPointsPerCheckin?: IntFilter<"MembershipPlan"> | number
     createdAt?: DateTimeFilter<"MembershipPlan"> | Date | string
     updatedAt?: DateTimeFilter<"MembershipPlan"> | Date | string
     sport?: XOR<SportScalarRelationFilter, SportWhereInput>
@@ -17535,6 +19000,8 @@ export namespace Prisma {
     slotsPerDay?: SortOrder
     isFamilyPlan?: SortOrder
     familySize?: SortOrderInput | SortOrder
+    rewardPointsOnPurchase?: SortOrder
+    rewardPointsPerCheckin?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: MembershipPlanCountOrderByAggregateInput
@@ -17556,6 +19023,8 @@ export namespace Prisma {
     slotsPerDay?: IntWithAggregatesFilter<"MembershipPlan"> | number
     isFamilyPlan?: BoolWithAggregatesFilter<"MembershipPlan"> | boolean
     familySize?: IntNullableWithAggregatesFilter<"MembershipPlan"> | number | null
+    rewardPointsOnPurchase?: IntWithAggregatesFilter<"MembershipPlan"> | number
+    rewardPointsPerCheckin?: IntWithAggregatesFilter<"MembershipPlan"> | number
     createdAt?: DateTimeWithAggregatesFilter<"MembershipPlan"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"MembershipPlan"> | Date | string
   }
@@ -17723,6 +19192,8 @@ export namespace Prisma {
     paymentStatus?: StringFilter<"Booking"> | string
     status?: StringFilter<"Booking"> | string
     participantCount?: IntFilter<"Booking"> | number
+    pointsRedeemed?: IntFilter<"Booking"> | number
+    discountAmount?: FloatFilter<"Booking"> | number
     createdAt?: DateTimeFilter<"Booking"> | Date | string
     updatedAt?: DateTimeFilter<"Booking"> | Date | string
     turf?: XOR<TurfScalarRelationFilter, TurfWhereInput>
@@ -17743,6 +19214,8 @@ export namespace Prisma {
     paymentStatus?: SortOrder
     status?: SortOrder
     participantCount?: SortOrder
+    pointsRedeemed?: SortOrder
+    discountAmount?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     turf?: TurfOrderByWithRelationInput
@@ -17766,6 +19239,8 @@ export namespace Prisma {
     paymentStatus?: StringFilter<"Booking"> | string
     status?: StringFilter<"Booking"> | string
     participantCount?: IntFilter<"Booking"> | number
+    pointsRedeemed?: IntFilter<"Booking"> | number
+    discountAmount?: FloatFilter<"Booking"> | number
     createdAt?: DateTimeFilter<"Booking"> | Date | string
     updatedAt?: DateTimeFilter<"Booking"> | Date | string
     turf?: XOR<TurfScalarRelationFilter, TurfWhereInput>
@@ -17786,6 +19261,8 @@ export namespace Prisma {
     paymentStatus?: SortOrder
     status?: SortOrder
     participantCount?: SortOrder
+    pointsRedeemed?: SortOrder
+    discountAmount?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: BookingCountOrderByAggregateInput
@@ -17809,6 +19286,8 @@ export namespace Prisma {
     paymentStatus?: StringWithAggregatesFilter<"Booking"> | string
     status?: StringWithAggregatesFilter<"Booking"> | string
     participantCount?: IntWithAggregatesFilter<"Booking"> | number
+    pointsRedeemed?: IntWithAggregatesFilter<"Booking"> | number
+    discountAmount?: FloatWithAggregatesFilter<"Booking"> | number
     createdAt?: DateTimeWithAggregatesFilter<"Booking"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Booking"> | Date | string
   }
@@ -18116,6 +19595,7 @@ export namespace Prisma {
     memberships?: MemberMembershipCreateNestedManyWithoutMemberInput
     attendances?: AttendanceCreateNestedManyWithoutMemberInput
     bookings?: BookingCreateNestedManyWithoutMemberInput
+    loyaltyHistory?: LoyaltyHistoryCreateNestedManyWithoutMemberInput
   }
 
   export type MemberUncheckedCreateInput = {
@@ -18130,6 +19610,7 @@ export namespace Prisma {
     memberships?: MemberMembershipUncheckedCreateNestedManyWithoutMemberInput
     attendances?: AttendanceUncheckedCreateNestedManyWithoutMemberInput
     bookings?: BookingUncheckedCreateNestedManyWithoutMemberInput
+    loyaltyHistory?: LoyaltyHistoryUncheckedCreateNestedManyWithoutMemberInput
   }
 
   export type MemberUpdateInput = {
@@ -18144,6 +19625,7 @@ export namespace Prisma {
     memberships?: MemberMembershipUpdateManyWithoutMemberNestedInput
     attendances?: AttendanceUpdateManyWithoutMemberNestedInput
     bookings?: BookingUpdateManyWithoutMemberNestedInput
+    loyaltyHistory?: LoyaltyHistoryUpdateManyWithoutMemberNestedInput
   }
 
   export type MemberUncheckedUpdateInput = {
@@ -18158,6 +19640,7 @@ export namespace Prisma {
     memberships?: MemberMembershipUncheckedUpdateManyWithoutMemberNestedInput
     attendances?: AttendanceUncheckedUpdateManyWithoutMemberNestedInput
     bookings?: BookingUncheckedUpdateManyWithoutMemberNestedInput
+    loyaltyHistory?: LoyaltyHistoryUncheckedUpdateManyWithoutMemberNestedInput
   }
 
   export type MemberCreateManyInput = {
@@ -18193,10 +19676,80 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type LoyaltyHistoryCreateInput = {
+    id?: string
+    points: number
+    type: string
+    source: string
+    description?: string | null
+    createdAt?: Date | string
+    member: MemberCreateNestedOneWithoutLoyaltyHistoryInput
+  }
+
+  export type LoyaltyHistoryUncheckedCreateInput = {
+    id?: string
+    memberId: string
+    points: number
+    type: string
+    source: string
+    description?: string | null
+    createdAt?: Date | string
+  }
+
+  export type LoyaltyHistoryUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    points?: IntFieldUpdateOperationsInput | number
+    type?: StringFieldUpdateOperationsInput | string
+    source?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    member?: MemberUpdateOneRequiredWithoutLoyaltyHistoryNestedInput
+  }
+
+  export type LoyaltyHistoryUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    memberId?: StringFieldUpdateOperationsInput | string
+    points?: IntFieldUpdateOperationsInput | number
+    type?: StringFieldUpdateOperationsInput | string
+    source?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type LoyaltyHistoryCreateManyInput = {
+    id?: string
+    memberId: string
+    points: number
+    type: string
+    source: string
+    description?: string | null
+    createdAt?: Date | string
+  }
+
+  export type LoyaltyHistoryUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    points?: IntFieldUpdateOperationsInput | number
+    type?: StringFieldUpdateOperationsInput | string
+    source?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type LoyaltyHistoryUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    memberId?: StringFieldUpdateOperationsInput | string
+    points?: IntFieldUpdateOperationsInput | number
+    type?: StringFieldUpdateOperationsInput | string
+    source?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type SportCreateInput = {
     id?: string
     name: string
     description?: string | null
+    rewardPointsPerCheckin?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     turfs?: TurfSportCreateNestedManyWithoutSportInput
@@ -18209,6 +19762,7 @@ export namespace Prisma {
     id?: string
     name: string
     description?: string | null
+    rewardPointsPerCheckin?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     turfs?: TurfSportUncheckedCreateNestedManyWithoutSportInput
@@ -18221,6 +19775,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    rewardPointsPerCheckin?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     turfs?: TurfSportUpdateManyWithoutSportNestedInput
@@ -18233,6 +19788,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    rewardPointsPerCheckin?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     turfs?: TurfSportUncheckedUpdateManyWithoutSportNestedInput
@@ -18245,6 +19801,7 @@ export namespace Prisma {
     id?: string
     name: string
     description?: string | null
+    rewardPointsPerCheckin?: number
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -18253,6 +19810,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    rewardPointsPerCheckin?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -18261,6 +19819,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    rewardPointsPerCheckin?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -18416,6 +19975,8 @@ export namespace Prisma {
     slotsPerDay?: number
     isFamilyPlan?: boolean
     familySize?: number | null
+    rewardPointsOnPurchase?: number
+    rewardPointsPerCheckin?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     sport: SportCreateNestedOneWithoutMembershipPlansInput
@@ -18432,6 +19993,8 @@ export namespace Prisma {
     slotsPerDay?: number
     isFamilyPlan?: boolean
     familySize?: number | null
+    rewardPointsOnPurchase?: number
+    rewardPointsPerCheckin?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     memberships?: MemberMembershipUncheckedCreateNestedManyWithoutMembershipPlanInput
@@ -18446,6 +20009,8 @@ export namespace Prisma {
     slotsPerDay?: IntFieldUpdateOperationsInput | number
     isFamilyPlan?: BoolFieldUpdateOperationsInput | boolean
     familySize?: NullableIntFieldUpdateOperationsInput | number | null
+    rewardPointsOnPurchase?: IntFieldUpdateOperationsInput | number
+    rewardPointsPerCheckin?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     sport?: SportUpdateOneRequiredWithoutMembershipPlansNestedInput
@@ -18462,6 +20027,8 @@ export namespace Prisma {
     slotsPerDay?: IntFieldUpdateOperationsInput | number
     isFamilyPlan?: BoolFieldUpdateOperationsInput | boolean
     familySize?: NullableIntFieldUpdateOperationsInput | number | null
+    rewardPointsOnPurchase?: IntFieldUpdateOperationsInput | number
+    rewardPointsPerCheckin?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     memberships?: MemberMembershipUncheckedUpdateManyWithoutMembershipPlanNestedInput
@@ -18477,6 +20044,8 @@ export namespace Prisma {
     slotsPerDay?: number
     isFamilyPlan?: boolean
     familySize?: number | null
+    rewardPointsOnPurchase?: number
+    rewardPointsPerCheckin?: number
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -18489,6 +20058,8 @@ export namespace Prisma {
     slotsPerDay?: IntFieldUpdateOperationsInput | number
     isFamilyPlan?: BoolFieldUpdateOperationsInput | boolean
     familySize?: NullableIntFieldUpdateOperationsInput | number | null
+    rewardPointsOnPurchase?: IntFieldUpdateOperationsInput | number
+    rewardPointsPerCheckin?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -18502,6 +20073,8 @@ export namespace Prisma {
     slotsPerDay?: IntFieldUpdateOperationsInput | number
     isFamilyPlan?: BoolFieldUpdateOperationsInput | boolean
     familySize?: NullableIntFieldUpdateOperationsInput | number | null
+    rewardPointsOnPurchase?: IntFieldUpdateOperationsInput | number
+    rewardPointsPerCheckin?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -18663,6 +20236,8 @@ export namespace Prisma {
     paymentStatus?: string
     status?: string
     participantCount?: number
+    pointsRedeemed?: number
+    discountAmount?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     turf: TurfCreateNestedOneWithoutBookingsInput
@@ -18683,6 +20258,8 @@ export namespace Prisma {
     paymentStatus?: string
     status?: string
     participantCount?: number
+    pointsRedeemed?: number
+    discountAmount?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     payments?: PaymentUncheckedCreateNestedManyWithoutBookingInput
@@ -18697,6 +20274,8 @@ export namespace Prisma {
     paymentStatus?: StringFieldUpdateOperationsInput | string
     status?: StringFieldUpdateOperationsInput | string
     participantCount?: IntFieldUpdateOperationsInput | number
+    pointsRedeemed?: IntFieldUpdateOperationsInput | number
+    discountAmount?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     turf?: TurfUpdateOneRequiredWithoutBookingsNestedInput
@@ -18717,6 +20296,8 @@ export namespace Prisma {
     paymentStatus?: StringFieldUpdateOperationsInput | string
     status?: StringFieldUpdateOperationsInput | string
     participantCount?: IntFieldUpdateOperationsInput | number
+    pointsRedeemed?: IntFieldUpdateOperationsInput | number
+    discountAmount?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     payments?: PaymentUncheckedUpdateManyWithoutBookingNestedInput
@@ -18734,6 +20315,8 @@ export namespace Prisma {
     paymentStatus?: string
     status?: string
     participantCount?: number
+    pointsRedeemed?: number
+    discountAmount?: number
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -18746,6 +20329,8 @@ export namespace Prisma {
     paymentStatus?: StringFieldUpdateOperationsInput | string
     status?: StringFieldUpdateOperationsInput | string
     participantCount?: IntFieldUpdateOperationsInput | number
+    pointsRedeemed?: IntFieldUpdateOperationsInput | number
+    discountAmount?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -18761,6 +20346,8 @@ export namespace Prisma {
     paymentStatus?: StringFieldUpdateOperationsInput | string
     status?: StringFieldUpdateOperationsInput | string
     participantCount?: IntFieldUpdateOperationsInput | number
+    pointsRedeemed?: IntFieldUpdateOperationsInput | number
+    discountAmount?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -19125,6 +20712,12 @@ export namespace Prisma {
     none?: BookingWhereInput
   }
 
+  export type LoyaltyHistoryListRelationFilter = {
+    every?: LoyaltyHistoryWhereInput
+    some?: LoyaltyHistoryWhereInput
+    none?: LoyaltyHistoryWhereInput
+  }
+
   export type MemberMembershipOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -19134,6 +20727,10 @@ export namespace Prisma {
   }
 
   export type BookingOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type LoyaltyHistoryOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -19194,6 +20791,49 @@ export namespace Prisma {
     _max?: NestedIntFilter<$PrismaModel>
   }
 
+  export type MemberScalarRelationFilter = {
+    is?: MemberWhereInput
+    isNot?: MemberWhereInput
+  }
+
+  export type LoyaltyHistoryCountOrderByAggregateInput = {
+    id?: SortOrder
+    memberId?: SortOrder
+    points?: SortOrder
+    type?: SortOrder
+    source?: SortOrder
+    description?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type LoyaltyHistoryAvgOrderByAggregateInput = {
+    points?: SortOrder
+  }
+
+  export type LoyaltyHistoryMaxOrderByAggregateInput = {
+    id?: SortOrder
+    memberId?: SortOrder
+    points?: SortOrder
+    type?: SortOrder
+    source?: SortOrder
+    description?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type LoyaltyHistoryMinOrderByAggregateInput = {
+    id?: SortOrder
+    memberId?: SortOrder
+    points?: SortOrder
+    type?: SortOrder
+    source?: SortOrder
+    description?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type LoyaltyHistorySumOrderByAggregateInput = {
+    points?: SortOrder
+  }
+
   export type TurfSportListRelationFilter = {
     every?: TurfSportWhereInput
     some?: TurfSportWhereInput
@@ -19218,14 +20858,20 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     description?: SortOrder
+    rewardPointsPerCheckin?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+  }
+
+  export type SportAvgOrderByAggregateInput = {
+    rewardPointsPerCheckin?: SortOrder
   }
 
   export type SportMaxOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
     description?: SortOrder
+    rewardPointsPerCheckin?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -19234,8 +20880,13 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     description?: SortOrder
+    rewardPointsPerCheckin?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+  }
+
+  export type SportSumOrderByAggregateInput = {
+    rewardPointsPerCheckin?: SortOrder
   }
 
   export type FloatNullableFilter<$PrismaModel = never> = {
@@ -19426,6 +21077,8 @@ export namespace Prisma {
     slotsPerDay?: SortOrder
     isFamilyPlan?: SortOrder
     familySize?: SortOrder
+    rewardPointsOnPurchase?: SortOrder
+    rewardPointsPerCheckin?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -19435,6 +21088,8 @@ export namespace Prisma {
     price?: SortOrder
     slotsPerDay?: SortOrder
     familySize?: SortOrder
+    rewardPointsOnPurchase?: SortOrder
+    rewardPointsPerCheckin?: SortOrder
   }
 
   export type MembershipPlanMaxOrderByAggregateInput = {
@@ -19446,6 +21101,8 @@ export namespace Prisma {
     slotsPerDay?: SortOrder
     isFamilyPlan?: SortOrder
     familySize?: SortOrder
+    rewardPointsOnPurchase?: SortOrder
+    rewardPointsPerCheckin?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -19459,6 +21116,8 @@ export namespace Prisma {
     slotsPerDay?: SortOrder
     isFamilyPlan?: SortOrder
     familySize?: SortOrder
+    rewardPointsOnPurchase?: SortOrder
+    rewardPointsPerCheckin?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -19468,6 +21127,8 @@ export namespace Prisma {
     price?: SortOrder
     slotsPerDay?: SortOrder
     familySize?: SortOrder
+    rewardPointsOnPurchase?: SortOrder
+    rewardPointsPerCheckin?: SortOrder
   }
 
   export type FloatWithAggregatesFilter<$PrismaModel = never> = {
@@ -19484,11 +21145,6 @@ export namespace Prisma {
     _sum?: NestedFloatFilter<$PrismaModel>
     _min?: NestedFloatFilter<$PrismaModel>
     _max?: NestedFloatFilter<$PrismaModel>
-  }
-
-  export type MemberScalarRelationFilter = {
-    is?: MemberWhereInput
-    isNot?: MemberWhereInput
   }
 
   export type MembershipPlanScalarRelationFilter = {
@@ -19603,6 +21259,8 @@ export namespace Prisma {
     paymentStatus?: SortOrder
     status?: SortOrder
     participantCount?: SortOrder
+    pointsRedeemed?: SortOrder
+    discountAmount?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -19610,6 +21268,8 @@ export namespace Prisma {
   export type BookingAvgOrderByAggregateInput = {
     price?: SortOrder
     participantCount?: SortOrder
+    pointsRedeemed?: SortOrder
+    discountAmount?: SortOrder
   }
 
   export type BookingMaxOrderByAggregateInput = {
@@ -19623,6 +21283,8 @@ export namespace Prisma {
     paymentStatus?: SortOrder
     status?: SortOrder
     participantCount?: SortOrder
+    pointsRedeemed?: SortOrder
+    discountAmount?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -19638,6 +21300,8 @@ export namespace Prisma {
     paymentStatus?: SortOrder
     status?: SortOrder
     participantCount?: SortOrder
+    pointsRedeemed?: SortOrder
+    discountAmount?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -19645,6 +21309,8 @@ export namespace Prisma {
   export type BookingSumOrderByAggregateInput = {
     price?: SortOrder
     participantCount?: SortOrder
+    pointsRedeemed?: SortOrder
+    discountAmount?: SortOrder
   }
 
   export type BookingScalarRelationFilter = {
@@ -19810,6 +21476,13 @@ export namespace Prisma {
     connect?: BookingWhereUniqueInput | BookingWhereUniqueInput[]
   }
 
+  export type LoyaltyHistoryCreateNestedManyWithoutMemberInput = {
+    create?: XOR<LoyaltyHistoryCreateWithoutMemberInput, LoyaltyHistoryUncheckedCreateWithoutMemberInput> | LoyaltyHistoryCreateWithoutMemberInput[] | LoyaltyHistoryUncheckedCreateWithoutMemberInput[]
+    connectOrCreate?: LoyaltyHistoryCreateOrConnectWithoutMemberInput | LoyaltyHistoryCreateOrConnectWithoutMemberInput[]
+    createMany?: LoyaltyHistoryCreateManyMemberInputEnvelope
+    connect?: LoyaltyHistoryWhereUniqueInput | LoyaltyHistoryWhereUniqueInput[]
+  }
+
   export type MemberMembershipUncheckedCreateNestedManyWithoutMemberInput = {
     create?: XOR<MemberMembershipCreateWithoutMemberInput, MemberMembershipUncheckedCreateWithoutMemberInput> | MemberMembershipCreateWithoutMemberInput[] | MemberMembershipUncheckedCreateWithoutMemberInput[]
     connectOrCreate?: MemberMembershipCreateOrConnectWithoutMemberInput | MemberMembershipCreateOrConnectWithoutMemberInput[]
@@ -19829,6 +21502,13 @@ export namespace Prisma {
     connectOrCreate?: BookingCreateOrConnectWithoutMemberInput | BookingCreateOrConnectWithoutMemberInput[]
     createMany?: BookingCreateManyMemberInputEnvelope
     connect?: BookingWhereUniqueInput | BookingWhereUniqueInput[]
+  }
+
+  export type LoyaltyHistoryUncheckedCreateNestedManyWithoutMemberInput = {
+    create?: XOR<LoyaltyHistoryCreateWithoutMemberInput, LoyaltyHistoryUncheckedCreateWithoutMemberInput> | LoyaltyHistoryCreateWithoutMemberInput[] | LoyaltyHistoryUncheckedCreateWithoutMemberInput[]
+    connectOrCreate?: LoyaltyHistoryCreateOrConnectWithoutMemberInput | LoyaltyHistoryCreateOrConnectWithoutMemberInput[]
+    createMany?: LoyaltyHistoryCreateManyMemberInputEnvelope
+    connect?: LoyaltyHistoryWhereUniqueInput | LoyaltyHistoryWhereUniqueInput[]
   }
 
   export type IntFieldUpdateOperationsInput = {
@@ -19881,6 +21561,20 @@ export namespace Prisma {
     deleteMany?: BookingScalarWhereInput | BookingScalarWhereInput[]
   }
 
+  export type LoyaltyHistoryUpdateManyWithoutMemberNestedInput = {
+    create?: XOR<LoyaltyHistoryCreateWithoutMemberInput, LoyaltyHistoryUncheckedCreateWithoutMemberInput> | LoyaltyHistoryCreateWithoutMemberInput[] | LoyaltyHistoryUncheckedCreateWithoutMemberInput[]
+    connectOrCreate?: LoyaltyHistoryCreateOrConnectWithoutMemberInput | LoyaltyHistoryCreateOrConnectWithoutMemberInput[]
+    upsert?: LoyaltyHistoryUpsertWithWhereUniqueWithoutMemberInput | LoyaltyHistoryUpsertWithWhereUniqueWithoutMemberInput[]
+    createMany?: LoyaltyHistoryCreateManyMemberInputEnvelope
+    set?: LoyaltyHistoryWhereUniqueInput | LoyaltyHistoryWhereUniqueInput[]
+    disconnect?: LoyaltyHistoryWhereUniqueInput | LoyaltyHistoryWhereUniqueInput[]
+    delete?: LoyaltyHistoryWhereUniqueInput | LoyaltyHistoryWhereUniqueInput[]
+    connect?: LoyaltyHistoryWhereUniqueInput | LoyaltyHistoryWhereUniqueInput[]
+    update?: LoyaltyHistoryUpdateWithWhereUniqueWithoutMemberInput | LoyaltyHistoryUpdateWithWhereUniqueWithoutMemberInput[]
+    updateMany?: LoyaltyHistoryUpdateManyWithWhereWithoutMemberInput | LoyaltyHistoryUpdateManyWithWhereWithoutMemberInput[]
+    deleteMany?: LoyaltyHistoryScalarWhereInput | LoyaltyHistoryScalarWhereInput[]
+  }
+
   export type MemberMembershipUncheckedUpdateManyWithoutMemberNestedInput = {
     create?: XOR<MemberMembershipCreateWithoutMemberInput, MemberMembershipUncheckedCreateWithoutMemberInput> | MemberMembershipCreateWithoutMemberInput[] | MemberMembershipUncheckedCreateWithoutMemberInput[]
     connectOrCreate?: MemberMembershipCreateOrConnectWithoutMemberInput | MemberMembershipCreateOrConnectWithoutMemberInput[]
@@ -19921,6 +21615,34 @@ export namespace Prisma {
     update?: BookingUpdateWithWhereUniqueWithoutMemberInput | BookingUpdateWithWhereUniqueWithoutMemberInput[]
     updateMany?: BookingUpdateManyWithWhereWithoutMemberInput | BookingUpdateManyWithWhereWithoutMemberInput[]
     deleteMany?: BookingScalarWhereInput | BookingScalarWhereInput[]
+  }
+
+  export type LoyaltyHistoryUncheckedUpdateManyWithoutMemberNestedInput = {
+    create?: XOR<LoyaltyHistoryCreateWithoutMemberInput, LoyaltyHistoryUncheckedCreateWithoutMemberInput> | LoyaltyHistoryCreateWithoutMemberInput[] | LoyaltyHistoryUncheckedCreateWithoutMemberInput[]
+    connectOrCreate?: LoyaltyHistoryCreateOrConnectWithoutMemberInput | LoyaltyHistoryCreateOrConnectWithoutMemberInput[]
+    upsert?: LoyaltyHistoryUpsertWithWhereUniqueWithoutMemberInput | LoyaltyHistoryUpsertWithWhereUniqueWithoutMemberInput[]
+    createMany?: LoyaltyHistoryCreateManyMemberInputEnvelope
+    set?: LoyaltyHistoryWhereUniqueInput | LoyaltyHistoryWhereUniqueInput[]
+    disconnect?: LoyaltyHistoryWhereUniqueInput | LoyaltyHistoryWhereUniqueInput[]
+    delete?: LoyaltyHistoryWhereUniqueInput | LoyaltyHistoryWhereUniqueInput[]
+    connect?: LoyaltyHistoryWhereUniqueInput | LoyaltyHistoryWhereUniqueInput[]
+    update?: LoyaltyHistoryUpdateWithWhereUniqueWithoutMemberInput | LoyaltyHistoryUpdateWithWhereUniqueWithoutMemberInput[]
+    updateMany?: LoyaltyHistoryUpdateManyWithWhereWithoutMemberInput | LoyaltyHistoryUpdateManyWithWhereWithoutMemberInput[]
+    deleteMany?: LoyaltyHistoryScalarWhereInput | LoyaltyHistoryScalarWhereInput[]
+  }
+
+  export type MemberCreateNestedOneWithoutLoyaltyHistoryInput = {
+    create?: XOR<MemberCreateWithoutLoyaltyHistoryInput, MemberUncheckedCreateWithoutLoyaltyHistoryInput>
+    connectOrCreate?: MemberCreateOrConnectWithoutLoyaltyHistoryInput
+    connect?: MemberWhereUniqueInput
+  }
+
+  export type MemberUpdateOneRequiredWithoutLoyaltyHistoryNestedInput = {
+    create?: XOR<MemberCreateWithoutLoyaltyHistoryInput, MemberUncheckedCreateWithoutLoyaltyHistoryInput>
+    connectOrCreate?: MemberCreateOrConnectWithoutLoyaltyHistoryInput
+    upsert?: MemberUpsertWithoutLoyaltyHistoryInput
+    connect?: MemberWhereUniqueInput
+    update?: XOR<XOR<MemberUpdateToOneWithWhereWithoutLoyaltyHistoryInput, MemberUpdateWithoutLoyaltyHistoryInput>, MemberUncheckedUpdateWithoutLoyaltyHistoryInput>
   }
 
   export type TurfSportCreateNestedManyWithoutSportInput = {
@@ -20918,6 +22640,8 @@ export namespace Prisma {
     paymentStatus?: string
     status?: string
     participantCount?: number
+    pointsRedeemed?: number
+    discountAmount?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     turf: TurfCreateNestedOneWithoutBookingsInput
@@ -20936,6 +22660,8 @@ export namespace Prisma {
     paymentStatus?: string
     status?: string
     participantCount?: number
+    pointsRedeemed?: number
+    discountAmount?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     payments?: PaymentUncheckedCreateNestedManyWithoutBookingInput
@@ -20949,6 +22675,33 @@ export namespace Prisma {
 
   export type BookingCreateManyMemberInputEnvelope = {
     data: BookingCreateManyMemberInput | BookingCreateManyMemberInput[]
+  }
+
+  export type LoyaltyHistoryCreateWithoutMemberInput = {
+    id?: string
+    points: number
+    type: string
+    source: string
+    description?: string | null
+    createdAt?: Date | string
+  }
+
+  export type LoyaltyHistoryUncheckedCreateWithoutMemberInput = {
+    id?: string
+    points: number
+    type: string
+    source: string
+    description?: string | null
+    createdAt?: Date | string
+  }
+
+  export type LoyaltyHistoryCreateOrConnectWithoutMemberInput = {
+    where: LoyaltyHistoryWhereUniqueInput
+    create: XOR<LoyaltyHistoryCreateWithoutMemberInput, LoyaltyHistoryUncheckedCreateWithoutMemberInput>
+  }
+
+  export type LoyaltyHistoryCreateManyMemberInputEnvelope = {
+    data: LoyaltyHistoryCreateManyMemberInput | LoyaltyHistoryCreateManyMemberInput[]
   }
 
   export type MemberMembershipUpsertWithWhereUniqueWithoutMemberInput = {
@@ -21041,8 +22794,111 @@ export namespace Prisma {
     paymentStatus?: StringFilter<"Booking"> | string
     status?: StringFilter<"Booking"> | string
     participantCount?: IntFilter<"Booking"> | number
+    pointsRedeemed?: IntFilter<"Booking"> | number
+    discountAmount?: FloatFilter<"Booking"> | number
     createdAt?: DateTimeFilter<"Booking"> | Date | string
     updatedAt?: DateTimeFilter<"Booking"> | Date | string
+  }
+
+  export type LoyaltyHistoryUpsertWithWhereUniqueWithoutMemberInput = {
+    where: LoyaltyHistoryWhereUniqueInput
+    update: XOR<LoyaltyHistoryUpdateWithoutMemberInput, LoyaltyHistoryUncheckedUpdateWithoutMemberInput>
+    create: XOR<LoyaltyHistoryCreateWithoutMemberInput, LoyaltyHistoryUncheckedCreateWithoutMemberInput>
+  }
+
+  export type LoyaltyHistoryUpdateWithWhereUniqueWithoutMemberInput = {
+    where: LoyaltyHistoryWhereUniqueInput
+    data: XOR<LoyaltyHistoryUpdateWithoutMemberInput, LoyaltyHistoryUncheckedUpdateWithoutMemberInput>
+  }
+
+  export type LoyaltyHistoryUpdateManyWithWhereWithoutMemberInput = {
+    where: LoyaltyHistoryScalarWhereInput
+    data: XOR<LoyaltyHistoryUpdateManyMutationInput, LoyaltyHistoryUncheckedUpdateManyWithoutMemberInput>
+  }
+
+  export type LoyaltyHistoryScalarWhereInput = {
+    AND?: LoyaltyHistoryScalarWhereInput | LoyaltyHistoryScalarWhereInput[]
+    OR?: LoyaltyHistoryScalarWhereInput[]
+    NOT?: LoyaltyHistoryScalarWhereInput | LoyaltyHistoryScalarWhereInput[]
+    id?: StringFilter<"LoyaltyHistory"> | string
+    memberId?: StringFilter<"LoyaltyHistory"> | string
+    points?: IntFilter<"LoyaltyHistory"> | number
+    type?: StringFilter<"LoyaltyHistory"> | string
+    source?: StringFilter<"LoyaltyHistory"> | string
+    description?: StringNullableFilter<"LoyaltyHistory"> | string | null
+    createdAt?: DateTimeFilter<"LoyaltyHistory"> | Date | string
+  }
+
+  export type MemberCreateWithoutLoyaltyHistoryInput = {
+    id?: string
+    mobile: string
+    name: string
+    email?: string | null
+    loyaltyPoints?: number
+    joinDate?: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    memberships?: MemberMembershipCreateNestedManyWithoutMemberInput
+    attendances?: AttendanceCreateNestedManyWithoutMemberInput
+    bookings?: BookingCreateNestedManyWithoutMemberInput
+  }
+
+  export type MemberUncheckedCreateWithoutLoyaltyHistoryInput = {
+    id?: string
+    mobile: string
+    name: string
+    email?: string | null
+    loyaltyPoints?: number
+    joinDate?: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    memberships?: MemberMembershipUncheckedCreateNestedManyWithoutMemberInput
+    attendances?: AttendanceUncheckedCreateNestedManyWithoutMemberInput
+    bookings?: BookingUncheckedCreateNestedManyWithoutMemberInput
+  }
+
+  export type MemberCreateOrConnectWithoutLoyaltyHistoryInput = {
+    where: MemberWhereUniqueInput
+    create: XOR<MemberCreateWithoutLoyaltyHistoryInput, MemberUncheckedCreateWithoutLoyaltyHistoryInput>
+  }
+
+  export type MemberUpsertWithoutLoyaltyHistoryInput = {
+    update: XOR<MemberUpdateWithoutLoyaltyHistoryInput, MemberUncheckedUpdateWithoutLoyaltyHistoryInput>
+    create: XOR<MemberCreateWithoutLoyaltyHistoryInput, MemberUncheckedCreateWithoutLoyaltyHistoryInput>
+    where?: MemberWhereInput
+  }
+
+  export type MemberUpdateToOneWithWhereWithoutLoyaltyHistoryInput = {
+    where?: MemberWhereInput
+    data: XOR<MemberUpdateWithoutLoyaltyHistoryInput, MemberUncheckedUpdateWithoutLoyaltyHistoryInput>
+  }
+
+  export type MemberUpdateWithoutLoyaltyHistoryInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    mobile?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    loyaltyPoints?: IntFieldUpdateOperationsInput | number
+    joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    memberships?: MemberMembershipUpdateManyWithoutMemberNestedInput
+    attendances?: AttendanceUpdateManyWithoutMemberNestedInput
+    bookings?: BookingUpdateManyWithoutMemberNestedInput
+  }
+
+  export type MemberUncheckedUpdateWithoutLoyaltyHistoryInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    mobile?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    loyaltyPoints?: IntFieldUpdateOperationsInput | number
+    joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    memberships?: MemberMembershipUncheckedUpdateManyWithoutMemberNestedInput
+    attendances?: AttendanceUncheckedUpdateManyWithoutMemberNestedInput
+    bookings?: BookingUncheckedUpdateManyWithoutMemberNestedInput
   }
 
   export type TurfSportCreateWithoutSportInput = {
@@ -21070,6 +22926,8 @@ export namespace Prisma {
     slotsPerDay?: number
     isFamilyPlan?: boolean
     familySize?: number | null
+    rewardPointsOnPurchase?: number
+    rewardPointsPerCheckin?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     memberships?: MemberMembershipCreateNestedManyWithoutMembershipPlanInput
@@ -21084,6 +22942,8 @@ export namespace Prisma {
     slotsPerDay?: number
     isFamilyPlan?: boolean
     familySize?: number | null
+    rewardPointsOnPurchase?: number
+    rewardPointsPerCheckin?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     memberships?: MemberMembershipUncheckedCreateNestedManyWithoutMembershipPlanInput
@@ -21136,6 +22996,8 @@ export namespace Prisma {
     paymentStatus?: string
     status?: string
     participantCount?: number
+    pointsRedeemed?: number
+    discountAmount?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     turf: TurfCreateNestedOneWithoutBookingsInput
@@ -21154,6 +23016,8 @@ export namespace Prisma {
     paymentStatus?: string
     status?: string
     participantCount?: number
+    pointsRedeemed?: number
+    discountAmount?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     payments?: PaymentUncheckedCreateNestedManyWithoutBookingInput
@@ -21221,6 +23085,8 @@ export namespace Prisma {
     slotsPerDay?: IntFilter<"MembershipPlan"> | number
     isFamilyPlan?: BoolFilter<"MembershipPlan"> | boolean
     familySize?: IntNullableFilter<"MembershipPlan"> | number | null
+    rewardPointsOnPurchase?: IntFilter<"MembershipPlan"> | number
+    rewardPointsPerCheckin?: IntFilter<"MembershipPlan"> | number
     createdAt?: DateTimeFilter<"MembershipPlan"> | Date | string
     updatedAt?: DateTimeFilter<"MembershipPlan"> | Date | string
   }
@@ -21360,6 +23226,8 @@ export namespace Prisma {
     paymentStatus?: string
     status?: string
     participantCount?: number
+    pointsRedeemed?: number
+    discountAmount?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     member: MemberCreateNestedOneWithoutBookingsInput
@@ -21378,6 +23246,8 @@ export namespace Prisma {
     paymentStatus?: string
     status?: string
     participantCount?: number
+    pointsRedeemed?: number
+    discountAmount?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     payments?: PaymentUncheckedCreateNestedManyWithoutBookingInput
@@ -21542,6 +23412,7 @@ export namespace Prisma {
     id?: string
     name: string
     description?: string | null
+    rewardPointsPerCheckin?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     membershipPlans?: MembershipPlanCreateNestedManyWithoutSportInput
@@ -21553,6 +23424,7 @@ export namespace Prisma {
     id?: string
     name: string
     description?: string | null
+    rewardPointsPerCheckin?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     membershipPlans?: MembershipPlanUncheckedCreateNestedManyWithoutSportInput
@@ -21623,6 +23495,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    rewardPointsPerCheckin?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     membershipPlans?: MembershipPlanUpdateManyWithoutSportNestedInput
@@ -21634,6 +23507,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    rewardPointsPerCheckin?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     membershipPlans?: MembershipPlanUncheckedUpdateManyWithoutSportNestedInput
@@ -21645,6 +23519,7 @@ export namespace Prisma {
     id?: string
     name: string
     description?: string | null
+    rewardPointsPerCheckin?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     turfs?: TurfSportCreateNestedManyWithoutSportInput
@@ -21656,6 +23531,7 @@ export namespace Prisma {
     id?: string
     name: string
     description?: string | null
+    rewardPointsPerCheckin?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     turfs?: TurfSportUncheckedCreateNestedManyWithoutSportInput
@@ -21741,6 +23617,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    rewardPointsPerCheckin?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     turfs?: TurfSportUpdateManyWithoutSportNestedInput
@@ -21752,6 +23629,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    rewardPointsPerCheckin?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     turfs?: TurfSportUncheckedUpdateManyWithoutSportNestedInput
@@ -21802,6 +23680,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     attendances?: AttendanceCreateNestedManyWithoutMemberInput
     bookings?: BookingCreateNestedManyWithoutMemberInput
+    loyaltyHistory?: LoyaltyHistoryCreateNestedManyWithoutMemberInput
   }
 
   export type MemberUncheckedCreateWithoutMembershipsInput = {
@@ -21815,6 +23694,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     attendances?: AttendanceUncheckedCreateNestedManyWithoutMemberInput
     bookings?: BookingUncheckedCreateNestedManyWithoutMemberInput
+    loyaltyHistory?: LoyaltyHistoryUncheckedCreateNestedManyWithoutMemberInput
   }
 
   export type MemberCreateOrConnectWithoutMembershipsInput = {
@@ -21830,6 +23710,8 @@ export namespace Prisma {
     slotsPerDay?: number
     isFamilyPlan?: boolean
     familySize?: number | null
+    rewardPointsOnPurchase?: number
+    rewardPointsPerCheckin?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     sport: SportCreateNestedOneWithoutMembershipPlansInput
@@ -21845,6 +23727,8 @@ export namespace Prisma {
     slotsPerDay?: number
     isFamilyPlan?: boolean
     familySize?: number | null
+    rewardPointsOnPurchase?: number
+    rewardPointsPerCheckin?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     attendances?: AttendanceUncheckedCreateNestedManyWithoutMembershipPlanInput
@@ -21877,6 +23761,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     attendances?: AttendanceUpdateManyWithoutMemberNestedInput
     bookings?: BookingUpdateManyWithoutMemberNestedInput
+    loyaltyHistory?: LoyaltyHistoryUpdateManyWithoutMemberNestedInput
   }
 
   export type MemberUncheckedUpdateWithoutMembershipsInput = {
@@ -21890,6 +23775,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     attendances?: AttendanceUncheckedUpdateManyWithoutMemberNestedInput
     bookings?: BookingUncheckedUpdateManyWithoutMemberNestedInput
+    loyaltyHistory?: LoyaltyHistoryUncheckedUpdateManyWithoutMemberNestedInput
   }
 
   export type MembershipPlanUpsertWithoutMembershipsInput = {
@@ -21911,6 +23797,8 @@ export namespace Prisma {
     slotsPerDay?: IntFieldUpdateOperationsInput | number
     isFamilyPlan?: BoolFieldUpdateOperationsInput | boolean
     familySize?: NullableIntFieldUpdateOperationsInput | number | null
+    rewardPointsOnPurchase?: IntFieldUpdateOperationsInput | number
+    rewardPointsPerCheckin?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     sport?: SportUpdateOneRequiredWithoutMembershipPlansNestedInput
@@ -21926,6 +23814,8 @@ export namespace Prisma {
     slotsPerDay?: IntFieldUpdateOperationsInput | number
     isFamilyPlan?: BoolFieldUpdateOperationsInput | boolean
     familySize?: NullableIntFieldUpdateOperationsInput | number | null
+    rewardPointsOnPurchase?: IntFieldUpdateOperationsInput | number
+    rewardPointsPerCheckin?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     attendances?: AttendanceUncheckedUpdateManyWithoutMembershipPlanNestedInput
@@ -21942,6 +23832,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     memberships?: MemberMembershipCreateNestedManyWithoutMemberInput
     bookings?: BookingCreateNestedManyWithoutMemberInput
+    loyaltyHistory?: LoyaltyHistoryCreateNestedManyWithoutMemberInput
   }
 
   export type MemberUncheckedCreateWithoutAttendancesInput = {
@@ -21955,6 +23846,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     memberships?: MemberMembershipUncheckedCreateNestedManyWithoutMemberInput
     bookings?: BookingUncheckedCreateNestedManyWithoutMemberInput
+    loyaltyHistory?: LoyaltyHistoryUncheckedCreateNestedManyWithoutMemberInput
   }
 
   export type MemberCreateOrConnectWithoutAttendancesInput = {
@@ -21966,6 +23858,7 @@ export namespace Prisma {
     id?: string
     name: string
     description?: string | null
+    rewardPointsPerCheckin?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     turfs?: TurfSportCreateNestedManyWithoutSportInput
@@ -21977,6 +23870,7 @@ export namespace Prisma {
     id?: string
     name: string
     description?: string | null
+    rewardPointsPerCheckin?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     turfs?: TurfSportUncheckedCreateNestedManyWithoutSportInput
@@ -21997,6 +23891,8 @@ export namespace Prisma {
     slotsPerDay?: number
     isFamilyPlan?: boolean
     familySize?: number | null
+    rewardPointsOnPurchase?: number
+    rewardPointsPerCheckin?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     sport: SportCreateNestedOneWithoutMembershipPlansInput
@@ -22012,6 +23908,8 @@ export namespace Prisma {
     slotsPerDay?: number
     isFamilyPlan?: boolean
     familySize?: number | null
+    rewardPointsOnPurchase?: number
+    rewardPointsPerCheckin?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     memberships?: MemberMembershipUncheckedCreateNestedManyWithoutMembershipPlanInput
@@ -22044,6 +23942,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     memberships?: MemberMembershipUpdateManyWithoutMemberNestedInput
     bookings?: BookingUpdateManyWithoutMemberNestedInput
+    loyaltyHistory?: LoyaltyHistoryUpdateManyWithoutMemberNestedInput
   }
 
   export type MemberUncheckedUpdateWithoutAttendancesInput = {
@@ -22057,6 +23956,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     memberships?: MemberMembershipUncheckedUpdateManyWithoutMemberNestedInput
     bookings?: BookingUncheckedUpdateManyWithoutMemberNestedInput
+    loyaltyHistory?: LoyaltyHistoryUncheckedUpdateManyWithoutMemberNestedInput
   }
 
   export type SportUpsertWithoutAttendancesInput = {
@@ -22074,6 +23974,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    rewardPointsPerCheckin?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     turfs?: TurfSportUpdateManyWithoutSportNestedInput
@@ -22085,6 +23986,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    rewardPointsPerCheckin?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     turfs?: TurfSportUncheckedUpdateManyWithoutSportNestedInput
@@ -22111,6 +24013,8 @@ export namespace Prisma {
     slotsPerDay?: IntFieldUpdateOperationsInput | number
     isFamilyPlan?: BoolFieldUpdateOperationsInput | boolean
     familySize?: NullableIntFieldUpdateOperationsInput | number | null
+    rewardPointsOnPurchase?: IntFieldUpdateOperationsInput | number
+    rewardPointsPerCheckin?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     sport?: SportUpdateOneRequiredWithoutMembershipPlansNestedInput
@@ -22126,6 +24030,8 @@ export namespace Prisma {
     slotsPerDay?: IntFieldUpdateOperationsInput | number
     isFamilyPlan?: BoolFieldUpdateOperationsInput | boolean
     familySize?: NullableIntFieldUpdateOperationsInput | number | null
+    rewardPointsOnPurchase?: IntFieldUpdateOperationsInput | number
+    rewardPointsPerCheckin?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     memberships?: MemberMembershipUncheckedUpdateManyWithoutMembershipPlanNestedInput
@@ -22179,6 +24085,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     memberships?: MemberMembershipCreateNestedManyWithoutMemberInput
     attendances?: AttendanceCreateNestedManyWithoutMemberInput
+    loyaltyHistory?: LoyaltyHistoryCreateNestedManyWithoutMemberInput
   }
 
   export type MemberUncheckedCreateWithoutBookingsInput = {
@@ -22192,6 +24099,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     memberships?: MemberMembershipUncheckedCreateNestedManyWithoutMemberInput
     attendances?: AttendanceUncheckedCreateNestedManyWithoutMemberInput
+    loyaltyHistory?: LoyaltyHistoryUncheckedCreateNestedManyWithoutMemberInput
   }
 
   export type MemberCreateOrConnectWithoutBookingsInput = {
@@ -22203,6 +24111,7 @@ export namespace Prisma {
     id?: string
     name: string
     description?: string | null
+    rewardPointsPerCheckin?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     turfs?: TurfSportCreateNestedManyWithoutSportInput
@@ -22214,6 +24123,7 @@ export namespace Prisma {
     id?: string
     name: string
     description?: string | null
+    rewardPointsPerCheckin?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     turfs?: TurfSportUncheckedCreateNestedManyWithoutSportInput
@@ -22341,6 +24251,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     memberships?: MemberMembershipUpdateManyWithoutMemberNestedInput
     attendances?: AttendanceUpdateManyWithoutMemberNestedInput
+    loyaltyHistory?: LoyaltyHistoryUpdateManyWithoutMemberNestedInput
   }
 
   export type MemberUncheckedUpdateWithoutBookingsInput = {
@@ -22354,6 +24265,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     memberships?: MemberMembershipUncheckedUpdateManyWithoutMemberNestedInput
     attendances?: AttendanceUncheckedUpdateManyWithoutMemberNestedInput
+    loyaltyHistory?: LoyaltyHistoryUncheckedUpdateManyWithoutMemberNestedInput
   }
 
   export type SportUpsertWithoutBookingsInput = {
@@ -22371,6 +24283,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    rewardPointsPerCheckin?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     turfs?: TurfSportUpdateManyWithoutSportNestedInput
@@ -22382,6 +24295,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    rewardPointsPerCheckin?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     turfs?: TurfSportUncheckedUpdateManyWithoutSportNestedInput
@@ -22453,6 +24367,8 @@ export namespace Prisma {
     paymentStatus?: string
     status?: string
     participantCount?: number
+    pointsRedeemed?: number
+    discountAmount?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     turf: TurfCreateNestedOneWithoutBookingsInput
@@ -22472,6 +24388,8 @@ export namespace Prisma {
     paymentStatus?: string
     status?: string
     participantCount?: number
+    pointsRedeemed?: number
+    discountAmount?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     tickets?: TicketUncheckedCreateNestedManyWithoutBookingInput
@@ -22501,6 +24419,8 @@ export namespace Prisma {
     paymentStatus?: StringFieldUpdateOperationsInput | string
     status?: StringFieldUpdateOperationsInput | string
     participantCount?: IntFieldUpdateOperationsInput | number
+    pointsRedeemed?: IntFieldUpdateOperationsInput | number
+    discountAmount?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     turf?: TurfUpdateOneRequiredWithoutBookingsNestedInput
@@ -22520,6 +24440,8 @@ export namespace Prisma {
     paymentStatus?: StringFieldUpdateOperationsInput | string
     status?: StringFieldUpdateOperationsInput | string
     participantCount?: IntFieldUpdateOperationsInput | number
+    pointsRedeemed?: IntFieldUpdateOperationsInput | number
+    discountAmount?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     tickets?: TicketUncheckedUpdateManyWithoutBookingNestedInput
@@ -22533,6 +24455,8 @@ export namespace Prisma {
     paymentStatus?: string
     status?: string
     participantCount?: number
+    pointsRedeemed?: number
+    discountAmount?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     turf: TurfCreateNestedOneWithoutBookingsInput
@@ -22552,6 +24476,8 @@ export namespace Prisma {
     paymentStatus?: string
     status?: string
     participantCount?: number
+    pointsRedeemed?: number
+    discountAmount?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     payments?: PaymentUncheckedCreateNestedManyWithoutBookingInput
@@ -22581,6 +24507,8 @@ export namespace Prisma {
     paymentStatus?: StringFieldUpdateOperationsInput | string
     status?: StringFieldUpdateOperationsInput | string
     participantCount?: IntFieldUpdateOperationsInput | number
+    pointsRedeemed?: IntFieldUpdateOperationsInput | number
+    discountAmount?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     turf?: TurfUpdateOneRequiredWithoutBookingsNestedInput
@@ -22600,6 +24528,8 @@ export namespace Prisma {
     paymentStatus?: StringFieldUpdateOperationsInput | string
     status?: StringFieldUpdateOperationsInput | string
     participantCount?: IntFieldUpdateOperationsInput | number
+    pointsRedeemed?: IntFieldUpdateOperationsInput | number
+    discountAmount?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     payments?: PaymentUncheckedUpdateManyWithoutBookingNestedInput
@@ -22635,8 +24565,19 @@ export namespace Prisma {
     paymentStatus?: string
     status?: string
     participantCount?: number
+    pointsRedeemed?: number
+    discountAmount?: number
     createdAt?: Date | string
     updatedAt?: Date | string
+  }
+
+  export type LoyaltyHistoryCreateManyMemberInput = {
+    id?: string
+    points: number
+    type: string
+    source: string
+    description?: string | null
+    createdAt?: Date | string
   }
 
   export type MemberMembershipUpdateWithoutMemberInput = {
@@ -22707,6 +24648,8 @@ export namespace Prisma {
     paymentStatus?: StringFieldUpdateOperationsInput | string
     status?: StringFieldUpdateOperationsInput | string
     participantCount?: IntFieldUpdateOperationsInput | number
+    pointsRedeemed?: IntFieldUpdateOperationsInput | number
+    discountAmount?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     turf?: TurfUpdateOneRequiredWithoutBookingsNestedInput
@@ -22725,6 +24668,8 @@ export namespace Prisma {
     paymentStatus?: StringFieldUpdateOperationsInput | string
     status?: StringFieldUpdateOperationsInput | string
     participantCount?: IntFieldUpdateOperationsInput | number
+    pointsRedeemed?: IntFieldUpdateOperationsInput | number
+    discountAmount?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     payments?: PaymentUncheckedUpdateManyWithoutBookingNestedInput
@@ -22741,8 +24686,37 @@ export namespace Prisma {
     paymentStatus?: StringFieldUpdateOperationsInput | string
     status?: StringFieldUpdateOperationsInput | string
     participantCount?: IntFieldUpdateOperationsInput | number
+    pointsRedeemed?: IntFieldUpdateOperationsInput | number
+    discountAmount?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type LoyaltyHistoryUpdateWithoutMemberInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    points?: IntFieldUpdateOperationsInput | number
+    type?: StringFieldUpdateOperationsInput | string
+    source?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type LoyaltyHistoryUncheckedUpdateWithoutMemberInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    points?: IntFieldUpdateOperationsInput | number
+    type?: StringFieldUpdateOperationsInput | string
+    source?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type LoyaltyHistoryUncheckedUpdateManyWithoutMemberInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    points?: IntFieldUpdateOperationsInput | number
+    type?: StringFieldUpdateOperationsInput | string
+    source?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type TurfSportCreateManySportInput = {
@@ -22757,6 +24731,8 @@ export namespace Prisma {
     slotsPerDay?: number
     isFamilyPlan?: boolean
     familySize?: number | null
+    rewardPointsOnPurchase?: number
+    rewardPointsPerCheckin?: number
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -22781,6 +24757,8 @@ export namespace Prisma {
     paymentStatus?: string
     status?: string
     participantCount?: number
+    pointsRedeemed?: number
+    discountAmount?: number
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -22805,6 +24783,8 @@ export namespace Prisma {
     slotsPerDay?: IntFieldUpdateOperationsInput | number
     isFamilyPlan?: BoolFieldUpdateOperationsInput | boolean
     familySize?: NullableIntFieldUpdateOperationsInput | number | null
+    rewardPointsOnPurchase?: IntFieldUpdateOperationsInput | number
+    rewardPointsPerCheckin?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     memberships?: MemberMembershipUpdateManyWithoutMembershipPlanNestedInput
@@ -22819,6 +24799,8 @@ export namespace Prisma {
     slotsPerDay?: IntFieldUpdateOperationsInput | number
     isFamilyPlan?: BoolFieldUpdateOperationsInput | boolean
     familySize?: NullableIntFieldUpdateOperationsInput | number | null
+    rewardPointsOnPurchase?: IntFieldUpdateOperationsInput | number
+    rewardPointsPerCheckin?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     memberships?: MemberMembershipUncheckedUpdateManyWithoutMembershipPlanNestedInput
@@ -22833,6 +24815,8 @@ export namespace Prisma {
     slotsPerDay?: IntFieldUpdateOperationsInput | number
     isFamilyPlan?: BoolFieldUpdateOperationsInput | boolean
     familySize?: NullableIntFieldUpdateOperationsInput | number | null
+    rewardPointsOnPurchase?: IntFieldUpdateOperationsInput | number
+    rewardPointsPerCheckin?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -22875,6 +24859,8 @@ export namespace Prisma {
     paymentStatus?: StringFieldUpdateOperationsInput | string
     status?: StringFieldUpdateOperationsInput | string
     participantCount?: IntFieldUpdateOperationsInput | number
+    pointsRedeemed?: IntFieldUpdateOperationsInput | number
+    discountAmount?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     turf?: TurfUpdateOneRequiredWithoutBookingsNestedInput
@@ -22893,6 +24879,8 @@ export namespace Prisma {
     paymentStatus?: StringFieldUpdateOperationsInput | string
     status?: StringFieldUpdateOperationsInput | string
     participantCount?: IntFieldUpdateOperationsInput | number
+    pointsRedeemed?: IntFieldUpdateOperationsInput | number
+    discountAmount?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     payments?: PaymentUncheckedUpdateManyWithoutBookingNestedInput
@@ -22909,6 +24897,8 @@ export namespace Prisma {
     paymentStatus?: StringFieldUpdateOperationsInput | string
     status?: StringFieldUpdateOperationsInput | string
     participantCount?: IntFieldUpdateOperationsInput | number
+    pointsRedeemed?: IntFieldUpdateOperationsInput | number
+    discountAmount?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -22940,6 +24930,8 @@ export namespace Prisma {
     paymentStatus?: string
     status?: string
     participantCount?: number
+    pointsRedeemed?: number
+    discountAmount?: number
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -23009,6 +25001,8 @@ export namespace Prisma {
     paymentStatus?: StringFieldUpdateOperationsInput | string
     status?: StringFieldUpdateOperationsInput | string
     participantCount?: IntFieldUpdateOperationsInput | number
+    pointsRedeemed?: IntFieldUpdateOperationsInput | number
+    discountAmount?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     member?: MemberUpdateOneRequiredWithoutBookingsNestedInput
@@ -23027,6 +25021,8 @@ export namespace Prisma {
     paymentStatus?: StringFieldUpdateOperationsInput | string
     status?: StringFieldUpdateOperationsInput | string
     participantCount?: IntFieldUpdateOperationsInput | number
+    pointsRedeemed?: IntFieldUpdateOperationsInput | number
+    discountAmount?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     payments?: PaymentUncheckedUpdateManyWithoutBookingNestedInput
@@ -23043,6 +25039,8 @@ export namespace Prisma {
     paymentStatus?: StringFieldUpdateOperationsInput | string
     status?: StringFieldUpdateOperationsInput | string
     participantCount?: IntFieldUpdateOperationsInput | number
+    pointsRedeemed?: IntFieldUpdateOperationsInput | number
+    discountAmount?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

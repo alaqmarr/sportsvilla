@@ -2,7 +2,7 @@
 import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 
-export async function createPlan(data: { name: string; sportId: string; durationInDays: number; price: number; slotsPerDay: number; isFamilyPlan: boolean; familySize?: number | null }) {
+export async function createPlan(data: { name: string; sportId: string; durationInDays: number; price: number; slotsPerDay: number; isFamilyPlan: boolean; familySize?: number | null; rewardPointsOnPurchase: number; rewardPointsPerCheckin: number }) {
   const plan = await prisma.membershipPlan.create({
     data: {
       name: data.name,
@@ -12,6 +12,8 @@ export async function createPlan(data: { name: string; sportId: string; duration
       slotsPerDay: data.slotsPerDay,
       isFamilyPlan: data.isFamilyPlan,
       familySize: data.familySize,
+      rewardPointsOnPurchase: data.rewardPointsOnPurchase,
+      rewardPointsPerCheckin: data.rewardPointsPerCheckin,
     },
     include: {
       sport: true,
@@ -21,7 +23,7 @@ export async function createPlan(data: { name: string; sportId: string; duration
   return plan;
 }
 
-export async function updatePlan(id: string, data: { name: string; sportId: string; durationInDays: number; price: number; slotsPerDay: number; isFamilyPlan: boolean; familySize?: number | null }) {
+export async function updatePlan(id: string, data: { name: string; sportId: string; durationInDays: number; price: number; slotsPerDay: number; isFamilyPlan: boolean; familySize?: number | null; rewardPointsOnPurchase: number; rewardPointsPerCheckin: number }) {
   const plan = await prisma.membershipPlan.update({
     where: { id },
     data: {
@@ -32,6 +34,8 @@ export async function updatePlan(id: string, data: { name: string; sportId: stri
       slotsPerDay: data.slotsPerDay,
       isFamilyPlan: data.isFamilyPlan,
       familySize: data.familySize,
+      rewardPointsOnPurchase: data.rewardPointsOnPurchase,
+      rewardPointsPerCheckin: data.rewardPointsPerCheckin,
     },
   });
   revalidatePath("/", "layout");

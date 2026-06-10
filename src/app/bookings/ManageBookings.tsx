@@ -296,7 +296,7 @@ export default function ManageBookings() {
                           <td className="px-6 py-4">
                             <div className="font-bold text-white mb-1 flex items-center gap-2">
                               <FiClock className="text-gray-400" />
-                              {new Date(b.startTime).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})} - {new Date(b.endTime).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
+                              {formatIST(new Date(b.startTime), 'h:mm a')} - {formatIST(new Date(b.endTime), 'h:mm a')}
                             </div>
                             <div className="text-sm text-gray-400 flex items-center gap-1.5">
                               <FiMapPin className="text-emerald-400" /> {b.turf?.name} ({b.sport?.name})
@@ -308,8 +308,15 @@ export default function ManageBookings() {
                             </div>
                             <div className="text-xs text-gray-500 mt-1">{b.member?.mobile}</div>
                             {b.tickets && b.tickets.length > 0 && (
-                              <div className="text-[10px] font-bold mt-2 px-2 py-1 rounded bg-[#1c1f2e] border border-[#2a2d3e] inline-block text-gray-300">
-                                {b.tickets.filter((t:any) => t.status === "CHECKED_IN").length} / {b.tickets.length} CHECKED IN
+                              <div className="mt-2">
+                                <div className="text-[10px] font-bold px-2 py-1 rounded bg-[#1c1f2e] border border-[#2a2d3e] inline-block text-gray-300">
+                                  {b.tickets.filter((t:any) => t.status === "CHECKED_IN").length} / {b.tickets.length} CHECKED IN
+                                </div>
+                                {b.tickets.filter((t:any) => t.status === "CHECKED_IN" && t.usedAt).map((t:any, idx:number) => (
+                                  <div key={idx} className="text-[10px] text-emerald-400 mt-1 pl-1">
+                                    • {t.guestName || b.member?.name || 'Guest'}: {formatIST(new Date(t.usedAt), 'h:mm a')}
+                                  </div>
+                                ))}
                               </div>
                             )}
                           </td>
@@ -327,8 +334,13 @@ export default function ManageBookings() {
                                 'bg-orange-500/10 text-orange-400 border-orange-500/20 hover:bg-orange-500/20 cursor-pointer'
                               }`}
                             >
-                              {b.paymentStatus} (₹{Number((b.payments?.reduce((s:number,p:any)=>s+p.amount,0) || 0).toFixed(2))} / ₹{Number(b.price.toFixed(2))})
+                              {b.paymentStatus} (₹{Number((b.payments?.reduce((s:number,p:any)=>s+p.amount,0) || 0).toFixed(2))} / ₹{Number((b.price - (b.discountAmount || 0)).toFixed(2))})
                             </button>
+                            {b.discountAmount > 0 && (
+                              <div className="text-[10px] text-orange-400 mt-1 font-medium">
+                                -₹{Number(b.discountAmount.toFixed(2))} Discount (Redeemed: {b.pointsRedeemed} pts)
+                              </div>
+                            )}
                           </td>
                           <td className="px-6 py-4 text-right">
                             <div className="flex items-center justify-end gap-2">
@@ -380,7 +392,8 @@ export default function ManageBookings() {
       </div>
       {payModal.show && payModal.booking && (() => {
         const totalPaid = payModal.booking.payments?.reduce((sum: number, p: any) => sum + p.amount, 0) || 0;
-        const balance = Math.max(0, payModal.booking.price - totalPaid);
+        const netPrice = payModal.booking.price - (payModal.booking.discountAmount || 0);
+        const balance = Math.max(0, netPrice - totalPaid);
         return (
           <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-[100] p-4">
             <div className="absolute inset-0" onClick={closePayModal} />
@@ -401,6 +414,12 @@ export default function ManageBookings() {
                     <span className="text-gray-400 font-medium text-sm">Total Booking Value</span>
                     <span className="text-white font-bold">₹{Number(payModal.booking.price.toFixed(2))}</span>
                   </div>
+                  {payModal.booking.discountAmount > 0 && (
+                    <div className="flex justify-between items-center mb-2">
+                      <span className="text-orange-400 font-medium text-sm">Points Discount</span>
+                      <span className="text-orange-400 font-bold">-₹{Number(payModal.booking.discountAmount.toFixed(2))}</span>
+                    </div>
+                  )}
                   <div className="flex justify-between items-center mb-2">
                     <span className="text-emerald-400 font-medium text-sm">Amount Paid</span>
                     <span className="text-emerald-400 font-bold">₹{Number(totalPaid.toFixed(2))}</span>
@@ -555,7 +574,7 @@ export default function ManageBookings() {
                             </span>
                           </div>
                           <div className="text-sm text-emerald-400 font-semibold mb-2">
-                            {new Date(alloc.startTime).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})} - {new Date(alloc.endTime).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
+                            {formatIST(new Date(alloc.startTime), 'h:mm a')} - {formatIST(new Date(alloc.endTime), 'h:mm a')}
                           </div>
                           <div className="text-xs text-gray-500">
                             Amount: ₹{Number(alloc.price.toFixed(2))}

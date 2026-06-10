@@ -10,13 +10,14 @@ export default function SettingsClient({ initialSettings }: { initialSettings: R
   const [businessName, setBusinessName] = useState(initialSettings.businessName || "SportsVilla");
   const [openTime, setOpenTime] = useState(initialSettings.openTime || "06:00");
   const [closeTime, setCloseTime] = useState(initialSettings.closeTime || "23:00");
+  const [pointsPerRupee, setPointsPerRupee] = useState(initialSettings.pointsPerRupee || "100");
   const [loading, setLoading] = useState(false);
 
   async function handleSave(e: React.FormEvent) {
     e.preventDefault();
     setLoading(true);
     try {
-      await updateSettings({ upiId, businessName, openTime, closeTime });
+      await updateSettings({ upiId, businessName, openTime, closeTime, pointsPerRupee });
       showAlert("Settings Saved", "Your configuration has been updated successfully.", "success");
     } catch (err) {
       showAlert("Error", "Failed to save settings. Please try again.", "error");
@@ -92,6 +93,28 @@ export default function SettingsClient({ initialSettings }: { initialSettings: R
               />
               <p className="text-xs text-gray-500 mt-2">
                 This UPI ID will be used to automatically generate payment QR codes for bookings. Ensure this is a valid business or personal UPI ID.
+              </p>
+            </div>
+
+            <div className="pt-6 border-t border-[#2a2d3e]">
+              <h3 className="text-sm font-bold font-['Outfit'] text-white flex items-center gap-2 mb-4">
+                <FiSettings className="text-orange-500" /> Loyalty Program
+              </h3>
+            </div>
+
+            <div>
+              <label className="block text-xs uppercase tracking-wider font-semibold text-gray-500 mb-2">Points to Rupee Ratio (Points per ₹1)</label>
+              <input 
+                type="number" 
+                min="1"
+                className="w-full bg-[#0f1117] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white placeholder-gray-600 focus:border-orange-500/50 focus:ring-2 focus:ring-orange-500/20 focus:outline-none text-sm" 
+                value={pointsPerRupee} 
+                onChange={e => setPointsPerRupee(e.target.value)} 
+                required 
+                placeholder="e.g. 100" 
+              />
+              <p className="text-xs text-gray-500 mt-2">
+                Enter how many reward points equal 1 Rupee discount. (e.g. 100 points = ₹1 means 1000 points gives a ₹10 discount).
               </p>
             </div>
 

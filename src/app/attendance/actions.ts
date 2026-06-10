@@ -109,11 +109,23 @@ export async function markAttendance(data: { memberId: string; sportId: string; 
     }
   });
 
-  // Increment loyalty points for check-in
-  await prisma.member.update({
-    where: { id: data.memberId },
-    data: { loyaltyPoints: { increment: 10 } }
-  });
+  if (plan.rewardPointsPerCheckin > 0) {
+    // Increment loyalty points for check-in
+    await prisma.member.update({
+      where: { id: data.memberId },
+      data: { loyaltyPoints: { increment: plan.rewardPointsPerCheckin } }
+    });
+    
+    await prisma.loyaltyHistory.create({
+      data: {
+        memberId: data.memberId,
+        points: plan.rewardPointsPerCheckin,
+        type: "EARNED",
+        source: "CHECKIN",
+        description: `Earned for membership attendance: ${plan.name}`
+      }
+    });
+  }
 
   revalidatePath("/", "layout");
   revalidatePath("/", "layout");

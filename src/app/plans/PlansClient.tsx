@@ -19,15 +19,17 @@ export default function PlansClient({ initialPlans, sports }: { initialPlans: an
   const [slotsPerDay, setSlotsPerDay] = useState(1);
   const [isFamilyPlan, setIsFamilyPlan] = useState(false);
   const [familySize, setFamilySize] = useState<number | "">("");
+  const [rewardPointsOnPurchase, setRewardPointsOnPurchase] = useState<number>(0);
+  const [rewardPointsPerCheckin, setRewardPointsPerCheckin] = useState<number>(0);
   const [loading, setLoading] = useState(false);
 
   function openCreateModal() {
-    setEditingId(""); setName(""); setSportId(sports[0]?.id || ""); setDurationInDays(30); setPrice(0); setSlotsPerDay(1); setIsFamilyPlan(false); setFamilySize("");
+    setEditingId(""); setName(""); setSportId(sports[0]?.id || ""); setDurationInDays(30); setPrice(0); setSlotsPerDay(1); setIsFamilyPlan(false); setFamilySize(""); setRewardPointsOnPurchase(0); setRewardPointsPerCheckin(0);
     setShowModal(true);
   }
 
   function openEditModal(plan: any) {
-    setEditingId(plan.id); setName(plan.name); setSportId(plan.sportId); setDurationInDays(plan.durationInDays); setPrice(plan.price); setSlotsPerDay(plan.slotsPerDay || 1); setIsFamilyPlan(plan.isFamilyPlan || false); setFamilySize(plan.familySize || "");
+    setEditingId(plan.id); setName(plan.name); setSportId(plan.sportId); setDurationInDays(plan.durationInDays); setPrice(plan.price); setSlotsPerDay(plan.slotsPerDay || 1); setIsFamilyPlan(plan.isFamilyPlan || false); setFamilySize(plan.familySize || ""); setRewardPointsOnPurchase(plan.rewardPointsOnPurchase || 0); setRewardPointsPerCheckin(plan.rewardPointsPerCheckin || 0);
     setShowModal(true);
   }
 
@@ -41,7 +43,9 @@ export default function PlansClient({ initialPlans, sports }: { initialPlans: an
         price: Number(price),
         slotsPerDay: Number(slotsPerDay),
         isFamilyPlan,
-        familySize: isFamilyPlan ? Number(familySize) : null
+        familySize: isFamilyPlan ? Number(familySize) : null,
+        rewardPointsOnPurchase: Number(rewardPointsOnPurchase),
+        rewardPointsPerCheckin: Number(rewardPointsPerCheckin)
       };
 
       if (editingId) {
@@ -79,7 +83,7 @@ export default function PlansClient({ initialPlans, sports }: { initialPlans: an
         <button
           onClick={() => {
             setEditingId(""); setName(""); setSportId(sports[0]?.id || "");
-            setDurationInDays(30); setPrice(1000); setSlotsPerDay(1); setIsFamilyPlan(false); setFamilySize(""); setShowModal(true);
+            setDurationInDays(30); setPrice(1000); setSlotsPerDay(1); setIsFamilyPlan(false); setFamilySize(""); setRewardPointsOnPurchase(0); setRewardPointsPerCheckin(0); setShowModal(true);
           }}
           className="bg-orange-500 hover:bg-orange-600 text-white rounded-lg px-5 py-2.5 text-sm font-semibold inline-flex items-center gap-2 transition-colors cursor-pointer border-none"
         >
@@ -98,7 +102,7 @@ export default function PlansClient({ initialPlans, sports }: { initialPlans: an
                 <button
                   onClick={() => {
                     setEditingId(plan.id); setName(plan.name); setSportId(plan.sportId);
-                    setDurationInDays(plan.durationInDays); setPrice(plan.price); setSlotsPerDay(plan.slotsPerDay); setIsFamilyPlan(plan.isFamilyPlan || false); setFamilySize(plan.familySize || ""); setShowModal(true);
+                    setDurationInDays(plan.durationInDays); setPrice(plan.price); setSlotsPerDay(plan.slotsPerDay); setIsFamilyPlan(plan.isFamilyPlan || false); setFamilySize(plan.familySize || ""); setRewardPointsOnPurchase(plan.rewardPointsOnPurchase || 0); setRewardPointsPerCheckin(plan.rewardPointsPerCheckin || 0); setShowModal(true);
                   }}
                   className="border border-[#2a2d3e] hover:bg-[#1c1f2e] text-gray-300 rounded-lg p-2 transition-colors cursor-pointer bg-transparent"
                   title="Edit"
@@ -132,6 +136,16 @@ export default function PlansClient({ initialPlans, sports }: { initialPlans: an
               {plan.isFamilyPlan && (
                 <li className="flex items-center gap-3">
                   <FiUsers className="text-purple-400 text-lg flex-shrink-0" /> Family Plan (Up to {plan.familySize} members)
+                </li>
+              )}
+              {plan.rewardPointsOnPurchase > 0 && (
+                <li className="flex items-center gap-3 text-orange-400">
+                  <span className="text-lg flex-shrink-0 font-bold">★</span> Earn {plan.rewardPointsOnPurchase} pts on purchase
+                </li>
+              )}
+              {plan.rewardPointsPerCheckin > 0 && (
+                <li className="flex items-center gap-3 text-orange-400">
+                  <span className="text-lg flex-shrink-0 font-bold">★</span> Earn {plan.rewardPointsPerCheckin} pts per check-in
                 </li>
               )}
               <li className="flex items-center gap-3 text-orange-400 font-semibold mt-2 pt-2 border-t border-[#2a2d3e]">
@@ -255,6 +269,34 @@ export default function PlansClient({ initialPlans, sports }: { initialPlans: an
                     />
                   </div>
                 )}
+              </div>
+
+              <div className="mb-6 bg-[#161923] border border-orange-500/20 rounded-lg p-4">
+                <h3 className="text-sm font-bold font-['Outfit'] text-white flex items-center gap-2 mb-4">
+                   Loyalty Rewards
+                </h3>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-xs uppercase tracking-wider font-semibold text-gray-500 mb-2">Points on Purchase</label>
+                    <input
+                      type="number"
+                      className="w-full bg-[#0f1117] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white placeholder-gray-600 focus:border-orange-500/50 focus:ring-2 focus:ring-orange-500/20 focus:outline-none text-sm"
+                      value={rewardPointsOnPurchase}
+                      onChange={e => setRewardPointsOnPurchase(Number(e.target.value))}
+                      min={0}
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs uppercase tracking-wider font-semibold text-gray-500 mb-2">Points per Check-in</label>
+                    <input
+                      type="number"
+                      className="w-full bg-[#0f1117] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white placeholder-gray-600 focus:border-orange-500/50 focus:ring-2 focus:ring-orange-500/20 focus:outline-none text-sm"
+                      value={rewardPointsPerCheckin}
+                      onChange={e => setRewardPointsPerCheckin(Number(e.target.value))}
+                      min={0}
+                    />
+                  </div>
+                </div>
               </div>
 
               <button

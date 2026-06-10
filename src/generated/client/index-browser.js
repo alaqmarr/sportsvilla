@@ -143,10 +143,21 @@ exports.Prisma.MemberScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.LoyaltyHistoryScalarFieldEnum = {
+  id: 'id',
+  memberId: 'memberId',
+  points: 'points',
+  type: 'type',
+  source: 'source',
+  description: 'description',
+  createdAt: 'createdAt'
+};
+
 exports.Prisma.SportScalarFieldEnum = {
   id: 'id',
   name: 'name',
   description: 'description',
+  rewardPointsPerCheckin: 'rewardPointsPerCheckin',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -179,6 +190,8 @@ exports.Prisma.MembershipPlanScalarFieldEnum = {
   slotsPerDay: 'slotsPerDay',
   isFamilyPlan: 'isFamilyPlan',
   familySize: 'familySize',
+  rewardPointsOnPurchase: 'rewardPointsOnPurchase',
+  rewardPointsPerCheckin: 'rewardPointsPerCheckin',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -216,6 +229,8 @@ exports.Prisma.BookingScalarFieldEnum = {
   paymentStatus: 'paymentStatus',
   status: 'status',
   participantCount: 'participantCount',
+  pointsRedeemed: 'pointsRedeemed',
+  discountAmount: 'discountAmount',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -263,6 +278,7 @@ exports.Prisma.ModelName = {
   Admin: 'Admin',
   Setting: 'Setting',
   Member: 'Member',
+  LoyaltyHistory: 'LoyaltyHistory',
   Sport: 'Sport',
   Turf: 'Turf',
   TurfSport: 'TurfSport',

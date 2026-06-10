@@ -3,9 +3,9 @@
 import { useState, useRef, useEffect } from "react";
 import { lookupTicket, confirmTicketCheckin } from "@/app/checkin/actions";
 import { useAlert } from "@/components/AlertProvider";
-import { FiCheckCircle, FiSearch, FiCamera, FiX } from "react-icons/fi";
+import { FiCheckCircle, FiXCircle, FiSearch, FiCamera, FiX } from "react-icons/fi";
 import { formatIST } from "@/lib/dateUtils";
-import { Scanner } from '@yudiel/react-qr-scanner';
+import { Html5QrcodeScanner } from "html5-qrcode";
 
 export default function CheckinScanner({ sports }: { sports: any[] }) {
   const { showAlert } = useAlert();
@@ -17,6 +17,28 @@ export default function CheckinScanner({ sports }: { sports: any[] }) {
   const [showScanner, setShowScanner] = useState(false);
   
   const inputRef = useRef<HTMLInputElement>(null);
+
+  function startScanner() {
+    setShowScanner(true);
+    setTimeout(() => {
+      const scanner = new Html5QrcodeScanner(
+        "reader",
+        { fps: 10, qrbox: {width: 250, height: 250} },
+        false
+      );
+      scanner.render(
+        (decodedText) => {
+          scanner.clear();
+          handleScan(decodedText);
+        },
+        (err) => {}
+      );
+    }, 100);
+  }
+
+  function closeScanner() {
+    setShowScanner(false);
+  }
 
   const playSound = (type: 'beep' | 'success' | 'error') => {
     try {
@@ -99,28 +121,24 @@ export default function CheckinScanner({ sports }: { sports: any[] }) {
     playSound('beep');
     try {
        const json = JSON.parse(codeData);
-       // Wraps the parsed JSON in an array format consistent with our DB lookup results
-       setScannedData([{
-         id: json.id,
-         guestName: json.guestName,
-         booking: {
-           member: { name: json.guestName, mobile: json.phone },
-           sport: { name: json.sport },
-           turf: { name: json.turf },
-           startTime: json.startTime,
-           endTime: json.endTime
-         }
-       }]);
-       setShowModal(true);
+       // Fetch real-time status from DB instead of relying solely on encoded data
+       performSearch(json.id);
     } catch(e) {
-       // If not JSON, it's a legacy ticket ID, perform normal search
+       // Legacy ticket ID
        performSearch(codeData);
     }
   }
 
   async function handleCheckin(ticketId: string) {
     try {
-      await confirmTicketCheckin(ticketId, selectedSportId);
+      const res = await confirmTicketCheckin(ticketId, selectedSportId);
+      
+      if (res && res.error) {
+        playSound('error');
+        showAlert("Check-in Failed", res.error, "error");
+        return;
+      }
+
       playSound('success');
       showAlert("Checked In", "Ticket successfully verified!", "success");
       
@@ -182,7 +200,7 @@ export default function CheckinScanner({ sports }: { sports: any[] }) {
           </div>
           <button 
             type="button" 
-            onClick={() => setShowScanner(!showScanner)}
+            onClick={startScanner}
             className="bg-[#1c1f2e] border border-[#2a2d3e] text-white px-4 rounded-xl hover:border-emerald-500 hover:text-emerald-500 transition-colors cursor-pointer"
             title="Scan QR Code"
           >
@@ -191,25 +209,15 @@ export default function CheckinScanner({ sports }: { sports: any[] }) {
         </div>
         
         {showScanner && (
-          <div className="mt-4 p-4 bg-[#0f1117] rounded-xl border border-[#2a2d3e]">
-            <div className="w-full max-w-md mx-auto overflow-hidden rounded-lg border-2 border-emerald-500/50 relative">
-              <Scanner
-                onScan={(result) => {
-                  if (result && result.length > 0) {
-                    handleScan(result[0].rawValue);
-                  }
-                }}
-                components={{ finder: true }}
-                allowMultiple={false}
-              />
+          <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-[100]">
+            <div className="bg-[#161923] border border-[#2a2d3e] rounded-xl p-8 w-full max-w-md shadow-2xl">
+              <div className="flex justify-between items-center mb-6">
+                <h2 className="text-lg font-semibold font-['Outfit'] text-white">Scan QR Code</h2>
+                <button type="button" className="text-gray-400 hover:text-white bg-[#1c1f2e] hover:bg-[#2a2d3e] rounded-lg p-2 transition-colors cursor-pointer border-none" onClick={closeScanner}><FiX /></button>
+              </div>
+              <div id="reader" className="w-full bg-black rounded-xl overflow-hidden border border-[#2a2d3e]"></div>
+              <p className="text-center text-gray-500 mt-6 text-sm">Point camera at the ticket's Digital QR</p>
             </div>
-            <button 
-              type="button" 
-              onClick={() => setShowScanner(false)}
-              className="mt-4 w-full bg-red-500/10 text-red-500 hover:bg-red-500/20 py-2 rounded-lg font-medium transition-colors text-sm cursor-pointer"
-            >
-              Close Camera
-            </button>
           </div>
         )}
       </form>
@@ -256,12 +264,18 @@ export default function CheckinScanner({ sports }: { sports: any[] }) {
                     </div>
                   </div>
                   
-                  <button
-                    onClick={() => handleCheckin(ticket.id)}
-                    className="w-full bg-emerald-500 hover:bg-emerald-600 text-white py-3.5 rounded-lg font-bold flex items-center justify-center gap-2 transition-colors shadow-lg shadow-emerald-500/20 cursor-pointer"
-                  >
-                    <FiCheckCircle size={20} /> Verify & Confirm Entry
-                  </button>
+                  {ticket.status === "CHECKED_IN" ? (
+                    <div className="w-full bg-red-500/10 border border-red-500/30 text-red-400 py-3.5 rounded-lg font-bold flex items-center justify-center gap-2 cursor-not-allowed">
+                      <FiXCircle size={20} /> Already Checked In {ticket.usedAt && `(${formatIST(new Date(ticket.usedAt), 'h:mm a')})`}
+                    </div>
+                  ) : (
+                    <button
+                      onClick={() => handleCheckin(ticket.id)}
+                      className="w-full bg-emerald-500 hover:bg-emerald-600 text-white py-3.5 rounded-lg font-bold flex items-center justify-center gap-2 transition-colors shadow-lg shadow-emerald-500/20 cursor-pointer"
+                    >
+                      <FiCheckCircle size={20} /> Verify & Confirm Entry
+                    </button>
+                  )}
                 </div>
               ))}
             </div>

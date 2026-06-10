@@ -129,6 +129,22 @@ export async function assignPlan(data: { memberIds?: string[]; memberId?: string
       include: { membershipPlan: true }
     });
     
+    if (plan.rewardPointsOnPurchase > 0) {
+      await prisma.member.update({
+        where: { id: tMemberId },
+        data: { loyaltyPoints: { increment: plan.rewardPointsOnPurchase } }
+      });
+      await prisma.loyaltyHistory.create({
+        data: {
+          memberId: tMemberId,
+          points: plan.rewardPointsOnPurchase,
+          type: "EARNED",
+          source: "MEMBERSHIP",
+          description: `Earned for purchasing membership: ${plan.name}`
+        }
+      });
+    }
+
     createdMemberships.push(memberMembership);
   }
   

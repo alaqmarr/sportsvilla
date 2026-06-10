@@ -30,14 +30,14 @@ function generateSlots(dateStr: string, durationMin: number, openTime: string = 
     slots.push({
       startTime: new Date(current),
       endTime: slotEnd,
-      label: current.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: true })
+      label: formatIST(current, 'h:mm a')
     });
     current = slotEnd;
   }
   return slots;
 }
 
-export default function BookingsClient({ turfs, facilityHours = { openTime: '06:00', closeTime: '23:00' } }: { turfs: any[], facilityHours?: { openTime: string, closeTime: string } }) {
+export default function BookingsClient({ turfs, facilityHours = { openTime: '06:00', closeTime: '23:00' }, pointsPerRupee = 100 }: { turfs: any[], facilityHours?: { openTime: string, closeTime: string }, pointsPerRupee?: number }) {
   const { showAlert } = useAlert();
   const [activeTab, setActiveTab] = useState<'NEW' | 'MANAGE'>('MANAGE');
   
@@ -76,6 +76,7 @@ export default function BookingsClient({ turfs, facilityHours = { openTime: '06:
   const [onlineAmount, setOnlineAmount] = useState<number | "">(0);
   const [participantCount, setParticipantCount] = useState<number | "">(1);
   const [guestNames, setGuestNames] = useState<string[]>([]);
+  const [redeemPoints, setRedeemPoints] = useState(false);
 
   useEffect(() => {
     if (activeTab === 'NEW') {
@@ -234,13 +235,18 @@ export default function BookingsClient({ turfs, facilityHours = { openTime: '06:
   const totalTurfPricePer30m = selectedTurfs.reduce((sum, t) => sum + ((t.bookingPrice || 0) / (t.bookingDurationMinutes || 60) * 30), 0);
   const totalPrice = selectedSlots.length * totalTurfPricePer30m * (Number(participantCount) || 1);
 
+  const primaryMember = searchResults.find(m => m.id === memberId) || (searchResults.length === 1 && searchResults[0].mobile === mobile ? searchResults[0] : null);
+  const maxDiscount = primaryMember ? Math.floor((primaryMember.loyaltyPoints || 0) / (pointsPerRupee || 100)) : 0;
+  const applicableDiscount = redeemPoints ? Math.min(totalPrice, maxDiscount) : 0;
+  const finalPrice = totalPrice - applicableDiscount;
+
   useEffect(() => {
     if (!showModal || !upiSettings.upiId) return;
 
     const generateDynamicQR = async () => {
       const amountForQR = (Number(onlineAmount) || 0) > 0 
         ? (Number(onlineAmount) || 0) 
-        : Math.max(0, totalPrice - (Number(cashAmount) || 0));
+        : Math.max(0, finalPrice - (Number(cashAmount) || 0));
 
       if (amountForQR > 0) {
         const upiUrl = `upi://pay?pa=${upiSettings.upiId}&pn=${encodeURIComponent(upiSettings.businessName)}&am=${amountForQR}&cu=INR`;
@@ -252,7 +258,7 @@ export default function BookingsClient({ turfs, facilityHours = { openTime: '06:
     };
 
     generateDynamicQR();
-  }, [cashAmount, onlineAmount, showModal, upiSettings, totalPrice]);
+  }, [cashAmount, onlineAmount, showModal, upiSettings, finalPrice]);
 
   async function confirmBooking() {
     if (!mobile && !memberId) return showAlert("Missing Details", "Please provide a mobile number.", "error");
@@ -272,7 +278,8 @@ export default function BookingsClient({ turfs, facilityHours = { openTime: '06:
         mobile: !memberId ? mobile : undefined,
         name: !memberId ? name : undefined,
         participantCount: Number(participantCount) || 1,
-        guestNames: finalGuestNames
+        guestNames: finalGuestNames,
+        redeemPoints: redeemPoints
       });
       
       if (createdBookings && createdBookings.length > 0) {
@@ -282,7 +289,7 @@ export default function BookingsClient({ turfs, facilityHours = { openTime: '06:
         if ((Number(onlineAmount) || 0) > 0) await addPayment(primaryBookingId, Number(onlineAmount) || 0, "ONLINE");
 
         // If cast to screen was active and we're fully paid, trigger success
-        if ((Number(cashAmount) || 0) + (Number(onlineAmount) || 0) >= totalPrice) {
+        if ((Number(cashAmount) || 0) + (Number(onlineAmount) || 0) >= finalPrice) {
           await updateDisplaySession({
             status: "PAID",
             memberName: name || "Member"
@@ -306,7 +313,7 @@ export default function BookingsClient({ turfs, facilityHours = { openTime: '06:
   async function handleCastToDisplay() {
     const amountForDisplay = (Number(onlineAmount) || 0) > 0 
       ? (Number(onlineAmount) || 0) 
-      : Math.max(0, totalPrice - (Number(cashAmount) || 0));
+      : Math.max(0, finalPrice - (Number(cashAmount) || 0));
 
     await updateDisplaySession({
       status: "AWAITING_PAYMENT",
@@ -377,10 +384,10 @@ export default function BookingsClient({ turfs, facilityHours = { openTime: '06:
             <div className="bg-orange-500/10 border border-orange-500/20 rounded-xl p-5">
               <h3 className="font-bold text-orange-400 mb-2">Booking Summary</h3>
               <div className="text-sm text-white mb-1">{selectedTurfs.map(t => t.name).join(", ")}</div>
-              <div className="text-sm font-semibold text-emerald-400 mb-1">
-                {new Date(Math.min(...selectedSlots.map(s => s.startTime.getTime()))).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} 
-                {" - "} 
-                {new Date(Math.max(...selectedSlots.map(s => s.endTime.getTime()))).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+              <div className="font-semibold text-lg text-emerald-400">
+                {formatIST(new Date(Math.min(...selectedSlots.map(s => s.startTime.getTime()))), 'h:mm a')} 
+                <span className="text-gray-500 mx-2">to</span> 
+                {formatIST(new Date(Math.max(...selectedSlots.map(s => s.endTime.getTime()))), 'h:mm a')}
               </div>
               <div className="text-xs text-gray-400 mb-1">{selectedSlots.length} Slots Selected</div>
               <div className="text-2xl font-bold text-white mb-4">₹{Number(totalPrice.toFixed(2))}</div>
@@ -651,9 +658,39 @@ export default function BookingsClient({ turfs, facilityHours = { openTime: '06:
                       ))}
                     </div>
                   </div>
-                  <div className="flex justify-between items-center">
+                  <div className="flex justify-between items-center mb-4">
                     <span className="text-gray-400 font-medium">Total Amount</span>
-                    <span className="text-3xl font-black text-emerald-400">₹{Number(totalPrice.toFixed(2))}</span>
+                    <span className="text-xl font-bold text-white">₹{Number(totalPrice.toFixed(2))}</span>
+                  </div>
+
+                  {primaryMember && (primaryMember.loyaltyPoints || 0) > 0 && (
+                    <div className="flex justify-between items-center mb-4 bg-[#1c1f2e] p-3 rounded-lg border border-[#2a2d3e]">
+                      <div className="flex flex-col">
+                        <span className="text-white font-medium text-sm">Loyalty Points: <span className="text-orange-400 font-bold">{primaryMember.loyaltyPoints}</span></span>
+                        <span className="text-xs text-gray-400">Max Discount: ₹{maxDiscount} (1 Rupee = {pointsPerRupee} pts)</span>
+                      </div>
+                      <label className="flex items-center gap-2 cursor-pointer">
+                        <input type="checkbox" className="hidden" checked={redeemPoints} onChange={(e) => setRedeemPoints(e.target.checked)} />
+                        <div className={`w-10 h-5 rounded-full p-1 transition-colors ${redeemPoints ? 'bg-orange-500' : 'bg-[#0f1117] border border-[#2a2d3e]'}`}>
+                          <div className={`w-3 h-3 bg-white rounded-full transition-transform ${redeemPoints ? 'translate-x-5' : ''}`}></div>
+                        </div>
+                        <span className={`text-sm font-semibold ${redeemPoints ? 'text-orange-400' : 'text-gray-500'}`}>
+                          {redeemPoints ? 'Applied' : 'Redeem'}
+                        </span>
+                      </label>
+                    </div>
+                  )}
+                  
+                  {redeemPoints && applicableDiscount > 0 && (
+                    <div className="flex justify-between items-center mb-3">
+                      <span className="text-orange-400 font-medium text-sm">Points Discount</span>
+                      <span className="text-orange-400 font-bold">-₹{applicableDiscount.toFixed(2)}</span>
+                    </div>
+                  )}
+
+                  <div className="flex justify-between items-center border-t border-[#2a2d3e] pt-4 mt-2">
+                    <span className="text-gray-400 font-medium">Amount to Pay</span>
+                    <span className="text-3xl font-black text-emerald-400">₹{Number(finalPrice.toFixed(2))}</span>
                   </div>
                 </div>
               </div>

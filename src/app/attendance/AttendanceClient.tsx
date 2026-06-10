@@ -19,6 +19,49 @@ export default function AttendanceClient({ initialRecords }: { initialRecords: a
   const [membersList, setMembersList] = useState<any[]>([]);
   const [familySelections, setFamilySelections] = useState<Record<string, string>>({});
 
+  const playSound = (type: 'beep' | 'success' | 'error') => {
+    try {
+      const context = new (window.AudioContext || (window as any).webkitAudioContext)();
+      const osc = context.createOscillator();
+      const gainNode = context.createGain();
+      
+      osc.connect(gainNode);
+      gainNode.connect(context.destination);
+      
+      if (type === 'beep') {
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(1000, context.currentTime);
+        gainNode.gain.setValueAtTime(0.1, context.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.01, context.currentTime + 0.1);
+        osc.start(context.currentTime);
+        osc.stop(context.currentTime + 0.1);
+      } else if (type === 'success') {
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(880, context.currentTime); // A5
+        osc.frequency.setValueAtTime(1108.73, context.currentTime + 0.1); // C#6
+        osc.frequency.setValueAtTime(1318.51, context.currentTime + 0.2); // E6
+        
+        gainNode.gain.setValueAtTime(0, context.currentTime);
+        gainNode.gain.linearRampToValueAtTime(0.2, context.currentTime + 0.05);
+        gainNode.gain.exponentialRampToValueAtTime(0.01, context.currentTime + 0.4);
+        osc.start(context.currentTime);
+        osc.stop(context.currentTime + 0.4);
+      } else if (type === 'error') {
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(200, context.currentTime);
+        osc.frequency.linearRampToValueAtTime(150, context.currentTime + 0.2);
+        
+        gainNode.gain.setValueAtTime(0, context.currentTime);
+        gainNode.gain.linearRampToValueAtTime(0.2, context.currentTime + 0.05);
+        gainNode.gain.exponentialRampToValueAtTime(0.01, context.currentTime + 0.3);
+        osc.start(context.currentTime);
+        osc.stop(context.currentTime + 0.3);
+      }
+    } catch (e) {
+      // Audio context might be blocked if no user interaction yet
+    }
+  };
+
   async function handleSearch(searchQuery: string) {
     if (!searchQuery) return;
     
@@ -29,13 +72,16 @@ export default function AttendanceClient({ initialRecords }: { initialRecords: a
     try {
       const data = await fetchMembers(searchQuery);
       if (!data || data.length === 0) {
+        playSound('error');
         showAlert("Member Not Found", "We couldn't find a member matching this.", "error");
         setMember(null);
         setMembersList([]);
       } else if (data.length === 1) {
+        playSound('beep');
         setMember(data[0]);
         setMembersList([]);
       } else {
+        playSound('beep');
         setMembersList(data);
         setMember(null);
         
@@ -49,7 +95,10 @@ export default function AttendanceClient({ initialRecords }: { initialRecords: a
         });
         setFamilySelections(initialSelections);
       }
-    } catch (err) { showAlert("Error", "An error occurred while searching.", "error"); }
+    } catch (err) { 
+      playSound('error');
+      showAlert("Error", "An error occurred while searching.", "error"); 
+    }
     setLoading(false);
   }
 
@@ -62,6 +111,7 @@ export default function AttendanceClient({ initialRecords }: { initialRecords: a
         membershipPlanId: planId,
         sportId: sportId
       });
+      playSound('success');
       showAlert("Check-in Successful", "Member has been successfully checked in.", "success");
       
       // Update local timeline
@@ -71,6 +121,7 @@ export default function AttendanceClient({ initialRecords }: { initialRecords: a
       setMember(null);
       setMobile("");
     } catch (err: any) {
+      playSound('error');
       showAlert("Check-in Failed", err.message || "There was an issue marking the attendance.", "error");
     }
     setProcessingId("");
@@ -105,9 +156,11 @@ export default function AttendanceClient({ initialRecords }: { initialRecords: a
     }
 
     if (successCount > 0) {
+      playSound('success');
       showAlert("Family Checked In", `Successfully checked in ${successCount} members.` + (failCount > 0 ? ` (${failCount} skipped/failed)` : ""), "success");
       setRecords((prev) => [...newRecords.reverse(), ...prev]);
     } else {
+      playSound('error');
       showAlert("Check-in Failed", "Could not check in any family members. Check if they have active plans.", "error");
     }
     

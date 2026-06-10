@@ -1,6 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import QRCodeLib from "qrcode";
-import { format } from "date-fns";
+import { formatIST } from "@/lib/dateUtils";
 
 export default async function PrintTicketPage({ params }: { params: Promise<{ bookingId: string }> }) {
   const { bookingId } = await params;
@@ -50,54 +50,58 @@ export default async function PrintTicketPage({ params }: { params: Promise<{ bo
           background: #fff !important;
           color: #000 !important;
           font-family: 'Courier New', Courier, monospace !important;
+          line-height: 1.2;
         }
         .ticket-container {
           width: 80mm;
-          padding: 2mm 5mm 5mm 5mm;
+          padding: 2mm 4mm;
           box-sizing: border-box;
-          break-inside: avoid;
+          page-break-after: always;
+        }
+        .ticket-container:last-child {
+          page-break-after: auto;
         }
         .text-center { text-align: center; }
         .font-bold { font-weight: bold; }
-        .mb-2 { margin-bottom: 0.5rem; }
-        .mb-4 { margin-bottom: 1rem; }
-        .border-dashed { border-top: 1px dashed #000; border-bottom: 1px dashed #000; padding: 10px 0; }
-        .flex-center { display: flex; justify-content: center; align-items: center; }
+        .border-dashed { border-top: 1px dashed #000; border-bottom: 1px dashed #000; padding: 4px 0; margin: 4px 0; }
+        .flex-center { display: flex; justify-content: center; align-items: center; margin: 4px 0; }
         .uppercase { text-transform: uppercase; }
-        .text-sm { font-size: 0.8rem; }
+        p { margin: 1px 0; font-size: 11px; }
+        h1 { margin: 0 0 2px 0; font-size: 18px; text-align: center; font-weight: bold; }
+        .ticket-title { font-size: 10px; text-align: center; text-transform: uppercase; margin-bottom: 4px; }
       `}} />
       
       {ticketsWithQRs.map((ticket, index) => (
         <div key={ticket.id} className="ticket-container">
-          <h1 className="text-center font-bold" style={{ fontSize: '1.5rem', marginBottom: '0.2rem' }}>SPORTSVILLA</h1>
-          <p className="text-center text-sm uppercase mb-4">Entry Ticket</p>
+          <h1>SPORTSVILLA</h1>
+          <p className="ticket-title">Entry Ticket</p>
           
-          <div className="border-dashed mb-4">
-            <p className="mb-2 font-bold uppercase">{booking.sport.name}</p>
-            <p style={{ margin: '2px 0' }}>{booking.turf.name}</p>
-            <p style={{ margin: '2px 0' }}>Name: {ticket.guestName || booking.member.name}</p>
-            <p style={{ margin: '2px 0' }}>Phone: {booking.member.mobile}</p>
+          <div className="border-dashed">
+            <p className="font-bold uppercase text-center">{booking.sport.name}</p>
+            <p className="text-center">{booking.turf.name}</p>
+            <p>Name: <b>{ticket.guestName || booking.member.name}</b></p>
+            <p>Phone: {booking.member.mobile}</p>
           </div>
 
-          <div className="mb-4">
-            <p style={{ margin: '2px 0' }}>Date: {format(booking.startTime, 'MMM dd, yyyy')}</p>
-            <p style={{ margin: '2px 0' }}>Slot: {format(booking.startTime, 'hh:mm a')} - {format(booking.endTime, 'hh:mm a')}</p>
+          <div>
+            <p>Date: {formatIST(booking.startTime, 'MMM dd, yyyy')}</p>
+            <p>Slot: {formatIST(booking.startTime, 'h:mm a')} - {formatIST(booking.endTime, 'h:mm a')}</p>
             {booking.turf.bookingValidityDays > 0 && (
-              <p className="text-sm" style={{ margin: '5px 0', fontStyle: 'italic' }}>
-                * Valid until: {format(new Date(booking.startTime.getTime() + booking.turf.bookingValidityDays * 24 * 60 * 60 * 1000), 'MMM dd, yyyy')}
+              <p style={{ fontSize: '9px', fontStyle: 'italic', marginTop: '2px' }}>
+                * Valid until: {formatIST(new Date(booking.startTime.getTime() + booking.turf.bookingValidityDays * 24 * 60 * 60 * 1000), 'MMM dd, yyyy')}
               </p>
             )}
             {booking.participantCount > 1 && (
-              <p className="text-center font-bold mt-2">Ticket {index + 1} of {booking.participantCount}</p>
+              <p className="text-center font-bold" style={{ marginTop: '4px' }}>Ticket {index + 1} of {booking.participantCount}</p>
             )}
           </div>
 
-          <div className="flex-center mb-2">
-            <img src={ticket.qrDataUrl} alt="Ticket QR" style={{ width: '50mm', height: '50mm' }} />
+          <div className="flex-center">
+            <img src={ticket.qrDataUrl} alt="Ticket QR" style={{ width: '45mm', height: '45mm' }} />
           </div>
-          <p className="text-center font-bold" style={{ fontSize: '0.7rem' }}>{ticket.qrCode}</p>
+          <p className="text-center font-bold" style={{ fontSize: '10px' }}>{ticket.qrCode}</p>
           
-          <p className="text-center text-sm mt-4">Thank you for visiting!</p>
+          <p className="text-center" style={{ marginTop: '6px', fontSize: '10px' }}>Thank you for visiting!</p>
         </div>
       ))}
       

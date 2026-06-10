@@ -12,15 +12,16 @@ export default function SportsClient({ initialSports }: { initialSports: any[] }
   const [editingId, setEditingId] = useState("");
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
+  const [rewardPointsPerCheckin, setRewardPointsPerCheckin] = useState<number>(0);
   const [loading, setLoading] = useState(false);
 
   function openCreateModal() {
-    setEditingId(""); setName(""); setDescription("");
+    setEditingId(""); setName(""); setDescription(""); setRewardPointsPerCheckin(0);
     setShowModal(true);
   }
 
   function openEditModal(sport: any) {
-    setEditingId(sport.id); setName(sport.name); setDescription(sport.description || "");
+    setEditingId(sport.id); setName(sport.name); setDescription(sport.description || ""); setRewardPointsPerCheckin(sport.rewardPointsPerCheckin || 0);
     setShowModal(true);
   }
 
@@ -28,10 +29,10 @@ export default function SportsClient({ initialSports }: { initialSports: any[] }
     e.preventDefault(); setLoading(true);
     try {
       if (editingId) {
-        await updateSport(editingId, { name, description });
+        await updateSport(editingId, { name, description, rewardPointsPerCheckin: Number(rewardPointsPerCheckin) });
         showAlert("Sport Updated", `The details for '${name}' have been successfully updated.`, "success");
       } else {
-        await createSport({ name, description });
+        await createSport({ name, description, rewardPointsPerCheckin: Number(rewardPointsPerCheckin) });
         showAlert("Sport Added", `The sport '${name}' has been successfully added to your catalog.`, "success");
       }
       setShowModal(false); window.location.reload();
@@ -76,6 +77,7 @@ export default function SportsClient({ initialSports }: { initialSports: any[] }
                   setEditingId(sport.id);
                   setName(sport.name);
                   setDescription(sport.description || "");
+                  setRewardPointsPerCheckin(sport.rewardPointsPerCheckin || 0);
                   setShowModal(true);
                 }} className="border border-[#2a2d3e] hover:bg-[#1c1f2e] text-gray-400 rounded-lg p-2 transition-colors cursor-pointer bg-transparent" title="Edit">
                   <FiEdit2 size={14} />
@@ -88,7 +90,12 @@ export default function SportsClient({ initialSports }: { initialSports: any[] }
             
             <div>
               <h3 className="text-lg font-semibold text-white mt-4">{sport.name}</h3>
-              <p className="text-sm text-gray-500 mt-1 line-clamp-2">
+              {sport.rewardPointsPerCheckin > 0 && (
+                <div className="inline-block bg-orange-500/20 text-orange-400 text-xs font-bold px-2 py-0.5 rounded mt-2 uppercase tracking-wider">
+                  {sport.rewardPointsPerCheckin} Pts / Check-in
+                </div>
+              )}
+              <p className="text-sm text-gray-500 mt-2 line-clamp-2">
                 {sport.description || "No description provided for this sport."}
               </p>
             </div>
@@ -111,6 +118,11 @@ export default function SportsClient({ initialSports }: { initialSports: any[] }
               <div className="mb-5">
                 <label className="block text-xs uppercase tracking-wider font-semibold text-gray-500 mb-2">Description</label>
                 <textarea className="w-full bg-[#0f1117] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white placeholder-gray-600 focus:border-orange-500/50 focus:ring-2 focus:ring-orange-500/20 focus:outline-none text-sm" value={description} onChange={e => setDescription(e.target.value)} rows={4} placeholder="Optional details about this sport..." />
+              </div>
+              <div className="mb-5">
+                <label className="block text-xs uppercase tracking-wider font-semibold text-gray-500 mb-2">Reward Points Per Check-in</label>
+                <input type="number" min="0" className="w-full bg-[#0f1117] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white focus:border-orange-500/50 focus:ring-2 focus:ring-orange-500/20 focus:outline-none text-sm" value={rewardPointsPerCheckin} onChange={e => setRewardPointsPerCheckin(Number(e.target.value))} placeholder="0" />
+                <p className="text-[10px] text-gray-500 mt-1">Points awarded to a member when they check into this sport.</p>
               </div>
               <button type="submit" className="w-full bg-orange-500 hover:bg-orange-600 text-white rounded-lg px-5 py-3 text-sm font-semibold transition-colors cursor-pointer border-none" disabled={loading}>
                 {loading ? "Saving..." : "Save Sport Configuration"}

@@ -13,5 +13,7 @@ export default async function BookingsPage() {
     closeTime: settings.closeTime || "23:00"
   };
 
-  return <BookingsClient turfs={turfs} facilityHours={facilityHours} />;
+  const pointsPerRupee = Number(settings.pointsPerRupee || 100);
+
+  return <BookingsClient turfs={turfs} facilityHours={facilityHours} pointsPerRupee={pointsPerRupee} />;
 }

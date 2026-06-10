@@ -3,7 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { randomUUID } from "crypto";
 import { revalidatePath } from "next/cache";
 import { getSettings } from "../settings/actions";
-
+import { formatIST } from "../../lib/dateUtils";
 export async function fetchBookableTurfs() {
   return await prisma.turf.findMany({
     where: { 
@@ -52,6 +52,7 @@ export async function createBooking(data: {
   name?: string;
   participantCount?: number;
   guestNames?: string[];
+  redeemPoints?: boolean;
 }) {
   let member;
   if (data.memberId) {
@@ -89,47 +90,78 @@ export async function createBooking(data: {
     }
   }
 
-  // Create bookings for merged slots
   const participantCount = data.participantCount || 1;
-  const bookings: any[] = [];
-  
+  const bookingItems = [];
+  let totalPrice = 0;
+
   for (const turf of turfs) {
     const pricePerSlot = (turf.bookingPrice || 0) / (turf.bookingDurationMinutes || 60) * 30;
-    
     for (const slot of mergedSlots) {
       const durationMins = (new Date(slot.endTime).getTime() - new Date(slot.startTime).getTime()) / 60000;
       const price = pricePerSlot * (durationMins / 30) * participantCount;
-      
-      const ticketsData = Array.from({ length: participantCount }).map((_, i) => ({
-        qrCode: `TKT-${Math.random().toString(36).substring(2, 10).toUpperCase()}-SYKM`,
-        guestName: data.guestNames && data.guestNames[i] ? data.guestNames[i] : null
-      }));
-
-      const booking = await prisma.booking.create({
-        data: {
-          turfId: turf.id,
-          memberId: member.id,
-          sportId: data.sportId,
-          startTime: new Date(slot.startTime),
-          endTime: new Date(slot.endTime),
-          price: price,
-          participantCount: participantCount,
-          paymentStatus: "UNPAID",
-          status: "CONFIRMED",
-          tickets: {
-            create: ticketsData
-          }
-        }
-      });
-      bookings.push(booking);
+      totalPrice += price;
+      bookingItems.push({ turf, slot, price });
     }
   }
 
-  // Increment Loyalty Points
-  await prisma.member.update({
-    where: { id: member.id },
-    data: { loyaltyPoints: { increment: 25 * data.slots.length * turfs.length } }
-  });
+  let totalDiscount = 0;
+  let pointsToDeduct = 0;
+  
+  if (data.redeemPoints && member.loyaltyPoints > 0) {
+    const settings = await getSettings();
+    const pointsPerRupee = Number(settings.pointsPerRupee || 100);
+    const maxPossibleDiscount = Math.floor(member.loyaltyPoints / pointsPerRupee);
+    totalDiscount = Math.min(totalPrice, maxPossibleDiscount);
+    pointsToDeduct = totalDiscount * pointsPerRupee;
+  }
+
+  const bookings: any[] = [];
+  
+  for (const item of bookingItems) {
+    const ticketsData = Array.from({ length: participantCount }).map((_, i) => ({
+      qrCode: `TKT-${Math.random().toString(36).substring(2, 10).toUpperCase()}-SYKM`,
+      guestName: data.guestNames && data.guestNames[i] ? data.guestNames[i] : null
+    }));
+
+    // Distribute discount proportionally
+    const ratio = totalPrice > 0 ? (item.price / totalPrice) : 0;
+    const itemDiscount = totalDiscount * ratio;
+    const itemPointsRedeemed = pointsToDeduct * ratio;
+
+    const booking = await prisma.booking.create({
+      data: {
+        turfId: item.turf.id,
+        memberId: member.id,
+        sportId: data.sportId,
+        startTime: new Date(item.slot.startTime),
+        endTime: new Date(item.slot.endTime),
+        price: item.price,
+        discountAmount: itemDiscount,
+        pointsRedeemed: Math.round(itemPointsRedeemed),
+        participantCount: participantCount,
+        paymentStatus: "UNPAID",
+        status: "CONFIRMED",
+        tickets: { create: ticketsData }
+      }
+    });
+    bookings.push(booking);
+  }
+
+  if (pointsToDeduct > 0) {
+    await prisma.member.update({
+      where: { id: member.id },
+      data: { loyaltyPoints: { decrement: pointsToDeduct } }
+    });
+    await prisma.loyaltyHistory.create({
+      data: {
+        memberId: member.id,
+        points: pointsToDeduct,
+        type: "REDEEMED",
+        source: "BOOKING",
+        description: `Redeemed points for ₹${totalDiscount} discount`
+      }
+    });
+  }
 
   revalidatePath("/", "layout");
   return bookings;
@@ -260,7 +292,7 @@ export async function previewExtension(bookingId: string, durationMinutes: numbe
     }
 
     if (!assignedTurf) {
-      return { available: false, message: `Could not find courts for the full ${durationMinutes} mins. Failed at ${currentStartTime.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}.` };
+      return { available: false, message: `Could not find courts for the full ${durationMinutes} mins. Failed at ${formatIST(currentStartTime, 'h:mm a')}.` };
     }
 
     const priceFor30m = (assignedTurf.bookingPrice || 0) / (assignedTurf.bookingDurationMinutes || 60) * 30;
