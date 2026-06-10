@@ -262,7 +262,7 @@ export default function BookingsClient({ turfs, facilityHours = { openTime: '06:
     setIsProcessing(true);
     try {
       const familyGuestNames = additionalMemberIds.map(id => searchResults.find(r => r.id === id)?.name || "");
-      const finalGuestNames = [...familyGuestNames, ...guestNames.slice(0, participantCount - 1 - familyGuestNames.length)];
+      const finalGuestNames = [...familyGuestNames, ...guestNames.slice(0, (Number(participantCount) || 1) - 1 - familyGuestNames.length)];
 
       const createdBookings = await createBooking({
         turfIds: selectedTurfs.map(t => t.id),
@@ -278,11 +278,11 @@ export default function BookingsClient({ turfs, facilityHours = { openTime: '06:
       if (createdBookings && createdBookings.length > 0) {
         // Apply payments to the first booking for simplicity if split across multiple
         const primaryBookingId = createdBookings[0].id;
-        if (cashAmount > 0) await addPayment(primaryBookingId, cashAmount, "CASH");
-        if (onlineAmount > 0) await addPayment(primaryBookingId, onlineAmount, "ONLINE");
+        if ((Number(cashAmount) || 0) > 0) await addPayment(primaryBookingId, Number(cashAmount) || 0, "CASH");
+        if ((Number(onlineAmount) || 0) > 0) await addPayment(primaryBookingId, Number(onlineAmount) || 0, "ONLINE");
 
         // If cast to screen was active and we're fully paid, trigger success
-        if (cashAmount + onlineAmount >= totalPrice) {
+        if ((Number(cashAmount) || 0) + (Number(onlineAmount) || 0) >= totalPrice) {
           await updateDisplaySession({
             status: "PAID",
             memberName: name || "Member"
@@ -304,9 +304,9 @@ export default function BookingsClient({ turfs, facilityHours = { openTime: '06:
   }
 
   async function handleCastToDisplay() {
-    const amountForDisplay = onlineAmount > 0 
-      ? onlineAmount 
-      : Math.max(0, totalPrice - (cashAmount || 0));
+    const amountForDisplay = (Number(onlineAmount) || 0) > 0 
+      ? (Number(onlineAmount) || 0) 
+      : Math.max(0, totalPrice - (Number(cashAmount) || 0));
 
     await updateDisplaySession({
       status: "AWAITING_PAYMENT",
@@ -575,7 +575,7 @@ export default function BookingsClient({ turfs, facilityHours = { openTime: '06:
                                     setMemberId(m.id);
                                     setName(m.name);
                                   } else {
-                                    if (1 + additionalMemberIds.length < participantCount) {
+                                    if (1 + additionalMemberIds.length < (Number(participantCount) || 1)) {
                                       setAdditionalMemberIds([...additionalMemberIds, m.id]);
                                     }
                                   }
