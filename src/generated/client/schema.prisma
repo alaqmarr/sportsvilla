@@ -17,16 +17,26 @@ model Admin {
   updatedAt DateTime @updatedAt
 }
 
+model Setting {
+  key       String   @id
+  value     String
+  updatedAt DateTime @updatedAt
+}
+
 model Member {
-  id          String             @id @default(cuid())
-  mobile      String             @unique
-  name        String
-  email       String?
-  joinDate    DateTime           @default(now())
-  memberships MemberMembership[]
-  attendances Attendance[]
-  createdAt   DateTime           @default(now())
-  updatedAt   DateTime           @updatedAt
+  id            String             @id @default(cuid())
+  mobile        String // Removed @unique to allow family accounts
+  name          String
+  email         String?
+  loyaltyPoints Int                @default(0)
+  joinDate      DateTime           @default(now())
+  memberships   MemberMembership[]
+  attendances   Attendance[]
+  bookings      Booking[]
+  createdAt     DateTime           @default(now())
+  updatedAt     DateTime           @updatedAt
+
+  @@index([mobile])
 }
 
 model Sport {
@@ -36,20 +46,27 @@ model Sport {
   turfs           TurfSport[]
   membershipPlans MembershipPlan[]
   attendances     Attendance[]
+  bookings        Booking[]
   createdAt       DateTime         @default(now())
   updatedAt       DateTime         @updatedAt
 }
 
 model Turf {
-  id           String      @id @default(cuid())
-  name         String
-  location     String?
-  parentTurfId String?
-  parentTurf   Turf?       @relation("TurfHierarchy", fields: [parentTurfId], references: [id])
-  childTurfs   Turf[]      @relation("TurfHierarchy")
-  sports       TurfSport[]
-  createdAt    DateTime    @default(now())
-  updatedAt    DateTime    @updatedAt
+  id                       String      @id @default(cuid())
+  name                     String
+  location                 String?
+  parentTurfId             String?
+  parentTurf               Turf?       @relation("TurfHierarchy", fields: [parentTurfId], references: [id])
+  childTurfs               Turf[]      @relation("TurfHierarchy")
+  sports                   TurfSport[]
+  bookingPrice             Float? // Price per booking duration
+  bookingDurationMinutes   Int? // Duration of a single booking slot in minutes
+  capacityPerSlot          Int         @default(1) // Number of bookings allowed per slot
+  requireEntryVerification Boolean     @default(false) // Uncapped bookings
+  bookingValidityDays      Int         @default(0) // Extra days valid
+  bookings                 Booking[]
+  createdAt                DateTime    @default(now())
+  updatedAt                DateTime    @updatedAt
 }
 
 model TurfSport {
@@ -69,6 +86,8 @@ model MembershipPlan {
   durationInDays Int
   price          Float
   slotsPerDay    Int                @default(1)
+  isFamilyPlan   Boolean            @default(false)
+  familySize     Int?
   memberships    MemberMembership[]
   attendances    Attendance[]
   createdAt      DateTime           @default(now())
@@ -105,4 +124,62 @@ model Attendance {
   createdAt        DateTime        @default(now())
 
   @@index([date])
+}
+
+model Booking {
+  id               String    @id @default(cuid())
+  turfId           String
+  turf             Turf      @relation(fields: [turfId], references: [id])
+  memberId         String
+  member           Member    @relation(fields: [memberId], references: [id])
+  sportId          String
+  sport            Sport     @relation(fields: [sportId], references: [id])
+  startTime        DateTime
+  endTime          DateTime
+  price            Float
+  paymentStatus    String    @default("PENDING") // UNPAID, PARTIAL, PAID
+  status           String    @default("CONFIRMED") // CONFIRMED, CANCELLED
+  participantCount Int       @default(1)
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+  payments         Payment[]
+  tickets          Ticket[]
+
+  @@index([startTime])
+  @@index([turfId])
+}
+
+model Payment {
+  id        String   @id @default(cuid())
+  bookingId String
+  booking   Booking  @relation(fields: [bookingId], references: [id])
+  amount    Float
+  method    String // CASH, ONLINE
+  createdAt DateTime @default(now())
+
+  @@index([bookingId])
+}
+
+model DisplaySession {
+  id         String   @id
+  bookingId  String?
+  qrData     String?
+  amount     Float?
+  memberName String?
+  status     String   @default("IDLE") // IDLE, AWAITING_PAYMENT, PAID
+  updatedAt  DateTime @updatedAt
+}
+
+model Ticket {
+  id        String    @id @default(cuid())
+  bookingId String
+  booking   Booking   @relation(fields: [bookingId], references: [id])
+  qrCode    String    @unique
+  guestName String?
+  status    String    @default("VALID") // VALID, CHECKED_IN, CANCELLED
+  usedAt    DateTime?
+  createdAt DateTime  @default(now())
+
+  @@index([qrCode])
+  @@index([bookingId])
 }

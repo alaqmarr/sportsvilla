@@ -76,6 +76,10 @@ export default function PortalClient({ member, activePlans, expiredPlans, attend
                         <div className="id-card-label">Member Since</div>
                         <div className="id-card-value">{formatIST(new Date(member.joinDate), 'MMM d, yyyy')}</div>
                       </div>
+                      <div className="id-card-detail-group">
+                        <div className="id-card-label">Loyalty</div>
+                        <div className="id-card-value">{member.loyaltyPoints} Pts</div>
+                      </div>
                     </div>
                   </div>
                 <div>
@@ -187,8 +191,10 @@ export default function PortalClient({ member, activePlans, expiredPlans, attend
                     </div>
                     <div className="flex-1 flex flex-col gap-0.5 mt-1 overflow-hidden">
                       {attendedDay && dayAttendances.map((a: any) => (
-                        <div key={a.id} className="text-[8px] sm:text-[9px] text-emerald-700 bg-emerald-100/50 rounded px-1 py-0.5 font-bold flex items-center justify-center truncate" title={formatIST(new Date(a.date), 'h:mm a')}>
-                          <FiCheckCircle size={8} className="mr-0.5 shrink-0" /> {formatIST(new Date(a.date), 'h:mm a')}
+                        <div key={a.id} className="text-[8px] sm:text-[9px] text-emerald-700 bg-emerald-100/50 rounded px-1 py-0.5 font-bold flex items-center justify-center truncate marquee-container" title={formatIST(new Date(a.date), 'h:mm a')}>
+                          <div className="marquee-content flex items-center">
+                            <FiCheckCircle size={8} className="mr-0.5 shrink-0" /> {formatIST(new Date(a.date), 'h:mm a')}
+                          </div>
                         </div>
                       ))}
                     </div>

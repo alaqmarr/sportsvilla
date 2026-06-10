@@ -7,8 +7,14 @@ export default async function TurfsPage() {
     include: {
       parentTurf: true,
       childTurfs: true,
+      sports: { include: { sport: true } }
     },
     orderBy: { createdAt: "desc" }
   });
-  return <TurfsClient initialTurfs={turfs} />;
+  
+  const sports = await prisma.sport.findMany({
+    orderBy: { name: "asc" }
+  });
+
+  return <TurfsClient initialTurfs={turfs} sports={sports} />;
 }

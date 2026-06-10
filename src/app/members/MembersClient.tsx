@@ -1,21 +1,25 @@
 "use client";
 import { formatIST } from "../../lib/dateUtils";
-import { useState, useRef } from "react";
-import { createMember, updateMember, deleteMember, assignPlan } from "./actions";
+import { useState, useRef, useMemo } from "react";
+import { createMember, updateMember, deleteMember, assignPlan, createFamily } from "./actions";
 import { useAlert } from "@/components/AlertProvider";
 
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import QRCodeLib from "qrcode";
-import { FiTrash2, FiEdit2, FiPlus, FiX, FiDownload, FiImage, FiMessageCircle, FiUserCheck } from "react-icons/fi";
+import { FiTrash2, FiEdit2, FiPlus, FiX, FiDownload, FiImage, FiMessageCircle, FiUserCheck, FiUsers } from "react-icons/fi";
 
 export default function MembersClient({ initialMembers, plans }: { initialMembers: any[], plans: any[] }) {
   const { showAlert } = useAlert();
   const [members, setMembers] = useState(initialMembers);
   
+  const [activeTab, setActiveTab] = useState<'MEMBERS'|'FAMILIES'>('MEMBERS');
+
   const [showMemberModal, setShowMemberModal] = useState(false);
+  const [showFamilyModal, setShowFamilyModal] = useState(false);
   const [showPlanModal, setShowPlanModal] = useState(false);
   const [showIdCardModal, setShowIdCardModal] = useState(false);
+  const [idCardData, setIdCardData] = useState<any>(null);
   
   const [editingId, setEditingId] = useState("");
   const [name, setName] = useState("");
@@ -23,22 +27,35 @@ export default function MembersClient({ initialMembers, plans }: { initialMember
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
 
+  // Family State
+  const [familyMobile, setFamilyMobile] = useState("");
+  const [familyMembers, setFamilyMembers] = useState([{ name: "", email: "" }]);
+
   // Assign Plan State
   const [assignMobile, setAssignMobile] = useState("");
   const [assignName, setAssignName] = useState("");
   const [assignEmail, setAssignEmail] = useState("");
+  const [assignMemberIds, setAssignMemberIds] = useState<string[]>([]);
   const [assignPlanId, setAssignPlanId] = useState("");
   const [startDate, setStartDate] = useState(new Date().toISOString().split('T')[0]);
   const [assignLoading, setAssignLoading] = useState(false);
 
-  // ID Card State
-  const [idCardData, setIdCardData] = useState<any>(null);
+  // Derived state for assignment
+  const existingAssignMembers = members.filter(m => m.mobile === assignMobile);
   const [generatingIdCard, setGeneratingIdCard] = useState(false);
   const idCardRef = useRef<HTMLDivElement>(null);
   const [qrCodeData, setQrCodeData] = useState("");
 
-  // Derived state for assignment
-  const existingAssignMember = members.find(m => m.mobile === assignMobile);
+  const selectedAssignPlan = useMemo(() => plans.find((p) => p.id === assignPlanId), [assignPlanId, plans]);
+
+  const families = useMemo(() => {
+    const map = new Map<string, any[]>();
+    members.forEach(m => {
+      if (!map.has(m.mobile)) map.set(m.mobile, []);
+      map.get(m.mobile)?.push(m);
+    });
+    return Array.from(map.entries()).map(([mobile, mems]) => ({ mobile, members: mems }));
+  }, [members]);
 
   function openCreateModal() {
     setEditingId(""); setName(""); setMobile(""); setEmail("");
@@ -50,8 +67,13 @@ export default function MembersClient({ initialMembers, plans }: { initialMember
     setShowMemberModal(true);
   }
 
+  function openFamilyModal() {
+    setFamilyMobile(""); setFamilyMembers([{name: "", email: ""}]);
+    setShowFamilyModal(true);
+  }
+
   function openAssignModal() {
-    setAssignMobile(""); setAssignName(""); setAssignEmail(""); setAssignPlanId("");
+    setAssignMobile(""); setAssignName(""); setAssignEmail(""); setAssignPlanId(""); setAssignMemberIds([]);
     setShowPlanModal(true);
   }
 
@@ -72,6 +94,18 @@ export default function MembersClient({ initialMembers, plans }: { initialMember
     setLoading(false);
   }
 
+  async function handleFamilySubmit(e: React.FormEvent) {
+    e.preventDefault(); setLoading(true);
+    try {
+      await createFamily({ mobile: familyMobile, members: familyMembers.filter(m => m.name.trim() !== "") });
+      showAlert("Family Created", "The family account has been successfully set up!", "success");
+      setShowFamilyModal(false); window.location.reload();
+    } catch (err: any) {
+      showAlert("Creation Failed", err.message || "Could not create family.", "error");
+    }
+    setLoading(false);
+  }
+
   async function handleDelete(id: string) {
     if (!confirm("Delete this member?")) return;
     try {
@@ -87,20 +121,25 @@ export default function MembersClient({ initialMembers, plans }: { initialMember
     e.preventDefault();
     if (!assignMobile || !assignPlanId) return showAlert("Missing Information", "Please provide both a mobile number and select a plan to continue.", "error");
     
-    if (!existingAssignMember && !assignName) {
+    if (existingAssignMembers.length > 0 && assignMemberIds.length === 0) {
+      return showAlert("Select Member", "Multiple family members found on this number. Please select at least one member to assign the plan to.", "error");
+    }
+
+    if (existingAssignMembers.length === 0 && !assignName) {
       return showAlert("Name Required", "This mobile number is new. Please provide a Full Name to register them automatically.", "error");
     }
 
     setAssignLoading(true);
     try {
       await assignPlan({ 
+        memberIds: assignMemberIds.length > 0 ? assignMemberIds : undefined,
         mobile: assignMobile, 
-        name: existingAssignMember ? undefined : assignName, 
-        email: existingAssignMember ? undefined : assignEmail,
+        name: existingAssignMembers.length > 0 ? undefined : assignName, 
+        email: existingAssignMembers.length > 0 ? undefined : assignEmail,
         planId: assignPlanId, 
         startDate 
       });
-      showAlert("Plan Assigned", "The membership plan has been successfully activated for this member.", "success");
+      showAlert("Plan Assigned", "The membership plan has been successfully activated.", "success");
       setShowPlanModal(false); window.location.reload();
     } catch (err: any) {
       showAlert("Assignment Failed", err.message || "There was an issue assigning the membership plan. Please try again.", "error");
@@ -111,7 +150,7 @@ export default function MembersClient({ initialMembers, plans }: { initialMember
   function openIdCardModal(member: any) {
     setIdCardData(member);
     setShowIdCardModal(true);
-    QRCodeLib.toDataURL(member.mobile, { width: 300, margin: 0 }).then(setQrCodeData);
+    QRCodeLib.toDataURL(member.id, { width: 300, margin: 0 }).then(setQrCodeData);
   }
 
   async function generateCanvas() {
@@ -162,17 +201,11 @@ export default function MembersClient({ initialMembers, plans }: { initialMember
 
       canvas.toBlob(async (blob) => {
         if (!blob) return fallbackWhatsApp(text);
-        
         const file = new File([blob], `Sportsvilla_ID_${idCardData.name.replace(/\s+/g, '_')}.png`, { type: 'image/png' });
         
-        // 1. Try Native Web Share API (Works on Mobile / macOS Safari)
         if (navigator.canShare && navigator.canShare({ files: [file] })) {
           try {
-            await navigator.share({
-              title: 'Sportsvilla ID Card',
-              text: text,
-              files: [file]
-            });
+            await navigator.share({ title: 'Sportsvilla ID Card', text: text, files: [file] });
             showAlert("Share Successful", "The ID card has been shared directly via your device.", "success");
             setGeneratingIdCard(false);
             return;
@@ -181,21 +214,15 @@ export default function MembersClient({ initialMembers, plans }: { initialMember
           }
         }
         
-        // 2. Fallback for Desktop (Copy to clipboard, then open WhatsApp Web)
         try {
-          await navigator.clipboard.write([
-            new ClipboardItem({ 'image/png': blob })
-          ]);
+          await navigator.clipboard.write([ new ClipboardItem({ 'image/png': blob }) ]);
           showAlert("Image Copied", "The ID Card image has been copied to your clipboard. Just paste it into the WhatsApp chat that opens next!", "info");
           setTimeout(() => fallbackWhatsApp(text), 2000);
         } catch (err) {
-          // 3. Ultimate Fallback: Just open text
           fallbackWhatsApp(text);
         }
-        
         setGeneratingIdCard(false);
       }, 'image/png');
-      
     } catch(e) {
       showAlert("Share Failed", "We encountered an unexpected error while preparing the ID Card for sharing.", "error");
       setGeneratingIdCard(false);
@@ -204,96 +231,130 @@ export default function MembersClient({ initialMembers, plans }: { initialMember
 
   return (
     <div>
-      <div className="flex justify-between items-start mb-8">
-        <h1 className="text-2xl font-bold font-['Outfit'] text-white">Members Directory</h1>
+      <div className="flex justify-between items-start mb-6">
+        <div>
+          <h1 className="text-2xl font-bold font-['Outfit'] text-white">Members Directory</h1>
+          <div className="flex gap-4 mt-4 border-b border-[#2a2d3e]">
+            <button onClick={() => setActiveTab('MEMBERS')} className={`pb-3 px-2 text-sm font-semibold transition-colors border-b-2 ${activeTab === 'MEMBERS' ? 'border-orange-500 text-orange-400' : 'border-transparent text-gray-500 hover:text-gray-300'}`}>All Members</button>
+            <button onClick={() => setActiveTab('FAMILIES')} className={`pb-3 px-2 text-sm font-semibold transition-colors border-b-2 ${activeTab === 'FAMILIES' ? 'border-orange-500 text-orange-400' : 'border-transparent text-gray-500 hover:text-gray-300'}`}>Families</button>
+          </div>
+        </div>
         <div className="flex gap-3">
           <button onClick={openAssignModal} className="bg-emerald-500 hover:bg-emerald-600 text-white rounded-lg px-5 py-2.5 text-sm font-semibold inline-flex items-center gap-2 transition-colors cursor-pointer border-none">
             <FiPlus /> Assign Plan
           </button>
-          <button onClick={openCreateModal} className="bg-orange-500 hover:bg-orange-600 text-white rounded-lg px-5 py-2.5 text-sm font-semibold inline-flex items-center gap-2 transition-colors cursor-pointer border-none">
-            <FiUserCheck /> Register Member
-          </button>
+          {activeTab === 'FAMILIES' ? (
+            <button onClick={openFamilyModal} className="bg-orange-500 hover:bg-orange-600 text-white rounded-lg px-5 py-2.5 text-sm font-semibold inline-flex items-center gap-2 transition-colors cursor-pointer border-none">
+              <FiUsers /> Setup Family
+            </button>
+          ) : (
+            <button onClick={openCreateModal} className="bg-orange-500 hover:bg-orange-600 text-white rounded-lg px-5 py-2.5 text-sm font-semibold inline-flex items-center gap-2 transition-colors cursor-pointer border-none">
+              <FiUserCheck /> Register Member
+            </button>
+          )}
         </div>
       </div>
 
-      {members.length === 0 ? (
-        <div className="bg-[#161923] border border-[#2a2d3e] rounded-xl p-16 text-center flex flex-col items-center">
-          <div className="w-16 h-16 rounded-full bg-orange-500/10 text-orange-400 flex items-center justify-center text-3xl mb-6">
-            <FiUserCheck />
+      {activeTab === 'MEMBERS' && (
+        members.length === 0 ? (
+          <div className="bg-[#161923] border border-[#2a2d3e] rounded-xl p-16 text-center flex flex-col items-center">
+            <div className="w-16 h-16 rounded-full bg-orange-500/10 text-orange-400 flex items-center justify-center text-3xl mb-6"><FiUserCheck /></div>
+            <h3 className="text-2xl font-bold text-white mb-2">No Members Found</h3>
+            <button onClick={openCreateModal} className="bg-orange-500 hover:bg-orange-600 text-white rounded-lg px-5 py-2.5 text-sm font-semibold inline-flex items-center gap-2 transition-colors cursor-pointer border-none mt-4">
+              <FiPlus /> Register First Member
+            </button>
           </div>
-          <h3 className="text-2xl font-bold text-white mb-2">No Members Found</h3>
-          <p className="text-gray-500 mb-8 max-w-md">Your directory is currently empty. Start by registering a member or assigning a plan to a new mobile number.</p>
-          <button onClick={openCreateModal} className="bg-orange-500 hover:bg-orange-600 text-white rounded-lg px-5 py-2.5 text-sm font-semibold inline-flex items-center gap-2 transition-colors cursor-pointer border-none">
-            <FiPlus /> Register First Member
-          </button>
-        </div>
-      ) : (
-        <div className="bg-[#161923] border border-[#2a2d3e] rounded-xl overflow-hidden">
-          <div className="overflow-x-auto">
-            <table className="w-full min-w-[800px]">
-              <thead>
-                <tr>
-                  <th className="bg-[#0f1117] text-gray-500 text-xs uppercase tracking-wider font-semibold px-6 py-4 text-left border-b border-[#2a2d3e] w-[30%]">Member Profile</th>
-                  <th className="bg-[#0f1117] text-gray-500 text-xs uppercase tracking-wider font-semibold px-6 py-4 text-left border-b border-[#2a2d3e] w-[25%]">Contact details</th>
-                  <th className="bg-[#0f1117] text-gray-500 text-xs uppercase tracking-wider font-semibold px-6 py-4 text-left border-b border-[#2a2d3e] w-[30%]">Active Plans</th>
-                  <th className="bg-[#0f1117] text-gray-500 text-xs uppercase tracking-wider font-semibold px-6 py-4 text-right border-b border-[#2a2d3e] w-[15%]">Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {members.map(member => (
-                  <tr key={member.id} className="hover:bg-[#1c1f2e]/50 transition-colors">
-                    <td className="px-6 py-5 text-sm border-b border-[#2a2d3e]">
-                      <div className="flex items-center gap-4">
-                        <div className="w-10 h-10 rounded-full bg-orange-500/10 text-orange-400 font-semibold flex items-center justify-center font-['Outfit'] text-base">
-                          {member.name.charAt(0)}
-                        </div>
-                        <div>
-                          <div className="font-semibold text-white">{member.name}</div>
-                          <div className="text-xs text-gray-500 mt-0.5">Joined {formatIST(new Date(member.joinDate), 'MMM d, yyyy')}</div>
-                        </div>
-                      </div>
-                    </td>
-                    <td className="px-6 py-5 text-sm border-b border-[#2a2d3e]">
-                      <div className="text-sm text-gray-300">{member.mobile}</div>
-                      <div className="text-xs text-gray-500 mt-0.5">{member.email || 'No email provided'}</div>
-                    </td>
-                    <td className="px-6 py-5 text-sm border-b border-[#2a2d3e]">
-                      <div className="flex flex-col gap-2">
-                        {member.memberships?.length ? member.memberships.map((m: any) => {
-                          const isActive = m.status === 'ACTIVE' && new Date(m.endDate) >= new Date();
-                          return (
-                            <div key={m.id} className={`text-xs py-1 px-3 rounded-md flex justify-between items-center ${isActive ? 'bg-emerald-500/10 border border-emerald-500/20 text-emerald-400' : 'bg-[#1c1f2e] border border-[#2a2d3e] text-gray-500 opacity-60'}`}>
-                              <span className="font-bold tracking-wide uppercase">{m.membershipPlan?.sport?.name}</span>
-                              <span className="opacity-80 font-medium tracking-tight">
-                                Expires: {formatIST(new Date(m.endDate), 'MMM d')}
-                              </span>
-                            </div>
-                          );
-                        }) : <span className="text-xs text-red-400 font-semibold bg-red-500/10 border border-red-500/20 px-3 py-1 rounded-md inline-block">No Active Plans</span>}
-                      </div>
-                    </td>
-                    <td className="px-6 py-5 text-sm border-b border-[#2a2d3e]">
-                      <div className="flex gap-2 justify-end">
-                        <button onClick={() => openIdCardModal(member)} className="border border-[#2a2d3e] hover:bg-orange-500/10 hover:text-orange-400 hover:border-orange-500/30 text-gray-400 rounded-lg px-3 py-1.5 text-xs font-semibold transition-colors cursor-pointer bg-transparent">
-                          ID CARD
-                        </button>
-                        <button onClick={() => openEditModal(member)} className="border border-[#2a2d3e] hover:bg-[#1c1f2e] text-gray-400 rounded-lg p-1.5 transition-colors cursor-pointer bg-transparent">
-                          <FiEdit2 />
-                        </button>
-                        <button onClick={() => handleDelete(member.id)} className="border border-[#2a2d3e] hover:bg-red-500/10 text-red-400 rounded-lg p-1.5 transition-colors cursor-pointer bg-transparent">
-                          <FiTrash2 />
-                        </button>
-                      </div>
-                    </td>
+        ) : (
+          <div className="bg-[#161923] border border-[#2a2d3e] rounded-xl overflow-hidden">
+            <div className="overflow-x-auto">
+              <table className="w-full min-w-[800px]">
+                <thead>
+                  <tr>
+                    <th className="bg-[#0f1117] text-gray-500 text-xs uppercase tracking-wider font-semibold px-6 py-4 text-left border-b border-[#2a2d3e] w-[30%]">Member Profile</th>
+                    <th className="bg-[#0f1117] text-gray-500 text-xs uppercase tracking-wider font-semibold px-6 py-4 text-left border-b border-[#2a2d3e] w-[25%]">Contact details</th>
+                    <th className="bg-[#0f1117] text-gray-500 text-xs uppercase tracking-wider font-semibold px-6 py-4 text-left border-b border-[#2a2d3e] w-[30%]">Active Plans</th>
+                    <th className="bg-[#0f1117] text-gray-500 text-xs uppercase tracking-wider font-semibold px-6 py-4 text-right border-b border-[#2a2d3e] w-[15%]">Actions</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {members.map(member => (
+                    <tr key={member.id} className="hover:bg-[#1c1f2e]/50 transition-colors">
+                      <td className="px-6 py-5 text-sm border-b border-[#2a2d3e]">
+                        <div className="flex items-center gap-4">
+                          <div className="w-10 h-10 rounded-full bg-orange-500/10 text-orange-400 font-semibold flex items-center justify-center font-['Outfit'] text-base">
+                            {member.name.charAt(0)}
+                          </div>
+                          <div>
+                            <div className="font-semibold text-white">{member.name}</div>
+                            <div className="text-xs text-gray-500 mt-0.5">ID: {member.id} • Joined {formatIST(new Date(member.joinDate), 'MMM d, yyyy')}</div>
+                            <div className="text-xs text-orange-400 mt-0.5 font-bold">{member.loyaltyPoints} Loyalty Pts</div>
+                          </div>
+                        </div>
+                      </td>
+                      <td className="px-6 py-5 text-sm border-b border-[#2a2d3e]">
+                        <div className="text-sm text-gray-300">{member.mobile}</div>
+                        <div className="text-xs text-gray-500 mt-0.5">{member.email || 'No email provided'}</div>
+                      </td>
+                      <td className="px-6 py-5 text-sm border-b border-[#2a2d3e]">
+                        <div className="flex flex-col gap-2">
+                          {member.memberships?.length ? member.memberships.map((m: any) => {
+                            const isActive = m.status === 'ACTIVE' && new Date(m.endDate) >= new Date();
+                            return (
+                              <div key={m.id} className={`text-xs py-1 px-3 rounded-md flex justify-between items-center ${isActive ? 'bg-emerald-500/10 border border-emerald-500/20 text-emerald-400' : 'bg-[#1c1f2e] border border-[#2a2d3e] text-gray-500 opacity-60'}`}>
+                                <span className="font-bold tracking-wide uppercase">{m.membershipPlan?.name} ({m.membershipPlan?.sport?.name})</span>
+                                <span className="opacity-80 font-medium tracking-tight">Expires: {formatIST(new Date(m.endDate), 'MMM d')}</span>
+                              </div>
+                            );
+                          }) : <span className="text-xs text-red-400 font-semibold bg-red-500/10 border border-red-500/20 px-3 py-1 rounded-md inline-block">No Active Plans</span>}
+                        </div>
+                      </td>
+                      <td className="px-6 py-5 text-sm border-b border-[#2a2d3e]">
+                        <div className="flex gap-2 justify-end">
+                          <button onClick={() => openIdCardModal(member)} className="border border-[#2a2d3e] hover:bg-orange-500/10 hover:text-orange-400 hover:border-orange-500/30 text-gray-400 rounded-lg px-3 py-1.5 text-xs font-semibold transition-colors cursor-pointer bg-transparent">ID CARD</button>
+                          <button onClick={() => openEditModal(member)} className="border border-[#2a2d3e] hover:bg-[#1c1f2e] text-gray-400 rounded-lg p-1.5 transition-colors cursor-pointer bg-transparent"><FiEdit2 /></button>
+                          <button onClick={() => handleDelete(member.id)} className="border border-[#2a2d3e] hover:bg-red-500/10 text-red-400 rounded-lg p-1.5 transition-colors cursor-pointer bg-transparent"><FiTrash2 /></button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
+        )
+      )}
+
+      {activeTab === 'FAMILIES' && (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {families.map(family => (
+            <div key={family.mobile} className="bg-[#161923] border border-[#2a2d3e] rounded-xl p-6">
+              <div className="flex justify-between items-start mb-4 pb-4 border-b border-[#2a2d3e]">
+                <div>
+                  <h3 className="text-lg font-bold text-white font-['Outfit']">{family.mobile}</h3>
+                  <p className="text-sm text-gray-500 mt-1">{family.members.length} Family Member(s)</p>
+                </div>
+                <div className="w-10 h-10 rounded-full bg-blue-500/10 text-blue-400 flex items-center justify-center text-xl"><FiUsers /></div>
+              </div>
+              <div className="space-y-4">
+                {family.members.map(member => (
+                  <div key={member.id} className="flex justify-between items-center bg-[#0f1117] border border-[#2a2d3e] p-3 rounded-lg">
+                    <div>
+                      <div className="font-semibold text-white text-sm">{member.name}</div>
+                      <div className="text-xs text-gray-500 mt-0.5">{member.id}</div>
+                    </div>
+                    <button onClick={() => openIdCardModal(member)} className="text-xs font-semibold text-orange-400 hover:text-orange-300">ID CARD</button>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
+          {families.length === 0 && (
+            <div className="col-span-full text-center p-10 text-gray-500">No families registered yet.</div>
+          )}
         </div>
       )}
 
-      {/* Edit Member Modal */}
+      {/* Edit/Create Member Modal */}
       {showMemberModal && (
         <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-[100] p-4">
           <div className="bg-[#161923] border border-[#2a2d3e] rounded-xl p-5 sm:p-8 w-full max-w-md shadow-2xl max-h-[95vh] overflow-y-auto">
@@ -322,6 +383,46 @@ export default function MembersClient({ initialMembers, plans }: { initialMember
         </div>
       )}
 
+      {/* Family Registration Modal */}
+      {showFamilyModal && (
+        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-[100] p-4">
+          <div className="bg-[#161923] border border-[#2a2d3e] rounded-xl p-5 sm:p-8 w-full max-w-lg shadow-2xl max-h-[95vh] overflow-y-auto">
+            <div className="flex justify-between items-center mb-6">
+              <h2 className="text-xl font-bold font-['Outfit'] text-white">Setup Family Account</h2>
+              <button className="text-gray-500 hover:text-white cursor-pointer bg-transparent border-none text-xl" onClick={() => setShowFamilyModal(false)}><FiX /></button>
+            </div>
+            <form onSubmit={handleFamilySubmit}>
+              <div className="mb-6">
+                <label className="block text-xs uppercase tracking-wider font-semibold text-gray-500 mb-2">Primary Mobile Number</label>
+                <input type="tel" className="w-full bg-[#0f1117] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white placeholder-gray-600 focus:border-orange-500/50 focus:ring-2 focus:ring-orange-500/20 focus:outline-none text-sm" value={familyMobile} onChange={e => setFamilyMobile(e.target.value)} required pattern="[0-9]{10}" placeholder="10-digit mobile" />
+              </div>
+              
+              <div className="mb-4">
+                <div className="flex justify-between items-center mb-3">
+                  <label className="block text-xs uppercase tracking-wider font-semibold text-gray-500">Family Members</label>
+                  <button type="button" onClick={() => setFamilyMembers([...familyMembers, {name: "", email: ""}])} className="text-xs text-orange-400 hover:text-orange-300 font-semibold flex items-center gap-1 bg-orange-500/10 px-2 py-1 rounded">
+                    <FiPlus /> Add Another
+                  </button>
+                </div>
+                <div className="space-y-3">
+                  {familyMembers.map((m, idx) => (
+                    <div key={idx} className="flex gap-2 items-center">
+                      <input type="text" className="flex-1 bg-[#0f1117] border border-[#2a2d3e] rounded-lg px-3 py-2 text-white placeholder-gray-600 focus:border-orange-500/50 focus:outline-none text-sm" value={m.name} onChange={e => { const nm = [...familyMembers]; nm[idx].name = e.target.value; setFamilyMembers(nm); }} required placeholder={`Member ${idx + 1} Name`} />
+                      <button type="button" onClick={() => setFamilyMembers(familyMembers.filter((_, i) => i !== idx))} className="text-gray-500 hover:text-red-400 p-2"><FiTrash2 /></button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <button type="submit" className="w-full mt-6 bg-orange-500 hover:bg-orange-600 text-white rounded-lg px-5 py-3 text-sm font-semibold transition-colors cursor-pointer border-none disabled:opacity-50" disabled={loading}>
+                {loading ? "Creating..." : "Create Family Account"}
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Assign Plan Modal & ID Card Modal omitted for brevity, keeping same logic */}
       {/* Assign Plan Modal (Refactored to Mobile Input) */}
       {showPlanModal && (
         <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-[100] p-4">
@@ -334,24 +435,58 @@ export default function MembersClient({ initialMembers, plans }: { initialMember
               <div className="mb-5">
                 <label className="block text-xs uppercase tracking-wider font-semibold text-gray-500 mb-2">Member's Mobile Number</label>
                 <input 
-                  type="tel" 
-                  className="w-full bg-[#0f1117] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white placeholder-gray-600 focus:border-orange-500/50 focus:ring-2 focus:ring-orange-500/20 focus:outline-none text-sm" 
-                  value={assignMobile} 
-                  onChange={e => setAssignMobile(e.target.value)} 
-                  required 
-                  pattern="[0-9]{10}" 
-                  placeholder="Enter 10-digit mobile..." 
+                  type="tel" className="w-full bg-[#0f1117] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white placeholder-gray-600 focus:border-orange-500/50 focus:ring-2 focus:ring-orange-500/20 focus:outline-none text-sm" 
+                  value={assignMobile} onChange={e => setAssignMobile(e.target.value)} required pattern="[0-9]{10}" placeholder="Enter 10-digit mobile..." 
                 />
                 {assignMobile.length === 10 && (
-                  <div className={`mt-3 p-3 rounded-lg text-sm font-semibold ${existingAssignMember ? 'bg-emerald-500/10 border border-emerald-500/20 text-emerald-400' : 'bg-orange-500/10 border border-orange-500/20 text-orange-400'}`}>
-                    {existingAssignMember 
-                      ? `Found Member: ${existingAssignMember.name}` 
-                      : `New Member! They will be created automatically upon assignment.`}
+                  <div className={`mt-3 p-3 rounded-lg text-sm font-semibold ${existingAssignMembers.length > 0 ? 'bg-emerald-500/10 border border-emerald-500/20 text-emerald-400' : 'bg-orange-500/10 border border-orange-500/20 text-orange-400'}`}>
+                    {existingAssignMembers.length > 0 ? `Found ${existingAssignMembers.length} Family Member(s)` : `New Member! They will be created automatically upon assignment.`}
+                  </div>
+                )}
+                {existingAssignMembers.length > 0 && (
+                  <div className="mt-3 space-y-2">
+                    <div className="flex justify-between items-center mb-2">
+                      <label className="block text-xs uppercase tracking-wider font-semibold text-gray-500">Select Family Member</label>
+                      {selectedAssignPlan?.isFamilyPlan && selectedAssignPlan.familySize && (
+                        <span className="text-[10px] font-semibold text-orange-400 bg-orange-500/10 px-2 py-0.5 rounded">
+                          {assignMemberIds.length} / {selectedAssignPlan.familySize} selected
+                        </span>
+                      )}
+                    </div>
+                    {existingAssignMembers.map(m => {
+                      const isChecked = assignMemberIds.includes(m.id);
+                      return (
+                      <label key={m.id} className={`flex items-center gap-3 p-3 rounded-lg border cursor-pointer transition-colors ${isChecked ? 'bg-[#1c1f2e] border-emerald-500 text-white' : 'border-[#2a2d3e] text-gray-400 hover:bg-[#1c1f2e]'}`}>
+                        <input 
+                          type={selectedAssignPlan?.isFamilyPlan ? "checkbox" : "radio"} 
+                          name="family_member" 
+                          value={m.id} 
+                          checked={isChecked} 
+                          onChange={() => {
+                            if (!selectedAssignPlan?.isFamilyPlan) {
+                              setAssignMemberIds([m.id]);
+                            } else {
+                              if (isChecked) {
+                                setAssignMemberIds(prev => prev.filter(id => id !== m.id));
+                              } else {
+                                if (selectedAssignPlan.familySize && assignMemberIds.length >= selectedAssignPlan.familySize) {
+                                  showAlert("Limit Reached", `This family plan allows a maximum of ${selectedAssignPlan.familySize} members.`, "error");
+                                  return;
+                                }
+                                setAssignMemberIds(prev => [...prev, m.id]);
+                              }
+                            }
+                          }} 
+                          className={`w-4 h-4 text-emerald-500 bg-[#0f1117] border-[#2a2d3e] focus:ring-emerald-500 ${selectedAssignPlan?.isFamilyPlan ? 'rounded' : ''}`} 
+                        />
+                        <span className="font-medium">{m.name}</span>
+                      </label>
+                    )})}
                   </div>
                 )}
               </div>
 
-              {!existingAssignMember && assignMobile.length === 10 && (
+              {existingAssignMembers.length === 0 && assignMobile.length === 10 && (
                 <div className="grid grid-cols-2 gap-4 mb-5">
                   <div>
                     <label className="block text-xs uppercase tracking-wider font-semibold text-gray-500 mb-2">Full Name <span className="text-red-400">*</span></label>
@@ -366,11 +501,9 @@ export default function MembersClient({ initialMembers, plans }: { initialMember
 
               <div className="mb-5">
                 <label className="block text-xs uppercase tracking-wider font-semibold text-gray-500 mb-2">Select Membership Plan</label>
-                <select className="w-full bg-[#0f1117] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white placeholder-gray-600 focus:border-orange-500/50 focus:ring-2 focus:ring-orange-500/20 focus:outline-none text-sm" value={assignPlanId} onChange={e => setAssignPlanId(e.target.value)} required>
+                <select className="w-full bg-[#0f1117] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white placeholder-gray-600 focus:border-orange-500/50 focus:ring-2 focus:ring-orange-500/20 focus:outline-none text-sm" value={assignPlanId} onChange={e => { setAssignPlanId(e.target.value); setAssignMemberIds([]); }} required>
                   <option value="">-- Choose Plan --</option>
-                  {plans.map(p => (
-                    <option key={p.id} value={p.id}>{p.name} - {p.sport?.name} ({p.slotsPerDay} slots/day)</option>
-                  ))}
+                  {plans.map(p => <option key={p.id} value={p.id}>{p.name} - {p.sport?.name} {p.isFamilyPlan && `(Family Size: ${p.familySize})`}</option>)}
                 </select>
               </div>
               <div className="mb-5">

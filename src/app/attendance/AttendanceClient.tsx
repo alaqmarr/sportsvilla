@@ -1,7 +1,7 @@
 "use client";
 import { formatIST } from "../../lib/dateUtils";
 import { useState } from "react";
-import { fetchMemberByMobile, markAttendance } from "./actions";
+import { fetchMembers, markAttendance } from "./actions";
 import { useAlert } from "@/components/AlertProvider";
 
 import { FiCheckCircle, FiSearch, FiUser, FiCamera, FiX, FiClock, FiActivity } from "react-icons/fi";
@@ -16,18 +16,40 @@ export default function AttendanceClient({ initialRecords }: { initialRecords: a
   const [showScanner, setShowScanner] = useState(false);
   const [records, setRecords] = useState(initialRecords);
 
-  async function handleSearch(searchMobile: string) {
-    if (searchMobile.length !== 10) return;
+  const [membersList, setMembersList] = useState<any[]>([]);
+  const [familySelections, setFamilySelections] = useState<Record<string, string>>({});
+
+  async function handleSearch(searchQuery: string) {
+    if (!searchQuery) return;
+    
+    // Only fetch if it's a 10 digit number OR a cuid (length > 15)
+    if (searchQuery.length !== 10 && searchQuery.length < 15) return;
+    
     setLoading(true);
     try {
-      const data = await fetchMemberByMobile(searchMobile);
-      if (!data) {
-        showAlert("Member Not Found", "We couldn't find a member matching this mobile number.", "error");
+      const data = await fetchMembers(searchQuery);
+      if (!data || data.length === 0) {
+        showAlert("Member Not Found", "We couldn't find a member matching this.", "error");
         setMember(null);
+        setMembersList([]);
+      } else if (data.length === 1) {
+        setMember(data[0]);
+        setMembersList([]);
       } else {
-        setMember(data);
+        setMembersList(data);
+        setMember(null);
+        
+        // Auto-select first active plan for each member
+        const initialSelections: Record<string, string> = {};
+        data.forEach((m: any) => {
+          const activePlans = m.memberships.filter((mem: any) => mem.status === 'ACTIVE' && new Date(mem.endDate) >= new Date());
+          if (activePlans.length > 0) {
+            initialSelections[m.id] = activePlans[0].membershipPlanId;
+          }
+        });
+        setFamilySelections(initialSelections);
       }
-    } catch (err) { showAlert("Error", "An error occurred while searching for the member.", "error"); }
+    } catch (err) { showAlert("Error", "An error occurred while searching.", "error"); }
     setLoading(false);
   }
 
@@ -52,6 +74,47 @@ export default function AttendanceClient({ initialRecords }: { initialRecords: a
       showAlert("Check-in Failed", err.message || "There was an issue marking the attendance.", "error");
     }
     setProcessingId("");
+  }
+
+  async function handleMarkFamilyAttendance() {
+    setLoading(true);
+    let successCount = 0;
+    let failCount = 0;
+    const newRecords: any[] = [];
+
+    for (const m of membersList) {
+      const selectedPlanId = familySelections[m.id];
+      if (selectedPlanId) {
+        const activePlan = m.memberships.find((mem: any) => mem.membershipPlanId === selectedPlanId);
+        if (activePlan) {
+          try {
+            const newRecord = await markAttendance({
+              memberId: m.id,
+              membershipPlanId: activePlan.membershipPlanId,
+              sportId: activePlan.membershipPlan.sportId
+            });
+            newRecords.push(newRecord);
+            successCount++;
+          } catch (err) {
+            failCount++;
+          }
+        } else {
+          failCount++;
+        }
+      }
+    }
+
+    if (successCount > 0) {
+      showAlert("Family Checked In", `Successfully checked in ${successCount} members.` + (failCount > 0 ? ` (${failCount} skipped/failed)` : ""), "success");
+      setRecords((prev) => [...newRecords.reverse(), ...prev]);
+    } else {
+      showAlert("Check-in Failed", "Could not check in any family members. Check if they have active plans.", "error");
+    }
+    
+    setMembersList([]);
+    setFamilySelections({});
+    setMobile("");
+    setLoading(false);
   }
 
   function startScanner() {
@@ -102,14 +165,13 @@ export default function AttendanceClient({ initialRecords }: { initialRecords: a
                   placeholder="Enter 10-digit mobile..." 
                   value={mobile}
                   onChange={e => {
-                    const val = e.target.value.replace(/\D/g, '');
-                    if (val.length <= 10) {
-                      setMobile(val);
-                      if (val.length === 10) {
-                        handleSearch(val);
-                      } else {
-                        setMember(null);
-                      }
+                    const val = e.target.value.replace(/\s/g, '');
+                    setMobile(val);
+                    if (val.length === 10 || val.length > 15) {
+                      handleSearch(val);
+                    } else {
+                      setMember(null);
+                      setMembersList([]);
                     }
                   }}
                   autoFocus
@@ -199,6 +261,72 @@ export default function AttendanceClient({ initialRecords }: { initialRecords: a
                   })}
                 </div>
               )}
+            </div>
+          )}
+
+          {membersList.length > 1 && (
+            <div className="bg-[#161923] border border-[#2a2d3e] rounded-xl p-6">
+              <div className="flex justify-between items-center mb-4">
+                <h3 className="text-lg font-semibold font-['Outfit'] text-white">Select Family Member</h3>
+                <button 
+                  onClick={handleMarkFamilyAttendance}
+                  className="bg-emerald-500 hover:bg-emerald-600 text-white rounded-lg px-4 py-2 text-sm font-semibold inline-flex items-center gap-2 transition-colors cursor-pointer border-none"
+                >
+                  <FiCheckCircle /> Mark Entire Family Present
+                </button>
+              </div>
+              <div className="flex flex-col gap-3">
+                {membersList.map(m => {
+                  const activePlans = m.memberships.filter((mem: any) => mem.status === 'ACTIVE' && new Date(mem.endDate) >= new Date());
+                  
+                  return (
+                  <div 
+                    key={m.id} 
+                    className="flex flex-col sm:flex-row sm:items-center gap-4 bg-[#1c1f2e] border border-[#2a2d3e] p-4 rounded-lg"
+                  >
+                    <div 
+                      className="flex items-center gap-4 cursor-pointer flex-1 hover:opacity-80 transition-opacity"
+                      onClick={() => {
+                        setMember(m);
+                        setMembersList([]);
+                        setFamilySelections({});
+                      }}
+                    >
+                      <div className="w-12 h-12 rounded-full bg-orange-500/10 text-orange-400 flex items-center justify-center font-bold font-['Outfit'] text-lg shrink-0">
+                        {m.name.charAt(0)}
+                      </div>
+                      <div className="min-w-0">
+                        <div className="text-white font-semibold truncate">{m.name}</div>
+                        <div className="text-gray-500 text-sm">Joined {formatIST(new Date(m.joinDate), 'yyyy')}</div>
+                      </div>
+                    </div>
+                    
+                    <div className="shrink-0 w-full sm:w-auto mt-3 sm:mt-0 pt-3 sm:pt-0 border-t border-[#2a2d3e] sm:border-none">
+                      {activePlans.length > 1 ? (
+                        <select 
+                          className="w-full sm:w-56 bg-[#0f1117] border border-[#2a2d3e] rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-orange-500/50"
+                          value={familySelections[m.id] || ""}
+                          onChange={(e) => setFamilySelections(prev => ({ ...prev, [m.id]: e.target.value }))}
+                        >
+                          {activePlans.map((ap: any) => (
+                            <option key={ap.membershipPlanId} value={ap.membershipPlanId}>
+                              {ap.membershipPlan?.sport?.name} - {ap.membershipPlan?.name}
+                            </option>
+                          ))}
+                        </select>
+                      ) : activePlans.length === 1 ? (
+                        <div className="inline-flex items-center text-xs font-semibold text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-3 py-2 rounded-lg">
+                          {activePlans[0].membershipPlan?.sport?.name} ({activePlans[0].membershipPlan?.name})
+                        </div>
+                      ) : (
+                        <div className="inline-flex items-center text-xs font-semibold text-red-400 bg-red-500/10 border border-red-500/20 px-3 py-2 rounded-lg">
+                          No Active Plans
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )})}
+              </div>
             </div>
           )}
         </div>

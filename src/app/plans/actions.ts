@@ -2,14 +2,16 @@
 import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 
-export async function createPlan(data: { name: string; sportId: string; durationInDays: number; price: number; slotsPerDay: number }) {
+export async function createPlan(data: { name: string; sportId: string; durationInDays: number; price: number; slotsPerDay: number; isFamilyPlan: boolean; familySize?: number | null }) {
   const plan = await prisma.membershipPlan.create({
     data: {
       name: data.name,
-      sportId: data.sportId,
+      sport: { connect: { id: data.sportId } },
       durationInDays: data.durationInDays,
       price: data.price,
       slotsPerDay: data.slotsPerDay,
+      isFamilyPlan: data.isFamilyPlan,
+      familySize: data.familySize,
     },
     include: {
       sport: true,
@@ -19,15 +21,17 @@ export async function createPlan(data: { name: string; sportId: string; duration
   return plan;
 }
 
-export async function updatePlan(id: string, data: { name: string; sportId: string; durationInDays: number; price: number; slotsPerDay: number }) {
+export async function updatePlan(id: string, data: { name: string; sportId: string; durationInDays: number; price: number; slotsPerDay: number; isFamilyPlan: boolean; familySize?: number | null }) {
   const plan = await prisma.membershipPlan.update({
     where: { id },
     data: {
       name: data.name,
-      sportId: data.sportId,
+      sport: { connect: { id: data.sportId } },
       durationInDays: data.durationInDays,
       price: data.price,
       slotsPerDay: data.slotsPerDay,
+      isFamilyPlan: data.isFamilyPlan,
+      familySize: data.familySize,
     },
   });
   revalidatePath("/", "layout");

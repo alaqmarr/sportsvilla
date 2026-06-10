@@ -1,7 +1,7 @@
 "use client";
 import { usePathname, useRouter } from "next/navigation";
 import { useState, useEffect, useRef } from "react";
-import { FiHome, FiUsers, FiMapPin, FiActivity, FiLayers, FiShield, FiFileText, FiMenu, FiX, FiUser, FiCalendar, FiServer, FiLogOut } from "react-icons/fi";
+import { FiHome, FiUsers, FiMapPin, FiActivity, FiLayers, FiShield, FiFileText, FiMenu, FiX, FiUser, FiCalendar, FiServer, FiLogOut, FiSettings, FiCalendar as FiCalendar2, FiAward, FiCheckCircle } from "react-icons/fi";
 import { signOut } from "next-auth/react";
 import LinkComponent from "next/link";
 
@@ -28,8 +28,8 @@ export function Navigation({ children }: { children: React.ReactNode }) {
 
   // Global Auto-Sync Polling
   useEffect(() => {
-    // Only poll if not on the public member portal
-    if (pathname.startsWith('/m/')) return;
+    // Only poll if not on the public member portal or the secondary display
+    if (pathname.startsWith('/m/') || pathname === '/display') return;
 
     const interval = setInterval(async () => {
       try {
@@ -49,8 +49,8 @@ export function Navigation({ children }: { children: React.ReactNode }) {
     return () => clearInterval(interval);
   }, [pathname, router]);
 
-  // If we are on the public member portal, don't show the admin sidebar
-  if (pathname.startsWith('/m/') || pathname === '/m') {
+  // If we are on the public member portal, CFD, or print page, don't show the admin sidebar
+  if (pathname.startsWith('/m/') || pathname === '/m' || pathname === '/display' || pathname.startsWith('/print')) {
     return <>{children}</>;
   }
 
@@ -60,11 +60,15 @@ export function Navigation({ children }: { children: React.ReactNode }) {
     { href: "/turfs", label: "Grounds & Turfs", icon: <FiMapPin /> },
     { href: "/plans", label: "Memberships", icon: <FiLayers /> },
     { href: "/members", label: "Members Directory", icon: <FiUsers /> },
+    { href: "/loyalty", label: "Loyalty Leaderboard", icon: <FiAward /> },
+    { href: "/bookings", label: "Turf Bookings", icon: <FiCalendar2 /> },
+    { href: "/checkin", label: "Entry Check-in", icon: <FiCheckCircle /> },
     { href: "/attendance", label: "Attendance Kiosk", icon: <FiShield /> },
     { href: "/admin", label: "Manage Admins", icon: <FiShield /> },
     { href: "/reports/member", label: "Member Reports", icon: <FiUser /> },
     { href: "/reports/attendance", label: "Attendance Reports", icon: <FiCalendar /> },
     { href: "/reports/memberships", label: "Membership Reports", icon: <FiLayers /> },
+    { href: "/settings", label: "Settings", icon: <FiSettings /> },
     { href: "/server", label: "Server Health", icon: <FiServer /> },
   ];
 
@@ -96,7 +100,7 @@ export function Navigation({ children }: { children: React.ReactNode }) {
       )}
 
       <aside className={`
-        w-64 bg-[#161923] border-r border-[#2a2d3e] p-6 flex flex-col gap-2 shrink-0 h-screen fixed lg:sticky top-0 z-50 transition-transform duration-300
+        w-64 bg-[#161923] border-r border-[#2a2d3e] p-6 flex flex-col gap-2 shrink-0 h-screen fixed top-0 left-0 z-50 transition-transform duration-300
         ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
       `}>
         <div className="flex flex-col mb-8 px-3">
@@ -145,7 +149,7 @@ export function Navigation({ children }: { children: React.ReactNode }) {
         </div>
       </aside>
       
-      <main className="flex-1 p-4 lg:p-10 w-full lg:max-w-[calc(100vw-16rem)] overflow-x-hidden">
+      <main className="flex-1 p-4 lg:p-10 w-full lg:max-w-[calc(100vw-16rem)] lg:ml-64 overflow-x-hidden">
         {children}
       </main>
     </div>

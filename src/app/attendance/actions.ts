@@ -2,9 +2,12 @@
 import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 
-export async function fetchMemberByMobile(mobile: string) {
-  const member = await prisma.member.findUnique({
-    where: { mobile },
+export async function fetchMembers(identifier: string) {
+  const isMobile = /^\d{10}$/.test(identifier);
+  const whereClause = isMobile ? { mobile: identifier } : { id: identifier };
+
+  const members = await prisma.member.findMany({
+    where: whereClause,
     include: {
       memberships: {
         where: {
@@ -20,9 +23,10 @@ export async function fetchMemberByMobile(mobile: string) {
     }
   });
 
-  if (!member) return null;
+  if (members.length === 0) return null;
 
-  const enhancedMemberships = await Promise.all(
+  return Promise.all(members.map(async (member) => {
+    const enhancedMemberships = await Promise.all(
     member.memberships.map(async (m) => {
       const attendedCount = await prisma.attendance.count({
         where: {
@@ -55,12 +59,13 @@ export async function fetchMemberByMobile(mobile: string) {
         }
       };
     })
-  );
+    );
 
-  return {
-    ...member,
-    memberships: enhancedMemberships
-  };
+    return {
+      ...member,
+      memberships: enhancedMemberships
+    };
+  }));
 }
 
 export async function markAttendance(data: { memberId: string; sportId: string; membershipPlanId: string; notes?: string }) {
@@ -102,6 +107,12 @@ export async function markAttendance(data: { memberId: string; sportId: string; 
       sport: true,
       membershipPlan: true
     }
+  });
+
+  // Increment loyalty points for check-in
+  await prisma.member.update({
+    where: { id: data.memberId },
+    data: { loyaltyPoints: { increment: 10 } }
   });
 
   revalidatePath("/", "layout");

@@ -2,7 +2,7 @@ export const dynamic = 'force-dynamic';
 import { formatIST } from "../lib/dateUtils";
 import { prisma } from "@/lib/prisma";
 import { FiUsers, FiActivity, FiCheckCircle } from "react-icons/fi";
-
+import CheckinScanner from "@/components/CheckinScanner";
 
 export default async function Dashboard() {
   const todayStart = new Date();
@@ -11,7 +11,7 @@ export default async function Dashboard() {
   const nextWeek = new Date();
   nextWeek.setDate(nextWeek.getDate() + 7);
 
-  const [totalMembers, activePlans, todaysAttendance, expiringMemberships] = await Promise.all([
+  const [totalMembers, activePlans, todaysAttendance, expiringMemberships, sports] = await Promise.all([
     prisma.member.count(),
     prisma.memberMembership.count({
       where: { status: "ACTIVE", endDate: { gte: new Date() } }
@@ -29,7 +29,8 @@ export default async function Dashboard() {
       },
       include: { member: true, membershipPlan: { include: { sport: true } } },
       orderBy: { endDate: "asc" }
-    })
+    }),
+    prisma.sport.findMany({ orderBy: { name: 'asc' } })
   ]);
 
   return (
@@ -98,6 +99,11 @@ export default async function Dashboard() {
             ))}
           </div>
         )}
+      </div>
+
+      <div className="mt-10">
+        <h3 className="text-lg font-semibold font-['Outfit'] text-white mb-5">Quick Check-in</h3>
+        <CheckinScanner sports={sports} />
       </div>
     </div>
   );

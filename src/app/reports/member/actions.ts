@@ -2,7 +2,7 @@
 import { prisma } from "@/lib/prisma";
 
 export async function fetchAttendanceReport(mobile: string) {
-  const member = await prisma.member.findUnique({
+  const members = await prisma.member.findMany({
     where: { mobile },
     include: {
       memberships: {
@@ -27,5 +27,5 @@ export async function fetchAttendanceReport(mobile: string) {
     }
   });
 
-  return member;
+  return members;
 }

@@ -1,0 +1,393 @@
+"use server";
+import { prisma } from "@/lib/prisma";
+import { randomUUID } from "crypto";
+import { revalidatePath } from "next/cache";
+import { getSettings } from "../settings/actions";
+
+export async function fetchBookableTurfs() {
+  return await prisma.turf.findMany({
+    where: { 
+      bookingPrice: { not: null },
+      bookingDurationMinutes: { not: null }
+    },
+    include: { sports: { include: { sport: true } } }
+  });
+}
+
+export async function fetchBookingsByDate(date: string) {
+  const startOfDay = new Date(date);
+  startOfDay.setHours(0, 0, 0, 0);
+  
+  const endOfDay = new Date(date);
+  endOfDay.setHours(23, 59, 59, 999);
+
+  return await prisma.booking.findMany({
+    where: {
+      startTime: {
+        gte: startOfDay,
+        lte: endOfDay
+      },
+      status: { not: "CANCELLED" }
+    },
+    include: {
+      member: true,
+      sport: true,
+      turf: true,
+      payments: true
+    }
+  });
+}
+
+export async function searchMember(mobile: string) {
+  if (mobile.length !== 10) return [];
+  return await prisma.member.findMany({ where: { mobile } });
+}
+
+export async function createBooking(data: {
+  turfIds: string[];
+  sportId: string;
+  slots: { startTime: Date, endTime: Date }[];
+  memberId?: string;
+  mobile?: string;
+  name?: string;
+  participantCount?: number;
+  guestNames?: string[];
+}) {
+  let member;
+  if (data.memberId) {
+    member = await prisma.member.findUnique({ where: { id: data.memberId } });
+  } else if (data.mobile && data.name) {
+    member = await prisma.member.findFirst({ where: { mobile: data.mobile } });
+    if (!member) {
+      const count = await prisma.member.count({ where: { mobile: data.mobile } });
+      const id = `${data.mobile}_${count + 1}`;
+      member = await prisma.member.create({
+        data: { id, mobile: data.mobile, name: data.name }
+      });
+    }
+  }
+
+  if (!member) throw new Error("Member information is required");
+
+  const turfs = await prisma.turf.findMany({ where: { id: { in: data.turfIds } } });
+  if (turfs.length === 0 || turfs.some(t => t.bookingPrice == null)) throw new Error("Invalid turf selection");
+
+  // Merge contiguous slots
+  const sortedSlots = [...data.slots].sort((a: any, b: any) => new Date(a.startTime).getTime() - new Date(b.startTime).getTime());
+  
+  const mergedSlots: { startTime: any, endTime: any }[] = [];
+  for (const slot of sortedSlots) {
+    if (mergedSlots.length === 0) {
+      mergedSlots.push({ ...slot });
+    } else {
+      const last = mergedSlots[mergedSlots.length - 1];
+      if (new Date(last.endTime).getTime() === new Date(slot.startTime).getTime()) {
+        last.endTime = slot.endTime;
+      } else {
+        mergedSlots.push({ ...slot });
+      }
+    }
+  }
+
+  // Create bookings for merged slots
+  const participantCount = data.participantCount || 1;
+  const bookings: any[] = [];
+  
+  for (const turf of turfs) {
+    const pricePerSlot = (turf.bookingPrice || 0) / (turf.bookingDurationMinutes || 60) * 30;
+    
+    for (const slot of mergedSlots) {
+      const durationMins = (new Date(slot.endTime).getTime() - new Date(slot.startTime).getTime()) / 60000;
+      const price = pricePerSlot * (durationMins / 30) * participantCount;
+      
+      const ticketsData = Array.from({ length: participantCount }).map((_, i) => ({
+        qrCode: `TKT-${Math.random().toString(36).substring(2, 10).toUpperCase()}-SYKM`,
+        guestName: data.guestNames && data.guestNames[i] ? data.guestNames[i] : null
+      }));
+
+      const booking = await prisma.booking.create({
+        data: {
+          turfId: turf.id,
+          memberId: member.id,
+          sportId: data.sportId,
+          startTime: new Date(slot.startTime),
+          endTime: new Date(slot.endTime),
+          price: price,
+          participantCount: participantCount,
+          paymentStatus: "UNPAID",
+          status: "CONFIRMED",
+          tickets: {
+            create: ticketsData
+          }
+        }
+      });
+      bookings.push(booking);
+    }
+  }
+
+  // Increment Loyalty Points
+  await prisma.member.update({
+    where: { id: member.id },
+    data: { loyaltyPoints: { increment: 25 * data.slots.length * turfs.length } }
+  });
+
+  revalidatePath("/", "layout");
+  return bookings;
+}
+
+export async function getUpiId() {
+  const settings = await getSettings();
+  return { upiId: settings.upiId || "", businessName: settings.businessName || "SportsVilla" };
+}
+
+export async function fetchAllBookingsByDate(date: string) {
+  const startOfDay = new Date(date);
+  startOfDay.setHours(0, 0, 0, 0);
+  const endOfDay = new Date(date);
+  endOfDay.setHours(23, 59, 59, 999);
+
+  return await prisma.booking.findMany({
+    where: {
+      startTime: {
+        gte: startOfDay,
+        lte: endOfDay
+      }
+    },
+    include: {
+      member: true,
+      sport: true,
+      turf: true,
+      payments: true,
+      tickets: true
+    },
+    orderBy: {
+      startTime: 'asc'
+    }
+  });
+}
+
+export async function cancelBooking(id: string) {
+  const booking = await prisma.booking.findUnique({ where: { id } });
+  if (!booking) throw new Error("Booking not found");
+
+  if (booking.status !== "CANCELLED") {
+    const durationMins = (booking.endTime.getTime() - booking.startTime.getTime()) / 60000;
+    const pointsToDeduct = (durationMins / 30) * 25;
+
+    await prisma.$transaction([
+      prisma.booking.update({
+        where: { id },
+        data: { status: "CANCELLED" }
+      }),
+      prisma.member.update({
+        where: { id: booking.memberId },
+        data: { loyaltyPoints: { decrement: pointsToDeduct } }
+      })
+    ]);
+  }
+  
+  revalidatePath("/", "layout");
+}
+
+export async function updateBookingPayment(id: string, paymentStatus: "PAID" | "UNPAID") {
+  await prisma.booking.update({
+    where: { id },
+    data: { paymentStatus }
+  });
+  revalidatePath("/", "layout");
+}
+
+export async function previewExtension(bookingId: string, durationMinutes: number) {
+  if (durationMinutes <= 0 || durationMinutes % 30 !== 0) {
+    throw new Error("Duration must be a multiple of 30 minutes.");
+  }
+
+  const booking = await prisma.booking.findUnique({
+    where: { id: bookingId },
+    include: { turf: true }
+  });
+  
+  if (!booking) throw new Error("Booking not found");
+  if (booking.status === "CANCELLED") throw new Error("Cannot extend cancelled booking");
+
+  const applicableTurfs = await prisma.turf.findMany({
+    where: {
+      sports: { some: { sportId: booking.sportId } },
+      bookingPrice: { not: null }
+    }
+  });
+
+  const numChunks = durationMinutes / 30;
+  let currentStartTime = booking.endTime;
+  const allocations: { turfId: string, turfName: string, startTime: string, endTime: string, price: number, isSameCourt: boolean }[] = [];
+  
+  for (let i = 0; i < numChunks; i++) {
+    const chunkEndTime = new Date(currentStartTime.getTime() + 30 * 60000);
+    
+    // 1. Try current court first
+    let assignedTurf = null;
+    let isSameCourt = false;
+
+    const conflictOnCurrent = await prisma.booking.findFirst({
+      where: {
+        turfId: booking.turfId,
+        status: { not: "CANCELLED" },
+        startTime: { lt: chunkEndTime },
+        endTime: { gt: currentStartTime }
+      }
+    });
+
+    if (!conflictOnCurrent) {
+      assignedTurf = applicableTurfs.find(t => t.id === booking.turfId);
+      isSameCourt = true;
+    } else {
+      // 2. Try other courts
+      for (const altTurf of applicableTurfs) {
+        if (altTurf.id === booking.turfId) continue;
+        const altConflict = await prisma.booking.findFirst({
+          where: {
+            turfId: altTurf.id,
+            status: { not: "CANCELLED" },
+            startTime: { lt: chunkEndTime },
+            endTime: { gt: currentStartTime }
+          }
+        });
+        if (!altConflict) {
+          assignedTurf = altTurf;
+          break;
+        }
+      }
+    }
+
+    if (!assignedTurf) {
+      return { available: false, message: `Could not find courts for the full ${durationMinutes} mins. Failed at ${currentStartTime.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}.` };
+    }
+
+    const priceFor30m = (assignedTurf.bookingPrice || 0) / (assignedTurf.bookingDurationMinutes || 60) * 30;
+    
+    allocations.push({
+      turfId: assignedTurf.id,
+      turfName: assignedTurf.name,
+      startTime: currentStartTime.toISOString(),
+      endTime: chunkEndTime.toISOString(),
+      price: priceFor30m,
+      isSameCourt
+    });
+
+    currentStartTime = chunkEndTime;
+  }
+
+  // Merge consecutive chunks on the same court
+  const mergedAllocations = [];
+  for (const alloc of allocations) {
+    if (mergedAllocations.length === 0) {
+      mergedAllocations.push({ ...alloc });
+    } else {
+      const last = mergedAllocations[mergedAllocations.length - 1];
+      if (last.turfId === alloc.turfId && last.endTime === alloc.startTime) {
+        last.endTime = alloc.endTime;
+        last.price += alloc.price;
+      } else {
+        mergedAllocations.push({ ...alloc });
+      }
+    }
+  }
+
+  return {
+    available: true,
+    allocations: mergedAllocations,
+    totalPrice: mergedAllocations.reduce((sum, a) => sum + a.price, 0)
+  };
+}
+
+export async function confirmExtension(bookingId: string, allocations: any[]) {
+  const booking = await prisma.booking.findUnique({
+    where: { id: bookingId }
+  });
+  if (!booking) throw new Error("Booking not found");
+
+  for (const alloc of allocations) {
+    if (alloc.isSameCourt && alloc.startTime === booking.endTime.toISOString()) {
+      // Update original booking
+      await prisma.booking.update({
+        where: { id: bookingId },
+        data: { 
+          endTime: new Date(alloc.endTime),
+          price: booking.price + alloc.price
+        }
+      });
+    } else {
+      // Create new booking
+      await prisma.booking.create({
+        data: {
+          turfId: alloc.turfId,
+          memberId: booking.memberId,
+          sportId: booking.sportId,
+          startTime: new Date(alloc.startTime),
+          endTime: new Date(alloc.endTime),
+          price: alloc.price,
+          paymentStatus: "UNPAID",
+          status: "CONFIRMED"
+        }
+      });
+    }
+  }
+
+  // Loyalty points
+  const totalMins = allocations.reduce((sum, a) => sum + (new Date(a.endTime).getTime() - new Date(a.startTime).getTime()) / 60000, 0);
+  const loyaltyPoints = (totalMins / 30) * 25;
+  await prisma.member.update({
+    where: { id: booking.memberId },
+    data: { loyaltyPoints: { increment: loyaltyPoints } }
+  });
+
+  revalidatePath("/", "layout");
+  return { success: true };
+}
+
+export async function addPayment(bookingId: string, amount: number, method: "CASH" | "ONLINE") {
+  const booking = await prisma.booking.findUnique({
+    where: { id: bookingId },
+    include: { payments: true }
+  });
+  if (!booking) throw new Error("Booking not found");
+
+  await prisma.payment.create({
+    data: {
+      bookingId,
+      amount,
+      method
+    }
+  });
+
+  const totalPaid = booking.payments.reduce((sum, p) => sum + p.amount, 0) + amount;
+  
+  let newStatus = "UNPAID";
+  if (totalPaid >= booking.price) {
+    newStatus = "PAID";
+  } else if (totalPaid > 0) {
+    newStatus = "PARTIAL";
+  }
+
+  await prisma.booking.update({
+    where: { id: bookingId },
+    data: { paymentStatus: newStatus }
+  });
+
+  revalidatePath("/", "layout");
+}
+
+export async function updateDisplaySession(data: { bookingId?: string; qrData?: string; amount?: number; memberName?: string; status: "IDLE" | "AWAITING_PAYMENT" | "PAID" }) {
+  await prisma.displaySession.upsert({
+    where: { id: "MAIN_DISPLAY" },
+    update: data,
+    create: { id: "MAIN_DISPLAY", ...data }
+  });
+  // Note: revalidatePath might not be needed for polling, but good practice
+}
+
+export async function getDisplaySession() {
+  return await prisma.displaySession.findUnique({
+    where: { id: "MAIN_DISPLAY" }
+  });
+}

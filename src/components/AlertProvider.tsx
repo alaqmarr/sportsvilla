@@ -4,16 +4,21 @@ import { FiCheckCircle, FiXCircle, FiInfo } from "react-icons/fi";
 
 type AlertType = "success" | "error" | "info";
 
+interface AlertAction {
+  label: string;
+  onClick: () => void;
+}
+
 interface AlertContextType {
-  showAlert: (titleOrMessage: string, messageOrType?: string, type?: AlertType) => void;
+  showAlert: (titleOrMessage: string, messageOrType?: string, type?: AlertType, options?: { actions?: AlertAction[] }) => void;
 }
 
 const AlertContext = createContext<AlertContextType | undefined>(undefined);
 
 export function AlertProvider({ children }: { children: ReactNode }) {
-  const [alert, setAlert] = useState<{ title: string; message: string; type: AlertType } | null>(null);
+  const [alert, setAlert] = useState<{ title: string; message: string; type: AlertType; actions?: AlertAction[] } | null>(null);
 
-  const showAlert = (titleOrMessage: string, messageOrType?: string, type?: AlertType) => {
+  const showAlert = (titleOrMessage: string, messageOrType?: string, type?: AlertType, options?: { actions?: AlertAction[] }) => {
     let title = "";
     let message = "";
     let alertType: AlertType = "info";
@@ -39,7 +44,7 @@ export function AlertProvider({ children }: { children: ReactNode }) {
       alertType = "info";
       title = 'Information';
     }
-    setAlert({ title, message, type: alertType });
+    setAlert({ title, message, type: alertType, actions: options?.actions });
   };
 
   const closeAlert = () => {
@@ -61,16 +66,30 @@ export function AlertProvider({ children }: { children: ReactNode }) {
               {alert.title}
             </h2>
             <p className="text-gray-400 text-sm mb-8">{alert.message}</p>
-            <button
-              className={`w-full rounded-lg px-5 py-3 text-sm font-semibold cursor-pointer transition-colors ${
-                alert.type === 'error'
-                  ? 'border border-red-500/30 text-red-400 hover:bg-red-500/10 bg-transparent'
-                  : 'bg-orange-500 hover:bg-orange-600 text-white'
-              }`}
-              onClick={closeAlert}
-            >
-              Close
-            </button>
+            <div className="flex flex-col gap-3">
+              {alert.actions?.map((action, idx) => (
+                <button
+                  key={idx}
+                  className="w-full rounded-lg px-5 py-3 text-sm font-bold cursor-pointer transition-colors bg-blue-600 hover:bg-blue-500 text-white"
+                  onClick={() => {
+                    action.onClick();
+                    closeAlert();
+                  }}
+                >
+                  {action.label}
+                </button>
+              ))}
+              <button
+                className={`w-full rounded-lg px-5 py-3 text-sm font-semibold cursor-pointer transition-colors ${
+                  alert.type === 'error'
+                    ? 'border border-red-500/30 text-red-400 hover:bg-red-500/10 bg-transparent'
+                    : 'bg-[#2a2d3e] hover:bg-[#3b3f54] text-white'
+                }`}
+                onClick={closeAlert}
+              >
+                Close
+              </button>
+            </div>
           </div>
         </div>
       )}

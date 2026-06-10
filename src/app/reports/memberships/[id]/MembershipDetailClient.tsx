@@ -215,10 +215,10 @@ export default function MembershipDetailClient({ id }: { id: string }) {
                     <div className="flex-1 mt-1.5 flex flex-col gap-1 overflow-hidden">
                       {attendedDay ? (
                         dayAttendances.map((a: any) => (
-                          <div key={a.id} className="text-[10px] leading-tight flex flex-col gap-0.5 mb-1.5 bg-emerald-500/20 px-2 py-1.5 rounded border border-emerald-500/30">
-                            <span className="font-bold text-white flex items-center gap-1">
+                          <div key={a.id} className="text-[10px] leading-tight flex flex-col gap-0.5 mb-1.5 bg-emerald-500/20 px-2 py-1.5 rounded border border-emerald-500/30 marquee-container" title={formatIST(new Date(a.date), 'h:mm a')}>
+                            <div className="marquee-content font-bold text-white flex items-center gap-1">
                               <FiClock size={10} className="text-emerald-400"/> {formatIST(new Date(a.date), 'h:mm a')}
-                            </span>
+                            </div>
                           </div>
                         ))
                       ) : missedDay ? (

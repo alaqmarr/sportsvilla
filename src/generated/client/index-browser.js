@@ -126,11 +126,18 @@ exports.Prisma.AdminScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.SettingScalarFieldEnum = {
+  key: 'key',
+  value: 'value',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.MemberScalarFieldEnum = {
   id: 'id',
   mobile: 'mobile',
   name: 'name',
   email: 'email',
+  loyaltyPoints: 'loyaltyPoints',
   joinDate: 'joinDate',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -149,6 +156,11 @@ exports.Prisma.TurfScalarFieldEnum = {
   name: 'name',
   location: 'location',
   parentTurfId: 'parentTurfId',
+  bookingPrice: 'bookingPrice',
+  bookingDurationMinutes: 'bookingDurationMinutes',
+  capacityPerSlot: 'capacityPerSlot',
+  requireEntryVerification: 'requireEntryVerification',
+  bookingValidityDays: 'bookingValidityDays',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -165,6 +177,8 @@ exports.Prisma.MembershipPlanScalarFieldEnum = {
   durationInDays: 'durationInDays',
   price: 'price',
   slotsPerDay: 'slotsPerDay',
+  isFamilyPlan: 'isFamilyPlan',
+  familySize: 'familySize',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -191,6 +205,49 @@ exports.Prisma.AttendanceScalarFieldEnum = {
   createdAt: 'createdAt'
 };
 
+exports.Prisma.BookingScalarFieldEnum = {
+  id: 'id',
+  turfId: 'turfId',
+  memberId: 'memberId',
+  sportId: 'sportId',
+  startTime: 'startTime',
+  endTime: 'endTime',
+  price: 'price',
+  paymentStatus: 'paymentStatus',
+  status: 'status',
+  participantCount: 'participantCount',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.PaymentScalarFieldEnum = {
+  id: 'id',
+  bookingId: 'bookingId',
+  amount: 'amount',
+  method: 'method',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.DisplaySessionScalarFieldEnum = {
+  id: 'id',
+  bookingId: 'bookingId',
+  qrData: 'qrData',
+  amount: 'amount',
+  memberName: 'memberName',
+  status: 'status',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.TicketScalarFieldEnum = {
+  id: 'id',
+  bookingId: 'bookingId',
+  qrCode: 'qrCode',
+  guestName: 'guestName',
+  status: 'status',
+  usedAt: 'usedAt',
+  createdAt: 'createdAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -204,13 +261,18 @@ exports.Prisma.NullsOrder = {
 
 exports.Prisma.ModelName = {
   Admin: 'Admin',
+  Setting: 'Setting',
   Member: 'Member',
   Sport: 'Sport',
   Turf: 'Turf',
   TurfSport: 'TurfSport',
   MembershipPlan: 'MembershipPlan',
   MemberMembership: 'MemberMembership',
-  Attendance: 'Attendance'
+  Attendance: 'Attendance',
+  Booking: 'Booking',
+  Payment: 'Payment',
+  DisplaySession: 'DisplaySession',
+  Ticket: 'Ticket'
 };
 
 /**

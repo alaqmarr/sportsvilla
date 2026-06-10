@@ -10,6 +10,7 @@ export default function ReportClient() {
   const { showAlert } = useAlert();
   const [mobile, setMobile] = useState("");
   const [loading, setLoading] = useState(false);
+  const [membersList, setMembersList] = useState<any[]>([]);
   const [reportData, setReportData] = useState<any>(null);
   const [currentMonth, setCurrentMonth] = useState(new Date());
 
@@ -40,11 +41,17 @@ export default function ReportClient() {
     setLoading(true);
     try {
       const data = await fetchAttendanceReport(searchMobile);
-      if (!data) {
+      if (!data || data.length === 0) {
         showAlert("Not Found", "We couldn't find any member registered with this mobile number.", "error");
+        setMembersList([]);
         setReportData(null);
       } else {
-        setReportData(data);
+        setMembersList(data);
+        if (data.length === 1) {
+          setReportData(data[0]);
+        } else {
+          setReportData(null); // Force user to select
+        }
       }
     } catch (err) {
       showAlert("Search Failed", "An unexpected error occurred while fetching the member's report.", "error");
@@ -99,6 +106,7 @@ export default function ReportClient() {
                   if (val.length === 10) {
                     handleSearch(val);
                   } else {
+                    setMembersList([]);
                     setReportData(null);
                   }
                 }
@@ -113,6 +121,23 @@ export default function ReportClient() {
             )}
           </div>
         </div>
+        {membersList.length > 1 && !reportData && (
+          <div className="mt-4">
+            <label className="block text-xs uppercase tracking-wider font-semibold text-gray-500 mb-2">Select Family Member</label>
+            <div className="flex flex-col gap-2">
+              {membersList.map(m => (
+                <button 
+                  key={m.id} 
+                  onClick={() => setReportData(m)}
+                  className="bg-[#0f1117] border border-[#2a2d3e] hover:border-orange-500/50 hover:bg-[#1c1f2e] text-left px-4 py-3 rounded-lg text-white font-semibold transition-colors flex justify-between items-center"
+                >
+                  <span>{m.name}</span>
+                  <span className="text-xs text-orange-400 bg-orange-500/10 px-2 py-1 rounded">View Report</span>
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
 
       {reportData && (
@@ -242,14 +267,18 @@ export default function ReportClient() {
                         <div className={`text-right text-xs font-bold ${isCurrentMonth ? (attended ? 'text-emerald-400' : missed ? 'text-red-400' : 'text-gray-500') : 'text-gray-600'}`}>
                           {formatIST(d, 'd')}
                         </div>
-                        <div className="flex-1 mt-1 flex flex-col gap-1 overflow-hidden">
+                        <div className="flex-1 mt-1.5 flex flex-col gap-1 overflow-hidden">
                           {attended ? (
                             dayAttendances.map((a: any) => (
-                              <div key={a.id} className="text-[9px] leading-tight flex flex-col gap-0.5 mb-1">
-                                <span className="font-bold text-white">{formatIST(new Date(a.date), 'h:mm a')}</span>
-                                <span className="text-emerald-400 font-semibold truncate uppercase tracking-wide">
-                                  {a.sport?.name || a.membershipPlan?.sport?.name || 'SPORT'}
-                                </span>
+                              <div key={a.id} className="text-[10px] leading-tight flex flex-col gap-0.5 mb-1.5 bg-emerald-500/20 px-2 py-1.5 rounded border border-emerald-500/30 marquee-container" title={`${formatIST(new Date(a.date), 'h:mm a')} - ${a.sport?.name || a.membershipPlan?.sport?.name || 'SPORT'}`}>
+                                <div className="marquee-content flex gap-1">
+                                  <span className="font-bold text-white flex items-center gap-1">
+                                    <FiClock size={10} className="text-emerald-400"/> {formatIST(new Date(a.date), 'h:mm a')}
+                                  </span>
+                                  <span className="text-emerald-400 font-semibold uppercase tracking-wide">
+                                    {a.sport?.name || a.membershipPlan?.sport?.name || 'SPORT'}
+                                  </span>
+                                </div>
                               </div>
                             ))
                           ) : missed ? (

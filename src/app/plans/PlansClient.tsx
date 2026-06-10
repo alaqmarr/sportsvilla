@@ -17,26 +17,38 @@ export default function PlansClient({ initialPlans, sports }: { initialPlans: an
   const [durationInDays, setDurationInDays] = useState(30);
   const [price, setPrice] = useState(0);
   const [slotsPerDay, setSlotsPerDay] = useState(1);
+  const [isFamilyPlan, setIsFamilyPlan] = useState(false);
+  const [familySize, setFamilySize] = useState<number | "">("");
   const [loading, setLoading] = useState(false);
 
   function openCreateModal() {
-    setEditingId(""); setName(""); setSportId(sports[0]?.id || ""); setDurationInDays(30); setPrice(0); setSlotsPerDay(1);
+    setEditingId(""); setName(""); setSportId(sports[0]?.id || ""); setDurationInDays(30); setPrice(0); setSlotsPerDay(1); setIsFamilyPlan(false); setFamilySize("");
     setShowModal(true);
   }
 
   function openEditModal(plan: any) {
-    setEditingId(plan.id); setName(plan.name); setSportId(plan.sportId); setDurationInDays(plan.durationInDays); setPrice(plan.price); setSlotsPerDay(plan.slotsPerDay || 1);
+    setEditingId(plan.id); setName(plan.name); setSportId(plan.sportId); setDurationInDays(plan.durationInDays); setPrice(plan.price); setSlotsPerDay(plan.slotsPerDay || 1); setIsFamilyPlan(plan.isFamilyPlan || false); setFamilySize(plan.familySize || "");
     setShowModal(true);
   }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault(); setLoading(true);
     try {
+      const payload = {
+        name,
+        sportId,
+        durationInDays: Number(durationInDays),
+        price: Number(price),
+        slotsPerDay: Number(slotsPerDay),
+        isFamilyPlan,
+        familySize: isFamilyPlan ? Number(familySize) : null
+      };
+
       if (editingId) {
-        await updatePlan(editingId, { name, sportId, durationInDays, price, slotsPerDay });
+        await updatePlan(editingId, payload);
         showAlert("Plan Updated", `The membership plan '${name}' has been successfully updated.`, "success");
       } else {
-        await createPlan({ name, sportId, durationInDays: Number(durationInDays), price: Number(price), slotsPerDay: Number(slotsPerDay) });
+        await createPlan(payload);
         showAlert("Plan Created", `A new membership plan '${name}' has been added to the catalog.`, "success");
       }
       setShowModal(false); window.location.reload();
@@ -67,7 +79,7 @@ export default function PlansClient({ initialPlans, sports }: { initialPlans: an
         <button
           onClick={() => {
             setEditingId(""); setName(""); setSportId(sports[0]?.id || "");
-            setDurationInDays(30); setPrice(1000); setSlotsPerDay(1); setShowModal(true);
+            setDurationInDays(30); setPrice(1000); setSlotsPerDay(1); setIsFamilyPlan(false); setFamilySize(""); setShowModal(true);
           }}
           className="bg-orange-500 hover:bg-orange-600 text-white rounded-lg px-5 py-2.5 text-sm font-semibold inline-flex items-center gap-2 transition-colors cursor-pointer border-none"
         >
@@ -86,7 +98,7 @@ export default function PlansClient({ initialPlans, sports }: { initialPlans: an
                 <button
                   onClick={() => {
                     setEditingId(plan.id); setName(plan.name); setSportId(plan.sportId);
-                    setDurationInDays(plan.durationInDays); setPrice(plan.price); setSlotsPerDay(plan.slotsPerDay); setShowModal(true);
+                    setDurationInDays(plan.durationInDays); setPrice(plan.price); setSlotsPerDay(plan.slotsPerDay); setIsFamilyPlan(plan.isFamilyPlan || false); setFamilySize(plan.familySize || ""); setShowModal(true);
                   }}
                   className="border border-[#2a2d3e] hover:bg-[#1c1f2e] text-gray-300 rounded-lg p-2 transition-colors cursor-pointer bg-transparent"
                   title="Edit"
@@ -117,6 +129,11 @@ export default function PlansClient({ initialPlans, sports }: { initialPlans: an
               <li className="flex items-center gap-3">
                 <FiCheck className="text-emerald-400 text-lg flex-shrink-0" /> Access to {plan.sport.name} facilities
               </li>
+              {plan.isFamilyPlan && (
+                <li className="flex items-center gap-3">
+                  <FiUsers className="text-purple-400 text-lg flex-shrink-0" /> Family Plan (Up to {plan.familySize} members)
+                </li>
+              )}
               <li className="flex items-center gap-3 text-orange-400 font-semibold mt-2 pt-2 border-t border-[#2a2d3e]">
                 <FiUsers className="text-lg flex-shrink-0" /> {plan._count?.memberships || 0} Active Enrollments
               </li>
@@ -208,6 +225,36 @@ export default function PlansClient({ initialPlans, sports }: { initialPlans: an
                   min={1}
                 />
                 <p className="text-xs text-gray-500 mt-2">Maximum number of times a member can mark attendance per day with this plan.</p>
+              </div>
+
+              <div className="mb-6 bg-[#0f1117] border border-[#2a2d3e] rounded-lg p-4">
+                <label className="flex items-center gap-3 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    className="w-5 h-5 rounded border-[#2a2d3e] text-orange-500 focus:ring-orange-500/20 bg-[#161923]"
+                    checked={isFamilyPlan}
+                    onChange={(e) => setIsFamilyPlan(e.target.checked)}
+                  />
+                  <div>
+                    <div className="text-sm font-medium text-white">This is a Family Plan</div>
+                    <div className="text-xs text-gray-500 mt-0.5">Allows multiple family members under a single assignment</div>
+                  </div>
+                </label>
+
+                {isFamilyPlan && (
+                  <div className="mt-4 pt-4 border-t border-[#2a2d3e]">
+                    <label className="block text-sm font-medium text-gray-400 mb-2">Maximum Family Members Allowed</label>
+                    <input
+                      type="number"
+                      className="w-full bg-[#161923] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white placeholder-gray-600 focus:border-orange-500/50 focus:ring-2 focus:ring-orange-500/20 focus:outline-none text-sm"
+                      value={familySize}
+                      onChange={e => setFamilySize(Number(e.target.value))}
+                      required={isFamilyPlan}
+                      min={2}
+                      placeholder="e.g. 4"
+                    />
+                  </div>
+                )}
               </div>
 
               <button
