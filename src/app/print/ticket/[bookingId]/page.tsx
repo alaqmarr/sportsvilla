@@ -21,10 +21,19 @@ export default async function PrintTicketPage({ params }: { params: Promise<{ bo
 
   // Generate QR codes
   const ticketsWithQRs = await Promise.all(booking.tickets.map(async (ticket) => {
-    const qrDataUrl = await QRCodeLib.toDataURL(ticket.qrCode, {
+    const qrPayload = JSON.stringify({
+      id: ticket.qrCode,
+      guestName: ticket.guestName || booking.member.name,
+      phone: booking.member.mobile,
+      sport: booking.sport.name,
+      turf: booking.turf.name,
+      startTime: booking.startTime,
+      endTime: booking.endTime
+    });
+    const qrDataUrl = await QRCodeLib.toDataURL(qrPayload, {
       width: 200,
       margin: 1,
-      errorCorrectionLevel: 'M'
+      errorCorrectionLevel: 'L'
     });
     return { ...ticket, qrDataUrl };
   }));

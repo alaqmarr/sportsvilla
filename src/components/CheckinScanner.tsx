@@ -3,72 +3,37 @@
 import { useState, useRef, useEffect } from "react";
 import { lookupTicket, confirmTicketCheckin } from "@/app/checkin/actions";
 import { useAlert } from "@/components/AlertProvider";
-import { FiCheckCircle, FiXCircle, FiSearch, FiCamera } from "react-icons/fi";
+import { FiCheckCircle, FiSearch, FiCamera, FiX } from "react-icons/fi";
 import { formatIST } from "@/lib/dateUtils";
+import { Scanner } from '@yudiel/react-qr-scanner';
 
 export default function CheckinScanner({ sports }: { sports: any[] }) {
   const { showAlert } = useAlert();
   const [selectedSportId, setSelectedSportId] = useState<string>(sports.length > 0 ? sports[0].id : "");
   const [query, setQuery] = useState("");
-  const [tickets, setTickets] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
+  const [scannedData, setScannedData] = useState<any>(null);
+  const [showModal, setShowModal] = useState(false);
   const [showScanner, setShowScanner] = useState(false);
+  
   const inputRef = useRef<HTMLInputElement>(null);
-  const scannerRef = useRef<any>(null);
 
+  // Keep input focused for manual barcode scanners
   useEffect(() => {
-    let scanner: any = null;
-    if (showScanner) {
-      import('html5-qrcode').then(({ Html5QrcodeScanner }) => {
-        setTimeout(() => {
-          if (document.getElementById("qr-reader")) {
-            scanner = new Html5QrcodeScanner(
-              "qr-reader",
-              { fps: 10, qrbox: { width: 250, height: 250 } },
-              false
-            );
-            scannerRef.current = scanner;
-            scanner.render(
-              (decodedText: string) => {
-                setQuery(decodedText);
-                setShowScanner(false);
-                performSearch(decodedText);
-              },
-              (error: any) => {
-                // ignore
-              }
-            );
-          }
-        }, 100);
-      });
-    } else {
-      if (scannerRef.current) {
-        scannerRef.current.clear().catch(console.error);
-        scannerRef.current = null;
-      }
-    }
-    return () => {
-      if (scannerRef.current) {
-        scannerRef.current.clear().catch(console.error);
-        scannerRef.current = null;
-      }
-    };
-  }, [showScanner]);
-
-  // Keep input focused for scanner
-  useEffect(() => {
-    inputRef.current?.focus();
-  }, [tickets, selectedSportId]);
+    if (!showModal && !showScanner) inputRef.current?.focus();
+  }, [selectedSportId, showModal, showScanner]);
 
   async function performSearch(searchQuery: string) {
     if (!searchQuery.trim()) return;
 
     setLoading(true);
     try {
-      const results = await lookupTicket(query.trim());
-      setTickets(results);
+      const results = await lookupTicket(searchQuery.trim());
       if (results.length === 0) {
         showAlert("Not Found", "No valid tickets found for this query.", "error");
+      } else {
+        setScannedData(results);
+        setShowModal(true);
       }
     } catch (err: any) {
       showAlert("Error", err.message, "error");
@@ -83,12 +48,42 @@ export default function CheckinScanner({ sports }: { sports: any[] }) {
     await performSearch(query);
   }
 
+  function handleScan(codeData: string) {
+    setShowScanner(false);
+    try {
+       const json = JSON.parse(codeData);
+       // Wraps the parsed JSON in an array format consistent with our DB lookup results
+       setScannedData([{
+         id: json.id,
+         guestName: json.guestName,
+         booking: {
+           member: { name: json.guestName, mobile: json.phone },
+           sport: { name: json.sport },
+           turf: { name: json.turf },
+           startTime: json.startTime,
+           endTime: json.endTime
+         }
+       }]);
+       setShowModal(true);
+    } catch(e) {
+       // If not JSON, it's a legacy ticket ID, perform normal search
+       performSearch(codeData);
+    }
+  }
+
   async function handleCheckin(ticketId: string) {
     try {
       await confirmTicketCheckin(ticketId, selectedSportId);
       showAlert("Checked In", "Ticket successfully verified!", "success");
-      setTickets(tickets.filter(t => t.id !== ticketId));
-      inputRef.current?.focus();
+      
+      const updatedData = scannedData.filter((t: any) => t.id !== ticketId);
+      if (updatedData.length === 0) {
+        setShowModal(false);
+        setScannedData(null);
+      } else {
+        setScannedData(updatedData);
+      }
+      
     } catch (err: any) {
       showAlert("Check-in Failed", err.message, "error");
     }
@@ -105,7 +100,7 @@ export default function CheckinScanner({ sports }: { sports: any[] }) {
           <select
             value={selectedSportId}
             onChange={(e) => setSelectedSportId(e.target.value)}
-            className="bg-[#1c1f2e] border border-[#2a2d3e] text-white rounded-lg px-4 py-2 focus:outline-none focus:border-emerald-500 w-full md:w-48"
+            className="bg-[#1c1f2e] border border-[#2a2d3e] text-white rounded-lg px-4 py-2 focus:outline-none focus:border-emerald-500 w-full md:w-48 cursor-pointer"
           >
             {sports.map(s => (
               <option key={s.id} value={s.id}>{s.name}</option>
@@ -124,17 +119,11 @@ export default function CheckinScanner({ sports }: { sports: any[] }) {
               ref={inputRef}
               type="text"
               value={query}
-              onChange={(e) => {
-                setQuery(e.target.value);
-                // If it's exactly 10 digits (mobile) or starts with TKT (QR), we could auto-search,
-                // but standard barcode scanners send an Enter key, which is caught below.
-              }}
+              onChange={(e) => setQuery(e.target.value)}
               onKeyDown={(e) => {
                 if (e.key === 'Enter') {
                   e.preventDefault();
-                  if (query.trim()) {
-                    performSearch(query);
-                  }
+                  if (query.trim()) performSearch(query);
                 }
               }}
               placeholder="Scan QR or Enter Mobile Number (Press Enter)"
@@ -145,20 +134,30 @@ export default function CheckinScanner({ sports }: { sports: any[] }) {
           <button 
             type="button" 
             onClick={() => setShowScanner(!showScanner)}
-            className="bg-[#1c1f2e] border border-[#2a2d3e] text-white px-4 rounded-xl hover:border-emerald-500 transition-colors"
-            title="Scan with Camera"
+            className="bg-[#1c1f2e] border border-[#2a2d3e] text-white px-4 rounded-xl hover:border-emerald-500 hover:text-emerald-500 transition-colors cursor-pointer"
+            title="Scan QR Code"
           >
-            <FiCamera size={24} className={showScanner ? 'text-emerald-500' : 'text-gray-400'} />
+            <FiCamera size={24} className={showScanner ? 'text-emerald-500' : ''} />
           </button>
         </div>
         
         {showScanner && (
           <div className="mt-4 p-4 bg-[#0f1117] rounded-xl border border-[#2a2d3e]">
-            <div id="qr-reader" className="w-full max-w-md mx-auto overflow-hidden rounded-lg"></div>
+            <div className="w-full max-w-md mx-auto overflow-hidden rounded-lg border-2 border-emerald-500/50 relative">
+              <Scanner
+                onScan={(result) => {
+                  if (result && result.length > 0) {
+                    handleScan(result[0].rawValue);
+                  }
+                }}
+                components={{ audio: false, finder: true }}
+                allowMultiple={false}
+              />
+            </div>
             <button 
               type="button" 
               onClick={() => setShowScanner(false)}
-              className="mt-4 w-full bg-red-500/10 text-red-500 hover:bg-red-500/20 py-2 rounded-lg font-medium transition-colors text-sm"
+              className="mt-4 w-full bg-red-500/10 text-red-500 hover:bg-red-500/20 py-2 rounded-lg font-medium transition-colors text-sm cursor-pointer"
             >
               Close Camera
             </button>
@@ -166,38 +165,58 @@ export default function CheckinScanner({ sports }: { sports: any[] }) {
         )}
       </form>
 
-      {tickets.length > 0 && (
-        <div className="space-y-4">
-          <h3 className="text-gray-400 font-medium mb-3">Found Valid Tickets ({tickets.length})</h3>
-          {tickets.map(ticket => (
-            <div key={ticket.id} className="bg-[#1c1f2e] border border-[#2a2d3e] rounded-xl p-5 flex flex-col md:flex-row justify-between items-center gap-4">
-              <div>
-                <p className="text-white font-bold text-lg">
-                  {ticket.guestName || ticket.booking.member.name}
-                  {ticket.guestName ? (
-                    <span className="text-gray-400 text-sm font-normal ml-2">(Guest of {ticket.booking.member.name})</span>
-                  ) : (
-                    <span className="text-gray-400 text-sm font-normal ml-2">({ticket.booking.member.mobile})</span>
-                  )}
-                </p>
-                <div className="flex gap-4 text-sm mt-1">
-                  <span className="text-emerald-400">{ticket.booking.sport.name}</span>
-                  <span className="text-gray-400">•</span>
-                  <span className="text-gray-300">{ticket.booking.turf.name}</span>
-                </div>
-                <div className="text-xs text-gray-500 mt-2">
-                  Slot: {formatIST(new Date(ticket.booking.startTime), 'MMM d, yyyy h:mm a')}
-                  {ticket.booking.turf.bookingValidityDays > 0 && " (Multi-day Valid)"}
-                </div>
-              </div>
-              <button
-                onClick={() => handleCheckin(ticket.id)}
-                className="w-full md:w-auto bg-blue-600 hover:bg-blue-500 text-white px-8 py-3 rounded-lg font-bold flex items-center justify-center gap-2 transition-colors"
-              >
-                <FiCheckCircle /> Confirm Entry
+      {/* Check-in Modal */}
+      {showModal && scannedData && scannedData.length > 0 && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
+          <div className="bg-[#161923] border border-[#2a2d3e] rounded-2xl w-full max-w-lg shadow-2xl flex flex-col max-h-[90vh]">
+            <div className="flex justify-between items-center p-6 border-b border-[#2a2d3e]">
+              <h2 className="text-xl font-bold text-white flex items-center gap-2">
+                <FiCheckCircle className="text-emerald-500" /> Ticket Details
+              </h2>
+              <button onClick={() => { setShowModal(false); setScannedData(null); }} className="text-gray-400 hover:text-white transition-colors cursor-pointer p-1">
+                <FiX size={24} />
               </button>
             </div>
-          ))}
+            
+            <div className="p-6 overflow-y-auto space-y-4">
+              {scannedData.map((ticket: any) => (
+                <div key={ticket.id} className="bg-[#1c1f2e] border border-emerald-500/30 rounded-xl p-5 relative overflow-hidden">
+                  <div className="absolute top-0 right-0 w-24 h-24 bg-emerald-500/10 rounded-bl-full -mr-4 -mt-4"></div>
+                  
+                  <div className="flex justify-between items-start mb-4">
+                    <div>
+                      <p className="text-emerald-400 font-bold uppercase tracking-wider text-xs mb-1">
+                        {ticket.booking.sport.name} • {ticket.booking.turf.name}
+                      </p>
+                      <h3 className="text-white font-bold text-2xl mb-1">
+                        {ticket.guestName || ticket.booking.member.name}
+                      </h3>
+                      <p className="text-gray-400 text-sm">
+                        Phone: {ticket.booking.member.mobile}
+                      </p>
+                    </div>
+                  </div>
+                  
+                  <div className="bg-[#0f1117] rounded-lg p-3 mb-5 border border-[#2a2d3e]">
+                    <div className="text-xs text-gray-500 uppercase font-semibold mb-1">Scheduled For</div>
+                    <div className="text-white font-medium flex items-center gap-2 flex-wrap">
+                      {formatIST(new Date(ticket.booking.startTime), 'MMM d, yyyy h:mm a')}
+                      {ticket.booking?.turf?.bookingValidityDays > 0 && (
+                        <span className="text-[10px] bg-orange-500/20 text-orange-400 px-2 py-0.5 rounded uppercase font-bold tracking-wider">Multi-day Valid</span>
+                      )}
+                    </div>
+                  </div>
+                  
+                  <button
+                    onClick={() => handleCheckin(ticket.id)}
+                    className="w-full bg-emerald-500 hover:bg-emerald-600 text-white py-3.5 rounded-lg font-bold flex items-center justify-center gap-2 transition-colors shadow-lg shadow-emerald-500/20 cursor-pointer"
+                  >
+                    <FiCheckCircle size={20} /> Verify & Confirm Entry
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       )}
     </div>
