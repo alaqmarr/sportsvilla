@@ -1,10 +1,10 @@
 "use client";
 import { formatIST } from "../../lib/dateUtils";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { fetchMembers, markAttendance } from "./actions";
 import { useAlert } from "@/components/AlertProvider";
 
-import { FiCheckCircle, FiSearch, FiUser, FiCamera, FiX, FiClock, FiActivity } from "react-icons/fi";
+import { FiCheckCircle, FiSearch, FiUser, FiUserCheck, FiUsers, FiCamera, FiX, FiClock, FiActivity } from "react-icons/fi";
 import { Html5QrcodeScanner } from "html5-qrcode";
 
 export default function AttendanceClient({ initialRecords }: { initialRecords: any[] }) {
@@ -169,7 +169,6 @@ export default function AttendanceClient({ initialRecords }: { initialRecords: a
     setMobile("");
     setLoading(false);
   }
-
   function startScanner() {
     setShowScanner(true);
     setTimeout(() => {
@@ -440,7 +439,7 @@ export default function AttendanceClient({ initialRecords }: { initialRecords: a
               <h2 className="text-lg font-semibold font-['Outfit'] text-white">Scan QR Code</h2>
               <button className="text-gray-400 hover:text-white bg-[#1c1f2e] hover:bg-[#2a2d3e] rounded-lg p-2 transition-colors cursor-pointer border-none" onClick={closeScanner}><FiX /></button>
             </div>
-            <div id="reader" className="w-full bg-black rounded-xl overflow-hidden border border-[#2a2d3e]"></div>
+            <div id="reader" className="w-full bg-black rounded-xl overflow-hidden border border-[#2a2d3e] html5-qrcode-custom"></div>
             <p className="text-center text-gray-500 mt-6 text-sm">Point camera at the member's Digital ID card</p>
           </div>
         </div>

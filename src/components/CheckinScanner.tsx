@@ -211,7 +211,7 @@ export default function CheckinScanner({ sports }: { sports: any[] }) {
                 <h2 className="text-lg font-semibold font-['Outfit'] text-white">Scan QR Code</h2>
                 <button type="button" className="text-gray-400 hover:text-white bg-[#1c1f2e] hover:bg-[#2a2d3e] rounded-lg p-2 transition-colors cursor-pointer border-none" onClick={closeScanner}><FiX /></button>
               </div>
-              <div id="reader" className="w-full bg-black rounded-xl overflow-hidden border border-[#2a2d3e]"></div>
+              <div id="reader" className="w-full bg-black rounded-xl overflow-hidden border border-[#2a2d3e] html5-qrcode-custom"></div>
               <p className="text-center text-gray-500 mt-6 text-sm">Point camera at the ticket's Digital QR</p>
             </div>
           </div>
