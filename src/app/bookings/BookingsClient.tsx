@@ -381,22 +381,39 @@ export default function BookingsClient({ turfs, facilityHours = { openTime: '06:
           </div>
 
           {selectedSlots.length > 0 && selectedTurfs.length > 0 && (
-            <div className="bg-orange-500/10 border border-orange-500/20 rounded-xl p-5">
-              <h3 className="font-bold text-orange-400 mb-2">Booking Summary</h3>
-              <div className="text-sm text-white mb-1">{selectedTurfs.map(t => t.name).join(", ")}</div>
-              <div className="font-semibold text-lg text-emerald-400">
-                {formatIST(new Date(Math.min(...selectedSlots.map(s => s.startTime.getTime()))), 'h:mm a')} 
-                <span className="text-gray-500 mx-2">to</span> 
-                {formatIST(new Date(Math.max(...selectedSlots.map(s => s.endTime.getTime()))), 'h:mm a')}
+            <div className="fixed bottom-0 left-0 right-0 z-40 p-4 border-t border-[#2a2d3e] bg-[#161923] shadow-[0_-10px_40px_rgba(0,0,0,0.5)] lg:relative lg:p-5 lg:border lg:border-orange-500/20 lg:bg-orange-500/10 lg:shadow-none lg:rounded-xl">
+              <h3 className="font-bold text-orange-400 mb-2 hidden lg:block">Booking Summary</h3>
+              
+              <div className="flex justify-between items-center lg:hidden">
+                <div className="flex flex-col">
+                  <div className="text-xs text-gray-400">{selectedSlots.length} Slots Selected</div>
+                  <div className="text-xl font-bold text-white">₹{Number(totalPrice.toFixed(2))}</div>
+                </div>
+                <button 
+                  onClick={openCheckout}
+                  className="bg-orange-500 hover:bg-orange-600 text-white rounded-lg px-6 py-3 font-semibold transition-colors border-none cursor-pointer"
+                >
+                  Checkout
+                </button>
               </div>
-              <div className="text-xs text-gray-400 mb-1">{selectedSlots.length} Slots Selected</div>
-              <div className="text-2xl font-bold text-white mb-4">₹{Number(totalPrice.toFixed(2))}</div>
-              <button 
-                onClick={openCheckout}
-                className="w-full bg-orange-500 hover:bg-orange-600 text-white rounded-lg py-3 font-semibold transition-colors border-none cursor-pointer"
-              >
-                Proceed to Checkout
-              </button>
+
+              {/* Desktop version */}
+              <div className="hidden lg:block">
+                <div className="text-sm text-white mb-1">{selectedTurfs.map(t => t.name).join(", ")}</div>
+                <div className="font-semibold text-lg text-emerald-400">
+                  {formatIST(new Date(Math.min(...selectedSlots.map(s => s.startTime.getTime()))), 'h:mm a')} 
+                  <span className="text-gray-500 mx-2">to</span> 
+                  {formatIST(new Date(Math.max(...selectedSlots.map(s => s.endTime.getTime()))), 'h:mm a')}
+                </div>
+                <div className="text-xs text-gray-400 mb-1">{selectedSlots.length} Slots Selected</div>
+                <div className="text-2xl font-bold text-white mb-4">₹{Number(totalPrice.toFixed(2))}</div>
+                <button 
+                  onClick={openCheckout}
+                  className="w-full bg-orange-500 hover:bg-orange-600 text-white rounded-lg py-3 font-semibold transition-colors border-none cursor-pointer"
+                >
+                  Proceed to Checkout
+                </button>
+              </div>
             </div>
           )}
         </div>
@@ -503,15 +520,11 @@ export default function BookingsClient({ turfs, facilityHours = { openTime: '06:
           )}
         </div>
       </div>
-      
+      <div className="h-24 lg:hidden"></div> {/* padding for sticky bottom bar */}
       {/* Checkout Modal */}
       {showModal && (
-        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-[100] p-4">
-          <div className="absolute inset-0" onClick={() => {
-            updateDisplaySession({ status: "IDLE" }).catch(() => {});
-            setShowModal(false);
-          }} />
-          <div className="bg-[#161923] border border-[#2a2d3e] rounded-2xl w-full max-w-4xl shadow-2xl flex flex-col md:flex-row max-h-[95vh] overflow-hidden relative z-10">
+        <div className="fixed inset-0 z-50 flex items-end md:items-center justify-center p-0 md:p-4 bg-black/80 backdrop-blur-sm">
+          <div className="bg-[#161923] md:border md:border-[#2a2d3e] rounded-t-2xl md:rounded-2xl w-full max-w-5xl shadow-2xl overflow-hidden flex flex-col md:flex-row max-h-[95vh] md:max-h-[90vh] animate-[slideUp_0.3s_ease-out] md:animate-none relative">
             
             {/* Left: Customer Details */}
             <div className="flex-1 p-6 md:p-8 border-b md:border-b-0 md:border-r border-[#2a2d3e] overflow-y-auto">
@@ -668,14 +681,15 @@ export default function BookingsClient({ turfs, facilityHours = { openTime: '06:
                       <div className="flex flex-col">
                         <span className="text-white font-medium text-sm">Loyalty Points: <span className="text-orange-400 font-bold">{primaryMember.loyaltyPoints}</span></span>
                         <span className="text-xs text-gray-400">Max Discount: ₹{maxDiscount} (1 Rupee = {pointsPerRupee} pts)</span>
+                        {maxDiscount < 50 && <span className="text-[10px] text-red-400 mt-1">Minimum ₹50 discount required to redeem</span>}
                       </div>
-                      <label className="flex items-center gap-2 cursor-pointer">
-                        <input type="checkbox" className="hidden" checked={redeemPoints} onChange={(e) => setRedeemPoints(e.target.checked)} />
-                        <div className={`w-10 h-5 rounded-full p-1 transition-colors ${redeemPoints ? 'bg-orange-500' : 'bg-[#0f1117] border border-[#2a2d3e]'}`}>
-                          <div className={`w-3 h-3 bg-white rounded-full transition-transform ${redeemPoints ? 'translate-x-5' : ''}`}></div>
+                      <label className={`flex items-center gap-2 ${maxDiscount >= 50 ? 'cursor-pointer' : 'cursor-not-allowed opacity-50'}`}>
+                        <input type="checkbox" className="hidden" disabled={maxDiscount < 50} checked={redeemPoints && maxDiscount >= 50} onChange={(e) => setRedeemPoints(e.target.checked)} />
+                        <div className={`w-10 h-5 rounded-full p-1 transition-colors ${(redeemPoints && maxDiscount >= 50) ? 'bg-orange-500' : 'bg-[#0f1117] border border-[#2a2d3e]'}`}>
+                          <div className={`w-3 h-3 bg-white rounded-full transition-transform ${(redeemPoints && maxDiscount >= 50) ? 'translate-x-5' : ''}`}></div>
                         </div>
-                        <span className={`text-sm font-semibold ${redeemPoints ? 'text-orange-400' : 'text-gray-500'}`}>
-                          {redeemPoints ? 'Applied' : 'Redeem'}
+                        <span className={`text-sm font-semibold ${(redeemPoints && maxDiscount >= 50) ? 'text-orange-400' : 'text-gray-500'}`}>
+                          {(redeemPoints && maxDiscount >= 50) ? 'Applied' : 'Redeem'}
                         </span>
                       </label>
                     </div>

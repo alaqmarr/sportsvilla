@@ -83,10 +83,7 @@ export default function CheckinScanner({ sports }: { sports: any[] }) {
     }
   };
 
-  // Keep input focused for manual barcode scanners
-  useEffect(() => {
-    if (!showModal && !showScanner) inputRef.current?.focus();
-  }, [selectedSportId, showModal, showScanner]);
+  // Removed autoFocus useEffect to prevent mobile keyboard from popping up by default
 
   async function performSearch(searchQuery: string) {
     if (!searchQuery.trim()) return;
@@ -195,7 +192,6 @@ export default function CheckinScanner({ sports }: { sports: any[] }) {
               }}
               placeholder="Scan QR or Enter Mobile Number (Press Enter)"
               className="w-full bg-[#1c1f2e] border border-[#2a2d3e] text-white rounded-xl pl-11 pr-4 py-4 focus:outline-none focus:border-emerald-500 text-lg shadow-inner"
-              autoFocus
             />
           </div>
           <button 
