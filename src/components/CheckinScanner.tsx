@@ -18,6 +18,49 @@ export default function CheckinScanner({ sports }: { sports: any[] }) {
   
   const inputRef = useRef<HTMLInputElement>(null);
 
+  const playSound = (type: 'beep' | 'success' | 'error') => {
+    try {
+      const context = new (window.AudioContext || (window as any).webkitAudioContext)();
+      const osc = context.createOscillator();
+      const gainNode = context.createGain();
+      
+      osc.connect(gainNode);
+      gainNode.connect(context.destination);
+      
+      if (type === 'beep') {
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(1000, context.currentTime);
+        gainNode.gain.setValueAtTime(0.1, context.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.01, context.currentTime + 0.1);
+        osc.start(context.currentTime);
+        osc.stop(context.currentTime + 0.1);
+      } else if (type === 'success') {
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(880, context.currentTime); // A5
+        osc.frequency.setValueAtTime(1108.73, context.currentTime + 0.1); // C#6
+        osc.frequency.setValueAtTime(1318.51, context.currentTime + 0.2); // E6
+        
+        gainNode.gain.setValueAtTime(0, context.currentTime);
+        gainNode.gain.linearRampToValueAtTime(0.2, context.currentTime + 0.05);
+        gainNode.gain.exponentialRampToValueAtTime(0.01, context.currentTime + 0.4);
+        osc.start(context.currentTime);
+        osc.stop(context.currentTime + 0.4);
+      } else if (type === 'error') {
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(200, context.currentTime);
+        osc.frequency.linearRampToValueAtTime(150, context.currentTime + 0.2);
+        
+        gainNode.gain.setValueAtTime(0, context.currentTime);
+        gainNode.gain.linearRampToValueAtTime(0.2, context.currentTime + 0.05);
+        gainNode.gain.exponentialRampToValueAtTime(0.01, context.currentTime + 0.3);
+        osc.start(context.currentTime);
+        osc.stop(context.currentTime + 0.3);
+      }
+    } catch (e) {
+      // Audio context might be blocked if no user interaction yet
+    }
+  };
+
   // Keep input focused for manual barcode scanners
   useEffect(() => {
     if (!showModal && !showScanner) inputRef.current?.focus();
@@ -30,12 +73,15 @@ export default function CheckinScanner({ sports }: { sports: any[] }) {
     try {
       const results = await lookupTicket(searchQuery.trim());
       if (results.length === 0) {
+        playSound('error');
         showAlert("Not Found", "No valid tickets found for this query.", "error");
       } else {
+        playSound('beep');
         setScannedData(results);
         setShowModal(true);
       }
     } catch (err: any) {
+      playSound('error');
       showAlert("Error", err.message, "error");
     } finally {
       setLoading(false);
@@ -50,6 +96,7 @@ export default function CheckinScanner({ sports }: { sports: any[] }) {
 
   function handleScan(codeData: string) {
     setShowScanner(false);
+    playSound('beep');
     try {
        const json = JSON.parse(codeData);
        // Wraps the parsed JSON in an array format consistent with our DB lookup results
@@ -74,6 +121,7 @@ export default function CheckinScanner({ sports }: { sports: any[] }) {
   async function handleCheckin(ticketId: string) {
     try {
       await confirmTicketCheckin(ticketId, selectedSportId);
+      playSound('success');
       showAlert("Checked In", "Ticket successfully verified!", "success");
       
       const updatedData = scannedData.filter((t: any) => t.id !== ticketId);
@@ -85,6 +133,7 @@ export default function CheckinScanner({ sports }: { sports: any[] }) {
       }
       
     } catch (err: any) {
+      playSound('error');
       showAlert("Check-in Failed", err.message, "error");
     }
   }
@@ -150,7 +199,7 @@ export default function CheckinScanner({ sports }: { sports: any[] }) {
                     handleScan(result[0].rawValue);
                   }
                 }}
-                components={{ audio: false, finder: true }}
+                components={{ finder: true }}
                 allowMultiple={false}
               />
             </div>
