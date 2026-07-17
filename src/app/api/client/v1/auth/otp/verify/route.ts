@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
-import { auth } from '@/lib/firebase-admin';
+import jwt from 'jsonwebtoken';
 
 export async function POST(request: Request) {
   try {
@@ -46,14 +46,17 @@ export async function POST(request: Request) {
       });
     }
 
-    // Mint a Firebase Custom Token
-    // We prefix the mobile number with +91 if needed to match standard phone auth
+    // Mint a custom JWT
     const uid = cleanMobile.startsWith('+') ? cleanMobile : `+91${cleanMobile}`;
-    const customToken = await auth.createCustomToken(uid);
+    const customToken = jwt.sign(
+      { uid, memberId: member.id },
+      process.env.NEXTAUTH_SECRET || 'fallback_secret_for_dev',
+      { expiresIn: '30d' }
+    );
 
     return NextResponse.json({ 
       success: true, 
-      customToken,
+      customToken, // We keep the property name 'customToken' so the frontend API contract doesn't break
       memberId: member.id,
       member 
     });

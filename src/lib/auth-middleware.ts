@@ -1,6 +1,6 @@
-import { auth } from '@/lib/firebase-admin';
 import { prisma } from '@/lib/prisma';
 import { NextResponse } from 'next/server';
+import jwt from 'jsonwebtoken';
 
 export async function authenticateClient(request: Request) {
   const authHeader = request.headers.get('authorization');
@@ -10,10 +10,12 @@ export async function authenticateClient(request: Request) {
 
   const token = authHeader.split('Bearer ')[1];
   try {
-    const decodedToken = await auth.verifyIdToken(token);
+    const decodedToken = jwt.verify(
+      token, 
+      process.env.NEXTAUTH_SECRET || 'fallback_secret_for_dev'
+    ) as any;
     
-    // Custom tokens store the provided identifier in 'uid', standard Firebase auth might use 'phone_number'
-    const phoneNumber = decodedToken.phone_number || decodedToken.uid;
+    const phoneNumber = decodedToken.uid;
     const email = decodedToken.email;
     
     if (!phoneNumber && !email) {
