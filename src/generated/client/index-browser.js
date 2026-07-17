@@ -137,7 +137,9 @@ exports.Prisma.MemberScalarFieldEnum = {
   mobile: 'mobile',
   name: 'name',
   email: 'email',
+  dateOfBirth: 'dateOfBirth',
   loyaltyPoints: 'loyaltyPoints',
+  walletBalance: 'walletBalance',
   joinDate: 'joinDate',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -263,6 +265,14 @@ exports.Prisma.TicketScalarFieldEnum = {
   createdAt: 'createdAt'
 };
 
+exports.Prisma.OtpScalarFieldEnum = {
+  id: 'id',
+  mobile: 'mobile',
+  code: 'code',
+  expiresAt: 'expiresAt',
+  createdAt: 'createdAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -288,7 +298,8 @@ exports.Prisma.ModelName = {
   Booking: 'Booking',
   Payment: 'Payment',
   DisplaySession: 'DisplaySession',
-  Ticket: 'Ticket'
+  Ticket: 'Ticket',
+  Otp: 'Otp'
 };
 
 /**

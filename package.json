@@ -7,7 +7,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "postinstall": "npx prisma generate && npx prisma db push"
+    "postinstall": "npx prisma generate && npx prisma db push",
+    "updatebeta": "git stash && git pull && npm i --legacy-peer-deps && npm run build && pm2 restart sportsvilla",
+    "updateprod": "git stash && git pull && npm i --legacy-peer-deps && npm run build && pm2 restart sportsvilla-production"
   },
   "dependencies": {
     "@prisma/adapter-better-sqlite3": "^7.8.0",
@@ -18,6 +20,7 @@
     "date-fns": "^4.3.0",
     "date-fns-tz": "^3.2.0",
     "dotenv": "^17.4.2",
+    "firebase-admin": "^14.2.0",
     "html2canvas": "^1.4.1",
     "html5-qrcode": "^2.3.8",
     "jspdf": "^4.2.1",

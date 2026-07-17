@@ -28,7 +28,9 @@ model Member {
   mobile         String // Removed @unique to allow family accounts
   name           String
   email          String?
+  dateOfBirth    DateTime?
   loyaltyPoints  Int                @default(0)
+  walletBalance  Float              @default(0)
   joinDate       DateTime           @default(now())
   memberships    MemberMembership[]
   attendances    Attendance[]
@@ -201,4 +203,12 @@ model Ticket {
 
   @@index([qrCode])
   @@index([bookingId])
+}
+
+model Otp {
+  id        String   @id @default(cuid())
+  mobile    String   @unique
+  code      String
+  expiresAt DateTime
+  createdAt DateTime @default(now())
 }

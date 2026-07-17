@@ -1,7 +1,7 @@
 generator client {
-  provider = "prisma-client-js"
+  provider   = "prisma-client-js"
   engineType = "library"
-  output   = "../src/generated/client"
+  output     = "../src/generated/client"
 }
 
 datasource db {
@@ -24,18 +24,20 @@ model Setting {
 }
 
 model Member {
-  id            String             @id @default(cuid())
-  mobile        String             // Removed @unique to allow family accounts
-  name          String
-  email         String?
-  loyaltyPoints Int                @default(0)
-  joinDate      DateTime           @default(now())
-  memberships   MemberMembership[]
-  attendances   Attendance[]
-  bookings      Booking[]
+  id             String             @id @default(cuid())
+  mobile         String // Removed @unique to allow family accounts
+  name           String
+  email          String?
+  dateOfBirth    DateTime?
+  loyaltyPoints  Int                @default(0)
+  walletBalance  Float              @default(0)
+  joinDate       DateTime           @default(now())
+  memberships    MemberMembership[]
+  attendances    Attendance[]
+  bookings       Booking[]
   loyaltyHistory LoyaltyHistory[]
-  createdAt     DateTime           @default(now())
-  updatedAt     DateTime           @updatedAt
+  createdAt      DateTime           @default(now())
+  updatedAt      DateTime           @updatedAt
 
   @@index([mobile])
 }
@@ -45,8 +47,8 @@ model LoyaltyHistory {
   memberId    String
   member      Member   @relation(fields: [memberId], references: [id])
   points      Int
-  type        String   // "EARNED" | "REDEEMED"
-  source      String   // "BOOKING" | "CHECKIN" | "MEMBERSHIP" | "MANUAL"
+  type        String // "EARNED" | "REDEEMED"
+  source      String // "BOOKING" | "CHECKIN" | "MEMBERSHIP" | "MANUAL"
   description String?
   createdAt   DateTime @default(now())
 
@@ -54,61 +56,61 @@ model LoyaltyHistory {
 }
 
 model Sport {
-  id               String            @id @default(cuid())
-  name             String
-  description      String?
-  rewardPointsPerCheckin Int       @default(0)
-  turfs            TurfSport[]
-  membershipPlans  MembershipPlan[]
-  attendances      Attendance[]
-  bookings         Booking[]
-  createdAt        DateTime          @default(now())
-  updatedAt        DateTime          @updatedAt
+  id                     String           @id @default(cuid())
+  name                   String
+  description            String?
+  rewardPointsPerCheckin Int              @default(0)
+  turfs                  TurfSport[]
+  membershipPlans        MembershipPlan[]
+  attendances            Attendance[]
+  bookings               Booking[]
+  createdAt              DateTime         @default(now())
+  updatedAt              DateTime         @updatedAt
 }
 
 model Turf {
-  id            String       @id @default(cuid())
-  name          String
-  location      String?
-  parentTurfId  String?
-  parentTurf    Turf?        @relation("TurfHierarchy", fields: [parentTurfId], references: [id])
-  childTurfs             Turf[]       @relation("TurfHierarchy")
-  sports                 TurfSport[]
-  bookingPrice           Float?       // Price per booking duration
-  bookingDurationMinutes Int?         // Duration of a single booking slot in minutes
-  capacityPerSlot        Int          @default(1) // Number of bookings allowed per slot
-  requireEntryVerification Boolean    @default(false) // Uncapped bookings
-  bookingValidityDays      Int        @default(0) // Extra days valid
-  bookings               Booking[]
-  createdAt              DateTime     @default(now())
-  updatedAt              DateTime     @updatedAt
+  id                       String      @id @default(cuid())
+  name                     String
+  location                 String?
+  parentTurfId             String?
+  parentTurf               Turf?       @relation("TurfHierarchy", fields: [parentTurfId], references: [id])
+  childTurfs               Turf[]      @relation("TurfHierarchy")
+  sports                   TurfSport[]
+  bookingPrice             Float? // Price per booking duration
+  bookingDurationMinutes   Int? // Duration of a single booking slot in minutes
+  capacityPerSlot          Int         @default(1) // Number of bookings allowed per slot
+  requireEntryVerification Boolean     @default(false) // Uncapped bookings
+  bookingValidityDays      Int         @default(0) // Extra days valid
+  bookings                 Booking[]
+  createdAt                DateTime    @default(now())
+  updatedAt                DateTime    @updatedAt
 }
 
 model TurfSport {
-  turfId   String
-  sportId  String
-  turf     Turf   @relation(fields: [turfId], references: [id])
-  sport    Sport  @relation(fields: [sportId], references: [id])
-  
+  turfId  String
+  sportId String
+  turf    Turf   @relation(fields: [turfId], references: [id])
+  sport   Sport  @relation(fields: [sportId], references: [id])
+
   @@id([turfId, sportId])
 }
 
 model MembershipPlan {
-  id             String             @id @default(cuid())
-  name           String
-  sportId        String
-  sport          Sport              @relation(fields: [sportId], references: [id])
-  durationInDays Int
-  price          Float
-  slotsPerDay    Int                @default(1)
-  isFamilyPlan   Boolean            @default(false)
-  familySize     Int?
-  rewardPointsOnPurchase Int        @default(0)
-  rewardPointsPerCheckin Int        @default(0)
-  memberships    MemberMembership[]
-  attendances    Attendance[]
-  createdAt      DateTime           @default(now())
-  updatedAt      DateTime           @updatedAt
+  id                     String             @id @default(cuid())
+  name                   String
+  sportId                String
+  sport                  Sport              @relation(fields: [sportId], references: [id])
+  durationInDays         Int
+  price                  Float
+  slotsPerDay            Int                @default(1)
+  isFamilyPlan           Boolean            @default(false)
+  familySize             Int?
+  rewardPointsOnPurchase Int                @default(0)
+  rewardPointsPerCheckin Int                @default(0)
+  memberships            MemberMembership[]
+  attendances            Attendance[]
+  createdAt              DateTime           @default(now())
+  updatedAt              DateTime           @updatedAt
 }
 
 model MemberMembership {
@@ -128,41 +130,41 @@ model MemberMembership {
 }
 
 model Attendance {
-  id        String   @id @default(cuid())
-  memberId  String
-  member    Member   @relation(fields: [memberId], references: [id])
-  date      DateTime @default(now())
-  status    String   @default("PRESENT")
-  sportId   String?  // Optional: what sport they played
-  sport     Sport?   @relation(fields: [sportId], references: [id])
+  id               String          @id @default(cuid())
+  memberId         String
+  member           Member          @relation(fields: [memberId], references: [id])
+  date             DateTime        @default(now())
+  status           String          @default("PRESENT")
+  sportId          String? // Optional: what sport they played
+  sport            Sport?          @relation(fields: [sportId], references: [id])
   membershipPlanId String?
   membershipPlan   MembershipPlan? @relation(fields: [membershipPlanId], references: [id])
-  notes     String?
-  createdAt DateTime @default(now())
+  notes            String?
+  createdAt        DateTime        @default(now())
 
   @@index([date])
 }
 
 model Booking {
-  id            String   @id @default(cuid())
-  turfId        String
-  turf          Turf     @relation(fields: [turfId], references: [id])
-  memberId      String
-  member        Member   @relation(fields: [memberId], references: [id])
-  sportId       String
-  sport         Sport    @relation(fields: [sportId], references: [id])
-  startTime     DateTime
-  endTime       DateTime
-  price         Float
-  paymentStatus String   @default("PENDING") // UNPAID, PARTIAL, PAID
-  status        String   @default("CONFIRMED") // CONFIRMED, CANCELLED
-  participantCount Int   @default(1)
-  pointsRedeemed   Int   @default(0)
-  discountAmount   Float @default(0)
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-  payments      Payment[]
-  tickets       Ticket[]
+  id               String    @id @default(cuid())
+  turfId           String
+  turf             Turf      @relation(fields: [turfId], references: [id])
+  memberId         String
+  member           Member    @relation(fields: [memberId], references: [id])
+  sportId          String
+  sport            Sport     @relation(fields: [sportId], references: [id])
+  startTime        DateTime
+  endTime          DateTime
+  price            Float
+  paymentStatus    String    @default("PENDING") // UNPAID, PARTIAL, PAID
+  status           String    @default("CONFIRMED") // CONFIRMED, CANCELLED
+  participantCount Int       @default(1)
+  pointsRedeemed   Int       @default(0)
+  discountAmount   Float     @default(0)
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+  payments         Payment[]
+  tickets          Ticket[]
 
   @@index([startTime])
   @@index([turfId])
@@ -173,9 +175,9 @@ model Payment {
   bookingId String
   booking   Booking  @relation(fields: [bookingId], references: [id])
   amount    Float
-  method    String   // CASH, ONLINE
+  method    String // CASH, ONLINE
   createdAt DateTime @default(now())
-  
+
   @@index([bookingId])
 }
 
@@ -190,15 +192,23 @@ model DisplaySession {
 }
 
 model Ticket {
-  id        String   @id @default(cuid())
+  id        String    @id @default(cuid())
   bookingId String
-  booking   Booking  @relation(fields: [bookingId], references: [id])
-  qrCode    String   @unique
+  booking   Booking   @relation(fields: [bookingId], references: [id])
+  qrCode    String    @unique
   guestName String?
-  status    String   @default("VALID") // VALID, CHECKED_IN, CANCELLED
+  status    String    @default("VALID") // VALID, CHECKED_IN, CANCELLED
   usedAt    DateTime?
-  createdAt DateTime @default(now())
+  createdAt DateTime  @default(now())
 
   @@index([qrCode])
   @@index([bookingId])
+}
+
+model Otp {
+  id        String   @id @default(cuid())
+  mobile    String   @unique
+  code      String
+  expiresAt DateTime
+  createdAt DateTime @default(now())
 }
