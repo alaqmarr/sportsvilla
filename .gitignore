@@ -18,6 +18,8 @@
 /out/
 
 *.db
+*.db-shm
+*.db-wal
 
 # production
 /build
