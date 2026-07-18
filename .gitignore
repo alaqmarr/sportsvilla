@@ -20,6 +20,8 @@
 *.db
 *.db-shm
 *.db-wal
+*.log
+*.logs
 
 # production
 /build

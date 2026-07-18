@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { logger } from '@/lib/logger';
 
 const INFOBIP_API_KEY = process.env.INFOBIP_API_KEY || '';
 const INFOBIP_BASE_URL = process.env.INFOBIP_BASE_URL || '';
@@ -11,7 +12,10 @@ export async function POST(request: Request) {
     // Clean mobile number (remove +91 if present)
     const cleanMobile = mobile.replace('+91', '').replace(/[^0-9]/g, '');
     
+    logger.info('OTP Send Request Initiated', { mobile: cleanMobile });
+
     if (!cleanMobile || cleanMobile.length < 10) {
+      logger.warn('Invalid mobile number provided for OTP', { mobile: cleanMobile });
       return NextResponse.json({ error: "Invalid mobile number" }, { status: 400 });
     }
 
@@ -48,9 +52,9 @@ export async function POST(request: Request) {
         })
       });
       const infobipData = await infobipRes.json();
-      console.log(`[Infobip] Sent to ${cleanMobile}:`, infobipData);
-    } catch (smsError) {
-      console.error("[Infobip Error]", smsError);
+      logger.info('Infobip SMS Sent', { mobile: cleanMobile, response: infobipData });
+    } catch (smsError: any) {
+      logger.error('Infobip SMS Failed', { mobile: cleanMobile, error: smsError.message });
     }
 
     return NextResponse.json({ 
@@ -60,7 +64,7 @@ export async function POST(request: Request) {
       dev_code: code 
     });
   } catch (error: any) {
-    console.error("OTP send error:", error);
+    logger.error('OTP send failed internally', { error: error.message, stack: error.stack });
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }

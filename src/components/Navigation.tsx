@@ -70,6 +70,7 @@ export function Navigation({ children }: { children: React.ReactNode }) {
     { href: "/reports/memberships", label: "Membership Reports", icon: <FiLayers /> },
     { href: "/settings", label: "Settings", icon: <FiSettings /> },
     { href: "/server", label: "Server Health", icon: <FiServer /> },
+    { href: "/app-logs", label: "System Logs", icon: <FiFileText /> },
   ];
 
   return (

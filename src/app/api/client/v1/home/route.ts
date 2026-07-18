@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { authenticateClient } from '@/lib/auth-middleware';
+import { logger } from '@/lib/logger';
 
 export async function GET(request: Request) {
   const authRes = await authenticateClient(request);
@@ -9,6 +10,8 @@ export async function GET(request: Request) {
   const { member: primaryMember } = authRes;
   const { searchParams } = new URL(request.url);
   let targetMemberId = searchParams.get('memberId') || primaryMember.id;
+
+  logger.info('Home Data Request Initiated', { primaryMemberId: primaryMember.id, targetMemberId });
 
   try {
     // 1. Fetch all family members sharing the same mobile number
@@ -155,7 +158,7 @@ export async function GET(request: Request) {
       recentAttendance
     });
   } catch (error: any) {
-    console.error("Home API error:", error);
+    logger.error('Home API error', { error: error.message, stack: error.stack });
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }
