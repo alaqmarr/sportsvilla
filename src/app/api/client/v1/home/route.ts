@@ -26,25 +26,43 @@ export async function GET(request: Request) {
       targetMemberId = primaryMember.id;
     }
 
-    // 3. Fetch upcoming bookings for the entire family
+    // 3. Fetch upcoming/ongoing bookings for the entire family
     const familyIds = familyMembers.map(m => m.id);
-    const upcomingBookings = await prisma.booking.findMany({
+    
+    // Get a date 30 days ago to catch any valid long-running bookings
+    const thirtyDaysAgo = new Date();
+    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+
+    const candidateBookings = await prisma.booking.findMany({
       where: {
         memberId: { in: familyIds },
-        startTime: { gt: new Date() },
+        startTime: { gt: thirtyDaysAgo },
         status: 'CONFIRMED'
       },
       include: {
         turf: {
-          select: { name: true, location: true }
+          select: { name: true, location: true, bookingValidityDays: true }
         },
         sport: {
           select: { name: true }
-        }
+        },
+        tickets: true
       },
-      orderBy: { startTime: 'asc' },
-      take: 5 // limit to 5 upcoming for home screen
+      orderBy: { startTime: 'asc' }
     });
+
+    const now = new Date();
+    
+    const upcomingBookings = candidateBookings.filter(b => {
+      const startDate = new Date(b.startTime);
+      const validityEnd = new Date(startDate.getTime());
+      validityEnd.setHours(23, 59, 59, 999);
+      if (b.turf?.bookingValidityDays && b.turf.bookingValidityDays > 0) {
+        validityEnd.setDate(validityEnd.getDate() + b.turf.bookingValidityDays);
+      }
+      const isExpired = now > validityEnd;
+      return !isExpired;
+    }).slice(0, 5); // limit to 5 upcoming for home screen
 
     // 4. (Optional) Fetch basic Wallet or Loyalty details for the target member
     const targetMemberData = familyMembers.find(m => m.id === targetMemberId);
@@ -60,9 +78,6 @@ export async function GET(request: Request) {
       orderBy: { endDate: 'desc' }
     });
 
-    const now = new Date();
-    
-    // 6. Fetch Attendances for calculations
     const attendances = await prisma.attendance.findMany({
       where: { memberId: targetMemberId },
       include: { sport: { select: { name: true } } },
