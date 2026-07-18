@@ -42,21 +42,68 @@ export async function POST(request: Request) {
     const body = await request.json();
     const { turfId, sportId, startTime, endTime, price, participantCount } = body;
 
-    // TODO: Ideally we should use a transaction here, but for now simple create.
-    // In WAL mode, SQLite will handle concurrent writes sequentially.
+    // STRICT AVAILABILITY CHECK
+    const start = new Date(startTime);
+    const end = new Date(endTime);
+    
+    // 1. Get turf capacity
+    const turf = await prisma.turf.findUnique({ where: { id: turfId } });
+    if (!turf) {
+      return NextResponse.json({ error: 'Turf not found' }, { status: 404 });
+    }
+
+    // 2. Count overlapping bookings for this exact slot
+    const overlappingBookings = await prisma.booking.findMany({
+      where: {
+        turfId,
+        status: { not: 'CANCELLED' },
+        startTime: { equals: start }
+      }
+    });
+
+    const usedCapacity = overlappingBookings.reduce((sum, b) => sum + b.participantCount, 0);
+    const availableCourts = turf.capacityPerSlot - usedCapacity;
+
+    if (participantCount > availableCourts) {
+      return NextResponse.json({ 
+        error: 'Slot is no longer available or insufficient courts.' 
+      }, { status: 409 });
+    }
+
+    // Calculate SV Points Earned (e.g. 1% of total price as points)
+    const pointsEarned = Math.floor(price * 0.01);
+
+    // Create Booking
     const booking = await prisma.booking.create({
       data: {
         turfId,
         sportId,
         memberId: member.id,
-        startTime: new Date(startTime),
-        endTime: new Date(endTime),
+        startTime: start,
+        endTime: end,
         price,
         participantCount,
         status: "CONFIRMED",
         paymentStatus: "PENDING"
       }
     });
+
+    // Add points to Member
+    if (pointsEarned > 0) {
+      await prisma.member.update({
+        where: { id: member.id },
+        data: { loyaltyPoints: { increment: pointsEarned } }
+      });
+      // Add History
+      await prisma.loyaltyHistory.create({
+        data: {
+          memberId: member.id,
+          points: pointsEarned,
+          type: 'EARNED',
+          description: `Earned from booking ${booking.id}`
+        }
+      });
+    }
 
     // Generate Tickets
     const tickets = [];
