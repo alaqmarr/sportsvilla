@@ -52,6 +52,7 @@ export async function createBooking(data: {
   name?: string;
   participantCount?: number;
   guestNames?: string[];
+  additionalMemberIds?: string[];
   redeemPoints?: boolean;
 }) {
   let member;
@@ -91,16 +92,26 @@ export async function createBooking(data: {
   }
 
   const participantCount = data.participantCount || 1;
-  const bookingItems = [];
-  let totalPrice = 0;
+  
+  // Build list of all member IDs who should get their own booking
+  // Primary member + any additional family members selected
+  const additionalIds = data.additionalMemberIds || [];
+  const allMemberIds = [member.id, ...additionalIds.filter(id => id !== member.id)];
+  
+  // Remaining guests (non-family) get tickets under the primary member's booking
+  const nonFamilyGuestCount = Math.max(0, participantCount - allMemberIds.length);
+  const nonFamilyGuestNames = data.guestNames?.slice(additionalIds.length) || [];
 
+  // Calculate total price for all participants across all turfs/slots
+  let totalPrice = 0;
+  const bookingItems: { turf: any, slot: any, pricePerPerson: number }[] = [];
   for (const turf of turfs) {
     const pricePerSlot = (turf.bookingPrice || 0) / (turf.bookingDurationMinutes || 60) * 30;
     for (const slot of mergedSlots) {
       const durationMins = (new Date(slot.endTime).getTime() - new Date(slot.startTime).getTime()) / 60000;
-      const price = pricePerSlot * (durationMins / 30) * participantCount;
-      totalPrice += price;
-      bookingItems.push({ turf, slot, price });
+      const pricePerPerson = pricePerSlot * (durationMins / 30);
+      totalPrice += pricePerPerson * participantCount;
+      bookingItems.push({ turf, slot, pricePerPerson });
     }
   }
 
@@ -118,33 +129,52 @@ export async function createBooking(data: {
   const bookings: any[] = [];
   
   for (const item of bookingItems) {
-    const ticketsData = Array.from({ length: participantCount }).map((_, i) => ({
-      qrCode: `TKT-${Math.random().toString(36).substring(2, 10).toUpperCase()}-SYKM`,
-      guestName: data.guestNames && data.guestNames[i] ? data.guestNames[i] : null
-    }));
+    // Create a booking for each family member
+    for (const currentMemberId of allMemberIds) {
+      const isPrimary = currentMemberId === member.id;
+      
+      // Each member gets 1 ticket for themselves
+      const ticketsForThisMember: { qrCode: string, guestName: string | null }[] = [{
+        qrCode: `TKT-${Math.random().toString(36).substring(2, 10).toUpperCase()}-SYKM`,
+        guestName: null // The member themselves
+      }];
 
-    // Distribute discount proportionally
-    const ratio = totalPrice > 0 ? (item.price / totalPrice) : 0;
-    const itemDiscount = totalDiscount * ratio;
-    const itemPointsRedeemed = pointsToDeduct * ratio;
-
-    const booking = await prisma.booking.create({
-      data: {
-        turfId: item.turf.id,
-        memberId: member.id,
-        sportId: data.sportId,
-        startTime: new Date(item.slot.startTime),
-        endTime: new Date(item.slot.endTime),
-        price: item.price,
-        discountAmount: itemDiscount,
-        pointsRedeemed: Math.round(itemPointsRedeemed),
-        participantCount: participantCount,
-        paymentStatus: "UNPAID",
-        status: "CONFIRMED",
-        tickets: { create: ticketsData }
+      // Only the primary member's booking carries the non-family guest tickets
+      if (isPrimary && nonFamilyGuestCount > 0) {
+        for (let g = 0; g < nonFamilyGuestCount; g++) {
+          ticketsForThisMember.push({
+            qrCode: `TKT-${Math.random().toString(36).substring(2, 10).toUpperCase()}-SYKM`,
+            guestName: nonFamilyGuestNames[g] || null
+          });
+        }
       }
-    });
-    bookings.push(booking);
+
+      const bookingParticipants = isPrimary ? (1 + nonFamilyGuestCount) : 1;
+      const bookingPrice = item.pricePerPerson * bookingParticipants;
+
+      // Only primary member gets the discount
+      const ratio = totalPrice > 0 ? (bookingPrice / totalPrice) : 0;
+      const itemDiscount = isPrimary ? (totalDiscount * ratio) : 0;
+      const itemPointsRedeemed = isPrimary ? Math.round(pointsToDeduct * ratio) : 0;
+
+      const booking = await prisma.booking.create({
+        data: {
+          turfId: item.turf.id,
+          memberId: currentMemberId,
+          sportId: data.sportId,
+          startTime: new Date(item.slot.startTime),
+          endTime: new Date(item.slot.endTime),
+          price: bookingPrice,
+          discountAmount: itemDiscount,
+          pointsRedeemed: itemPointsRedeemed,
+          participantCount: bookingParticipants,
+          paymentStatus: "UNPAID",
+          status: "CONFIRMED",
+          tickets: { create: ticketsForThisMember }
+        }
+      });
+      bookings.push(booking);
+    }
   }
 
   if (pointsToDeduct > 0) {

@@ -279,6 +279,7 @@ export default function BookingsClient({ turfs, facilityHours = { openTime: '06:
         name: !memberId ? name : undefined,
         participantCount: Number(participantCount) || 1,
         guestNames: finalGuestNames,
+        additionalMemberIds: additionalMemberIds,
         redeemPoints: redeemPoints
       });
       

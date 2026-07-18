@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import { FiHome, FiUsers, FiMapPin, FiActivity, FiLayers, FiShield, FiFileText, FiMenu, FiX, FiUser, FiCalendar, FiServer, FiLogOut, FiSettings, FiCalendar as FiCalendar2, FiAward, FiCheckCircle } from "react-icons/fi";
 import { signOut } from "next-auth/react";
 import LinkComponent from "next/link";
+import Image from "next/image";
 
 export function Navigation({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -79,7 +80,7 @@ export function Navigation({ children }: { children: React.ReactNode }) {
       <div className="lg:hidden bg-[#161923] border-b border-[#2a2d3e] p-4 flex justify-between items-center sticky top-0 z-40">
         <div className="flex flex-col">
           <div className="font-['Outfit'] text-lg font-black text-orange-500 tracking-wider uppercase">
-            SPORTSVILLA
+            <Image src="/long-logo.png" alt="SportsVilla" width={180} height={44} className="h-10 w-auto object-contain" />
           </div>
           {currentTime && (
             <div className="text-[10px] font-medium text-gray-500 mt-0.5">
@@ -107,7 +108,7 @@ export function Navigation({ children }: { children: React.ReactNode }) {
         <div className="flex flex-col mb-8 px-3">
           <div className="flex justify-between items-center">
             <div className="font-['Outfit'] text-xl font-black text-orange-500 tracking-wider uppercase hidden lg:block">
-              SPORTSVILLA
+              <Image src="/long-logo.png" alt="SportsVilla" width={160} height={40} className="h-10 w-auto object-contain" />
             </div>
             <div className="font-['Outfit'] text-xl font-black text-orange-500 tracking-wider uppercase lg:hidden">
               MENU
