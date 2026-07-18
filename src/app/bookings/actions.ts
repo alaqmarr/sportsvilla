@@ -203,19 +203,32 @@ export async function cancelBooking(id: string) {
   if (!booking) throw new Error("Booking not found");
 
   if (booking.status !== "CANCELLED") {
-    const durationMins = (booking.endTime.getTime() - booking.startTime.getTime()) / 60000;
-    const pointsToDeduct = (durationMins / 30) * 25;
-
-    await prisma.$transaction([
+    const queries: any[] = [
       prisma.booking.update({
         where: { id },
         data: { status: "CANCELLED" }
-      }),
-      prisma.member.update({
-        where: { id: booking.memberId },
-        data: { loyaltyPoints: { decrement: pointsToDeduct } }
       })
-    ]);
+    ];
+
+    if (booking.pointsRedeemed > 0) {
+      queries.push(
+        prisma.member.update({
+          where: { id: booking.memberId },
+          data: { loyaltyPoints: { increment: booking.pointsRedeemed } }
+        }),
+        prisma.loyaltyHistory.create({
+          data: {
+            memberId: booking.memberId,
+            points: booking.pointsRedeemed,
+            type: "EARNED",
+            source: "MANUAL",
+            description: "Refund for cancelled booking"
+          }
+        })
+      );
+    }
+    
+    await prisma.$transaction(queries);
   }
   
   revalidatePath("/", "layout");
@@ -359,19 +372,17 @@ export async function confirmExtension(bookingId: string, allocations: any[]) {
           endTime: new Date(alloc.endTime),
           price: alloc.price,
           paymentStatus: "UNPAID",
-          status: "CONFIRMED"
+          status: "CONFIRMED",
+          participantCount: booking.participantCount,
+          tickets: {
+            create: Array.from({ length: booking.participantCount }).map(() => ({
+              qrCode: `TKT-${Math.random().toString(36).substring(2, 10).toUpperCase()}-SYKM`
+            }))
+          }
         }
       });
     }
   }
-
-  // Loyalty points
-  const totalMins = allocations.reduce((sum, a) => sum + (new Date(a.endTime).getTime() - new Date(a.startTime).getTime()) / 60000, 0);
-  const loyaltyPoints = (totalMins / 30) * 25;
-  await prisma.member.update({
-    where: { id: booking.memberId },
-    data: { loyaltyPoints: { increment: loyaltyPoints } }
-  });
 
   revalidatePath("/", "layout");
   return { success: true };

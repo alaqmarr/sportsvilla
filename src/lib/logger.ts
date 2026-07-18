@@ -14,6 +14,11 @@ const formatLogConsole = (level: LogLevel, message: string, meta?: any) => {
 
 const writeToFile = (level: LogLevel, message: string, meta?: any) => {
   try {
+    const logDir = path.dirname(logFilePath);
+    if (!fs.existsSync(logDir)) {
+      fs.mkdirSync(logDir, { recursive: true });
+    }
+    
     const timestamp = new Date().toISOString();
     const logEntry = {
       timestamp,

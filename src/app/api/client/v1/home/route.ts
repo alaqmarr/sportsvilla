@@ -26,10 +26,11 @@ export async function GET(request: Request) {
       targetMemberId = primaryMember.id;
     }
 
-    // 3. Fetch upcoming bookings for the target member
+    // 3. Fetch upcoming bookings for the entire family
+    const familyIds = familyMembers.map(m => m.id);
     const upcomingBookings = await prisma.booking.findMany({
       where: {
-        memberId: targetMemberId,
+        memberId: { in: familyIds },
         startTime: { gt: new Date() },
         status: 'CONFIRMED'
       },
