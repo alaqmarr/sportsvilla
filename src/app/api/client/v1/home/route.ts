@@ -26,16 +26,13 @@ export async function GET(request: Request) {
       targetMemberId = primaryMember.id;
     }
 
-    // 3. Fetch upcoming/ongoing bookings for the entire family
-    const familyIds = familyMembers.map(m => m.id);
-    
-    // Get a date 30 days ago to catch any valid long-running bookings
+    // 3. Fetch upcoming/ongoing bookings for the selected member
     const thirtyDaysAgo = new Date();
     thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
 
     const candidateBookings = await prisma.booking.findMany({
       where: {
-        memberId: { in: familyIds },
+        memberId: targetMemberId,
         startTime: { gt: thirtyDaysAgo },
         status: 'CONFIRMED'
       },

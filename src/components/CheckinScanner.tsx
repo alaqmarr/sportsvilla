@@ -110,7 +110,20 @@ export default function CheckinScanner({ sports }: { sports: any[] }) {
 
   async function handleSearch(e: React.FormEvent) {
     e.preventDefault();
-    await performSearch(query);
+    if (!query.trim()) return;
+    
+    // If a physical barcode scanner typed in a JSON string, extract the ID
+    let finalQuery = query.trim();
+    try {
+      const json = JSON.parse(finalQuery);
+      if (json.id) {
+        finalQuery = json.id;
+      }
+    } catch(err) {
+      // Not JSON, use as-is
+    }
+    
+    await performSearch(finalQuery);
   }
 
   function handleScan(codeData: string) {
