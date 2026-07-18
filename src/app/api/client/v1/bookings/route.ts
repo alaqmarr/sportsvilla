@@ -57,7 +57,8 @@ export async function POST(request: Request) {
       where: {
         turfId,
         status: { not: 'CANCELLED' },
-        startTime: { equals: start }
+        startTime: { lt: end },
+        endTime: { gt: start }
       }
     });
 

@@ -61,10 +61,11 @@ export async function GET(request: Request) {
         const slotStart = new Date(`${dateStr}T${currentHour.toString().padStart(2, '0')}:${currentMin.toString().padStart(2, '0')}:00+05:30`);
         const slotEnd = new Date(slotStart.getTime() + duration * 60000);
 
-        // Calculate used capacity
+        // Calculate used capacity based on time overlap intersection
         const overlappingBookings = activeBookings.filter(b => 
           b.turfId === turf.id && 
-          b.startTime.getTime() === slotStart.getTime()
+          b.startTime.getTime() < slotEnd.getTime() &&
+          b.endTime.getTime() > slotStart.getTime()
         );
 
         const usedCapacity = overlappingBookings.reduce((sum, b) => sum + b.participantCount, 0);
