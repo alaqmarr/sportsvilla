@@ -51,13 +51,7 @@ export async function GET(request: Request) {
     const now = new Date();
     
     const upcomingBookings = candidateBookings.filter(b => {
-      const startDate = new Date(b.startTime);
-      const validityEnd = new Date(startDate.getTime());
-      validityEnd.setHours(23, 59, 59, 999);
-      if (b.turf?.bookingValidityDays && b.turf.bookingValidityDays > 0) {
-        validityEnd.setDate(validityEnd.getDate() + b.turf.bookingValidityDays);
-      }
-      const isExpired = now > validityEnd;
+      const isExpired = now > new Date(b.endTime);
       return !isExpired;
     }).slice(0, 5); // limit to 5 upcoming for home screen
 
