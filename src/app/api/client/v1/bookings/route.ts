@@ -112,7 +112,8 @@ export async function POST(request: Request) {
     for(let i = 0; i < participantCount; i++) {
       tickets.push({
         bookingId: booking.id,
-        qrCode: `TICKET-${booking.id}-${i}-${Date.now()}`
+        qrCode: `TICKET-${booking.id}-${i}-${Date.now()}`,
+        guestName: body.guests && body.guests[i] ? body.guests[i].name : null
       });
     }
 
