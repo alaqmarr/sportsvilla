@@ -69,15 +69,17 @@ export async function GET(request: Request) {
 
         const usedCapacity = overlappingBookings.reduce((sum, b) => sum + b.participantCount, 0);
         const availableCourts = Math.max(0, capacity - usedCapacity);
-        const isAvailable = availableCourts > 0 && slotStart.getTime() > Date.now();
+        const isAvailable = availableCourts > 0;
 
-        slots.push({
-          startTime: slotStart.toISOString(),
-          endTime: slotEnd.toISOString(),
-          price,
-          availableCourts,
-          isAvailable
-        });
+        if (slotStart.getTime() > Date.now()) {
+          slots.push({
+            startTime: slotStart.toISOString(),
+            endTime: slotEnd.toISOString(),
+            price,
+            availableCourts,
+            isAvailable
+          });
+        }
 
         // Increment time
         currentMin += duration;
