@@ -273,6 +273,53 @@ exports.Prisma.OtpScalarFieldEnum = {
   createdAt: 'createdAt'
 };
 
+exports.Prisma.TournamentScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  description: 'description',
+  participationFee: 'participationFee',
+  teamSize: 'teamSize',
+  maxTeams: 'maxTeams',
+  thumbnail: 'thumbnail',
+  rules: 'rules',
+  status: 'status',
+  startDate: 'startDate',
+  endDate: 'endDate',
+  isPublic: 'isPublic',
+  prizePool: 'prizePool',
+  venue: 'venue',
+  registrationDeadline: 'registrationDeadline',
+  sportId: 'sportId',
+  paymentUpiId: 'paymentUpiId',
+  acceptsCash: 'acceptsCash',
+  cashResponsiblePerson: 'cashResponsiblePerson',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.TournamentRegistrationScalarFieldEnum = {
+  id: 'id',
+  tournamentId: 'tournamentId',
+  teamName: 'teamName',
+  paymentMethod: 'paymentMethod',
+  paymentScreenshotUrl: 'paymentScreenshotUrl',
+  paymentUtr: 'paymentUtr',
+  status: 'status',
+  registeredById: 'registeredById',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.TournamentPlayerScalarFieldEnum = {
+  id: 'id',
+  registrationId: 'registrationId',
+  name: 'name',
+  mobile: 'mobile',
+  memberId: 'memberId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -299,7 +346,10 @@ exports.Prisma.ModelName = {
   Payment: 'Payment',
   DisplaySession: 'DisplaySession',
   Ticket: 'Ticket',
-  Otp: 'Otp'
+  Otp: 'Otp',
+  Tournament: 'Tournament',
+  TournamentRegistration: 'TournamentRegistration',
+  TournamentPlayer: 'TournamentPlayer'
 };
 
 /**

@@ -24,20 +24,21 @@ model Setting {
 }
 
 model Member {
-  id             String             @id @default(cuid())
-  mobile         String // Removed @unique to allow family accounts
-  name           String
-  email          String?
-  dateOfBirth    DateTime?
-  loyaltyPoints  Int                @default(0)
-  walletBalance  Float              @default(0)
-  joinDate       DateTime           @default(now())
-  memberships    MemberMembership[]
-  attendances    Attendance[]
-  bookings       Booking[]
-  loyaltyHistory LoyaltyHistory[]
-  createdAt      DateTime           @default(now())
-  updatedAt      DateTime           @updatedAt
+  id                      String                   @id @default(cuid())
+  mobile                  String // Removed @unique to allow family accounts
+  name                    String
+  email                   String?
+  dateOfBirth             DateTime?
+  loyaltyPoints           Int                      @default(0)
+  walletBalance           Float                    @default(0)
+  joinDate                DateTime                 @default(now())
+  memberships             MemberMembership[]
+  attendances             Attendance[]
+  bookings                Booking[]
+  loyaltyHistory          LoyaltyHistory[]
+  tournamentRegistrations TournamentRegistration[]
+  createdAt               DateTime                 @default(now())
+  updatedAt               DateTime                 @updatedAt
 
   @@index([mobile])
 }
@@ -64,6 +65,7 @@ model Sport {
   membershipPlans        MembershipPlan[]
   attendances            Attendance[]
   bookings               Booking[]
+  tournaments            Tournament[]
   createdAt              DateTime         @default(now())
   updatedAt              DateTime         @updatedAt
 }
@@ -211,4 +213,67 @@ model Otp {
   code      String
   expiresAt DateTime
   createdAt DateTime @default(now())
+}
+
+model Tournament {
+  id               String    @id @default(cuid())
+  name             String
+  description      String?
+  participationFee Float     @default(0)
+  teamSize         Int       @default(1)
+  maxTeams         Int?
+  thumbnail        String?
+  rules            String?
+  status           String    @default("UPCOMING") // UPCOMING, ONGOING, COMPLETED
+  startDate        DateTime
+  endDate          DateTime?
+
+  // New fields for UI/UX refinement
+  isPublic             Boolean   @default(true)
+  prizePool            String?
+  venue                String?
+  registrationDeadline DateTime?
+  sportId              String?
+  sport                Sport?    @relation(fields: [sportId], references: [id])
+  paymentUpiId         String?
+
+  // New Payment Fields
+  acceptsCash           Boolean @default(false)
+  cashResponsiblePerson String?
+
+  registrations TournamentRegistration[]
+  createdAt     DateTime                 @default(now())
+  updatedAt     DateTime                 @updatedAt
+}
+
+model TournamentRegistration {
+  id                   String             @id @default(cuid())
+  tournamentId         String
+  tournament           Tournament         @relation(fields: [tournamentId], references: [id], onDelete: Cascade)
+  teamName             String?
+  paymentMethod        String             @default("UPI") // UPI, CASH
+  paymentScreenshotUrl String?
+  paymentUtr           String?
+  status               String             @default("PENDING") // PENDING, VERIFIED, REJECTED
+  registeredById       String
+  registeredBy         Member             @relation(fields: [registeredById], references: [id])
+  players              TournamentPlayer[]
+  createdAt            DateTime           @default(now())
+  updatedAt            DateTime           @updatedAt
+
+  @@index([tournamentId])
+  @@index([registeredById])
+}
+
+model TournamentPlayer {
+  id             String                 @id @default(cuid())
+  registrationId String
+  registration   TournamentRegistration @relation(fields: [registrationId], references: [id], onDelete: Cascade)
+  name           String
+  mobile         String?
+  memberId       String?
+  createdAt      DateTime               @default(now())
+  updatedAt      DateTime               @updatedAt
+
+  @@index([registrationId])
 }

@@ -12,6 +12,9 @@
     "updateprod": "git stash && git pull && npm i --legacy-peer-deps && npm run build && pm2 restart sportsvilla-production"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.1090.0",
+    "@aws-sdk/s3-request-presigner": "^3.1090.0",
+    "@google/genai": "^2.12.0",
     "@prisma/adapter-better-sqlite3": "^7.8.0",
     "@prisma/client": "^7.8.0",
     "@yudiel/react-qr-scanner": "^2.6.0",

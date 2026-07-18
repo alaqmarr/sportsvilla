@@ -63,6 +63,7 @@ export function Navigation({ children }: { children: React.ReactNode }) {
     { href: "/members", label: "Members Directory", icon: <FiUsers /> },
     { href: "/loyalty", label: "Loyalty Leaderboard", icon: <FiAward /> },
     { href: "/bookings", label: "Turf Bookings", icon: <FiCalendar2 /> },
+    { href: "/tournaments", label: "Tournaments", icon: <FiAward /> },
     { href: "/checkin", label: "Entry Check-in", icon: <FiCheckCircle /> },
     { href: "/attendance", label: "Attendance Kiosk", icon: <FiShield /> },
     { href: "/admin", label: "Manage Admins", icon: <FiShield /> },

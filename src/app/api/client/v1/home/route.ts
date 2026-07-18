@@ -153,6 +153,42 @@ export async function GET(request: Request) {
       };
     });
 
+    // 8. Fetch Registered Tournaments (Upcoming/Ongoing)
+    const registrations = await prisma.tournamentRegistration.findMany({
+      where: {
+        registeredById: targetMemberId,
+        status: { not: 'REJECTED' },
+        tournament: {
+          status: { in: ['UPCOMING', 'ONGOING'] }
+        }
+      },
+      include: {
+        tournament: {
+          include: { sport: true }
+        }
+      },
+      orderBy: { tournament: { startDate: 'asc' } }
+    });
+    
+    const registeredTournaments = registrations.map(r => ({
+      ...r.tournament,
+      registrationStatus: r.status,
+      teamName: r.teamName
+    }));
+
+    const registeredTournamentIds = registeredTournaments.map(t => t.id);
+
+    // 9. Fetch Upcoming Tournaments (Not registered, not completed)
+    const upcomingTournaments = await prisma.tournament.findMany({
+      where: {
+        status: 'UPCOMING',
+        id: { notIn: registeredTournamentIds }
+      },
+      include: { sport: true, _count: { select: { registrations: true } } },
+      orderBy: { startDate: 'asc' },
+      take: 5
+    });
+
     return NextResponse.json({
       success: true,
       familyMembers,
@@ -162,7 +198,9 @@ export async function GET(request: Request) {
       memberships: activeMemberships,
       history,
       attendance: attendanceOverview,
-      recentAttendance
+      recentAttendance,
+      registeredTournaments,
+      upcomingTournaments
     });
   } catch (error: any) {
     logger.error('Home API error', { error: error.message, stack: error.stack });

@@ -14,7 +14,7 @@ export async function GET(request: Request) {
     // 1. Fetch all family members sharing the same mobile number
     const familyMembers = await prisma.member.findMany({
       where: { mobile: primaryMember.mobile },
-      select: { id: true, name: true, loyaltyPoints: true },
+      select: { id: true, name: true, mobile: true, loyaltyPoints: true },
       orderBy: { joinDate: 'asc' }
     });
 
