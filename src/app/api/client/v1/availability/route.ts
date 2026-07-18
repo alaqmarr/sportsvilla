@@ -57,10 +57,8 @@ export async function GET(request: Request) {
       let currentMin = 0;
 
       while (currentHour < CLOSE_HOUR) {
-        // Construct slot start and end times
-        const slotStart = new Date(`${dateStr}T00:00:00.000+05:30`);
-        slotStart.setHours(currentHour, currentMin, 0, 0);
-
+        // Safe cross-timezone construction
+        const slotStart = new Date(`${dateStr}T${currentHour.toString().padStart(2, '0')}:${currentMin.toString().padStart(2, '0')}:00+05:30`);
         const slotEnd = new Date(slotStart.getTime() + duration * 60000);
 
         // Calculate used capacity
@@ -71,7 +69,7 @@ export async function GET(request: Request) {
 
         const usedCapacity = overlappingBookings.reduce((sum, b) => sum + b.participantCount, 0);
         const availableCourts = Math.max(0, capacity - usedCapacity);
-        const isAvailable = availableCourts > 0 && slotStart > new Date();
+        const isAvailable = availableCourts > 0 && slotStart.getTime() > Date.now();
 
         slots.push({
           startTime: slotStart.toISOString(),
