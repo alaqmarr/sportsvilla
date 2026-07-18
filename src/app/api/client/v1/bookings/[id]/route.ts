@@ -2,11 +2,12 @@ import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { authenticateClient } from '@/lib/auth-middleware';
 
-export async function GET(request: Request, { params }: { params: { id: string } }) {
+export async function GET(request: Request, context: { params: Promise<{ id: string }> }) {
   const authRes = await authenticateClient(request);
   if ('error' in authRes) return authRes.error;
   
   const { member } = authRes;
+  const params = await context.params;
 
   try {
     const booking = await prisma.booking.findUnique({
