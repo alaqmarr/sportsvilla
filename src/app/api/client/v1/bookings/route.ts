@@ -100,6 +100,7 @@ export async function POST(request: Request) {
           memberId: member.id,
           points: pointsEarned,
           type: 'EARNED',
+          source: 'BOOKING',
           description: `Earned from booking ${booking.id}`
         }
       });
