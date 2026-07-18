@@ -83,7 +83,7 @@ export default function TournamentFormClient({ initialData, sports }: { initialD
       if (res.error) toast.error(res.error);
       else {
         toast.success(initialData?.id ? 'Tournament updated!' : 'Tournament created!');
-        if (!initialData?.id) {
+        if (!initialData?.id && res.tournament?.id) {
           router.push(`/tournaments/${res.tournament.id}`);
         } else {
           // just stay on page if editing
