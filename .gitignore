@@ -29,7 +29,6 @@ firebase-admin.json
 # production
 /build
 
-firebase-admin.json
 # misc
 .DS_Store
 *.pem
