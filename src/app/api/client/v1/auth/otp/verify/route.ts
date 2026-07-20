@@ -2,8 +2,10 @@ import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import jwt from 'jsonwebtoken';
 import { logger } from '@/lib/logger';
+import { jsonResponse } from '@/lib/api-logger';
 
 export async function POST(request: Request) {
+  console.log(`[API] POST /api/client/v1/auth/otp/verify called`);
   try {
     const { mobile, code } = await request.json();
     
@@ -12,7 +14,7 @@ export async function POST(request: Request) {
 
     if (!cleanMobile || !code) {
       logger.warn('OTP Verify failed: missing fields', { mobile: cleanMobile });
-      return NextResponse.json({ error: "Mobile and code are required" }, { status: 400 });
+      return jsonResponse({ error: "Mobile and code are required" }, { status: 400 });
     }
 
     const otpRecord = await prisma.otp.findUnique({
@@ -21,17 +23,17 @@ export async function POST(request: Request) {
 
     if (!otpRecord) {
       logger.warn('OTP Verify failed: no record found', { mobile: cleanMobile });
-      return NextResponse.json({ error: "No OTP request found for this number" }, { status: 400 });
+      return jsonResponse({ error: "No OTP request found for this number" }, { status: 400 });
     }
 
     if (otpRecord.code !== code) {
       logger.warn('OTP Verify failed: invalid code', { mobile: cleanMobile, provided: code });
-      return NextResponse.json({ error: "Invalid OTP code" }, { status: 400 });
+      return jsonResponse({ error: "Invalid OTP code" }, { status: 400 });
     }
 
     if (new Date() > otpRecord.expiresAt) {
       logger.warn('OTP Verify failed: expired', { mobile: cleanMobile });
-      return NextResponse.json({ error: "OTP has expired" }, { status: 400 });
+      return jsonResponse({ error: "OTP has expired" }, { status: 400 });
     }
 
     // Delete the OTP record so it can't be reused
@@ -43,7 +45,7 @@ export async function POST(request: Request) {
     });
 
     if (!member) {
-      return NextResponse.json({ error: "User does not exist" }, { status: 400 });
+      return jsonResponse({ error: "User does not exist" }, { status: 400 });
     }
 
     // Mint a custom JWT
@@ -56,14 +58,15 @@ export async function POST(request: Request) {
 
     logger.info('OTP Verify Successful', { memberId: member.id });
 
-    return NextResponse.json({ 
+    return jsonResponse({ 
       success: true, 
       customToken, // We keep the property name 'customToken' so the frontend API contract doesn't break
       memberId: member.id,
       member 
     });
   } catch (error: any) {
+    console.error(`[API ERROR] POST /api/client/v1/auth/otp/verify ->`, error);
     logger.error('OTP Verify failed internally', { error: error.message, stack: error.stack });
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    return jsonResponse({ error: error.message }, { status: 500 });
   }
 }

@@ -2,11 +2,13 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { logger } from "@/lib/logger";
 import jwt from 'jsonwebtoken';
+import { jsonResponse } from '@/lib/api-logger';
 
 export async function GET(
   request: Request,
   { params }: { params: Promise<{ id: string }> },
 ) {
+  console.log(`[API] GET /api/client/v1/tournaments/[id] called`);
   try {
     const tournament = await prisma.tournament.findUnique({
       where: { id: (await params).id },
@@ -19,7 +21,7 @@ export async function GET(
     });
 
     if (!tournament) {
-      return NextResponse.json(
+      return jsonResponse(
         { error: "Tournament not found" },
         { status: 404 },
       );
@@ -47,15 +49,16 @@ export async function GET(
           });
         }
       } catch (err) {
+    console.error(`[API ERROR] GET /api/client/v1/tournaments/[id] ->`, err);
         // ignore invalid token, just return tournament details
       }
     }
 
-    return NextResponse.json({ success: true, tournament, upiId, existingRegistration });
+    return jsonResponse({ success: true, tournament, upiId, existingRegistration });
   } catch (error: any) {
     logger.error("Failed to fetch tournament details", {
       error: error.message,
     });
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    return jsonResponse({ error: error.message }, { status: 500 });
   }
 }

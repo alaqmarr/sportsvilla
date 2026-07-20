@@ -1,8 +1,10 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { logger } from '@/lib/logger';
+import { jsonResponse } from '@/lib/api-logger';
 
 export async function GET(request: Request) {
+  console.log(`[API] GET /api/client/v1/tournaments called`);
   try {
     const url = new URL(request.url);
     const status = url.searchParams.get('status') || 'UPCOMING';
@@ -29,9 +31,10 @@ export async function GET(request: Request) {
       }
     });
 
-    return NextResponse.json({ success: true, tournaments });
+    return jsonResponse({ success: true, tournaments });
   } catch (error: any) {
+    console.error(`[API ERROR] GET /api/client/v1/tournaments ->`, error);
     logger.error('Failed to fetch tournaments', { error: error.message });
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    return jsonResponse({ error: error.message }, { status: 500 });
   }
 }

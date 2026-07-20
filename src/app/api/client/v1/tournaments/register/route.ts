@@ -2,19 +2,21 @@ import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { logger } from '@/lib/logger';
 import jwt from 'jsonwebtoken';
+import { jsonResponse } from '@/lib/api-logger';
 
 export async function POST(request: Request) {
+  console.log(`[API] POST /api/client/v1/tournaments/register called`);
   try {
     const authHeader = request.headers.get('Authorization');
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return jsonResponse({ error: "Unauthorized" }, { status: 401 });
     }
 
     const token = authHeader.split(' ')[1];
     const decoded = jwt.verify(token, process.env.NEXTAUTH_SECRET || 'fallback_secret_for_dev') as any;
     
     if (!decoded.memberId) {
-      return NextResponse.json({ error: "Invalid token" }, { status: 401 });
+      return jsonResponse({ error: "Invalid token" }, { status: 401 });
     }
 
     const memberId = decoded.memberId;
@@ -22,7 +24,7 @@ export async function POST(request: Request) {
     const { tournamentId, teamName, paymentScreenshotUrl, paymentUtr, players, aiVerified, paymentMethod } = await request.json();
 
     if (!tournamentId) {
-      return NextResponse.json({ error: "tournamentId is required" }, { status: 400 });
+      return jsonResponse({ error: "tournamentId is required" }, { status: 400 });
     }
 
     // Verify tournament exists and is upcoming
@@ -31,11 +33,11 @@ export async function POST(request: Request) {
     });
 
     if (!tournament) {
-      return NextResponse.json({ error: "Tournament not found" }, { status: 404 });
+      return jsonResponse({ error: "Tournament not found" }, { status: 404 });
     }
 
     if (tournament.status !== 'UPCOMING') {
-      return NextResponse.json({ error: "Registration is closed for this tournament" }, { status: 400 });
+      return jsonResponse({ error: "Registration is closed for this tournament" }, { status: 400 });
     }
 
     if (paymentUtr && paymentUtr !== 'MANUAL_CASH') {
@@ -48,7 +50,7 @@ export async function POST(request: Request) {
       });
       
       if (existing) {
-        return NextResponse.json({ error: "This Transaction ID (UTR) has already been used for this tournament. Please contact support if you think this is a mistake." }, { status: 400 });
+        return jsonResponse({ error: "This Transaction ID (UTR) has already been used for this tournament. Please contact support if you think this is a mistake." }, { status: 400 });
       }
     }
 
@@ -74,9 +76,10 @@ export async function POST(request: Request) {
       }
     });
 
-    return NextResponse.json({ success: true, registration });
+    return jsonResponse({ success: true, registration });
   } catch (error: any) {
+    console.error(`[API ERROR] POST /api/client/v1/tournaments/register ->`, error);
     logger.error('Failed to register for tournament', { error: error.message });
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    return jsonResponse({ error: error.message }, { status: 500 });
   }
 }

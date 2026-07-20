@@ -1,8 +1,10 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { authenticateClient } from '@/lib/auth-middleware';
+import { jsonResponse } from '@/lib/api-logger';
 
 export async function GET(request: Request) {
+  console.log(`[API] GET /api/client/v1/wallet called`);
   const authRes = await authenticateClient(request);
   if ('error' in authRes) return authRes.error;
   
@@ -60,7 +62,7 @@ export async function GET(request: Request) {
     });
     const conversionRate = conversionSetting ? parseFloat(conversionSetting.value) : 1;
 
-    return NextResponse.json({
+    return jsonResponse({
       success: true,
       familyMembers,
       targetMemberId,
@@ -69,7 +71,8 @@ export async function GET(request: Request) {
       conversionRate
     });
   } catch (error: any) {
+    console.error(`[API ERROR] GET /api/client/v1/wallet ->`, error);
     console.error("Wallet GET error:", error);
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    return jsonResponse({ error: error.message }, { status: 500 });
   }
 }

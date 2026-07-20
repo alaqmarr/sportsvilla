@@ -1,8 +1,10 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { authenticateClient } from '@/lib/auth-middleware';
+import { jsonResponse } from '@/lib/api-logger';
 
 export async function GET(request: Request) {
+  console.log(`[API] GET /api/client/v1/availability called`);
   const authRes = await authenticateClient(request);
   if ('error' in authRes) return authRes.error;
 
@@ -11,7 +13,7 @@ export async function GET(request: Request) {
   const sportId = searchParams.get('sportId');
 
   if (!dateStr || !sportId) {
-    return NextResponse.json({ error: 'date and sportId are required' }, { status: 400 });
+    return jsonResponse({ error: 'date and sportId are required' }, { status: 400 });
   }
 
   try {
@@ -25,7 +27,7 @@ export async function GET(request: Request) {
     });
 
     if (turfs.length === 0) {
-      return NextResponse.json({ success: true, turfs: [] });
+      return jsonResponse({ success: true, turfs: [] });
     }
 
     // 2. Define Time Boundaries for the given date (local time assumption)
@@ -98,9 +100,10 @@ export async function GET(request: Request) {
       };
     });
 
-    return NextResponse.json({ success: true, turfs: result });
+    return jsonResponse({ success: true, turfs: result });
   } catch (error: any) {
+    console.error(`[API ERROR] GET /api/client/v1/availability ->`, error);
     console.error('Availability fetch error:', error);
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    return jsonResponse({ error: error.message }, { status: 500 });
   }
 }

@@ -1,11 +1,13 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { logger } from '@/lib/logger';
+import { jsonResponse } from '@/lib/api-logger';
 
 const INFOBIP_API_KEY = process.env.INFOBIP_API_KEY || '';
 const INFOBIP_BASE_URL = process.env.INFOBIP_BASE_URL || '';
 
 export async function POST(request: Request) {
+  console.log(`[API] POST /api/client/v1/auth/otp/send called`);
   try {
     const { mobile } = await request.json();
     
@@ -16,7 +18,7 @@ export async function POST(request: Request) {
 
     if (!cleanMobile || cleanMobile.length < 10) {
       logger.warn('Invalid mobile number provided for OTP', { mobile: cleanMobile });
-      return NextResponse.json({ error: "Invalid mobile number" }, { status: 400 });
+      return jsonResponse({ error: "Invalid mobile number" }, { status: 400 });
     }
 
     // Generate 6 digit code
@@ -54,10 +56,11 @@ export async function POST(request: Request) {
       const infobipData = await infobipRes.json();
       logger.info('Infobip SMS Sent', { mobile: cleanMobile, response: infobipData });
     } catch (smsError: any) {
+    console.error(`[API ERROR] POST /api/client/v1/auth/otp/send ->`, smsError);
       logger.error('Infobip SMS Failed', { mobile: cleanMobile, error: smsError.message });
     }
 
-    return NextResponse.json({ 
+    return jsonResponse({ 
       success: true, 
       message: "OTP generated",
       // Include code in dev logs but don't show to user
@@ -65,7 +68,7 @@ export async function POST(request: Request) {
     });
   } catch (error: any) {
     logger.error('OTP send failed internally', { error: error.message, stack: error.stack });
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    return jsonResponse({ error: error.message }, { status: 500 });
   }
 }
 

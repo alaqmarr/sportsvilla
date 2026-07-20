@@ -3,16 +3,18 @@ import { PutObjectCommand } from '@aws-sdk/client-s3';
 import { s3Client } from '@/lib/s3';
 import { v4 as uuidv4 } from 'uuid';
 import { logger } from '@/lib/logger';
+import { jsonResponse } from '@/lib/api-logger';
 
 const bucketName = process.env.R2_BUCKET_NAME || '';
 
 export async function POST(request: Request) {
+  console.log(`[API] POST /api/client/v1/upload/direct called`);
   try {
     const formData = await request.formData();
     const file = formData.get('file') as File;
     
     if (!file) {
-      return NextResponse.json({ error: "File is required" }, { status: 400 });
+      return jsonResponse({ error: "File is required" }, { status: 400 });
     }
 
     const fileExtension = file.name.split('.').pop() || 'jpg';
@@ -34,13 +36,14 @@ export async function POST(request: Request) {
     
     const publicUrl = `${process.env.R2_PUBLIC_URL}/${key}`;
 
-    return NextResponse.json({ 
+    return jsonResponse({ 
       success: true, 
       publicUrl,
       key 
     });
   } catch (error: any) {
+    console.error(`[API ERROR] POST /api/client/v1/upload/direct ->`, error);
     logger.error('Failed to upload file directly', { error: error.message });
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    return jsonResponse({ error: error.message }, { status: 500 });
   }
 }

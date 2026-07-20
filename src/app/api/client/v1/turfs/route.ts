@@ -1,13 +1,15 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { jsonResponse } from '@/lib/api-logger';
 
 export async function GET(request: Request) {
+  console.log(`[API] GET /api/client/v1/turfs called`);
   try {
     const { searchParams } = new URL(request.url);
     const sportId = searchParams.get('sportId');
 
     if (!sportId) {
-      return NextResponse.json({ error: 'sportId is required' }, { status: 400 });
+      return jsonResponse({ error: 'sportId is required' }, { status: 400 });
     }
 
     const turfs = await prisma.turf.findMany({
@@ -21,8 +23,9 @@ export async function GET(request: Request) {
       orderBy: { name: 'asc' }
     });
     
-    return NextResponse.json({ success: true, turfs });
+    return jsonResponse({ success: true, turfs });
   } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    console.error(`[API ERROR] GET /api/client/v1/turfs ->`, error);
+    return jsonResponse({ error: error.message }, { status: 500 });
   }
 }

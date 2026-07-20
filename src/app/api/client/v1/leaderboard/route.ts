@@ -1,8 +1,10 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { authenticateClient } from '@/lib/auth-middleware';
+import { jsonResponse } from '@/lib/api-logger';
 
 export async function GET(request: Request) {
+  console.log(`[API] GET /api/client/v1/leaderboard called`);
   const authRes = await authenticateClient(request);
   if ('error' in authRes) return authRes.error;
   
@@ -40,7 +42,7 @@ export async function GET(request: Request) {
     });
     const userRank = membersWithMorePoints + 1;
 
-    return NextResponse.json({ 
+    return jsonResponse({ 
       success: true, 
       topMembers: rankedMembers, 
       userRank, 
@@ -48,7 +50,8 @@ export async function GET(request: Request) {
       primaryMemberId: primaryMember.id
     });
   } catch (error: any) {
+    console.error(`[API ERROR] GET /api/client/v1/leaderboard ->`, error);
     console.error('Leaderboard fetch error:', error);
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    return jsonResponse({ error: error.message }, { status: 500 });
   }
 }

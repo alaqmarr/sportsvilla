@@ -123,6 +123,21 @@ export type CouponAssignment = $Result.DefaultSelection<Prisma.$CouponAssignment
  * 
  */
 export type CouponUsage = $Result.DefaultSelection<Prisma.$CouponUsagePayload>
+/**
+ * Model LoyaltyTrigger
+ * 
+ */
+export type LoyaltyTrigger = $Result.DefaultSelection<Prisma.$LoyaltyTriggerPayload>
+/**
+ * Model LoyaltyAchievement
+ * 
+ */
+export type LoyaltyAchievement = $Result.DefaultSelection<Prisma.$LoyaltyAchievementPayload>
+/**
+ * Model AppAnnouncement
+ * 
+ */
+export type AppAnnouncement = $Result.DefaultSelection<Prisma.$AppAnnouncementPayload>
 
 /**
  * ##  Prisma Client ʲˢ
@@ -464,6 +479,36 @@ export class PrismaClient<
     * ```
     */
   get couponUsage(): Prisma.CouponUsageDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.loyaltyTrigger`: Exposes CRUD operations for the **LoyaltyTrigger** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more LoyaltyTriggers
+    * const loyaltyTriggers = await prisma.loyaltyTrigger.findMany()
+    * ```
+    */
+  get loyaltyTrigger(): Prisma.LoyaltyTriggerDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.loyaltyAchievement`: Exposes CRUD operations for the **LoyaltyAchievement** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more LoyaltyAchievements
+    * const loyaltyAchievements = await prisma.loyaltyAchievement.findMany()
+    * ```
+    */
+  get loyaltyAchievement(): Prisma.LoyaltyAchievementDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.appAnnouncement`: Exposes CRUD operations for the **AppAnnouncement** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more AppAnnouncements
+    * const appAnnouncements = await prisma.appAnnouncement.findMany()
+    * ```
+    */
+  get appAnnouncement(): Prisma.AppAnnouncementDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -919,7 +964,10 @@ export namespace Prisma {
     WalletTransaction: 'WalletTransaction',
     Coupon: 'Coupon',
     CouponAssignment: 'CouponAssignment',
-    CouponUsage: 'CouponUsage'
+    CouponUsage: 'CouponUsage',
+    LoyaltyTrigger: 'LoyaltyTrigger',
+    LoyaltyAchievement: 'LoyaltyAchievement',
+    AppAnnouncement: 'AppAnnouncement'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -935,7 +983,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "admin" | "setting" | "member" | "loyaltyHistory" | "sport" | "turf" | "turfSport" | "membershipPlan" | "memberMembership" | "attendance" | "booking" | "payment" | "displaySession" | "ticket" | "otp" | "tournament" | "tournamentRegistration" | "tournamentPlayer" | "walletTransaction" | "coupon" | "couponAssignment" | "couponUsage"
+      modelProps: "admin" | "setting" | "member" | "loyaltyHistory" | "sport" | "turf" | "turfSport" | "membershipPlan" | "memberMembership" | "attendance" | "booking" | "payment" | "displaySession" | "ticket" | "otp" | "tournament" | "tournamentRegistration" | "tournamentPlayer" | "walletTransaction" | "coupon" | "couponAssignment" | "couponUsage" | "loyaltyTrigger" | "loyaltyAchievement" | "appAnnouncement"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -2567,6 +2615,228 @@ export namespace Prisma {
           }
         }
       }
+      LoyaltyTrigger: {
+        payload: Prisma.$LoyaltyTriggerPayload<ExtArgs>
+        fields: Prisma.LoyaltyTriggerFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.LoyaltyTriggerFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LoyaltyTriggerPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.LoyaltyTriggerFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LoyaltyTriggerPayload>
+          }
+          findFirst: {
+            args: Prisma.LoyaltyTriggerFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LoyaltyTriggerPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.LoyaltyTriggerFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LoyaltyTriggerPayload>
+          }
+          findMany: {
+            args: Prisma.LoyaltyTriggerFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LoyaltyTriggerPayload>[]
+          }
+          create: {
+            args: Prisma.LoyaltyTriggerCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LoyaltyTriggerPayload>
+          }
+          createMany: {
+            args: Prisma.LoyaltyTriggerCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.LoyaltyTriggerCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LoyaltyTriggerPayload>[]
+          }
+          delete: {
+            args: Prisma.LoyaltyTriggerDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LoyaltyTriggerPayload>
+          }
+          update: {
+            args: Prisma.LoyaltyTriggerUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LoyaltyTriggerPayload>
+          }
+          deleteMany: {
+            args: Prisma.LoyaltyTriggerDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.LoyaltyTriggerUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.LoyaltyTriggerUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LoyaltyTriggerPayload>[]
+          }
+          upsert: {
+            args: Prisma.LoyaltyTriggerUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LoyaltyTriggerPayload>
+          }
+          aggregate: {
+            args: Prisma.LoyaltyTriggerAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateLoyaltyTrigger>
+          }
+          groupBy: {
+            args: Prisma.LoyaltyTriggerGroupByArgs<ExtArgs>
+            result: $Utils.Optional<LoyaltyTriggerGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.LoyaltyTriggerCountArgs<ExtArgs>
+            result: $Utils.Optional<LoyaltyTriggerCountAggregateOutputType> | number
+          }
+        }
+      }
+      LoyaltyAchievement: {
+        payload: Prisma.$LoyaltyAchievementPayload<ExtArgs>
+        fields: Prisma.LoyaltyAchievementFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.LoyaltyAchievementFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LoyaltyAchievementPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.LoyaltyAchievementFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LoyaltyAchievementPayload>
+          }
+          findFirst: {
+            args: Prisma.LoyaltyAchievementFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LoyaltyAchievementPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.LoyaltyAchievementFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LoyaltyAchievementPayload>
+          }
+          findMany: {
+            args: Prisma.LoyaltyAchievementFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LoyaltyAchievementPayload>[]
+          }
+          create: {
+            args: Prisma.LoyaltyAchievementCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LoyaltyAchievementPayload>
+          }
+          createMany: {
+            args: Prisma.LoyaltyAchievementCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.LoyaltyAchievementCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LoyaltyAchievementPayload>[]
+          }
+          delete: {
+            args: Prisma.LoyaltyAchievementDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LoyaltyAchievementPayload>
+          }
+          update: {
+            args: Prisma.LoyaltyAchievementUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LoyaltyAchievementPayload>
+          }
+          deleteMany: {
+            args: Prisma.LoyaltyAchievementDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.LoyaltyAchievementUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.LoyaltyAchievementUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LoyaltyAchievementPayload>[]
+          }
+          upsert: {
+            args: Prisma.LoyaltyAchievementUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LoyaltyAchievementPayload>
+          }
+          aggregate: {
+            args: Prisma.LoyaltyAchievementAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateLoyaltyAchievement>
+          }
+          groupBy: {
+            args: Prisma.LoyaltyAchievementGroupByArgs<ExtArgs>
+            result: $Utils.Optional<LoyaltyAchievementGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.LoyaltyAchievementCountArgs<ExtArgs>
+            result: $Utils.Optional<LoyaltyAchievementCountAggregateOutputType> | number
+          }
+        }
+      }
+      AppAnnouncement: {
+        payload: Prisma.$AppAnnouncementPayload<ExtArgs>
+        fields: Prisma.AppAnnouncementFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.AppAnnouncementFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AppAnnouncementPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.AppAnnouncementFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AppAnnouncementPayload>
+          }
+          findFirst: {
+            args: Prisma.AppAnnouncementFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AppAnnouncementPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.AppAnnouncementFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AppAnnouncementPayload>
+          }
+          findMany: {
+            args: Prisma.AppAnnouncementFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AppAnnouncementPayload>[]
+          }
+          create: {
+            args: Prisma.AppAnnouncementCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AppAnnouncementPayload>
+          }
+          createMany: {
+            args: Prisma.AppAnnouncementCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.AppAnnouncementCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AppAnnouncementPayload>[]
+          }
+          delete: {
+            args: Prisma.AppAnnouncementDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AppAnnouncementPayload>
+          }
+          update: {
+            args: Prisma.AppAnnouncementUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AppAnnouncementPayload>
+          }
+          deleteMany: {
+            args: Prisma.AppAnnouncementDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.AppAnnouncementUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.AppAnnouncementUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AppAnnouncementPayload>[]
+          }
+          upsert: {
+            args: Prisma.AppAnnouncementUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AppAnnouncementPayload>
+          }
+          aggregate: {
+            args: Prisma.AppAnnouncementAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateAppAnnouncement>
+          }
+          groupBy: {
+            args: Prisma.AppAnnouncementGroupByArgs<ExtArgs>
+            result: $Utils.Optional<AppAnnouncementGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.AppAnnouncementCountArgs<ExtArgs>
+            result: $Utils.Optional<AppAnnouncementCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -2697,6 +2967,9 @@ export namespace Prisma {
     coupon?: CouponOmit
     couponAssignment?: CouponAssignmentOmit
     couponUsage?: CouponUsageOmit
+    loyaltyTrigger?: LoyaltyTriggerOmit
+    loyaltyAchievement?: LoyaltyAchievementOmit
+    appAnnouncement?: AppAnnouncementOmit
   }
 
   /* Types for Logging */
@@ -2785,6 +3058,7 @@ export namespace Prisma {
     walletTransactions: number
     couponAssignments: number
     couponUsages: number
+    loyaltyAchievements: number
   }
 
   export type MemberCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -2796,6 +3070,7 @@ export namespace Prisma {
     walletTransactions?: boolean | MemberCountOutputTypeCountWalletTransactionsArgs
     couponAssignments?: boolean | MemberCountOutputTypeCountCouponAssignmentsArgs
     couponUsages?: boolean | MemberCountOutputTypeCountCouponUsagesArgs
+    loyaltyAchievements?: boolean | MemberCountOutputTypeCountLoyaltyAchievementsArgs
   }
 
   // Custom InputTypes
@@ -2863,6 +3138,13 @@ export namespace Prisma {
    */
   export type MemberCountOutputTypeCountCouponUsagesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: CouponUsageWhereInput
+  }
+
+  /**
+   * MemberCountOutputType without action
+   */
+  export type MemberCountOutputTypeCountLoyaltyAchievementsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: LoyaltyAchievementWhereInput
   }
 
 
@@ -3170,6 +3452,37 @@ export namespace Prisma {
    */
   export type CouponCountOutputTypeCountAssignmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: CouponAssignmentWhereInput
+  }
+
+
+  /**
+   * Count Type LoyaltyTriggerCountOutputType
+   */
+
+  export type LoyaltyTriggerCountOutputType = {
+    achievements: number
+  }
+
+  export type LoyaltyTriggerCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    achievements?: boolean | LoyaltyTriggerCountOutputTypeCountAchievementsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * LoyaltyTriggerCountOutputType without action
+   */
+  export type LoyaltyTriggerCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LoyaltyTriggerCountOutputType
+     */
+    select?: LoyaltyTriggerCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * LoyaltyTriggerCountOutputType without action
+   */
+  export type LoyaltyTriggerCountOutputTypeCountAchievementsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: LoyaltyAchievementWhereInput
   }
 
 
@@ -5410,6 +5723,7 @@ export namespace Prisma {
     walletTransactions?: boolean | Member$walletTransactionsArgs<ExtArgs>
     couponAssignments?: boolean | Member$couponAssignmentsArgs<ExtArgs>
     couponUsages?: boolean | Member$couponUsagesArgs<ExtArgs>
+    loyaltyAchievements?: boolean | Member$loyaltyAchievementsArgs<ExtArgs>
     _count?: boolean | MemberCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["member"]>
 
@@ -5462,6 +5776,7 @@ export namespace Prisma {
     walletTransactions?: boolean | Member$walletTransactionsArgs<ExtArgs>
     couponAssignments?: boolean | Member$couponAssignmentsArgs<ExtArgs>
     couponUsages?: boolean | Member$couponUsagesArgs<ExtArgs>
+    loyaltyAchievements?: boolean | Member$loyaltyAchievementsArgs<ExtArgs>
     _count?: boolean | MemberCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type MemberIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -5478,6 +5793,7 @@ export namespace Prisma {
       walletTransactions: Prisma.$WalletTransactionPayload<ExtArgs>[]
       couponAssignments: Prisma.$CouponAssignmentPayload<ExtArgs>[]
       couponUsages: Prisma.$CouponUsagePayload<ExtArgs>[]
+      loyaltyAchievements: Prisma.$LoyaltyAchievementPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -5892,6 +6208,7 @@ export namespace Prisma {
     walletTransactions<T extends Member$walletTransactionsArgs<ExtArgs> = {}>(args?: Subset<T, Member$walletTransactionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WalletTransactionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     couponAssignments<T extends Member$couponAssignmentsArgs<ExtArgs> = {}>(args?: Subset<T, Member$couponAssignmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CouponAssignmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     couponUsages<T extends Member$couponUsagesArgs<ExtArgs> = {}>(args?: Subset<T, Member$couponUsagesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CouponUsagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    loyaltyAchievements<T extends Member$loyaltyAchievementsArgs<ExtArgs> = {}>(args?: Subset<T, Member$loyaltyAchievementsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LoyaltyAchievementPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -6511,6 +6828,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: CouponUsageScalarFieldEnum | CouponUsageScalarFieldEnum[]
+  }
+
+  /**
+   * Member.loyaltyAchievements
+   */
+  export type Member$loyaltyAchievementsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LoyaltyAchievement
+     */
+    select?: LoyaltyAchievementSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LoyaltyAchievement
+     */
+    omit?: LoyaltyAchievementOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LoyaltyAchievementInclude<ExtArgs> | null
+    where?: LoyaltyAchievementWhereInput
+    orderBy?: LoyaltyAchievementOrderByWithRelationInput | LoyaltyAchievementOrderByWithRelationInput[]
+    cursor?: LoyaltyAchievementWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: LoyaltyAchievementScalarFieldEnum | LoyaltyAchievementScalarFieldEnum[]
   }
 
   /**
@@ -28514,6 +28855,3266 @@ export namespace Prisma {
 
 
   /**
+   * Model LoyaltyTrigger
+   */
+
+  export type AggregateLoyaltyTrigger = {
+    _count: LoyaltyTriggerCountAggregateOutputType | null
+    _avg: LoyaltyTriggerAvgAggregateOutputType | null
+    _sum: LoyaltyTriggerSumAggregateOutputType | null
+    _min: LoyaltyTriggerMinAggregateOutputType | null
+    _max: LoyaltyTriggerMaxAggregateOutputType | null
+  }
+
+  export type LoyaltyTriggerAvgAggregateOutputType = {
+    targetBookingsCount: number | null
+    rewardAmount: number | null
+    rewardPoints: number | null
+  }
+
+  export type LoyaltyTriggerSumAggregateOutputType = {
+    targetBookingsCount: number | null
+    rewardAmount: number | null
+    rewardPoints: number | null
+  }
+
+  export type LoyaltyTriggerMinAggregateOutputType = {
+    id: string | null
+    title: string | null
+    description: string | null
+    targetBookingsCount: number | null
+    rewardAmount: number | null
+    rewardPoints: number | null
+    isActive: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type LoyaltyTriggerMaxAggregateOutputType = {
+    id: string | null
+    title: string | null
+    description: string | null
+    targetBookingsCount: number | null
+    rewardAmount: number | null
+    rewardPoints: number | null
+    isActive: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type LoyaltyTriggerCountAggregateOutputType = {
+    id: number
+    title: number
+    description: number
+    targetBookingsCount: number
+    rewardAmount: number
+    rewardPoints: number
+    isActive: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type LoyaltyTriggerAvgAggregateInputType = {
+    targetBookingsCount?: true
+    rewardAmount?: true
+    rewardPoints?: true
+  }
+
+  export type LoyaltyTriggerSumAggregateInputType = {
+    targetBookingsCount?: true
+    rewardAmount?: true
+    rewardPoints?: true
+  }
+
+  export type LoyaltyTriggerMinAggregateInputType = {
+    id?: true
+    title?: true
+    description?: true
+    targetBookingsCount?: true
+    rewardAmount?: true
+    rewardPoints?: true
+    isActive?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type LoyaltyTriggerMaxAggregateInputType = {
+    id?: true
+    title?: true
+    description?: true
+    targetBookingsCount?: true
+    rewardAmount?: true
+    rewardPoints?: true
+    isActive?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type LoyaltyTriggerCountAggregateInputType = {
+    id?: true
+    title?: true
+    description?: true
+    targetBookingsCount?: true
+    rewardAmount?: true
+    rewardPoints?: true
+    isActive?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type LoyaltyTriggerAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which LoyaltyTrigger to aggregate.
+     */
+    where?: LoyaltyTriggerWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of LoyaltyTriggers to fetch.
+     */
+    orderBy?: LoyaltyTriggerOrderByWithRelationInput | LoyaltyTriggerOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: LoyaltyTriggerWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` LoyaltyTriggers from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` LoyaltyTriggers.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned LoyaltyTriggers
+    **/
+    _count?: true | LoyaltyTriggerCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: LoyaltyTriggerAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: LoyaltyTriggerSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: LoyaltyTriggerMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: LoyaltyTriggerMaxAggregateInputType
+  }
+
+  export type GetLoyaltyTriggerAggregateType<T extends LoyaltyTriggerAggregateArgs> = {
+        [P in keyof T & keyof AggregateLoyaltyTrigger]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateLoyaltyTrigger[P]>
+      : GetScalarType<T[P], AggregateLoyaltyTrigger[P]>
+  }
+
+
+
+
+  export type LoyaltyTriggerGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: LoyaltyTriggerWhereInput
+    orderBy?: LoyaltyTriggerOrderByWithAggregationInput | LoyaltyTriggerOrderByWithAggregationInput[]
+    by: LoyaltyTriggerScalarFieldEnum[] | LoyaltyTriggerScalarFieldEnum
+    having?: LoyaltyTriggerScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: LoyaltyTriggerCountAggregateInputType | true
+    _avg?: LoyaltyTriggerAvgAggregateInputType
+    _sum?: LoyaltyTriggerSumAggregateInputType
+    _min?: LoyaltyTriggerMinAggregateInputType
+    _max?: LoyaltyTriggerMaxAggregateInputType
+  }
+
+  export type LoyaltyTriggerGroupByOutputType = {
+    id: string
+    title: string
+    description: string | null
+    targetBookingsCount: number
+    rewardAmount: number
+    rewardPoints: number
+    isActive: boolean
+    createdAt: Date
+    updatedAt: Date
+    _count: LoyaltyTriggerCountAggregateOutputType | null
+    _avg: LoyaltyTriggerAvgAggregateOutputType | null
+    _sum: LoyaltyTriggerSumAggregateOutputType | null
+    _min: LoyaltyTriggerMinAggregateOutputType | null
+    _max: LoyaltyTriggerMaxAggregateOutputType | null
+  }
+
+  type GetLoyaltyTriggerGroupByPayload<T extends LoyaltyTriggerGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<LoyaltyTriggerGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof LoyaltyTriggerGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], LoyaltyTriggerGroupByOutputType[P]>
+            : GetScalarType<T[P], LoyaltyTriggerGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type LoyaltyTriggerSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    title?: boolean
+    description?: boolean
+    targetBookingsCount?: boolean
+    rewardAmount?: boolean
+    rewardPoints?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    achievements?: boolean | LoyaltyTrigger$achievementsArgs<ExtArgs>
+    _count?: boolean | LoyaltyTriggerCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["loyaltyTrigger"]>
+
+  export type LoyaltyTriggerSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    title?: boolean
+    description?: boolean
+    targetBookingsCount?: boolean
+    rewardAmount?: boolean
+    rewardPoints?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["loyaltyTrigger"]>
+
+  export type LoyaltyTriggerSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    title?: boolean
+    description?: boolean
+    targetBookingsCount?: boolean
+    rewardAmount?: boolean
+    rewardPoints?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["loyaltyTrigger"]>
+
+  export type LoyaltyTriggerSelectScalar = {
+    id?: boolean
+    title?: boolean
+    description?: boolean
+    targetBookingsCount?: boolean
+    rewardAmount?: boolean
+    rewardPoints?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type LoyaltyTriggerOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "description" | "targetBookingsCount" | "rewardAmount" | "rewardPoints" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["loyaltyTrigger"]>
+  export type LoyaltyTriggerInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    achievements?: boolean | LoyaltyTrigger$achievementsArgs<ExtArgs>
+    _count?: boolean | LoyaltyTriggerCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type LoyaltyTriggerIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type LoyaltyTriggerIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+
+  export type $LoyaltyTriggerPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "LoyaltyTrigger"
+    objects: {
+      achievements: Prisma.$LoyaltyAchievementPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      title: string
+      description: string | null
+      targetBookingsCount: number
+      rewardAmount: number
+      rewardPoints: number
+      isActive: boolean
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["loyaltyTrigger"]>
+    composites: {}
+  }
+
+  type LoyaltyTriggerGetPayload<S extends boolean | null | undefined | LoyaltyTriggerDefaultArgs> = $Result.GetResult<Prisma.$LoyaltyTriggerPayload, S>
+
+  type LoyaltyTriggerCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<LoyaltyTriggerFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: LoyaltyTriggerCountAggregateInputType | true
+    }
+
+  export interface LoyaltyTriggerDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['LoyaltyTrigger'], meta: { name: 'LoyaltyTrigger' } }
+    /**
+     * Find zero or one LoyaltyTrigger that matches the filter.
+     * @param {LoyaltyTriggerFindUniqueArgs} args - Arguments to find a LoyaltyTrigger
+     * @example
+     * // Get one LoyaltyTrigger
+     * const loyaltyTrigger = await prisma.loyaltyTrigger.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends LoyaltyTriggerFindUniqueArgs>(args: SelectSubset<T, LoyaltyTriggerFindUniqueArgs<ExtArgs>>): Prisma__LoyaltyTriggerClient<$Result.GetResult<Prisma.$LoyaltyTriggerPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one LoyaltyTrigger that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {LoyaltyTriggerFindUniqueOrThrowArgs} args - Arguments to find a LoyaltyTrigger
+     * @example
+     * // Get one LoyaltyTrigger
+     * const loyaltyTrigger = await prisma.loyaltyTrigger.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends LoyaltyTriggerFindUniqueOrThrowArgs>(args: SelectSubset<T, LoyaltyTriggerFindUniqueOrThrowArgs<ExtArgs>>): Prisma__LoyaltyTriggerClient<$Result.GetResult<Prisma.$LoyaltyTriggerPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first LoyaltyTrigger that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LoyaltyTriggerFindFirstArgs} args - Arguments to find a LoyaltyTrigger
+     * @example
+     * // Get one LoyaltyTrigger
+     * const loyaltyTrigger = await prisma.loyaltyTrigger.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends LoyaltyTriggerFindFirstArgs>(args?: SelectSubset<T, LoyaltyTriggerFindFirstArgs<ExtArgs>>): Prisma__LoyaltyTriggerClient<$Result.GetResult<Prisma.$LoyaltyTriggerPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first LoyaltyTrigger that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LoyaltyTriggerFindFirstOrThrowArgs} args - Arguments to find a LoyaltyTrigger
+     * @example
+     * // Get one LoyaltyTrigger
+     * const loyaltyTrigger = await prisma.loyaltyTrigger.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends LoyaltyTriggerFindFirstOrThrowArgs>(args?: SelectSubset<T, LoyaltyTriggerFindFirstOrThrowArgs<ExtArgs>>): Prisma__LoyaltyTriggerClient<$Result.GetResult<Prisma.$LoyaltyTriggerPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more LoyaltyTriggers that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LoyaltyTriggerFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all LoyaltyTriggers
+     * const loyaltyTriggers = await prisma.loyaltyTrigger.findMany()
+     * 
+     * // Get first 10 LoyaltyTriggers
+     * const loyaltyTriggers = await prisma.loyaltyTrigger.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const loyaltyTriggerWithIdOnly = await prisma.loyaltyTrigger.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends LoyaltyTriggerFindManyArgs>(args?: SelectSubset<T, LoyaltyTriggerFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LoyaltyTriggerPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a LoyaltyTrigger.
+     * @param {LoyaltyTriggerCreateArgs} args - Arguments to create a LoyaltyTrigger.
+     * @example
+     * // Create one LoyaltyTrigger
+     * const LoyaltyTrigger = await prisma.loyaltyTrigger.create({
+     *   data: {
+     *     // ... data to create a LoyaltyTrigger
+     *   }
+     * })
+     * 
+     */
+    create<T extends LoyaltyTriggerCreateArgs>(args: SelectSubset<T, LoyaltyTriggerCreateArgs<ExtArgs>>): Prisma__LoyaltyTriggerClient<$Result.GetResult<Prisma.$LoyaltyTriggerPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many LoyaltyTriggers.
+     * @param {LoyaltyTriggerCreateManyArgs} args - Arguments to create many LoyaltyTriggers.
+     * @example
+     * // Create many LoyaltyTriggers
+     * const loyaltyTrigger = await prisma.loyaltyTrigger.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends LoyaltyTriggerCreateManyArgs>(args?: SelectSubset<T, LoyaltyTriggerCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many LoyaltyTriggers and returns the data saved in the database.
+     * @param {LoyaltyTriggerCreateManyAndReturnArgs} args - Arguments to create many LoyaltyTriggers.
+     * @example
+     * // Create many LoyaltyTriggers
+     * const loyaltyTrigger = await prisma.loyaltyTrigger.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many LoyaltyTriggers and only return the `id`
+     * const loyaltyTriggerWithIdOnly = await prisma.loyaltyTrigger.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends LoyaltyTriggerCreateManyAndReturnArgs>(args?: SelectSubset<T, LoyaltyTriggerCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LoyaltyTriggerPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a LoyaltyTrigger.
+     * @param {LoyaltyTriggerDeleteArgs} args - Arguments to delete one LoyaltyTrigger.
+     * @example
+     * // Delete one LoyaltyTrigger
+     * const LoyaltyTrigger = await prisma.loyaltyTrigger.delete({
+     *   where: {
+     *     // ... filter to delete one LoyaltyTrigger
+     *   }
+     * })
+     * 
+     */
+    delete<T extends LoyaltyTriggerDeleteArgs>(args: SelectSubset<T, LoyaltyTriggerDeleteArgs<ExtArgs>>): Prisma__LoyaltyTriggerClient<$Result.GetResult<Prisma.$LoyaltyTriggerPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one LoyaltyTrigger.
+     * @param {LoyaltyTriggerUpdateArgs} args - Arguments to update one LoyaltyTrigger.
+     * @example
+     * // Update one LoyaltyTrigger
+     * const loyaltyTrigger = await prisma.loyaltyTrigger.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends LoyaltyTriggerUpdateArgs>(args: SelectSubset<T, LoyaltyTriggerUpdateArgs<ExtArgs>>): Prisma__LoyaltyTriggerClient<$Result.GetResult<Prisma.$LoyaltyTriggerPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more LoyaltyTriggers.
+     * @param {LoyaltyTriggerDeleteManyArgs} args - Arguments to filter LoyaltyTriggers to delete.
+     * @example
+     * // Delete a few LoyaltyTriggers
+     * const { count } = await prisma.loyaltyTrigger.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends LoyaltyTriggerDeleteManyArgs>(args?: SelectSubset<T, LoyaltyTriggerDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more LoyaltyTriggers.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LoyaltyTriggerUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many LoyaltyTriggers
+     * const loyaltyTrigger = await prisma.loyaltyTrigger.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends LoyaltyTriggerUpdateManyArgs>(args: SelectSubset<T, LoyaltyTriggerUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more LoyaltyTriggers and returns the data updated in the database.
+     * @param {LoyaltyTriggerUpdateManyAndReturnArgs} args - Arguments to update many LoyaltyTriggers.
+     * @example
+     * // Update many LoyaltyTriggers
+     * const loyaltyTrigger = await prisma.loyaltyTrigger.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more LoyaltyTriggers and only return the `id`
+     * const loyaltyTriggerWithIdOnly = await prisma.loyaltyTrigger.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends LoyaltyTriggerUpdateManyAndReturnArgs>(args: SelectSubset<T, LoyaltyTriggerUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LoyaltyTriggerPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one LoyaltyTrigger.
+     * @param {LoyaltyTriggerUpsertArgs} args - Arguments to update or create a LoyaltyTrigger.
+     * @example
+     * // Update or create a LoyaltyTrigger
+     * const loyaltyTrigger = await prisma.loyaltyTrigger.upsert({
+     *   create: {
+     *     // ... data to create a LoyaltyTrigger
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the LoyaltyTrigger we want to update
+     *   }
+     * })
+     */
+    upsert<T extends LoyaltyTriggerUpsertArgs>(args: SelectSubset<T, LoyaltyTriggerUpsertArgs<ExtArgs>>): Prisma__LoyaltyTriggerClient<$Result.GetResult<Prisma.$LoyaltyTriggerPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of LoyaltyTriggers.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LoyaltyTriggerCountArgs} args - Arguments to filter LoyaltyTriggers to count.
+     * @example
+     * // Count the number of LoyaltyTriggers
+     * const count = await prisma.loyaltyTrigger.count({
+     *   where: {
+     *     // ... the filter for the LoyaltyTriggers we want to count
+     *   }
+     * })
+    **/
+    count<T extends LoyaltyTriggerCountArgs>(
+      args?: Subset<T, LoyaltyTriggerCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], LoyaltyTriggerCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a LoyaltyTrigger.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LoyaltyTriggerAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends LoyaltyTriggerAggregateArgs>(args: Subset<T, LoyaltyTriggerAggregateArgs>): Prisma.PrismaPromise<GetLoyaltyTriggerAggregateType<T>>
+
+    /**
+     * Group by LoyaltyTrigger.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LoyaltyTriggerGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends LoyaltyTriggerGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: LoyaltyTriggerGroupByArgs['orderBy'] }
+        : { orderBy?: LoyaltyTriggerGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, LoyaltyTriggerGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetLoyaltyTriggerGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the LoyaltyTrigger model
+   */
+  readonly fields: LoyaltyTriggerFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for LoyaltyTrigger.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__LoyaltyTriggerClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    achievements<T extends LoyaltyTrigger$achievementsArgs<ExtArgs> = {}>(args?: Subset<T, LoyaltyTrigger$achievementsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LoyaltyAchievementPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the LoyaltyTrigger model
+   */
+  interface LoyaltyTriggerFieldRefs {
+    readonly id: FieldRef<"LoyaltyTrigger", 'String'>
+    readonly title: FieldRef<"LoyaltyTrigger", 'String'>
+    readonly description: FieldRef<"LoyaltyTrigger", 'String'>
+    readonly targetBookingsCount: FieldRef<"LoyaltyTrigger", 'Int'>
+    readonly rewardAmount: FieldRef<"LoyaltyTrigger", 'Float'>
+    readonly rewardPoints: FieldRef<"LoyaltyTrigger", 'Int'>
+    readonly isActive: FieldRef<"LoyaltyTrigger", 'Boolean'>
+    readonly createdAt: FieldRef<"LoyaltyTrigger", 'DateTime'>
+    readonly updatedAt: FieldRef<"LoyaltyTrigger", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * LoyaltyTrigger findUnique
+   */
+  export type LoyaltyTriggerFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LoyaltyTrigger
+     */
+    select?: LoyaltyTriggerSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LoyaltyTrigger
+     */
+    omit?: LoyaltyTriggerOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LoyaltyTriggerInclude<ExtArgs> | null
+    /**
+     * Filter, which LoyaltyTrigger to fetch.
+     */
+    where: LoyaltyTriggerWhereUniqueInput
+  }
+
+  /**
+   * LoyaltyTrigger findUniqueOrThrow
+   */
+  export type LoyaltyTriggerFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LoyaltyTrigger
+     */
+    select?: LoyaltyTriggerSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LoyaltyTrigger
+     */
+    omit?: LoyaltyTriggerOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LoyaltyTriggerInclude<ExtArgs> | null
+    /**
+     * Filter, which LoyaltyTrigger to fetch.
+     */
+    where: LoyaltyTriggerWhereUniqueInput
+  }
+
+  /**
+   * LoyaltyTrigger findFirst
+   */
+  export type LoyaltyTriggerFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LoyaltyTrigger
+     */
+    select?: LoyaltyTriggerSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LoyaltyTrigger
+     */
+    omit?: LoyaltyTriggerOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LoyaltyTriggerInclude<ExtArgs> | null
+    /**
+     * Filter, which LoyaltyTrigger to fetch.
+     */
+    where?: LoyaltyTriggerWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of LoyaltyTriggers to fetch.
+     */
+    orderBy?: LoyaltyTriggerOrderByWithRelationInput | LoyaltyTriggerOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for LoyaltyTriggers.
+     */
+    cursor?: LoyaltyTriggerWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` LoyaltyTriggers from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` LoyaltyTriggers.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of LoyaltyTriggers.
+     */
+    distinct?: LoyaltyTriggerScalarFieldEnum | LoyaltyTriggerScalarFieldEnum[]
+  }
+
+  /**
+   * LoyaltyTrigger findFirstOrThrow
+   */
+  export type LoyaltyTriggerFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LoyaltyTrigger
+     */
+    select?: LoyaltyTriggerSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LoyaltyTrigger
+     */
+    omit?: LoyaltyTriggerOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LoyaltyTriggerInclude<ExtArgs> | null
+    /**
+     * Filter, which LoyaltyTrigger to fetch.
+     */
+    where?: LoyaltyTriggerWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of LoyaltyTriggers to fetch.
+     */
+    orderBy?: LoyaltyTriggerOrderByWithRelationInput | LoyaltyTriggerOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for LoyaltyTriggers.
+     */
+    cursor?: LoyaltyTriggerWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` LoyaltyTriggers from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` LoyaltyTriggers.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of LoyaltyTriggers.
+     */
+    distinct?: LoyaltyTriggerScalarFieldEnum | LoyaltyTriggerScalarFieldEnum[]
+  }
+
+  /**
+   * LoyaltyTrigger findMany
+   */
+  export type LoyaltyTriggerFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LoyaltyTrigger
+     */
+    select?: LoyaltyTriggerSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LoyaltyTrigger
+     */
+    omit?: LoyaltyTriggerOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LoyaltyTriggerInclude<ExtArgs> | null
+    /**
+     * Filter, which LoyaltyTriggers to fetch.
+     */
+    where?: LoyaltyTriggerWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of LoyaltyTriggers to fetch.
+     */
+    orderBy?: LoyaltyTriggerOrderByWithRelationInput | LoyaltyTriggerOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing LoyaltyTriggers.
+     */
+    cursor?: LoyaltyTriggerWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` LoyaltyTriggers from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` LoyaltyTriggers.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of LoyaltyTriggers.
+     */
+    distinct?: LoyaltyTriggerScalarFieldEnum | LoyaltyTriggerScalarFieldEnum[]
+  }
+
+  /**
+   * LoyaltyTrigger create
+   */
+  export type LoyaltyTriggerCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LoyaltyTrigger
+     */
+    select?: LoyaltyTriggerSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LoyaltyTrigger
+     */
+    omit?: LoyaltyTriggerOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LoyaltyTriggerInclude<ExtArgs> | null
+    /**
+     * The data needed to create a LoyaltyTrigger.
+     */
+    data: XOR<LoyaltyTriggerCreateInput, LoyaltyTriggerUncheckedCreateInput>
+  }
+
+  /**
+   * LoyaltyTrigger createMany
+   */
+  export type LoyaltyTriggerCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many LoyaltyTriggers.
+     */
+    data: LoyaltyTriggerCreateManyInput | LoyaltyTriggerCreateManyInput[]
+  }
+
+  /**
+   * LoyaltyTrigger createManyAndReturn
+   */
+  export type LoyaltyTriggerCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LoyaltyTrigger
+     */
+    select?: LoyaltyTriggerSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the LoyaltyTrigger
+     */
+    omit?: LoyaltyTriggerOmit<ExtArgs> | null
+    /**
+     * The data used to create many LoyaltyTriggers.
+     */
+    data: LoyaltyTriggerCreateManyInput | LoyaltyTriggerCreateManyInput[]
+  }
+
+  /**
+   * LoyaltyTrigger update
+   */
+  export type LoyaltyTriggerUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LoyaltyTrigger
+     */
+    select?: LoyaltyTriggerSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LoyaltyTrigger
+     */
+    omit?: LoyaltyTriggerOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LoyaltyTriggerInclude<ExtArgs> | null
+    /**
+     * The data needed to update a LoyaltyTrigger.
+     */
+    data: XOR<LoyaltyTriggerUpdateInput, LoyaltyTriggerUncheckedUpdateInput>
+    /**
+     * Choose, which LoyaltyTrigger to update.
+     */
+    where: LoyaltyTriggerWhereUniqueInput
+  }
+
+  /**
+   * LoyaltyTrigger updateMany
+   */
+  export type LoyaltyTriggerUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update LoyaltyTriggers.
+     */
+    data: XOR<LoyaltyTriggerUpdateManyMutationInput, LoyaltyTriggerUncheckedUpdateManyInput>
+    /**
+     * Filter which LoyaltyTriggers to update
+     */
+    where?: LoyaltyTriggerWhereInput
+    /**
+     * Limit how many LoyaltyTriggers to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * LoyaltyTrigger updateManyAndReturn
+   */
+  export type LoyaltyTriggerUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LoyaltyTrigger
+     */
+    select?: LoyaltyTriggerSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the LoyaltyTrigger
+     */
+    omit?: LoyaltyTriggerOmit<ExtArgs> | null
+    /**
+     * The data used to update LoyaltyTriggers.
+     */
+    data: XOR<LoyaltyTriggerUpdateManyMutationInput, LoyaltyTriggerUncheckedUpdateManyInput>
+    /**
+     * Filter which LoyaltyTriggers to update
+     */
+    where?: LoyaltyTriggerWhereInput
+    /**
+     * Limit how many LoyaltyTriggers to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * LoyaltyTrigger upsert
+   */
+  export type LoyaltyTriggerUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LoyaltyTrigger
+     */
+    select?: LoyaltyTriggerSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LoyaltyTrigger
+     */
+    omit?: LoyaltyTriggerOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LoyaltyTriggerInclude<ExtArgs> | null
+    /**
+     * The filter to search for the LoyaltyTrigger to update in case it exists.
+     */
+    where: LoyaltyTriggerWhereUniqueInput
+    /**
+     * In case the LoyaltyTrigger found by the `where` argument doesn't exist, create a new LoyaltyTrigger with this data.
+     */
+    create: XOR<LoyaltyTriggerCreateInput, LoyaltyTriggerUncheckedCreateInput>
+    /**
+     * In case the LoyaltyTrigger was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<LoyaltyTriggerUpdateInput, LoyaltyTriggerUncheckedUpdateInput>
+  }
+
+  /**
+   * LoyaltyTrigger delete
+   */
+  export type LoyaltyTriggerDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LoyaltyTrigger
+     */
+    select?: LoyaltyTriggerSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LoyaltyTrigger
+     */
+    omit?: LoyaltyTriggerOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LoyaltyTriggerInclude<ExtArgs> | null
+    /**
+     * Filter which LoyaltyTrigger to delete.
+     */
+    where: LoyaltyTriggerWhereUniqueInput
+  }
+
+  /**
+   * LoyaltyTrigger deleteMany
+   */
+  export type LoyaltyTriggerDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which LoyaltyTriggers to delete
+     */
+    where?: LoyaltyTriggerWhereInput
+    /**
+     * Limit how many LoyaltyTriggers to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * LoyaltyTrigger.achievements
+   */
+  export type LoyaltyTrigger$achievementsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LoyaltyAchievement
+     */
+    select?: LoyaltyAchievementSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LoyaltyAchievement
+     */
+    omit?: LoyaltyAchievementOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LoyaltyAchievementInclude<ExtArgs> | null
+    where?: LoyaltyAchievementWhereInput
+    orderBy?: LoyaltyAchievementOrderByWithRelationInput | LoyaltyAchievementOrderByWithRelationInput[]
+    cursor?: LoyaltyAchievementWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: LoyaltyAchievementScalarFieldEnum | LoyaltyAchievementScalarFieldEnum[]
+  }
+
+  /**
+   * LoyaltyTrigger without action
+   */
+  export type LoyaltyTriggerDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LoyaltyTrigger
+     */
+    select?: LoyaltyTriggerSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LoyaltyTrigger
+     */
+    omit?: LoyaltyTriggerOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LoyaltyTriggerInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model LoyaltyAchievement
+   */
+
+  export type AggregateLoyaltyAchievement = {
+    _count: LoyaltyAchievementCountAggregateOutputType | null
+    _min: LoyaltyAchievementMinAggregateOutputType | null
+    _max: LoyaltyAchievementMaxAggregateOutputType | null
+  }
+
+  export type LoyaltyAchievementMinAggregateOutputType = {
+    id: string | null
+    triggerId: string | null
+    memberId: string | null
+    achievedAt: Date | null
+  }
+
+  export type LoyaltyAchievementMaxAggregateOutputType = {
+    id: string | null
+    triggerId: string | null
+    memberId: string | null
+    achievedAt: Date | null
+  }
+
+  export type LoyaltyAchievementCountAggregateOutputType = {
+    id: number
+    triggerId: number
+    memberId: number
+    achievedAt: number
+    _all: number
+  }
+
+
+  export type LoyaltyAchievementMinAggregateInputType = {
+    id?: true
+    triggerId?: true
+    memberId?: true
+    achievedAt?: true
+  }
+
+  export type LoyaltyAchievementMaxAggregateInputType = {
+    id?: true
+    triggerId?: true
+    memberId?: true
+    achievedAt?: true
+  }
+
+  export type LoyaltyAchievementCountAggregateInputType = {
+    id?: true
+    triggerId?: true
+    memberId?: true
+    achievedAt?: true
+    _all?: true
+  }
+
+  export type LoyaltyAchievementAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which LoyaltyAchievement to aggregate.
+     */
+    where?: LoyaltyAchievementWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of LoyaltyAchievements to fetch.
+     */
+    orderBy?: LoyaltyAchievementOrderByWithRelationInput | LoyaltyAchievementOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: LoyaltyAchievementWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` LoyaltyAchievements from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` LoyaltyAchievements.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned LoyaltyAchievements
+    **/
+    _count?: true | LoyaltyAchievementCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: LoyaltyAchievementMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: LoyaltyAchievementMaxAggregateInputType
+  }
+
+  export type GetLoyaltyAchievementAggregateType<T extends LoyaltyAchievementAggregateArgs> = {
+        [P in keyof T & keyof AggregateLoyaltyAchievement]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateLoyaltyAchievement[P]>
+      : GetScalarType<T[P], AggregateLoyaltyAchievement[P]>
+  }
+
+
+
+
+  export type LoyaltyAchievementGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: LoyaltyAchievementWhereInput
+    orderBy?: LoyaltyAchievementOrderByWithAggregationInput | LoyaltyAchievementOrderByWithAggregationInput[]
+    by: LoyaltyAchievementScalarFieldEnum[] | LoyaltyAchievementScalarFieldEnum
+    having?: LoyaltyAchievementScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: LoyaltyAchievementCountAggregateInputType | true
+    _min?: LoyaltyAchievementMinAggregateInputType
+    _max?: LoyaltyAchievementMaxAggregateInputType
+  }
+
+  export type LoyaltyAchievementGroupByOutputType = {
+    id: string
+    triggerId: string
+    memberId: string
+    achievedAt: Date
+    _count: LoyaltyAchievementCountAggregateOutputType | null
+    _min: LoyaltyAchievementMinAggregateOutputType | null
+    _max: LoyaltyAchievementMaxAggregateOutputType | null
+  }
+
+  type GetLoyaltyAchievementGroupByPayload<T extends LoyaltyAchievementGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<LoyaltyAchievementGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof LoyaltyAchievementGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], LoyaltyAchievementGroupByOutputType[P]>
+            : GetScalarType<T[P], LoyaltyAchievementGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type LoyaltyAchievementSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    triggerId?: boolean
+    memberId?: boolean
+    achievedAt?: boolean
+    trigger?: boolean | LoyaltyTriggerDefaultArgs<ExtArgs>
+    member?: boolean | MemberDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["loyaltyAchievement"]>
+
+  export type LoyaltyAchievementSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    triggerId?: boolean
+    memberId?: boolean
+    achievedAt?: boolean
+    trigger?: boolean | LoyaltyTriggerDefaultArgs<ExtArgs>
+    member?: boolean | MemberDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["loyaltyAchievement"]>
+
+  export type LoyaltyAchievementSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    triggerId?: boolean
+    memberId?: boolean
+    achievedAt?: boolean
+    trigger?: boolean | LoyaltyTriggerDefaultArgs<ExtArgs>
+    member?: boolean | MemberDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["loyaltyAchievement"]>
+
+  export type LoyaltyAchievementSelectScalar = {
+    id?: boolean
+    triggerId?: boolean
+    memberId?: boolean
+    achievedAt?: boolean
+  }
+
+  export type LoyaltyAchievementOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "triggerId" | "memberId" | "achievedAt", ExtArgs["result"]["loyaltyAchievement"]>
+  export type LoyaltyAchievementInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    trigger?: boolean | LoyaltyTriggerDefaultArgs<ExtArgs>
+    member?: boolean | MemberDefaultArgs<ExtArgs>
+  }
+  export type LoyaltyAchievementIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    trigger?: boolean | LoyaltyTriggerDefaultArgs<ExtArgs>
+    member?: boolean | MemberDefaultArgs<ExtArgs>
+  }
+  export type LoyaltyAchievementIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    trigger?: boolean | LoyaltyTriggerDefaultArgs<ExtArgs>
+    member?: boolean | MemberDefaultArgs<ExtArgs>
+  }
+
+  export type $LoyaltyAchievementPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "LoyaltyAchievement"
+    objects: {
+      trigger: Prisma.$LoyaltyTriggerPayload<ExtArgs>
+      member: Prisma.$MemberPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      triggerId: string
+      memberId: string
+      achievedAt: Date
+    }, ExtArgs["result"]["loyaltyAchievement"]>
+    composites: {}
+  }
+
+  type LoyaltyAchievementGetPayload<S extends boolean | null | undefined | LoyaltyAchievementDefaultArgs> = $Result.GetResult<Prisma.$LoyaltyAchievementPayload, S>
+
+  type LoyaltyAchievementCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<LoyaltyAchievementFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: LoyaltyAchievementCountAggregateInputType | true
+    }
+
+  export interface LoyaltyAchievementDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['LoyaltyAchievement'], meta: { name: 'LoyaltyAchievement' } }
+    /**
+     * Find zero or one LoyaltyAchievement that matches the filter.
+     * @param {LoyaltyAchievementFindUniqueArgs} args - Arguments to find a LoyaltyAchievement
+     * @example
+     * // Get one LoyaltyAchievement
+     * const loyaltyAchievement = await prisma.loyaltyAchievement.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends LoyaltyAchievementFindUniqueArgs>(args: SelectSubset<T, LoyaltyAchievementFindUniqueArgs<ExtArgs>>): Prisma__LoyaltyAchievementClient<$Result.GetResult<Prisma.$LoyaltyAchievementPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one LoyaltyAchievement that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {LoyaltyAchievementFindUniqueOrThrowArgs} args - Arguments to find a LoyaltyAchievement
+     * @example
+     * // Get one LoyaltyAchievement
+     * const loyaltyAchievement = await prisma.loyaltyAchievement.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends LoyaltyAchievementFindUniqueOrThrowArgs>(args: SelectSubset<T, LoyaltyAchievementFindUniqueOrThrowArgs<ExtArgs>>): Prisma__LoyaltyAchievementClient<$Result.GetResult<Prisma.$LoyaltyAchievementPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first LoyaltyAchievement that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LoyaltyAchievementFindFirstArgs} args - Arguments to find a LoyaltyAchievement
+     * @example
+     * // Get one LoyaltyAchievement
+     * const loyaltyAchievement = await prisma.loyaltyAchievement.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends LoyaltyAchievementFindFirstArgs>(args?: SelectSubset<T, LoyaltyAchievementFindFirstArgs<ExtArgs>>): Prisma__LoyaltyAchievementClient<$Result.GetResult<Prisma.$LoyaltyAchievementPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first LoyaltyAchievement that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LoyaltyAchievementFindFirstOrThrowArgs} args - Arguments to find a LoyaltyAchievement
+     * @example
+     * // Get one LoyaltyAchievement
+     * const loyaltyAchievement = await prisma.loyaltyAchievement.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends LoyaltyAchievementFindFirstOrThrowArgs>(args?: SelectSubset<T, LoyaltyAchievementFindFirstOrThrowArgs<ExtArgs>>): Prisma__LoyaltyAchievementClient<$Result.GetResult<Prisma.$LoyaltyAchievementPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more LoyaltyAchievements that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LoyaltyAchievementFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all LoyaltyAchievements
+     * const loyaltyAchievements = await prisma.loyaltyAchievement.findMany()
+     * 
+     * // Get first 10 LoyaltyAchievements
+     * const loyaltyAchievements = await prisma.loyaltyAchievement.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const loyaltyAchievementWithIdOnly = await prisma.loyaltyAchievement.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends LoyaltyAchievementFindManyArgs>(args?: SelectSubset<T, LoyaltyAchievementFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LoyaltyAchievementPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a LoyaltyAchievement.
+     * @param {LoyaltyAchievementCreateArgs} args - Arguments to create a LoyaltyAchievement.
+     * @example
+     * // Create one LoyaltyAchievement
+     * const LoyaltyAchievement = await prisma.loyaltyAchievement.create({
+     *   data: {
+     *     // ... data to create a LoyaltyAchievement
+     *   }
+     * })
+     * 
+     */
+    create<T extends LoyaltyAchievementCreateArgs>(args: SelectSubset<T, LoyaltyAchievementCreateArgs<ExtArgs>>): Prisma__LoyaltyAchievementClient<$Result.GetResult<Prisma.$LoyaltyAchievementPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many LoyaltyAchievements.
+     * @param {LoyaltyAchievementCreateManyArgs} args - Arguments to create many LoyaltyAchievements.
+     * @example
+     * // Create many LoyaltyAchievements
+     * const loyaltyAchievement = await prisma.loyaltyAchievement.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends LoyaltyAchievementCreateManyArgs>(args?: SelectSubset<T, LoyaltyAchievementCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many LoyaltyAchievements and returns the data saved in the database.
+     * @param {LoyaltyAchievementCreateManyAndReturnArgs} args - Arguments to create many LoyaltyAchievements.
+     * @example
+     * // Create many LoyaltyAchievements
+     * const loyaltyAchievement = await prisma.loyaltyAchievement.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many LoyaltyAchievements and only return the `id`
+     * const loyaltyAchievementWithIdOnly = await prisma.loyaltyAchievement.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends LoyaltyAchievementCreateManyAndReturnArgs>(args?: SelectSubset<T, LoyaltyAchievementCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LoyaltyAchievementPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a LoyaltyAchievement.
+     * @param {LoyaltyAchievementDeleteArgs} args - Arguments to delete one LoyaltyAchievement.
+     * @example
+     * // Delete one LoyaltyAchievement
+     * const LoyaltyAchievement = await prisma.loyaltyAchievement.delete({
+     *   where: {
+     *     // ... filter to delete one LoyaltyAchievement
+     *   }
+     * })
+     * 
+     */
+    delete<T extends LoyaltyAchievementDeleteArgs>(args: SelectSubset<T, LoyaltyAchievementDeleteArgs<ExtArgs>>): Prisma__LoyaltyAchievementClient<$Result.GetResult<Prisma.$LoyaltyAchievementPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one LoyaltyAchievement.
+     * @param {LoyaltyAchievementUpdateArgs} args - Arguments to update one LoyaltyAchievement.
+     * @example
+     * // Update one LoyaltyAchievement
+     * const loyaltyAchievement = await prisma.loyaltyAchievement.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends LoyaltyAchievementUpdateArgs>(args: SelectSubset<T, LoyaltyAchievementUpdateArgs<ExtArgs>>): Prisma__LoyaltyAchievementClient<$Result.GetResult<Prisma.$LoyaltyAchievementPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more LoyaltyAchievements.
+     * @param {LoyaltyAchievementDeleteManyArgs} args - Arguments to filter LoyaltyAchievements to delete.
+     * @example
+     * // Delete a few LoyaltyAchievements
+     * const { count } = await prisma.loyaltyAchievement.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends LoyaltyAchievementDeleteManyArgs>(args?: SelectSubset<T, LoyaltyAchievementDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more LoyaltyAchievements.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LoyaltyAchievementUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many LoyaltyAchievements
+     * const loyaltyAchievement = await prisma.loyaltyAchievement.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends LoyaltyAchievementUpdateManyArgs>(args: SelectSubset<T, LoyaltyAchievementUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more LoyaltyAchievements and returns the data updated in the database.
+     * @param {LoyaltyAchievementUpdateManyAndReturnArgs} args - Arguments to update many LoyaltyAchievements.
+     * @example
+     * // Update many LoyaltyAchievements
+     * const loyaltyAchievement = await prisma.loyaltyAchievement.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more LoyaltyAchievements and only return the `id`
+     * const loyaltyAchievementWithIdOnly = await prisma.loyaltyAchievement.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends LoyaltyAchievementUpdateManyAndReturnArgs>(args: SelectSubset<T, LoyaltyAchievementUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LoyaltyAchievementPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one LoyaltyAchievement.
+     * @param {LoyaltyAchievementUpsertArgs} args - Arguments to update or create a LoyaltyAchievement.
+     * @example
+     * // Update or create a LoyaltyAchievement
+     * const loyaltyAchievement = await prisma.loyaltyAchievement.upsert({
+     *   create: {
+     *     // ... data to create a LoyaltyAchievement
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the LoyaltyAchievement we want to update
+     *   }
+     * })
+     */
+    upsert<T extends LoyaltyAchievementUpsertArgs>(args: SelectSubset<T, LoyaltyAchievementUpsertArgs<ExtArgs>>): Prisma__LoyaltyAchievementClient<$Result.GetResult<Prisma.$LoyaltyAchievementPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of LoyaltyAchievements.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LoyaltyAchievementCountArgs} args - Arguments to filter LoyaltyAchievements to count.
+     * @example
+     * // Count the number of LoyaltyAchievements
+     * const count = await prisma.loyaltyAchievement.count({
+     *   where: {
+     *     // ... the filter for the LoyaltyAchievements we want to count
+     *   }
+     * })
+    **/
+    count<T extends LoyaltyAchievementCountArgs>(
+      args?: Subset<T, LoyaltyAchievementCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], LoyaltyAchievementCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a LoyaltyAchievement.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LoyaltyAchievementAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends LoyaltyAchievementAggregateArgs>(args: Subset<T, LoyaltyAchievementAggregateArgs>): Prisma.PrismaPromise<GetLoyaltyAchievementAggregateType<T>>
+
+    /**
+     * Group by LoyaltyAchievement.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LoyaltyAchievementGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends LoyaltyAchievementGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: LoyaltyAchievementGroupByArgs['orderBy'] }
+        : { orderBy?: LoyaltyAchievementGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, LoyaltyAchievementGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetLoyaltyAchievementGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the LoyaltyAchievement model
+   */
+  readonly fields: LoyaltyAchievementFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for LoyaltyAchievement.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__LoyaltyAchievementClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    trigger<T extends LoyaltyTriggerDefaultArgs<ExtArgs> = {}>(args?: Subset<T, LoyaltyTriggerDefaultArgs<ExtArgs>>): Prisma__LoyaltyTriggerClient<$Result.GetResult<Prisma.$LoyaltyTriggerPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    member<T extends MemberDefaultArgs<ExtArgs> = {}>(args?: Subset<T, MemberDefaultArgs<ExtArgs>>): Prisma__MemberClient<$Result.GetResult<Prisma.$MemberPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the LoyaltyAchievement model
+   */
+  interface LoyaltyAchievementFieldRefs {
+    readonly id: FieldRef<"LoyaltyAchievement", 'String'>
+    readonly triggerId: FieldRef<"LoyaltyAchievement", 'String'>
+    readonly memberId: FieldRef<"LoyaltyAchievement", 'String'>
+    readonly achievedAt: FieldRef<"LoyaltyAchievement", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * LoyaltyAchievement findUnique
+   */
+  export type LoyaltyAchievementFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LoyaltyAchievement
+     */
+    select?: LoyaltyAchievementSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LoyaltyAchievement
+     */
+    omit?: LoyaltyAchievementOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LoyaltyAchievementInclude<ExtArgs> | null
+    /**
+     * Filter, which LoyaltyAchievement to fetch.
+     */
+    where: LoyaltyAchievementWhereUniqueInput
+  }
+
+  /**
+   * LoyaltyAchievement findUniqueOrThrow
+   */
+  export type LoyaltyAchievementFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LoyaltyAchievement
+     */
+    select?: LoyaltyAchievementSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LoyaltyAchievement
+     */
+    omit?: LoyaltyAchievementOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LoyaltyAchievementInclude<ExtArgs> | null
+    /**
+     * Filter, which LoyaltyAchievement to fetch.
+     */
+    where: LoyaltyAchievementWhereUniqueInput
+  }
+
+  /**
+   * LoyaltyAchievement findFirst
+   */
+  export type LoyaltyAchievementFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LoyaltyAchievement
+     */
+    select?: LoyaltyAchievementSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LoyaltyAchievement
+     */
+    omit?: LoyaltyAchievementOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LoyaltyAchievementInclude<ExtArgs> | null
+    /**
+     * Filter, which LoyaltyAchievement to fetch.
+     */
+    where?: LoyaltyAchievementWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of LoyaltyAchievements to fetch.
+     */
+    orderBy?: LoyaltyAchievementOrderByWithRelationInput | LoyaltyAchievementOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for LoyaltyAchievements.
+     */
+    cursor?: LoyaltyAchievementWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` LoyaltyAchievements from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` LoyaltyAchievements.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of LoyaltyAchievements.
+     */
+    distinct?: LoyaltyAchievementScalarFieldEnum | LoyaltyAchievementScalarFieldEnum[]
+  }
+
+  /**
+   * LoyaltyAchievement findFirstOrThrow
+   */
+  export type LoyaltyAchievementFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LoyaltyAchievement
+     */
+    select?: LoyaltyAchievementSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LoyaltyAchievement
+     */
+    omit?: LoyaltyAchievementOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LoyaltyAchievementInclude<ExtArgs> | null
+    /**
+     * Filter, which LoyaltyAchievement to fetch.
+     */
+    where?: LoyaltyAchievementWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of LoyaltyAchievements to fetch.
+     */
+    orderBy?: LoyaltyAchievementOrderByWithRelationInput | LoyaltyAchievementOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for LoyaltyAchievements.
+     */
+    cursor?: LoyaltyAchievementWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` LoyaltyAchievements from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` LoyaltyAchievements.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of LoyaltyAchievements.
+     */
+    distinct?: LoyaltyAchievementScalarFieldEnum | LoyaltyAchievementScalarFieldEnum[]
+  }
+
+  /**
+   * LoyaltyAchievement findMany
+   */
+  export type LoyaltyAchievementFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LoyaltyAchievement
+     */
+    select?: LoyaltyAchievementSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LoyaltyAchievement
+     */
+    omit?: LoyaltyAchievementOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LoyaltyAchievementInclude<ExtArgs> | null
+    /**
+     * Filter, which LoyaltyAchievements to fetch.
+     */
+    where?: LoyaltyAchievementWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of LoyaltyAchievements to fetch.
+     */
+    orderBy?: LoyaltyAchievementOrderByWithRelationInput | LoyaltyAchievementOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing LoyaltyAchievements.
+     */
+    cursor?: LoyaltyAchievementWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` LoyaltyAchievements from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` LoyaltyAchievements.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of LoyaltyAchievements.
+     */
+    distinct?: LoyaltyAchievementScalarFieldEnum | LoyaltyAchievementScalarFieldEnum[]
+  }
+
+  /**
+   * LoyaltyAchievement create
+   */
+  export type LoyaltyAchievementCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LoyaltyAchievement
+     */
+    select?: LoyaltyAchievementSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LoyaltyAchievement
+     */
+    omit?: LoyaltyAchievementOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LoyaltyAchievementInclude<ExtArgs> | null
+    /**
+     * The data needed to create a LoyaltyAchievement.
+     */
+    data: XOR<LoyaltyAchievementCreateInput, LoyaltyAchievementUncheckedCreateInput>
+  }
+
+  /**
+   * LoyaltyAchievement createMany
+   */
+  export type LoyaltyAchievementCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many LoyaltyAchievements.
+     */
+    data: LoyaltyAchievementCreateManyInput | LoyaltyAchievementCreateManyInput[]
+  }
+
+  /**
+   * LoyaltyAchievement createManyAndReturn
+   */
+  export type LoyaltyAchievementCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LoyaltyAchievement
+     */
+    select?: LoyaltyAchievementSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the LoyaltyAchievement
+     */
+    omit?: LoyaltyAchievementOmit<ExtArgs> | null
+    /**
+     * The data used to create many LoyaltyAchievements.
+     */
+    data: LoyaltyAchievementCreateManyInput | LoyaltyAchievementCreateManyInput[]
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LoyaltyAchievementIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * LoyaltyAchievement update
+   */
+  export type LoyaltyAchievementUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LoyaltyAchievement
+     */
+    select?: LoyaltyAchievementSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LoyaltyAchievement
+     */
+    omit?: LoyaltyAchievementOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LoyaltyAchievementInclude<ExtArgs> | null
+    /**
+     * The data needed to update a LoyaltyAchievement.
+     */
+    data: XOR<LoyaltyAchievementUpdateInput, LoyaltyAchievementUncheckedUpdateInput>
+    /**
+     * Choose, which LoyaltyAchievement to update.
+     */
+    where: LoyaltyAchievementWhereUniqueInput
+  }
+
+  /**
+   * LoyaltyAchievement updateMany
+   */
+  export type LoyaltyAchievementUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update LoyaltyAchievements.
+     */
+    data: XOR<LoyaltyAchievementUpdateManyMutationInput, LoyaltyAchievementUncheckedUpdateManyInput>
+    /**
+     * Filter which LoyaltyAchievements to update
+     */
+    where?: LoyaltyAchievementWhereInput
+    /**
+     * Limit how many LoyaltyAchievements to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * LoyaltyAchievement updateManyAndReturn
+   */
+  export type LoyaltyAchievementUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LoyaltyAchievement
+     */
+    select?: LoyaltyAchievementSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the LoyaltyAchievement
+     */
+    omit?: LoyaltyAchievementOmit<ExtArgs> | null
+    /**
+     * The data used to update LoyaltyAchievements.
+     */
+    data: XOR<LoyaltyAchievementUpdateManyMutationInput, LoyaltyAchievementUncheckedUpdateManyInput>
+    /**
+     * Filter which LoyaltyAchievements to update
+     */
+    where?: LoyaltyAchievementWhereInput
+    /**
+     * Limit how many LoyaltyAchievements to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LoyaltyAchievementIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * LoyaltyAchievement upsert
+   */
+  export type LoyaltyAchievementUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LoyaltyAchievement
+     */
+    select?: LoyaltyAchievementSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LoyaltyAchievement
+     */
+    omit?: LoyaltyAchievementOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LoyaltyAchievementInclude<ExtArgs> | null
+    /**
+     * The filter to search for the LoyaltyAchievement to update in case it exists.
+     */
+    where: LoyaltyAchievementWhereUniqueInput
+    /**
+     * In case the LoyaltyAchievement found by the `where` argument doesn't exist, create a new LoyaltyAchievement with this data.
+     */
+    create: XOR<LoyaltyAchievementCreateInput, LoyaltyAchievementUncheckedCreateInput>
+    /**
+     * In case the LoyaltyAchievement was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<LoyaltyAchievementUpdateInput, LoyaltyAchievementUncheckedUpdateInput>
+  }
+
+  /**
+   * LoyaltyAchievement delete
+   */
+  export type LoyaltyAchievementDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LoyaltyAchievement
+     */
+    select?: LoyaltyAchievementSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LoyaltyAchievement
+     */
+    omit?: LoyaltyAchievementOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LoyaltyAchievementInclude<ExtArgs> | null
+    /**
+     * Filter which LoyaltyAchievement to delete.
+     */
+    where: LoyaltyAchievementWhereUniqueInput
+  }
+
+  /**
+   * LoyaltyAchievement deleteMany
+   */
+  export type LoyaltyAchievementDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which LoyaltyAchievements to delete
+     */
+    where?: LoyaltyAchievementWhereInput
+    /**
+     * Limit how many LoyaltyAchievements to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * LoyaltyAchievement without action
+   */
+  export type LoyaltyAchievementDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LoyaltyAchievement
+     */
+    select?: LoyaltyAchievementSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LoyaltyAchievement
+     */
+    omit?: LoyaltyAchievementOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LoyaltyAchievementInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model AppAnnouncement
+   */
+
+  export type AggregateAppAnnouncement = {
+    _count: AppAnnouncementCountAggregateOutputType | null
+    _min: AppAnnouncementMinAggregateOutputType | null
+    _max: AppAnnouncementMaxAggregateOutputType | null
+  }
+
+  export type AppAnnouncementMinAggregateOutputType = {
+    id: string | null
+    title: string | null
+    content: string | null
+    imageUrl: string | null
+    linkUrl: string | null
+    isActive: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type AppAnnouncementMaxAggregateOutputType = {
+    id: string | null
+    title: string | null
+    content: string | null
+    imageUrl: string | null
+    linkUrl: string | null
+    isActive: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type AppAnnouncementCountAggregateOutputType = {
+    id: number
+    title: number
+    content: number
+    imageUrl: number
+    linkUrl: number
+    isActive: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type AppAnnouncementMinAggregateInputType = {
+    id?: true
+    title?: true
+    content?: true
+    imageUrl?: true
+    linkUrl?: true
+    isActive?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type AppAnnouncementMaxAggregateInputType = {
+    id?: true
+    title?: true
+    content?: true
+    imageUrl?: true
+    linkUrl?: true
+    isActive?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type AppAnnouncementCountAggregateInputType = {
+    id?: true
+    title?: true
+    content?: true
+    imageUrl?: true
+    linkUrl?: true
+    isActive?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type AppAnnouncementAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which AppAnnouncement to aggregate.
+     */
+    where?: AppAnnouncementWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AppAnnouncements to fetch.
+     */
+    orderBy?: AppAnnouncementOrderByWithRelationInput | AppAnnouncementOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: AppAnnouncementWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AppAnnouncements from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AppAnnouncements.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned AppAnnouncements
+    **/
+    _count?: true | AppAnnouncementCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: AppAnnouncementMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: AppAnnouncementMaxAggregateInputType
+  }
+
+  export type GetAppAnnouncementAggregateType<T extends AppAnnouncementAggregateArgs> = {
+        [P in keyof T & keyof AggregateAppAnnouncement]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateAppAnnouncement[P]>
+      : GetScalarType<T[P], AggregateAppAnnouncement[P]>
+  }
+
+
+
+
+  export type AppAnnouncementGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AppAnnouncementWhereInput
+    orderBy?: AppAnnouncementOrderByWithAggregationInput | AppAnnouncementOrderByWithAggregationInput[]
+    by: AppAnnouncementScalarFieldEnum[] | AppAnnouncementScalarFieldEnum
+    having?: AppAnnouncementScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: AppAnnouncementCountAggregateInputType | true
+    _min?: AppAnnouncementMinAggregateInputType
+    _max?: AppAnnouncementMaxAggregateInputType
+  }
+
+  export type AppAnnouncementGroupByOutputType = {
+    id: string
+    title: string
+    content: string
+    imageUrl: string | null
+    linkUrl: string | null
+    isActive: boolean
+    createdAt: Date
+    updatedAt: Date
+    _count: AppAnnouncementCountAggregateOutputType | null
+    _min: AppAnnouncementMinAggregateOutputType | null
+    _max: AppAnnouncementMaxAggregateOutputType | null
+  }
+
+  type GetAppAnnouncementGroupByPayload<T extends AppAnnouncementGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<AppAnnouncementGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof AppAnnouncementGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], AppAnnouncementGroupByOutputType[P]>
+            : GetScalarType<T[P], AppAnnouncementGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type AppAnnouncementSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    title?: boolean
+    content?: boolean
+    imageUrl?: boolean
+    linkUrl?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["appAnnouncement"]>
+
+  export type AppAnnouncementSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    title?: boolean
+    content?: boolean
+    imageUrl?: boolean
+    linkUrl?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["appAnnouncement"]>
+
+  export type AppAnnouncementSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    title?: boolean
+    content?: boolean
+    imageUrl?: boolean
+    linkUrl?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["appAnnouncement"]>
+
+  export type AppAnnouncementSelectScalar = {
+    id?: boolean
+    title?: boolean
+    content?: boolean
+    imageUrl?: boolean
+    linkUrl?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type AppAnnouncementOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "content" | "imageUrl" | "linkUrl" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["appAnnouncement"]>
+
+  export type $AppAnnouncementPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "AppAnnouncement"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      title: string
+      content: string
+      imageUrl: string | null
+      linkUrl: string | null
+      isActive: boolean
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["appAnnouncement"]>
+    composites: {}
+  }
+
+  type AppAnnouncementGetPayload<S extends boolean | null | undefined | AppAnnouncementDefaultArgs> = $Result.GetResult<Prisma.$AppAnnouncementPayload, S>
+
+  type AppAnnouncementCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<AppAnnouncementFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: AppAnnouncementCountAggregateInputType | true
+    }
+
+  export interface AppAnnouncementDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['AppAnnouncement'], meta: { name: 'AppAnnouncement' } }
+    /**
+     * Find zero or one AppAnnouncement that matches the filter.
+     * @param {AppAnnouncementFindUniqueArgs} args - Arguments to find a AppAnnouncement
+     * @example
+     * // Get one AppAnnouncement
+     * const appAnnouncement = await prisma.appAnnouncement.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends AppAnnouncementFindUniqueArgs>(args: SelectSubset<T, AppAnnouncementFindUniqueArgs<ExtArgs>>): Prisma__AppAnnouncementClient<$Result.GetResult<Prisma.$AppAnnouncementPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one AppAnnouncement that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {AppAnnouncementFindUniqueOrThrowArgs} args - Arguments to find a AppAnnouncement
+     * @example
+     * // Get one AppAnnouncement
+     * const appAnnouncement = await prisma.appAnnouncement.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends AppAnnouncementFindUniqueOrThrowArgs>(args: SelectSubset<T, AppAnnouncementFindUniqueOrThrowArgs<ExtArgs>>): Prisma__AppAnnouncementClient<$Result.GetResult<Prisma.$AppAnnouncementPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first AppAnnouncement that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AppAnnouncementFindFirstArgs} args - Arguments to find a AppAnnouncement
+     * @example
+     * // Get one AppAnnouncement
+     * const appAnnouncement = await prisma.appAnnouncement.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends AppAnnouncementFindFirstArgs>(args?: SelectSubset<T, AppAnnouncementFindFirstArgs<ExtArgs>>): Prisma__AppAnnouncementClient<$Result.GetResult<Prisma.$AppAnnouncementPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first AppAnnouncement that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AppAnnouncementFindFirstOrThrowArgs} args - Arguments to find a AppAnnouncement
+     * @example
+     * // Get one AppAnnouncement
+     * const appAnnouncement = await prisma.appAnnouncement.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends AppAnnouncementFindFirstOrThrowArgs>(args?: SelectSubset<T, AppAnnouncementFindFirstOrThrowArgs<ExtArgs>>): Prisma__AppAnnouncementClient<$Result.GetResult<Prisma.$AppAnnouncementPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more AppAnnouncements that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AppAnnouncementFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all AppAnnouncements
+     * const appAnnouncements = await prisma.appAnnouncement.findMany()
+     * 
+     * // Get first 10 AppAnnouncements
+     * const appAnnouncements = await prisma.appAnnouncement.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const appAnnouncementWithIdOnly = await prisma.appAnnouncement.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends AppAnnouncementFindManyArgs>(args?: SelectSubset<T, AppAnnouncementFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AppAnnouncementPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a AppAnnouncement.
+     * @param {AppAnnouncementCreateArgs} args - Arguments to create a AppAnnouncement.
+     * @example
+     * // Create one AppAnnouncement
+     * const AppAnnouncement = await prisma.appAnnouncement.create({
+     *   data: {
+     *     // ... data to create a AppAnnouncement
+     *   }
+     * })
+     * 
+     */
+    create<T extends AppAnnouncementCreateArgs>(args: SelectSubset<T, AppAnnouncementCreateArgs<ExtArgs>>): Prisma__AppAnnouncementClient<$Result.GetResult<Prisma.$AppAnnouncementPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many AppAnnouncements.
+     * @param {AppAnnouncementCreateManyArgs} args - Arguments to create many AppAnnouncements.
+     * @example
+     * // Create many AppAnnouncements
+     * const appAnnouncement = await prisma.appAnnouncement.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends AppAnnouncementCreateManyArgs>(args?: SelectSubset<T, AppAnnouncementCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many AppAnnouncements and returns the data saved in the database.
+     * @param {AppAnnouncementCreateManyAndReturnArgs} args - Arguments to create many AppAnnouncements.
+     * @example
+     * // Create many AppAnnouncements
+     * const appAnnouncement = await prisma.appAnnouncement.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many AppAnnouncements and only return the `id`
+     * const appAnnouncementWithIdOnly = await prisma.appAnnouncement.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends AppAnnouncementCreateManyAndReturnArgs>(args?: SelectSubset<T, AppAnnouncementCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AppAnnouncementPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a AppAnnouncement.
+     * @param {AppAnnouncementDeleteArgs} args - Arguments to delete one AppAnnouncement.
+     * @example
+     * // Delete one AppAnnouncement
+     * const AppAnnouncement = await prisma.appAnnouncement.delete({
+     *   where: {
+     *     // ... filter to delete one AppAnnouncement
+     *   }
+     * })
+     * 
+     */
+    delete<T extends AppAnnouncementDeleteArgs>(args: SelectSubset<T, AppAnnouncementDeleteArgs<ExtArgs>>): Prisma__AppAnnouncementClient<$Result.GetResult<Prisma.$AppAnnouncementPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one AppAnnouncement.
+     * @param {AppAnnouncementUpdateArgs} args - Arguments to update one AppAnnouncement.
+     * @example
+     * // Update one AppAnnouncement
+     * const appAnnouncement = await prisma.appAnnouncement.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends AppAnnouncementUpdateArgs>(args: SelectSubset<T, AppAnnouncementUpdateArgs<ExtArgs>>): Prisma__AppAnnouncementClient<$Result.GetResult<Prisma.$AppAnnouncementPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more AppAnnouncements.
+     * @param {AppAnnouncementDeleteManyArgs} args - Arguments to filter AppAnnouncements to delete.
+     * @example
+     * // Delete a few AppAnnouncements
+     * const { count } = await prisma.appAnnouncement.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends AppAnnouncementDeleteManyArgs>(args?: SelectSubset<T, AppAnnouncementDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more AppAnnouncements.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AppAnnouncementUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many AppAnnouncements
+     * const appAnnouncement = await prisma.appAnnouncement.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends AppAnnouncementUpdateManyArgs>(args: SelectSubset<T, AppAnnouncementUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more AppAnnouncements and returns the data updated in the database.
+     * @param {AppAnnouncementUpdateManyAndReturnArgs} args - Arguments to update many AppAnnouncements.
+     * @example
+     * // Update many AppAnnouncements
+     * const appAnnouncement = await prisma.appAnnouncement.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more AppAnnouncements and only return the `id`
+     * const appAnnouncementWithIdOnly = await prisma.appAnnouncement.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends AppAnnouncementUpdateManyAndReturnArgs>(args: SelectSubset<T, AppAnnouncementUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AppAnnouncementPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one AppAnnouncement.
+     * @param {AppAnnouncementUpsertArgs} args - Arguments to update or create a AppAnnouncement.
+     * @example
+     * // Update or create a AppAnnouncement
+     * const appAnnouncement = await prisma.appAnnouncement.upsert({
+     *   create: {
+     *     // ... data to create a AppAnnouncement
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the AppAnnouncement we want to update
+     *   }
+     * })
+     */
+    upsert<T extends AppAnnouncementUpsertArgs>(args: SelectSubset<T, AppAnnouncementUpsertArgs<ExtArgs>>): Prisma__AppAnnouncementClient<$Result.GetResult<Prisma.$AppAnnouncementPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of AppAnnouncements.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AppAnnouncementCountArgs} args - Arguments to filter AppAnnouncements to count.
+     * @example
+     * // Count the number of AppAnnouncements
+     * const count = await prisma.appAnnouncement.count({
+     *   where: {
+     *     // ... the filter for the AppAnnouncements we want to count
+     *   }
+     * })
+    **/
+    count<T extends AppAnnouncementCountArgs>(
+      args?: Subset<T, AppAnnouncementCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], AppAnnouncementCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a AppAnnouncement.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AppAnnouncementAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends AppAnnouncementAggregateArgs>(args: Subset<T, AppAnnouncementAggregateArgs>): Prisma.PrismaPromise<GetAppAnnouncementAggregateType<T>>
+
+    /**
+     * Group by AppAnnouncement.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AppAnnouncementGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends AppAnnouncementGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: AppAnnouncementGroupByArgs['orderBy'] }
+        : { orderBy?: AppAnnouncementGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, AppAnnouncementGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetAppAnnouncementGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the AppAnnouncement model
+   */
+  readonly fields: AppAnnouncementFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for AppAnnouncement.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__AppAnnouncementClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the AppAnnouncement model
+   */
+  interface AppAnnouncementFieldRefs {
+    readonly id: FieldRef<"AppAnnouncement", 'String'>
+    readonly title: FieldRef<"AppAnnouncement", 'String'>
+    readonly content: FieldRef<"AppAnnouncement", 'String'>
+    readonly imageUrl: FieldRef<"AppAnnouncement", 'String'>
+    readonly linkUrl: FieldRef<"AppAnnouncement", 'String'>
+    readonly isActive: FieldRef<"AppAnnouncement", 'Boolean'>
+    readonly createdAt: FieldRef<"AppAnnouncement", 'DateTime'>
+    readonly updatedAt: FieldRef<"AppAnnouncement", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * AppAnnouncement findUnique
+   */
+  export type AppAnnouncementFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AppAnnouncement
+     */
+    select?: AppAnnouncementSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AppAnnouncement
+     */
+    omit?: AppAnnouncementOmit<ExtArgs> | null
+    /**
+     * Filter, which AppAnnouncement to fetch.
+     */
+    where: AppAnnouncementWhereUniqueInput
+  }
+
+  /**
+   * AppAnnouncement findUniqueOrThrow
+   */
+  export type AppAnnouncementFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AppAnnouncement
+     */
+    select?: AppAnnouncementSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AppAnnouncement
+     */
+    omit?: AppAnnouncementOmit<ExtArgs> | null
+    /**
+     * Filter, which AppAnnouncement to fetch.
+     */
+    where: AppAnnouncementWhereUniqueInput
+  }
+
+  /**
+   * AppAnnouncement findFirst
+   */
+  export type AppAnnouncementFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AppAnnouncement
+     */
+    select?: AppAnnouncementSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AppAnnouncement
+     */
+    omit?: AppAnnouncementOmit<ExtArgs> | null
+    /**
+     * Filter, which AppAnnouncement to fetch.
+     */
+    where?: AppAnnouncementWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AppAnnouncements to fetch.
+     */
+    orderBy?: AppAnnouncementOrderByWithRelationInput | AppAnnouncementOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for AppAnnouncements.
+     */
+    cursor?: AppAnnouncementWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AppAnnouncements from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AppAnnouncements.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of AppAnnouncements.
+     */
+    distinct?: AppAnnouncementScalarFieldEnum | AppAnnouncementScalarFieldEnum[]
+  }
+
+  /**
+   * AppAnnouncement findFirstOrThrow
+   */
+  export type AppAnnouncementFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AppAnnouncement
+     */
+    select?: AppAnnouncementSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AppAnnouncement
+     */
+    omit?: AppAnnouncementOmit<ExtArgs> | null
+    /**
+     * Filter, which AppAnnouncement to fetch.
+     */
+    where?: AppAnnouncementWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AppAnnouncements to fetch.
+     */
+    orderBy?: AppAnnouncementOrderByWithRelationInput | AppAnnouncementOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for AppAnnouncements.
+     */
+    cursor?: AppAnnouncementWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AppAnnouncements from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AppAnnouncements.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of AppAnnouncements.
+     */
+    distinct?: AppAnnouncementScalarFieldEnum | AppAnnouncementScalarFieldEnum[]
+  }
+
+  /**
+   * AppAnnouncement findMany
+   */
+  export type AppAnnouncementFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AppAnnouncement
+     */
+    select?: AppAnnouncementSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AppAnnouncement
+     */
+    omit?: AppAnnouncementOmit<ExtArgs> | null
+    /**
+     * Filter, which AppAnnouncements to fetch.
+     */
+    where?: AppAnnouncementWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AppAnnouncements to fetch.
+     */
+    orderBy?: AppAnnouncementOrderByWithRelationInput | AppAnnouncementOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing AppAnnouncements.
+     */
+    cursor?: AppAnnouncementWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AppAnnouncements from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AppAnnouncements.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of AppAnnouncements.
+     */
+    distinct?: AppAnnouncementScalarFieldEnum | AppAnnouncementScalarFieldEnum[]
+  }
+
+  /**
+   * AppAnnouncement create
+   */
+  export type AppAnnouncementCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AppAnnouncement
+     */
+    select?: AppAnnouncementSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AppAnnouncement
+     */
+    omit?: AppAnnouncementOmit<ExtArgs> | null
+    /**
+     * The data needed to create a AppAnnouncement.
+     */
+    data: XOR<AppAnnouncementCreateInput, AppAnnouncementUncheckedCreateInput>
+  }
+
+  /**
+   * AppAnnouncement createMany
+   */
+  export type AppAnnouncementCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many AppAnnouncements.
+     */
+    data: AppAnnouncementCreateManyInput | AppAnnouncementCreateManyInput[]
+  }
+
+  /**
+   * AppAnnouncement createManyAndReturn
+   */
+  export type AppAnnouncementCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AppAnnouncement
+     */
+    select?: AppAnnouncementSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the AppAnnouncement
+     */
+    omit?: AppAnnouncementOmit<ExtArgs> | null
+    /**
+     * The data used to create many AppAnnouncements.
+     */
+    data: AppAnnouncementCreateManyInput | AppAnnouncementCreateManyInput[]
+  }
+
+  /**
+   * AppAnnouncement update
+   */
+  export type AppAnnouncementUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AppAnnouncement
+     */
+    select?: AppAnnouncementSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AppAnnouncement
+     */
+    omit?: AppAnnouncementOmit<ExtArgs> | null
+    /**
+     * The data needed to update a AppAnnouncement.
+     */
+    data: XOR<AppAnnouncementUpdateInput, AppAnnouncementUncheckedUpdateInput>
+    /**
+     * Choose, which AppAnnouncement to update.
+     */
+    where: AppAnnouncementWhereUniqueInput
+  }
+
+  /**
+   * AppAnnouncement updateMany
+   */
+  export type AppAnnouncementUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update AppAnnouncements.
+     */
+    data: XOR<AppAnnouncementUpdateManyMutationInput, AppAnnouncementUncheckedUpdateManyInput>
+    /**
+     * Filter which AppAnnouncements to update
+     */
+    where?: AppAnnouncementWhereInput
+    /**
+     * Limit how many AppAnnouncements to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * AppAnnouncement updateManyAndReturn
+   */
+  export type AppAnnouncementUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AppAnnouncement
+     */
+    select?: AppAnnouncementSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the AppAnnouncement
+     */
+    omit?: AppAnnouncementOmit<ExtArgs> | null
+    /**
+     * The data used to update AppAnnouncements.
+     */
+    data: XOR<AppAnnouncementUpdateManyMutationInput, AppAnnouncementUncheckedUpdateManyInput>
+    /**
+     * Filter which AppAnnouncements to update
+     */
+    where?: AppAnnouncementWhereInput
+    /**
+     * Limit how many AppAnnouncements to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * AppAnnouncement upsert
+   */
+  export type AppAnnouncementUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AppAnnouncement
+     */
+    select?: AppAnnouncementSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AppAnnouncement
+     */
+    omit?: AppAnnouncementOmit<ExtArgs> | null
+    /**
+     * The filter to search for the AppAnnouncement to update in case it exists.
+     */
+    where: AppAnnouncementWhereUniqueInput
+    /**
+     * In case the AppAnnouncement found by the `where` argument doesn't exist, create a new AppAnnouncement with this data.
+     */
+    create: XOR<AppAnnouncementCreateInput, AppAnnouncementUncheckedCreateInput>
+    /**
+     * In case the AppAnnouncement was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<AppAnnouncementUpdateInput, AppAnnouncementUncheckedUpdateInput>
+  }
+
+  /**
+   * AppAnnouncement delete
+   */
+  export type AppAnnouncementDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AppAnnouncement
+     */
+    select?: AppAnnouncementSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AppAnnouncement
+     */
+    omit?: AppAnnouncementOmit<ExtArgs> | null
+    /**
+     * Filter which AppAnnouncement to delete.
+     */
+    where: AppAnnouncementWhereUniqueInput
+  }
+
+  /**
+   * AppAnnouncement deleteMany
+   */
+  export type AppAnnouncementDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which AppAnnouncements to delete
+     */
+    where?: AppAnnouncementWhereInput
+    /**
+     * Limit how many AppAnnouncements to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * AppAnnouncement without action
+   */
+  export type AppAnnouncementDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AppAnnouncement
+     */
+    select?: AppAnnouncementSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AppAnnouncement
+     */
+    omit?: AppAnnouncementOmit<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -28838,6 +32439,45 @@ export namespace Prisma {
   export type CouponUsageScalarFieldEnum = (typeof CouponUsageScalarFieldEnum)[keyof typeof CouponUsageScalarFieldEnum]
 
 
+  export const LoyaltyTriggerScalarFieldEnum: {
+    id: 'id',
+    title: 'title',
+    description: 'description',
+    targetBookingsCount: 'targetBookingsCount',
+    rewardAmount: 'rewardAmount',
+    rewardPoints: 'rewardPoints',
+    isActive: 'isActive',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type LoyaltyTriggerScalarFieldEnum = (typeof LoyaltyTriggerScalarFieldEnum)[keyof typeof LoyaltyTriggerScalarFieldEnum]
+
+
+  export const LoyaltyAchievementScalarFieldEnum: {
+    id: 'id',
+    triggerId: 'triggerId',
+    memberId: 'memberId',
+    achievedAt: 'achievedAt'
+  };
+
+  export type LoyaltyAchievementScalarFieldEnum = (typeof LoyaltyAchievementScalarFieldEnum)[keyof typeof LoyaltyAchievementScalarFieldEnum]
+
+
+  export const AppAnnouncementScalarFieldEnum: {
+    id: 'id',
+    title: 'title',
+    content: 'content',
+    imageUrl: 'imageUrl',
+    linkUrl: 'linkUrl',
+    isActive: 'isActive',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type AppAnnouncementScalarFieldEnum = (typeof AppAnnouncementScalarFieldEnum)[keyof typeof AppAnnouncementScalarFieldEnum]
+
+
   export const SortOrder: {
     asc: 'asc',
     desc: 'desc'
@@ -29018,6 +32658,7 @@ export namespace Prisma {
     walletTransactions?: WalletTransactionListRelationFilter
     couponAssignments?: CouponAssignmentListRelationFilter
     couponUsages?: CouponUsageListRelationFilter
+    loyaltyAchievements?: LoyaltyAchievementListRelationFilter
   }
 
   export type MemberOrderByWithRelationInput = {
@@ -29039,6 +32680,7 @@ export namespace Prisma {
     walletTransactions?: WalletTransactionOrderByRelationAggregateInput
     couponAssignments?: CouponAssignmentOrderByRelationAggregateInput
     couponUsages?: CouponUsageOrderByRelationAggregateInput
+    loyaltyAchievements?: LoyaltyAchievementOrderByRelationAggregateInput
   }
 
   export type MemberWhereUniqueInput = Prisma.AtLeast<{
@@ -29063,6 +32705,7 @@ export namespace Prisma {
     walletTransactions?: WalletTransactionListRelationFilter
     couponAssignments?: CouponAssignmentListRelationFilter
     couponUsages?: CouponUsageListRelationFilter
+    loyaltyAchievements?: LoyaltyAchievementListRelationFilter
   }, "id">
 
   export type MemberOrderByWithAggregationInput = {
@@ -30577,6 +34220,204 @@ export namespace Prisma {
     createdAt?: DateTimeWithAggregatesFilter<"CouponUsage"> | Date | string
   }
 
+  export type LoyaltyTriggerWhereInput = {
+    AND?: LoyaltyTriggerWhereInput | LoyaltyTriggerWhereInput[]
+    OR?: LoyaltyTriggerWhereInput[]
+    NOT?: LoyaltyTriggerWhereInput | LoyaltyTriggerWhereInput[]
+    id?: StringFilter<"LoyaltyTrigger"> | string
+    title?: StringFilter<"LoyaltyTrigger"> | string
+    description?: StringNullableFilter<"LoyaltyTrigger"> | string | null
+    targetBookingsCount?: IntFilter<"LoyaltyTrigger"> | number
+    rewardAmount?: FloatFilter<"LoyaltyTrigger"> | number
+    rewardPoints?: IntFilter<"LoyaltyTrigger"> | number
+    isActive?: BoolFilter<"LoyaltyTrigger"> | boolean
+    createdAt?: DateTimeFilter<"LoyaltyTrigger"> | Date | string
+    updatedAt?: DateTimeFilter<"LoyaltyTrigger"> | Date | string
+    achievements?: LoyaltyAchievementListRelationFilter
+  }
+
+  export type LoyaltyTriggerOrderByWithRelationInput = {
+    id?: SortOrder
+    title?: SortOrder
+    description?: SortOrderInput | SortOrder
+    targetBookingsCount?: SortOrder
+    rewardAmount?: SortOrder
+    rewardPoints?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    achievements?: LoyaltyAchievementOrderByRelationAggregateInput
+  }
+
+  export type LoyaltyTriggerWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: LoyaltyTriggerWhereInput | LoyaltyTriggerWhereInput[]
+    OR?: LoyaltyTriggerWhereInput[]
+    NOT?: LoyaltyTriggerWhereInput | LoyaltyTriggerWhereInput[]
+    title?: StringFilter<"LoyaltyTrigger"> | string
+    description?: StringNullableFilter<"LoyaltyTrigger"> | string | null
+    targetBookingsCount?: IntFilter<"LoyaltyTrigger"> | number
+    rewardAmount?: FloatFilter<"LoyaltyTrigger"> | number
+    rewardPoints?: IntFilter<"LoyaltyTrigger"> | number
+    isActive?: BoolFilter<"LoyaltyTrigger"> | boolean
+    createdAt?: DateTimeFilter<"LoyaltyTrigger"> | Date | string
+    updatedAt?: DateTimeFilter<"LoyaltyTrigger"> | Date | string
+    achievements?: LoyaltyAchievementListRelationFilter
+  }, "id">
+
+  export type LoyaltyTriggerOrderByWithAggregationInput = {
+    id?: SortOrder
+    title?: SortOrder
+    description?: SortOrderInput | SortOrder
+    targetBookingsCount?: SortOrder
+    rewardAmount?: SortOrder
+    rewardPoints?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: LoyaltyTriggerCountOrderByAggregateInput
+    _avg?: LoyaltyTriggerAvgOrderByAggregateInput
+    _max?: LoyaltyTriggerMaxOrderByAggregateInput
+    _min?: LoyaltyTriggerMinOrderByAggregateInput
+    _sum?: LoyaltyTriggerSumOrderByAggregateInput
+  }
+
+  export type LoyaltyTriggerScalarWhereWithAggregatesInput = {
+    AND?: LoyaltyTriggerScalarWhereWithAggregatesInput | LoyaltyTriggerScalarWhereWithAggregatesInput[]
+    OR?: LoyaltyTriggerScalarWhereWithAggregatesInput[]
+    NOT?: LoyaltyTriggerScalarWhereWithAggregatesInput | LoyaltyTriggerScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"LoyaltyTrigger"> | string
+    title?: StringWithAggregatesFilter<"LoyaltyTrigger"> | string
+    description?: StringNullableWithAggregatesFilter<"LoyaltyTrigger"> | string | null
+    targetBookingsCount?: IntWithAggregatesFilter<"LoyaltyTrigger"> | number
+    rewardAmount?: FloatWithAggregatesFilter<"LoyaltyTrigger"> | number
+    rewardPoints?: IntWithAggregatesFilter<"LoyaltyTrigger"> | number
+    isActive?: BoolWithAggregatesFilter<"LoyaltyTrigger"> | boolean
+    createdAt?: DateTimeWithAggregatesFilter<"LoyaltyTrigger"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"LoyaltyTrigger"> | Date | string
+  }
+
+  export type LoyaltyAchievementWhereInput = {
+    AND?: LoyaltyAchievementWhereInput | LoyaltyAchievementWhereInput[]
+    OR?: LoyaltyAchievementWhereInput[]
+    NOT?: LoyaltyAchievementWhereInput | LoyaltyAchievementWhereInput[]
+    id?: StringFilter<"LoyaltyAchievement"> | string
+    triggerId?: StringFilter<"LoyaltyAchievement"> | string
+    memberId?: StringFilter<"LoyaltyAchievement"> | string
+    achievedAt?: DateTimeFilter<"LoyaltyAchievement"> | Date | string
+    trigger?: XOR<LoyaltyTriggerScalarRelationFilter, LoyaltyTriggerWhereInput>
+    member?: XOR<MemberScalarRelationFilter, MemberWhereInput>
+  }
+
+  export type LoyaltyAchievementOrderByWithRelationInput = {
+    id?: SortOrder
+    triggerId?: SortOrder
+    memberId?: SortOrder
+    achievedAt?: SortOrder
+    trigger?: LoyaltyTriggerOrderByWithRelationInput
+    member?: MemberOrderByWithRelationInput
+  }
+
+  export type LoyaltyAchievementWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    triggerId_memberId?: LoyaltyAchievementTriggerIdMemberIdCompoundUniqueInput
+    AND?: LoyaltyAchievementWhereInput | LoyaltyAchievementWhereInput[]
+    OR?: LoyaltyAchievementWhereInput[]
+    NOT?: LoyaltyAchievementWhereInput | LoyaltyAchievementWhereInput[]
+    triggerId?: StringFilter<"LoyaltyAchievement"> | string
+    memberId?: StringFilter<"LoyaltyAchievement"> | string
+    achievedAt?: DateTimeFilter<"LoyaltyAchievement"> | Date | string
+    trigger?: XOR<LoyaltyTriggerScalarRelationFilter, LoyaltyTriggerWhereInput>
+    member?: XOR<MemberScalarRelationFilter, MemberWhereInput>
+  }, "id" | "triggerId_memberId">
+
+  export type LoyaltyAchievementOrderByWithAggregationInput = {
+    id?: SortOrder
+    triggerId?: SortOrder
+    memberId?: SortOrder
+    achievedAt?: SortOrder
+    _count?: LoyaltyAchievementCountOrderByAggregateInput
+    _max?: LoyaltyAchievementMaxOrderByAggregateInput
+    _min?: LoyaltyAchievementMinOrderByAggregateInput
+  }
+
+  export type LoyaltyAchievementScalarWhereWithAggregatesInput = {
+    AND?: LoyaltyAchievementScalarWhereWithAggregatesInput | LoyaltyAchievementScalarWhereWithAggregatesInput[]
+    OR?: LoyaltyAchievementScalarWhereWithAggregatesInput[]
+    NOT?: LoyaltyAchievementScalarWhereWithAggregatesInput | LoyaltyAchievementScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"LoyaltyAchievement"> | string
+    triggerId?: StringWithAggregatesFilter<"LoyaltyAchievement"> | string
+    memberId?: StringWithAggregatesFilter<"LoyaltyAchievement"> | string
+    achievedAt?: DateTimeWithAggregatesFilter<"LoyaltyAchievement"> | Date | string
+  }
+
+  export type AppAnnouncementWhereInput = {
+    AND?: AppAnnouncementWhereInput | AppAnnouncementWhereInput[]
+    OR?: AppAnnouncementWhereInput[]
+    NOT?: AppAnnouncementWhereInput | AppAnnouncementWhereInput[]
+    id?: StringFilter<"AppAnnouncement"> | string
+    title?: StringFilter<"AppAnnouncement"> | string
+    content?: StringFilter<"AppAnnouncement"> | string
+    imageUrl?: StringNullableFilter<"AppAnnouncement"> | string | null
+    linkUrl?: StringNullableFilter<"AppAnnouncement"> | string | null
+    isActive?: BoolFilter<"AppAnnouncement"> | boolean
+    createdAt?: DateTimeFilter<"AppAnnouncement"> | Date | string
+    updatedAt?: DateTimeFilter<"AppAnnouncement"> | Date | string
+  }
+
+  export type AppAnnouncementOrderByWithRelationInput = {
+    id?: SortOrder
+    title?: SortOrder
+    content?: SortOrder
+    imageUrl?: SortOrderInput | SortOrder
+    linkUrl?: SortOrderInput | SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type AppAnnouncementWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: AppAnnouncementWhereInput | AppAnnouncementWhereInput[]
+    OR?: AppAnnouncementWhereInput[]
+    NOT?: AppAnnouncementWhereInput | AppAnnouncementWhereInput[]
+    title?: StringFilter<"AppAnnouncement"> | string
+    content?: StringFilter<"AppAnnouncement"> | string
+    imageUrl?: StringNullableFilter<"AppAnnouncement"> | string | null
+    linkUrl?: StringNullableFilter<"AppAnnouncement"> | string | null
+    isActive?: BoolFilter<"AppAnnouncement"> | boolean
+    createdAt?: DateTimeFilter<"AppAnnouncement"> | Date | string
+    updatedAt?: DateTimeFilter<"AppAnnouncement"> | Date | string
+  }, "id">
+
+  export type AppAnnouncementOrderByWithAggregationInput = {
+    id?: SortOrder
+    title?: SortOrder
+    content?: SortOrder
+    imageUrl?: SortOrderInput | SortOrder
+    linkUrl?: SortOrderInput | SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: AppAnnouncementCountOrderByAggregateInput
+    _max?: AppAnnouncementMaxOrderByAggregateInput
+    _min?: AppAnnouncementMinOrderByAggregateInput
+  }
+
+  export type AppAnnouncementScalarWhereWithAggregatesInput = {
+    AND?: AppAnnouncementScalarWhereWithAggregatesInput | AppAnnouncementScalarWhereWithAggregatesInput[]
+    OR?: AppAnnouncementScalarWhereWithAggregatesInput[]
+    NOT?: AppAnnouncementScalarWhereWithAggregatesInput | AppAnnouncementScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"AppAnnouncement"> | string
+    title?: StringWithAggregatesFilter<"AppAnnouncement"> | string
+    content?: StringWithAggregatesFilter<"AppAnnouncement"> | string
+    imageUrl?: StringNullableWithAggregatesFilter<"AppAnnouncement"> | string | null
+    linkUrl?: StringNullableWithAggregatesFilter<"AppAnnouncement"> | string | null
+    isActive?: BoolWithAggregatesFilter<"AppAnnouncement"> | boolean
+    createdAt?: DateTimeWithAggregatesFilter<"AppAnnouncement"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"AppAnnouncement"> | Date | string
+  }
+
   export type AdminCreateInput = {
     id?: string
     email: string
@@ -30701,6 +34542,7 @@ export namespace Prisma {
     walletTransactions?: WalletTransactionCreateNestedManyWithoutMemberInput
     couponAssignments?: CouponAssignmentCreateNestedManyWithoutMemberInput
     couponUsages?: CouponUsageCreateNestedManyWithoutMemberInput
+    loyaltyAchievements?: LoyaltyAchievementCreateNestedManyWithoutMemberInput
   }
 
   export type MemberUncheckedCreateInput = {
@@ -30722,6 +34564,7 @@ export namespace Prisma {
     walletTransactions?: WalletTransactionUncheckedCreateNestedManyWithoutMemberInput
     couponAssignments?: CouponAssignmentUncheckedCreateNestedManyWithoutMemberInput
     couponUsages?: CouponUsageUncheckedCreateNestedManyWithoutMemberInput
+    loyaltyAchievements?: LoyaltyAchievementUncheckedCreateNestedManyWithoutMemberInput
   }
 
   export type MemberUpdateInput = {
@@ -30743,6 +34586,7 @@ export namespace Prisma {
     walletTransactions?: WalletTransactionUpdateManyWithoutMemberNestedInput
     couponAssignments?: CouponAssignmentUpdateManyWithoutMemberNestedInput
     couponUsages?: CouponUsageUpdateManyWithoutMemberNestedInput
+    loyaltyAchievements?: LoyaltyAchievementUpdateManyWithoutMemberNestedInput
   }
 
   export type MemberUncheckedUpdateInput = {
@@ -30764,6 +34608,7 @@ export namespace Prisma {
     walletTransactions?: WalletTransactionUncheckedUpdateManyWithoutMemberNestedInput
     couponAssignments?: CouponAssignmentUncheckedUpdateManyWithoutMemberNestedInput
     couponUsages?: CouponUsageUncheckedUpdateManyWithoutMemberNestedInput
+    loyaltyAchievements?: LoyaltyAchievementUncheckedUpdateManyWithoutMemberNestedInput
   }
 
   export type MemberCreateManyInput = {
@@ -32389,6 +36234,218 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type LoyaltyTriggerCreateInput = {
+    id?: string
+    title: string
+    description?: string | null
+    targetBookingsCount: number
+    rewardAmount: number
+    rewardPoints?: number
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    achievements?: LoyaltyAchievementCreateNestedManyWithoutTriggerInput
+  }
+
+  export type LoyaltyTriggerUncheckedCreateInput = {
+    id?: string
+    title: string
+    description?: string | null
+    targetBookingsCount: number
+    rewardAmount: number
+    rewardPoints?: number
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    achievements?: LoyaltyAchievementUncheckedCreateNestedManyWithoutTriggerInput
+  }
+
+  export type LoyaltyTriggerUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    targetBookingsCount?: IntFieldUpdateOperationsInput | number
+    rewardAmount?: FloatFieldUpdateOperationsInput | number
+    rewardPoints?: IntFieldUpdateOperationsInput | number
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    achievements?: LoyaltyAchievementUpdateManyWithoutTriggerNestedInput
+  }
+
+  export type LoyaltyTriggerUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    targetBookingsCount?: IntFieldUpdateOperationsInput | number
+    rewardAmount?: FloatFieldUpdateOperationsInput | number
+    rewardPoints?: IntFieldUpdateOperationsInput | number
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    achievements?: LoyaltyAchievementUncheckedUpdateManyWithoutTriggerNestedInput
+  }
+
+  export type LoyaltyTriggerCreateManyInput = {
+    id?: string
+    title: string
+    description?: string | null
+    targetBookingsCount: number
+    rewardAmount: number
+    rewardPoints?: number
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type LoyaltyTriggerUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    targetBookingsCount?: IntFieldUpdateOperationsInput | number
+    rewardAmount?: FloatFieldUpdateOperationsInput | number
+    rewardPoints?: IntFieldUpdateOperationsInput | number
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type LoyaltyTriggerUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    targetBookingsCount?: IntFieldUpdateOperationsInput | number
+    rewardAmount?: FloatFieldUpdateOperationsInput | number
+    rewardPoints?: IntFieldUpdateOperationsInput | number
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type LoyaltyAchievementCreateInput = {
+    id?: string
+    achievedAt?: Date | string
+    trigger: LoyaltyTriggerCreateNestedOneWithoutAchievementsInput
+    member: MemberCreateNestedOneWithoutLoyaltyAchievementsInput
+  }
+
+  export type LoyaltyAchievementUncheckedCreateInput = {
+    id?: string
+    triggerId: string
+    memberId: string
+    achievedAt?: Date | string
+  }
+
+  export type LoyaltyAchievementUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    achievedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    trigger?: LoyaltyTriggerUpdateOneRequiredWithoutAchievementsNestedInput
+    member?: MemberUpdateOneRequiredWithoutLoyaltyAchievementsNestedInput
+  }
+
+  export type LoyaltyAchievementUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    triggerId?: StringFieldUpdateOperationsInput | string
+    memberId?: StringFieldUpdateOperationsInput | string
+    achievedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type LoyaltyAchievementCreateManyInput = {
+    id?: string
+    triggerId: string
+    memberId: string
+    achievedAt?: Date | string
+  }
+
+  export type LoyaltyAchievementUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    achievedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type LoyaltyAchievementUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    triggerId?: StringFieldUpdateOperationsInput | string
+    memberId?: StringFieldUpdateOperationsInput | string
+    achievedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AppAnnouncementCreateInput = {
+    id?: string
+    title: string
+    content: string
+    imageUrl?: string | null
+    linkUrl?: string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AppAnnouncementUncheckedCreateInput = {
+    id?: string
+    title: string
+    content: string
+    imageUrl?: string | null
+    linkUrl?: string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AppAnnouncementUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    linkUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AppAnnouncementUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    linkUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AppAnnouncementCreateManyInput = {
+    id?: string
+    title: string
+    content: string
+    imageUrl?: string | null
+    linkUrl?: string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AppAnnouncementUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    linkUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AppAnnouncementUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    linkUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type StringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[]
@@ -32607,6 +36664,12 @@ export namespace Prisma {
     none?: CouponUsageWhereInput
   }
 
+  export type LoyaltyAchievementListRelationFilter = {
+    every?: LoyaltyAchievementWhereInput
+    some?: LoyaltyAchievementWhereInput
+    none?: LoyaltyAchievementWhereInput
+  }
+
   export type MemberMembershipOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -32636,6 +36699,10 @@ export namespace Prisma {
   }
 
   export type CouponUsageOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type LoyaltyAchievementOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -33724,6 +37791,118 @@ export namespace Prisma {
     discountAmount?: SortOrder
   }
 
+  export type LoyaltyTriggerCountOrderByAggregateInput = {
+    id?: SortOrder
+    title?: SortOrder
+    description?: SortOrder
+    targetBookingsCount?: SortOrder
+    rewardAmount?: SortOrder
+    rewardPoints?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type LoyaltyTriggerAvgOrderByAggregateInput = {
+    targetBookingsCount?: SortOrder
+    rewardAmount?: SortOrder
+    rewardPoints?: SortOrder
+  }
+
+  export type LoyaltyTriggerMaxOrderByAggregateInput = {
+    id?: SortOrder
+    title?: SortOrder
+    description?: SortOrder
+    targetBookingsCount?: SortOrder
+    rewardAmount?: SortOrder
+    rewardPoints?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type LoyaltyTriggerMinOrderByAggregateInput = {
+    id?: SortOrder
+    title?: SortOrder
+    description?: SortOrder
+    targetBookingsCount?: SortOrder
+    rewardAmount?: SortOrder
+    rewardPoints?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type LoyaltyTriggerSumOrderByAggregateInput = {
+    targetBookingsCount?: SortOrder
+    rewardAmount?: SortOrder
+    rewardPoints?: SortOrder
+  }
+
+  export type LoyaltyTriggerScalarRelationFilter = {
+    is?: LoyaltyTriggerWhereInput
+    isNot?: LoyaltyTriggerWhereInput
+  }
+
+  export type LoyaltyAchievementTriggerIdMemberIdCompoundUniqueInput = {
+    triggerId: string
+    memberId: string
+  }
+
+  export type LoyaltyAchievementCountOrderByAggregateInput = {
+    id?: SortOrder
+    triggerId?: SortOrder
+    memberId?: SortOrder
+    achievedAt?: SortOrder
+  }
+
+  export type LoyaltyAchievementMaxOrderByAggregateInput = {
+    id?: SortOrder
+    triggerId?: SortOrder
+    memberId?: SortOrder
+    achievedAt?: SortOrder
+  }
+
+  export type LoyaltyAchievementMinOrderByAggregateInput = {
+    id?: SortOrder
+    triggerId?: SortOrder
+    memberId?: SortOrder
+    achievedAt?: SortOrder
+  }
+
+  export type AppAnnouncementCountOrderByAggregateInput = {
+    id?: SortOrder
+    title?: SortOrder
+    content?: SortOrder
+    imageUrl?: SortOrder
+    linkUrl?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type AppAnnouncementMaxOrderByAggregateInput = {
+    id?: SortOrder
+    title?: SortOrder
+    content?: SortOrder
+    imageUrl?: SortOrder
+    linkUrl?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type AppAnnouncementMinOrderByAggregateInput = {
+    id?: SortOrder
+    title?: SortOrder
+    content?: SortOrder
+    imageUrl?: SortOrder
+    linkUrl?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
   export type StringFieldUpdateOperationsInput = {
     set?: string
   }
@@ -33792,6 +37971,13 @@ export namespace Prisma {
     connect?: CouponUsageWhereUniqueInput | CouponUsageWhereUniqueInput[]
   }
 
+  export type LoyaltyAchievementCreateNestedManyWithoutMemberInput = {
+    create?: XOR<LoyaltyAchievementCreateWithoutMemberInput, LoyaltyAchievementUncheckedCreateWithoutMemberInput> | LoyaltyAchievementCreateWithoutMemberInput[] | LoyaltyAchievementUncheckedCreateWithoutMemberInput[]
+    connectOrCreate?: LoyaltyAchievementCreateOrConnectWithoutMemberInput | LoyaltyAchievementCreateOrConnectWithoutMemberInput[]
+    createMany?: LoyaltyAchievementCreateManyMemberInputEnvelope
+    connect?: LoyaltyAchievementWhereUniqueInput | LoyaltyAchievementWhereUniqueInput[]
+  }
+
   export type MemberMembershipUncheckedCreateNestedManyWithoutMemberInput = {
     create?: XOR<MemberMembershipCreateWithoutMemberInput, MemberMembershipUncheckedCreateWithoutMemberInput> | MemberMembershipCreateWithoutMemberInput[] | MemberMembershipUncheckedCreateWithoutMemberInput[]
     connectOrCreate?: MemberMembershipCreateOrConnectWithoutMemberInput | MemberMembershipCreateOrConnectWithoutMemberInput[]
@@ -33846,6 +38032,13 @@ export namespace Prisma {
     connectOrCreate?: CouponUsageCreateOrConnectWithoutMemberInput | CouponUsageCreateOrConnectWithoutMemberInput[]
     createMany?: CouponUsageCreateManyMemberInputEnvelope
     connect?: CouponUsageWhereUniqueInput | CouponUsageWhereUniqueInput[]
+  }
+
+  export type LoyaltyAchievementUncheckedCreateNestedManyWithoutMemberInput = {
+    create?: XOR<LoyaltyAchievementCreateWithoutMemberInput, LoyaltyAchievementUncheckedCreateWithoutMemberInput> | LoyaltyAchievementCreateWithoutMemberInput[] | LoyaltyAchievementUncheckedCreateWithoutMemberInput[]
+    connectOrCreate?: LoyaltyAchievementCreateOrConnectWithoutMemberInput | LoyaltyAchievementCreateOrConnectWithoutMemberInput[]
+    createMany?: LoyaltyAchievementCreateManyMemberInputEnvelope
+    connect?: LoyaltyAchievementWhereUniqueInput | LoyaltyAchievementWhereUniqueInput[]
   }
 
   export type NullableDateTimeFieldUpdateOperationsInput = {
@@ -33980,6 +38173,20 @@ export namespace Prisma {
     deleteMany?: CouponUsageScalarWhereInput | CouponUsageScalarWhereInput[]
   }
 
+  export type LoyaltyAchievementUpdateManyWithoutMemberNestedInput = {
+    create?: XOR<LoyaltyAchievementCreateWithoutMemberInput, LoyaltyAchievementUncheckedCreateWithoutMemberInput> | LoyaltyAchievementCreateWithoutMemberInput[] | LoyaltyAchievementUncheckedCreateWithoutMemberInput[]
+    connectOrCreate?: LoyaltyAchievementCreateOrConnectWithoutMemberInput | LoyaltyAchievementCreateOrConnectWithoutMemberInput[]
+    upsert?: LoyaltyAchievementUpsertWithWhereUniqueWithoutMemberInput | LoyaltyAchievementUpsertWithWhereUniqueWithoutMemberInput[]
+    createMany?: LoyaltyAchievementCreateManyMemberInputEnvelope
+    set?: LoyaltyAchievementWhereUniqueInput | LoyaltyAchievementWhereUniqueInput[]
+    disconnect?: LoyaltyAchievementWhereUniqueInput | LoyaltyAchievementWhereUniqueInput[]
+    delete?: LoyaltyAchievementWhereUniqueInput | LoyaltyAchievementWhereUniqueInput[]
+    connect?: LoyaltyAchievementWhereUniqueInput | LoyaltyAchievementWhereUniqueInput[]
+    update?: LoyaltyAchievementUpdateWithWhereUniqueWithoutMemberInput | LoyaltyAchievementUpdateWithWhereUniqueWithoutMemberInput[]
+    updateMany?: LoyaltyAchievementUpdateManyWithWhereWithoutMemberInput | LoyaltyAchievementUpdateManyWithWhereWithoutMemberInput[]
+    deleteMany?: LoyaltyAchievementScalarWhereInput | LoyaltyAchievementScalarWhereInput[]
+  }
+
   export type MemberMembershipUncheckedUpdateManyWithoutMemberNestedInput = {
     create?: XOR<MemberMembershipCreateWithoutMemberInput, MemberMembershipUncheckedCreateWithoutMemberInput> | MemberMembershipCreateWithoutMemberInput[] | MemberMembershipUncheckedCreateWithoutMemberInput[]
     connectOrCreate?: MemberMembershipCreateOrConnectWithoutMemberInput | MemberMembershipCreateOrConnectWithoutMemberInput[]
@@ -34090,6 +38297,20 @@ export namespace Prisma {
     update?: CouponUsageUpdateWithWhereUniqueWithoutMemberInput | CouponUsageUpdateWithWhereUniqueWithoutMemberInput[]
     updateMany?: CouponUsageUpdateManyWithWhereWithoutMemberInput | CouponUsageUpdateManyWithWhereWithoutMemberInput[]
     deleteMany?: CouponUsageScalarWhereInput | CouponUsageScalarWhereInput[]
+  }
+
+  export type LoyaltyAchievementUncheckedUpdateManyWithoutMemberNestedInput = {
+    create?: XOR<LoyaltyAchievementCreateWithoutMemberInput, LoyaltyAchievementUncheckedCreateWithoutMemberInput> | LoyaltyAchievementCreateWithoutMemberInput[] | LoyaltyAchievementUncheckedCreateWithoutMemberInput[]
+    connectOrCreate?: LoyaltyAchievementCreateOrConnectWithoutMemberInput | LoyaltyAchievementCreateOrConnectWithoutMemberInput[]
+    upsert?: LoyaltyAchievementUpsertWithWhereUniqueWithoutMemberInput | LoyaltyAchievementUpsertWithWhereUniqueWithoutMemberInput[]
+    createMany?: LoyaltyAchievementCreateManyMemberInputEnvelope
+    set?: LoyaltyAchievementWhereUniqueInput | LoyaltyAchievementWhereUniqueInput[]
+    disconnect?: LoyaltyAchievementWhereUniqueInput | LoyaltyAchievementWhereUniqueInput[]
+    delete?: LoyaltyAchievementWhereUniqueInput | LoyaltyAchievementWhereUniqueInput[]
+    connect?: LoyaltyAchievementWhereUniqueInput | LoyaltyAchievementWhereUniqueInput[]
+    update?: LoyaltyAchievementUpdateWithWhereUniqueWithoutMemberInput | LoyaltyAchievementUpdateWithWhereUniqueWithoutMemberInput[]
+    updateMany?: LoyaltyAchievementUpdateManyWithWhereWithoutMemberInput | LoyaltyAchievementUpdateManyWithWhereWithoutMemberInput[]
+    deleteMany?: LoyaltyAchievementScalarWhereInput | LoyaltyAchievementScalarWhereInput[]
   }
 
   export type MemberCreateNestedOneWithoutLoyaltyHistoryInput = {
@@ -35184,6 +39405,76 @@ export namespace Prisma {
     update?: XOR<XOR<BookingUpdateToOneWithWhereWithoutCouponUsagesInput, BookingUpdateWithoutCouponUsagesInput>, BookingUncheckedUpdateWithoutCouponUsagesInput>
   }
 
+  export type LoyaltyAchievementCreateNestedManyWithoutTriggerInput = {
+    create?: XOR<LoyaltyAchievementCreateWithoutTriggerInput, LoyaltyAchievementUncheckedCreateWithoutTriggerInput> | LoyaltyAchievementCreateWithoutTriggerInput[] | LoyaltyAchievementUncheckedCreateWithoutTriggerInput[]
+    connectOrCreate?: LoyaltyAchievementCreateOrConnectWithoutTriggerInput | LoyaltyAchievementCreateOrConnectWithoutTriggerInput[]
+    createMany?: LoyaltyAchievementCreateManyTriggerInputEnvelope
+    connect?: LoyaltyAchievementWhereUniqueInput | LoyaltyAchievementWhereUniqueInput[]
+  }
+
+  export type LoyaltyAchievementUncheckedCreateNestedManyWithoutTriggerInput = {
+    create?: XOR<LoyaltyAchievementCreateWithoutTriggerInput, LoyaltyAchievementUncheckedCreateWithoutTriggerInput> | LoyaltyAchievementCreateWithoutTriggerInput[] | LoyaltyAchievementUncheckedCreateWithoutTriggerInput[]
+    connectOrCreate?: LoyaltyAchievementCreateOrConnectWithoutTriggerInput | LoyaltyAchievementCreateOrConnectWithoutTriggerInput[]
+    createMany?: LoyaltyAchievementCreateManyTriggerInputEnvelope
+    connect?: LoyaltyAchievementWhereUniqueInput | LoyaltyAchievementWhereUniqueInput[]
+  }
+
+  export type LoyaltyAchievementUpdateManyWithoutTriggerNestedInput = {
+    create?: XOR<LoyaltyAchievementCreateWithoutTriggerInput, LoyaltyAchievementUncheckedCreateWithoutTriggerInput> | LoyaltyAchievementCreateWithoutTriggerInput[] | LoyaltyAchievementUncheckedCreateWithoutTriggerInput[]
+    connectOrCreate?: LoyaltyAchievementCreateOrConnectWithoutTriggerInput | LoyaltyAchievementCreateOrConnectWithoutTriggerInput[]
+    upsert?: LoyaltyAchievementUpsertWithWhereUniqueWithoutTriggerInput | LoyaltyAchievementUpsertWithWhereUniqueWithoutTriggerInput[]
+    createMany?: LoyaltyAchievementCreateManyTriggerInputEnvelope
+    set?: LoyaltyAchievementWhereUniqueInput | LoyaltyAchievementWhereUniqueInput[]
+    disconnect?: LoyaltyAchievementWhereUniqueInput | LoyaltyAchievementWhereUniqueInput[]
+    delete?: LoyaltyAchievementWhereUniqueInput | LoyaltyAchievementWhereUniqueInput[]
+    connect?: LoyaltyAchievementWhereUniqueInput | LoyaltyAchievementWhereUniqueInput[]
+    update?: LoyaltyAchievementUpdateWithWhereUniqueWithoutTriggerInput | LoyaltyAchievementUpdateWithWhereUniqueWithoutTriggerInput[]
+    updateMany?: LoyaltyAchievementUpdateManyWithWhereWithoutTriggerInput | LoyaltyAchievementUpdateManyWithWhereWithoutTriggerInput[]
+    deleteMany?: LoyaltyAchievementScalarWhereInput | LoyaltyAchievementScalarWhereInput[]
+  }
+
+  export type LoyaltyAchievementUncheckedUpdateManyWithoutTriggerNestedInput = {
+    create?: XOR<LoyaltyAchievementCreateWithoutTriggerInput, LoyaltyAchievementUncheckedCreateWithoutTriggerInput> | LoyaltyAchievementCreateWithoutTriggerInput[] | LoyaltyAchievementUncheckedCreateWithoutTriggerInput[]
+    connectOrCreate?: LoyaltyAchievementCreateOrConnectWithoutTriggerInput | LoyaltyAchievementCreateOrConnectWithoutTriggerInput[]
+    upsert?: LoyaltyAchievementUpsertWithWhereUniqueWithoutTriggerInput | LoyaltyAchievementUpsertWithWhereUniqueWithoutTriggerInput[]
+    createMany?: LoyaltyAchievementCreateManyTriggerInputEnvelope
+    set?: LoyaltyAchievementWhereUniqueInput | LoyaltyAchievementWhereUniqueInput[]
+    disconnect?: LoyaltyAchievementWhereUniqueInput | LoyaltyAchievementWhereUniqueInput[]
+    delete?: LoyaltyAchievementWhereUniqueInput | LoyaltyAchievementWhereUniqueInput[]
+    connect?: LoyaltyAchievementWhereUniqueInput | LoyaltyAchievementWhereUniqueInput[]
+    update?: LoyaltyAchievementUpdateWithWhereUniqueWithoutTriggerInput | LoyaltyAchievementUpdateWithWhereUniqueWithoutTriggerInput[]
+    updateMany?: LoyaltyAchievementUpdateManyWithWhereWithoutTriggerInput | LoyaltyAchievementUpdateManyWithWhereWithoutTriggerInput[]
+    deleteMany?: LoyaltyAchievementScalarWhereInput | LoyaltyAchievementScalarWhereInput[]
+  }
+
+  export type LoyaltyTriggerCreateNestedOneWithoutAchievementsInput = {
+    create?: XOR<LoyaltyTriggerCreateWithoutAchievementsInput, LoyaltyTriggerUncheckedCreateWithoutAchievementsInput>
+    connectOrCreate?: LoyaltyTriggerCreateOrConnectWithoutAchievementsInput
+    connect?: LoyaltyTriggerWhereUniqueInput
+  }
+
+  export type MemberCreateNestedOneWithoutLoyaltyAchievementsInput = {
+    create?: XOR<MemberCreateWithoutLoyaltyAchievementsInput, MemberUncheckedCreateWithoutLoyaltyAchievementsInput>
+    connectOrCreate?: MemberCreateOrConnectWithoutLoyaltyAchievementsInput
+    connect?: MemberWhereUniqueInput
+  }
+
+  export type LoyaltyTriggerUpdateOneRequiredWithoutAchievementsNestedInput = {
+    create?: XOR<LoyaltyTriggerCreateWithoutAchievementsInput, LoyaltyTriggerUncheckedCreateWithoutAchievementsInput>
+    connectOrCreate?: LoyaltyTriggerCreateOrConnectWithoutAchievementsInput
+    upsert?: LoyaltyTriggerUpsertWithoutAchievementsInput
+    connect?: LoyaltyTriggerWhereUniqueInput
+    update?: XOR<XOR<LoyaltyTriggerUpdateToOneWithWhereWithoutAchievementsInput, LoyaltyTriggerUpdateWithoutAchievementsInput>, LoyaltyTriggerUncheckedUpdateWithoutAchievementsInput>
+  }
+
+  export type MemberUpdateOneRequiredWithoutLoyaltyAchievementsNestedInput = {
+    create?: XOR<MemberCreateWithoutLoyaltyAchievementsInput, MemberUncheckedCreateWithoutLoyaltyAchievementsInput>
+    connectOrCreate?: MemberCreateOrConnectWithoutLoyaltyAchievementsInput
+    upsert?: MemberUpsertWithoutLoyaltyAchievementsInput
+    connect?: MemberWhereUniqueInput
+    update?: XOR<XOR<MemberUpdateToOneWithWhereWithoutLoyaltyAchievementsInput, MemberUpdateWithoutLoyaltyAchievementsInput>, MemberUncheckedUpdateWithoutLoyaltyAchievementsInput>
+  }
+
   export type NestedStringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[]
@@ -35659,6 +39950,27 @@ export namespace Prisma {
     data: CouponUsageCreateManyMemberInput | CouponUsageCreateManyMemberInput[]
   }
 
+  export type LoyaltyAchievementCreateWithoutMemberInput = {
+    id?: string
+    achievedAt?: Date | string
+    trigger: LoyaltyTriggerCreateNestedOneWithoutAchievementsInput
+  }
+
+  export type LoyaltyAchievementUncheckedCreateWithoutMemberInput = {
+    id?: string
+    triggerId: string
+    achievedAt?: Date | string
+  }
+
+  export type LoyaltyAchievementCreateOrConnectWithoutMemberInput = {
+    where: LoyaltyAchievementWhereUniqueInput
+    create: XOR<LoyaltyAchievementCreateWithoutMemberInput, LoyaltyAchievementUncheckedCreateWithoutMemberInput>
+  }
+
+  export type LoyaltyAchievementCreateManyMemberInputEnvelope = {
+    data: LoyaltyAchievementCreateManyMemberInput | LoyaltyAchievementCreateManyMemberInput[]
+  }
+
   export type MemberMembershipUpsertWithWhereUniqueWithoutMemberInput = {
     where: MemberMembershipWhereUniqueInput
     update: XOR<MemberMembershipUpdateWithoutMemberInput, MemberMembershipUncheckedUpdateWithoutMemberInput>
@@ -35900,6 +40212,32 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"CouponUsage"> | Date | string
   }
 
+  export type LoyaltyAchievementUpsertWithWhereUniqueWithoutMemberInput = {
+    where: LoyaltyAchievementWhereUniqueInput
+    update: XOR<LoyaltyAchievementUpdateWithoutMemberInput, LoyaltyAchievementUncheckedUpdateWithoutMemberInput>
+    create: XOR<LoyaltyAchievementCreateWithoutMemberInput, LoyaltyAchievementUncheckedCreateWithoutMemberInput>
+  }
+
+  export type LoyaltyAchievementUpdateWithWhereUniqueWithoutMemberInput = {
+    where: LoyaltyAchievementWhereUniqueInput
+    data: XOR<LoyaltyAchievementUpdateWithoutMemberInput, LoyaltyAchievementUncheckedUpdateWithoutMemberInput>
+  }
+
+  export type LoyaltyAchievementUpdateManyWithWhereWithoutMemberInput = {
+    where: LoyaltyAchievementScalarWhereInput
+    data: XOR<LoyaltyAchievementUpdateManyMutationInput, LoyaltyAchievementUncheckedUpdateManyWithoutMemberInput>
+  }
+
+  export type LoyaltyAchievementScalarWhereInput = {
+    AND?: LoyaltyAchievementScalarWhereInput | LoyaltyAchievementScalarWhereInput[]
+    OR?: LoyaltyAchievementScalarWhereInput[]
+    NOT?: LoyaltyAchievementScalarWhereInput | LoyaltyAchievementScalarWhereInput[]
+    id?: StringFilter<"LoyaltyAchievement"> | string
+    triggerId?: StringFilter<"LoyaltyAchievement"> | string
+    memberId?: StringFilter<"LoyaltyAchievement"> | string
+    achievedAt?: DateTimeFilter<"LoyaltyAchievement"> | Date | string
+  }
+
   export type MemberCreateWithoutLoyaltyHistoryInput = {
     id?: string
     mobile: string
@@ -35918,6 +40256,7 @@ export namespace Prisma {
     walletTransactions?: WalletTransactionCreateNestedManyWithoutMemberInput
     couponAssignments?: CouponAssignmentCreateNestedManyWithoutMemberInput
     couponUsages?: CouponUsageCreateNestedManyWithoutMemberInput
+    loyaltyAchievements?: LoyaltyAchievementCreateNestedManyWithoutMemberInput
   }
 
   export type MemberUncheckedCreateWithoutLoyaltyHistoryInput = {
@@ -35938,6 +40277,7 @@ export namespace Prisma {
     walletTransactions?: WalletTransactionUncheckedCreateNestedManyWithoutMemberInput
     couponAssignments?: CouponAssignmentUncheckedCreateNestedManyWithoutMemberInput
     couponUsages?: CouponUsageUncheckedCreateNestedManyWithoutMemberInput
+    loyaltyAchievements?: LoyaltyAchievementUncheckedCreateNestedManyWithoutMemberInput
   }
 
   export type MemberCreateOrConnectWithoutLoyaltyHistoryInput = {
@@ -35974,6 +40314,7 @@ export namespace Prisma {
     walletTransactions?: WalletTransactionUpdateManyWithoutMemberNestedInput
     couponAssignments?: CouponAssignmentUpdateManyWithoutMemberNestedInput
     couponUsages?: CouponUsageUpdateManyWithoutMemberNestedInput
+    loyaltyAchievements?: LoyaltyAchievementUpdateManyWithoutMemberNestedInput
   }
 
   export type MemberUncheckedUpdateWithoutLoyaltyHistoryInput = {
@@ -35994,6 +40335,7 @@ export namespace Prisma {
     walletTransactions?: WalletTransactionUncheckedUpdateManyWithoutMemberNestedInput
     couponAssignments?: CouponAssignmentUncheckedUpdateManyWithoutMemberNestedInput
     couponUsages?: CouponUsageUncheckedUpdateManyWithoutMemberNestedInput
+    loyaltyAchievements?: LoyaltyAchievementUncheckedUpdateManyWithoutMemberNestedInput
   }
 
   export type TurfSportCreateWithoutSportInput = {
@@ -36902,6 +41244,7 @@ export namespace Prisma {
     walletTransactions?: WalletTransactionCreateNestedManyWithoutMemberInput
     couponAssignments?: CouponAssignmentCreateNestedManyWithoutMemberInput
     couponUsages?: CouponUsageCreateNestedManyWithoutMemberInput
+    loyaltyAchievements?: LoyaltyAchievementCreateNestedManyWithoutMemberInput
   }
 
   export type MemberUncheckedCreateWithoutMembershipsInput = {
@@ -36922,6 +41265,7 @@ export namespace Prisma {
     walletTransactions?: WalletTransactionUncheckedCreateNestedManyWithoutMemberInput
     couponAssignments?: CouponAssignmentUncheckedCreateNestedManyWithoutMemberInput
     couponUsages?: CouponUsageUncheckedCreateNestedManyWithoutMemberInput
+    loyaltyAchievements?: LoyaltyAchievementUncheckedCreateNestedManyWithoutMemberInput
   }
 
   export type MemberCreateOrConnectWithoutMembershipsInput = {
@@ -36995,6 +41339,7 @@ export namespace Prisma {
     walletTransactions?: WalletTransactionUpdateManyWithoutMemberNestedInput
     couponAssignments?: CouponAssignmentUpdateManyWithoutMemberNestedInput
     couponUsages?: CouponUsageUpdateManyWithoutMemberNestedInput
+    loyaltyAchievements?: LoyaltyAchievementUpdateManyWithoutMemberNestedInput
   }
 
   export type MemberUncheckedUpdateWithoutMembershipsInput = {
@@ -37015,6 +41360,7 @@ export namespace Prisma {
     walletTransactions?: WalletTransactionUncheckedUpdateManyWithoutMemberNestedInput
     couponAssignments?: CouponAssignmentUncheckedUpdateManyWithoutMemberNestedInput
     couponUsages?: CouponUsageUncheckedUpdateManyWithoutMemberNestedInput
+    loyaltyAchievements?: LoyaltyAchievementUncheckedUpdateManyWithoutMemberNestedInput
   }
 
   export type MembershipPlanUpsertWithoutMembershipsInput = {
@@ -37078,6 +41424,7 @@ export namespace Prisma {
     walletTransactions?: WalletTransactionCreateNestedManyWithoutMemberInput
     couponAssignments?: CouponAssignmentCreateNestedManyWithoutMemberInput
     couponUsages?: CouponUsageCreateNestedManyWithoutMemberInput
+    loyaltyAchievements?: LoyaltyAchievementCreateNestedManyWithoutMemberInput
   }
 
   export type MemberUncheckedCreateWithoutAttendancesInput = {
@@ -37098,6 +41445,7 @@ export namespace Prisma {
     walletTransactions?: WalletTransactionUncheckedCreateNestedManyWithoutMemberInput
     couponAssignments?: CouponAssignmentUncheckedCreateNestedManyWithoutMemberInput
     couponUsages?: CouponUsageUncheckedCreateNestedManyWithoutMemberInput
+    loyaltyAchievements?: LoyaltyAchievementUncheckedCreateNestedManyWithoutMemberInput
   }
 
   export type MemberCreateOrConnectWithoutAttendancesInput = {
@@ -37202,6 +41550,7 @@ export namespace Prisma {
     walletTransactions?: WalletTransactionUpdateManyWithoutMemberNestedInput
     couponAssignments?: CouponAssignmentUpdateManyWithoutMemberNestedInput
     couponUsages?: CouponUsageUpdateManyWithoutMemberNestedInput
+    loyaltyAchievements?: LoyaltyAchievementUpdateManyWithoutMemberNestedInput
   }
 
   export type MemberUncheckedUpdateWithoutAttendancesInput = {
@@ -37222,6 +41571,7 @@ export namespace Prisma {
     walletTransactions?: WalletTransactionUncheckedUpdateManyWithoutMemberNestedInput
     couponAssignments?: CouponAssignmentUncheckedUpdateManyWithoutMemberNestedInput
     couponUsages?: CouponUsageUncheckedUpdateManyWithoutMemberNestedInput
+    loyaltyAchievements?: LoyaltyAchievementUncheckedUpdateManyWithoutMemberNestedInput
   }
 
   export type SportUpsertWithoutAttendancesInput = {
@@ -37359,6 +41709,7 @@ export namespace Prisma {
     walletTransactions?: WalletTransactionCreateNestedManyWithoutMemberInput
     couponAssignments?: CouponAssignmentCreateNestedManyWithoutMemberInput
     couponUsages?: CouponUsageCreateNestedManyWithoutMemberInput
+    loyaltyAchievements?: LoyaltyAchievementCreateNestedManyWithoutMemberInput
   }
 
   export type MemberUncheckedCreateWithoutBookingsInput = {
@@ -37379,6 +41730,7 @@ export namespace Prisma {
     walletTransactions?: WalletTransactionUncheckedCreateNestedManyWithoutMemberInput
     couponAssignments?: CouponAssignmentUncheckedCreateNestedManyWithoutMemberInput
     couponUsages?: CouponUsageUncheckedCreateNestedManyWithoutMemberInput
+    loyaltyAchievements?: LoyaltyAchievementUncheckedCreateNestedManyWithoutMemberInput
   }
 
   export type MemberCreateOrConnectWithoutBookingsInput = {
@@ -37564,6 +41916,7 @@ export namespace Prisma {
     walletTransactions?: WalletTransactionUpdateManyWithoutMemberNestedInput
     couponAssignments?: CouponAssignmentUpdateManyWithoutMemberNestedInput
     couponUsages?: CouponUsageUpdateManyWithoutMemberNestedInput
+    loyaltyAchievements?: LoyaltyAchievementUpdateManyWithoutMemberNestedInput
   }
 
   export type MemberUncheckedUpdateWithoutBookingsInput = {
@@ -37584,6 +41937,7 @@ export namespace Prisma {
     walletTransactions?: WalletTransactionUncheckedUpdateManyWithoutMemberNestedInput
     couponAssignments?: CouponAssignmentUncheckedUpdateManyWithoutMemberNestedInput
     couponUsages?: CouponUsageUncheckedUpdateManyWithoutMemberNestedInput
+    loyaltyAchievements?: LoyaltyAchievementUncheckedUpdateManyWithoutMemberNestedInput
   }
 
   export type SportUpsertWithoutBookingsInput = {
@@ -38085,6 +42439,7 @@ export namespace Prisma {
     walletTransactions?: WalletTransactionCreateNestedManyWithoutMemberInput
     couponAssignments?: CouponAssignmentCreateNestedManyWithoutMemberInput
     couponUsages?: CouponUsageCreateNestedManyWithoutMemberInput
+    loyaltyAchievements?: LoyaltyAchievementCreateNestedManyWithoutMemberInput
   }
 
   export type MemberUncheckedCreateWithoutTournamentRegistrationsInput = {
@@ -38105,6 +42460,7 @@ export namespace Prisma {
     walletTransactions?: WalletTransactionUncheckedCreateNestedManyWithoutMemberInput
     couponAssignments?: CouponAssignmentUncheckedCreateNestedManyWithoutMemberInput
     couponUsages?: CouponUsageUncheckedCreateNestedManyWithoutMemberInput
+    loyaltyAchievements?: LoyaltyAchievementUncheckedCreateNestedManyWithoutMemberInput
   }
 
   export type MemberCreateOrConnectWithoutTournamentRegistrationsInput = {
@@ -38227,6 +42583,7 @@ export namespace Prisma {
     walletTransactions?: WalletTransactionUpdateManyWithoutMemberNestedInput
     couponAssignments?: CouponAssignmentUpdateManyWithoutMemberNestedInput
     couponUsages?: CouponUsageUpdateManyWithoutMemberNestedInput
+    loyaltyAchievements?: LoyaltyAchievementUpdateManyWithoutMemberNestedInput
   }
 
   export type MemberUncheckedUpdateWithoutTournamentRegistrationsInput = {
@@ -38247,6 +42604,7 @@ export namespace Prisma {
     walletTransactions?: WalletTransactionUncheckedUpdateManyWithoutMemberNestedInput
     couponAssignments?: CouponAssignmentUncheckedUpdateManyWithoutMemberNestedInput
     couponUsages?: CouponUsageUncheckedUpdateManyWithoutMemberNestedInput
+    loyaltyAchievements?: LoyaltyAchievementUncheckedUpdateManyWithoutMemberNestedInput
   }
 
   export type TournamentPlayerUpsertWithWhereUniqueWithoutRegistrationInput = {
@@ -38364,6 +42722,7 @@ export namespace Prisma {
     tournamentRegistrations?: TournamentRegistrationCreateNestedManyWithoutRegisteredByInput
     couponAssignments?: CouponAssignmentCreateNestedManyWithoutMemberInput
     couponUsages?: CouponUsageCreateNestedManyWithoutMemberInput
+    loyaltyAchievements?: LoyaltyAchievementCreateNestedManyWithoutMemberInput
   }
 
   export type MemberUncheckedCreateWithoutWalletTransactionsInput = {
@@ -38384,6 +42743,7 @@ export namespace Prisma {
     tournamentRegistrations?: TournamentRegistrationUncheckedCreateNestedManyWithoutRegisteredByInput
     couponAssignments?: CouponAssignmentUncheckedCreateNestedManyWithoutMemberInput
     couponUsages?: CouponUsageUncheckedCreateNestedManyWithoutMemberInput
+    loyaltyAchievements?: LoyaltyAchievementUncheckedCreateNestedManyWithoutMemberInput
   }
 
   export type MemberCreateOrConnectWithoutWalletTransactionsInput = {
@@ -38420,6 +42780,7 @@ export namespace Prisma {
     tournamentRegistrations?: TournamentRegistrationUpdateManyWithoutRegisteredByNestedInput
     couponAssignments?: CouponAssignmentUpdateManyWithoutMemberNestedInput
     couponUsages?: CouponUsageUpdateManyWithoutMemberNestedInput
+    loyaltyAchievements?: LoyaltyAchievementUpdateManyWithoutMemberNestedInput
   }
 
   export type MemberUncheckedUpdateWithoutWalletTransactionsInput = {
@@ -38440,6 +42801,7 @@ export namespace Prisma {
     tournamentRegistrations?: TournamentRegistrationUncheckedUpdateManyWithoutRegisteredByNestedInput
     couponAssignments?: CouponAssignmentUncheckedUpdateManyWithoutMemberNestedInput
     couponUsages?: CouponUsageUncheckedUpdateManyWithoutMemberNestedInput
+    loyaltyAchievements?: LoyaltyAchievementUncheckedUpdateManyWithoutMemberNestedInput
   }
 
   export type CouponUsageCreateWithoutCouponInput = {
@@ -38581,6 +42943,7 @@ export namespace Prisma {
     tournamentRegistrations?: TournamentRegistrationCreateNestedManyWithoutRegisteredByInput
     walletTransactions?: WalletTransactionCreateNestedManyWithoutMemberInput
     couponUsages?: CouponUsageCreateNestedManyWithoutMemberInput
+    loyaltyAchievements?: LoyaltyAchievementCreateNestedManyWithoutMemberInput
   }
 
   export type MemberUncheckedCreateWithoutCouponAssignmentsInput = {
@@ -38601,6 +42964,7 @@ export namespace Prisma {
     tournamentRegistrations?: TournamentRegistrationUncheckedCreateNestedManyWithoutRegisteredByInput
     walletTransactions?: WalletTransactionUncheckedCreateNestedManyWithoutMemberInput
     couponUsages?: CouponUsageUncheckedCreateNestedManyWithoutMemberInput
+    loyaltyAchievements?: LoyaltyAchievementUncheckedCreateNestedManyWithoutMemberInput
   }
 
   export type MemberCreateOrConnectWithoutCouponAssignmentsInput = {
@@ -38686,6 +43050,7 @@ export namespace Prisma {
     tournamentRegistrations?: TournamentRegistrationUpdateManyWithoutRegisteredByNestedInput
     walletTransactions?: WalletTransactionUpdateManyWithoutMemberNestedInput
     couponUsages?: CouponUsageUpdateManyWithoutMemberNestedInput
+    loyaltyAchievements?: LoyaltyAchievementUpdateManyWithoutMemberNestedInput
   }
 
   export type MemberUncheckedUpdateWithoutCouponAssignmentsInput = {
@@ -38706,6 +43071,7 @@ export namespace Prisma {
     tournamentRegistrations?: TournamentRegistrationUncheckedUpdateManyWithoutRegisteredByNestedInput
     walletTransactions?: WalletTransactionUncheckedUpdateManyWithoutMemberNestedInput
     couponUsages?: CouponUsageUncheckedUpdateManyWithoutMemberNestedInput
+    loyaltyAchievements?: LoyaltyAchievementUncheckedUpdateManyWithoutMemberNestedInput
   }
 
   export type CouponCreateWithoutUsagesInput = {
@@ -38769,6 +43135,7 @@ export namespace Prisma {
     tournamentRegistrations?: TournamentRegistrationCreateNestedManyWithoutRegisteredByInput
     walletTransactions?: WalletTransactionCreateNestedManyWithoutMemberInput
     couponAssignments?: CouponAssignmentCreateNestedManyWithoutMemberInput
+    loyaltyAchievements?: LoyaltyAchievementCreateNestedManyWithoutMemberInput
   }
 
   export type MemberUncheckedCreateWithoutCouponUsagesInput = {
@@ -38789,6 +43156,7 @@ export namespace Prisma {
     tournamentRegistrations?: TournamentRegistrationUncheckedCreateNestedManyWithoutRegisteredByInput
     walletTransactions?: WalletTransactionUncheckedCreateNestedManyWithoutMemberInput
     couponAssignments?: CouponAssignmentUncheckedCreateNestedManyWithoutMemberInput
+    loyaltyAchievements?: LoyaltyAchievementUncheckedCreateNestedManyWithoutMemberInput
   }
 
   export type MemberCreateOrConnectWithoutCouponUsagesInput = {
@@ -38921,6 +43289,7 @@ export namespace Prisma {
     tournamentRegistrations?: TournamentRegistrationUpdateManyWithoutRegisteredByNestedInput
     walletTransactions?: WalletTransactionUpdateManyWithoutMemberNestedInput
     couponAssignments?: CouponAssignmentUpdateManyWithoutMemberNestedInput
+    loyaltyAchievements?: LoyaltyAchievementUpdateManyWithoutMemberNestedInput
   }
 
   export type MemberUncheckedUpdateWithoutCouponUsagesInput = {
@@ -38941,6 +43310,7 @@ export namespace Prisma {
     tournamentRegistrations?: TournamentRegistrationUncheckedUpdateManyWithoutRegisteredByNestedInput
     walletTransactions?: WalletTransactionUncheckedUpdateManyWithoutMemberNestedInput
     couponAssignments?: CouponAssignmentUncheckedUpdateManyWithoutMemberNestedInput
+    loyaltyAchievements?: LoyaltyAchievementUncheckedUpdateManyWithoutMemberNestedInput
   }
 
   export type BookingUpsertWithoutCouponUsagesInput = {
@@ -38994,6 +43364,207 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     payments?: PaymentUncheckedUpdateManyWithoutBookingNestedInput
     tickets?: TicketUncheckedUpdateManyWithoutBookingNestedInput
+  }
+
+  export type LoyaltyAchievementCreateWithoutTriggerInput = {
+    id?: string
+    achievedAt?: Date | string
+    member: MemberCreateNestedOneWithoutLoyaltyAchievementsInput
+  }
+
+  export type LoyaltyAchievementUncheckedCreateWithoutTriggerInput = {
+    id?: string
+    memberId: string
+    achievedAt?: Date | string
+  }
+
+  export type LoyaltyAchievementCreateOrConnectWithoutTriggerInput = {
+    where: LoyaltyAchievementWhereUniqueInput
+    create: XOR<LoyaltyAchievementCreateWithoutTriggerInput, LoyaltyAchievementUncheckedCreateWithoutTriggerInput>
+  }
+
+  export type LoyaltyAchievementCreateManyTriggerInputEnvelope = {
+    data: LoyaltyAchievementCreateManyTriggerInput | LoyaltyAchievementCreateManyTriggerInput[]
+  }
+
+  export type LoyaltyAchievementUpsertWithWhereUniqueWithoutTriggerInput = {
+    where: LoyaltyAchievementWhereUniqueInput
+    update: XOR<LoyaltyAchievementUpdateWithoutTriggerInput, LoyaltyAchievementUncheckedUpdateWithoutTriggerInput>
+    create: XOR<LoyaltyAchievementCreateWithoutTriggerInput, LoyaltyAchievementUncheckedCreateWithoutTriggerInput>
+  }
+
+  export type LoyaltyAchievementUpdateWithWhereUniqueWithoutTriggerInput = {
+    where: LoyaltyAchievementWhereUniqueInput
+    data: XOR<LoyaltyAchievementUpdateWithoutTriggerInput, LoyaltyAchievementUncheckedUpdateWithoutTriggerInput>
+  }
+
+  export type LoyaltyAchievementUpdateManyWithWhereWithoutTriggerInput = {
+    where: LoyaltyAchievementScalarWhereInput
+    data: XOR<LoyaltyAchievementUpdateManyMutationInput, LoyaltyAchievementUncheckedUpdateManyWithoutTriggerInput>
+  }
+
+  export type LoyaltyTriggerCreateWithoutAchievementsInput = {
+    id?: string
+    title: string
+    description?: string | null
+    targetBookingsCount: number
+    rewardAmount: number
+    rewardPoints?: number
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type LoyaltyTriggerUncheckedCreateWithoutAchievementsInput = {
+    id?: string
+    title: string
+    description?: string | null
+    targetBookingsCount: number
+    rewardAmount: number
+    rewardPoints?: number
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type LoyaltyTriggerCreateOrConnectWithoutAchievementsInput = {
+    where: LoyaltyTriggerWhereUniqueInput
+    create: XOR<LoyaltyTriggerCreateWithoutAchievementsInput, LoyaltyTriggerUncheckedCreateWithoutAchievementsInput>
+  }
+
+  export type MemberCreateWithoutLoyaltyAchievementsInput = {
+    id?: string
+    mobile: string
+    name: string
+    email?: string | null
+    dateOfBirth?: Date | string | null
+    loyaltyPoints?: number
+    walletBalance?: number
+    joinDate?: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    memberships?: MemberMembershipCreateNestedManyWithoutMemberInput
+    attendances?: AttendanceCreateNestedManyWithoutMemberInput
+    bookings?: BookingCreateNestedManyWithoutMemberInput
+    loyaltyHistory?: LoyaltyHistoryCreateNestedManyWithoutMemberInput
+    tournamentRegistrations?: TournamentRegistrationCreateNestedManyWithoutRegisteredByInput
+    walletTransactions?: WalletTransactionCreateNestedManyWithoutMemberInput
+    couponAssignments?: CouponAssignmentCreateNestedManyWithoutMemberInput
+    couponUsages?: CouponUsageCreateNestedManyWithoutMemberInput
+  }
+
+  export type MemberUncheckedCreateWithoutLoyaltyAchievementsInput = {
+    id?: string
+    mobile: string
+    name: string
+    email?: string | null
+    dateOfBirth?: Date | string | null
+    loyaltyPoints?: number
+    walletBalance?: number
+    joinDate?: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    memberships?: MemberMembershipUncheckedCreateNestedManyWithoutMemberInput
+    attendances?: AttendanceUncheckedCreateNestedManyWithoutMemberInput
+    bookings?: BookingUncheckedCreateNestedManyWithoutMemberInput
+    loyaltyHistory?: LoyaltyHistoryUncheckedCreateNestedManyWithoutMemberInput
+    tournamentRegistrations?: TournamentRegistrationUncheckedCreateNestedManyWithoutRegisteredByInput
+    walletTransactions?: WalletTransactionUncheckedCreateNestedManyWithoutMemberInput
+    couponAssignments?: CouponAssignmentUncheckedCreateNestedManyWithoutMemberInput
+    couponUsages?: CouponUsageUncheckedCreateNestedManyWithoutMemberInput
+  }
+
+  export type MemberCreateOrConnectWithoutLoyaltyAchievementsInput = {
+    where: MemberWhereUniqueInput
+    create: XOR<MemberCreateWithoutLoyaltyAchievementsInput, MemberUncheckedCreateWithoutLoyaltyAchievementsInput>
+  }
+
+  export type LoyaltyTriggerUpsertWithoutAchievementsInput = {
+    update: XOR<LoyaltyTriggerUpdateWithoutAchievementsInput, LoyaltyTriggerUncheckedUpdateWithoutAchievementsInput>
+    create: XOR<LoyaltyTriggerCreateWithoutAchievementsInput, LoyaltyTriggerUncheckedCreateWithoutAchievementsInput>
+    where?: LoyaltyTriggerWhereInput
+  }
+
+  export type LoyaltyTriggerUpdateToOneWithWhereWithoutAchievementsInput = {
+    where?: LoyaltyTriggerWhereInput
+    data: XOR<LoyaltyTriggerUpdateWithoutAchievementsInput, LoyaltyTriggerUncheckedUpdateWithoutAchievementsInput>
+  }
+
+  export type LoyaltyTriggerUpdateWithoutAchievementsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    targetBookingsCount?: IntFieldUpdateOperationsInput | number
+    rewardAmount?: FloatFieldUpdateOperationsInput | number
+    rewardPoints?: IntFieldUpdateOperationsInput | number
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type LoyaltyTriggerUncheckedUpdateWithoutAchievementsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    targetBookingsCount?: IntFieldUpdateOperationsInput | number
+    rewardAmount?: FloatFieldUpdateOperationsInput | number
+    rewardPoints?: IntFieldUpdateOperationsInput | number
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MemberUpsertWithoutLoyaltyAchievementsInput = {
+    update: XOR<MemberUpdateWithoutLoyaltyAchievementsInput, MemberUncheckedUpdateWithoutLoyaltyAchievementsInput>
+    create: XOR<MemberCreateWithoutLoyaltyAchievementsInput, MemberUncheckedCreateWithoutLoyaltyAchievementsInput>
+    where?: MemberWhereInput
+  }
+
+  export type MemberUpdateToOneWithWhereWithoutLoyaltyAchievementsInput = {
+    where?: MemberWhereInput
+    data: XOR<MemberUpdateWithoutLoyaltyAchievementsInput, MemberUncheckedUpdateWithoutLoyaltyAchievementsInput>
+  }
+
+  export type MemberUpdateWithoutLoyaltyAchievementsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    mobile?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    loyaltyPoints?: IntFieldUpdateOperationsInput | number
+    walletBalance?: FloatFieldUpdateOperationsInput | number
+    joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    memberships?: MemberMembershipUpdateManyWithoutMemberNestedInput
+    attendances?: AttendanceUpdateManyWithoutMemberNestedInput
+    bookings?: BookingUpdateManyWithoutMemberNestedInput
+    loyaltyHistory?: LoyaltyHistoryUpdateManyWithoutMemberNestedInput
+    tournamentRegistrations?: TournamentRegistrationUpdateManyWithoutRegisteredByNestedInput
+    walletTransactions?: WalletTransactionUpdateManyWithoutMemberNestedInput
+    couponAssignments?: CouponAssignmentUpdateManyWithoutMemberNestedInput
+    couponUsages?: CouponUsageUpdateManyWithoutMemberNestedInput
+  }
+
+  export type MemberUncheckedUpdateWithoutLoyaltyAchievementsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    mobile?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    loyaltyPoints?: IntFieldUpdateOperationsInput | number
+    walletBalance?: FloatFieldUpdateOperationsInput | number
+    joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    memberships?: MemberMembershipUncheckedUpdateManyWithoutMemberNestedInput
+    attendances?: AttendanceUncheckedUpdateManyWithoutMemberNestedInput
+    bookings?: BookingUncheckedUpdateManyWithoutMemberNestedInput
+    loyaltyHistory?: LoyaltyHistoryUncheckedUpdateManyWithoutMemberNestedInput
+    tournamentRegistrations?: TournamentRegistrationUncheckedUpdateManyWithoutRegisteredByNestedInput
+    walletTransactions?: WalletTransactionUncheckedUpdateManyWithoutMemberNestedInput
+    couponAssignments?: CouponAssignmentUncheckedUpdateManyWithoutMemberNestedInput
+    couponUsages?: CouponUsageUncheckedUpdateManyWithoutMemberNestedInput
   }
 
   export type MemberMembershipCreateManyMemberInput = {
@@ -39075,6 +43646,12 @@ export namespace Prisma {
     bookingId: string
     discountAmount?: number
     createdAt?: Date | string
+  }
+
+  export type LoyaltyAchievementCreateManyMemberInput = {
+    id?: string
+    triggerId: string
+    achievedAt?: Date | string
   }
 
   export type MemberMembershipUpdateWithoutMemberInput = {
@@ -39326,6 +43903,24 @@ export namespace Prisma {
     bookingId?: StringFieldUpdateOperationsInput | string
     discountAmount?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type LoyaltyAchievementUpdateWithoutMemberInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    achievedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    trigger?: LoyaltyTriggerUpdateOneRequiredWithoutAchievementsNestedInput
+  }
+
+  export type LoyaltyAchievementUncheckedUpdateWithoutMemberInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    triggerId?: StringFieldUpdateOperationsInput | string
+    achievedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type LoyaltyAchievementUncheckedUpdateManyWithoutMemberInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    triggerId?: StringFieldUpdateOperationsInput | string
+    achievedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type TurfSportCreateManySportInput = {
@@ -40084,6 +44679,30 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     memberId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type LoyaltyAchievementCreateManyTriggerInput = {
+    id?: string
+    memberId: string
+    achievedAt?: Date | string
+  }
+
+  export type LoyaltyAchievementUpdateWithoutTriggerInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    achievedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    member?: MemberUpdateOneRequiredWithoutLoyaltyAchievementsNestedInput
+  }
+
+  export type LoyaltyAchievementUncheckedUpdateWithoutTriggerInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    memberId?: StringFieldUpdateOperationsInput | string
+    achievedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type LoyaltyAchievementUncheckedUpdateManyWithoutTriggerInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    memberId?: StringFieldUpdateOperationsInput | string
+    achievedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
 

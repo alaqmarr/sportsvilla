@@ -2,20 +2,22 @@ import { NextResponse } from 'next/server';
 import { authenticateClient } from '@/lib/auth-middleware';
 import { GoogleGenAI } from '@google/genai';
 import { prisma } from '@/lib/prisma';
+import { jsonResponse } from '@/lib/api-logger';
 
 export async function POST(request: Request) {
+  console.log(`[API] POST /api/client/v1/upload/validate-utr called`);
   const authRes = await authenticateClient(request);
   if ('error' in authRes) return authRes.error;
 
   try {
     const { imageUrl, expectedAmount, expectedUpiId, tournamentId } = await request.json();
     if (!imageUrl) {
-      return NextResponse.json({ error: 'Image URL is required' }, { status: 400 });
+      return jsonResponse({ error: 'Image URL is required' }, { status: 400 });
     }
 
     if (!process.env.GEMINI_API_KEY) {
       console.warn("GEMINI_API_KEY not found. Please add it to your .env file.");
-      return NextResponse.json({ error: 'Server missing Gemini API Key for validation' }, { status: 500 });
+      return jsonResponse({ error: 'Server missing Gemini API Key for validation' }, { status: 500 });
     }
 
     const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
@@ -62,8 +64,9 @@ Rules:
     try {
       resultJson = JSON.parse(resultText);
     } catch (e) {
+    console.error(`[API ERROR] POST /api/client/v1/upload/validate-utr ->`, e);
       console.error("Failed to parse Gemini output:", resultText);
-      return NextResponse.json({ error: 'Failed to process AI response' }, { status: 500 });
+      return jsonResponse({ error: 'Failed to process AI response' }, { status: 500 });
     }
 
     // Database Duplicate Check
@@ -82,7 +85,7 @@ Rules:
       }
     }
 
-    return NextResponse.json({ 
+    return jsonResponse({ 
       success: true, 
       genuine: resultJson.genuine, 
       utr: resultJson.utr || null,
@@ -93,6 +96,6 @@ Rules:
 
   } catch (error: any) {
     console.error('Gemini validation error:', error);
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+    return jsonResponse({ error: 'Internal server error' }, { status: 500 });
   }
 }

@@ -1,8 +1,10 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { authenticateClient } from '@/lib/auth-middleware';
+import { jsonResponse } from '@/lib/api-logger';
 
 export async function POST(request: Request, context: { params: Promise<{ id: string }> }) {
+  console.log(`[API] POST /api/client/v1/bookings/[id]/reschedule called`);
   const authRes = await authenticateClient(request);
   if ('error' in authRes) return authRes.error;
   
@@ -14,7 +16,7 @@ export async function POST(request: Request, context: { params: Promise<{ id: st
     const { newStartTime, newEndTime } = body;
     
     if (!newStartTime || !newEndTime) {
-      return NextResponse.json({ success: false, error: "Missing new time fields" }, { status: 400 });
+      return jsonResponse({ success: false, error: "Missing new time fields" }, { status: 400 });
     }
 
     const booking = await prisma.booking.findUnique({
@@ -22,15 +24,15 @@ export async function POST(request: Request, context: { params: Promise<{ id: st
     });
 
     if (!booking) {
-      return NextResponse.json({ success: false, error: "Booking not found" }, { status: 404 });
+      return jsonResponse({ success: false, error: "Booking not found" }, { status: 404 });
     }
 
     if (booking.memberId !== member.id) {
-      return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 403 });
+      return jsonResponse({ success: false, error: "Unauthorized" }, { status: 403 });
     }
 
     if (booking.status === "CANCELLED") {
-      return NextResponse.json({ success: false, error: "Cannot reschedule a cancelled booking" }, { status: 400 });
+      return jsonResponse({ success: false, error: "Cannot reschedule a cancelled booking" }, { status: 400 });
     }
 
     // Check global settings
@@ -42,7 +44,7 @@ export async function POST(request: Request, context: { params: Promise<{ id: st
     
     const allowRescheduling = settingsMap.ALLOW_RESCHEDULING !== "false";
     if (!allowRescheduling) {
-      return NextResponse.json({ success: false, error: 'Rescheduling is currently disabled by the administrator.' }, { status: 403 });
+      return jsonResponse({ success: false, error: 'Rescheduling is currently disabled by the administrator.' }, { status: 403 });
     }
     
     const limitHours = parseInt(settingsMap.CLIENT_CANCELLATION_LIMIT_HOURS || "3", 10);
@@ -52,7 +54,7 @@ export async function POST(request: Request, context: { params: Promise<{ id: st
       const diffMs = booking.startTime.getTime() - now.getTime();
       const diffHours = diffMs / (1000 * 60 * 60);
       if (diffHours < limitHours) {
-        return NextResponse.json({ success: false, error: `You can only reschedule bookings at least ${limitHours} hours before the start time.` }, { status: 400 });
+        return jsonResponse({ success: false, error: `You can only reschedule bookings at least ${limitHours} hours before the start time.` }, { status: 400 });
       }
     }
 
@@ -63,7 +65,7 @@ export async function POST(request: Request, context: { params: Promise<{ id: st
     const oldDuration = booking.endTime.getTime() - booking.startTime.getTime();
     const newDuration = end.getTime() - start.getTime();
     if (oldDuration !== newDuration) {
-      return NextResponse.json({ success: false, error: "Duration must remain the same." }, { status: 400 });
+      return jsonResponse({ success: false, error: "Duration must remain the same." }, { status: 400 });
     }
 
     // Check for conflicts
@@ -78,7 +80,7 @@ export async function POST(request: Request, context: { params: Promise<{ id: st
     });
 
     if (conflict) {
-      return NextResponse.json({ success: false, error: "The selected time slot is already booked." }, { status: 400 });
+      return jsonResponse({ success: false, error: "The selected time slot is already booked." }, { status: 400 });
     }
 
     await prisma.booking.update({
@@ -89,8 +91,9 @@ export async function POST(request: Request, context: { params: Promise<{ id: st
       }
     });
 
-    return NextResponse.json({ success: true, message: "Booking rescheduled successfully." });
+    return jsonResponse({ success: true, message: "Booking rescheduled successfully." });
   } catch (error: any) {
-    return NextResponse.json({ success: false, error: error.message }, { status: 500 });
+    console.error(`[API ERROR] POST /api/client/v1/bookings/[id]/reschedule ->`, error);
+    return jsonResponse({ success: false, error: error.message }, { status: 500 });
   }
 }

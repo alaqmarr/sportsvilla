@@ -2,8 +2,10 @@ import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { authenticateClient } from '@/lib/auth-middleware';
 import { logger } from '@/lib/logger';
+import { jsonResponse } from '@/lib/api-logger';
 
 export async function GET(request: Request) {
+  console.log(`[API] GET /api/client/v1/home called`);
   const authRes = await authenticateClient(request);
   if ('error' in authRes) return authRes.error;
   
@@ -200,7 +202,7 @@ export async function GET(request: Request) {
     const allowOnlineBooking = settingsMap.ALLOW_ONLINE_BOOKING !== "false";
     const maintenanceMode = settingsMap.MAINTENANCE_MODE === "true";
 
-    return NextResponse.json({
+    return jsonResponse({
       success: true,
       familyMembers,
       targetMemberId,
@@ -219,7 +221,8 @@ export async function GET(request: Request) {
       maintenanceMode
     });
   } catch (error: any) {
+    console.error(`[API ERROR] GET /api/client/v1/home ->`, error);
     logger.error('Home API error', { error: error.message, stack: error.stack });
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    return jsonResponse({ error: error.message }, { status: 500 });
   }
 }

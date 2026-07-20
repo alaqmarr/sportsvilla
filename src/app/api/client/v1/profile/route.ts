@@ -1,8 +1,10 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { authenticateClient } from '@/lib/auth-middleware';
+import { jsonResponse } from '@/lib/api-logger';
 
 export async function GET(request: Request) {
+  console.log(`[API] GET /api/client/v1/profile called`);
   const authRes = await authenticateClient(request);
   if ('error' in authRes) return authRes.error;
   
@@ -52,7 +54,7 @@ export async function GET(request: Request) {
       }
     });
 
-    return NextResponse.json({
+    return jsonResponse({
       success: true,
       familyMembers,
       targetMemberId,
@@ -65,12 +67,14 @@ export async function GET(request: Request) {
       }
     });
   } catch (error: any) {
+    console.error(`[API ERROR] GET /api/client/v1/profile ->`, error);
     console.error("Profile API error:", error);
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    return jsonResponse({ error: error.message }, { status: 500 });
   }
 }
 
 export async function PUT(request: Request) {
+  console.log(`[API] PUT /api/client/v1/profile called`);
   const authRes = await authenticateClient(request);
   if ('error' in authRes) return authRes.error;
   
@@ -88,7 +92,7 @@ export async function PUT(request: Request) {
     });
 
     if (!familyMembers.find(m => m.id === targetMemberId)) {
-      return NextResponse.json({ error: 'Unauthorized access to member profile' }, { status: 403 });
+      return jsonResponse({ error: 'Unauthorized access to member profile' }, { status: 403 });
     }
 
     // Update the profile (excluding mobile)
@@ -101,10 +105,11 @@ export async function PUT(request: Request) {
       }
     });
 
-    return NextResponse.json({ success: true, profile: updatedMember });
+    return jsonResponse({ success: true, profile: updatedMember });
   } catch (error: any) {
+    console.error(`[API ERROR] PUT /api/client/v1/profile ->`, error);
     console.error("Profile Update API error:", error);
-    return NextResponse.json({ error: 'Failed to update profile' }, { status: 500 });
+    return jsonResponse({ error: 'Failed to update profile' }, { status: 500 });
   }
 }
 

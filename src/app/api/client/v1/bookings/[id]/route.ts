@@ -1,8 +1,10 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { authenticateClient } from '@/lib/auth-middleware';
+import { jsonResponse } from '@/lib/api-logger';
 
 export async function GET(request: Request, context: { params: Promise<{ id: string }> }) {
+  console.log(`[API] GET /api/client/v1/bookings/[id] called`);
   const authRes = await authenticateClient(request);
   if ('error' in authRes) return authRes.error;
   
@@ -23,7 +25,7 @@ export async function GET(request: Request, context: { params: Promise<{ id: str
 
     if (!booking) {
       console.log("[GET /bookings/[id]] Booking not found in DB for ID:", params.id);
-      return NextResponse.json({ error: "Booking not found" }, { status: 404 });
+      return jsonResponse({ error: "Booking not found" }, { status: 404 });
     }
     
     console.log("[GET /bookings/[id]] Found booking:", booking.id);
@@ -31,7 +33,7 @@ export async function GET(request: Request, context: { params: Promise<{ id: str
     const allCheckedIn = booking.tickets && booking.tickets.length > 0 && booking.tickets.every((t: any) => t.usedAt);
     const anyCheckedIn = booking.tickets && booking.tickets.some((t: any) => t.usedAt);
 
-    return NextResponse.json({ 
+    return jsonResponse({ 
       success: true, 
       checkedIn: allCheckedIn,
       anyCheckedIn,
@@ -39,7 +41,8 @@ export async function GET(request: Request, context: { params: Promise<{ id: str
       booking
     });
   } catch (error: any) {
+    console.error(`[API ERROR] GET /api/client/v1/bookings/[id] ->`, error);
     console.error("[GET /bookings/[id]] Prisma/Internal error:", error);
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    return jsonResponse({ error: error.message }, { status: 500 });
   }
 }

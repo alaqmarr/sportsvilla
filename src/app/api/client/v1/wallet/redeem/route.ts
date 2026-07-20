@@ -1,8 +1,10 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { authenticateClient } from '@/lib/auth-middleware';
+import { jsonResponse } from '@/lib/api-logger';
 
 export async function POST(request: Request) {
+  console.log(`[API] POST /api/client/v1/wallet/redeem called`);
   const authRes = await authenticateClient(request);
   if ('error' in authRes) return authRes.error;
   
@@ -13,7 +15,7 @@ export async function POST(request: Request) {
     const { points, memberId } = body;
     
     if (!points || points < 500) {
-      return NextResponse.json({ error: 'Minimum 500 SV Points required to redeem.' }, { status: 400 });
+      return jsonResponse({ error: 'Minimum 500 SV Points required to redeem.' }, { status: 400 });
     }
 
     const targetMemberId = memberId || primaryMember.id;
@@ -25,7 +27,7 @@ export async function POST(request: Request) {
     });
 
     if (!familyMembers.find(m => m.id === targetMemberId)) {
-      return NextResponse.json({ error: 'Unauthorized member.' }, { status: 403 });
+      return jsonResponse({ error: 'Unauthorized member.' }, { status: 403 });
     }
 
     // Run transaction
@@ -77,9 +79,10 @@ export async function POST(request: Request) {
       return updatedMember;
     });
 
-    return NextResponse.json({ success: true, profile: result });
+    return jsonResponse({ success: true, profile: result });
   } catch (error: any) {
+    console.error(`[API ERROR] POST /api/client/v1/wallet/redeem ->`, error);
     console.error("Wallet Redeem error:", error);
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    return jsonResponse({ error: error.message }, { status: 500 });
   }
 }

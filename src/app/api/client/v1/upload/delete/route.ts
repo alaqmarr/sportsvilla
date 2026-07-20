@@ -2,10 +2,12 @@ import { NextResponse } from 'next/server';
 import { DeleteObjectCommand } from '@aws-sdk/client-s3';
 import { s3Client } from '@/lib/s3';
 import { logger } from '@/lib/logger';
+import { jsonResponse } from '@/lib/api-logger';
 
 const bucketName = process.env.R2_BUCKET_NAME || '';
 
 export async function POST(request: Request) {
+  console.log(`[API] POST /api/client/v1/upload/delete called`);
   try {
     const { key, publicUrl } = await request.json();
 
@@ -24,7 +26,7 @@ export async function POST(request: Request) {
     }
 
     if (!objectKey) {
-      return NextResponse.json({ error: "key or publicUrl is required" }, { status: 400 });
+      return jsonResponse({ error: "key or publicUrl is required" }, { status: 400 });
     }
 
     const command = new DeleteObjectCommand({
@@ -34,9 +36,10 @@ export async function POST(request: Request) {
 
     await s3Client.send(command);
 
-    return NextResponse.json({ success: true, message: "File deleted successfully" });
+    return jsonResponse({ success: true, message: "File deleted successfully" });
   } catch (error: any) {
+    console.error(`[API ERROR] POST /api/client/v1/upload/delete ->`, error);
     logger.error('Failed to delete file', { error: error.message });
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    return jsonResponse({ error: error.message }, { status: 500 });
   }
 }

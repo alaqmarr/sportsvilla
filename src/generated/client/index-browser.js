@@ -365,6 +365,36 @@ exports.Prisma.CouponUsageScalarFieldEnum = {
   createdAt: 'createdAt'
 };
 
+exports.Prisma.LoyaltyTriggerScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  description: 'description',
+  targetBookingsCount: 'targetBookingsCount',
+  rewardAmount: 'rewardAmount',
+  rewardPoints: 'rewardPoints',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.LoyaltyAchievementScalarFieldEnum = {
+  id: 'id',
+  triggerId: 'triggerId',
+  memberId: 'memberId',
+  achievedAt: 'achievedAt'
+};
+
+exports.Prisma.AppAnnouncementScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  content: 'content',
+  imageUrl: 'imageUrl',
+  linkUrl: 'linkUrl',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -398,7 +428,10 @@ exports.Prisma.ModelName = {
   WalletTransaction: 'WalletTransaction',
   Coupon: 'Coupon',
   CouponAssignment: 'CouponAssignment',
-  CouponUsage: 'CouponUsage'
+  CouponUsage: 'CouponUsage',
+  LoyaltyTrigger: 'LoyaltyTrigger',
+  LoyaltyAchievement: 'LoyaltyAchievement',
+  AppAnnouncement: 'AppAnnouncement'
 };
 
 /**

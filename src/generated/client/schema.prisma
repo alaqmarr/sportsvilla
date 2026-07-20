@@ -40,6 +40,7 @@ model Member {
   walletTransactions      WalletTransaction[]
   couponAssignments       CouponAssignment[]
   couponUsages            CouponUsage[]
+  loyaltyAchievements     LoyaltyAchievement[]
   createdAt               DateTime                 @default(now())
   updatedAt               DateTime                 @updatedAt
 
@@ -342,4 +343,42 @@ model CouponUsage {
   coupon  Coupon  @relation(fields: [couponId], references: [id])
   member  Member  @relation(fields: [memberId], references: [id])
   booking Booking @relation(fields: [bookingId], references: [id])
+}
+
+model LoyaltyTrigger {
+  id                  String  @id @default(cuid())
+  title               String // e.g. "Weekend Warrior"
+  description         String? // e.g. "Play 5 matches and get ₹100!"
+  targetBookingsCount Int
+  rewardAmount        Float // Wallet cash reward
+  rewardPoints        Int     @default(0) // SV Points reward
+  isActive            Boolean @default(true)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  achievements LoyaltyAchievement[]
+}
+
+model LoyaltyAchievement {
+  id         String   @id @default(cuid())
+  triggerId  String
+  memberId   String
+  achievedAt DateTime @default(now())
+
+  trigger LoyaltyTrigger @relation(fields: [triggerId], references: [id])
+  member  Member         @relation(fields: [memberId], references: [id])
+
+  @@unique([triggerId, memberId])
+}
+
+model AppAnnouncement {
+  id        String   @id @default(cuid())
+  title     String
+  content   String
+  imageUrl  String?
+  linkUrl   String?
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }

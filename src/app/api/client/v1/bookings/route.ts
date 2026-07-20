@@ -1,8 +1,10 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { authenticateClient } from '@/lib/auth-middleware';
+import { jsonResponse } from '@/lib/api-logger';
 
 export async function GET(request: Request) {
+  console.log(`[API] GET /api/client/v1/bookings called`);
   const authRes = await authenticateClient(request);
   if ('error' in authRes) return authRes.error;
   
@@ -37,7 +39,7 @@ export async function GET(request: Request) {
     const allowCancellation = settingsMap.ALLOW_CANCELLATION !== "false";
     const allowOnlineBooking = settingsMap.ALLOW_ONLINE_BOOKING !== "false";
 
-    return NextResponse.json({ 
+    return jsonResponse({ 
       success: true, 
       bookings, 
       cancellationLimitHours,
@@ -46,11 +48,13 @@ export async function GET(request: Request) {
       allowOnlineBooking
     });
   } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    console.error(`[API ERROR] GET /api/client/v1/bookings ->`, error);
+    return jsonResponse({ error: error.message }, { status: 500 });
   }
 }
 
 export async function POST(request: Request) {
+  console.log(`[API] POST /api/client/v1/bookings called`);
   const authRes = await authenticateClient(request);
   if ('error' in authRes) return authRes.error;
   
@@ -58,7 +62,7 @@ export async function POST(request: Request) {
 
   try {
     const body = await request.json();
-    const { turfId, sportId, startTime, endTime, price, participantCount, couponCode, walletAmountToUse = 0 } = body;
+    const { turfId, sportId, startTime, endTime, price, participantCount, couponCode, walletAmountToUse = 0, memberId: requestedMemberId } = body;
 
     // STRICT AVAILABILITY CHECK
     const start = new Date(startTime);
@@ -73,13 +77,13 @@ export async function POST(request: Request) {
     const allowOnlineBooking = settingsMap.ALLOW_ONLINE_BOOKING !== "false";
     
     if (!allowOnlineBooking) {
-      return NextResponse.json({ error: 'Online booking is currently disabled by the administrator.' }, { status: 403 });
+      return jsonResponse({ error: 'Online booking is currently disabled by the administrator.' }, { status: 403 });
     }
     
     // 1. Get turf capacity
     const turf = await prisma.turf.findUnique({ where: { id: turfId } });
     if (!turf) {
-      return NextResponse.json({ error: 'Turf not found' }, { status: 404 });
+      return jsonResponse({ error: 'Turf not found' }, { status: 404 });
     }
 
     // 2. Count overlapping bookings for this exact slot
@@ -96,7 +100,7 @@ export async function POST(request: Request) {
     const availableCourts = turf.capacityPerSlot - usedCapacity;
 
     if (participantCount > availableCourts) {
-      return NextResponse.json({ 
+      return jsonResponse({ 
         error: 'Slot is no longer available or insufficient courts.' 
       }, { status: 409 });
     }
@@ -104,8 +108,22 @@ export async function POST(request: Request) {
     // Calculate SV Points Earned (e.g. 1% of total price as points)
     const pointsEarned = Math.floor(price * 0.01);
 
-    // Fetch latest member wallet balance
-    const memberData = await prisma.member.findUnique({ where: { id: member.id } });
+    // Profile and Wallet Logic
+    let targetMemberId = member.id;
+    if (requestedMemberId && requestedMemberId !== member.id) {
+      // Validate requestedMemberId belongs to same family
+      const familyCheck = await prisma.member.findFirst({
+        where: { id: requestedMemberId, mobile: member.mobile }
+      });
+      if (familyCheck) {
+        targetMemberId = requestedMemberId;
+      } else {
+        return jsonResponse({ error: 'Invalid profile selection.' }, { status: 403 });
+      }
+    }
+
+    // Fetch latest member wallet balance for target member
+    const memberData = await prisma.member.findUnique({ where: { id: targetMemberId } });
     const currentWallet = memberData?.walletBalance || 0;
     
     // Validate Coupon if provided
@@ -121,15 +139,15 @@ export async function POST(request: Request) {
         // Evaluate target constraints
         let isAllowed = true;
         if (coupon.targetType === 'SPECIFIC_MEMBERS') {
-          isAllowed = coupon.assignments.some(a => a.memberId === member.id);
+          isAllowed = coupon.assignments.some(a => a.memberId === targetMemberId);
         } else if (coupon.targetType === 'MILESTONE_ALL_TIME') {
-          const userBookingsCount = await prisma.booking.count({ where: { memberId: member.id, status: 'COMPLETED' } });
+          const userBookingsCount = await prisma.booking.count({ where: { memberId: targetMemberId, status: 'COMPLETED' } });
           if (userBookingsCount < (coupon.milestoneBookingsCount || 0)) isAllowed = false;
         }
 
         // Global and per user limits
         if (coupon.maxUses !== null && coupon.usages.length >= coupon.maxUses) isAllowed = false;
-        if (coupon.maxUsesPerUser !== null && coupon.usages.filter(u => u.memberId === member.id).length >= coupon.maxUsesPerUser) isAllowed = false;
+        if (coupon.maxUsesPerUser !== null && coupon.usages.filter(u => u.memberId === targetMemberId).length >= coupon.maxUsesPerUser) isAllowed = false;
 
         if (isAllowed) {
           validCouponId = coupon.id;
@@ -172,7 +190,7 @@ export async function POST(request: Request) {
       data: {
         turfId,
         sportId,
-        memberId: member.id,
+        memberId: targetMemberId,
         startTime: start,
         endTime: end,
         price,
@@ -188,7 +206,7 @@ export async function POST(request: Request) {
       queries.push(prisma.couponUsage.create({
         data: {
           couponId: validCouponId,
-          memberId: member.id,
+          memberId: targetMemberId,
           bookingId: booking.id,
           discountAmount
         }
@@ -198,14 +216,14 @@ export async function POST(request: Request) {
     if (advancePaid > 0) {
       queries.push(
         prisma.member.update({
-          where: { id: member.id },
+          where: { id: targetMemberId },
           data: { walletBalance: { decrement: advancePaid } }
         })
       );
       queries.push(
         prisma.walletTransaction.create({
           data: {
-            memberId: member.id,
+            memberId: targetMemberId,
             amount: advancePaid,
             type: 'DEBIT',
             description: `Payment for booking ${booking.id}`
@@ -227,7 +245,7 @@ export async function POST(request: Request) {
     if (pointsEarned > 0) {
       queries.push(
         prisma.member.update({
-          where: { id: member.id },
+          where: { id: targetMemberId },
           data: { loyaltyPoints: { increment: pointsEarned } }
         })
       );
@@ -235,7 +253,7 @@ export async function POST(request: Request) {
       queries.push(
         prisma.loyaltyHistory.create({
           data: {
-            memberId: member.id,
+            memberId: targetMemberId,
             points: pointsEarned,
             type: 'EARNED',
             source: 'BOOKING',
@@ -259,8 +277,80 @@ export async function POST(request: Request) {
 
     await prisma.$transaction(queries);
 
-    return NextResponse.json({ success: true, booking });
+    // Evaluate Loyalty Triggers
+    try {
+      const userBookings = await prisma.booking.count({
+        where: {
+          memberId: targetMemberId,
+          status: { in: ['CONFIRMED', 'COMPLETED'] }
+        }
+      });
+
+      const activeTriggers = await prisma.loyaltyTrigger.findMany({
+        where: {
+          isActive: true,
+          targetBookingsCount: { lte: userBookings }
+        }
+      });
+
+      if (activeTriggers.length > 0) {
+        const existingAchievements = await prisma.loyaltyAchievement.findMany({
+          where: {
+            memberId: targetMemberId,
+            triggerId: { in: activeTriggers.map(t => t.id) }
+          }
+        });
+        const achievedIds = new Set(existingAchievements.map(a => a.triggerId));
+        const newAchievements = activeTriggers.filter(t => !achievedIds.has(t.id));
+        
+        if (newAchievements.length > 0) {
+          const triggerQueries: any[] = [];
+          for (const trigger of newAchievements) {
+            triggerQueries.push(prisma.loyaltyAchievement.create({
+              data: { triggerId: trigger.id, memberId: targetMemberId }
+            }));
+            
+            if (trigger.rewardAmount > 0) {
+              triggerQueries.push(prisma.member.update({
+                where: { id: targetMemberId },
+                data: { walletBalance: { increment: trigger.rewardAmount } }
+              }));
+              triggerQueries.push(prisma.walletTransaction.create({
+                data: {
+                  memberId: targetMemberId,
+                  amount: trigger.rewardAmount,
+                  type: 'CREDIT',
+                  description: `Reward for ${trigger.title}`
+                }
+              }));
+            }
+
+            if (trigger.rewardPoints > 0) {
+              triggerQueries.push(prisma.member.update({
+                where: { id: targetMemberId },
+                data: { loyaltyPoints: { increment: trigger.rewardPoints } }
+              }));
+              triggerQueries.push(prisma.loyaltyHistory.create({
+                data: {
+                  memberId: targetMemberId,
+                  points: trigger.rewardPoints,
+                  type: 'EARNED',
+                  source: 'MANUAL',
+                  description: `Reward for ${trigger.title}`
+                }
+              }));
+            }
+          }
+          await prisma.$transaction(triggerQueries);
+        }
+      }
+    } catch (triggerError) {
+    console.error(`[API ERROR] POST /api/client/v1/bookings ->`, triggerError);
+      console.error('Error evaluating loyalty triggers:', triggerError);
+    }
+
+    return jsonResponse({ success: true, booking });
   } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    return jsonResponse({ error: error.message }, { status: 500 });
   }
 }

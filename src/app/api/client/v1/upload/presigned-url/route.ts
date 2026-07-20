@@ -4,15 +4,17 @@ import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { s3Client } from '@/lib/s3';
 import { v4 as uuidv4 } from 'uuid';
 import { logger } from '@/lib/logger';
+import { jsonResponse } from '@/lib/api-logger';
 
 const bucketName = process.env.R2_BUCKET_NAME || '';
 
 export async function POST(request: Request) {
+  console.log(`[API] POST /api/client/v1/upload/presigned-url called`);
   try {
     const { contentType, fileExtension } = await request.json();
 
     if (!contentType || !fileExtension) {
-      return NextResponse.json({ error: "contentType and fileExtension are required" }, { status: 400 });
+      return jsonResponse({ error: "contentType and fileExtension are required" }, { status: 400 });
     }
 
     const key = `uploads/${uuidv4()}.${fileExtension.replace('.', '')}`;
@@ -30,14 +32,15 @@ export async function POST(request: Request) {
     // We will assume `process.env.R2_PUBLIC_URL` holds the base URL for public access.
     const publicUrl = `${process.env.R2_PUBLIC_URL}/${key}`;
 
-    return NextResponse.json({ 
+    return jsonResponse({ 
       success: true, 
       signedUrl, 
       publicUrl,
       key 
     });
   } catch (error: any) {
+    console.error(`[API ERROR] POST /api/client/v1/upload/presigned-url ->`, error);
     logger.error('Failed to generate presigned URL', { error: error.message });
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    return jsonResponse({ error: error.message }, { status: 500 });
   }
 }

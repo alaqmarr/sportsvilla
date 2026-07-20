@@ -2,8 +2,10 @@ import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import jwt from 'jsonwebtoken';
 import { logger } from '@/lib/logger';
+import { jsonResponse } from '@/lib/api-logger';
 
 export async function POST(request: Request) {
+  console.log(`[API] POST /api/client/v1/auth/register called`);
   try {
     const { mobile, code, name, email, dob } = await request.json();
     
@@ -12,7 +14,7 @@ export async function POST(request: Request) {
 
     if (!cleanMobile || !code || !name) {
       logger.warn('Register failed: missing fields', { mobile: cleanMobile });
-      return NextResponse.json({ error: "Mobile, code, and name are required" }, { status: 400 });
+      return jsonResponse({ error: "Mobile, code, and name are required" }, { status: 400 });
     }
 
     const otpRecord = await prisma.otp.findUnique({
@@ -20,15 +22,15 @@ export async function POST(request: Request) {
     });
 
     if (!otpRecord) {
-      return NextResponse.json({ error: "No OTP request found for this number" }, { status: 400 });
+      return jsonResponse({ error: "No OTP request found for this number" }, { status: 400 });
     }
 
     if (otpRecord.code !== code) {
-      return NextResponse.json({ error: "Invalid OTP code" }, { status: 400 });
+      return jsonResponse({ error: "Invalid OTP code" }, { status: 400 });
     }
 
     if (new Date() > otpRecord.expiresAt) {
-      return NextResponse.json({ error: "OTP has expired" }, { status: 400 });
+      return jsonResponse({ error: "OTP has expired" }, { status: 400 });
     }
 
     // Delete the OTP record so it can't be reused
@@ -40,7 +42,7 @@ export async function POST(request: Request) {
     });
 
     if (member) {
-      return NextResponse.json({ error: "User already exists" }, { status: 400 });
+      return jsonResponse({ error: "User already exists" }, { status: 400 });
     }
 
     // Create the Member record
@@ -64,14 +66,15 @@ export async function POST(request: Request) {
 
     logger.info('Register Successful', { memberId: member.id });
 
-    return NextResponse.json({ 
+    return jsonResponse({ 
       success: true, 
       customToken, 
       memberId: member.id,
       member 
     });
   } catch (error: any) {
+    console.error(`[API ERROR] POST /api/client/v1/auth/register ->`, error);
     logger.error('Register failed internally', { error: error.message, stack: error.stack });
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    return jsonResponse({ error: error.message }, { status: 500 });
   }
 }
