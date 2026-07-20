@@ -11,13 +11,29 @@ export default function SettingsClient({ initialSettings }: { initialSettings: R
   const [openTime, setOpenTime] = useState(initialSettings.openTime || "06:00");
   const [closeTime, setCloseTime] = useState(initialSettings.closeTime || "23:00");
   const [pointsPerRupee, setPointsPerRupee] = useState(initialSettings.pointsPerRupee || "100");
+  const [clientCancellationLimitHours, setClientCancellationLimitHours] = useState(initialSettings.CLIENT_CANCELLATION_LIMIT_HOURS || "3");
+  const [allowRescheduling, setAllowRescheduling] = useState(initialSettings.ALLOW_RESCHEDULING !== "false");
+  const [allowCancellation, setAllowCancellation] = useState(initialSettings.ALLOW_CANCELLATION !== "false");
+  const [allowOnlineBooking, setAllowOnlineBooking] = useState(initialSettings.ALLOW_ONLINE_BOOKING !== "false");
+  const [maintenanceMode, setMaintenanceMode] = useState(initialSettings.MAINTENANCE_MODE === "true");
   const [loading, setLoading] = useState(false);
 
   async function handleSave(e: React.FormEvent) {
     e.preventDefault();
     setLoading(true);
     try {
-      await updateSettings({ upiId, businessName, openTime, closeTime, pointsPerRupee });
+      await updateSettings({ 
+        upiId, 
+        businessName, 
+        openTime, 
+        closeTime, 
+        pointsPerRupee, 
+        CLIENT_CANCELLATION_LIMIT_HOURS: clientCancellationLimitHours,
+        ALLOW_RESCHEDULING: allowRescheduling ? "true" : "false",
+        ALLOW_CANCELLATION: allowCancellation ? "true" : "false",
+        ALLOW_ONLINE_BOOKING: allowOnlineBooking ? "true" : "false",
+        MAINTENANCE_MODE: maintenanceMode ? "true" : "false"
+      });
       showAlert("Settings Saved", "Your configuration has been updated successfully.", "success");
     } catch (err) {
       showAlert("Error", "Failed to save settings. Please try again.", "error");
@@ -116,6 +132,88 @@ export default function SettingsClient({ initialSettings }: { initialSettings: R
               <p className="text-xs text-gray-500 mt-2">
                 Enter how many reward points equal 1 Rupee discount. (e.g. 100 points = ₹1 means 1000 points gives a ₹10 discount).
               </p>
+            </div>
+
+            <div className="pt-6 border-t border-[#2a2d3e]">
+              <h3 className="text-sm font-bold font-['Outfit'] text-white flex items-center gap-2 mb-4">
+                <FiSettings className="text-orange-500" /> Booking Policies
+              </h3>
+            </div>
+
+            <div>
+              <label className="block text-xs uppercase tracking-wider font-semibold text-gray-500 mb-2">Client Cancellation / Reschedule Time Limit (Hours)</label>
+              <input 
+                type="number" 
+                min="0"
+                className="w-full bg-[#0f1117] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white placeholder-gray-600 focus:border-orange-500/50 focus:ring-2 focus:ring-orange-500/20 focus:outline-none text-sm" 
+                value={clientCancellationLimitHours} 
+                onChange={e => setClientCancellationLimitHours(e.target.value)} 
+                required 
+                placeholder="e.g. 3" 
+              />
+              <p className="text-xs text-gray-500 mt-2">
+                The number of hours before the booking start time where the client can no longer cancel or reschedule from the app. Set to 0 to disable restrictions.
+              </p>
+            </div>
+
+            <div className="pt-6 border-t border-[#2a2d3e]">
+              <h3 className="text-sm font-bold font-['Outfit'] text-white flex items-center gap-2 mb-4">
+                <FiSettings className="text-orange-500" /> App Controls & Maintenance
+              </h3>
+            </div>
+
+            <div className="space-y-4">
+              <label className="flex items-center gap-3 cursor-pointer">
+                <input 
+                  type="checkbox" 
+                  checked={allowOnlineBooking} 
+                  onChange={e => setAllowOnlineBooking(e.target.checked)} 
+                  className="w-5 h-5 rounded border-gray-600 text-orange-500 focus:ring-orange-500/20 bg-[#0f1117]" 
+                />
+                <div>
+                  <span className="block text-sm font-semibold text-white">Allow Online Booking</span>
+                  <span className="block text-xs text-gray-500">Enable or disable new bookings from the mobile app.</span>
+                </div>
+              </label>
+
+              <label className="flex items-center gap-3 cursor-pointer">
+                <input 
+                  type="checkbox" 
+                  checked={allowRescheduling} 
+                  onChange={e => setAllowRescheduling(e.target.checked)} 
+                  className="w-5 h-5 rounded border-gray-600 text-orange-500 focus:ring-orange-500/20 bg-[#0f1117]" 
+                />
+                <div>
+                  <span className="block text-sm font-semibold text-white">Allow Client Rescheduling</span>
+                  <span className="block text-xs text-gray-500">Allow users to reschedule their bookings from the app.</span>
+                </div>
+              </label>
+
+              <label className="flex items-center gap-3 cursor-pointer">
+                <input 
+                  type="checkbox" 
+                  checked={allowCancellation} 
+                  onChange={e => setAllowCancellation(e.target.checked)} 
+                  className="w-5 h-5 rounded border-gray-600 text-orange-500 focus:ring-orange-500/20 bg-[#0f1117]" 
+                />
+                <div>
+                  <span className="block text-sm font-semibold text-white">Allow Client Cancellation</span>
+                  <span className="block text-xs text-gray-500">Allow users to cancel their bookings from the app.</span>
+                </div>
+              </label>
+
+              <label className="flex items-center gap-3 cursor-pointer pt-2">
+                <input 
+                  type="checkbox" 
+                  checked={maintenanceMode} 
+                  onChange={e => setMaintenanceMode(e.target.checked)} 
+                  className="w-5 h-5 rounded border-gray-600 text-red-500 focus:ring-red-500/20 bg-[#0f1117]" 
+                />
+                <div>
+                  <span className="block text-sm font-bold text-red-400">Maintenance Mode</span>
+                  <span className="block text-xs text-gray-500">Block all users from accessing the mobile app. Show a maintenance screen instead.</span>
+                </div>
+              </label>
             </div>
 
             <div className="pt-4 border-t border-[#2a2d3e]">

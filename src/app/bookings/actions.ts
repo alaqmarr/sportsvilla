@@ -264,6 +264,38 @@ export async function cancelBooking(id: string) {
   revalidatePath("/", "layout");
 }
 
+export async function rescheduleBooking(id: string, newTurfId: string, newStartTime: Date, newEndTime: Date) {
+  const booking = await prisma.booking.findUnique({ where: { id } });
+  if (!booking) throw new Error("Booking not found");
+  if (booking.status === "CANCELLED") throw new Error("Cannot reschedule a cancelled booking");
+
+  // Check for conflicts
+  const conflict = await prisma.booking.findFirst({
+    where: {
+      id: { not: id },
+      turfId: newTurfId,
+      status: { not: "CANCELLED" },
+      startTime: { lt: newEndTime },
+      endTime: { gt: newStartTime }
+    }
+  });
+
+  if (conflict) {
+    throw new Error("The selected slot is already booked.");
+  }
+
+  await prisma.booking.update({
+    where: { id },
+    data: {
+      turfId: newTurfId,
+      startTime: newStartTime,
+      endTime: newEndTime
+    }
+  });
+
+  revalidatePath("/", "layout");
+}
+
 export async function updateBookingPayment(id: string, paymentStatus: "PAID" | "UNPAID") {
   await prisma.booking.update({
     where: { id },

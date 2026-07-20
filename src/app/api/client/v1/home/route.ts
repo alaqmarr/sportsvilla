@@ -14,10 +14,9 @@ export async function GET(request: Request) {
   logger.info('Home Data Request Initiated', { primaryMemberId: primaryMember.id, targetMemberId });
 
   try {
-    // 1. Fetch all family members sharing the same mobile number
     const familyMembers = await prisma.member.findMany({
       where: { mobile: primaryMember.mobile },
-      select: { id: true, name: true, loyaltyPoints: true },
+      select: { id: true, name: true, loyaltyPoints: true, walletBalance: true },
       orderBy: { joinDate: 'asc' }
     });
 
@@ -189,6 +188,18 @@ export async function GET(request: Request) {
       take: 5
     });
 
+    // Get global settings
+    const globalSettings = await prisma.setting.findMany();
+    const settingsMap = globalSettings.reduce((acc, s) => {
+      acc[s.key] = s.value;
+      return acc;
+    }, {} as Record<string, string>);
+    const cancellationLimitHours = parseInt(settingsMap.CLIENT_CANCELLATION_LIMIT_HOURS || "3", 10);
+    const allowRescheduling = settingsMap.ALLOW_RESCHEDULING !== "false";
+    const allowCancellation = settingsMap.ALLOW_CANCELLATION !== "false";
+    const allowOnlineBooking = settingsMap.ALLOW_ONLINE_BOOKING !== "false";
+    const maintenanceMode = settingsMap.MAINTENANCE_MODE === "true";
+
     return NextResponse.json({
       success: true,
       familyMembers,
@@ -200,7 +211,12 @@ export async function GET(request: Request) {
       attendance: attendanceOverview,
       recentAttendance,
       registeredTournaments,
-      upcomingTournaments
+      upcomingTournaments,
+      cancellationLimitHours,
+      allowRescheduling,
+      allowCancellation,
+      allowOnlineBooking,
+      maintenanceMode
     });
   } catch (error: any) {
     logger.error('Home API error', { error: error.message, stack: error.stack });

@@ -233,6 +233,8 @@ exports.Prisma.BookingScalarFieldEnum = {
   participantCount: 'participantCount',
   pointsRedeemed: 'pointsRedeemed',
   discountAmount: 'discountAmount',
+  advancePaid: 'advancePaid',
+  amountDue: 'amountDue',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -320,6 +322,49 @@ exports.Prisma.TournamentPlayerScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.WalletTransactionScalarFieldEnum = {
+  id: 'id',
+  memberId: 'memberId',
+  amount: 'amount',
+  type: 'type',
+  description: 'description',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.CouponScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  discountAmount: 'discountAmount',
+  discountPercentage: 'discountPercentage',
+  maxDiscount: 'maxDiscount',
+  maxUses: 'maxUses',
+  maxUsesPerUser: 'maxUsesPerUser',
+  isActive: 'isActive',
+  expiryDate: 'expiryDate',
+  appOnly: 'appOnly',
+  isPublic: 'isPublic',
+  targetType: 'targetType',
+  milestoneBookingsCount: 'milestoneBookingsCount',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.CouponAssignmentScalarFieldEnum = {
+  id: 'id',
+  couponId: 'couponId',
+  memberId: 'memberId',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.CouponUsageScalarFieldEnum = {
+  id: 'id',
+  couponId: 'couponId',
+  memberId: 'memberId',
+  bookingId: 'bookingId',
+  discountAmount: 'discountAmount',
+  createdAt: 'createdAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -349,7 +394,11 @@ exports.Prisma.ModelName = {
   Otp: 'Otp',
   Tournament: 'Tournament',
   TournamentRegistration: 'TournamentRegistration',
-  TournamentPlayer: 'TournamentPlayer'
+  TournamentPlayer: 'TournamentPlayer',
+  WalletTransaction: 'WalletTransaction',
+  Coupon: 'Coupon',
+  CouponAssignment: 'CouponAssignment',
+  CouponUsage: 'CouponUsage'
 };
 
 /**

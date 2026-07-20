@@ -42,7 +42,7 @@ export default function LoginClient() {
       <div className="bg-[#161923] border border-[#2a2d3e] rounded-2xl p-8 w-full max-w-md shadow-2xl">
         <div className="text-center mb-8 flex flex-col items-center">
           <h1 className="mb-4">
-            <Image src="/long-logo.png" alt="SportsVilla" width={200} height={50} className="h-12 w-auto object-contain mx-auto" />
+            <Image src="/long-logo.png" alt="SportsVilla" width={200} height={50} unoptimized className="h-12 w-auto object-contain mx-auto" />
           </h1>
           <p className="text-gray-400 text-sm">Sign in to admin dashboard</p>
         </div>

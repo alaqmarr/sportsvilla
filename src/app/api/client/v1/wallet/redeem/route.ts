@@ -64,6 +64,16 @@ export async function POST(request: Request) {
         }
       });
 
+      // Create wallet transaction
+      await tx.walletTransaction.create({
+        data: {
+          memberId: targetMemberId,
+          amount: amountToAdd,
+          type: 'CREDIT',
+          description: `Redeemed ${points} SV Points`
+        }
+      });
+
       return updatedMember;
     });
 

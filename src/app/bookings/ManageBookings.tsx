@@ -4,7 +4,8 @@ import { fetchAllBookingsByDate, cancelBooking, updateBookingPayment, previewExt
 import { useAlert } from "@/components/AlertProvider";
 import QRCodeLib from "qrcode";
 import { formatIST } from "../../lib/dateUtils";
-import { FiXCircle, FiCheckCircle, FiClock, FiCreditCard, FiTrash2, FiMaximize2, FiUser, FiMapPin, FiX, FiCheck, FiMonitor, FiPrinter } from "react-icons/fi";
+import { FiXCircle, FiCheckCircle, FiClock, FiCreditCard, FiTrash2, FiMaximize2, FiUser, FiMapPin, FiX, FiCheck, FiMonitor, FiPrinter, FiCalendar } from "react-icons/fi";
+import { rescheduleBooking } from "./actions";
 
 export default function ManageBookings() {
   const { showAlert } = useAlert();
@@ -27,6 +28,15 @@ export default function ManageBookings() {
     loading: boolean;
     confirming: boolean;
   }>({ show: false, bookingId: "", duration: 30, preview: null, loading: false, confirming: false });
+
+  // Reschedule Modal State
+  const [rescheduleModal, setRescheduleModal] = useState<{
+    show: boolean;
+    booking: any | null;
+    newDate: string;
+    newTime: string;
+    loading: boolean;
+  }>({ show: false, booking: null, newDate: "", newTime: "", loading: false });
 
   useEffect(() => {
     getUpiId().then(setUpiSettings);
@@ -100,6 +110,29 @@ export default function ManageBookings() {
     } catch (e: any) {
       showAlert("Error", e.message, "error");
       setExtModal(prev => ({ ...prev, confirming: false }));
+    }
+  }
+
+  async function handleRescheduleSubmit() {
+    if (!rescheduleModal.booking || !rescheduleModal.newDate || !rescheduleModal.newTime) {
+      showAlert("Error", "Please select a valid date and time", "error");
+      return;
+    }
+    setRescheduleModal(prev => ({ ...prev, loading: true }));
+    try {
+      const b = rescheduleModal.booking;
+      const durationMs = new Date(b.endTime).getTime() - new Date(b.startTime).getTime();
+      
+      const newStart = new Date(`${rescheduleModal.newDate}T${rescheduleModal.newTime}:00`);
+      const newEnd = new Date(newStart.getTime() + durationMs);
+
+      await rescheduleBooking(b.id, b.turfId, newStart, newEnd);
+      showAlert("Success", "Booking rescheduled successfully.", "success");
+      setRescheduleModal({ show: false, booking: null, newDate: "", newTime: "", loading: false });
+      loadBookings();
+    } catch (e: any) {
+      showAlert("Error", e.message || "Failed to reschedule booking", "error");
+      setRescheduleModal(prev => ({ ...prev, loading: false }));
     }
   }
 
@@ -370,6 +403,13 @@ export default function ManageBookings() {
                                     <FiMaximize2 size={16} />
                                   </button>
                                   <button 
+                                    onClick={() => setRescheduleModal({ show: true, booking: b, newDate: new Date(b.startTime).toISOString().split('T')[0], newTime: new Date(b.startTime).toTimeString().substring(0, 5), loading: false })}
+                                    className="p-2 bg-[#0f1117] border border-[#2a2d3e] text-yellow-400 hover:border-yellow-500/50 rounded-lg transition-colors"
+                                    title="Reschedule Booking"
+                                  >
+                                    <FiCalendar size={16} />
+                                  </button>
+                                  <button 
                                     onClick={() => handleCancel(b.id)}
                                     className="p-2 bg-[#0f1117] border border-[#2a2d3e] text-red-400 hover:border-red-500/50 rounded-lg transition-colors"
                                     title="Cancel Booking"
@@ -601,6 +641,54 @@ export default function ManageBookings() {
                 className="w-full bg-blue-500 hover:bg-blue-600 text-white rounded-lg py-3.5 font-bold text-lg transition-colors border-none cursor-pointer flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {extModal.confirming ? "Confirming..." : <><FiCheck /> Confirm Extension</>}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Reschedule Modal */}
+      {rescheduleModal.show && rescheduleModal.booking && (
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-[100] p-4 overflow-y-auto">
+          <div className="bg-[#161923] border border-[#2a2d3e] rounded-2xl w-full max-w-md shadow-2xl overflow-hidden flex flex-col my-8">
+            <div className="p-6 border-b border-[#2a2d3e] flex justify-between items-center">
+              <h2 className="text-xl font-bold font-['Outfit'] text-white">Reschedule Booking</h2>
+              <button className="text-gray-500 hover:text-white" onClick={() => setRescheduleModal(prev => ({ ...prev, show: false }))}><FiX size={24} /></button>
+            </div>
+            
+            <div className="p-6">
+              <div className="mb-4 bg-[#0f1117] p-4 rounded-xl border border-[#2a2d3e]">
+                <p className="text-sm text-gray-400">Current Slot</p>
+                <p className="text-white font-bold">{formatIST(new Date(rescheduleModal.booking.startTime), 'MMM d, yyyy h:mm a')}</p>
+              </div>
+
+              <div className="space-y-4 mb-6">
+                <div>
+                  <label className="block text-xs uppercase tracking-wider font-semibold text-gray-500 mb-2">New Date</label>
+                  <input 
+                    type="date" 
+                    value={rescheduleModal.newDate}
+                    onChange={e => setRescheduleModal(prev => ({ ...prev, newDate: e.target.value }))}
+                    className="w-full bg-[#1c1f2e] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white focus:border-yellow-500/50 focus:outline-none"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs uppercase tracking-wider font-semibold text-gray-500 mb-2">New Start Time</label>
+                  <input 
+                    type="time" 
+                    value={rescheduleModal.newTime}
+                    onChange={e => setRescheduleModal(prev => ({ ...prev, newTime: e.target.value }))}
+                    className="w-full bg-[#1c1f2e] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white focus:border-yellow-500/50 focus:outline-none"
+                  />
+                </div>
+              </div>
+
+              <button 
+                onClick={handleRescheduleSubmit}
+                disabled={rescheduleModal.loading}
+                className="w-full bg-yellow-500 hover:bg-yellow-600 text-white rounded-lg py-3.5 font-bold text-lg transition-colors border-none cursor-pointer flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {rescheduleModal.loading ? "Checking..." : <><FiCalendar /> Confirm Reschedule</>}
               </button>
             </div>
           </div>

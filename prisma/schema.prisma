@@ -37,6 +37,9 @@ model Member {
   bookings              Booking[]
   loyaltyHistory        LoyaltyHistory[]
   tournamentRegistrations TournamentRegistration[]
+  walletTransactions    WalletTransaction[]
+  couponAssignments     CouponAssignment[]
+  couponUsages          CouponUsage[]
   createdAt             DateTime                 @default(now())
   updatedAt             DateTime                 @updatedAt
 
@@ -163,10 +166,13 @@ model Booking {
   participantCount Int       @default(1)
   pointsRedeemed   Int       @default(0)
   discountAmount   Float     @default(0)
+  advancePaid      Float     @default(0)
+  amountDue        Float     @default(0)
   createdAt        DateTime  @default(now())
   updatedAt        DateTime  @updatedAt
   payments         Payment[]
   tickets          Ticket[]
+  couponUsages     CouponUsage[]
 
   @@index([startTime])
   @@index([turfId])
@@ -276,4 +282,64 @@ model TournamentPlayer {
   updatedAt      DateTime               @updatedAt
 
   @@index([registrationId])
+}
+
+model WalletTransaction {
+  id          String   @id @default(cuid())
+  memberId    String
+  member      Member   @relation(fields: [memberId], references: [id])
+  amount      Float
+  type        String   // "CREDIT" or "DEBIT"
+  description String?
+  createdAt   DateTime @default(now())
+
+  @@index([memberId])
+}
+
+model Coupon {
+  id                      String    @id @default(cuid())
+  code                    String    @unique
+  discountAmount          Float?    
+  discountPercentage      Float?    
+  maxDiscount             Float?    
+  maxUses                 Int?
+  maxUsesPerUser          Int?
+  isActive                Boolean   @default(true)
+  expiryDate              DateTime?
+  
+  appOnly                 Boolean   @default(false)
+  isPublic                Boolean   @default(true)
+
+  targetType              String    @default("EVERYONE") // EVERYONE, SPECIFIC_MEMBERS, MILESTONE_ALL_TIME, MILESTONE_FROM_CREATION
+  milestoneBookingsCount  Int?      
+  createdAt               DateTime  @default(now())
+  updatedAt               DateTime  @updatedAt
+
+  usages                  CouponUsage[]
+  assignments             CouponAssignment[]
+}
+
+model CouponAssignment {
+  id        String   @id @default(cuid())
+  couponId  String
+  memberId  String
+  createdAt DateTime @default(now())
+
+  coupon    Coupon   @relation(fields: [couponId], references: [id], onDelete: Cascade)
+  member    Member   @relation(fields: [memberId], references: [id], onDelete: Cascade)
+
+  @@unique([couponId, memberId])
+}
+
+model CouponUsage {
+  id        String   @id @default(cuid())
+  couponId  String
+  memberId  String
+  bookingId String
+  discountAmount Float @default(0)
+  createdAt DateTime @default(now())
+
+  coupon    Coupon   @relation(fields: [couponId], references: [id])
+  member    Member   @relation(fields: [memberId], references: [id])
+  booking   Booking  @relation(fields: [bookingId], references: [id])
 }
