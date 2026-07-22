@@ -22,7 +22,7 @@ export default function CalendarClient() {
     });
   }, [date]);
 
-  const hours = [];
+  const hours: number[] = [];
   for (let i = START_HOUR; i < END_HOUR; i++) {
     hours.push(i);
   }

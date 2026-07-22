@@ -62,7 +62,7 @@ export default function MembersClient({ initialMembers, plans }: { initialMember
   const handleExportCSV = () => {
     let csv = "Name,Mobile,Email,Joined Date\n";
     members.forEach(m => {
-      csv += `"${m.name}","${m.mobile}","${m.email || ''}","${formatIST(m.createdAt)}"\n`;
+      csv += `"${m.name}","${m.mobile}","${m.email || ''}","${formatIST(m.createdAt, 'MMM d, yyyy')}"\n`;
     });
     const blob = new Blob([csv], { type: 'text/csv' });
     const url = window.URL.createObjectURL(blob);
@@ -399,10 +399,8 @@ export default function MembersClient({ initialMembers, plans }: { initialMember
               </div>
             </div>
           ))}
-          {families.length === 0 && (
-            <div className="col-span-full text-center p-10 text-gray-500">No families registered yet.</div>
-          )}
         </div>
+        )
       )}
 
       {/* Edit/Create Member Modal */}
