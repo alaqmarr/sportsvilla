@@ -28,7 +28,7 @@ export async function middleware(req: any) {
   }
 
   // Auth logic
-  if (pathname.startsWith("/m") || pathname === "/login" || pathname === "/setup") {
+  if (pathname.startsWith("/m") || pathname === "/login" || pathname === "/setup" || pathname === "/downloads") {
     return NextResponse.next();
   }
 

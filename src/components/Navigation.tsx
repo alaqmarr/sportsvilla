@@ -51,7 +51,7 @@ export function Navigation({ children }: { children: React.ReactNode }) {
   }, [pathname, router]);
 
   // If we are on the public member portal, CFD, or print page, don't show the admin sidebar
-  if (pathname.startsWith('/m/') || pathname === '/m' || pathname === '/display' || pathname.startsWith('/print')) {
+  if (pathname.startsWith('/m/') || pathname === '/m' || pathname === '/display' || pathname.startsWith('/print') || pathname === '/downloads') {
     return <>{children}</>;
   }
 
