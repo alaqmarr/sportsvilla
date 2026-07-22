@@ -4,7 +4,7 @@ import { prisma } from '@/lib/prisma';
 import jwt from 'jsonwebtoken';
 import { jsonResponse } from '@/lib/api-logger';
 
-const JWT_SECRET = process.env.JWT_SECRET || 'secret';
+const JWT_SECRET = process.env.NEXTAUTH_SECRET || 'fallback_secret_for_dev';
 
 export async function POST(request: Request) {
   console.log(`[API] POST /api/client/v1/auth/register-firebase called`);
