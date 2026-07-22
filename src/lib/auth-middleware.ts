@@ -12,9 +12,14 @@ export async function authenticateClient(request: Request) {
 
   const token = authHeader.split("Bearer ")[1];
   try {
+    if (!process.env.NEXTAUTH_SECRET) {
+      console.error('FATAL: NEXTAUTH_SECRET environment variable is not set!');
+      return { error: NextResponse.json({ error: 'Server configuration error' }, { status: 500 }) };
+    }
+
     const decodedToken = jwt.verify(
       token,
-      process.env.NEXTAUTH_SECRET || "fallback_secret_for_dev",
+      process.env.NEXTAUTH_SECRET!
     ) as any;
 
     const phoneNumber = decodedToken.uid;
@@ -52,7 +57,8 @@ export async function authenticateClient(request: Request) {
     }
 
     return { member, decodedToken };
-  } catch (error) {
+  } catch (error: any) {
+    console.error("JWT Verification Error:", error.message, "Token:", token.substring(0, 20) + "...");
     return {
       error: NextResponse.json({ error: "Invalid token" }, { status: 401 }),
     };

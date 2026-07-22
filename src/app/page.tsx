@@ -5,11 +5,14 @@ import { FiUsers, FiActivity, FiCheckCircle } from "react-icons/fi";
 import CheckinScanner from "@/components/CheckinScanner";
 
 export default async function Dashboard() {
-  const todayStart = new Date();
-  todayStart.setHours(0,0,0,0);
+  // Calculate "today" in IST (Asia/Kolkata = UTC+5:30)
+  // This ensures correct attendance counts even when server runs in UTC (e.g., Vercel)
+  const nowUtc = new Date();
+  const istOffsetMs = 5.5 * 60 * 60 * 1000;
+  const istNow = new Date(nowUtc.getTime() + istOffsetMs);
+  const todayStart = new Date(Date.UTC(istNow.getUTCFullYear(), istNow.getUTCMonth(), istNow.getUTCDate()) - istOffsetMs);
   
-  const nextWeek = new Date();
-  nextWeek.setDate(nextWeek.getDate() + 7);
+  const nextWeek = new Date(todayStart.getTime() + 7 * 24 * 60 * 60 * 1000);
 
   const [totalMembers, activePlans, todaysAttendance, expiringMemberships, sports] = await Promise.all([
     prisma.member.count(),

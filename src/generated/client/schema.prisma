@@ -45,12 +45,13 @@ model Member {
   updatedAt               DateTime                 @updatedAt
 
   @@index([mobile])
+  @@index([updatedAt])
 }
 
 model LoyaltyHistory {
   id          String   @id @default(cuid())
   memberId    String
-  member      Member   @relation(fields: [memberId], references: [id])
+  member      Member   @relation(fields: [memberId], references: [id], onDelete: Cascade)
   points      Int
   type        String // "EARNED" | "REDEEMED"
   source      String // "BOOKING" | "CHECKIN" | "MEMBERSHIP" | "MANUAL"
@@ -58,6 +59,7 @@ model LoyaltyHistory {
   createdAt   DateTime @default(now())
 
   @@index([memberId])
+  @@index([createdAt])
 }
 
 model Sport {
@@ -72,6 +74,8 @@ model Sport {
   tournaments            Tournament[]
   createdAt              DateTime         @default(now())
   updatedAt              DateTime         @updatedAt
+
+  @@index([updatedAt])
 }
 
 model Turf {
@@ -90,6 +94,8 @@ model Turf {
   bookings                 Booking[]
   createdAt                DateTime    @default(now())
   updatedAt                DateTime    @updatedAt
+
+  @@index([updatedAt])
 }
 
 model TurfSport {
@@ -122,7 +128,7 @@ model MembershipPlan {
 model MemberMembership {
   id               String         @id @default(cuid())
   memberId         String
-  member           Member         @relation(fields: [memberId], references: [id])
+  member           Member         @relation(fields: [memberId], references: [id], onDelete: Cascade)
   membershipPlanId String
   membershipPlan   MembershipPlan @relation(fields: [membershipPlanId], references: [id])
   startDate        DateTime
@@ -138,7 +144,7 @@ model MemberMembership {
 model Attendance {
   id               String          @id @default(cuid())
   memberId         String
-  member           Member          @relation(fields: [memberId], references: [id])
+  member           Member          @relation(fields: [memberId], references: [id], onDelete: Cascade)
   date             DateTime        @default(now())
   status           String          @default("PRESENT")
   sportId          String? // Optional: what sport they played
@@ -149,6 +155,8 @@ model Attendance {
   createdAt        DateTime        @default(now())
 
   @@index([date])
+  @@index([memberId, date])
+  @@index([createdAt])
 }
 
 model Booking {
@@ -156,7 +164,7 @@ model Booking {
   turfId           String
   turf             Turf          @relation(fields: [turfId], references: [id])
   memberId         String
-  member           Member        @relation(fields: [memberId], references: [id])
+  member           Member        @relation(fields: [memberId], references: [id], onDelete: Cascade)
   sportId          String
   sport            Sport         @relation(fields: [sportId], references: [id])
   startTime        DateTime
@@ -177,17 +185,20 @@ model Booking {
 
   @@index([startTime])
   @@index([turfId])
+  @@index([memberId])
+  @@index([updatedAt])
 }
 
 model Payment {
   id        String   @id @default(cuid())
   bookingId String
-  booking   Booking  @relation(fields: [bookingId], references: [id])
+  booking   Booking  @relation(fields: [bookingId], references: [id], onDelete: Cascade)
   amount    Float
   method    String // CASH, ONLINE
   createdAt DateTime @default(now())
 
   @@index([bookingId])
+  @@index([createdAt])
 }
 
 model DisplaySession {
@@ -203,7 +214,7 @@ model DisplaySession {
 model Ticket {
   id        String    @id @default(cuid())
   bookingId String
-  booking   Booking   @relation(fields: [bookingId], references: [id])
+  booking   Booking   @relation(fields: [bookingId], references: [id], onDelete: Cascade)
   qrCode    String    @unique
   guestName String?
   status    String    @default("VALID") // VALID, CHECKED_IN, CANCELLED
@@ -215,11 +226,13 @@ model Ticket {
 }
 
 model Otp {
-  id        String   @id @default(cuid())
-  mobile    String   @unique
-  code      String
-  expiresAt DateTime
-  createdAt DateTime @default(now())
+  id          String    @id @default(cuid())
+  mobile      String    @unique
+  code        String
+  expiresAt   DateTime
+  attempts    Int       @default(0)
+  lockedUntil DateTime?
+  createdAt   DateTime  @default(now())
 }
 
 model Tournament {
@@ -288,13 +301,14 @@ model TournamentPlayer {
 model WalletTransaction {
   id          String   @id @default(cuid())
   memberId    String
-  member      Member   @relation(fields: [memberId], references: [id])
+  member      Member   @relation(fields: [memberId], references: [id], onDelete: Cascade)
   amount      Float
   type        String // "CREDIT" or "DEBIT"
   description String?
   createdAt   DateTime @default(now())
 
   @@index([memberId])
+  @@index([createdAt])
 }
 
 model Coupon {
@@ -341,7 +355,7 @@ model CouponUsage {
   createdAt      DateTime @default(now())
 
   coupon  Coupon  @relation(fields: [couponId], references: [id])
-  member  Member  @relation(fields: [memberId], references: [id])
+  member  Member  @relation(fields: [memberId], references: [id], onDelete: Cascade)
   booking Booking @relation(fields: [bookingId], references: [id])
 }
 
@@ -367,7 +381,7 @@ model LoyaltyAchievement {
   achievedAt DateTime @default(now())
 
   trigger LoyaltyTrigger @relation(fields: [triggerId], references: [id])
-  member  Member         @relation(fields: [memberId], references: [id])
+  member  Member         @relation(fields: [memberId], references: [id], onDelete: Cascade)
 
   @@unique([triggerId, memberId])
 }
@@ -381,4 +395,35 @@ model AppAnnouncement {
   isActive  Boolean  @default(true)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model AppVersion {
+  id           String   @id @default(cuid())
+  platform     String   @unique // "android" or "ios"
+  version      String // e.g. "1.0.1"
+  forceUpdate  Boolean  @default(true)
+  downloadUrl  String?
+  fileKey      String?
+  releaseNotes String?
+  updatedAt    DateTime @updatedAt
+}
+
+// Single-row table bumped on every create/update/delete for efficient sync polling
+model LastUpdate {
+  id        String   @id @default("singleton")
+  timestamp DateTime @default(now())
+  source    String   @default("init") // which table triggered the update
+}
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  action    String // e.g. "CREATE_BOOKING", "CANCEL_BOOKING"
+  entity    String // e.g. "Booking", "Member"
+  entityId  String
+  details   String? // JSON string
+  adminName String   @default("System")
+  createdAt DateTime @default(now())
+
+  @@index([entity, entityId])
+  @@index([createdAt])
 }

@@ -3,11 +3,15 @@ import { DeleteObjectCommand } from '@aws-sdk/client-s3';
 import { s3Client } from '@/lib/s3';
 import { logger } from '@/lib/logger';
 import { jsonResponse } from '@/lib/api-logger';
+import { authenticateClient } from '@/lib/auth-middleware';
 
 const bucketName = process.env.R2_BUCKET_NAME || '';
 
 export async function POST(request: Request) {
   console.log(`[API] POST /api/client/v1/upload/delete called`);
+  const authRes = await authenticateClient(request);
+  if ('error' in authRes) return authRes.error;
+
   try {
     const { key, publicUrl } = await request.json();
 

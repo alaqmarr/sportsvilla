@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { logger } from '@/lib/logger';
 import { jsonResponse } from '@/lib/api-logger';
+import { randomInt } from 'crypto';
 
 const INFOBIP_API_KEY = process.env.INFOBIP_API_KEY || '';
 const INFOBIP_BASE_URL = process.env.INFOBIP_BASE_URL || '';
@@ -21,8 +22,20 @@ export async function POST(request: Request) {
       return jsonResponse({ error: "Invalid mobile number" }, { status: 400 });
     }
 
+    // Rate limit: check if there's a recent OTP for this number
+    const existingOtp = await prisma.otp.findUnique({ where: { mobile: cleanMobile } });
+    if (existingOtp) {
+      const timeSinceCreated = Date.now() - existingOtp.createdAt.getTime();
+      if (timeSinceCreated < 60000) { // 1 minute cooldown
+        return jsonResponse({ error: 'Please wait before requesting another OTP.' }, { status: 429 });
+      }
+      if (existingOtp.lockedUntil && new Date() < existingOtp.lockedUntil) {
+        return jsonResponse({ error: 'Account temporarily locked due to too many attempts.' }, { status: 429 });
+      }
+    }
+
     // Generate 6 digit code
-    const code = Math.floor(100000 + Math.random() * 900000).toString();
+    const code = randomInt(100000, 999999).toString();
     
     // Set expiration 5 minutes from now
     const expiresAt = new Date();
@@ -62,9 +75,7 @@ export async function POST(request: Request) {
 
     return jsonResponse({ 
       success: true, 
-      message: "OTP generated",
-      // Include code in dev logs but don't show to user
-      dev_code: code 
+      message: "OTP sent successfully"
     });
   } catch (error: any) {
     logger.error('OTP send failed internally', { error: error.message, stack: error.stack });

@@ -272,6 +272,8 @@ exports.Prisma.OtpScalarFieldEnum = {
   mobile: 'mobile',
   code: 'code',
   expiresAt: 'expiresAt',
+  attempts: 'attempts',
+  lockedUntil: 'lockedUntil',
   createdAt: 'createdAt'
 };
 
@@ -395,6 +397,33 @@ exports.Prisma.AppAnnouncementScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.AppVersionScalarFieldEnum = {
+  id: 'id',
+  platform: 'platform',
+  version: 'version',
+  forceUpdate: 'forceUpdate',
+  downloadUrl: 'downloadUrl',
+  fileKey: 'fileKey',
+  releaseNotes: 'releaseNotes',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.LastUpdateScalarFieldEnum = {
+  id: 'id',
+  timestamp: 'timestamp',
+  source: 'source'
+};
+
+exports.Prisma.AuditLogScalarFieldEnum = {
+  id: 'id',
+  action: 'action',
+  entity: 'entity',
+  entityId: 'entityId',
+  details: 'details',
+  adminName: 'adminName',
+  createdAt: 'createdAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -431,7 +460,10 @@ exports.Prisma.ModelName = {
   CouponUsage: 'CouponUsage',
   LoyaltyTrigger: 'LoyaltyTrigger',
   LoyaltyAchievement: 'LoyaltyAchievement',
-  AppAnnouncement: 'AppAnnouncement'
+  AppAnnouncement: 'AppAnnouncement',
+  AppVersion: 'AppVersion',
+  LastUpdate: 'LastUpdate',
+  AuditLog: 'AuditLog'
 };
 
 /**

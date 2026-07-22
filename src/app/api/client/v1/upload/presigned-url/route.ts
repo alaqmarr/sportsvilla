@@ -5,16 +5,25 @@ import { s3Client } from '@/lib/s3';
 import { v4 as uuidv4 } from 'uuid';
 import { logger } from '@/lib/logger';
 import { jsonResponse } from '@/lib/api-logger';
+import { authenticateClient } from '@/lib/auth-middleware';
 
 const bucketName = process.env.R2_BUCKET_NAME || '';
 
 export async function POST(request: Request) {
   console.log(`[API] POST /api/client/v1/upload/presigned-url called`);
+  const authRes = await authenticateClient(request);
+  if ('error' in authRes) return authRes.error;
+
   try {
     const { contentType, fileExtension } = await request.json();
 
     if (!contentType || !fileExtension) {
       return jsonResponse({ error: "contentType and fileExtension are required" }, { status: 400 });
+    }
+
+    const ALLOWED_EXTENSIONS = ['jpg', 'jpeg', 'png', 'webp', 'gif', 'pdf', 'apk'];
+    if (!ALLOWED_EXTENSIONS.includes(fileExtension.replace('.', '').toLowerCase())) {
+      return jsonResponse({ error: 'File type not allowed.' }, { status: 400 });
     }
 
     const key = `uploads/${uuidv4()}.${fileExtension.replace('.', '')}`;

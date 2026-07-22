@@ -1,6 +1,7 @@
 "use server";
 import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
+import { bumpSyncTimestamp } from '@/lib/sync';
 
 export async function fetchMembers(identifier: string) {
   const isMobile = /^\d{10}$/.test(identifier);
@@ -127,6 +128,7 @@ export async function markAttendance(data: { memberId: string; sportId: string; 
     });
   }
 
+  await bumpSyncTimestamp('attendance');
   revalidatePath("/", "layout");
   revalidatePath("/", "layout");
   return attendance;

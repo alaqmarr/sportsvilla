@@ -26,33 +26,52 @@ export async function GET(request: Request) {
     const targetMemberData = familyMembers.find(m => m.id === targetMemberId);
 
     // 2. Fetch Loyalty History
-    const history = await prisma.loyaltyHistory.findMany({
+    const loyaltyHistory = await prisma.loyaltyHistory.findMany({
       where: { memberId: targetMemberId },
       orderBy: { createdAt: 'desc' },
       take: 20
     });
 
-    const transactions = history.map(h => {
-      const d = new Date(h.createdAt);
+    // Fetch Wallet Transactions
+    const walletHistory = await prisma.walletTransaction.findMany({
+      where: { memberId: targetMemberId },
+      orderBy: { createdAt: 'desc' },
+      take: 20
+    });
+
+    const combined = [
+      ...loyaltyHistory.map(h => ({
+        id: `loyalty_${h.id}`,
+        isWallet: false,
+        title: h.type === "REDEEMED" ? "Points Redeemed" : (h.source === "WELCOME" ? "Welcome Bonus" : "Points Earned"),
+        subtitle: h.description || h.source,
+        createdAt: h.createdAt,
+        points: h.points,
+        amount: 0,
+        type: h.type // EARNED or REDEEMED
+      })),
+      ...walletHistory.map(w => ({
+        id: `wallet_${w.id}`,
+        isWallet: true,
+        title: w.type === "CREDIT" ? "Wallet Credited" : "Wallet Debited",
+        subtitle: w.description || 'Wallet Transaction',
+        createdAt: w.createdAt,
+        points: 0,
+        amount: w.amount,
+        type: w.type // CREDIT or DEBIT
+      }))
+    ];
+
+    combined.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+
+    const transactions = combined.slice(0, 30).map(t => {
+      const d = new Date(t.createdAt);
       const dateStr = d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
       const timeStr = d.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
-      
-      // Calculate INR amount equivalent if it was a redemption or earn
-      // For now we'll send it as is and let the client multiply by conversion rate, 
-      // but if we want the actual snapshot amount, we might need a separate field.
-      // We will provide the points to frontend.
-      
-      let title = "Points Earned";
-      if (h.type === "REDEEMED") title = "Points Redeemed";
-      if (h.source === "WELCOME") title = "Welcome Bonus";
 
       return {
-        id: h.id,
-        title,
-        subtitle: h.description || h.source,
-        dateStr: `${dateStr}, ${timeStr}`,
-        points: h.points,
-        type: h.type, // EARNED or REDEEMED
+        ...t,
+        dateStr: `${dateStr}, ${timeStr}`
       };
     });
 

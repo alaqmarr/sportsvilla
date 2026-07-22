@@ -2,6 +2,7 @@
 import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 import { addDays } from "date-fns";
+import { bumpSyncTimestamp } from '@/lib/sync';
 
 async function generateMemberId(mobile: string) {
   const count = await prisma.member.count({ where: { mobile } });
@@ -19,6 +20,7 @@ export async function createMember(data: { name: string; mobile: string; email?:
     },
     include: { memberships: { include: { membershipPlan: { include: { sport: true } } } } }
   });
+  await bumpSyncTimestamp('member');
   revalidatePath("/", "layout");
   return member;
 }
@@ -41,6 +43,7 @@ export async function createFamily(data: { mobile: string; members: { name: stri
     createdMembers.push(member);
   }
   
+  await bumpSyncTimestamp('member');
   revalidatePath("/", "layout");
   return createdMembers;
 }
@@ -54,12 +57,14 @@ export async function updateMember(id: string, data: { name: string; mobile: str
       email: data.email || null,
     },
   });
+  await bumpSyncTimestamp('member');
   revalidatePath("/", "layout");
   return member;
 }
 
 export async function deleteMember(id: string) {
   await prisma.member.delete({ where: { id } });
+  await bumpSyncTimestamp('member');
   revalidatePath("/", "layout");
 }
 
@@ -101,53 +106,58 @@ export async function assignPlan(data: { memberIds?: string[]; memberId?: string
   const createdMemberships = [];
 
   for (const tMemberId of targetMemberIds) {
-    // Prevent overlapping assignment of the exact same plan
-    const overlappingPlan = await prisma.memberMembership.findFirst({
-      where: {
-        memberId: tMemberId,
-        membershipPlanId: data.planId,
-        status: "ACTIVE",
-        AND: [
-          { startDate: { lte: end } },
-          { endDate: { gte: start } }
-        ]
-      }
-    });
-
-    if (overlappingPlan) {
-      throw new Error(`Overlapping dates: Member with ID ${tMemberId} already has an active assignment for this plan during this period.`);
-    }
-
-    const memberMembership = await prisma.memberMembership.create({
-      data: {
-        memberId: tMemberId,
-        membershipPlanId: data.planId,
-        startDate: start,
-        endDate: end,
-        status: "ACTIVE"
-      },
-      include: { membershipPlan: true }
-    });
-    
-    if (plan.rewardPointsOnPurchase > 0) {
-      await prisma.member.update({
-        where: { id: tMemberId },
-        data: { loyaltyPoints: { increment: plan.rewardPointsOnPurchase } }
-      });
-      await prisma.loyaltyHistory.create({
-        data: {
+    const memberMembership = await prisma.$transaction(async (tx) => {
+      // Prevent overlapping assignment of the exact same plan
+      const overlappingPlan = await tx.memberMembership.findFirst({
+        where: {
           memberId: tMemberId,
-          points: plan.rewardPointsOnPurchase,
-          type: "EARNED",
-          source: "MEMBERSHIP",
-          description: `Earned for purchasing membership: ${plan.name}`
+          membershipPlanId: data.planId,
+          status: "ACTIVE",
+          AND: [
+            { startDate: { lte: end } },
+            { endDate: { gte: start } }
+          ]
         }
       });
-    }
+
+      if (overlappingPlan) {
+        throw new Error(`Overlapping dates: Member with ID ${tMemberId} already has an active assignment for this plan during this period.`);
+      }
+
+      const created = await tx.memberMembership.create({
+        data: {
+          memberId: tMemberId,
+          membershipPlanId: data.planId,
+          startDate: start,
+          endDate: end,
+          status: "ACTIVE"
+        },
+        include: { membershipPlan: true }
+      });
+      
+      if (plan.rewardPointsOnPurchase > 0) {
+        await tx.member.update({
+          where: { id: tMemberId },
+          data: { loyaltyPoints: { increment: plan.rewardPointsOnPurchase } }
+        });
+        await tx.loyaltyHistory.create({
+          data: {
+            memberId: tMemberId,
+            points: plan.rewardPointsOnPurchase,
+            type: "EARNED",
+            source: "MEMBERSHIP",
+            description: `Earned for purchasing membership: ${plan.name}`
+          }
+        });
+      }
+      
+      return created;
+    });
 
     createdMemberships.push(memberMembership);
   }
   
+  await bumpSyncTimestamp('member');
   revalidatePath("/", "layout");
   return createdMemberships;
 }

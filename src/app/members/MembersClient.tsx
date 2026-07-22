@@ -7,13 +7,15 @@ import { useAlert } from "@/components/AlertProvider";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import QRCodeLib from "qrcode";
-import { FiTrash2, FiEdit2, FiPlus, FiX, FiDownload, FiImage, FiMessageCircle, FiUserCheck, FiUsers } from "react-icons/fi";
+import { FiTrash2, FiEdit2, FiPlus, FiX, FiDownload, FiImage, FiMessageCircle, FiUserCheck, FiUsers, FiFileText } from "react-icons/fi";
 
 export default function MembersClient({ initialMembers, plans }: { initialMembers: any[], plans: any[] }) {
   const { showAlert } = useAlert();
   const [members, setMembers] = useState(initialMembers);
   
   const [activeTab, setActiveTab] = useState<'MEMBERS'|'FAMILIES'>('MEMBERS');
+  const [page, setPage] = useState(1);
+  const itemsPerPage = 20;
 
   const [showMemberModal, setShowMemberModal] = useState(false);
   const [showFamilyModal, setShowFamilyModal] = useState(false);
@@ -56,6 +58,20 @@ export default function MembersClient({ initialMembers, plans }: { initialMember
     });
     return Array.from(map.entries()).map(([mobile, mems]) => ({ mobile, members: mems }));
   }, [members]);
+
+  const handleExportCSV = () => {
+    let csv = "Name,Mobile,Email,Joined Date\n";
+    members.forEach(m => {
+      csv += `"${m.name}","${m.mobile}","${m.email || ''}","${formatIST(m.createdAt)}"\n`;
+    });
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `sportsvilla_members_${new Date().toISOString().split('T')[0]}.csv`;
+    a.click();
+    window.URL.revokeObjectURL(url);
+  };
 
   function openCreateModal() {
     setEditingId(""); setName(""); setMobile(""); setEmail("");
@@ -240,6 +256,9 @@ export default function MembersClient({ initialMembers, plans }: { initialMember
           </div>
         </div>
         <div className="flex gap-3">
+          <button onClick={handleExportCSV} className="bg-gray-800 hover:bg-gray-700 text-white border border-gray-600 rounded-lg px-4 py-2.5 text-sm font-semibold inline-flex items-center gap-2 transition-colors cursor-pointer">
+            <FiFileText /> Export CSV
+          </button>
           <button onClick={openAssignModal} className="bg-emerald-500 hover:bg-emerald-600 text-white rounded-lg px-5 py-2.5 text-sm font-semibold inline-flex items-center gap-2 transition-colors cursor-pointer border-none">
             <FiPlus /> Assign Plan
           </button>
@@ -277,7 +296,7 @@ export default function MembersClient({ initialMembers, plans }: { initialMember
                   </tr>
                 </thead>
                 <tbody>
-                  {members.map(member => (
+                  {members.slice((page - 1) * itemsPerPage, page * itemsPerPage).map(member => (
                     <tr key={member.id} className="hover:bg-[#1c1f2e]/50 transition-colors">
                       <td className="px-6 py-5 text-sm border-b border-[#2a2d3e]">
                         <div className="flex items-center gap-4">
@@ -320,15 +339,47 @@ export default function MembersClient({ initialMembers, plans }: { initialMember
                 </tbody>
               </table>
             </div>
+            {members.length > itemsPerPage && (
+              <div className="flex justify-between items-center p-4 border-t border-[#2a2d3e]">
+                <div className="text-sm text-gray-500">
+                  Showing {(page - 1) * itemsPerPage + 1} to {Math.min(page * itemsPerPage, members.length)} of {members.length}
+                </div>
+                <div className="flex gap-2">
+                  <button 
+                    disabled={page === 1}
+                    onClick={() => setPage(p => p - 1)}
+                    className="px-3 py-1 bg-[#1a1d27] border border-[#2a2d3e] text-white rounded disabled:opacity-50"
+                  >
+                    Previous
+                  </button>
+                  <button 
+                    disabled={page * itemsPerPage >= members.length}
+                    onClick={() => setPage(p => p + 1)}
+                    className="px-3 py-1 bg-[#1a1d27] border border-[#2a2d3e] text-white rounded disabled:opacity-50"
+                  >
+                    Next
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
         )
       )}
 
       {activeTab === 'FAMILIES' && (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {families.map(family => (
-            <div key={family.mobile} className="bg-[#161923] border border-[#2a2d3e] rounded-xl p-6">
-              <div className="flex justify-between items-start mb-4 pb-4 border-b border-[#2a2d3e]">
+        families.length === 0 ? (
+          <div className="bg-[#161923] border border-[#2a2d3e] rounded-xl p-16 text-center flex flex-col items-center">
+            <div className="w-16 h-16 rounded-full bg-orange-500/10 text-orange-400 flex items-center justify-center text-3xl mb-6"><FiUsers /></div>
+            <h3 className="text-2xl font-bold text-white mb-2">No Families Setup</h3>
+            <button onClick={openFamilyModal} className="bg-orange-500 hover:bg-orange-600 text-white rounded-lg px-5 py-2.5 text-sm font-semibold inline-flex items-center gap-2 transition-colors cursor-pointer border-none mt-4">
+              <FiPlus /> Setup First Family
+            </button>
+          </div>
+        ) : (
+          <div className="space-y-6">
+            {families.map(family => (
+              <div key={family.mobile} className="bg-[#161923] border border-[#2a2d3e] rounded-xl overflow-hidden">
+                <div className="bg-[#1c1f2e] border-b border-[#2a2d3e] px-6 py-4 flex justify-between items-center">
                 <div>
                   <h3 className="text-lg font-bold text-white font-['Outfit']">{family.mobile}</h3>
                   <p className="text-sm text-gray-500 mt-1">{family.members.length} Family Member(s)</p>

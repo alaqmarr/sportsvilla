@@ -5,23 +5,12 @@ export const dynamic = "force-dynamic";
 
 export async function GET() {
   try {
-    const [member, attendance, plan, sport, turf] = await Promise.all([
-      prisma.member.findFirst({ orderBy: { updatedAt: 'desc' }, select: { updatedAt: true } }),
-      prisma.attendance.findFirst({ orderBy: { createdAt: 'desc' }, select: { createdAt: true } }),
-      prisma.membershipPlan.findFirst({ orderBy: { updatedAt: 'desc' }, select: { updatedAt: true } }),
-      prisma.sport.findFirst({ orderBy: { updatedAt: 'desc' }, select: { updatedAt: true } }),
-      prisma.turf.findFirst({ orderBy: { updatedAt: 'desc' }, select: { updatedAt: true } }),
-    ]);
+    // Single-row lookup — O(1) instead of 5 full-table scans
+    const lastUpdate = await prisma.lastUpdate.findUnique({
+      where: { id: 'singleton' }
+    });
 
-    const times = [
-      member?.updatedAt?.getTime() || 0,
-      attendance?.createdAt?.getTime() || 0,
-      plan?.updatedAt?.getTime() || 0,
-      sport?.updatedAt?.getTime() || 0,
-      turf?.updatedAt?.getTime() || 0,
-    ];
-
-    const latest = Math.max(...times);
+    const latest = lastUpdate?.timestamp?.getTime() || 0;
     
     return NextResponse.json({ latest });
   } catch (error) {

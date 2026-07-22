@@ -70,8 +70,12 @@ export async function GET(request: Request) {
       orderBy: { endDate: 'desc' }
     });
 
+    // Limit attendance to last 60 days for performance (avoid loading years of history)
+    const sixtyDaysAgo = new Date();
+    sixtyDaysAgo.setDate(sixtyDaysAgo.getDate() - 60);
+
     const attendances = await prisma.attendance.findMany({
-      where: { memberId: targetMemberId },
+      where: { memberId: targetMemberId, date: { gte: sixtyDaysAgo } },
       include: { sport: { select: { name: true } } },
       orderBy: { date: 'desc' }
     });

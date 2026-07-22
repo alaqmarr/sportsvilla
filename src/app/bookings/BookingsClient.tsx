@@ -39,7 +39,7 @@ function generateSlots(dateStr: string, durationMin: number, openTime: string = 
 
 export default function BookingsClient({ turfs, facilityHours = { openTime: '06:00', closeTime: '23:00' }, pointsPerRupee = 100 }: { turfs: any[], facilityHours?: { openTime: string, closeTime: string }, pointsPerRupee?: number }) {
   const { showAlert } = useAlert();
-  const [activeTab, setActiveTab] = useState<'NEW' | 'MANAGE'>('MANAGE');
+  const [activeTab, setActiveTab] = useState<'NEW' | 'MANAGE'>('NEW');
   
   // Extract unique sports from turfs
   const sports = useMemo(() => {

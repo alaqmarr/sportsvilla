@@ -1,6 +1,7 @@
 "use server";
 import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
+import { bumpSyncTimestamp } from '@/lib/sync';
 
 export async function addWalletTransaction(data: { memberId: string; amount: number; type: "CREDIT" | "DEBIT"; description?: string }) {
   if (!data.memberId || !data.amount || data.amount <= 0) {
@@ -37,6 +38,7 @@ export async function addWalletTransaction(data: { memberId: string; amount: num
     });
   });
 
+  await bumpSyncTimestamp('wallet');
   revalidatePath("/", "layout");
   return { success: true };
 }

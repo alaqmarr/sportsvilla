@@ -4,7 +4,7 @@ import { fetchAllBookingsByDate, cancelBooking, updateBookingPayment, previewExt
 import { useAlert } from "@/components/AlertProvider";
 import QRCodeLib from "qrcode";
 import { formatIST } from "../../lib/dateUtils";
-import { FiXCircle, FiCheckCircle, FiClock, FiCreditCard, FiTrash2, FiMaximize2, FiUser, FiMapPin, FiX, FiCheck, FiMonitor, FiPrinter, FiCalendar } from "react-icons/fi";
+import { FiXCircle, FiCheckCircle, FiClock, FiCreditCard, FiTrash2, FiMaximize2, FiUser, FiMapPin, FiX, FiCheck, FiMonitor, FiPrinter, FiCalendar, FiFileText } from "react-icons/fi";
 import { rescheduleBooking } from "./actions";
 
 export default function ManageBookings() {
@@ -61,12 +61,29 @@ export default function ManageBookings() {
     if (!confirm("Are you sure you want to cancel this booking?")) return;
     try {
       await cancelBooking(id);
-      showAlert("Cancelled", "Booking has been cancelled.", "success");
+      showAlert("Success", "Booking cancelled", "success");
       loadBookings();
     } catch (e: any) {
-      showAlert("Error", e.message || "Failed to cancel booking", "error");
+      showAlert("Error", e.message || "Failed to cancel", "error");
     }
   }
+
+  const handleExportCSV = () => {
+    let csv = "ID,Turf,Member,Mobile,Date,Start,End,Status,Payment,Price\n";
+    bookings.forEach(b => {
+      const dateStr = formatIST(new Date(b.startTime), 'yyyy-MM-dd');
+      const startStr = formatIST(new Date(b.startTime), 'HH:mm');
+      const endStr = formatIST(new Date(b.endTime), 'HH:mm');
+      csv += `"${b.id}","${b.turf?.name}","${b.member?.name}","${b.member?.mobile}","${dateStr}","${startStr}","${endStr}","${b.status}","${b.paymentStatus}",${b.price}\n`;
+    });
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `sportsvilla_bookings_${date}.csv`;
+    a.click();
+    window.URL.revokeObjectURL(url);
+  };
 
   async function handleTogglePayment(id: string, currentStatus: string) {
     if (currentStatus === "PAID") {
@@ -272,12 +289,17 @@ export default function ManageBookings() {
           <h2 className="text-xl font-bold font-['Outfit'] text-white">Manage Bookings</h2>
           <p className="text-gray-500 text-sm mt-1">View and manage all bookings for a specific day.</p>
         </div>
-        <input 
-          type="date" 
-          value={date}
-          onChange={e => setDate(e.target.value)}
-          className="bg-[#161923] border border-[#2a2d3e] rounded-lg px-4 py-2.5 text-white focus:border-emerald-500/50 focus:outline-none"
-        />
+        <div className="flex items-center gap-3">
+          <button onClick={handleExportCSV} className="bg-gray-800 hover:bg-gray-700 text-white border border-gray-600 rounded-lg px-4 py-2.5 text-sm font-semibold inline-flex items-center gap-2 transition-colors cursor-pointer">
+            <FiFileText /> Export
+          </button>
+          <input 
+            type="date" 
+            value={date}
+            onChange={e => setDate(e.target.value)}
+            className="bg-[#161923] border border-[#2a2d3e] rounded-lg px-4 py-2.5 text-white focus:border-emerald-500/50 focus:outline-none"
+          />
+        </div>
       </div>
 
       <div className="bg-[#161923] border border-[#2a2d3e] rounded-xl overflow-hidden">

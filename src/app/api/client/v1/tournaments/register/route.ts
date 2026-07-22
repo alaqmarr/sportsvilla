@@ -40,40 +40,58 @@ export async function POST(request: Request) {
       return jsonResponse({ error: "Registration is closed for this tournament" }, { status: 400 });
     }
 
-    if (paymentUtr && paymentUtr !== 'MANUAL_CASH') {
-      const existing = await prisma.tournamentRegistration.findFirst({
-        where: {
+    // Create Registration and Players within a transaction to enforce maxTeams limit and avoid race conditions
+    const registration = await prisma.$transaction(async (tx) => {
+      // Re-fetch tournament to ensure latest maxTeams data
+      const currentTournament = await tx.tournament.findUnique({ where: { id: tournamentId } });
+      if (!currentTournament) throw new Error("Tournament not found");
+
+      if (paymentUtr && paymentUtr !== 'MANUAL_CASH') {
+        const existing = await tx.tournamentRegistration.findFirst({
+          where: {
+            tournamentId,
+            paymentUtr,
+            status: { not: 'REJECTED' }
+          }
+        });
+        
+        if (existing) {
+          throw new Error("This Transaction ID (UTR) has already been used for this tournament. Please contact support if you think this is a mistake.");
+        }
+      }
+
+      if (currentTournament.maxTeams) {
+        const currentRegistrations = await tx.tournamentRegistration.count({
+          where: {
+            tournamentId,
+            status: { not: 'REJECTED' }
+          }
+        });
+        if (currentRegistrations >= currentTournament.maxTeams) {
+          throw new Error("Tournament is full");
+        }
+      }
+
+      return await tx.tournamentRegistration.create({
+        data: {
           tournamentId,
+          registeredById: memberId,
+          teamName,
+          paymentScreenshotUrl,
           paymentUtr,
-          status: { not: 'REJECTED' }
+          paymentMethod: paymentMethod || 'UPI',
+          status: (paymentMethod === 'CASH') ? 'PENDING' : (aiVerified ? 'VERIFIED' : 'PENDING'),
+          players: {
+            create: players.map((p: any) => ({
+              name: p.name,
+              mobile: p.mobile
+            }))
+          }
+        },
+        include: {
+          players: true
         }
       });
-      
-      if (existing) {
-        return jsonResponse({ error: "This Transaction ID (UTR) has already been used for this tournament. Please contact support if you think this is a mistake." }, { status: 400 });
-      }
-    }
-
-    // Create Registration and Players
-    const registration = await prisma.tournamentRegistration.create({
-      data: {
-        tournamentId,
-        registeredById: memberId,
-        teamName,
-        paymentScreenshotUrl,
-        paymentUtr,
-        paymentMethod: paymentMethod || 'UPI',
-        status: (paymentMethod === 'CASH') ? 'PENDING' : (aiVerified ? 'VERIFIED' : 'PENDING'),
-        players: {
-          create: players.map((p: any) => ({
-            name: p.name,
-            mobile: p.mobile
-          }))
-        }
-      },
-      include: {
-        players: true
-      }
     });
 
     return jsonResponse({ success: true, registration });

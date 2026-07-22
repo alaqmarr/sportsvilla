@@ -1,7 +1,7 @@
 "use client";
 import { usePathname, useRouter } from "next/navigation";
 import { useState, useEffect, useRef } from "react";
-import { FiHome, FiUsers, FiMapPin, FiActivity, FiLayers, FiShield, FiFileText, FiMenu, FiX, FiUser, FiCalendar, FiServer, FiLogOut, FiSettings, FiCalendar as FiCalendar2, FiAward, FiCheckCircle, FiTag, FiCreditCard } from "react-icons/fi";
+import { FiHome, FiUsers, FiMapPin, FiActivity, FiLayers, FiShield, FiFileText, FiMenu, FiX, FiUser, FiCalendar, FiServer, FiLogOut, FiSettings, FiCalendar as FiCalendar2, FiAward, FiCheckCircle, FiTag, FiCreditCard, FiSmartphone } from "react-icons/fi";
 import { signOut } from "next-auth/react";
 import LinkComponent from "next/link";
 import Image from "next/image";
@@ -45,7 +45,7 @@ export function Navigation({ children }: { children: React.ReactNode }) {
       } catch (e) {
         // ignore fetch errors silently
       }
-    }, 2000); // Check for new data every 2 seconds
+    }, 5000); // Check for new data every 5 seconds (reduced from 2s for performance)
 
     return () => clearInterval(interval);
   }, [pathname, router]);
@@ -55,26 +55,55 @@ export function Navigation({ children }: { children: React.ReactNode }) {
     return <>{children}</>;
   }
 
-  const links = [
-    { href: "/", label: "Dashboard", icon: <FiHome /> },
-    { href: "/sports", label: "Sports", icon: <FiActivity /> },
-    { href: "/turfs", label: "Grounds & Turfs", icon: <FiMapPin /> },
-    { href: "/plans", label: "Memberships", icon: <FiLayers /> },
-    { href: "/members", label: "Members Directory", icon: <FiUsers /> },
-    { href: "/loyalty", label: "Loyalty Leaderboard", icon: <FiAward /> },
-    { href: "/coupons", label: "Coupons", icon: <FiTag /> },
-    { href: "/wallets", label: "Member Wallets", icon: <FiCreditCard /> },
-    { href: "/bookings", label: "Turf Bookings", icon: <FiCalendar2 /> },
-    { href: "/tournaments", label: "Tournaments", icon: <FiAward /> },
-    { href: "/checkin", label: "Entry Check-in", icon: <FiCheckCircle /> },
-    { href: "/attendance", label: "Attendance Kiosk", icon: <FiShield /> },
-    { href: "/admin", label: "Manage Admins", icon: <FiShield /> },
-    { href: "/reports/member", label: "Member Reports", icon: <FiUser /> },
-    { href: "/reports/attendance", label: "Attendance Reports", icon: <FiCalendar /> },
-    { href: "/reports/memberships", label: "Membership Reports", icon: <FiLayers /> },
-    { href: "/settings", label: "Settings", icon: <FiSettings /> },
-    { href: "/server", label: "Server Health", icon: <FiServer /> },
-    { href: "/app-logs", label: "System Logs", icon: <FiFileText /> },
+  const linkGroups = [
+    {
+      title: "Core",
+      links: [
+        { href: "/", label: "Dashboard", icon: <FiHome /> },
+      ]
+    },
+    {
+      title: "Operations",
+      links: [
+        { href: "/calendar", label: "Booking Calendar", icon: <FiCalendar2 /> },
+        { href: "/bookings", label: "Turf Bookings", icon: <FiCalendar2 /> },
+        { href: "/checkin", label: "Entry Check-in", icon: <FiCheckCircle /> },
+        { href: "/attendance", label: "Attendance Kiosk", icon: <FiShield /> },
+        { href: "/tournaments", label: "Tournaments", icon: <FiAward /> },
+      ]
+    },
+    {
+      title: "Management",
+      links: [
+        { href: "/members", label: "Members Directory", icon: <FiUsers /> },
+        { href: "/wallets", label: "Member Wallets", icon: <FiCreditCard /> },
+        { href: "/plans", label: "Memberships", icon: <FiLayers /> },
+        { href: "/coupons", label: "Coupons", icon: <FiTag /> },
+        { href: "/loyalty", label: "Loyalty Leaderboard", icon: <FiAward /> },
+        { href: "/sports", label: "Sports", icon: <FiActivity /> },
+        { href: "/turfs", label: "Grounds & Turfs", icon: <FiMapPin /> },
+      ]
+    },
+    {
+      title: "Reports",
+      links: [
+        { href: "/reports/revenue", label: "Revenue Dashboard", icon: <FiFileText /> },
+        { href: "/reports/member", label: "Member Reports", icon: <FiUser /> },
+        { href: "/reports/attendance", label: "Attendance Reports", icon: <FiCalendar /> },
+        { href: "/reports/memberships", label: "Membership Reports", icon: <FiLayers /> },
+      ]
+    },
+    {
+      title: "System",
+      links: [
+        { href: "/audit", label: "Audit Logs", icon: <FiShield /> },
+        { href: "/admin", label: "Manage Admins", icon: <FiShield /> },
+        { href: "/settings", label: "Settings", icon: <FiSettings /> },
+        { href: "/app-versions", label: "App Versions", icon: <FiSmartphone /> },
+        { href: "/server", label: "Server Health", icon: <FiServer /> },
+        { href: "/app-logs", label: "System Logs", icon: <FiFileText /> },
+      ]
+    }
   ];
 
   return (
@@ -105,10 +134,10 @@ export function Navigation({ children }: { children: React.ReactNode }) {
       )}
 
       <aside className={`
-        w-64 bg-[#161923] border-r border-[#2a2d3e] p-6 flex flex-col gap-2 shrink-0 h-screen fixed top-0 left-0 z-50 transition-transform duration-300
+        w-64 bg-[#161923] border-r border-[#2a2d3e] py-6 flex flex-col gap-2 shrink-0 h-screen fixed top-0 left-0 z-50 transition-transform duration-300
         ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
       `}>
-        <div className="flex flex-col mb-8 px-3">
+        <div className="flex flex-col mb-8 px-6">
           <div className="flex justify-between items-center">
             <div className="font-['Outfit'] text-xl font-black text-orange-500 tracking-wider uppercase hidden lg:block">
               <Image src="/long-logo.png" alt="SportsVilla" width={160} height={40} unoptimized className="h-10 w-auto object-contain" />
@@ -127,20 +156,29 @@ export function Navigation({ children }: { children: React.ReactNode }) {
           )}
         </div>
         
-        <nav className="flex flex-col gap-2 flex-1 overflow-y-auto">
-          {links.map(link => (
-            <LinkComponent
-              key={link.href}
-              href={link.href}
-              className={`flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-colors ${
-                pathname === link.href
-                  ? 'bg-orange-500/10 text-orange-400 border-l-[3px] border-orange-500 rounded-l-none'
-                  : 'text-gray-400 hover:bg-[#1c1f2e] hover:text-white'
-              }`}
-            >
-              {link.icon}
-              <span>{link.label}</span>
-            </LinkComponent>
+        <nav className="flex flex-col gap-5 flex-1 overflow-y-auto px-3 pb-4 styled-scrollbar">
+          {linkGroups.map((group, index) => (
+            <div key={index} className="flex flex-col gap-1">
+              {group.title !== "Core" && (
+                <div className="px-3 mb-1 text-[11px] font-bold text-gray-500 uppercase tracking-widest">
+                  {group.title}
+                </div>
+              )}
+              {group.links.map(link => (
+                <LinkComponent
+                  key={link.href}
+                  href={link.href}
+                  className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
+                    pathname === link.href
+                      ? 'bg-orange-500/10 text-orange-400 border-l-[3px] border-orange-500 rounded-l-none'
+                      : 'text-gray-400 hover:bg-[#1c1f2e] hover:text-white'
+                  }`}
+                >
+                  {link.icon}
+                  <span>{link.label}</span>
+                </LinkComponent>
+              ))}
+            </div>
           ))}
         </nav>
         <div className="mt-auto pt-6 pb-2 border-t border-[#2a2d3e]">

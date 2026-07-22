@@ -2,6 +2,8 @@ import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { authenticateClient } from '@/lib/auth-middleware';
 import { jsonResponse } from '@/lib/api-logger';
+import { randomUUID } from 'crypto';
+import { bumpSyncTimestamp } from '@/lib/sync';
 
 export async function GET(request: Request) {
   console.log(`[API] GET /api/client/v1/bookings called`);
@@ -62,11 +64,20 @@ export async function POST(request: Request) {
 
   try {
     const body = await request.json();
-    const { turfId, sportId, startTime, endTime, price, participantCount, couponCode, walletAmountToUse = 0, memberId: requestedMemberId } = body;
+    const { turfId, sportId, startTime, endTime, participantCount, couponCode, walletAmountToUse = 0, memberId: requestedMemberId } = body;
 
-    // STRICT AVAILABILITY CHECK
     const start = new Date(startTime);
     const end = new Date(endTime);
+
+    // Bug #6: Block past-date bookings
+    if (start < new Date()) {
+      return jsonResponse({ error: 'Cannot book a slot in the past.' }, { status: 400 });
+    }
+
+    // Bug #15: Validate participantCount
+    if (!participantCount || participantCount < 1 || !Number.isInteger(participantCount)) {
+      return jsonResponse({ error: 'Invalid participant count.' }, { status: 400 });
+    }
     
     // Check global settings for online booking
     const globalSettings = await prisma.setting.findMany();
@@ -80,10 +91,22 @@ export async function POST(request: Request) {
       return jsonResponse({ error: 'Online booking is currently disabled by the administrator.' }, { status: 403 });
     }
     
-    // 1. Get turf capacity
+    // 1. Get turf and validate
     const turf = await prisma.turf.findUnique({ where: { id: turfId } });
     if (!turf) {
       return jsonResponse({ error: 'Turf not found' }, { status: 404 });
+    }
+
+    // Bug #16: Validate sportId exists and belongs to turf
+    const sport = await prisma.sport.findUnique({ where: { id: sportId } });
+    if (!sport) {
+      return jsonResponse({ error: 'Sport not found' }, { status: 404 });
+    }
+    const turfSport = await prisma.turfSport.findUnique({ 
+      where: { turfId_sportId: { turfId, sportId } } 
+    });
+    if (!turfSport) {
+      return jsonResponse({ error: 'This sport is not available at the selected turf.' }, { status: 400 });
     }
 
     // 2. Count overlapping bookings for this exact slot
@@ -105,13 +128,15 @@ export async function POST(request: Request) {
       }, { status: 409 });
     }
 
-    // Calculate SV Points Earned (e.g. 1% of total price as points)
-    const pointsEarned = Math.floor(price * 0.01);
+    // Bug #1: Server-side price calculation — do NOT trust client price
+    const durationMs = end.getTime() - start.getTime();
+    const slotDurationMs = (turf.bookingDurationMinutes || 60) * 60 * 1000;
+    const numberOfSlots = Math.max(1, Math.round(durationMs / slotDurationMs));
+    const price = (turf.bookingPrice || 0) * numberOfSlots * participantCount;
 
     // Profile and Wallet Logic
     let targetMemberId = member.id;
     if (requestedMemberId && requestedMemberId !== member.id) {
-      // Validate requestedMemberId belongs to same family
       const familyCheck = await prisma.member.findFirst({
         where: { id: requestedMemberId, mobile: member.mobile }
       });
@@ -128,156 +153,205 @@ export async function POST(request: Request) {
     
     // Validate Coupon if provided
     let discountAmount = 0;
-    let validCouponId = null;
+    let validCouponId: string | null = null;
     if (couponCode) {
       const coupon = await prisma.coupon.findUnique({
-        where: { code: couponCode.toUpperCase() },
+        where: { code: String(couponCode).toUpperCase() },
         include: { usages: true, assignments: true }
       });
       
-      if (coupon && coupon.isActive && (!coupon.expiryDate || new Date() <= coupon.expiryDate)) {
-        // Evaluate target constraints
-        let isAllowed = true;
-        if (coupon.targetType === 'SPECIFIC_MEMBERS') {
-          isAllowed = coupon.assignments.some(a => a.memberId === targetMemberId);
-        } else if (coupon.targetType === 'MILESTONE_ALL_TIME') {
-          const userBookingsCount = await prisma.booking.count({ where: { memberId: targetMemberId, status: 'COMPLETED' } });
-          if (userBookingsCount < (coupon.milestoneBookingsCount || 0)) isAllowed = false;
+      // Bug #11: Return error if coupon is invalid instead of silently ignoring
+      if (!coupon) {
+        return jsonResponse({ error: 'Invalid coupon code.' }, { status: 400 });
+      }
+      if (!coupon.isActive) {
+        return jsonResponse({ error: 'This coupon is no longer active.' }, { status: 400 });
+      }
+      if (coupon.expiryDate && new Date() > coupon.expiryDate) {
+        return jsonResponse({ error: 'This coupon has expired.' }, { status: 400 });
+      }
+
+      // Evaluate target constraints
+      let isAllowed = true;
+      let targetError = '';
+      if (coupon.targetType === 'SPECIFIC_MEMBERS') {
+        isAllowed = coupon.assignments.some(a => a.memberId === targetMemberId);
+        if (!isAllowed) targetError = 'This coupon is not available for your account.';
+      } else if (coupon.targetType === 'MILESTONE_ALL_TIME' || coupon.targetType === 'MILESTONE_FROM_CREATION') {
+        // Bug #9: Count CONFIRMED + COMPLETED, not just COMPLETED
+        const milestoneWhere: any = { 
+          memberId: targetMemberId, 
+          status: { in: ['CONFIRMED', 'COMPLETED'] } 
+        };
+        // Bug #8: Handle MILESTONE_FROM_CREATION — count bookings since member joined
+        if (coupon.targetType === 'MILESTONE_FROM_CREATION' && memberData?.joinDate) {
+          milestoneWhere.createdAt = { gte: memberData.joinDate };
         }
-
-        // Global and per user limits
-        if (coupon.maxUses !== null && coupon.usages.length >= coupon.maxUses) isAllowed = false;
-        if (coupon.maxUsesPerUser !== null && coupon.usages.filter(u => u.memberId === targetMemberId).length >= coupon.maxUsesPerUser) isAllowed = false;
-
-        if (isAllowed) {
-          validCouponId = coupon.id;
-          if (coupon.discountAmount !== null && coupon.discountAmount > 0) {
-            discountAmount = coupon.discountAmount;
-          } else if (coupon.discountPercentage !== null && coupon.discountPercentage > 0) {
-            discountAmount = (price * coupon.discountPercentage) / 100;
-          }
-          if (coupon.maxDiscount !== null && discountAmount > coupon.maxDiscount) discountAmount = coupon.maxDiscount;
-          if (discountAmount > price) discountAmount = price;
-          discountAmount = Math.floor(discountAmount);
+        const userBookingsCount = await prisma.booking.count({ where: milestoneWhere });
+        if (userBookingsCount < (coupon.milestoneBookingsCount || 0)) {
+          isAllowed = false;
+          targetError = `You need at least ${coupon.milestoneBookingsCount} bookings to use this coupon.`;
         }
       }
+
+      // Global and per user limits
+      if (coupon.maxUses !== null && coupon.usages.length >= coupon.maxUses) {
+        isAllowed = false;
+        targetError = 'This coupon has reached its maximum usage limit.';
+      }
+      if (coupon.maxUsesPerUser !== null && coupon.usages.filter(u => u.memberId === targetMemberId).length >= coupon.maxUsesPerUser) {
+        isAllowed = false;
+        targetError = 'You have already used this coupon the maximum number of times.';
+      }
+
+      if (!isAllowed) {
+        return jsonResponse({ error: targetError || 'Coupon not applicable.' }, { status: 400 });
+      }
+
+      validCouponId = coupon.id;
+      if (coupon.discountAmount !== null && coupon.discountAmount > 0) {
+        discountAmount = coupon.discountAmount;
+      } else if (coupon.discountPercentage !== null && coupon.discountPercentage > 0) {
+        discountAmount = (price * coupon.discountPercentage) / 100;
+      }
+      if (coupon.maxDiscount !== null && discountAmount > coupon.maxDiscount) discountAmount = coupon.maxDiscount;
+      if (discountAmount > price) discountAmount = price;
+      discountAmount = Math.floor(discountAmount);
     }
 
     const subtotal = price - discountAmount;
     
-    // Wallet deduction rules
+    // Wallet deduction - allow any amount up to balance and subtotal
     let advancePaid = 0;
     if (walletAmountToUse > 0) {
-      if (walletAmountToUse >= 100 || subtotal < 100) { // Enforce min 100 Rs cap, unless subtotal is < 100
-        advancePaid = Math.min(walletAmountToUse, currentWallet, subtotal);
-      }
+      advancePaid = Math.min(walletAmountToUse, currentWallet, subtotal);
     }
     
     const amountDue = subtotal - advancePaid;
 
-    const queries: any[] = [];
-    const bookingIdString = `cm${Date.now()}${Math.floor(Math.random()*1000)}`;
+    // Calculate SV Points Earned on subtotal (net amount), not gross price
+    const pointsEarned = Math.floor(subtotal * 0.01);
 
     let paymentStatus = "Due";
     if (amountDue === 0) {
-      paymentStatus = advancePaid > 0 ? "Paid using Wallet" : "Paid"; // e.g. 100% coupon -> "Paid", Wallet -> "Paid using Wallet"
+      paymentStatus = advancePaid > 0 ? "Paid using Wallet" : "Paid";
     } else if (advancePaid > 0) {
       paymentStatus = "Advance Paid";
     }
 
-    // Create Booking
-    const booking = await prisma.booking.create({
-      data: {
-        turfId,
-        sportId,
-        memberId: targetMemberId,
-        startTime: start,
-        endTime: end,
-        price,
-        participantCount,
-        status: "CONFIRMED",
-        paymentStatus,
-        advancePaid,
-        amountDue
-      }
-    });
-
-    if (validCouponId) {
-      queries.push(prisma.couponUsage.create({
-        data: {
-          couponId: validCouponId,
-          memberId: targetMemberId,
-          bookingId: booking.id,
-          discountAmount
-        }
-      }));
+    // Generate ticket data ahead of time
+    const ticketData: { qrCode: string; guestName: string | null }[] = [];
+    for (let i = 0; i < participantCount; i++) {
+      ticketData.push({
+        qrCode: `TICKET-${randomUUID()}`,
+        guestName: body.guests && body.guests[i] ? body.guests[i].name : null
+      });
     }
 
-    if (advancePaid > 0) {
-      queries.push(
-        prisma.member.update({
+    // Bug #2: Use interactive transaction so everything is atomic
+    const booking = await prisma.$transaction(async (tx) => {
+      // Re-check availability inside transaction to reduce race window
+      const txOverlapping = await tx.booking.findMany({
+        where: {
+          turfId,
+          status: { not: 'CANCELLED' },
+          startTime: { lt: end },
+          endTime: { gt: start }
+        }
+      });
+      const txUsed = txOverlapping.reduce((sum, b) => sum + b.participantCount, 0);
+      if (participantCount > (turf.capacityPerSlot - txUsed)) {
+        throw new Error('SLOT_UNAVAILABLE');
+      }
+
+      // Re-check wallet balance inside transaction to prevent double-spending
+      if (advancePaid > 0) {
+        const freshMember = await tx.member.findUnique({ where: { id: targetMemberId } });
+        if (!freshMember || freshMember.walletBalance < advancePaid) {
+          throw new Error('INSUFFICIENT_WALLET');
+        }
+      }
+
+      // Create booking
+      const newBooking = await tx.booking.create({
+        data: {
+          turfId,
+          sportId,
+          memberId: targetMemberId,
+          startTime: start,
+          endTime: end,
+          price,
+          participantCount,
+          status: "CONFIRMED",
+          paymentStatus,
+          advancePaid,
+          amountDue
+        }
+      });
+
+      // Coupon usage
+      if (validCouponId) {
+        await tx.couponUsage.create({
+          data: {
+            couponId: validCouponId,
+            memberId: targetMemberId,
+            bookingId: newBooking.id,
+            discountAmount
+          }
+        });
+      }
+
+      // Wallet deduction
+      if (advancePaid > 0) {
+        await tx.member.update({
           where: { id: targetMemberId },
           data: { walletBalance: { decrement: advancePaid } }
-        })
-      );
-      queries.push(
-        prisma.walletTransaction.create({
+        });
+        await tx.walletTransaction.create({
           data: {
             memberId: targetMemberId,
             amount: advancePaid,
             type: 'DEBIT',
-            description: `Payment for booking ${booking.id}`
+            description: `Payment for booking ${newBooking.id}`
           }
-        })
-      );
-      queries.push(
-        prisma.payment.create({
+        });
+        await tx.payment.create({
           data: {
-            bookingId: booking.id,
+            bookingId: newBooking.id,
             amount: advancePaid,
             method: 'WALLET'
           }
-        })
-      );
-    }
+        });
+      }
 
-    // Add points to Member
-    if (pointsEarned > 0) {
-      queries.push(
-        prisma.member.update({
+      // Add loyalty points
+      if (pointsEarned > 0) {
+        await tx.member.update({
           where: { id: targetMemberId },
           data: { loyaltyPoints: { increment: pointsEarned } }
-        })
-      );
-      // Add History
-      queries.push(
-        prisma.loyaltyHistory.create({
+        });
+        await tx.loyaltyHistory.create({
           data: {
             memberId: targetMemberId,
             points: pointsEarned,
             type: 'EARNED',
             source: 'BOOKING',
-            description: `Earned from booking ${booking.id}`
+            description: `Earned from booking ${newBooking.id}`
           }
-        })
-      );
-    }
+        });
+      }
 
-    // Generate Tickets
-    const tickets = [];
-    for(let i = 0; i < participantCount; i++) {
-      tickets.push({
-        bookingId: booking.id,
-        qrCode: `TICKET-${booking.id}-${i}-${Date.now()}`,
-        guestName: body.guests && body.guests[i] ? body.guests[i].name : null
-      });
-    }
+      // Generate Tickets
+      const tickets = ticketData.map(t => ({
+        bookingId: newBooking.id,
+        ...t
+      }));
+      await tx.ticket.createMany({ data: tickets });
 
-    queries.push(prisma.ticket.createMany({ data: tickets }));
+      return newBooking;
+    });
 
-    await prisma.$transaction(queries);
-
-    // Evaluate Loyalty Triggers
+    // Evaluate Loyalty Triggers (outside main transaction — non-critical)
     try {
       const userBookings = await prisma.booking.count({
         where: {
@@ -345,12 +419,19 @@ export async function POST(request: Request) {
         }
       }
     } catch (triggerError) {
-    console.error(`[API ERROR] POST /api/client/v1/bookings ->`, triggerError);
-      console.error('Error evaluating loyalty triggers:', triggerError);
+      console.error(`[API ERROR] POST /api/client/v1/bookings -> Loyalty triggers:`, triggerError);
     }
 
+    await bumpSyncTimestamp('booking');
     return jsonResponse({ success: true, booking });
   } catch (error: any) {
+    if (error.message === 'SLOT_UNAVAILABLE') {
+      return jsonResponse({ error: 'Slot is no longer available or insufficient courts.' }, { status: 409 });
+    }
+    if (error.message === 'INSUFFICIENT_WALLET') {
+      return jsonResponse({ error: 'Insufficient wallet balance.' }, { status: 400 });
+    }
+    console.error(`[API ERROR] POST /api/client/v1/bookings ->`, error);
     return jsonResponse({ error: error.message }, { status: 500 });
   }
 }

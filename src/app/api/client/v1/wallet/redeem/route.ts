@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { authenticateClient } from '@/lib/auth-middleware';
 import { jsonResponse } from '@/lib/api-logger';
+import { bumpSyncTimestamp } from '@/lib/sync';
 
 export async function POST(request: Request) {
   console.log(`[API] POST /api/client/v1/wallet/redeem called`);
@@ -50,8 +51,8 @@ export async function POST(request: Request) {
       const updatedMember = await tx.member.update({
         where: { id: targetMemberId },
         data: {
-          loyaltyPoints: member.loyaltyPoints - points,
-          walletBalance: member.walletBalance + amountToAdd
+          loyaltyPoints: { decrement: points },
+          walletBalance: { increment: amountToAdd }
         }
       });
 
@@ -79,6 +80,7 @@ export async function POST(request: Request) {
       return updatedMember;
     });
 
+    await bumpSyncTimestamp('wallet');
     return jsonResponse({ success: true, profile: result });
   } catch (error: any) {
     console.error(`[API ERROR] POST /api/client/v1/wallet/redeem ->`, error);

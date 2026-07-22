@@ -4,6 +4,7 @@ import { randomUUID } from "crypto";
 import { revalidatePath } from "next/cache";
 import { getSettings } from "../settings/actions";
 import { formatIST } from "../../lib/dateUtils";
+import { bumpSyncTimestamp } from '@/lib/sync';
 export async function fetchBookableTurfs() {
   return await prisma.turf.findMany({
     where: { 
@@ -126,73 +127,95 @@ export async function createBooking(data: {
     pointsToDeduct = totalDiscount * pointsPerRupee;
   }
 
-  const bookings: any[] = [];
-  
-  for (const item of bookingItems) {
-    // Create a booking for each family member
-    for (const currentMemberId of allMemberIds) {
-      const isPrimary = currentMemberId === member.id;
-      
-      // Each member gets 1 ticket for themselves
-      const ticketsForThisMember: { qrCode: string, guestName: string | null }[] = [{
-        qrCode: `TKT-${Math.random().toString(36).substring(2, 10).toUpperCase()}-SYKM`,
-        guestName: null // The member themselves
-      }];
-
-      // Only the primary member's booking carries the non-family guest tickets
-      if (isPrimary && nonFamilyGuestCount > 0) {
-        for (let g = 0; g < nonFamilyGuestCount; g++) {
-          ticketsForThisMember.push({
-            qrCode: `TKT-${Math.random().toString(36).substring(2, 10).toUpperCase()}-SYKM`,
-            guestName: nonFamilyGuestNames[g] || null
-          });
-        }
-      }
-
-      const bookingParticipants = isPrimary ? (1 + nonFamilyGuestCount) : 1;
-      const bookingPrice = item.pricePerPerson * bookingParticipants;
-
-      // Only primary member gets the discount
-      const ratio = totalPrice > 0 ? (bookingPrice / totalPrice) : 0;
-      const itemDiscount = isPrimary ? (totalDiscount * ratio) : 0;
-      const itemPointsRedeemed = isPrimary ? Math.round(pointsToDeduct * ratio) : 0;
-
-      const booking = await prisma.booking.create({
-        data: {
+  const bookings = await prisma.$transaction(async (tx) => {
+    const createdBookings: any[] = [];
+    
+    for (const item of bookingItems) {
+      // 1. Verify Slot Availability to prevent double-booking Walk-ins
+      const overlappingBookings = await tx.booking.findMany({
+        where: {
           turfId: item.turf.id,
-          memberId: currentMemberId,
-          sportId: data.sportId,
-          startTime: new Date(item.slot.startTime),
-          endTime: new Date(item.slot.endTime),
-          price: bookingPrice,
-          discountAmount: itemDiscount,
-          pointsRedeemed: itemPointsRedeemed,
-          participantCount: bookingParticipants,
-          paymentStatus: "UNPAID",
-          status: "CONFIRMED",
-          tickets: { create: ticketsForThisMember }
+          status: { not: "CANCELLED" },
+          startTime: { lt: new Date(item.slot.endTime) },
+          endTime: { gt: new Date(item.slot.startTime) }
         }
       });
-      bookings.push(booking);
-    }
-  }
-
-  if (pointsToDeduct > 0) {
-    await prisma.member.update({
-      where: { id: member.id },
-      data: { loyaltyPoints: { decrement: pointsToDeduct } }
-    });
-    await prisma.loyaltyHistory.create({
-      data: {
-        memberId: member.id,
-        points: pointsToDeduct,
-        type: "REDEEMED",
-        source: "BOOKING",
-        description: `Redeemed points for ₹${totalDiscount} discount`
+      
+      const usedCapacity = overlappingBookings.reduce((sum, b) => sum + b.participantCount, 0);
+      const turfCapacity = item.turf.capacityPerSlot || 1;
+      
+      if (participantCount > (turfCapacity - usedCapacity)) {
+        throw new Error(`Slot unavailable for Turf ${item.turf.name} at ${new Date(item.slot.startTime).toLocaleTimeString()}. Capacity exceeded.`);
       }
-    });
-  }
 
+      // Create a booking for each family member
+      for (const currentMemberId of allMemberIds) {
+        const isPrimary = currentMemberId === member.id;
+        
+        // Each member gets 1 ticket for themselves
+        const ticketsForThisMember: { qrCode: string, guestName: string | null }[] = [{
+          qrCode: `TKT-${Math.random().toString(36).substring(2, 10).toUpperCase()}-SYKM`,
+          guestName: null
+        }];
+
+        // Only the primary member's booking carries the non-family guest tickets
+        if (isPrimary && nonFamilyGuestCount > 0) {
+          for (let g = 0; g < nonFamilyGuestCount; g++) {
+            ticketsForThisMember.push({
+              qrCode: `TKT-${Math.random().toString(36).substring(2, 10).toUpperCase()}-SYKM`,
+              guestName: nonFamilyGuestNames[g] || null
+            });
+          }
+        }
+
+        const bookingParticipants = isPrimary ? (1 + nonFamilyGuestCount) : 1;
+        const bookingPrice = item.pricePerPerson * bookingParticipants;
+
+        // Only primary member gets the discount
+        const ratio = totalPrice > 0 ? (bookingPrice / totalPrice) : 0;
+        const itemDiscount = isPrimary ? (totalDiscount * ratio) : 0;
+        const itemPointsRedeemed = isPrimary ? Math.round(pointsToDeduct * ratio) : 0;
+
+        const booking = await tx.booking.create({
+          data: {
+            turfId: item.turf.id,
+            memberId: currentMemberId,
+            sportId: data.sportId,
+            startTime: new Date(item.slot.startTime),
+            endTime: new Date(item.slot.endTime),
+            price: bookingPrice,
+            discountAmount: itemDiscount,
+            pointsRedeemed: itemPointsRedeemed,
+            participantCount: bookingParticipants,
+            paymentStatus: "UNPAID",
+            status: "CONFIRMED",
+            tickets: { create: ticketsForThisMember }
+          }
+        });
+        createdBookings.push(booking);
+      }
+    }
+
+    if (pointsToDeduct > 0) {
+      await tx.member.update({
+        where: { id: member.id },
+        data: { loyaltyPoints: { decrement: pointsToDeduct } }
+      });
+      await tx.loyaltyHistory.create({
+        data: {
+          memberId: member.id,
+          points: pointsToDeduct,
+          type: "REDEEMED",
+          source: "BOOKING",
+          description: `Redeemed points for ₹${totalDiscount} discount`
+        }
+      });
+    }
+
+    return createdBookings;
+  });
+
+  await bumpSyncTimestamp('admin_booking');
   revalidatePath("/", "layout");
   return bookings;
 }
@@ -258,9 +281,21 @@ export async function cancelBooking(id: string) {
       );
     }
     
+    queries.push(
+      prisma.auditLog.create({
+        data: {
+          action: "CANCEL_BOOKING",
+          entity: "Booking",
+          entityId: id,
+          details: JSON.stringify({ previousStatus: booking.status })
+        }
+      })
+    );
+
     await prisma.$transaction(queries);
   }
   
+  await bumpSyncTimestamp('admin_booking');
   revalidatePath("/", "layout");
 }
 
@@ -293,6 +328,7 @@ export async function rescheduleBooking(id: string, newTurfId: string, newStartT
     }
   });
 
+  await bumpSyncTimestamp('admin_booking');
   revalidatePath("/", "layout");
 }
 
@@ -301,6 +337,7 @@ export async function updateBookingPayment(id: string, paymentStatus: "PAID" | "
     where: { id },
     data: { paymentStatus }
   });
+  await bumpSyncTimestamp('admin_booking');
   revalidatePath("/", "layout");
 }
 
@@ -446,6 +483,7 @@ export async function confirmExtension(bookingId: string, allocations: any[]) {
     }
   }
 
+  await bumpSyncTimestamp('admin_booking');
   revalidatePath("/", "layout");
   return { success: true };
 }
@@ -479,6 +517,7 @@ export async function addPayment(bookingId: string, amount: number, method: "CAS
     data: { paymentStatus: newStatus }
   });
 
+  await bumpSyncTimestamp('admin_booking');
   revalidatePath("/", "layout");
 }
 

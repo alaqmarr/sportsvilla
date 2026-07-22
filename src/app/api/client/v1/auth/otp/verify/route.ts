@@ -26,9 +26,24 @@ export async function POST(request: Request) {
       return jsonResponse({ error: "No OTP request found for this number" }, { status: 400 });
     }
 
+    // Check if locked
+    if (otpRecord.lockedUntil && new Date() < otpRecord.lockedUntil) {
+      const waitMinutes = Math.ceil((otpRecord.lockedUntil.getTime() - Date.now()) / 60000);
+      return jsonResponse({ error: `Too many attempts. Try again in ${waitMinutes} minute(s).` }, { status: 429 });
+    }
+
     if (otpRecord.code !== code) {
-      logger.warn('OTP Verify failed: invalid code', { mobile: cleanMobile, provided: code });
-      return jsonResponse({ error: "Invalid OTP code" }, { status: 400 });
+      // Increment attempts
+      const newAttempts = otpRecord.attempts + 1;
+      const updateData: any = { attempts: newAttempts };
+      if (newAttempts >= 5) {
+        // Lock for 15 minutes
+        updateData.lockedUntil = new Date(Date.now() + 15 * 60 * 1000);
+      }
+      await prisma.otp.update({ where: { id: otpRecord.id }, data: updateData });
+      
+      logger.warn('OTP Verify failed: invalid code', { mobile: cleanMobile, attempts: newAttempts });
+      return jsonResponse({ error: newAttempts >= 5 ? 'Too many failed attempts. Locked for 15 minutes.' : 'Invalid OTP code' }, { status: newAttempts >= 5 ? 429 : 400 });
     }
 
     if (new Date() > otpRecord.expiresAt) {
@@ -50,9 +65,12 @@ export async function POST(request: Request) {
 
     // Mint a custom JWT
     const uid = cleanMobile.startsWith('+') ? cleanMobile : `+91${cleanMobile}`;
+    if (!process.env.NEXTAUTH_SECRET) {
+      return jsonResponse({ error: 'Server configuration error' }, { status: 500 });
+    }
     const customToken = jwt.sign(
       { uid, memberId: member.id },
-      process.env.NEXTAUTH_SECRET || 'fallback_secret_for_dev',
+      process.env.NEXTAUTH_SECRET!,
       { expiresIn: '30d' }
     );
 
@@ -60,9 +78,8 @@ export async function POST(request: Request) {
 
     return jsonResponse({ 
       success: true, 
-      customToken, // We keep the property name 'customToken' so the frontend API contract doesn't break
-      memberId: member.id,
-      member 
+      customToken,
+      memberId: member.id
     });
   } catch (error: any) {
     console.error(`[API ERROR] POST /api/client/v1/auth/otp/verify ->`, error);

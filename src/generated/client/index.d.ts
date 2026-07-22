@@ -138,6 +138,21 @@ export type LoyaltyAchievement = $Result.DefaultSelection<Prisma.$LoyaltyAchieve
  * 
  */
 export type AppAnnouncement = $Result.DefaultSelection<Prisma.$AppAnnouncementPayload>
+/**
+ * Model AppVersion
+ * 
+ */
+export type AppVersion = $Result.DefaultSelection<Prisma.$AppVersionPayload>
+/**
+ * Model LastUpdate
+ * 
+ */
+export type LastUpdate = $Result.DefaultSelection<Prisma.$LastUpdatePayload>
+/**
+ * Model AuditLog
+ * 
+ */
+export type AuditLog = $Result.DefaultSelection<Prisma.$AuditLogPayload>
 
 /**
  * ##  Prisma Client ʲˢ
@@ -509,6 +524,36 @@ export class PrismaClient<
     * ```
     */
   get appAnnouncement(): Prisma.AppAnnouncementDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.appVersion`: Exposes CRUD operations for the **AppVersion** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more AppVersions
+    * const appVersions = await prisma.appVersion.findMany()
+    * ```
+    */
+  get appVersion(): Prisma.AppVersionDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.lastUpdate`: Exposes CRUD operations for the **LastUpdate** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more LastUpdates
+    * const lastUpdates = await prisma.lastUpdate.findMany()
+    * ```
+    */
+  get lastUpdate(): Prisma.LastUpdateDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.auditLog`: Exposes CRUD operations for the **AuditLog** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more AuditLogs
+    * const auditLogs = await prisma.auditLog.findMany()
+    * ```
+    */
+  get auditLog(): Prisma.AuditLogDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -967,7 +1012,10 @@ export namespace Prisma {
     CouponUsage: 'CouponUsage',
     LoyaltyTrigger: 'LoyaltyTrigger',
     LoyaltyAchievement: 'LoyaltyAchievement',
-    AppAnnouncement: 'AppAnnouncement'
+    AppAnnouncement: 'AppAnnouncement',
+    AppVersion: 'AppVersion',
+    LastUpdate: 'LastUpdate',
+    AuditLog: 'AuditLog'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -983,7 +1031,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "admin" | "setting" | "member" | "loyaltyHistory" | "sport" | "turf" | "turfSport" | "membershipPlan" | "memberMembership" | "attendance" | "booking" | "payment" | "displaySession" | "ticket" | "otp" | "tournament" | "tournamentRegistration" | "tournamentPlayer" | "walletTransaction" | "coupon" | "couponAssignment" | "couponUsage" | "loyaltyTrigger" | "loyaltyAchievement" | "appAnnouncement"
+      modelProps: "admin" | "setting" | "member" | "loyaltyHistory" | "sport" | "turf" | "turfSport" | "membershipPlan" | "memberMembership" | "attendance" | "booking" | "payment" | "displaySession" | "ticket" | "otp" | "tournament" | "tournamentRegistration" | "tournamentPlayer" | "walletTransaction" | "coupon" | "couponAssignment" | "couponUsage" | "loyaltyTrigger" | "loyaltyAchievement" | "appAnnouncement" | "appVersion" | "lastUpdate" | "auditLog"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -2837,6 +2885,228 @@ export namespace Prisma {
           }
         }
       }
+      AppVersion: {
+        payload: Prisma.$AppVersionPayload<ExtArgs>
+        fields: Prisma.AppVersionFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.AppVersionFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AppVersionPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.AppVersionFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AppVersionPayload>
+          }
+          findFirst: {
+            args: Prisma.AppVersionFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AppVersionPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.AppVersionFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AppVersionPayload>
+          }
+          findMany: {
+            args: Prisma.AppVersionFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AppVersionPayload>[]
+          }
+          create: {
+            args: Prisma.AppVersionCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AppVersionPayload>
+          }
+          createMany: {
+            args: Prisma.AppVersionCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.AppVersionCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AppVersionPayload>[]
+          }
+          delete: {
+            args: Prisma.AppVersionDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AppVersionPayload>
+          }
+          update: {
+            args: Prisma.AppVersionUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AppVersionPayload>
+          }
+          deleteMany: {
+            args: Prisma.AppVersionDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.AppVersionUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.AppVersionUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AppVersionPayload>[]
+          }
+          upsert: {
+            args: Prisma.AppVersionUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AppVersionPayload>
+          }
+          aggregate: {
+            args: Prisma.AppVersionAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateAppVersion>
+          }
+          groupBy: {
+            args: Prisma.AppVersionGroupByArgs<ExtArgs>
+            result: $Utils.Optional<AppVersionGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.AppVersionCountArgs<ExtArgs>
+            result: $Utils.Optional<AppVersionCountAggregateOutputType> | number
+          }
+        }
+      }
+      LastUpdate: {
+        payload: Prisma.$LastUpdatePayload<ExtArgs>
+        fields: Prisma.LastUpdateFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.LastUpdateFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LastUpdatePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.LastUpdateFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LastUpdatePayload>
+          }
+          findFirst: {
+            args: Prisma.LastUpdateFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LastUpdatePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.LastUpdateFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LastUpdatePayload>
+          }
+          findMany: {
+            args: Prisma.LastUpdateFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LastUpdatePayload>[]
+          }
+          create: {
+            args: Prisma.LastUpdateCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LastUpdatePayload>
+          }
+          createMany: {
+            args: Prisma.LastUpdateCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.LastUpdateCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LastUpdatePayload>[]
+          }
+          delete: {
+            args: Prisma.LastUpdateDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LastUpdatePayload>
+          }
+          update: {
+            args: Prisma.LastUpdateUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LastUpdatePayload>
+          }
+          deleteMany: {
+            args: Prisma.LastUpdateDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.LastUpdateUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.LastUpdateUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LastUpdatePayload>[]
+          }
+          upsert: {
+            args: Prisma.LastUpdateUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LastUpdatePayload>
+          }
+          aggregate: {
+            args: Prisma.LastUpdateAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateLastUpdate>
+          }
+          groupBy: {
+            args: Prisma.LastUpdateGroupByArgs<ExtArgs>
+            result: $Utils.Optional<LastUpdateGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.LastUpdateCountArgs<ExtArgs>
+            result: $Utils.Optional<LastUpdateCountAggregateOutputType> | number
+          }
+        }
+      }
+      AuditLog: {
+        payload: Prisma.$AuditLogPayload<ExtArgs>
+        fields: Prisma.AuditLogFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.AuditLogFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AuditLogPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.AuditLogFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AuditLogPayload>
+          }
+          findFirst: {
+            args: Prisma.AuditLogFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AuditLogPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.AuditLogFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AuditLogPayload>
+          }
+          findMany: {
+            args: Prisma.AuditLogFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AuditLogPayload>[]
+          }
+          create: {
+            args: Prisma.AuditLogCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AuditLogPayload>
+          }
+          createMany: {
+            args: Prisma.AuditLogCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.AuditLogCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AuditLogPayload>[]
+          }
+          delete: {
+            args: Prisma.AuditLogDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AuditLogPayload>
+          }
+          update: {
+            args: Prisma.AuditLogUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AuditLogPayload>
+          }
+          deleteMany: {
+            args: Prisma.AuditLogDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.AuditLogUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.AuditLogUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AuditLogPayload>[]
+          }
+          upsert: {
+            args: Prisma.AuditLogUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AuditLogPayload>
+          }
+          aggregate: {
+            args: Prisma.AuditLogAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateAuditLog>
+          }
+          groupBy: {
+            args: Prisma.AuditLogGroupByArgs<ExtArgs>
+            result: $Utils.Optional<AuditLogGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.AuditLogCountArgs<ExtArgs>
+            result: $Utils.Optional<AuditLogCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -2970,6 +3240,9 @@ export namespace Prisma {
     loyaltyTrigger?: LoyaltyTriggerOmit
     loyaltyAchievement?: LoyaltyAchievementOmit
     appAnnouncement?: AppAnnouncementOmit
+    appVersion?: AppVersionOmit
+    lastUpdate?: LastUpdateOmit
+    auditLog?: AuditLogOmit
   }
 
   /* Types for Logging */
@@ -19678,8 +19951,18 @@ export namespace Prisma {
 
   export type AggregateOtp = {
     _count: OtpCountAggregateOutputType | null
+    _avg: OtpAvgAggregateOutputType | null
+    _sum: OtpSumAggregateOutputType | null
     _min: OtpMinAggregateOutputType | null
     _max: OtpMaxAggregateOutputType | null
+  }
+
+  export type OtpAvgAggregateOutputType = {
+    attempts: number | null
+  }
+
+  export type OtpSumAggregateOutputType = {
+    attempts: number | null
   }
 
   export type OtpMinAggregateOutputType = {
@@ -19687,6 +19970,8 @@ export namespace Prisma {
     mobile: string | null
     code: string | null
     expiresAt: Date | null
+    attempts: number | null
+    lockedUntil: Date | null
     createdAt: Date | null
   }
 
@@ -19695,6 +19980,8 @@ export namespace Prisma {
     mobile: string | null
     code: string | null
     expiresAt: Date | null
+    attempts: number | null
+    lockedUntil: Date | null
     createdAt: Date | null
   }
 
@@ -19703,16 +19990,28 @@ export namespace Prisma {
     mobile: number
     code: number
     expiresAt: number
+    attempts: number
+    lockedUntil: number
     createdAt: number
     _all: number
   }
 
+
+  export type OtpAvgAggregateInputType = {
+    attempts?: true
+  }
+
+  export type OtpSumAggregateInputType = {
+    attempts?: true
+  }
 
   export type OtpMinAggregateInputType = {
     id?: true
     mobile?: true
     code?: true
     expiresAt?: true
+    attempts?: true
+    lockedUntil?: true
     createdAt?: true
   }
 
@@ -19721,6 +20020,8 @@ export namespace Prisma {
     mobile?: true
     code?: true
     expiresAt?: true
+    attempts?: true
+    lockedUntil?: true
     createdAt?: true
   }
 
@@ -19729,6 +20030,8 @@ export namespace Prisma {
     mobile?: true
     code?: true
     expiresAt?: true
+    attempts?: true
+    lockedUntil?: true
     createdAt?: true
     _all?: true
   }
@@ -19771,6 +20074,18 @@ export namespace Prisma {
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
+     * Select which fields to average
+    **/
+    _avg?: OtpAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: OtpSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
      * Select which fields to find the minimum value
     **/
     _min?: OtpMinAggregateInputType
@@ -19801,6 +20116,8 @@ export namespace Prisma {
     take?: number
     skip?: number
     _count?: OtpCountAggregateInputType | true
+    _avg?: OtpAvgAggregateInputType
+    _sum?: OtpSumAggregateInputType
     _min?: OtpMinAggregateInputType
     _max?: OtpMaxAggregateInputType
   }
@@ -19810,8 +20127,12 @@ export namespace Prisma {
     mobile: string
     code: string
     expiresAt: Date
+    attempts: number
+    lockedUntil: Date | null
     createdAt: Date
     _count: OtpCountAggregateOutputType | null
+    _avg: OtpAvgAggregateOutputType | null
+    _sum: OtpSumAggregateOutputType | null
     _min: OtpMinAggregateOutputType | null
     _max: OtpMaxAggregateOutputType | null
   }
@@ -19835,6 +20156,8 @@ export namespace Prisma {
     mobile?: boolean
     code?: boolean
     expiresAt?: boolean
+    attempts?: boolean
+    lockedUntil?: boolean
     createdAt?: boolean
   }, ExtArgs["result"]["otp"]>
 
@@ -19843,6 +20166,8 @@ export namespace Prisma {
     mobile?: boolean
     code?: boolean
     expiresAt?: boolean
+    attempts?: boolean
+    lockedUntil?: boolean
     createdAt?: boolean
   }, ExtArgs["result"]["otp"]>
 
@@ -19851,6 +20176,8 @@ export namespace Prisma {
     mobile?: boolean
     code?: boolean
     expiresAt?: boolean
+    attempts?: boolean
+    lockedUntil?: boolean
     createdAt?: boolean
   }, ExtArgs["result"]["otp"]>
 
@@ -19859,10 +20186,12 @@ export namespace Prisma {
     mobile?: boolean
     code?: boolean
     expiresAt?: boolean
+    attempts?: boolean
+    lockedUntil?: boolean
     createdAt?: boolean
   }
 
-  export type OtpOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "mobile" | "code" | "expiresAt" | "createdAt", ExtArgs["result"]["otp"]>
+  export type OtpOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "mobile" | "code" | "expiresAt" | "attempts" | "lockedUntil" | "createdAt", ExtArgs["result"]["otp"]>
 
   export type $OtpPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Otp"
@@ -19872,6 +20201,8 @@ export namespace Prisma {
       mobile: string
       code: string
       expiresAt: Date
+      attempts: number
+      lockedUntil: Date | null
       createdAt: Date
     }, ExtArgs["result"]["otp"]>
     composites: {}
@@ -20300,6 +20631,8 @@ export namespace Prisma {
     readonly mobile: FieldRef<"Otp", 'String'>
     readonly code: FieldRef<"Otp", 'String'>
     readonly expiresAt: FieldRef<"Otp", 'DateTime'>
+    readonly attempts: FieldRef<"Otp", 'Int'>
+    readonly lockedUntil: FieldRef<"Otp", 'DateTime'>
     readonly createdAt: FieldRef<"Otp", 'DateTime'>
   }
     
@@ -32115,6 +32448,3039 @@ export namespace Prisma {
 
 
   /**
+   * Model AppVersion
+   */
+
+  export type AggregateAppVersion = {
+    _count: AppVersionCountAggregateOutputType | null
+    _min: AppVersionMinAggregateOutputType | null
+    _max: AppVersionMaxAggregateOutputType | null
+  }
+
+  export type AppVersionMinAggregateOutputType = {
+    id: string | null
+    platform: string | null
+    version: string | null
+    forceUpdate: boolean | null
+    downloadUrl: string | null
+    fileKey: string | null
+    releaseNotes: string | null
+    updatedAt: Date | null
+  }
+
+  export type AppVersionMaxAggregateOutputType = {
+    id: string | null
+    platform: string | null
+    version: string | null
+    forceUpdate: boolean | null
+    downloadUrl: string | null
+    fileKey: string | null
+    releaseNotes: string | null
+    updatedAt: Date | null
+  }
+
+  export type AppVersionCountAggregateOutputType = {
+    id: number
+    platform: number
+    version: number
+    forceUpdate: number
+    downloadUrl: number
+    fileKey: number
+    releaseNotes: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type AppVersionMinAggregateInputType = {
+    id?: true
+    platform?: true
+    version?: true
+    forceUpdate?: true
+    downloadUrl?: true
+    fileKey?: true
+    releaseNotes?: true
+    updatedAt?: true
+  }
+
+  export type AppVersionMaxAggregateInputType = {
+    id?: true
+    platform?: true
+    version?: true
+    forceUpdate?: true
+    downloadUrl?: true
+    fileKey?: true
+    releaseNotes?: true
+    updatedAt?: true
+  }
+
+  export type AppVersionCountAggregateInputType = {
+    id?: true
+    platform?: true
+    version?: true
+    forceUpdate?: true
+    downloadUrl?: true
+    fileKey?: true
+    releaseNotes?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type AppVersionAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which AppVersion to aggregate.
+     */
+    where?: AppVersionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AppVersions to fetch.
+     */
+    orderBy?: AppVersionOrderByWithRelationInput | AppVersionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: AppVersionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AppVersions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AppVersions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned AppVersions
+    **/
+    _count?: true | AppVersionCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: AppVersionMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: AppVersionMaxAggregateInputType
+  }
+
+  export type GetAppVersionAggregateType<T extends AppVersionAggregateArgs> = {
+        [P in keyof T & keyof AggregateAppVersion]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateAppVersion[P]>
+      : GetScalarType<T[P], AggregateAppVersion[P]>
+  }
+
+
+
+
+  export type AppVersionGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AppVersionWhereInput
+    orderBy?: AppVersionOrderByWithAggregationInput | AppVersionOrderByWithAggregationInput[]
+    by: AppVersionScalarFieldEnum[] | AppVersionScalarFieldEnum
+    having?: AppVersionScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: AppVersionCountAggregateInputType | true
+    _min?: AppVersionMinAggregateInputType
+    _max?: AppVersionMaxAggregateInputType
+  }
+
+  export type AppVersionGroupByOutputType = {
+    id: string
+    platform: string
+    version: string
+    forceUpdate: boolean
+    downloadUrl: string | null
+    fileKey: string | null
+    releaseNotes: string | null
+    updatedAt: Date
+    _count: AppVersionCountAggregateOutputType | null
+    _min: AppVersionMinAggregateOutputType | null
+    _max: AppVersionMaxAggregateOutputType | null
+  }
+
+  type GetAppVersionGroupByPayload<T extends AppVersionGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<AppVersionGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof AppVersionGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], AppVersionGroupByOutputType[P]>
+            : GetScalarType<T[P], AppVersionGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type AppVersionSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    platform?: boolean
+    version?: boolean
+    forceUpdate?: boolean
+    downloadUrl?: boolean
+    fileKey?: boolean
+    releaseNotes?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["appVersion"]>
+
+  export type AppVersionSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    platform?: boolean
+    version?: boolean
+    forceUpdate?: boolean
+    downloadUrl?: boolean
+    fileKey?: boolean
+    releaseNotes?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["appVersion"]>
+
+  export type AppVersionSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    platform?: boolean
+    version?: boolean
+    forceUpdate?: boolean
+    downloadUrl?: boolean
+    fileKey?: boolean
+    releaseNotes?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["appVersion"]>
+
+  export type AppVersionSelectScalar = {
+    id?: boolean
+    platform?: boolean
+    version?: boolean
+    forceUpdate?: boolean
+    downloadUrl?: boolean
+    fileKey?: boolean
+    releaseNotes?: boolean
+    updatedAt?: boolean
+  }
+
+  export type AppVersionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "platform" | "version" | "forceUpdate" | "downloadUrl" | "fileKey" | "releaseNotes" | "updatedAt", ExtArgs["result"]["appVersion"]>
+
+  export type $AppVersionPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "AppVersion"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      platform: string
+      version: string
+      forceUpdate: boolean
+      downloadUrl: string | null
+      fileKey: string | null
+      releaseNotes: string | null
+      updatedAt: Date
+    }, ExtArgs["result"]["appVersion"]>
+    composites: {}
+  }
+
+  type AppVersionGetPayload<S extends boolean | null | undefined | AppVersionDefaultArgs> = $Result.GetResult<Prisma.$AppVersionPayload, S>
+
+  type AppVersionCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<AppVersionFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: AppVersionCountAggregateInputType | true
+    }
+
+  export interface AppVersionDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['AppVersion'], meta: { name: 'AppVersion' } }
+    /**
+     * Find zero or one AppVersion that matches the filter.
+     * @param {AppVersionFindUniqueArgs} args - Arguments to find a AppVersion
+     * @example
+     * // Get one AppVersion
+     * const appVersion = await prisma.appVersion.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends AppVersionFindUniqueArgs>(args: SelectSubset<T, AppVersionFindUniqueArgs<ExtArgs>>): Prisma__AppVersionClient<$Result.GetResult<Prisma.$AppVersionPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one AppVersion that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {AppVersionFindUniqueOrThrowArgs} args - Arguments to find a AppVersion
+     * @example
+     * // Get one AppVersion
+     * const appVersion = await prisma.appVersion.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends AppVersionFindUniqueOrThrowArgs>(args: SelectSubset<T, AppVersionFindUniqueOrThrowArgs<ExtArgs>>): Prisma__AppVersionClient<$Result.GetResult<Prisma.$AppVersionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first AppVersion that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AppVersionFindFirstArgs} args - Arguments to find a AppVersion
+     * @example
+     * // Get one AppVersion
+     * const appVersion = await prisma.appVersion.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends AppVersionFindFirstArgs>(args?: SelectSubset<T, AppVersionFindFirstArgs<ExtArgs>>): Prisma__AppVersionClient<$Result.GetResult<Prisma.$AppVersionPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first AppVersion that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AppVersionFindFirstOrThrowArgs} args - Arguments to find a AppVersion
+     * @example
+     * // Get one AppVersion
+     * const appVersion = await prisma.appVersion.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends AppVersionFindFirstOrThrowArgs>(args?: SelectSubset<T, AppVersionFindFirstOrThrowArgs<ExtArgs>>): Prisma__AppVersionClient<$Result.GetResult<Prisma.$AppVersionPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more AppVersions that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AppVersionFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all AppVersions
+     * const appVersions = await prisma.appVersion.findMany()
+     * 
+     * // Get first 10 AppVersions
+     * const appVersions = await prisma.appVersion.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const appVersionWithIdOnly = await prisma.appVersion.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends AppVersionFindManyArgs>(args?: SelectSubset<T, AppVersionFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AppVersionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a AppVersion.
+     * @param {AppVersionCreateArgs} args - Arguments to create a AppVersion.
+     * @example
+     * // Create one AppVersion
+     * const AppVersion = await prisma.appVersion.create({
+     *   data: {
+     *     // ... data to create a AppVersion
+     *   }
+     * })
+     * 
+     */
+    create<T extends AppVersionCreateArgs>(args: SelectSubset<T, AppVersionCreateArgs<ExtArgs>>): Prisma__AppVersionClient<$Result.GetResult<Prisma.$AppVersionPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many AppVersions.
+     * @param {AppVersionCreateManyArgs} args - Arguments to create many AppVersions.
+     * @example
+     * // Create many AppVersions
+     * const appVersion = await prisma.appVersion.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends AppVersionCreateManyArgs>(args?: SelectSubset<T, AppVersionCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many AppVersions and returns the data saved in the database.
+     * @param {AppVersionCreateManyAndReturnArgs} args - Arguments to create many AppVersions.
+     * @example
+     * // Create many AppVersions
+     * const appVersion = await prisma.appVersion.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many AppVersions and only return the `id`
+     * const appVersionWithIdOnly = await prisma.appVersion.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends AppVersionCreateManyAndReturnArgs>(args?: SelectSubset<T, AppVersionCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AppVersionPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a AppVersion.
+     * @param {AppVersionDeleteArgs} args - Arguments to delete one AppVersion.
+     * @example
+     * // Delete one AppVersion
+     * const AppVersion = await prisma.appVersion.delete({
+     *   where: {
+     *     // ... filter to delete one AppVersion
+     *   }
+     * })
+     * 
+     */
+    delete<T extends AppVersionDeleteArgs>(args: SelectSubset<T, AppVersionDeleteArgs<ExtArgs>>): Prisma__AppVersionClient<$Result.GetResult<Prisma.$AppVersionPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one AppVersion.
+     * @param {AppVersionUpdateArgs} args - Arguments to update one AppVersion.
+     * @example
+     * // Update one AppVersion
+     * const appVersion = await prisma.appVersion.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends AppVersionUpdateArgs>(args: SelectSubset<T, AppVersionUpdateArgs<ExtArgs>>): Prisma__AppVersionClient<$Result.GetResult<Prisma.$AppVersionPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more AppVersions.
+     * @param {AppVersionDeleteManyArgs} args - Arguments to filter AppVersions to delete.
+     * @example
+     * // Delete a few AppVersions
+     * const { count } = await prisma.appVersion.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends AppVersionDeleteManyArgs>(args?: SelectSubset<T, AppVersionDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more AppVersions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AppVersionUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many AppVersions
+     * const appVersion = await prisma.appVersion.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends AppVersionUpdateManyArgs>(args: SelectSubset<T, AppVersionUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more AppVersions and returns the data updated in the database.
+     * @param {AppVersionUpdateManyAndReturnArgs} args - Arguments to update many AppVersions.
+     * @example
+     * // Update many AppVersions
+     * const appVersion = await prisma.appVersion.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more AppVersions and only return the `id`
+     * const appVersionWithIdOnly = await prisma.appVersion.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends AppVersionUpdateManyAndReturnArgs>(args: SelectSubset<T, AppVersionUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AppVersionPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one AppVersion.
+     * @param {AppVersionUpsertArgs} args - Arguments to update or create a AppVersion.
+     * @example
+     * // Update or create a AppVersion
+     * const appVersion = await prisma.appVersion.upsert({
+     *   create: {
+     *     // ... data to create a AppVersion
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the AppVersion we want to update
+     *   }
+     * })
+     */
+    upsert<T extends AppVersionUpsertArgs>(args: SelectSubset<T, AppVersionUpsertArgs<ExtArgs>>): Prisma__AppVersionClient<$Result.GetResult<Prisma.$AppVersionPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of AppVersions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AppVersionCountArgs} args - Arguments to filter AppVersions to count.
+     * @example
+     * // Count the number of AppVersions
+     * const count = await prisma.appVersion.count({
+     *   where: {
+     *     // ... the filter for the AppVersions we want to count
+     *   }
+     * })
+    **/
+    count<T extends AppVersionCountArgs>(
+      args?: Subset<T, AppVersionCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], AppVersionCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a AppVersion.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AppVersionAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends AppVersionAggregateArgs>(args: Subset<T, AppVersionAggregateArgs>): Prisma.PrismaPromise<GetAppVersionAggregateType<T>>
+
+    /**
+     * Group by AppVersion.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AppVersionGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends AppVersionGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: AppVersionGroupByArgs['orderBy'] }
+        : { orderBy?: AppVersionGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, AppVersionGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetAppVersionGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the AppVersion model
+   */
+  readonly fields: AppVersionFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for AppVersion.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__AppVersionClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the AppVersion model
+   */
+  interface AppVersionFieldRefs {
+    readonly id: FieldRef<"AppVersion", 'String'>
+    readonly platform: FieldRef<"AppVersion", 'String'>
+    readonly version: FieldRef<"AppVersion", 'String'>
+    readonly forceUpdate: FieldRef<"AppVersion", 'Boolean'>
+    readonly downloadUrl: FieldRef<"AppVersion", 'String'>
+    readonly fileKey: FieldRef<"AppVersion", 'String'>
+    readonly releaseNotes: FieldRef<"AppVersion", 'String'>
+    readonly updatedAt: FieldRef<"AppVersion", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * AppVersion findUnique
+   */
+  export type AppVersionFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AppVersion
+     */
+    select?: AppVersionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AppVersion
+     */
+    omit?: AppVersionOmit<ExtArgs> | null
+    /**
+     * Filter, which AppVersion to fetch.
+     */
+    where: AppVersionWhereUniqueInput
+  }
+
+  /**
+   * AppVersion findUniqueOrThrow
+   */
+  export type AppVersionFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AppVersion
+     */
+    select?: AppVersionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AppVersion
+     */
+    omit?: AppVersionOmit<ExtArgs> | null
+    /**
+     * Filter, which AppVersion to fetch.
+     */
+    where: AppVersionWhereUniqueInput
+  }
+
+  /**
+   * AppVersion findFirst
+   */
+  export type AppVersionFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AppVersion
+     */
+    select?: AppVersionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AppVersion
+     */
+    omit?: AppVersionOmit<ExtArgs> | null
+    /**
+     * Filter, which AppVersion to fetch.
+     */
+    where?: AppVersionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AppVersions to fetch.
+     */
+    orderBy?: AppVersionOrderByWithRelationInput | AppVersionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for AppVersions.
+     */
+    cursor?: AppVersionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AppVersions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AppVersions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of AppVersions.
+     */
+    distinct?: AppVersionScalarFieldEnum | AppVersionScalarFieldEnum[]
+  }
+
+  /**
+   * AppVersion findFirstOrThrow
+   */
+  export type AppVersionFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AppVersion
+     */
+    select?: AppVersionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AppVersion
+     */
+    omit?: AppVersionOmit<ExtArgs> | null
+    /**
+     * Filter, which AppVersion to fetch.
+     */
+    where?: AppVersionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AppVersions to fetch.
+     */
+    orderBy?: AppVersionOrderByWithRelationInput | AppVersionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for AppVersions.
+     */
+    cursor?: AppVersionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AppVersions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AppVersions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of AppVersions.
+     */
+    distinct?: AppVersionScalarFieldEnum | AppVersionScalarFieldEnum[]
+  }
+
+  /**
+   * AppVersion findMany
+   */
+  export type AppVersionFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AppVersion
+     */
+    select?: AppVersionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AppVersion
+     */
+    omit?: AppVersionOmit<ExtArgs> | null
+    /**
+     * Filter, which AppVersions to fetch.
+     */
+    where?: AppVersionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AppVersions to fetch.
+     */
+    orderBy?: AppVersionOrderByWithRelationInput | AppVersionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing AppVersions.
+     */
+    cursor?: AppVersionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AppVersions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AppVersions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of AppVersions.
+     */
+    distinct?: AppVersionScalarFieldEnum | AppVersionScalarFieldEnum[]
+  }
+
+  /**
+   * AppVersion create
+   */
+  export type AppVersionCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AppVersion
+     */
+    select?: AppVersionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AppVersion
+     */
+    omit?: AppVersionOmit<ExtArgs> | null
+    /**
+     * The data needed to create a AppVersion.
+     */
+    data: XOR<AppVersionCreateInput, AppVersionUncheckedCreateInput>
+  }
+
+  /**
+   * AppVersion createMany
+   */
+  export type AppVersionCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many AppVersions.
+     */
+    data: AppVersionCreateManyInput | AppVersionCreateManyInput[]
+  }
+
+  /**
+   * AppVersion createManyAndReturn
+   */
+  export type AppVersionCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AppVersion
+     */
+    select?: AppVersionSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the AppVersion
+     */
+    omit?: AppVersionOmit<ExtArgs> | null
+    /**
+     * The data used to create many AppVersions.
+     */
+    data: AppVersionCreateManyInput | AppVersionCreateManyInput[]
+  }
+
+  /**
+   * AppVersion update
+   */
+  export type AppVersionUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AppVersion
+     */
+    select?: AppVersionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AppVersion
+     */
+    omit?: AppVersionOmit<ExtArgs> | null
+    /**
+     * The data needed to update a AppVersion.
+     */
+    data: XOR<AppVersionUpdateInput, AppVersionUncheckedUpdateInput>
+    /**
+     * Choose, which AppVersion to update.
+     */
+    where: AppVersionWhereUniqueInput
+  }
+
+  /**
+   * AppVersion updateMany
+   */
+  export type AppVersionUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update AppVersions.
+     */
+    data: XOR<AppVersionUpdateManyMutationInput, AppVersionUncheckedUpdateManyInput>
+    /**
+     * Filter which AppVersions to update
+     */
+    where?: AppVersionWhereInput
+    /**
+     * Limit how many AppVersions to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * AppVersion updateManyAndReturn
+   */
+  export type AppVersionUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AppVersion
+     */
+    select?: AppVersionSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the AppVersion
+     */
+    omit?: AppVersionOmit<ExtArgs> | null
+    /**
+     * The data used to update AppVersions.
+     */
+    data: XOR<AppVersionUpdateManyMutationInput, AppVersionUncheckedUpdateManyInput>
+    /**
+     * Filter which AppVersions to update
+     */
+    where?: AppVersionWhereInput
+    /**
+     * Limit how many AppVersions to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * AppVersion upsert
+   */
+  export type AppVersionUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AppVersion
+     */
+    select?: AppVersionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AppVersion
+     */
+    omit?: AppVersionOmit<ExtArgs> | null
+    /**
+     * The filter to search for the AppVersion to update in case it exists.
+     */
+    where: AppVersionWhereUniqueInput
+    /**
+     * In case the AppVersion found by the `where` argument doesn't exist, create a new AppVersion with this data.
+     */
+    create: XOR<AppVersionCreateInput, AppVersionUncheckedCreateInput>
+    /**
+     * In case the AppVersion was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<AppVersionUpdateInput, AppVersionUncheckedUpdateInput>
+  }
+
+  /**
+   * AppVersion delete
+   */
+  export type AppVersionDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AppVersion
+     */
+    select?: AppVersionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AppVersion
+     */
+    omit?: AppVersionOmit<ExtArgs> | null
+    /**
+     * Filter which AppVersion to delete.
+     */
+    where: AppVersionWhereUniqueInput
+  }
+
+  /**
+   * AppVersion deleteMany
+   */
+  export type AppVersionDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which AppVersions to delete
+     */
+    where?: AppVersionWhereInput
+    /**
+     * Limit how many AppVersions to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * AppVersion without action
+   */
+  export type AppVersionDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AppVersion
+     */
+    select?: AppVersionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AppVersion
+     */
+    omit?: AppVersionOmit<ExtArgs> | null
+  }
+
+
+  /**
+   * Model LastUpdate
+   */
+
+  export type AggregateLastUpdate = {
+    _count: LastUpdateCountAggregateOutputType | null
+    _min: LastUpdateMinAggregateOutputType | null
+    _max: LastUpdateMaxAggregateOutputType | null
+  }
+
+  export type LastUpdateMinAggregateOutputType = {
+    id: string | null
+    timestamp: Date | null
+    source: string | null
+  }
+
+  export type LastUpdateMaxAggregateOutputType = {
+    id: string | null
+    timestamp: Date | null
+    source: string | null
+  }
+
+  export type LastUpdateCountAggregateOutputType = {
+    id: number
+    timestamp: number
+    source: number
+    _all: number
+  }
+
+
+  export type LastUpdateMinAggregateInputType = {
+    id?: true
+    timestamp?: true
+    source?: true
+  }
+
+  export type LastUpdateMaxAggregateInputType = {
+    id?: true
+    timestamp?: true
+    source?: true
+  }
+
+  export type LastUpdateCountAggregateInputType = {
+    id?: true
+    timestamp?: true
+    source?: true
+    _all?: true
+  }
+
+  export type LastUpdateAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which LastUpdate to aggregate.
+     */
+    where?: LastUpdateWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of LastUpdates to fetch.
+     */
+    orderBy?: LastUpdateOrderByWithRelationInput | LastUpdateOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: LastUpdateWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` LastUpdates from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` LastUpdates.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned LastUpdates
+    **/
+    _count?: true | LastUpdateCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: LastUpdateMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: LastUpdateMaxAggregateInputType
+  }
+
+  export type GetLastUpdateAggregateType<T extends LastUpdateAggregateArgs> = {
+        [P in keyof T & keyof AggregateLastUpdate]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateLastUpdate[P]>
+      : GetScalarType<T[P], AggregateLastUpdate[P]>
+  }
+
+
+
+
+  export type LastUpdateGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: LastUpdateWhereInput
+    orderBy?: LastUpdateOrderByWithAggregationInput | LastUpdateOrderByWithAggregationInput[]
+    by: LastUpdateScalarFieldEnum[] | LastUpdateScalarFieldEnum
+    having?: LastUpdateScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: LastUpdateCountAggregateInputType | true
+    _min?: LastUpdateMinAggregateInputType
+    _max?: LastUpdateMaxAggregateInputType
+  }
+
+  export type LastUpdateGroupByOutputType = {
+    id: string
+    timestamp: Date
+    source: string
+    _count: LastUpdateCountAggregateOutputType | null
+    _min: LastUpdateMinAggregateOutputType | null
+    _max: LastUpdateMaxAggregateOutputType | null
+  }
+
+  type GetLastUpdateGroupByPayload<T extends LastUpdateGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<LastUpdateGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof LastUpdateGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], LastUpdateGroupByOutputType[P]>
+            : GetScalarType<T[P], LastUpdateGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type LastUpdateSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    timestamp?: boolean
+    source?: boolean
+  }, ExtArgs["result"]["lastUpdate"]>
+
+  export type LastUpdateSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    timestamp?: boolean
+    source?: boolean
+  }, ExtArgs["result"]["lastUpdate"]>
+
+  export type LastUpdateSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    timestamp?: boolean
+    source?: boolean
+  }, ExtArgs["result"]["lastUpdate"]>
+
+  export type LastUpdateSelectScalar = {
+    id?: boolean
+    timestamp?: boolean
+    source?: boolean
+  }
+
+  export type LastUpdateOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "timestamp" | "source", ExtArgs["result"]["lastUpdate"]>
+
+  export type $LastUpdatePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "LastUpdate"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      timestamp: Date
+      source: string
+    }, ExtArgs["result"]["lastUpdate"]>
+    composites: {}
+  }
+
+  type LastUpdateGetPayload<S extends boolean | null | undefined | LastUpdateDefaultArgs> = $Result.GetResult<Prisma.$LastUpdatePayload, S>
+
+  type LastUpdateCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<LastUpdateFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: LastUpdateCountAggregateInputType | true
+    }
+
+  export interface LastUpdateDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['LastUpdate'], meta: { name: 'LastUpdate' } }
+    /**
+     * Find zero or one LastUpdate that matches the filter.
+     * @param {LastUpdateFindUniqueArgs} args - Arguments to find a LastUpdate
+     * @example
+     * // Get one LastUpdate
+     * const lastUpdate = await prisma.lastUpdate.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends LastUpdateFindUniqueArgs>(args: SelectSubset<T, LastUpdateFindUniqueArgs<ExtArgs>>): Prisma__LastUpdateClient<$Result.GetResult<Prisma.$LastUpdatePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one LastUpdate that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {LastUpdateFindUniqueOrThrowArgs} args - Arguments to find a LastUpdate
+     * @example
+     * // Get one LastUpdate
+     * const lastUpdate = await prisma.lastUpdate.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends LastUpdateFindUniqueOrThrowArgs>(args: SelectSubset<T, LastUpdateFindUniqueOrThrowArgs<ExtArgs>>): Prisma__LastUpdateClient<$Result.GetResult<Prisma.$LastUpdatePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first LastUpdate that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LastUpdateFindFirstArgs} args - Arguments to find a LastUpdate
+     * @example
+     * // Get one LastUpdate
+     * const lastUpdate = await prisma.lastUpdate.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends LastUpdateFindFirstArgs>(args?: SelectSubset<T, LastUpdateFindFirstArgs<ExtArgs>>): Prisma__LastUpdateClient<$Result.GetResult<Prisma.$LastUpdatePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first LastUpdate that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LastUpdateFindFirstOrThrowArgs} args - Arguments to find a LastUpdate
+     * @example
+     * // Get one LastUpdate
+     * const lastUpdate = await prisma.lastUpdate.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends LastUpdateFindFirstOrThrowArgs>(args?: SelectSubset<T, LastUpdateFindFirstOrThrowArgs<ExtArgs>>): Prisma__LastUpdateClient<$Result.GetResult<Prisma.$LastUpdatePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more LastUpdates that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LastUpdateFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all LastUpdates
+     * const lastUpdates = await prisma.lastUpdate.findMany()
+     * 
+     * // Get first 10 LastUpdates
+     * const lastUpdates = await prisma.lastUpdate.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const lastUpdateWithIdOnly = await prisma.lastUpdate.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends LastUpdateFindManyArgs>(args?: SelectSubset<T, LastUpdateFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LastUpdatePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a LastUpdate.
+     * @param {LastUpdateCreateArgs} args - Arguments to create a LastUpdate.
+     * @example
+     * // Create one LastUpdate
+     * const LastUpdate = await prisma.lastUpdate.create({
+     *   data: {
+     *     // ... data to create a LastUpdate
+     *   }
+     * })
+     * 
+     */
+    create<T extends LastUpdateCreateArgs>(args: SelectSubset<T, LastUpdateCreateArgs<ExtArgs>>): Prisma__LastUpdateClient<$Result.GetResult<Prisma.$LastUpdatePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many LastUpdates.
+     * @param {LastUpdateCreateManyArgs} args - Arguments to create many LastUpdates.
+     * @example
+     * // Create many LastUpdates
+     * const lastUpdate = await prisma.lastUpdate.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends LastUpdateCreateManyArgs>(args?: SelectSubset<T, LastUpdateCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many LastUpdates and returns the data saved in the database.
+     * @param {LastUpdateCreateManyAndReturnArgs} args - Arguments to create many LastUpdates.
+     * @example
+     * // Create many LastUpdates
+     * const lastUpdate = await prisma.lastUpdate.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many LastUpdates and only return the `id`
+     * const lastUpdateWithIdOnly = await prisma.lastUpdate.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends LastUpdateCreateManyAndReturnArgs>(args?: SelectSubset<T, LastUpdateCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LastUpdatePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a LastUpdate.
+     * @param {LastUpdateDeleteArgs} args - Arguments to delete one LastUpdate.
+     * @example
+     * // Delete one LastUpdate
+     * const LastUpdate = await prisma.lastUpdate.delete({
+     *   where: {
+     *     // ... filter to delete one LastUpdate
+     *   }
+     * })
+     * 
+     */
+    delete<T extends LastUpdateDeleteArgs>(args: SelectSubset<T, LastUpdateDeleteArgs<ExtArgs>>): Prisma__LastUpdateClient<$Result.GetResult<Prisma.$LastUpdatePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one LastUpdate.
+     * @param {LastUpdateUpdateArgs} args - Arguments to update one LastUpdate.
+     * @example
+     * // Update one LastUpdate
+     * const lastUpdate = await prisma.lastUpdate.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends LastUpdateUpdateArgs>(args: SelectSubset<T, LastUpdateUpdateArgs<ExtArgs>>): Prisma__LastUpdateClient<$Result.GetResult<Prisma.$LastUpdatePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more LastUpdates.
+     * @param {LastUpdateDeleteManyArgs} args - Arguments to filter LastUpdates to delete.
+     * @example
+     * // Delete a few LastUpdates
+     * const { count } = await prisma.lastUpdate.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends LastUpdateDeleteManyArgs>(args?: SelectSubset<T, LastUpdateDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more LastUpdates.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LastUpdateUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many LastUpdates
+     * const lastUpdate = await prisma.lastUpdate.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends LastUpdateUpdateManyArgs>(args: SelectSubset<T, LastUpdateUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more LastUpdates and returns the data updated in the database.
+     * @param {LastUpdateUpdateManyAndReturnArgs} args - Arguments to update many LastUpdates.
+     * @example
+     * // Update many LastUpdates
+     * const lastUpdate = await prisma.lastUpdate.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more LastUpdates and only return the `id`
+     * const lastUpdateWithIdOnly = await prisma.lastUpdate.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends LastUpdateUpdateManyAndReturnArgs>(args: SelectSubset<T, LastUpdateUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LastUpdatePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one LastUpdate.
+     * @param {LastUpdateUpsertArgs} args - Arguments to update or create a LastUpdate.
+     * @example
+     * // Update or create a LastUpdate
+     * const lastUpdate = await prisma.lastUpdate.upsert({
+     *   create: {
+     *     // ... data to create a LastUpdate
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the LastUpdate we want to update
+     *   }
+     * })
+     */
+    upsert<T extends LastUpdateUpsertArgs>(args: SelectSubset<T, LastUpdateUpsertArgs<ExtArgs>>): Prisma__LastUpdateClient<$Result.GetResult<Prisma.$LastUpdatePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of LastUpdates.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LastUpdateCountArgs} args - Arguments to filter LastUpdates to count.
+     * @example
+     * // Count the number of LastUpdates
+     * const count = await prisma.lastUpdate.count({
+     *   where: {
+     *     // ... the filter for the LastUpdates we want to count
+     *   }
+     * })
+    **/
+    count<T extends LastUpdateCountArgs>(
+      args?: Subset<T, LastUpdateCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], LastUpdateCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a LastUpdate.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LastUpdateAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends LastUpdateAggregateArgs>(args: Subset<T, LastUpdateAggregateArgs>): Prisma.PrismaPromise<GetLastUpdateAggregateType<T>>
+
+    /**
+     * Group by LastUpdate.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LastUpdateGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends LastUpdateGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: LastUpdateGroupByArgs['orderBy'] }
+        : { orderBy?: LastUpdateGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, LastUpdateGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetLastUpdateGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the LastUpdate model
+   */
+  readonly fields: LastUpdateFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for LastUpdate.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__LastUpdateClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the LastUpdate model
+   */
+  interface LastUpdateFieldRefs {
+    readonly id: FieldRef<"LastUpdate", 'String'>
+    readonly timestamp: FieldRef<"LastUpdate", 'DateTime'>
+    readonly source: FieldRef<"LastUpdate", 'String'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * LastUpdate findUnique
+   */
+  export type LastUpdateFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LastUpdate
+     */
+    select?: LastUpdateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LastUpdate
+     */
+    omit?: LastUpdateOmit<ExtArgs> | null
+    /**
+     * Filter, which LastUpdate to fetch.
+     */
+    where: LastUpdateWhereUniqueInput
+  }
+
+  /**
+   * LastUpdate findUniqueOrThrow
+   */
+  export type LastUpdateFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LastUpdate
+     */
+    select?: LastUpdateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LastUpdate
+     */
+    omit?: LastUpdateOmit<ExtArgs> | null
+    /**
+     * Filter, which LastUpdate to fetch.
+     */
+    where: LastUpdateWhereUniqueInput
+  }
+
+  /**
+   * LastUpdate findFirst
+   */
+  export type LastUpdateFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LastUpdate
+     */
+    select?: LastUpdateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LastUpdate
+     */
+    omit?: LastUpdateOmit<ExtArgs> | null
+    /**
+     * Filter, which LastUpdate to fetch.
+     */
+    where?: LastUpdateWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of LastUpdates to fetch.
+     */
+    orderBy?: LastUpdateOrderByWithRelationInput | LastUpdateOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for LastUpdates.
+     */
+    cursor?: LastUpdateWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` LastUpdates from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` LastUpdates.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of LastUpdates.
+     */
+    distinct?: LastUpdateScalarFieldEnum | LastUpdateScalarFieldEnum[]
+  }
+
+  /**
+   * LastUpdate findFirstOrThrow
+   */
+  export type LastUpdateFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LastUpdate
+     */
+    select?: LastUpdateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LastUpdate
+     */
+    omit?: LastUpdateOmit<ExtArgs> | null
+    /**
+     * Filter, which LastUpdate to fetch.
+     */
+    where?: LastUpdateWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of LastUpdates to fetch.
+     */
+    orderBy?: LastUpdateOrderByWithRelationInput | LastUpdateOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for LastUpdates.
+     */
+    cursor?: LastUpdateWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` LastUpdates from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` LastUpdates.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of LastUpdates.
+     */
+    distinct?: LastUpdateScalarFieldEnum | LastUpdateScalarFieldEnum[]
+  }
+
+  /**
+   * LastUpdate findMany
+   */
+  export type LastUpdateFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LastUpdate
+     */
+    select?: LastUpdateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LastUpdate
+     */
+    omit?: LastUpdateOmit<ExtArgs> | null
+    /**
+     * Filter, which LastUpdates to fetch.
+     */
+    where?: LastUpdateWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of LastUpdates to fetch.
+     */
+    orderBy?: LastUpdateOrderByWithRelationInput | LastUpdateOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing LastUpdates.
+     */
+    cursor?: LastUpdateWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` LastUpdates from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` LastUpdates.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of LastUpdates.
+     */
+    distinct?: LastUpdateScalarFieldEnum | LastUpdateScalarFieldEnum[]
+  }
+
+  /**
+   * LastUpdate create
+   */
+  export type LastUpdateCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LastUpdate
+     */
+    select?: LastUpdateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LastUpdate
+     */
+    omit?: LastUpdateOmit<ExtArgs> | null
+    /**
+     * The data needed to create a LastUpdate.
+     */
+    data?: XOR<LastUpdateCreateInput, LastUpdateUncheckedCreateInput>
+  }
+
+  /**
+   * LastUpdate createMany
+   */
+  export type LastUpdateCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many LastUpdates.
+     */
+    data: LastUpdateCreateManyInput | LastUpdateCreateManyInput[]
+  }
+
+  /**
+   * LastUpdate createManyAndReturn
+   */
+  export type LastUpdateCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LastUpdate
+     */
+    select?: LastUpdateSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the LastUpdate
+     */
+    omit?: LastUpdateOmit<ExtArgs> | null
+    /**
+     * The data used to create many LastUpdates.
+     */
+    data: LastUpdateCreateManyInput | LastUpdateCreateManyInput[]
+  }
+
+  /**
+   * LastUpdate update
+   */
+  export type LastUpdateUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LastUpdate
+     */
+    select?: LastUpdateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LastUpdate
+     */
+    omit?: LastUpdateOmit<ExtArgs> | null
+    /**
+     * The data needed to update a LastUpdate.
+     */
+    data: XOR<LastUpdateUpdateInput, LastUpdateUncheckedUpdateInput>
+    /**
+     * Choose, which LastUpdate to update.
+     */
+    where: LastUpdateWhereUniqueInput
+  }
+
+  /**
+   * LastUpdate updateMany
+   */
+  export type LastUpdateUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update LastUpdates.
+     */
+    data: XOR<LastUpdateUpdateManyMutationInput, LastUpdateUncheckedUpdateManyInput>
+    /**
+     * Filter which LastUpdates to update
+     */
+    where?: LastUpdateWhereInput
+    /**
+     * Limit how many LastUpdates to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * LastUpdate updateManyAndReturn
+   */
+  export type LastUpdateUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LastUpdate
+     */
+    select?: LastUpdateSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the LastUpdate
+     */
+    omit?: LastUpdateOmit<ExtArgs> | null
+    /**
+     * The data used to update LastUpdates.
+     */
+    data: XOR<LastUpdateUpdateManyMutationInput, LastUpdateUncheckedUpdateManyInput>
+    /**
+     * Filter which LastUpdates to update
+     */
+    where?: LastUpdateWhereInput
+    /**
+     * Limit how many LastUpdates to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * LastUpdate upsert
+   */
+  export type LastUpdateUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LastUpdate
+     */
+    select?: LastUpdateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LastUpdate
+     */
+    omit?: LastUpdateOmit<ExtArgs> | null
+    /**
+     * The filter to search for the LastUpdate to update in case it exists.
+     */
+    where: LastUpdateWhereUniqueInput
+    /**
+     * In case the LastUpdate found by the `where` argument doesn't exist, create a new LastUpdate with this data.
+     */
+    create: XOR<LastUpdateCreateInput, LastUpdateUncheckedCreateInput>
+    /**
+     * In case the LastUpdate was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<LastUpdateUpdateInput, LastUpdateUncheckedUpdateInput>
+  }
+
+  /**
+   * LastUpdate delete
+   */
+  export type LastUpdateDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LastUpdate
+     */
+    select?: LastUpdateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LastUpdate
+     */
+    omit?: LastUpdateOmit<ExtArgs> | null
+    /**
+     * Filter which LastUpdate to delete.
+     */
+    where: LastUpdateWhereUniqueInput
+  }
+
+  /**
+   * LastUpdate deleteMany
+   */
+  export type LastUpdateDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which LastUpdates to delete
+     */
+    where?: LastUpdateWhereInput
+    /**
+     * Limit how many LastUpdates to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * LastUpdate without action
+   */
+  export type LastUpdateDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LastUpdate
+     */
+    select?: LastUpdateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LastUpdate
+     */
+    omit?: LastUpdateOmit<ExtArgs> | null
+  }
+
+
+  /**
+   * Model AuditLog
+   */
+
+  export type AggregateAuditLog = {
+    _count: AuditLogCountAggregateOutputType | null
+    _min: AuditLogMinAggregateOutputType | null
+    _max: AuditLogMaxAggregateOutputType | null
+  }
+
+  export type AuditLogMinAggregateOutputType = {
+    id: string | null
+    action: string | null
+    entity: string | null
+    entityId: string | null
+    details: string | null
+    adminName: string | null
+    createdAt: Date | null
+  }
+
+  export type AuditLogMaxAggregateOutputType = {
+    id: string | null
+    action: string | null
+    entity: string | null
+    entityId: string | null
+    details: string | null
+    adminName: string | null
+    createdAt: Date | null
+  }
+
+  export type AuditLogCountAggregateOutputType = {
+    id: number
+    action: number
+    entity: number
+    entityId: number
+    details: number
+    adminName: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type AuditLogMinAggregateInputType = {
+    id?: true
+    action?: true
+    entity?: true
+    entityId?: true
+    details?: true
+    adminName?: true
+    createdAt?: true
+  }
+
+  export type AuditLogMaxAggregateInputType = {
+    id?: true
+    action?: true
+    entity?: true
+    entityId?: true
+    details?: true
+    adminName?: true
+    createdAt?: true
+  }
+
+  export type AuditLogCountAggregateInputType = {
+    id?: true
+    action?: true
+    entity?: true
+    entityId?: true
+    details?: true
+    adminName?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type AuditLogAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which AuditLog to aggregate.
+     */
+    where?: AuditLogWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AuditLogs to fetch.
+     */
+    orderBy?: AuditLogOrderByWithRelationInput | AuditLogOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: AuditLogWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AuditLogs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AuditLogs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned AuditLogs
+    **/
+    _count?: true | AuditLogCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: AuditLogMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: AuditLogMaxAggregateInputType
+  }
+
+  export type GetAuditLogAggregateType<T extends AuditLogAggregateArgs> = {
+        [P in keyof T & keyof AggregateAuditLog]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateAuditLog[P]>
+      : GetScalarType<T[P], AggregateAuditLog[P]>
+  }
+
+
+
+
+  export type AuditLogGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AuditLogWhereInput
+    orderBy?: AuditLogOrderByWithAggregationInput | AuditLogOrderByWithAggregationInput[]
+    by: AuditLogScalarFieldEnum[] | AuditLogScalarFieldEnum
+    having?: AuditLogScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: AuditLogCountAggregateInputType | true
+    _min?: AuditLogMinAggregateInputType
+    _max?: AuditLogMaxAggregateInputType
+  }
+
+  export type AuditLogGroupByOutputType = {
+    id: string
+    action: string
+    entity: string
+    entityId: string
+    details: string | null
+    adminName: string
+    createdAt: Date
+    _count: AuditLogCountAggregateOutputType | null
+    _min: AuditLogMinAggregateOutputType | null
+    _max: AuditLogMaxAggregateOutputType | null
+  }
+
+  type GetAuditLogGroupByPayload<T extends AuditLogGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<AuditLogGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof AuditLogGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], AuditLogGroupByOutputType[P]>
+            : GetScalarType<T[P], AuditLogGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type AuditLogSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    action?: boolean
+    entity?: boolean
+    entityId?: boolean
+    details?: boolean
+    adminName?: boolean
+    createdAt?: boolean
+  }, ExtArgs["result"]["auditLog"]>
+
+  export type AuditLogSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    action?: boolean
+    entity?: boolean
+    entityId?: boolean
+    details?: boolean
+    adminName?: boolean
+    createdAt?: boolean
+  }, ExtArgs["result"]["auditLog"]>
+
+  export type AuditLogSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    action?: boolean
+    entity?: boolean
+    entityId?: boolean
+    details?: boolean
+    adminName?: boolean
+    createdAt?: boolean
+  }, ExtArgs["result"]["auditLog"]>
+
+  export type AuditLogSelectScalar = {
+    id?: boolean
+    action?: boolean
+    entity?: boolean
+    entityId?: boolean
+    details?: boolean
+    adminName?: boolean
+    createdAt?: boolean
+  }
+
+  export type AuditLogOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "action" | "entity" | "entityId" | "details" | "adminName" | "createdAt", ExtArgs["result"]["auditLog"]>
+
+  export type $AuditLogPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "AuditLog"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      action: string
+      entity: string
+      entityId: string
+      details: string | null
+      adminName: string
+      createdAt: Date
+    }, ExtArgs["result"]["auditLog"]>
+    composites: {}
+  }
+
+  type AuditLogGetPayload<S extends boolean | null | undefined | AuditLogDefaultArgs> = $Result.GetResult<Prisma.$AuditLogPayload, S>
+
+  type AuditLogCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<AuditLogFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: AuditLogCountAggregateInputType | true
+    }
+
+  export interface AuditLogDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['AuditLog'], meta: { name: 'AuditLog' } }
+    /**
+     * Find zero or one AuditLog that matches the filter.
+     * @param {AuditLogFindUniqueArgs} args - Arguments to find a AuditLog
+     * @example
+     * // Get one AuditLog
+     * const auditLog = await prisma.auditLog.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends AuditLogFindUniqueArgs>(args: SelectSubset<T, AuditLogFindUniqueArgs<ExtArgs>>): Prisma__AuditLogClient<$Result.GetResult<Prisma.$AuditLogPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one AuditLog that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {AuditLogFindUniqueOrThrowArgs} args - Arguments to find a AuditLog
+     * @example
+     * // Get one AuditLog
+     * const auditLog = await prisma.auditLog.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends AuditLogFindUniqueOrThrowArgs>(args: SelectSubset<T, AuditLogFindUniqueOrThrowArgs<ExtArgs>>): Prisma__AuditLogClient<$Result.GetResult<Prisma.$AuditLogPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first AuditLog that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AuditLogFindFirstArgs} args - Arguments to find a AuditLog
+     * @example
+     * // Get one AuditLog
+     * const auditLog = await prisma.auditLog.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends AuditLogFindFirstArgs>(args?: SelectSubset<T, AuditLogFindFirstArgs<ExtArgs>>): Prisma__AuditLogClient<$Result.GetResult<Prisma.$AuditLogPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first AuditLog that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AuditLogFindFirstOrThrowArgs} args - Arguments to find a AuditLog
+     * @example
+     * // Get one AuditLog
+     * const auditLog = await prisma.auditLog.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends AuditLogFindFirstOrThrowArgs>(args?: SelectSubset<T, AuditLogFindFirstOrThrowArgs<ExtArgs>>): Prisma__AuditLogClient<$Result.GetResult<Prisma.$AuditLogPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more AuditLogs that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AuditLogFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all AuditLogs
+     * const auditLogs = await prisma.auditLog.findMany()
+     * 
+     * // Get first 10 AuditLogs
+     * const auditLogs = await prisma.auditLog.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const auditLogWithIdOnly = await prisma.auditLog.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends AuditLogFindManyArgs>(args?: SelectSubset<T, AuditLogFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AuditLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a AuditLog.
+     * @param {AuditLogCreateArgs} args - Arguments to create a AuditLog.
+     * @example
+     * // Create one AuditLog
+     * const AuditLog = await prisma.auditLog.create({
+     *   data: {
+     *     // ... data to create a AuditLog
+     *   }
+     * })
+     * 
+     */
+    create<T extends AuditLogCreateArgs>(args: SelectSubset<T, AuditLogCreateArgs<ExtArgs>>): Prisma__AuditLogClient<$Result.GetResult<Prisma.$AuditLogPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many AuditLogs.
+     * @param {AuditLogCreateManyArgs} args - Arguments to create many AuditLogs.
+     * @example
+     * // Create many AuditLogs
+     * const auditLog = await prisma.auditLog.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends AuditLogCreateManyArgs>(args?: SelectSubset<T, AuditLogCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many AuditLogs and returns the data saved in the database.
+     * @param {AuditLogCreateManyAndReturnArgs} args - Arguments to create many AuditLogs.
+     * @example
+     * // Create many AuditLogs
+     * const auditLog = await prisma.auditLog.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many AuditLogs and only return the `id`
+     * const auditLogWithIdOnly = await prisma.auditLog.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends AuditLogCreateManyAndReturnArgs>(args?: SelectSubset<T, AuditLogCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AuditLogPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a AuditLog.
+     * @param {AuditLogDeleteArgs} args - Arguments to delete one AuditLog.
+     * @example
+     * // Delete one AuditLog
+     * const AuditLog = await prisma.auditLog.delete({
+     *   where: {
+     *     // ... filter to delete one AuditLog
+     *   }
+     * })
+     * 
+     */
+    delete<T extends AuditLogDeleteArgs>(args: SelectSubset<T, AuditLogDeleteArgs<ExtArgs>>): Prisma__AuditLogClient<$Result.GetResult<Prisma.$AuditLogPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one AuditLog.
+     * @param {AuditLogUpdateArgs} args - Arguments to update one AuditLog.
+     * @example
+     * // Update one AuditLog
+     * const auditLog = await prisma.auditLog.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends AuditLogUpdateArgs>(args: SelectSubset<T, AuditLogUpdateArgs<ExtArgs>>): Prisma__AuditLogClient<$Result.GetResult<Prisma.$AuditLogPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more AuditLogs.
+     * @param {AuditLogDeleteManyArgs} args - Arguments to filter AuditLogs to delete.
+     * @example
+     * // Delete a few AuditLogs
+     * const { count } = await prisma.auditLog.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends AuditLogDeleteManyArgs>(args?: SelectSubset<T, AuditLogDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more AuditLogs.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AuditLogUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many AuditLogs
+     * const auditLog = await prisma.auditLog.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends AuditLogUpdateManyArgs>(args: SelectSubset<T, AuditLogUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more AuditLogs and returns the data updated in the database.
+     * @param {AuditLogUpdateManyAndReturnArgs} args - Arguments to update many AuditLogs.
+     * @example
+     * // Update many AuditLogs
+     * const auditLog = await prisma.auditLog.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more AuditLogs and only return the `id`
+     * const auditLogWithIdOnly = await prisma.auditLog.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends AuditLogUpdateManyAndReturnArgs>(args: SelectSubset<T, AuditLogUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AuditLogPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one AuditLog.
+     * @param {AuditLogUpsertArgs} args - Arguments to update or create a AuditLog.
+     * @example
+     * // Update or create a AuditLog
+     * const auditLog = await prisma.auditLog.upsert({
+     *   create: {
+     *     // ... data to create a AuditLog
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the AuditLog we want to update
+     *   }
+     * })
+     */
+    upsert<T extends AuditLogUpsertArgs>(args: SelectSubset<T, AuditLogUpsertArgs<ExtArgs>>): Prisma__AuditLogClient<$Result.GetResult<Prisma.$AuditLogPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of AuditLogs.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AuditLogCountArgs} args - Arguments to filter AuditLogs to count.
+     * @example
+     * // Count the number of AuditLogs
+     * const count = await prisma.auditLog.count({
+     *   where: {
+     *     // ... the filter for the AuditLogs we want to count
+     *   }
+     * })
+    **/
+    count<T extends AuditLogCountArgs>(
+      args?: Subset<T, AuditLogCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], AuditLogCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a AuditLog.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AuditLogAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends AuditLogAggregateArgs>(args: Subset<T, AuditLogAggregateArgs>): Prisma.PrismaPromise<GetAuditLogAggregateType<T>>
+
+    /**
+     * Group by AuditLog.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AuditLogGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends AuditLogGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: AuditLogGroupByArgs['orderBy'] }
+        : { orderBy?: AuditLogGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, AuditLogGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetAuditLogGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the AuditLog model
+   */
+  readonly fields: AuditLogFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for AuditLog.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__AuditLogClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the AuditLog model
+   */
+  interface AuditLogFieldRefs {
+    readonly id: FieldRef<"AuditLog", 'String'>
+    readonly action: FieldRef<"AuditLog", 'String'>
+    readonly entity: FieldRef<"AuditLog", 'String'>
+    readonly entityId: FieldRef<"AuditLog", 'String'>
+    readonly details: FieldRef<"AuditLog", 'String'>
+    readonly adminName: FieldRef<"AuditLog", 'String'>
+    readonly createdAt: FieldRef<"AuditLog", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * AuditLog findUnique
+   */
+  export type AuditLogFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AuditLog
+     */
+    select?: AuditLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AuditLog
+     */
+    omit?: AuditLogOmit<ExtArgs> | null
+    /**
+     * Filter, which AuditLog to fetch.
+     */
+    where: AuditLogWhereUniqueInput
+  }
+
+  /**
+   * AuditLog findUniqueOrThrow
+   */
+  export type AuditLogFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AuditLog
+     */
+    select?: AuditLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AuditLog
+     */
+    omit?: AuditLogOmit<ExtArgs> | null
+    /**
+     * Filter, which AuditLog to fetch.
+     */
+    where: AuditLogWhereUniqueInput
+  }
+
+  /**
+   * AuditLog findFirst
+   */
+  export type AuditLogFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AuditLog
+     */
+    select?: AuditLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AuditLog
+     */
+    omit?: AuditLogOmit<ExtArgs> | null
+    /**
+     * Filter, which AuditLog to fetch.
+     */
+    where?: AuditLogWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AuditLogs to fetch.
+     */
+    orderBy?: AuditLogOrderByWithRelationInput | AuditLogOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for AuditLogs.
+     */
+    cursor?: AuditLogWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AuditLogs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AuditLogs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of AuditLogs.
+     */
+    distinct?: AuditLogScalarFieldEnum | AuditLogScalarFieldEnum[]
+  }
+
+  /**
+   * AuditLog findFirstOrThrow
+   */
+  export type AuditLogFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AuditLog
+     */
+    select?: AuditLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AuditLog
+     */
+    omit?: AuditLogOmit<ExtArgs> | null
+    /**
+     * Filter, which AuditLog to fetch.
+     */
+    where?: AuditLogWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AuditLogs to fetch.
+     */
+    orderBy?: AuditLogOrderByWithRelationInput | AuditLogOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for AuditLogs.
+     */
+    cursor?: AuditLogWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AuditLogs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AuditLogs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of AuditLogs.
+     */
+    distinct?: AuditLogScalarFieldEnum | AuditLogScalarFieldEnum[]
+  }
+
+  /**
+   * AuditLog findMany
+   */
+  export type AuditLogFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AuditLog
+     */
+    select?: AuditLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AuditLog
+     */
+    omit?: AuditLogOmit<ExtArgs> | null
+    /**
+     * Filter, which AuditLogs to fetch.
+     */
+    where?: AuditLogWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AuditLogs to fetch.
+     */
+    orderBy?: AuditLogOrderByWithRelationInput | AuditLogOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing AuditLogs.
+     */
+    cursor?: AuditLogWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AuditLogs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AuditLogs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of AuditLogs.
+     */
+    distinct?: AuditLogScalarFieldEnum | AuditLogScalarFieldEnum[]
+  }
+
+  /**
+   * AuditLog create
+   */
+  export type AuditLogCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AuditLog
+     */
+    select?: AuditLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AuditLog
+     */
+    omit?: AuditLogOmit<ExtArgs> | null
+    /**
+     * The data needed to create a AuditLog.
+     */
+    data: XOR<AuditLogCreateInput, AuditLogUncheckedCreateInput>
+  }
+
+  /**
+   * AuditLog createMany
+   */
+  export type AuditLogCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many AuditLogs.
+     */
+    data: AuditLogCreateManyInput | AuditLogCreateManyInput[]
+  }
+
+  /**
+   * AuditLog createManyAndReturn
+   */
+  export type AuditLogCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AuditLog
+     */
+    select?: AuditLogSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the AuditLog
+     */
+    omit?: AuditLogOmit<ExtArgs> | null
+    /**
+     * The data used to create many AuditLogs.
+     */
+    data: AuditLogCreateManyInput | AuditLogCreateManyInput[]
+  }
+
+  /**
+   * AuditLog update
+   */
+  export type AuditLogUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AuditLog
+     */
+    select?: AuditLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AuditLog
+     */
+    omit?: AuditLogOmit<ExtArgs> | null
+    /**
+     * The data needed to update a AuditLog.
+     */
+    data: XOR<AuditLogUpdateInput, AuditLogUncheckedUpdateInput>
+    /**
+     * Choose, which AuditLog to update.
+     */
+    where: AuditLogWhereUniqueInput
+  }
+
+  /**
+   * AuditLog updateMany
+   */
+  export type AuditLogUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update AuditLogs.
+     */
+    data: XOR<AuditLogUpdateManyMutationInput, AuditLogUncheckedUpdateManyInput>
+    /**
+     * Filter which AuditLogs to update
+     */
+    where?: AuditLogWhereInput
+    /**
+     * Limit how many AuditLogs to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * AuditLog updateManyAndReturn
+   */
+  export type AuditLogUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AuditLog
+     */
+    select?: AuditLogSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the AuditLog
+     */
+    omit?: AuditLogOmit<ExtArgs> | null
+    /**
+     * The data used to update AuditLogs.
+     */
+    data: XOR<AuditLogUpdateManyMutationInput, AuditLogUncheckedUpdateManyInput>
+    /**
+     * Filter which AuditLogs to update
+     */
+    where?: AuditLogWhereInput
+    /**
+     * Limit how many AuditLogs to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * AuditLog upsert
+   */
+  export type AuditLogUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AuditLog
+     */
+    select?: AuditLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AuditLog
+     */
+    omit?: AuditLogOmit<ExtArgs> | null
+    /**
+     * The filter to search for the AuditLog to update in case it exists.
+     */
+    where: AuditLogWhereUniqueInput
+    /**
+     * In case the AuditLog found by the `where` argument doesn't exist, create a new AuditLog with this data.
+     */
+    create: XOR<AuditLogCreateInput, AuditLogUncheckedCreateInput>
+    /**
+     * In case the AuditLog was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<AuditLogUpdateInput, AuditLogUncheckedUpdateInput>
+  }
+
+  /**
+   * AuditLog delete
+   */
+  export type AuditLogDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AuditLog
+     */
+    select?: AuditLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AuditLog
+     */
+    omit?: AuditLogOmit<ExtArgs> | null
+    /**
+     * Filter which AuditLog to delete.
+     */
+    where: AuditLogWhereUniqueInput
+  }
+
+  /**
+   * AuditLog deleteMany
+   */
+  export type AuditLogDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which AuditLogs to delete
+     */
+    where?: AuditLogWhereInput
+    /**
+     * Limit how many AuditLogs to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * AuditLog without action
+   */
+  export type AuditLogDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AuditLog
+     */
+    select?: AuditLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AuditLog
+     */
+    omit?: AuditLogOmit<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -32322,6 +35688,8 @@ export namespace Prisma {
     mobile: 'mobile',
     code: 'code',
     expiresAt: 'expiresAt',
+    attempts: 'attempts',
+    lockedUntil: 'lockedUntil',
     createdAt: 'createdAt'
   };
 
@@ -32476,6 +35844,42 @@ export namespace Prisma {
   };
 
   export type AppAnnouncementScalarFieldEnum = (typeof AppAnnouncementScalarFieldEnum)[keyof typeof AppAnnouncementScalarFieldEnum]
+
+
+  export const AppVersionScalarFieldEnum: {
+    id: 'id',
+    platform: 'platform',
+    version: 'version',
+    forceUpdate: 'forceUpdate',
+    downloadUrl: 'downloadUrl',
+    fileKey: 'fileKey',
+    releaseNotes: 'releaseNotes',
+    updatedAt: 'updatedAt'
+  };
+
+  export type AppVersionScalarFieldEnum = (typeof AppVersionScalarFieldEnum)[keyof typeof AppVersionScalarFieldEnum]
+
+
+  export const LastUpdateScalarFieldEnum: {
+    id: 'id',
+    timestamp: 'timestamp',
+    source: 'source'
+  };
+
+  export type LastUpdateScalarFieldEnum = (typeof LastUpdateScalarFieldEnum)[keyof typeof LastUpdateScalarFieldEnum]
+
+
+  export const AuditLogScalarFieldEnum: {
+    id: 'id',
+    action: 'action',
+    entity: 'entity',
+    entityId: 'entityId',
+    details: 'details',
+    adminName: 'adminName',
+    createdAt: 'createdAt'
+  };
+
+  export type AuditLogScalarFieldEnum = (typeof AuditLogScalarFieldEnum)[keyof typeof AuditLogScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -33591,6 +36995,8 @@ export namespace Prisma {
     mobile?: StringFilter<"Otp"> | string
     code?: StringFilter<"Otp"> | string
     expiresAt?: DateTimeFilter<"Otp"> | Date | string
+    attempts?: IntFilter<"Otp"> | number
+    lockedUntil?: DateTimeNullableFilter<"Otp"> | Date | string | null
     createdAt?: DateTimeFilter<"Otp"> | Date | string
   }
 
@@ -33599,6 +37005,8 @@ export namespace Prisma {
     mobile?: SortOrder
     code?: SortOrder
     expiresAt?: SortOrder
+    attempts?: SortOrder
+    lockedUntil?: SortOrderInput | SortOrder
     createdAt?: SortOrder
   }
 
@@ -33610,6 +37018,8 @@ export namespace Prisma {
     NOT?: OtpWhereInput | OtpWhereInput[]
     code?: StringFilter<"Otp"> | string
     expiresAt?: DateTimeFilter<"Otp"> | Date | string
+    attempts?: IntFilter<"Otp"> | number
+    lockedUntil?: DateTimeNullableFilter<"Otp"> | Date | string | null
     createdAt?: DateTimeFilter<"Otp"> | Date | string
   }, "id" | "mobile">
 
@@ -33618,10 +37028,14 @@ export namespace Prisma {
     mobile?: SortOrder
     code?: SortOrder
     expiresAt?: SortOrder
+    attempts?: SortOrder
+    lockedUntil?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     _count?: OtpCountOrderByAggregateInput
+    _avg?: OtpAvgOrderByAggregateInput
     _max?: OtpMaxOrderByAggregateInput
     _min?: OtpMinOrderByAggregateInput
+    _sum?: OtpSumOrderByAggregateInput
   }
 
   export type OtpScalarWhereWithAggregatesInput = {
@@ -33632,6 +37046,8 @@ export namespace Prisma {
     mobile?: StringWithAggregatesFilter<"Otp"> | string
     code?: StringWithAggregatesFilter<"Otp"> | string
     expiresAt?: DateTimeWithAggregatesFilter<"Otp"> | Date | string
+    attempts?: IntWithAggregatesFilter<"Otp"> | number
+    lockedUntil?: DateTimeNullableWithAggregatesFilter<"Otp"> | Date | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Otp"> | Date | string
   }
 
@@ -34416,6 +37832,177 @@ export namespace Prisma {
     isActive?: BoolWithAggregatesFilter<"AppAnnouncement"> | boolean
     createdAt?: DateTimeWithAggregatesFilter<"AppAnnouncement"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"AppAnnouncement"> | Date | string
+  }
+
+  export type AppVersionWhereInput = {
+    AND?: AppVersionWhereInput | AppVersionWhereInput[]
+    OR?: AppVersionWhereInput[]
+    NOT?: AppVersionWhereInput | AppVersionWhereInput[]
+    id?: StringFilter<"AppVersion"> | string
+    platform?: StringFilter<"AppVersion"> | string
+    version?: StringFilter<"AppVersion"> | string
+    forceUpdate?: BoolFilter<"AppVersion"> | boolean
+    downloadUrl?: StringNullableFilter<"AppVersion"> | string | null
+    fileKey?: StringNullableFilter<"AppVersion"> | string | null
+    releaseNotes?: StringNullableFilter<"AppVersion"> | string | null
+    updatedAt?: DateTimeFilter<"AppVersion"> | Date | string
+  }
+
+  export type AppVersionOrderByWithRelationInput = {
+    id?: SortOrder
+    platform?: SortOrder
+    version?: SortOrder
+    forceUpdate?: SortOrder
+    downloadUrl?: SortOrderInput | SortOrder
+    fileKey?: SortOrderInput | SortOrder
+    releaseNotes?: SortOrderInput | SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type AppVersionWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    platform?: string
+    AND?: AppVersionWhereInput | AppVersionWhereInput[]
+    OR?: AppVersionWhereInput[]
+    NOT?: AppVersionWhereInput | AppVersionWhereInput[]
+    version?: StringFilter<"AppVersion"> | string
+    forceUpdate?: BoolFilter<"AppVersion"> | boolean
+    downloadUrl?: StringNullableFilter<"AppVersion"> | string | null
+    fileKey?: StringNullableFilter<"AppVersion"> | string | null
+    releaseNotes?: StringNullableFilter<"AppVersion"> | string | null
+    updatedAt?: DateTimeFilter<"AppVersion"> | Date | string
+  }, "id" | "platform">
+
+  export type AppVersionOrderByWithAggregationInput = {
+    id?: SortOrder
+    platform?: SortOrder
+    version?: SortOrder
+    forceUpdate?: SortOrder
+    downloadUrl?: SortOrderInput | SortOrder
+    fileKey?: SortOrderInput | SortOrder
+    releaseNotes?: SortOrderInput | SortOrder
+    updatedAt?: SortOrder
+    _count?: AppVersionCountOrderByAggregateInput
+    _max?: AppVersionMaxOrderByAggregateInput
+    _min?: AppVersionMinOrderByAggregateInput
+  }
+
+  export type AppVersionScalarWhereWithAggregatesInput = {
+    AND?: AppVersionScalarWhereWithAggregatesInput | AppVersionScalarWhereWithAggregatesInput[]
+    OR?: AppVersionScalarWhereWithAggregatesInput[]
+    NOT?: AppVersionScalarWhereWithAggregatesInput | AppVersionScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"AppVersion"> | string
+    platform?: StringWithAggregatesFilter<"AppVersion"> | string
+    version?: StringWithAggregatesFilter<"AppVersion"> | string
+    forceUpdate?: BoolWithAggregatesFilter<"AppVersion"> | boolean
+    downloadUrl?: StringNullableWithAggregatesFilter<"AppVersion"> | string | null
+    fileKey?: StringNullableWithAggregatesFilter<"AppVersion"> | string | null
+    releaseNotes?: StringNullableWithAggregatesFilter<"AppVersion"> | string | null
+    updatedAt?: DateTimeWithAggregatesFilter<"AppVersion"> | Date | string
+  }
+
+  export type LastUpdateWhereInput = {
+    AND?: LastUpdateWhereInput | LastUpdateWhereInput[]
+    OR?: LastUpdateWhereInput[]
+    NOT?: LastUpdateWhereInput | LastUpdateWhereInput[]
+    id?: StringFilter<"LastUpdate"> | string
+    timestamp?: DateTimeFilter<"LastUpdate"> | Date | string
+    source?: StringFilter<"LastUpdate"> | string
+  }
+
+  export type LastUpdateOrderByWithRelationInput = {
+    id?: SortOrder
+    timestamp?: SortOrder
+    source?: SortOrder
+  }
+
+  export type LastUpdateWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: LastUpdateWhereInput | LastUpdateWhereInput[]
+    OR?: LastUpdateWhereInput[]
+    NOT?: LastUpdateWhereInput | LastUpdateWhereInput[]
+    timestamp?: DateTimeFilter<"LastUpdate"> | Date | string
+    source?: StringFilter<"LastUpdate"> | string
+  }, "id">
+
+  export type LastUpdateOrderByWithAggregationInput = {
+    id?: SortOrder
+    timestamp?: SortOrder
+    source?: SortOrder
+    _count?: LastUpdateCountOrderByAggregateInput
+    _max?: LastUpdateMaxOrderByAggregateInput
+    _min?: LastUpdateMinOrderByAggregateInput
+  }
+
+  export type LastUpdateScalarWhereWithAggregatesInput = {
+    AND?: LastUpdateScalarWhereWithAggregatesInput | LastUpdateScalarWhereWithAggregatesInput[]
+    OR?: LastUpdateScalarWhereWithAggregatesInput[]
+    NOT?: LastUpdateScalarWhereWithAggregatesInput | LastUpdateScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"LastUpdate"> | string
+    timestamp?: DateTimeWithAggregatesFilter<"LastUpdate"> | Date | string
+    source?: StringWithAggregatesFilter<"LastUpdate"> | string
+  }
+
+  export type AuditLogWhereInput = {
+    AND?: AuditLogWhereInput | AuditLogWhereInput[]
+    OR?: AuditLogWhereInput[]
+    NOT?: AuditLogWhereInput | AuditLogWhereInput[]
+    id?: StringFilter<"AuditLog"> | string
+    action?: StringFilter<"AuditLog"> | string
+    entity?: StringFilter<"AuditLog"> | string
+    entityId?: StringFilter<"AuditLog"> | string
+    details?: StringNullableFilter<"AuditLog"> | string | null
+    adminName?: StringFilter<"AuditLog"> | string
+    createdAt?: DateTimeFilter<"AuditLog"> | Date | string
+  }
+
+  export type AuditLogOrderByWithRelationInput = {
+    id?: SortOrder
+    action?: SortOrder
+    entity?: SortOrder
+    entityId?: SortOrder
+    details?: SortOrderInput | SortOrder
+    adminName?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type AuditLogWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: AuditLogWhereInput | AuditLogWhereInput[]
+    OR?: AuditLogWhereInput[]
+    NOT?: AuditLogWhereInput | AuditLogWhereInput[]
+    action?: StringFilter<"AuditLog"> | string
+    entity?: StringFilter<"AuditLog"> | string
+    entityId?: StringFilter<"AuditLog"> | string
+    details?: StringNullableFilter<"AuditLog"> | string | null
+    adminName?: StringFilter<"AuditLog"> | string
+    createdAt?: DateTimeFilter<"AuditLog"> | Date | string
+  }, "id">
+
+  export type AuditLogOrderByWithAggregationInput = {
+    id?: SortOrder
+    action?: SortOrder
+    entity?: SortOrder
+    entityId?: SortOrder
+    details?: SortOrderInput | SortOrder
+    adminName?: SortOrder
+    createdAt?: SortOrder
+    _count?: AuditLogCountOrderByAggregateInput
+    _max?: AuditLogMaxOrderByAggregateInput
+    _min?: AuditLogMinOrderByAggregateInput
+  }
+
+  export type AuditLogScalarWhereWithAggregatesInput = {
+    AND?: AuditLogScalarWhereWithAggregatesInput | AuditLogScalarWhereWithAggregatesInput[]
+    OR?: AuditLogScalarWhereWithAggregatesInput[]
+    NOT?: AuditLogScalarWhereWithAggregatesInput | AuditLogScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"AuditLog"> | string
+    action?: StringWithAggregatesFilter<"AuditLog"> | string
+    entity?: StringWithAggregatesFilter<"AuditLog"> | string
+    entityId?: StringWithAggregatesFilter<"AuditLog"> | string
+    details?: StringNullableWithAggregatesFilter<"AuditLog"> | string | null
+    adminName?: StringWithAggregatesFilter<"AuditLog"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"AuditLog"> | Date | string
   }
 
   export type AdminCreateInput = {
@@ -35547,6 +39134,8 @@ export namespace Prisma {
     mobile: string
     code: string
     expiresAt: Date | string
+    attempts?: number
+    lockedUntil?: Date | string | null
     createdAt?: Date | string
   }
 
@@ -35555,6 +39144,8 @@ export namespace Prisma {
     mobile: string
     code: string
     expiresAt: Date | string
+    attempts?: number
+    lockedUntil?: Date | string | null
     createdAt?: Date | string
   }
 
@@ -35563,6 +39154,8 @@ export namespace Prisma {
     mobile?: StringFieldUpdateOperationsInput | string
     code?: StringFieldUpdateOperationsInput | string
     expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    attempts?: IntFieldUpdateOperationsInput | number
+    lockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -35571,6 +39164,8 @@ export namespace Prisma {
     mobile?: StringFieldUpdateOperationsInput | string
     code?: StringFieldUpdateOperationsInput | string
     expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    attempts?: IntFieldUpdateOperationsInput | number
+    lockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -35579,6 +39174,8 @@ export namespace Prisma {
     mobile: string
     code: string
     expiresAt: Date | string
+    attempts?: number
+    lockedUntil?: Date | string | null
     createdAt?: Date | string
   }
 
@@ -35587,6 +39184,8 @@ export namespace Prisma {
     mobile?: StringFieldUpdateOperationsInput | string
     code?: StringFieldUpdateOperationsInput | string
     expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    attempts?: IntFieldUpdateOperationsInput | number
+    lockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -35595,6 +39194,8 @@ export namespace Prisma {
     mobile?: StringFieldUpdateOperationsInput | string
     code?: StringFieldUpdateOperationsInput | string
     expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    attempts?: IntFieldUpdateOperationsInput | number
+    lockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -36444,6 +40045,195 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AppVersionCreateInput = {
+    id?: string
+    platform: string
+    version: string
+    forceUpdate?: boolean
+    downloadUrl?: string | null
+    fileKey?: string | null
+    releaseNotes?: string | null
+    updatedAt?: Date | string
+  }
+
+  export type AppVersionUncheckedCreateInput = {
+    id?: string
+    platform: string
+    version: string
+    forceUpdate?: boolean
+    downloadUrl?: string | null
+    fileKey?: string | null
+    releaseNotes?: string | null
+    updatedAt?: Date | string
+  }
+
+  export type AppVersionUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    platform?: StringFieldUpdateOperationsInput | string
+    version?: StringFieldUpdateOperationsInput | string
+    forceUpdate?: BoolFieldUpdateOperationsInput | boolean
+    downloadUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    fileKey?: NullableStringFieldUpdateOperationsInput | string | null
+    releaseNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AppVersionUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    platform?: StringFieldUpdateOperationsInput | string
+    version?: StringFieldUpdateOperationsInput | string
+    forceUpdate?: BoolFieldUpdateOperationsInput | boolean
+    downloadUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    fileKey?: NullableStringFieldUpdateOperationsInput | string | null
+    releaseNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AppVersionCreateManyInput = {
+    id?: string
+    platform: string
+    version: string
+    forceUpdate?: boolean
+    downloadUrl?: string | null
+    fileKey?: string | null
+    releaseNotes?: string | null
+    updatedAt?: Date | string
+  }
+
+  export type AppVersionUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    platform?: StringFieldUpdateOperationsInput | string
+    version?: StringFieldUpdateOperationsInput | string
+    forceUpdate?: BoolFieldUpdateOperationsInput | boolean
+    downloadUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    fileKey?: NullableStringFieldUpdateOperationsInput | string | null
+    releaseNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AppVersionUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    platform?: StringFieldUpdateOperationsInput | string
+    version?: StringFieldUpdateOperationsInput | string
+    forceUpdate?: BoolFieldUpdateOperationsInput | boolean
+    downloadUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    fileKey?: NullableStringFieldUpdateOperationsInput | string | null
+    releaseNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type LastUpdateCreateInput = {
+    id?: string
+    timestamp?: Date | string
+    source?: string
+  }
+
+  export type LastUpdateUncheckedCreateInput = {
+    id?: string
+    timestamp?: Date | string
+    source?: string
+  }
+
+  export type LastUpdateUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    timestamp?: DateTimeFieldUpdateOperationsInput | Date | string
+    source?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type LastUpdateUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    timestamp?: DateTimeFieldUpdateOperationsInput | Date | string
+    source?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type LastUpdateCreateManyInput = {
+    id?: string
+    timestamp?: Date | string
+    source?: string
+  }
+
+  export type LastUpdateUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    timestamp?: DateTimeFieldUpdateOperationsInput | Date | string
+    source?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type LastUpdateUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    timestamp?: DateTimeFieldUpdateOperationsInput | Date | string
+    source?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type AuditLogCreateInput = {
+    id?: string
+    action: string
+    entity: string
+    entityId: string
+    details?: string | null
+    adminName?: string
+    createdAt?: Date | string
+  }
+
+  export type AuditLogUncheckedCreateInput = {
+    id?: string
+    action: string
+    entity: string
+    entityId: string
+    details?: string | null
+    adminName?: string
+    createdAt?: Date | string
+  }
+
+  export type AuditLogUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    action?: StringFieldUpdateOperationsInput | string
+    entity?: StringFieldUpdateOperationsInput | string
+    entityId?: StringFieldUpdateOperationsInput | string
+    details?: NullableStringFieldUpdateOperationsInput | string | null
+    adminName?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AuditLogUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    action?: StringFieldUpdateOperationsInput | string
+    entity?: StringFieldUpdateOperationsInput | string
+    entityId?: StringFieldUpdateOperationsInput | string
+    details?: NullableStringFieldUpdateOperationsInput | string | null
+    adminName?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AuditLogCreateManyInput = {
+    id?: string
+    action: string
+    entity: string
+    entityId: string
+    details?: string | null
+    adminName?: string
+    createdAt?: Date | string
+  }
+
+  export type AuditLogUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    action?: StringFieldUpdateOperationsInput | string
+    entity?: StringFieldUpdateOperationsInput | string
+    entityId?: StringFieldUpdateOperationsInput | string
+    details?: NullableStringFieldUpdateOperationsInput | string | null
+    adminName?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AuditLogUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    action?: StringFieldUpdateOperationsInput | string
+    entity?: StringFieldUpdateOperationsInput | string
+    entityId?: StringFieldUpdateOperationsInput | string
+    details?: NullableStringFieldUpdateOperationsInput | string | null
+    adminName?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type StringFilter<$PrismaModel = never> = {
@@ -37426,7 +41216,13 @@ export namespace Prisma {
     mobile?: SortOrder
     code?: SortOrder
     expiresAt?: SortOrder
+    attempts?: SortOrder
+    lockedUntil?: SortOrder
     createdAt?: SortOrder
+  }
+
+  export type OtpAvgOrderByAggregateInput = {
+    attempts?: SortOrder
   }
 
   export type OtpMaxOrderByAggregateInput = {
@@ -37434,6 +41230,8 @@ export namespace Prisma {
     mobile?: SortOrder
     code?: SortOrder
     expiresAt?: SortOrder
+    attempts?: SortOrder
+    lockedUntil?: SortOrder
     createdAt?: SortOrder
   }
 
@@ -37442,7 +41240,13 @@ export namespace Prisma {
     mobile?: SortOrder
     code?: SortOrder
     expiresAt?: SortOrder
+    attempts?: SortOrder
+    lockedUntil?: SortOrder
     createdAt?: SortOrder
+  }
+
+  export type OtpSumOrderByAggregateInput = {
+    attempts?: SortOrder
   }
 
   export type TournamentCountOrderByAggregateInput = {
@@ -37901,6 +41705,87 @@ export namespace Prisma {
     isActive?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+  }
+
+  export type AppVersionCountOrderByAggregateInput = {
+    id?: SortOrder
+    platform?: SortOrder
+    version?: SortOrder
+    forceUpdate?: SortOrder
+    downloadUrl?: SortOrder
+    fileKey?: SortOrder
+    releaseNotes?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type AppVersionMaxOrderByAggregateInput = {
+    id?: SortOrder
+    platform?: SortOrder
+    version?: SortOrder
+    forceUpdate?: SortOrder
+    downloadUrl?: SortOrder
+    fileKey?: SortOrder
+    releaseNotes?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type AppVersionMinOrderByAggregateInput = {
+    id?: SortOrder
+    platform?: SortOrder
+    version?: SortOrder
+    forceUpdate?: SortOrder
+    downloadUrl?: SortOrder
+    fileKey?: SortOrder
+    releaseNotes?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type LastUpdateCountOrderByAggregateInput = {
+    id?: SortOrder
+    timestamp?: SortOrder
+    source?: SortOrder
+  }
+
+  export type LastUpdateMaxOrderByAggregateInput = {
+    id?: SortOrder
+    timestamp?: SortOrder
+    source?: SortOrder
+  }
+
+  export type LastUpdateMinOrderByAggregateInput = {
+    id?: SortOrder
+    timestamp?: SortOrder
+    source?: SortOrder
+  }
+
+  export type AuditLogCountOrderByAggregateInput = {
+    id?: SortOrder
+    action?: SortOrder
+    entity?: SortOrder
+    entityId?: SortOrder
+    details?: SortOrder
+    adminName?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type AuditLogMaxOrderByAggregateInput = {
+    id?: SortOrder
+    action?: SortOrder
+    entity?: SortOrder
+    entityId?: SortOrder
+    details?: SortOrder
+    adminName?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type AuditLogMinOrderByAggregateInput = {
+    id?: SortOrder
+    action?: SortOrder
+    entity?: SortOrder
+    entityId?: SortOrder
+    details?: SortOrder
+    adminName?: SortOrder
+    createdAt?: SortOrder
   }
 
   export type StringFieldUpdateOperationsInput = {

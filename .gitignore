@@ -23,7 +23,7 @@
 *.log
 *.logs
 
-*.firebase-admin.json
+*.firebase-admin.jsons
 firebase-admin.json
 
 # production
