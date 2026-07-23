@@ -157,7 +157,7 @@ export async function POST(request: Request) {
     if (couponCode) {
       const coupon = await prisma.coupon.findUnique({
         where: { code: String(couponCode).toUpperCase() },
-        include: { usages: true, assignments: true }
+        include: { assignments: true }
       });
       
       // Bug #11: Return error if coupon is invalid instead of silently ignoring
@@ -195,13 +195,19 @@ export async function POST(request: Request) {
       }
 
       // Global and per user limits
-      if (coupon.maxUses !== null && coupon.usages.length >= coupon.maxUses) {
-        isAllowed = false;
-        targetError = 'This coupon has reached its maximum usage limit.';
+      if (coupon.maxUses !== null) {
+        const totalUses = await prisma.couponUsage.count({ where: { couponId: coupon.id } });
+        if (totalUses >= coupon.maxUses) {
+          isAllowed = false;
+          targetError = 'This coupon has reached its maximum usage limit.';
+        }
       }
-      if (coupon.maxUsesPerUser !== null && coupon.usages.filter(u => u.memberId === member.id).length >= coupon.maxUsesPerUser) {
-        isAllowed = false;
-        targetError = 'You have already used this coupon the maximum number of times.';
+      if (isAllowed && coupon.maxUsesPerUser !== null) {
+        const userUses = await prisma.couponUsage.count({ where: { couponId: coupon.id, memberId: member.id } });
+        if (userUses >= coupon.maxUsesPerUser) {
+          isAllowed = false;
+          targetError = 'You have already used this coupon the maximum number of times.';
+        }
       }
 
       if (!isAllowed) {
@@ -222,10 +228,11 @@ export async function POST(request: Request) {
     const subtotal = price - discountAmount;
     
     // Wallet deduction - allow any amount up to balance and subtotal
+    // Note: currentWallet is in Paise. requestedWallet and subtotal are in Rupees.
     let advancePaid = 0;
     const requestedWallet = Number(walletAmountToUse) || 0;
     if (requestedWallet > 0) {
-      advancePaid = Math.min(requestedWallet, currentWallet, subtotal);
+      advancePaid = Math.min(requestedWallet, currentWallet / 100, subtotal);
     }
     
     const amountDue = subtotal - advancePaid;
@@ -268,7 +275,7 @@ export async function POST(request: Request) {
       // Re-check wallet balance inside transaction to prevent double-spending
       if (advancePaid > 0) {
         const freshMember = await tx.member.findUnique({ where: { id: member.id } });
-        if (!freshMember || freshMember.walletBalance < advancePaid) {
+        if (!freshMember || freshMember.walletBalance < advancePaid * 100) {
           throw new Error('INSUFFICIENT_WALLET');
         }
       }
@@ -307,12 +314,12 @@ export async function POST(request: Request) {
       if (advancePaid > 0) {
         await tx.member.update({
           where: { id: member.id },
-          data: { walletBalance: { decrement: advancePaid } }
+          data: { walletBalance: { decrement: advancePaid * 100 } }
         });
         await tx.walletTransaction.create({
           data: {
             memberId: member.id,
-            amount: advancePaid,
+            amount: advancePaid * 100,
             type: 'DEBIT',
             description: `Payment for booking ${newBooking.id}`
           }
@@ -342,6 +349,14 @@ export async function POST(request: Request) {
           }
         });
       }
+      // Update UserSportStat
+      await tx.userSportStat.upsert({
+        where: {
+          memberId_sportId: { memberId: targetMemberId, sportId: sportId }
+        },
+        update: { bookingCount: { increment: 1 } },
+        create: { memberId: targetMemberId, sportId: sportId, bookingCount: 1 }
+      });
 
       // Generate Tickets
       const tickets = ticketData.map(t => ({

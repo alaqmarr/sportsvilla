@@ -153,6 +153,16 @@ export type LastUpdate = $Result.DefaultSelection<Prisma.$LastUpdatePayload>
  * 
  */
 export type AuditLog = $Result.DefaultSelection<Prisma.$AuditLogPayload>
+/**
+ * Model Banner
+ * 
+ */
+export type Banner = $Result.DefaultSelection<Prisma.$BannerPayload>
+/**
+ * Model UserSportStat
+ * 
+ */
+export type UserSportStat = $Result.DefaultSelection<Prisma.$UserSportStatPayload>
 
 /**
  * ##  Prisma Client ʲˢ
@@ -554,6 +564,26 @@ export class PrismaClient<
     * ```
     */
   get auditLog(): Prisma.AuditLogDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.banner`: Exposes CRUD operations for the **Banner** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Banners
+    * const banners = await prisma.banner.findMany()
+    * ```
+    */
+  get banner(): Prisma.BannerDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.userSportStat`: Exposes CRUD operations for the **UserSportStat** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more UserSportStats
+    * const userSportStats = await prisma.userSportStat.findMany()
+    * ```
+    */
+  get userSportStat(): Prisma.UserSportStatDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -1015,7 +1045,9 @@ export namespace Prisma {
     AppAnnouncement: 'AppAnnouncement',
     AppVersion: 'AppVersion',
     LastUpdate: 'LastUpdate',
-    AuditLog: 'AuditLog'
+    AuditLog: 'AuditLog',
+    Banner: 'Banner',
+    UserSportStat: 'UserSportStat'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -1031,7 +1063,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "admin" | "setting" | "member" | "loyaltyHistory" | "sport" | "turf" | "turfSport" | "membershipPlan" | "memberMembership" | "attendance" | "booking" | "payment" | "displaySession" | "ticket" | "otp" | "tournament" | "tournamentRegistration" | "tournamentPlayer" | "walletTransaction" | "coupon" | "couponAssignment" | "couponUsage" | "loyaltyTrigger" | "loyaltyAchievement" | "appAnnouncement" | "appVersion" | "lastUpdate" | "auditLog"
+      modelProps: "admin" | "setting" | "member" | "loyaltyHistory" | "sport" | "turf" | "turfSport" | "membershipPlan" | "memberMembership" | "attendance" | "booking" | "payment" | "displaySession" | "ticket" | "otp" | "tournament" | "tournamentRegistration" | "tournamentPlayer" | "walletTransaction" | "coupon" | "couponAssignment" | "couponUsage" | "loyaltyTrigger" | "loyaltyAchievement" | "appAnnouncement" | "appVersion" | "lastUpdate" | "auditLog" | "banner" | "userSportStat"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -3107,6 +3139,154 @@ export namespace Prisma {
           }
         }
       }
+      Banner: {
+        payload: Prisma.$BannerPayload<ExtArgs>
+        fields: Prisma.BannerFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.BannerFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BannerPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.BannerFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BannerPayload>
+          }
+          findFirst: {
+            args: Prisma.BannerFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BannerPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.BannerFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BannerPayload>
+          }
+          findMany: {
+            args: Prisma.BannerFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BannerPayload>[]
+          }
+          create: {
+            args: Prisma.BannerCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BannerPayload>
+          }
+          createMany: {
+            args: Prisma.BannerCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.BannerCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BannerPayload>[]
+          }
+          delete: {
+            args: Prisma.BannerDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BannerPayload>
+          }
+          update: {
+            args: Prisma.BannerUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BannerPayload>
+          }
+          deleteMany: {
+            args: Prisma.BannerDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.BannerUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.BannerUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BannerPayload>[]
+          }
+          upsert: {
+            args: Prisma.BannerUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BannerPayload>
+          }
+          aggregate: {
+            args: Prisma.BannerAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateBanner>
+          }
+          groupBy: {
+            args: Prisma.BannerGroupByArgs<ExtArgs>
+            result: $Utils.Optional<BannerGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.BannerCountArgs<ExtArgs>
+            result: $Utils.Optional<BannerCountAggregateOutputType> | number
+          }
+        }
+      }
+      UserSportStat: {
+        payload: Prisma.$UserSportStatPayload<ExtArgs>
+        fields: Prisma.UserSportStatFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.UserSportStatFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserSportStatPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.UserSportStatFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserSportStatPayload>
+          }
+          findFirst: {
+            args: Prisma.UserSportStatFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserSportStatPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.UserSportStatFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserSportStatPayload>
+          }
+          findMany: {
+            args: Prisma.UserSportStatFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserSportStatPayload>[]
+          }
+          create: {
+            args: Prisma.UserSportStatCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserSportStatPayload>
+          }
+          createMany: {
+            args: Prisma.UserSportStatCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.UserSportStatCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserSportStatPayload>[]
+          }
+          delete: {
+            args: Prisma.UserSportStatDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserSportStatPayload>
+          }
+          update: {
+            args: Prisma.UserSportStatUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserSportStatPayload>
+          }
+          deleteMany: {
+            args: Prisma.UserSportStatDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.UserSportStatUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.UserSportStatUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserSportStatPayload>[]
+          }
+          upsert: {
+            args: Prisma.UserSportStatUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserSportStatPayload>
+          }
+          aggregate: {
+            args: Prisma.UserSportStatAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateUserSportStat>
+          }
+          groupBy: {
+            args: Prisma.UserSportStatGroupByArgs<ExtArgs>
+            result: $Utils.Optional<UserSportStatGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.UserSportStatCountArgs<ExtArgs>
+            result: $Utils.Optional<UserSportStatCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -3243,6 +3423,8 @@ export namespace Prisma {
     appVersion?: AppVersionOmit
     lastUpdate?: LastUpdateOmit
     auditLog?: AuditLogOmit
+    banner?: BannerOmit
+    userSportStat?: UserSportStatOmit
   }
 
   /* Types for Logging */
@@ -3332,6 +3514,7 @@ export namespace Prisma {
     couponAssignments: number
     couponUsages: number
     loyaltyAchievements: number
+    sportStats: number
   }
 
   export type MemberCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -3344,6 +3527,7 @@ export namespace Prisma {
     couponAssignments?: boolean | MemberCountOutputTypeCountCouponAssignmentsArgs
     couponUsages?: boolean | MemberCountOutputTypeCountCouponUsagesArgs
     loyaltyAchievements?: boolean | MemberCountOutputTypeCountLoyaltyAchievementsArgs
+    sportStats?: boolean | MemberCountOutputTypeCountSportStatsArgs
   }
 
   // Custom InputTypes
@@ -3420,6 +3604,13 @@ export namespace Prisma {
     where?: LoyaltyAchievementWhereInput
   }
 
+  /**
+   * MemberCountOutputType without action
+   */
+  export type MemberCountOutputTypeCountSportStatsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: UserSportStatWhereInput
+  }
+
 
   /**
    * Count Type SportCountOutputType
@@ -3431,6 +3622,8 @@ export namespace Prisma {
     attendances: number
     bookings: number
     tournaments: number
+    sportStats: number
+    banners: number
   }
 
   export type SportCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -3439,6 +3632,8 @@ export namespace Prisma {
     attendances?: boolean | SportCountOutputTypeCountAttendancesArgs
     bookings?: boolean | SportCountOutputTypeCountBookingsArgs
     tournaments?: boolean | SportCountOutputTypeCountTournamentsArgs
+    sportStats?: boolean | SportCountOutputTypeCountSportStatsArgs
+    banners?: boolean | SportCountOutputTypeCountBannersArgs
   }
 
   // Custom InputTypes
@@ -3485,6 +3680,20 @@ export namespace Prisma {
    */
   export type SportCountOutputTypeCountTournamentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: TournamentWhereInput
+  }
+
+  /**
+   * SportCountOutputType without action
+   */
+  export type SportCountOutputTypeCountSportStatsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: UserSportStatWhereInput
+  }
+
+  /**
+   * SportCountOutputType without action
+   */
+  export type SportCountOutputTypeCountBannersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: BannerWhereInput
   }
 
 
@@ -5997,6 +6206,7 @@ export namespace Prisma {
     couponAssignments?: boolean | Member$couponAssignmentsArgs<ExtArgs>
     couponUsages?: boolean | Member$couponUsagesArgs<ExtArgs>
     loyaltyAchievements?: boolean | Member$loyaltyAchievementsArgs<ExtArgs>
+    sportStats?: boolean | Member$sportStatsArgs<ExtArgs>
     _count?: boolean | MemberCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["member"]>
 
@@ -6050,6 +6260,7 @@ export namespace Prisma {
     couponAssignments?: boolean | Member$couponAssignmentsArgs<ExtArgs>
     couponUsages?: boolean | Member$couponUsagesArgs<ExtArgs>
     loyaltyAchievements?: boolean | Member$loyaltyAchievementsArgs<ExtArgs>
+    sportStats?: boolean | Member$sportStatsArgs<ExtArgs>
     _count?: boolean | MemberCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type MemberIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -6067,6 +6278,7 @@ export namespace Prisma {
       couponAssignments: Prisma.$CouponAssignmentPayload<ExtArgs>[]
       couponUsages: Prisma.$CouponUsagePayload<ExtArgs>[]
       loyaltyAchievements: Prisma.$LoyaltyAchievementPayload<ExtArgs>[]
+      sportStats: Prisma.$UserSportStatPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -6482,6 +6694,7 @@ export namespace Prisma {
     couponAssignments<T extends Member$couponAssignmentsArgs<ExtArgs> = {}>(args?: Subset<T, Member$couponAssignmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CouponAssignmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     couponUsages<T extends Member$couponUsagesArgs<ExtArgs> = {}>(args?: Subset<T, Member$couponUsagesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CouponUsagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     loyaltyAchievements<T extends Member$loyaltyAchievementsArgs<ExtArgs> = {}>(args?: Subset<T, Member$loyaltyAchievementsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LoyaltyAchievementPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    sportStats<T extends Member$sportStatsArgs<ExtArgs> = {}>(args?: Subset<T, Member$sportStatsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserSportStatPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -7125,6 +7338,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: LoyaltyAchievementScalarFieldEnum | LoyaltyAchievementScalarFieldEnum[]
+  }
+
+  /**
+   * Member.sportStats
+   */
+  export type Member$sportStatsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserSportStat
+     */
+    select?: UserSportStatSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserSportStat
+     */
+    omit?: UserSportStatOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserSportStatInclude<ExtArgs> | null
+    where?: UserSportStatWhereInput
+    orderBy?: UserSportStatOrderByWithRelationInput | UserSportStatOrderByWithRelationInput[]
+    cursor?: UserSportStatWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: UserSportStatScalarFieldEnum | UserSportStatScalarFieldEnum[]
   }
 
   /**
@@ -8478,6 +8715,8 @@ export namespace Prisma {
     attendances?: boolean | Sport$attendancesArgs<ExtArgs>
     bookings?: boolean | Sport$bookingsArgs<ExtArgs>
     tournaments?: boolean | Sport$tournamentsArgs<ExtArgs>
+    sportStats?: boolean | Sport$sportStatsArgs<ExtArgs>
+    banners?: boolean | Sport$bannersArgs<ExtArgs>
     _count?: boolean | SportCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["sport"]>
 
@@ -8515,6 +8754,8 @@ export namespace Prisma {
     attendances?: boolean | Sport$attendancesArgs<ExtArgs>
     bookings?: boolean | Sport$bookingsArgs<ExtArgs>
     tournaments?: boolean | Sport$tournamentsArgs<ExtArgs>
+    sportStats?: boolean | Sport$sportStatsArgs<ExtArgs>
+    banners?: boolean | Sport$bannersArgs<ExtArgs>
     _count?: boolean | SportCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type SportIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -8528,6 +8769,8 @@ export namespace Prisma {
       attendances: Prisma.$AttendancePayload<ExtArgs>[]
       bookings: Prisma.$BookingPayload<ExtArgs>[]
       tournaments: Prisma.$TournamentPayload<ExtArgs>[]
+      sportStats: Prisma.$UserSportStatPayload<ExtArgs>[]
+      banners: Prisma.$BannerPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -8935,6 +9178,8 @@ export namespace Prisma {
     attendances<T extends Sport$attendancesArgs<ExtArgs> = {}>(args?: Subset<T, Sport$attendancesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AttendancePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     bookings<T extends Sport$bookingsArgs<ExtArgs> = {}>(args?: Subset<T, Sport$bookingsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BookingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     tournaments<T extends Sport$tournamentsArgs<ExtArgs> = {}>(args?: Subset<T, Sport$tournamentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TournamentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    sportStats<T extends Sport$sportStatsArgs<ExtArgs> = {}>(args?: Subset<T, Sport$sportStatsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserSportStatPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    banners<T extends Sport$bannersArgs<ExtArgs> = {}>(args?: Subset<T, Sport$bannersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BannerPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -9478,6 +9723,54 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: TournamentScalarFieldEnum | TournamentScalarFieldEnum[]
+  }
+
+  /**
+   * Sport.sportStats
+   */
+  export type Sport$sportStatsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserSportStat
+     */
+    select?: UserSportStatSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserSportStat
+     */
+    omit?: UserSportStatOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserSportStatInclude<ExtArgs> | null
+    where?: UserSportStatWhereInput
+    orderBy?: UserSportStatOrderByWithRelationInput | UserSportStatOrderByWithRelationInput[]
+    cursor?: UserSportStatWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: UserSportStatScalarFieldEnum | UserSportStatScalarFieldEnum[]
+  }
+
+  /**
+   * Sport.banners
+   */
+  export type Sport$bannersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Banner
+     */
+    select?: BannerSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Banner
+     */
+    omit?: BannerOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BannerInclude<ExtArgs> | null
+    where?: BannerWhereInput
+    orderBy?: BannerOrderByWithRelationInput | BannerOrderByWithRelationInput[]
+    cursor?: BannerWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: BannerScalarFieldEnum | BannerScalarFieldEnum[]
   }
 
   /**
@@ -35481,6 +35774,2215 @@ export namespace Prisma {
 
 
   /**
+   * Model Banner
+   */
+
+  export type AggregateBanner = {
+    _count: BannerCountAggregateOutputType | null
+    _min: BannerMinAggregateOutputType | null
+    _max: BannerMaxAggregateOutputType | null
+  }
+
+  export type BannerMinAggregateOutputType = {
+    id: string | null
+    imageUrl: string | null
+    title: string | null
+    targetSportId: string | null
+    isActive: boolean | null
+    createdAt: Date | null
+  }
+
+  export type BannerMaxAggregateOutputType = {
+    id: string | null
+    imageUrl: string | null
+    title: string | null
+    targetSportId: string | null
+    isActive: boolean | null
+    createdAt: Date | null
+  }
+
+  export type BannerCountAggregateOutputType = {
+    id: number
+    imageUrl: number
+    title: number
+    targetSportId: number
+    isActive: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type BannerMinAggregateInputType = {
+    id?: true
+    imageUrl?: true
+    title?: true
+    targetSportId?: true
+    isActive?: true
+    createdAt?: true
+  }
+
+  export type BannerMaxAggregateInputType = {
+    id?: true
+    imageUrl?: true
+    title?: true
+    targetSportId?: true
+    isActive?: true
+    createdAt?: true
+  }
+
+  export type BannerCountAggregateInputType = {
+    id?: true
+    imageUrl?: true
+    title?: true
+    targetSportId?: true
+    isActive?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type BannerAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Banner to aggregate.
+     */
+    where?: BannerWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Banners to fetch.
+     */
+    orderBy?: BannerOrderByWithRelationInput | BannerOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: BannerWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Banners from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Banners.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Banners
+    **/
+    _count?: true | BannerCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: BannerMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: BannerMaxAggregateInputType
+  }
+
+  export type GetBannerAggregateType<T extends BannerAggregateArgs> = {
+        [P in keyof T & keyof AggregateBanner]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateBanner[P]>
+      : GetScalarType<T[P], AggregateBanner[P]>
+  }
+
+
+
+
+  export type BannerGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: BannerWhereInput
+    orderBy?: BannerOrderByWithAggregationInput | BannerOrderByWithAggregationInput[]
+    by: BannerScalarFieldEnum[] | BannerScalarFieldEnum
+    having?: BannerScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: BannerCountAggregateInputType | true
+    _min?: BannerMinAggregateInputType
+    _max?: BannerMaxAggregateInputType
+  }
+
+  export type BannerGroupByOutputType = {
+    id: string
+    imageUrl: string
+    title: string | null
+    targetSportId: string | null
+    isActive: boolean
+    createdAt: Date
+    _count: BannerCountAggregateOutputType | null
+    _min: BannerMinAggregateOutputType | null
+    _max: BannerMaxAggregateOutputType | null
+  }
+
+  type GetBannerGroupByPayload<T extends BannerGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<BannerGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof BannerGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], BannerGroupByOutputType[P]>
+            : GetScalarType<T[P], BannerGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type BannerSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    imageUrl?: boolean
+    title?: boolean
+    targetSportId?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    targetSport?: boolean | Banner$targetSportArgs<ExtArgs>
+  }, ExtArgs["result"]["banner"]>
+
+  export type BannerSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    imageUrl?: boolean
+    title?: boolean
+    targetSportId?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    targetSport?: boolean | Banner$targetSportArgs<ExtArgs>
+  }, ExtArgs["result"]["banner"]>
+
+  export type BannerSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    imageUrl?: boolean
+    title?: boolean
+    targetSportId?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    targetSport?: boolean | Banner$targetSportArgs<ExtArgs>
+  }, ExtArgs["result"]["banner"]>
+
+  export type BannerSelectScalar = {
+    id?: boolean
+    imageUrl?: boolean
+    title?: boolean
+    targetSportId?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+  }
+
+  export type BannerOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "imageUrl" | "title" | "targetSportId" | "isActive" | "createdAt", ExtArgs["result"]["banner"]>
+  export type BannerInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    targetSport?: boolean | Banner$targetSportArgs<ExtArgs>
+  }
+  export type BannerIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    targetSport?: boolean | Banner$targetSportArgs<ExtArgs>
+  }
+  export type BannerIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    targetSport?: boolean | Banner$targetSportArgs<ExtArgs>
+  }
+
+  export type $BannerPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Banner"
+    objects: {
+      targetSport: Prisma.$SportPayload<ExtArgs> | null
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      imageUrl: string
+      title: string | null
+      targetSportId: string | null
+      isActive: boolean
+      createdAt: Date
+    }, ExtArgs["result"]["banner"]>
+    composites: {}
+  }
+
+  type BannerGetPayload<S extends boolean | null | undefined | BannerDefaultArgs> = $Result.GetResult<Prisma.$BannerPayload, S>
+
+  type BannerCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<BannerFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: BannerCountAggregateInputType | true
+    }
+
+  export interface BannerDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Banner'], meta: { name: 'Banner' } }
+    /**
+     * Find zero or one Banner that matches the filter.
+     * @param {BannerFindUniqueArgs} args - Arguments to find a Banner
+     * @example
+     * // Get one Banner
+     * const banner = await prisma.banner.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends BannerFindUniqueArgs>(args: SelectSubset<T, BannerFindUniqueArgs<ExtArgs>>): Prisma__BannerClient<$Result.GetResult<Prisma.$BannerPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Banner that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {BannerFindUniqueOrThrowArgs} args - Arguments to find a Banner
+     * @example
+     * // Get one Banner
+     * const banner = await prisma.banner.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends BannerFindUniqueOrThrowArgs>(args: SelectSubset<T, BannerFindUniqueOrThrowArgs<ExtArgs>>): Prisma__BannerClient<$Result.GetResult<Prisma.$BannerPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Banner that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BannerFindFirstArgs} args - Arguments to find a Banner
+     * @example
+     * // Get one Banner
+     * const banner = await prisma.banner.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends BannerFindFirstArgs>(args?: SelectSubset<T, BannerFindFirstArgs<ExtArgs>>): Prisma__BannerClient<$Result.GetResult<Prisma.$BannerPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Banner that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BannerFindFirstOrThrowArgs} args - Arguments to find a Banner
+     * @example
+     * // Get one Banner
+     * const banner = await prisma.banner.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends BannerFindFirstOrThrowArgs>(args?: SelectSubset<T, BannerFindFirstOrThrowArgs<ExtArgs>>): Prisma__BannerClient<$Result.GetResult<Prisma.$BannerPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Banners that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BannerFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Banners
+     * const banners = await prisma.banner.findMany()
+     * 
+     * // Get first 10 Banners
+     * const banners = await prisma.banner.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const bannerWithIdOnly = await prisma.banner.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends BannerFindManyArgs>(args?: SelectSubset<T, BannerFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BannerPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Banner.
+     * @param {BannerCreateArgs} args - Arguments to create a Banner.
+     * @example
+     * // Create one Banner
+     * const Banner = await prisma.banner.create({
+     *   data: {
+     *     // ... data to create a Banner
+     *   }
+     * })
+     * 
+     */
+    create<T extends BannerCreateArgs>(args: SelectSubset<T, BannerCreateArgs<ExtArgs>>): Prisma__BannerClient<$Result.GetResult<Prisma.$BannerPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Banners.
+     * @param {BannerCreateManyArgs} args - Arguments to create many Banners.
+     * @example
+     * // Create many Banners
+     * const banner = await prisma.banner.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends BannerCreateManyArgs>(args?: SelectSubset<T, BannerCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Banners and returns the data saved in the database.
+     * @param {BannerCreateManyAndReturnArgs} args - Arguments to create many Banners.
+     * @example
+     * // Create many Banners
+     * const banner = await prisma.banner.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Banners and only return the `id`
+     * const bannerWithIdOnly = await prisma.banner.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends BannerCreateManyAndReturnArgs>(args?: SelectSubset<T, BannerCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BannerPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Banner.
+     * @param {BannerDeleteArgs} args - Arguments to delete one Banner.
+     * @example
+     * // Delete one Banner
+     * const Banner = await prisma.banner.delete({
+     *   where: {
+     *     // ... filter to delete one Banner
+     *   }
+     * })
+     * 
+     */
+    delete<T extends BannerDeleteArgs>(args: SelectSubset<T, BannerDeleteArgs<ExtArgs>>): Prisma__BannerClient<$Result.GetResult<Prisma.$BannerPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Banner.
+     * @param {BannerUpdateArgs} args - Arguments to update one Banner.
+     * @example
+     * // Update one Banner
+     * const banner = await prisma.banner.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends BannerUpdateArgs>(args: SelectSubset<T, BannerUpdateArgs<ExtArgs>>): Prisma__BannerClient<$Result.GetResult<Prisma.$BannerPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Banners.
+     * @param {BannerDeleteManyArgs} args - Arguments to filter Banners to delete.
+     * @example
+     * // Delete a few Banners
+     * const { count } = await prisma.banner.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends BannerDeleteManyArgs>(args?: SelectSubset<T, BannerDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Banners.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BannerUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Banners
+     * const banner = await prisma.banner.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends BannerUpdateManyArgs>(args: SelectSubset<T, BannerUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Banners and returns the data updated in the database.
+     * @param {BannerUpdateManyAndReturnArgs} args - Arguments to update many Banners.
+     * @example
+     * // Update many Banners
+     * const banner = await prisma.banner.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Banners and only return the `id`
+     * const bannerWithIdOnly = await prisma.banner.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends BannerUpdateManyAndReturnArgs>(args: SelectSubset<T, BannerUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BannerPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Banner.
+     * @param {BannerUpsertArgs} args - Arguments to update or create a Banner.
+     * @example
+     * // Update or create a Banner
+     * const banner = await prisma.banner.upsert({
+     *   create: {
+     *     // ... data to create a Banner
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Banner we want to update
+     *   }
+     * })
+     */
+    upsert<T extends BannerUpsertArgs>(args: SelectSubset<T, BannerUpsertArgs<ExtArgs>>): Prisma__BannerClient<$Result.GetResult<Prisma.$BannerPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Banners.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BannerCountArgs} args - Arguments to filter Banners to count.
+     * @example
+     * // Count the number of Banners
+     * const count = await prisma.banner.count({
+     *   where: {
+     *     // ... the filter for the Banners we want to count
+     *   }
+     * })
+    **/
+    count<T extends BannerCountArgs>(
+      args?: Subset<T, BannerCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], BannerCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Banner.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BannerAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends BannerAggregateArgs>(args: Subset<T, BannerAggregateArgs>): Prisma.PrismaPromise<GetBannerAggregateType<T>>
+
+    /**
+     * Group by Banner.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BannerGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends BannerGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: BannerGroupByArgs['orderBy'] }
+        : { orderBy?: BannerGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, BannerGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetBannerGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Banner model
+   */
+  readonly fields: BannerFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Banner.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__BannerClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    targetSport<T extends Banner$targetSportArgs<ExtArgs> = {}>(args?: Subset<T, Banner$targetSportArgs<ExtArgs>>): Prisma__SportClient<$Result.GetResult<Prisma.$SportPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Banner model
+   */
+  interface BannerFieldRefs {
+    readonly id: FieldRef<"Banner", 'String'>
+    readonly imageUrl: FieldRef<"Banner", 'String'>
+    readonly title: FieldRef<"Banner", 'String'>
+    readonly targetSportId: FieldRef<"Banner", 'String'>
+    readonly isActive: FieldRef<"Banner", 'Boolean'>
+    readonly createdAt: FieldRef<"Banner", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Banner findUnique
+   */
+  export type BannerFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Banner
+     */
+    select?: BannerSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Banner
+     */
+    omit?: BannerOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BannerInclude<ExtArgs> | null
+    /**
+     * Filter, which Banner to fetch.
+     */
+    where: BannerWhereUniqueInput
+  }
+
+  /**
+   * Banner findUniqueOrThrow
+   */
+  export type BannerFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Banner
+     */
+    select?: BannerSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Banner
+     */
+    omit?: BannerOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BannerInclude<ExtArgs> | null
+    /**
+     * Filter, which Banner to fetch.
+     */
+    where: BannerWhereUniqueInput
+  }
+
+  /**
+   * Banner findFirst
+   */
+  export type BannerFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Banner
+     */
+    select?: BannerSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Banner
+     */
+    omit?: BannerOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BannerInclude<ExtArgs> | null
+    /**
+     * Filter, which Banner to fetch.
+     */
+    where?: BannerWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Banners to fetch.
+     */
+    orderBy?: BannerOrderByWithRelationInput | BannerOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Banners.
+     */
+    cursor?: BannerWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Banners from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Banners.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Banners.
+     */
+    distinct?: BannerScalarFieldEnum | BannerScalarFieldEnum[]
+  }
+
+  /**
+   * Banner findFirstOrThrow
+   */
+  export type BannerFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Banner
+     */
+    select?: BannerSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Banner
+     */
+    omit?: BannerOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BannerInclude<ExtArgs> | null
+    /**
+     * Filter, which Banner to fetch.
+     */
+    where?: BannerWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Banners to fetch.
+     */
+    orderBy?: BannerOrderByWithRelationInput | BannerOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Banners.
+     */
+    cursor?: BannerWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Banners from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Banners.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Banners.
+     */
+    distinct?: BannerScalarFieldEnum | BannerScalarFieldEnum[]
+  }
+
+  /**
+   * Banner findMany
+   */
+  export type BannerFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Banner
+     */
+    select?: BannerSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Banner
+     */
+    omit?: BannerOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BannerInclude<ExtArgs> | null
+    /**
+     * Filter, which Banners to fetch.
+     */
+    where?: BannerWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Banners to fetch.
+     */
+    orderBy?: BannerOrderByWithRelationInput | BannerOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Banners.
+     */
+    cursor?: BannerWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Banners from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Banners.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Banners.
+     */
+    distinct?: BannerScalarFieldEnum | BannerScalarFieldEnum[]
+  }
+
+  /**
+   * Banner create
+   */
+  export type BannerCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Banner
+     */
+    select?: BannerSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Banner
+     */
+    omit?: BannerOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BannerInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Banner.
+     */
+    data: XOR<BannerCreateInput, BannerUncheckedCreateInput>
+  }
+
+  /**
+   * Banner createMany
+   */
+  export type BannerCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Banners.
+     */
+    data: BannerCreateManyInput | BannerCreateManyInput[]
+  }
+
+  /**
+   * Banner createManyAndReturn
+   */
+  export type BannerCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Banner
+     */
+    select?: BannerSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Banner
+     */
+    omit?: BannerOmit<ExtArgs> | null
+    /**
+     * The data used to create many Banners.
+     */
+    data: BannerCreateManyInput | BannerCreateManyInput[]
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BannerIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Banner update
+   */
+  export type BannerUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Banner
+     */
+    select?: BannerSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Banner
+     */
+    omit?: BannerOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BannerInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Banner.
+     */
+    data: XOR<BannerUpdateInput, BannerUncheckedUpdateInput>
+    /**
+     * Choose, which Banner to update.
+     */
+    where: BannerWhereUniqueInput
+  }
+
+  /**
+   * Banner updateMany
+   */
+  export type BannerUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Banners.
+     */
+    data: XOR<BannerUpdateManyMutationInput, BannerUncheckedUpdateManyInput>
+    /**
+     * Filter which Banners to update
+     */
+    where?: BannerWhereInput
+    /**
+     * Limit how many Banners to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Banner updateManyAndReturn
+   */
+  export type BannerUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Banner
+     */
+    select?: BannerSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Banner
+     */
+    omit?: BannerOmit<ExtArgs> | null
+    /**
+     * The data used to update Banners.
+     */
+    data: XOR<BannerUpdateManyMutationInput, BannerUncheckedUpdateManyInput>
+    /**
+     * Filter which Banners to update
+     */
+    where?: BannerWhereInput
+    /**
+     * Limit how many Banners to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BannerIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Banner upsert
+   */
+  export type BannerUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Banner
+     */
+    select?: BannerSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Banner
+     */
+    omit?: BannerOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BannerInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Banner to update in case it exists.
+     */
+    where: BannerWhereUniqueInput
+    /**
+     * In case the Banner found by the `where` argument doesn't exist, create a new Banner with this data.
+     */
+    create: XOR<BannerCreateInput, BannerUncheckedCreateInput>
+    /**
+     * In case the Banner was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<BannerUpdateInput, BannerUncheckedUpdateInput>
+  }
+
+  /**
+   * Banner delete
+   */
+  export type BannerDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Banner
+     */
+    select?: BannerSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Banner
+     */
+    omit?: BannerOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BannerInclude<ExtArgs> | null
+    /**
+     * Filter which Banner to delete.
+     */
+    where: BannerWhereUniqueInput
+  }
+
+  /**
+   * Banner deleteMany
+   */
+  export type BannerDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Banners to delete
+     */
+    where?: BannerWhereInput
+    /**
+     * Limit how many Banners to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Banner.targetSport
+   */
+  export type Banner$targetSportArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Sport
+     */
+    select?: SportSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Sport
+     */
+    omit?: SportOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SportInclude<ExtArgs> | null
+    where?: SportWhereInput
+  }
+
+  /**
+   * Banner without action
+   */
+  export type BannerDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Banner
+     */
+    select?: BannerSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Banner
+     */
+    omit?: BannerOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BannerInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model UserSportStat
+   */
+
+  export type AggregateUserSportStat = {
+    _count: UserSportStatCountAggregateOutputType | null
+    _avg: UserSportStatAvgAggregateOutputType | null
+    _sum: UserSportStatSumAggregateOutputType | null
+    _min: UserSportStatMinAggregateOutputType | null
+    _max: UserSportStatMaxAggregateOutputType | null
+  }
+
+  export type UserSportStatAvgAggregateOutputType = {
+    bookingCount: number | null
+  }
+
+  export type UserSportStatSumAggregateOutputType = {
+    bookingCount: number | null
+  }
+
+  export type UserSportStatMinAggregateOutputType = {
+    id: string | null
+    memberId: string | null
+    sportId: string | null
+    bookingCount: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type UserSportStatMaxAggregateOutputType = {
+    id: string | null
+    memberId: string | null
+    sportId: string | null
+    bookingCount: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type UserSportStatCountAggregateOutputType = {
+    id: number
+    memberId: number
+    sportId: number
+    bookingCount: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type UserSportStatAvgAggregateInputType = {
+    bookingCount?: true
+  }
+
+  export type UserSportStatSumAggregateInputType = {
+    bookingCount?: true
+  }
+
+  export type UserSportStatMinAggregateInputType = {
+    id?: true
+    memberId?: true
+    sportId?: true
+    bookingCount?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type UserSportStatMaxAggregateInputType = {
+    id?: true
+    memberId?: true
+    sportId?: true
+    bookingCount?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type UserSportStatCountAggregateInputType = {
+    id?: true
+    memberId?: true
+    sportId?: true
+    bookingCount?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type UserSportStatAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which UserSportStat to aggregate.
+     */
+    where?: UserSportStatWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of UserSportStats to fetch.
+     */
+    orderBy?: UserSportStatOrderByWithRelationInput | UserSportStatOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: UserSportStatWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` UserSportStats from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` UserSportStats.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned UserSportStats
+    **/
+    _count?: true | UserSportStatCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: UserSportStatAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: UserSportStatSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: UserSportStatMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: UserSportStatMaxAggregateInputType
+  }
+
+  export type GetUserSportStatAggregateType<T extends UserSportStatAggregateArgs> = {
+        [P in keyof T & keyof AggregateUserSportStat]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateUserSportStat[P]>
+      : GetScalarType<T[P], AggregateUserSportStat[P]>
+  }
+
+
+
+
+  export type UserSportStatGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: UserSportStatWhereInput
+    orderBy?: UserSportStatOrderByWithAggregationInput | UserSportStatOrderByWithAggregationInput[]
+    by: UserSportStatScalarFieldEnum[] | UserSportStatScalarFieldEnum
+    having?: UserSportStatScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: UserSportStatCountAggregateInputType | true
+    _avg?: UserSportStatAvgAggregateInputType
+    _sum?: UserSportStatSumAggregateInputType
+    _min?: UserSportStatMinAggregateInputType
+    _max?: UserSportStatMaxAggregateInputType
+  }
+
+  export type UserSportStatGroupByOutputType = {
+    id: string
+    memberId: string
+    sportId: string
+    bookingCount: number
+    createdAt: Date
+    updatedAt: Date
+    _count: UserSportStatCountAggregateOutputType | null
+    _avg: UserSportStatAvgAggregateOutputType | null
+    _sum: UserSportStatSumAggregateOutputType | null
+    _min: UserSportStatMinAggregateOutputType | null
+    _max: UserSportStatMaxAggregateOutputType | null
+  }
+
+  type GetUserSportStatGroupByPayload<T extends UserSportStatGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<UserSportStatGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof UserSportStatGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], UserSportStatGroupByOutputType[P]>
+            : GetScalarType<T[P], UserSportStatGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type UserSportStatSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    memberId?: boolean
+    sportId?: boolean
+    bookingCount?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    member?: boolean | MemberDefaultArgs<ExtArgs>
+    sport?: boolean | SportDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["userSportStat"]>
+
+  export type UserSportStatSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    memberId?: boolean
+    sportId?: boolean
+    bookingCount?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    member?: boolean | MemberDefaultArgs<ExtArgs>
+    sport?: boolean | SportDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["userSportStat"]>
+
+  export type UserSportStatSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    memberId?: boolean
+    sportId?: boolean
+    bookingCount?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    member?: boolean | MemberDefaultArgs<ExtArgs>
+    sport?: boolean | SportDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["userSportStat"]>
+
+  export type UserSportStatSelectScalar = {
+    id?: boolean
+    memberId?: boolean
+    sportId?: boolean
+    bookingCount?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type UserSportStatOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "memberId" | "sportId" | "bookingCount" | "createdAt" | "updatedAt", ExtArgs["result"]["userSportStat"]>
+  export type UserSportStatInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    member?: boolean | MemberDefaultArgs<ExtArgs>
+    sport?: boolean | SportDefaultArgs<ExtArgs>
+  }
+  export type UserSportStatIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    member?: boolean | MemberDefaultArgs<ExtArgs>
+    sport?: boolean | SportDefaultArgs<ExtArgs>
+  }
+  export type UserSportStatIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    member?: boolean | MemberDefaultArgs<ExtArgs>
+    sport?: boolean | SportDefaultArgs<ExtArgs>
+  }
+
+  export type $UserSportStatPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "UserSportStat"
+    objects: {
+      member: Prisma.$MemberPayload<ExtArgs>
+      sport: Prisma.$SportPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      memberId: string
+      sportId: string
+      bookingCount: number
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["userSportStat"]>
+    composites: {}
+  }
+
+  type UserSportStatGetPayload<S extends boolean | null | undefined | UserSportStatDefaultArgs> = $Result.GetResult<Prisma.$UserSportStatPayload, S>
+
+  type UserSportStatCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<UserSportStatFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: UserSportStatCountAggregateInputType | true
+    }
+
+  export interface UserSportStatDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['UserSportStat'], meta: { name: 'UserSportStat' } }
+    /**
+     * Find zero or one UserSportStat that matches the filter.
+     * @param {UserSportStatFindUniqueArgs} args - Arguments to find a UserSportStat
+     * @example
+     * // Get one UserSportStat
+     * const userSportStat = await prisma.userSportStat.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends UserSportStatFindUniqueArgs>(args: SelectSubset<T, UserSportStatFindUniqueArgs<ExtArgs>>): Prisma__UserSportStatClient<$Result.GetResult<Prisma.$UserSportStatPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one UserSportStat that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {UserSportStatFindUniqueOrThrowArgs} args - Arguments to find a UserSportStat
+     * @example
+     * // Get one UserSportStat
+     * const userSportStat = await prisma.userSportStat.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends UserSportStatFindUniqueOrThrowArgs>(args: SelectSubset<T, UserSportStatFindUniqueOrThrowArgs<ExtArgs>>): Prisma__UserSportStatClient<$Result.GetResult<Prisma.$UserSportStatPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first UserSportStat that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserSportStatFindFirstArgs} args - Arguments to find a UserSportStat
+     * @example
+     * // Get one UserSportStat
+     * const userSportStat = await prisma.userSportStat.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends UserSportStatFindFirstArgs>(args?: SelectSubset<T, UserSportStatFindFirstArgs<ExtArgs>>): Prisma__UserSportStatClient<$Result.GetResult<Prisma.$UserSportStatPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first UserSportStat that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserSportStatFindFirstOrThrowArgs} args - Arguments to find a UserSportStat
+     * @example
+     * // Get one UserSportStat
+     * const userSportStat = await prisma.userSportStat.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends UserSportStatFindFirstOrThrowArgs>(args?: SelectSubset<T, UserSportStatFindFirstOrThrowArgs<ExtArgs>>): Prisma__UserSportStatClient<$Result.GetResult<Prisma.$UserSportStatPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more UserSportStats that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserSportStatFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all UserSportStats
+     * const userSportStats = await prisma.userSportStat.findMany()
+     * 
+     * // Get first 10 UserSportStats
+     * const userSportStats = await prisma.userSportStat.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const userSportStatWithIdOnly = await prisma.userSportStat.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends UserSportStatFindManyArgs>(args?: SelectSubset<T, UserSportStatFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserSportStatPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a UserSportStat.
+     * @param {UserSportStatCreateArgs} args - Arguments to create a UserSportStat.
+     * @example
+     * // Create one UserSportStat
+     * const UserSportStat = await prisma.userSportStat.create({
+     *   data: {
+     *     // ... data to create a UserSportStat
+     *   }
+     * })
+     * 
+     */
+    create<T extends UserSportStatCreateArgs>(args: SelectSubset<T, UserSportStatCreateArgs<ExtArgs>>): Prisma__UserSportStatClient<$Result.GetResult<Prisma.$UserSportStatPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many UserSportStats.
+     * @param {UserSportStatCreateManyArgs} args - Arguments to create many UserSportStats.
+     * @example
+     * // Create many UserSportStats
+     * const userSportStat = await prisma.userSportStat.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends UserSportStatCreateManyArgs>(args?: SelectSubset<T, UserSportStatCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many UserSportStats and returns the data saved in the database.
+     * @param {UserSportStatCreateManyAndReturnArgs} args - Arguments to create many UserSportStats.
+     * @example
+     * // Create many UserSportStats
+     * const userSportStat = await prisma.userSportStat.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many UserSportStats and only return the `id`
+     * const userSportStatWithIdOnly = await prisma.userSportStat.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends UserSportStatCreateManyAndReturnArgs>(args?: SelectSubset<T, UserSportStatCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserSportStatPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a UserSportStat.
+     * @param {UserSportStatDeleteArgs} args - Arguments to delete one UserSportStat.
+     * @example
+     * // Delete one UserSportStat
+     * const UserSportStat = await prisma.userSportStat.delete({
+     *   where: {
+     *     // ... filter to delete one UserSportStat
+     *   }
+     * })
+     * 
+     */
+    delete<T extends UserSportStatDeleteArgs>(args: SelectSubset<T, UserSportStatDeleteArgs<ExtArgs>>): Prisma__UserSportStatClient<$Result.GetResult<Prisma.$UserSportStatPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one UserSportStat.
+     * @param {UserSportStatUpdateArgs} args - Arguments to update one UserSportStat.
+     * @example
+     * // Update one UserSportStat
+     * const userSportStat = await prisma.userSportStat.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends UserSportStatUpdateArgs>(args: SelectSubset<T, UserSportStatUpdateArgs<ExtArgs>>): Prisma__UserSportStatClient<$Result.GetResult<Prisma.$UserSportStatPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more UserSportStats.
+     * @param {UserSportStatDeleteManyArgs} args - Arguments to filter UserSportStats to delete.
+     * @example
+     * // Delete a few UserSportStats
+     * const { count } = await prisma.userSportStat.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends UserSportStatDeleteManyArgs>(args?: SelectSubset<T, UserSportStatDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more UserSportStats.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserSportStatUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many UserSportStats
+     * const userSportStat = await prisma.userSportStat.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends UserSportStatUpdateManyArgs>(args: SelectSubset<T, UserSportStatUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more UserSportStats and returns the data updated in the database.
+     * @param {UserSportStatUpdateManyAndReturnArgs} args - Arguments to update many UserSportStats.
+     * @example
+     * // Update many UserSportStats
+     * const userSportStat = await prisma.userSportStat.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more UserSportStats and only return the `id`
+     * const userSportStatWithIdOnly = await prisma.userSportStat.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends UserSportStatUpdateManyAndReturnArgs>(args: SelectSubset<T, UserSportStatUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserSportStatPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one UserSportStat.
+     * @param {UserSportStatUpsertArgs} args - Arguments to update or create a UserSportStat.
+     * @example
+     * // Update or create a UserSportStat
+     * const userSportStat = await prisma.userSportStat.upsert({
+     *   create: {
+     *     // ... data to create a UserSportStat
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the UserSportStat we want to update
+     *   }
+     * })
+     */
+    upsert<T extends UserSportStatUpsertArgs>(args: SelectSubset<T, UserSportStatUpsertArgs<ExtArgs>>): Prisma__UserSportStatClient<$Result.GetResult<Prisma.$UserSportStatPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of UserSportStats.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserSportStatCountArgs} args - Arguments to filter UserSportStats to count.
+     * @example
+     * // Count the number of UserSportStats
+     * const count = await prisma.userSportStat.count({
+     *   where: {
+     *     // ... the filter for the UserSportStats we want to count
+     *   }
+     * })
+    **/
+    count<T extends UserSportStatCountArgs>(
+      args?: Subset<T, UserSportStatCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], UserSportStatCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a UserSportStat.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserSportStatAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends UserSportStatAggregateArgs>(args: Subset<T, UserSportStatAggregateArgs>): Prisma.PrismaPromise<GetUserSportStatAggregateType<T>>
+
+    /**
+     * Group by UserSportStat.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserSportStatGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends UserSportStatGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: UserSportStatGroupByArgs['orderBy'] }
+        : { orderBy?: UserSportStatGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, UserSportStatGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetUserSportStatGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the UserSportStat model
+   */
+  readonly fields: UserSportStatFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for UserSportStat.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__UserSportStatClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    member<T extends MemberDefaultArgs<ExtArgs> = {}>(args?: Subset<T, MemberDefaultArgs<ExtArgs>>): Prisma__MemberClient<$Result.GetResult<Prisma.$MemberPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    sport<T extends SportDefaultArgs<ExtArgs> = {}>(args?: Subset<T, SportDefaultArgs<ExtArgs>>): Prisma__SportClient<$Result.GetResult<Prisma.$SportPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the UserSportStat model
+   */
+  interface UserSportStatFieldRefs {
+    readonly id: FieldRef<"UserSportStat", 'String'>
+    readonly memberId: FieldRef<"UserSportStat", 'String'>
+    readonly sportId: FieldRef<"UserSportStat", 'String'>
+    readonly bookingCount: FieldRef<"UserSportStat", 'Int'>
+    readonly createdAt: FieldRef<"UserSportStat", 'DateTime'>
+    readonly updatedAt: FieldRef<"UserSportStat", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * UserSportStat findUnique
+   */
+  export type UserSportStatFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserSportStat
+     */
+    select?: UserSportStatSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserSportStat
+     */
+    omit?: UserSportStatOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserSportStatInclude<ExtArgs> | null
+    /**
+     * Filter, which UserSportStat to fetch.
+     */
+    where: UserSportStatWhereUniqueInput
+  }
+
+  /**
+   * UserSportStat findUniqueOrThrow
+   */
+  export type UserSportStatFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserSportStat
+     */
+    select?: UserSportStatSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserSportStat
+     */
+    omit?: UserSportStatOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserSportStatInclude<ExtArgs> | null
+    /**
+     * Filter, which UserSportStat to fetch.
+     */
+    where: UserSportStatWhereUniqueInput
+  }
+
+  /**
+   * UserSportStat findFirst
+   */
+  export type UserSportStatFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserSportStat
+     */
+    select?: UserSportStatSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserSportStat
+     */
+    omit?: UserSportStatOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserSportStatInclude<ExtArgs> | null
+    /**
+     * Filter, which UserSportStat to fetch.
+     */
+    where?: UserSportStatWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of UserSportStats to fetch.
+     */
+    orderBy?: UserSportStatOrderByWithRelationInput | UserSportStatOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for UserSportStats.
+     */
+    cursor?: UserSportStatWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` UserSportStats from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` UserSportStats.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of UserSportStats.
+     */
+    distinct?: UserSportStatScalarFieldEnum | UserSportStatScalarFieldEnum[]
+  }
+
+  /**
+   * UserSportStat findFirstOrThrow
+   */
+  export type UserSportStatFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserSportStat
+     */
+    select?: UserSportStatSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserSportStat
+     */
+    omit?: UserSportStatOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserSportStatInclude<ExtArgs> | null
+    /**
+     * Filter, which UserSportStat to fetch.
+     */
+    where?: UserSportStatWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of UserSportStats to fetch.
+     */
+    orderBy?: UserSportStatOrderByWithRelationInput | UserSportStatOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for UserSportStats.
+     */
+    cursor?: UserSportStatWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` UserSportStats from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` UserSportStats.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of UserSportStats.
+     */
+    distinct?: UserSportStatScalarFieldEnum | UserSportStatScalarFieldEnum[]
+  }
+
+  /**
+   * UserSportStat findMany
+   */
+  export type UserSportStatFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserSportStat
+     */
+    select?: UserSportStatSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserSportStat
+     */
+    omit?: UserSportStatOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserSportStatInclude<ExtArgs> | null
+    /**
+     * Filter, which UserSportStats to fetch.
+     */
+    where?: UserSportStatWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of UserSportStats to fetch.
+     */
+    orderBy?: UserSportStatOrderByWithRelationInput | UserSportStatOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing UserSportStats.
+     */
+    cursor?: UserSportStatWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` UserSportStats from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` UserSportStats.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of UserSportStats.
+     */
+    distinct?: UserSportStatScalarFieldEnum | UserSportStatScalarFieldEnum[]
+  }
+
+  /**
+   * UserSportStat create
+   */
+  export type UserSportStatCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserSportStat
+     */
+    select?: UserSportStatSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserSportStat
+     */
+    omit?: UserSportStatOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserSportStatInclude<ExtArgs> | null
+    /**
+     * The data needed to create a UserSportStat.
+     */
+    data: XOR<UserSportStatCreateInput, UserSportStatUncheckedCreateInput>
+  }
+
+  /**
+   * UserSportStat createMany
+   */
+  export type UserSportStatCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many UserSportStats.
+     */
+    data: UserSportStatCreateManyInput | UserSportStatCreateManyInput[]
+  }
+
+  /**
+   * UserSportStat createManyAndReturn
+   */
+  export type UserSportStatCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserSportStat
+     */
+    select?: UserSportStatSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserSportStat
+     */
+    omit?: UserSportStatOmit<ExtArgs> | null
+    /**
+     * The data used to create many UserSportStats.
+     */
+    data: UserSportStatCreateManyInput | UserSportStatCreateManyInput[]
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserSportStatIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * UserSportStat update
+   */
+  export type UserSportStatUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserSportStat
+     */
+    select?: UserSportStatSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserSportStat
+     */
+    omit?: UserSportStatOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserSportStatInclude<ExtArgs> | null
+    /**
+     * The data needed to update a UserSportStat.
+     */
+    data: XOR<UserSportStatUpdateInput, UserSportStatUncheckedUpdateInput>
+    /**
+     * Choose, which UserSportStat to update.
+     */
+    where: UserSportStatWhereUniqueInput
+  }
+
+  /**
+   * UserSportStat updateMany
+   */
+  export type UserSportStatUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update UserSportStats.
+     */
+    data: XOR<UserSportStatUpdateManyMutationInput, UserSportStatUncheckedUpdateManyInput>
+    /**
+     * Filter which UserSportStats to update
+     */
+    where?: UserSportStatWhereInput
+    /**
+     * Limit how many UserSportStats to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * UserSportStat updateManyAndReturn
+   */
+  export type UserSportStatUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserSportStat
+     */
+    select?: UserSportStatSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserSportStat
+     */
+    omit?: UserSportStatOmit<ExtArgs> | null
+    /**
+     * The data used to update UserSportStats.
+     */
+    data: XOR<UserSportStatUpdateManyMutationInput, UserSportStatUncheckedUpdateManyInput>
+    /**
+     * Filter which UserSportStats to update
+     */
+    where?: UserSportStatWhereInput
+    /**
+     * Limit how many UserSportStats to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserSportStatIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * UserSportStat upsert
+   */
+  export type UserSportStatUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserSportStat
+     */
+    select?: UserSportStatSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserSportStat
+     */
+    omit?: UserSportStatOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserSportStatInclude<ExtArgs> | null
+    /**
+     * The filter to search for the UserSportStat to update in case it exists.
+     */
+    where: UserSportStatWhereUniqueInput
+    /**
+     * In case the UserSportStat found by the `where` argument doesn't exist, create a new UserSportStat with this data.
+     */
+    create: XOR<UserSportStatCreateInput, UserSportStatUncheckedCreateInput>
+    /**
+     * In case the UserSportStat was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<UserSportStatUpdateInput, UserSportStatUncheckedUpdateInput>
+  }
+
+  /**
+   * UserSportStat delete
+   */
+  export type UserSportStatDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserSportStat
+     */
+    select?: UserSportStatSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserSportStat
+     */
+    omit?: UserSportStatOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserSportStatInclude<ExtArgs> | null
+    /**
+     * Filter which UserSportStat to delete.
+     */
+    where: UserSportStatWhereUniqueInput
+  }
+
+  /**
+   * UserSportStat deleteMany
+   */
+  export type UserSportStatDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which UserSportStats to delete
+     */
+    where?: UserSportStatWhereInput
+    /**
+     * Limit how many UserSportStats to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * UserSportStat without action
+   */
+  export type UserSportStatDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserSportStat
+     */
+    select?: UserSportStatSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserSportStat
+     */
+    omit?: UserSportStatOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserSportStatInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -35882,6 +38384,30 @@ export namespace Prisma {
   export type AuditLogScalarFieldEnum = (typeof AuditLogScalarFieldEnum)[keyof typeof AuditLogScalarFieldEnum]
 
 
+  export const BannerScalarFieldEnum: {
+    id: 'id',
+    imageUrl: 'imageUrl',
+    title: 'title',
+    targetSportId: 'targetSportId',
+    isActive: 'isActive',
+    createdAt: 'createdAt'
+  };
+
+  export type BannerScalarFieldEnum = (typeof BannerScalarFieldEnum)[keyof typeof BannerScalarFieldEnum]
+
+
+  export const UserSportStatScalarFieldEnum: {
+    id: 'id',
+    memberId: 'memberId',
+    sportId: 'sportId',
+    bookingCount: 'bookingCount',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type UserSportStatScalarFieldEnum = (typeof UserSportStatScalarFieldEnum)[keyof typeof UserSportStatScalarFieldEnum]
+
+
   export const SortOrder: {
     asc: 'asc',
     desc: 'desc'
@@ -36063,6 +38589,7 @@ export namespace Prisma {
     couponAssignments?: CouponAssignmentListRelationFilter
     couponUsages?: CouponUsageListRelationFilter
     loyaltyAchievements?: LoyaltyAchievementListRelationFilter
+    sportStats?: UserSportStatListRelationFilter
   }
 
   export type MemberOrderByWithRelationInput = {
@@ -36085,6 +38612,7 @@ export namespace Prisma {
     couponAssignments?: CouponAssignmentOrderByRelationAggregateInput
     couponUsages?: CouponUsageOrderByRelationAggregateInput
     loyaltyAchievements?: LoyaltyAchievementOrderByRelationAggregateInput
+    sportStats?: UserSportStatOrderByRelationAggregateInput
   }
 
   export type MemberWhereUniqueInput = Prisma.AtLeast<{
@@ -36110,6 +38638,7 @@ export namespace Prisma {
     couponAssignments?: CouponAssignmentListRelationFilter
     couponUsages?: CouponUsageListRelationFilter
     loyaltyAchievements?: LoyaltyAchievementListRelationFilter
+    sportStats?: UserSportStatListRelationFilter
   }, "id">
 
   export type MemberOrderByWithAggregationInput = {
@@ -36228,6 +38757,8 @@ export namespace Prisma {
     attendances?: AttendanceListRelationFilter
     bookings?: BookingListRelationFilter
     tournaments?: TournamentListRelationFilter
+    sportStats?: UserSportStatListRelationFilter
+    banners?: BannerListRelationFilter
   }
 
   export type SportOrderByWithRelationInput = {
@@ -36242,6 +38773,8 @@ export namespace Prisma {
     attendances?: AttendanceOrderByRelationAggregateInput
     bookings?: BookingOrderByRelationAggregateInput
     tournaments?: TournamentOrderByRelationAggregateInput
+    sportStats?: UserSportStatOrderByRelationAggregateInput
+    banners?: BannerOrderByRelationAggregateInput
   }
 
   export type SportWhereUniqueInput = Prisma.AtLeast<{
@@ -36259,6 +38792,8 @@ export namespace Prisma {
     attendances?: AttendanceListRelationFilter
     bookings?: BookingListRelationFilter
     tournaments?: TournamentListRelationFilter
+    sportStats?: UserSportStatListRelationFilter
+    banners?: BannerListRelationFilter
   }, "id">
 
   export type SportOrderByWithAggregationInput = {
@@ -38005,6 +40540,132 @@ export namespace Prisma {
     createdAt?: DateTimeWithAggregatesFilter<"AuditLog"> | Date | string
   }
 
+  export type BannerWhereInput = {
+    AND?: BannerWhereInput | BannerWhereInput[]
+    OR?: BannerWhereInput[]
+    NOT?: BannerWhereInput | BannerWhereInput[]
+    id?: StringFilter<"Banner"> | string
+    imageUrl?: StringFilter<"Banner"> | string
+    title?: StringNullableFilter<"Banner"> | string | null
+    targetSportId?: StringNullableFilter<"Banner"> | string | null
+    isActive?: BoolFilter<"Banner"> | boolean
+    createdAt?: DateTimeFilter<"Banner"> | Date | string
+    targetSport?: XOR<SportNullableScalarRelationFilter, SportWhereInput> | null
+  }
+
+  export type BannerOrderByWithRelationInput = {
+    id?: SortOrder
+    imageUrl?: SortOrder
+    title?: SortOrderInput | SortOrder
+    targetSportId?: SortOrderInput | SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    targetSport?: SportOrderByWithRelationInput
+  }
+
+  export type BannerWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: BannerWhereInput | BannerWhereInput[]
+    OR?: BannerWhereInput[]
+    NOT?: BannerWhereInput | BannerWhereInput[]
+    imageUrl?: StringFilter<"Banner"> | string
+    title?: StringNullableFilter<"Banner"> | string | null
+    targetSportId?: StringNullableFilter<"Banner"> | string | null
+    isActive?: BoolFilter<"Banner"> | boolean
+    createdAt?: DateTimeFilter<"Banner"> | Date | string
+    targetSport?: XOR<SportNullableScalarRelationFilter, SportWhereInput> | null
+  }, "id">
+
+  export type BannerOrderByWithAggregationInput = {
+    id?: SortOrder
+    imageUrl?: SortOrder
+    title?: SortOrderInput | SortOrder
+    targetSportId?: SortOrderInput | SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    _count?: BannerCountOrderByAggregateInput
+    _max?: BannerMaxOrderByAggregateInput
+    _min?: BannerMinOrderByAggregateInput
+  }
+
+  export type BannerScalarWhereWithAggregatesInput = {
+    AND?: BannerScalarWhereWithAggregatesInput | BannerScalarWhereWithAggregatesInput[]
+    OR?: BannerScalarWhereWithAggregatesInput[]
+    NOT?: BannerScalarWhereWithAggregatesInput | BannerScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"Banner"> | string
+    imageUrl?: StringWithAggregatesFilter<"Banner"> | string
+    title?: StringNullableWithAggregatesFilter<"Banner"> | string | null
+    targetSportId?: StringNullableWithAggregatesFilter<"Banner"> | string | null
+    isActive?: BoolWithAggregatesFilter<"Banner"> | boolean
+    createdAt?: DateTimeWithAggregatesFilter<"Banner"> | Date | string
+  }
+
+  export type UserSportStatWhereInput = {
+    AND?: UserSportStatWhereInput | UserSportStatWhereInput[]
+    OR?: UserSportStatWhereInput[]
+    NOT?: UserSportStatWhereInput | UserSportStatWhereInput[]
+    id?: StringFilter<"UserSportStat"> | string
+    memberId?: StringFilter<"UserSportStat"> | string
+    sportId?: StringFilter<"UserSportStat"> | string
+    bookingCount?: IntFilter<"UserSportStat"> | number
+    createdAt?: DateTimeFilter<"UserSportStat"> | Date | string
+    updatedAt?: DateTimeFilter<"UserSportStat"> | Date | string
+    member?: XOR<MemberScalarRelationFilter, MemberWhereInput>
+    sport?: XOR<SportScalarRelationFilter, SportWhereInput>
+  }
+
+  export type UserSportStatOrderByWithRelationInput = {
+    id?: SortOrder
+    memberId?: SortOrder
+    sportId?: SortOrder
+    bookingCount?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    member?: MemberOrderByWithRelationInput
+    sport?: SportOrderByWithRelationInput
+  }
+
+  export type UserSportStatWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    memberId_sportId?: UserSportStatMemberIdSportIdCompoundUniqueInput
+    AND?: UserSportStatWhereInput | UserSportStatWhereInput[]
+    OR?: UserSportStatWhereInput[]
+    NOT?: UserSportStatWhereInput | UserSportStatWhereInput[]
+    memberId?: StringFilter<"UserSportStat"> | string
+    sportId?: StringFilter<"UserSportStat"> | string
+    bookingCount?: IntFilter<"UserSportStat"> | number
+    createdAt?: DateTimeFilter<"UserSportStat"> | Date | string
+    updatedAt?: DateTimeFilter<"UserSportStat"> | Date | string
+    member?: XOR<MemberScalarRelationFilter, MemberWhereInput>
+    sport?: XOR<SportScalarRelationFilter, SportWhereInput>
+  }, "id" | "memberId_sportId">
+
+  export type UserSportStatOrderByWithAggregationInput = {
+    id?: SortOrder
+    memberId?: SortOrder
+    sportId?: SortOrder
+    bookingCount?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: UserSportStatCountOrderByAggregateInput
+    _avg?: UserSportStatAvgOrderByAggregateInput
+    _max?: UserSportStatMaxOrderByAggregateInput
+    _min?: UserSportStatMinOrderByAggregateInput
+    _sum?: UserSportStatSumOrderByAggregateInput
+  }
+
+  export type UserSportStatScalarWhereWithAggregatesInput = {
+    AND?: UserSportStatScalarWhereWithAggregatesInput | UserSportStatScalarWhereWithAggregatesInput[]
+    OR?: UserSportStatScalarWhereWithAggregatesInput[]
+    NOT?: UserSportStatScalarWhereWithAggregatesInput | UserSportStatScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"UserSportStat"> | string
+    memberId?: StringWithAggregatesFilter<"UserSportStat"> | string
+    sportId?: StringWithAggregatesFilter<"UserSportStat"> | string
+    bookingCount?: IntWithAggregatesFilter<"UserSportStat"> | number
+    createdAt?: DateTimeWithAggregatesFilter<"UserSportStat"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"UserSportStat"> | Date | string
+  }
+
   export type AdminCreateInput = {
     id?: string
     email: string
@@ -38130,6 +40791,7 @@ export namespace Prisma {
     couponAssignments?: CouponAssignmentCreateNestedManyWithoutMemberInput
     couponUsages?: CouponUsageCreateNestedManyWithoutMemberInput
     loyaltyAchievements?: LoyaltyAchievementCreateNestedManyWithoutMemberInput
+    sportStats?: UserSportStatCreateNestedManyWithoutMemberInput
   }
 
   export type MemberUncheckedCreateInput = {
@@ -38152,6 +40814,7 @@ export namespace Prisma {
     couponAssignments?: CouponAssignmentUncheckedCreateNestedManyWithoutMemberInput
     couponUsages?: CouponUsageUncheckedCreateNestedManyWithoutMemberInput
     loyaltyAchievements?: LoyaltyAchievementUncheckedCreateNestedManyWithoutMemberInput
+    sportStats?: UserSportStatUncheckedCreateNestedManyWithoutMemberInput
   }
 
   export type MemberUpdateInput = {
@@ -38174,6 +40837,7 @@ export namespace Prisma {
     couponAssignments?: CouponAssignmentUpdateManyWithoutMemberNestedInput
     couponUsages?: CouponUsageUpdateManyWithoutMemberNestedInput
     loyaltyAchievements?: LoyaltyAchievementUpdateManyWithoutMemberNestedInput
+    sportStats?: UserSportStatUpdateManyWithoutMemberNestedInput
   }
 
   export type MemberUncheckedUpdateInput = {
@@ -38196,6 +40860,7 @@ export namespace Prisma {
     couponAssignments?: CouponAssignmentUncheckedUpdateManyWithoutMemberNestedInput
     couponUsages?: CouponUsageUncheckedUpdateManyWithoutMemberNestedInput
     loyaltyAchievements?: LoyaltyAchievementUncheckedUpdateManyWithoutMemberNestedInput
+    sportStats?: UserSportStatUncheckedUpdateManyWithoutMemberNestedInput
   }
 
   export type MemberCreateManyInput = {
@@ -38318,6 +40983,8 @@ export namespace Prisma {
     attendances?: AttendanceCreateNestedManyWithoutSportInput
     bookings?: BookingCreateNestedManyWithoutSportInput
     tournaments?: TournamentCreateNestedManyWithoutSportInput
+    sportStats?: UserSportStatCreateNestedManyWithoutSportInput
+    banners?: BannerCreateNestedManyWithoutTargetSportInput
   }
 
   export type SportUncheckedCreateInput = {
@@ -38332,6 +40999,8 @@ export namespace Prisma {
     attendances?: AttendanceUncheckedCreateNestedManyWithoutSportInput
     bookings?: BookingUncheckedCreateNestedManyWithoutSportInput
     tournaments?: TournamentUncheckedCreateNestedManyWithoutSportInput
+    sportStats?: UserSportStatUncheckedCreateNestedManyWithoutSportInput
+    banners?: BannerUncheckedCreateNestedManyWithoutTargetSportInput
   }
 
   export type SportUpdateInput = {
@@ -38346,6 +41015,8 @@ export namespace Prisma {
     attendances?: AttendanceUpdateManyWithoutSportNestedInput
     bookings?: BookingUpdateManyWithoutSportNestedInput
     tournaments?: TournamentUpdateManyWithoutSportNestedInput
+    sportStats?: UserSportStatUpdateManyWithoutSportNestedInput
+    banners?: BannerUpdateManyWithoutTargetSportNestedInput
   }
 
   export type SportUncheckedUpdateInput = {
@@ -38360,6 +41031,8 @@ export namespace Prisma {
     attendances?: AttendanceUncheckedUpdateManyWithoutSportNestedInput
     bookings?: BookingUncheckedUpdateManyWithoutSportNestedInput
     tournaments?: TournamentUncheckedUpdateManyWithoutSportNestedInput
+    sportStats?: UserSportStatUncheckedUpdateManyWithoutSportNestedInput
+    banners?: BannerUncheckedUpdateManyWithoutTargetSportNestedInput
   }
 
   export type SportCreateManyInput = {
@@ -40236,6 +42909,129 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type BannerCreateInput = {
+    id?: string
+    imageUrl: string
+    title?: string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    targetSport?: SportCreateNestedOneWithoutBannersInput
+  }
+
+  export type BannerUncheckedCreateInput = {
+    id?: string
+    imageUrl: string
+    title?: string | null
+    targetSportId?: string | null
+    isActive?: boolean
+    createdAt?: Date | string
+  }
+
+  export type BannerUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    imageUrl?: StringFieldUpdateOperationsInput | string
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    targetSport?: SportUpdateOneWithoutBannersNestedInput
+  }
+
+  export type BannerUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    imageUrl?: StringFieldUpdateOperationsInput | string
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    targetSportId?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BannerCreateManyInput = {
+    id?: string
+    imageUrl: string
+    title?: string | null
+    targetSportId?: string | null
+    isActive?: boolean
+    createdAt?: Date | string
+  }
+
+  export type BannerUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    imageUrl?: StringFieldUpdateOperationsInput | string
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BannerUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    imageUrl?: StringFieldUpdateOperationsInput | string
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    targetSportId?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserSportStatCreateInput = {
+    id?: string
+    bookingCount?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    member: MemberCreateNestedOneWithoutSportStatsInput
+    sport: SportCreateNestedOneWithoutSportStatsInput
+  }
+
+  export type UserSportStatUncheckedCreateInput = {
+    id?: string
+    memberId: string
+    sportId: string
+    bookingCount?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type UserSportStatUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    bookingCount?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    member?: MemberUpdateOneRequiredWithoutSportStatsNestedInput
+    sport?: SportUpdateOneRequiredWithoutSportStatsNestedInput
+  }
+
+  export type UserSportStatUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    memberId?: StringFieldUpdateOperationsInput | string
+    sportId?: StringFieldUpdateOperationsInput | string
+    bookingCount?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserSportStatCreateManyInput = {
+    id?: string
+    memberId: string
+    sportId: string
+    bookingCount?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type UserSportStatUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    bookingCount?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserSportStatUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    memberId?: StringFieldUpdateOperationsInput | string
+    sportId?: StringFieldUpdateOperationsInput | string
+    bookingCount?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type StringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[]
@@ -40460,6 +43256,12 @@ export namespace Prisma {
     none?: LoyaltyAchievementWhereInput
   }
 
+  export type UserSportStatListRelationFilter = {
+    every?: UserSportStatWhereInput
+    some?: UserSportStatWhereInput
+    none?: UserSportStatWhereInput
+  }
+
   export type MemberMembershipOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -40493,6 +43295,10 @@ export namespace Prisma {
   }
 
   export type LoyaltyAchievementOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type UserSportStatOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -40652,6 +43458,12 @@ export namespace Prisma {
     none?: TournamentWhereInput
   }
 
+  export type BannerListRelationFilter = {
+    every?: BannerWhereInput
+    some?: BannerWhereInput
+    none?: BannerWhereInput
+  }
+
   export type TurfSportOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -40661,6 +43473,10 @@ export namespace Prisma {
   }
 
   export type TournamentOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type BannerOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -41788,6 +44604,73 @@ export namespace Prisma {
     createdAt?: SortOrder
   }
 
+  export type BannerCountOrderByAggregateInput = {
+    id?: SortOrder
+    imageUrl?: SortOrder
+    title?: SortOrder
+    targetSportId?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type BannerMaxOrderByAggregateInput = {
+    id?: SortOrder
+    imageUrl?: SortOrder
+    title?: SortOrder
+    targetSportId?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type BannerMinOrderByAggregateInput = {
+    id?: SortOrder
+    imageUrl?: SortOrder
+    title?: SortOrder
+    targetSportId?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type UserSportStatMemberIdSportIdCompoundUniqueInput = {
+    memberId: string
+    sportId: string
+  }
+
+  export type UserSportStatCountOrderByAggregateInput = {
+    id?: SortOrder
+    memberId?: SortOrder
+    sportId?: SortOrder
+    bookingCount?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type UserSportStatAvgOrderByAggregateInput = {
+    bookingCount?: SortOrder
+  }
+
+  export type UserSportStatMaxOrderByAggregateInput = {
+    id?: SortOrder
+    memberId?: SortOrder
+    sportId?: SortOrder
+    bookingCount?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type UserSportStatMinOrderByAggregateInput = {
+    id?: SortOrder
+    memberId?: SortOrder
+    sportId?: SortOrder
+    bookingCount?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type UserSportStatSumOrderByAggregateInput = {
+    bookingCount?: SortOrder
+  }
+
   export type StringFieldUpdateOperationsInput = {
     set?: string
   }
@@ -41863,6 +44746,13 @@ export namespace Prisma {
     connect?: LoyaltyAchievementWhereUniqueInput | LoyaltyAchievementWhereUniqueInput[]
   }
 
+  export type UserSportStatCreateNestedManyWithoutMemberInput = {
+    create?: XOR<UserSportStatCreateWithoutMemberInput, UserSportStatUncheckedCreateWithoutMemberInput> | UserSportStatCreateWithoutMemberInput[] | UserSportStatUncheckedCreateWithoutMemberInput[]
+    connectOrCreate?: UserSportStatCreateOrConnectWithoutMemberInput | UserSportStatCreateOrConnectWithoutMemberInput[]
+    createMany?: UserSportStatCreateManyMemberInputEnvelope
+    connect?: UserSportStatWhereUniqueInput | UserSportStatWhereUniqueInput[]
+  }
+
   export type MemberMembershipUncheckedCreateNestedManyWithoutMemberInput = {
     create?: XOR<MemberMembershipCreateWithoutMemberInput, MemberMembershipUncheckedCreateWithoutMemberInput> | MemberMembershipCreateWithoutMemberInput[] | MemberMembershipUncheckedCreateWithoutMemberInput[]
     connectOrCreate?: MemberMembershipCreateOrConnectWithoutMemberInput | MemberMembershipCreateOrConnectWithoutMemberInput[]
@@ -41924,6 +44814,13 @@ export namespace Prisma {
     connectOrCreate?: LoyaltyAchievementCreateOrConnectWithoutMemberInput | LoyaltyAchievementCreateOrConnectWithoutMemberInput[]
     createMany?: LoyaltyAchievementCreateManyMemberInputEnvelope
     connect?: LoyaltyAchievementWhereUniqueInput | LoyaltyAchievementWhereUniqueInput[]
+  }
+
+  export type UserSportStatUncheckedCreateNestedManyWithoutMemberInput = {
+    create?: XOR<UserSportStatCreateWithoutMemberInput, UserSportStatUncheckedCreateWithoutMemberInput> | UserSportStatCreateWithoutMemberInput[] | UserSportStatUncheckedCreateWithoutMemberInput[]
+    connectOrCreate?: UserSportStatCreateOrConnectWithoutMemberInput | UserSportStatCreateOrConnectWithoutMemberInput[]
+    createMany?: UserSportStatCreateManyMemberInputEnvelope
+    connect?: UserSportStatWhereUniqueInput | UserSportStatWhereUniqueInput[]
   }
 
   export type NullableDateTimeFieldUpdateOperationsInput = {
@@ -42072,6 +44969,20 @@ export namespace Prisma {
     deleteMany?: LoyaltyAchievementScalarWhereInput | LoyaltyAchievementScalarWhereInput[]
   }
 
+  export type UserSportStatUpdateManyWithoutMemberNestedInput = {
+    create?: XOR<UserSportStatCreateWithoutMemberInput, UserSportStatUncheckedCreateWithoutMemberInput> | UserSportStatCreateWithoutMemberInput[] | UserSportStatUncheckedCreateWithoutMemberInput[]
+    connectOrCreate?: UserSportStatCreateOrConnectWithoutMemberInput | UserSportStatCreateOrConnectWithoutMemberInput[]
+    upsert?: UserSportStatUpsertWithWhereUniqueWithoutMemberInput | UserSportStatUpsertWithWhereUniqueWithoutMemberInput[]
+    createMany?: UserSportStatCreateManyMemberInputEnvelope
+    set?: UserSportStatWhereUniqueInput | UserSportStatWhereUniqueInput[]
+    disconnect?: UserSportStatWhereUniqueInput | UserSportStatWhereUniqueInput[]
+    delete?: UserSportStatWhereUniqueInput | UserSportStatWhereUniqueInput[]
+    connect?: UserSportStatWhereUniqueInput | UserSportStatWhereUniqueInput[]
+    update?: UserSportStatUpdateWithWhereUniqueWithoutMemberInput | UserSportStatUpdateWithWhereUniqueWithoutMemberInput[]
+    updateMany?: UserSportStatUpdateManyWithWhereWithoutMemberInput | UserSportStatUpdateManyWithWhereWithoutMemberInput[]
+    deleteMany?: UserSportStatScalarWhereInput | UserSportStatScalarWhereInput[]
+  }
+
   export type MemberMembershipUncheckedUpdateManyWithoutMemberNestedInput = {
     create?: XOR<MemberMembershipCreateWithoutMemberInput, MemberMembershipUncheckedCreateWithoutMemberInput> | MemberMembershipCreateWithoutMemberInput[] | MemberMembershipUncheckedCreateWithoutMemberInput[]
     connectOrCreate?: MemberMembershipCreateOrConnectWithoutMemberInput | MemberMembershipCreateOrConnectWithoutMemberInput[]
@@ -42198,6 +45109,20 @@ export namespace Prisma {
     deleteMany?: LoyaltyAchievementScalarWhereInput | LoyaltyAchievementScalarWhereInput[]
   }
 
+  export type UserSportStatUncheckedUpdateManyWithoutMemberNestedInput = {
+    create?: XOR<UserSportStatCreateWithoutMemberInput, UserSportStatUncheckedCreateWithoutMemberInput> | UserSportStatCreateWithoutMemberInput[] | UserSportStatUncheckedCreateWithoutMemberInput[]
+    connectOrCreate?: UserSportStatCreateOrConnectWithoutMemberInput | UserSportStatCreateOrConnectWithoutMemberInput[]
+    upsert?: UserSportStatUpsertWithWhereUniqueWithoutMemberInput | UserSportStatUpsertWithWhereUniqueWithoutMemberInput[]
+    createMany?: UserSportStatCreateManyMemberInputEnvelope
+    set?: UserSportStatWhereUniqueInput | UserSportStatWhereUniqueInput[]
+    disconnect?: UserSportStatWhereUniqueInput | UserSportStatWhereUniqueInput[]
+    delete?: UserSportStatWhereUniqueInput | UserSportStatWhereUniqueInput[]
+    connect?: UserSportStatWhereUniqueInput | UserSportStatWhereUniqueInput[]
+    update?: UserSportStatUpdateWithWhereUniqueWithoutMemberInput | UserSportStatUpdateWithWhereUniqueWithoutMemberInput[]
+    updateMany?: UserSportStatUpdateManyWithWhereWithoutMemberInput | UserSportStatUpdateManyWithWhereWithoutMemberInput[]
+    deleteMany?: UserSportStatScalarWhereInput | UserSportStatScalarWhereInput[]
+  }
+
   export type MemberCreateNestedOneWithoutLoyaltyHistoryInput = {
     create?: XOR<MemberCreateWithoutLoyaltyHistoryInput, MemberUncheckedCreateWithoutLoyaltyHistoryInput>
     connectOrCreate?: MemberCreateOrConnectWithoutLoyaltyHistoryInput
@@ -42247,6 +45172,20 @@ export namespace Prisma {
     connect?: TournamentWhereUniqueInput | TournamentWhereUniqueInput[]
   }
 
+  export type UserSportStatCreateNestedManyWithoutSportInput = {
+    create?: XOR<UserSportStatCreateWithoutSportInput, UserSportStatUncheckedCreateWithoutSportInput> | UserSportStatCreateWithoutSportInput[] | UserSportStatUncheckedCreateWithoutSportInput[]
+    connectOrCreate?: UserSportStatCreateOrConnectWithoutSportInput | UserSportStatCreateOrConnectWithoutSportInput[]
+    createMany?: UserSportStatCreateManySportInputEnvelope
+    connect?: UserSportStatWhereUniqueInput | UserSportStatWhereUniqueInput[]
+  }
+
+  export type BannerCreateNestedManyWithoutTargetSportInput = {
+    create?: XOR<BannerCreateWithoutTargetSportInput, BannerUncheckedCreateWithoutTargetSportInput> | BannerCreateWithoutTargetSportInput[] | BannerUncheckedCreateWithoutTargetSportInput[]
+    connectOrCreate?: BannerCreateOrConnectWithoutTargetSportInput | BannerCreateOrConnectWithoutTargetSportInput[]
+    createMany?: BannerCreateManyTargetSportInputEnvelope
+    connect?: BannerWhereUniqueInput | BannerWhereUniqueInput[]
+  }
+
   export type TurfSportUncheckedCreateNestedManyWithoutSportInput = {
     create?: XOR<TurfSportCreateWithoutSportInput, TurfSportUncheckedCreateWithoutSportInput> | TurfSportCreateWithoutSportInput[] | TurfSportUncheckedCreateWithoutSportInput[]
     connectOrCreate?: TurfSportCreateOrConnectWithoutSportInput | TurfSportCreateOrConnectWithoutSportInput[]
@@ -42280,6 +45219,20 @@ export namespace Prisma {
     connectOrCreate?: TournamentCreateOrConnectWithoutSportInput | TournamentCreateOrConnectWithoutSportInput[]
     createMany?: TournamentCreateManySportInputEnvelope
     connect?: TournamentWhereUniqueInput | TournamentWhereUniqueInput[]
+  }
+
+  export type UserSportStatUncheckedCreateNestedManyWithoutSportInput = {
+    create?: XOR<UserSportStatCreateWithoutSportInput, UserSportStatUncheckedCreateWithoutSportInput> | UserSportStatCreateWithoutSportInput[] | UserSportStatUncheckedCreateWithoutSportInput[]
+    connectOrCreate?: UserSportStatCreateOrConnectWithoutSportInput | UserSportStatCreateOrConnectWithoutSportInput[]
+    createMany?: UserSportStatCreateManySportInputEnvelope
+    connect?: UserSportStatWhereUniqueInput | UserSportStatWhereUniqueInput[]
+  }
+
+  export type BannerUncheckedCreateNestedManyWithoutTargetSportInput = {
+    create?: XOR<BannerCreateWithoutTargetSportInput, BannerUncheckedCreateWithoutTargetSportInput> | BannerCreateWithoutTargetSportInput[] | BannerUncheckedCreateWithoutTargetSportInput[]
+    connectOrCreate?: BannerCreateOrConnectWithoutTargetSportInput | BannerCreateOrConnectWithoutTargetSportInput[]
+    createMany?: BannerCreateManyTargetSportInputEnvelope
+    connect?: BannerWhereUniqueInput | BannerWhereUniqueInput[]
   }
 
   export type TurfSportUpdateManyWithoutSportNestedInput = {
@@ -42352,6 +45305,34 @@ export namespace Prisma {
     deleteMany?: TournamentScalarWhereInput | TournamentScalarWhereInput[]
   }
 
+  export type UserSportStatUpdateManyWithoutSportNestedInput = {
+    create?: XOR<UserSportStatCreateWithoutSportInput, UserSportStatUncheckedCreateWithoutSportInput> | UserSportStatCreateWithoutSportInput[] | UserSportStatUncheckedCreateWithoutSportInput[]
+    connectOrCreate?: UserSportStatCreateOrConnectWithoutSportInput | UserSportStatCreateOrConnectWithoutSportInput[]
+    upsert?: UserSportStatUpsertWithWhereUniqueWithoutSportInput | UserSportStatUpsertWithWhereUniqueWithoutSportInput[]
+    createMany?: UserSportStatCreateManySportInputEnvelope
+    set?: UserSportStatWhereUniqueInput | UserSportStatWhereUniqueInput[]
+    disconnect?: UserSportStatWhereUniqueInput | UserSportStatWhereUniqueInput[]
+    delete?: UserSportStatWhereUniqueInput | UserSportStatWhereUniqueInput[]
+    connect?: UserSportStatWhereUniqueInput | UserSportStatWhereUniqueInput[]
+    update?: UserSportStatUpdateWithWhereUniqueWithoutSportInput | UserSportStatUpdateWithWhereUniqueWithoutSportInput[]
+    updateMany?: UserSportStatUpdateManyWithWhereWithoutSportInput | UserSportStatUpdateManyWithWhereWithoutSportInput[]
+    deleteMany?: UserSportStatScalarWhereInput | UserSportStatScalarWhereInput[]
+  }
+
+  export type BannerUpdateManyWithoutTargetSportNestedInput = {
+    create?: XOR<BannerCreateWithoutTargetSportInput, BannerUncheckedCreateWithoutTargetSportInput> | BannerCreateWithoutTargetSportInput[] | BannerUncheckedCreateWithoutTargetSportInput[]
+    connectOrCreate?: BannerCreateOrConnectWithoutTargetSportInput | BannerCreateOrConnectWithoutTargetSportInput[]
+    upsert?: BannerUpsertWithWhereUniqueWithoutTargetSportInput | BannerUpsertWithWhereUniqueWithoutTargetSportInput[]
+    createMany?: BannerCreateManyTargetSportInputEnvelope
+    set?: BannerWhereUniqueInput | BannerWhereUniqueInput[]
+    disconnect?: BannerWhereUniqueInput | BannerWhereUniqueInput[]
+    delete?: BannerWhereUniqueInput | BannerWhereUniqueInput[]
+    connect?: BannerWhereUniqueInput | BannerWhereUniqueInput[]
+    update?: BannerUpdateWithWhereUniqueWithoutTargetSportInput | BannerUpdateWithWhereUniqueWithoutTargetSportInput[]
+    updateMany?: BannerUpdateManyWithWhereWithoutTargetSportInput | BannerUpdateManyWithWhereWithoutTargetSportInput[]
+    deleteMany?: BannerScalarWhereInput | BannerScalarWhereInput[]
+  }
+
   export type TurfSportUncheckedUpdateManyWithoutSportNestedInput = {
     create?: XOR<TurfSportCreateWithoutSportInput, TurfSportUncheckedCreateWithoutSportInput> | TurfSportCreateWithoutSportInput[] | TurfSportUncheckedCreateWithoutSportInput[]
     connectOrCreate?: TurfSportCreateOrConnectWithoutSportInput | TurfSportCreateOrConnectWithoutSportInput[]
@@ -42420,6 +45401,34 @@ export namespace Prisma {
     update?: TournamentUpdateWithWhereUniqueWithoutSportInput | TournamentUpdateWithWhereUniqueWithoutSportInput[]
     updateMany?: TournamentUpdateManyWithWhereWithoutSportInput | TournamentUpdateManyWithWhereWithoutSportInput[]
     deleteMany?: TournamentScalarWhereInput | TournamentScalarWhereInput[]
+  }
+
+  export type UserSportStatUncheckedUpdateManyWithoutSportNestedInput = {
+    create?: XOR<UserSportStatCreateWithoutSportInput, UserSportStatUncheckedCreateWithoutSportInput> | UserSportStatCreateWithoutSportInput[] | UserSportStatUncheckedCreateWithoutSportInput[]
+    connectOrCreate?: UserSportStatCreateOrConnectWithoutSportInput | UserSportStatCreateOrConnectWithoutSportInput[]
+    upsert?: UserSportStatUpsertWithWhereUniqueWithoutSportInput | UserSportStatUpsertWithWhereUniqueWithoutSportInput[]
+    createMany?: UserSportStatCreateManySportInputEnvelope
+    set?: UserSportStatWhereUniqueInput | UserSportStatWhereUniqueInput[]
+    disconnect?: UserSportStatWhereUniqueInput | UserSportStatWhereUniqueInput[]
+    delete?: UserSportStatWhereUniqueInput | UserSportStatWhereUniqueInput[]
+    connect?: UserSportStatWhereUniqueInput | UserSportStatWhereUniqueInput[]
+    update?: UserSportStatUpdateWithWhereUniqueWithoutSportInput | UserSportStatUpdateWithWhereUniqueWithoutSportInput[]
+    updateMany?: UserSportStatUpdateManyWithWhereWithoutSportInput | UserSportStatUpdateManyWithWhereWithoutSportInput[]
+    deleteMany?: UserSportStatScalarWhereInput | UserSportStatScalarWhereInput[]
+  }
+
+  export type BannerUncheckedUpdateManyWithoutTargetSportNestedInput = {
+    create?: XOR<BannerCreateWithoutTargetSportInput, BannerUncheckedCreateWithoutTargetSportInput> | BannerCreateWithoutTargetSportInput[] | BannerUncheckedCreateWithoutTargetSportInput[]
+    connectOrCreate?: BannerCreateOrConnectWithoutTargetSportInput | BannerCreateOrConnectWithoutTargetSportInput[]
+    upsert?: BannerUpsertWithWhereUniqueWithoutTargetSportInput | BannerUpsertWithWhereUniqueWithoutTargetSportInput[]
+    createMany?: BannerCreateManyTargetSportInputEnvelope
+    set?: BannerWhereUniqueInput | BannerWhereUniqueInput[]
+    disconnect?: BannerWhereUniqueInput | BannerWhereUniqueInput[]
+    delete?: BannerWhereUniqueInput | BannerWhereUniqueInput[]
+    connect?: BannerWhereUniqueInput | BannerWhereUniqueInput[]
+    update?: BannerUpdateWithWhereUniqueWithoutTargetSportInput | BannerUpdateWithWhereUniqueWithoutTargetSportInput[]
+    updateMany?: BannerUpdateManyWithWhereWithoutTargetSportInput | BannerUpdateManyWithWhereWithoutTargetSportInput[]
+    deleteMany?: BannerScalarWhereInput | BannerScalarWhereInput[]
   }
 
   export type TurfCreateNestedOneWithoutChildTurfsInput = {
@@ -43360,6 +46369,50 @@ export namespace Prisma {
     update?: XOR<XOR<MemberUpdateToOneWithWhereWithoutLoyaltyAchievementsInput, MemberUpdateWithoutLoyaltyAchievementsInput>, MemberUncheckedUpdateWithoutLoyaltyAchievementsInput>
   }
 
+  export type SportCreateNestedOneWithoutBannersInput = {
+    create?: XOR<SportCreateWithoutBannersInput, SportUncheckedCreateWithoutBannersInput>
+    connectOrCreate?: SportCreateOrConnectWithoutBannersInput
+    connect?: SportWhereUniqueInput
+  }
+
+  export type SportUpdateOneWithoutBannersNestedInput = {
+    create?: XOR<SportCreateWithoutBannersInput, SportUncheckedCreateWithoutBannersInput>
+    connectOrCreate?: SportCreateOrConnectWithoutBannersInput
+    upsert?: SportUpsertWithoutBannersInput
+    disconnect?: SportWhereInput | boolean
+    delete?: SportWhereInput | boolean
+    connect?: SportWhereUniqueInput
+    update?: XOR<XOR<SportUpdateToOneWithWhereWithoutBannersInput, SportUpdateWithoutBannersInput>, SportUncheckedUpdateWithoutBannersInput>
+  }
+
+  export type MemberCreateNestedOneWithoutSportStatsInput = {
+    create?: XOR<MemberCreateWithoutSportStatsInput, MemberUncheckedCreateWithoutSportStatsInput>
+    connectOrCreate?: MemberCreateOrConnectWithoutSportStatsInput
+    connect?: MemberWhereUniqueInput
+  }
+
+  export type SportCreateNestedOneWithoutSportStatsInput = {
+    create?: XOR<SportCreateWithoutSportStatsInput, SportUncheckedCreateWithoutSportStatsInput>
+    connectOrCreate?: SportCreateOrConnectWithoutSportStatsInput
+    connect?: SportWhereUniqueInput
+  }
+
+  export type MemberUpdateOneRequiredWithoutSportStatsNestedInput = {
+    create?: XOR<MemberCreateWithoutSportStatsInput, MemberUncheckedCreateWithoutSportStatsInput>
+    connectOrCreate?: MemberCreateOrConnectWithoutSportStatsInput
+    upsert?: MemberUpsertWithoutSportStatsInput
+    connect?: MemberWhereUniqueInput
+    update?: XOR<XOR<MemberUpdateToOneWithWhereWithoutSportStatsInput, MemberUpdateWithoutSportStatsInput>, MemberUncheckedUpdateWithoutSportStatsInput>
+  }
+
+  export type SportUpdateOneRequiredWithoutSportStatsNestedInput = {
+    create?: XOR<SportCreateWithoutSportStatsInput, SportUncheckedCreateWithoutSportStatsInput>
+    connectOrCreate?: SportCreateOrConnectWithoutSportStatsInput
+    upsert?: SportUpsertWithoutSportStatsInput
+    connect?: SportWhereUniqueInput
+    update?: XOR<XOR<SportUpdateToOneWithWhereWithoutSportStatsInput, SportUpdateWithoutSportStatsInput>, SportUncheckedUpdateWithoutSportStatsInput>
+  }
+
   export type NestedStringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[]
@@ -43856,6 +46909,31 @@ export namespace Prisma {
     data: LoyaltyAchievementCreateManyMemberInput | LoyaltyAchievementCreateManyMemberInput[]
   }
 
+  export type UserSportStatCreateWithoutMemberInput = {
+    id?: string
+    bookingCount?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    sport: SportCreateNestedOneWithoutSportStatsInput
+  }
+
+  export type UserSportStatUncheckedCreateWithoutMemberInput = {
+    id?: string
+    sportId: string
+    bookingCount?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type UserSportStatCreateOrConnectWithoutMemberInput = {
+    where: UserSportStatWhereUniqueInput
+    create: XOR<UserSportStatCreateWithoutMemberInput, UserSportStatUncheckedCreateWithoutMemberInput>
+  }
+
+  export type UserSportStatCreateManyMemberInputEnvelope = {
+    data: UserSportStatCreateManyMemberInput | UserSportStatCreateManyMemberInput[]
+  }
+
   export type MemberMembershipUpsertWithWhereUniqueWithoutMemberInput = {
     where: MemberMembershipWhereUniqueInput
     update: XOR<MemberMembershipUpdateWithoutMemberInput, MemberMembershipUncheckedUpdateWithoutMemberInput>
@@ -44123,6 +47201,34 @@ export namespace Prisma {
     achievedAt?: DateTimeFilter<"LoyaltyAchievement"> | Date | string
   }
 
+  export type UserSportStatUpsertWithWhereUniqueWithoutMemberInput = {
+    where: UserSportStatWhereUniqueInput
+    update: XOR<UserSportStatUpdateWithoutMemberInput, UserSportStatUncheckedUpdateWithoutMemberInput>
+    create: XOR<UserSportStatCreateWithoutMemberInput, UserSportStatUncheckedCreateWithoutMemberInput>
+  }
+
+  export type UserSportStatUpdateWithWhereUniqueWithoutMemberInput = {
+    where: UserSportStatWhereUniqueInput
+    data: XOR<UserSportStatUpdateWithoutMemberInput, UserSportStatUncheckedUpdateWithoutMemberInput>
+  }
+
+  export type UserSportStatUpdateManyWithWhereWithoutMemberInput = {
+    where: UserSportStatScalarWhereInput
+    data: XOR<UserSportStatUpdateManyMutationInput, UserSportStatUncheckedUpdateManyWithoutMemberInput>
+  }
+
+  export type UserSportStatScalarWhereInput = {
+    AND?: UserSportStatScalarWhereInput | UserSportStatScalarWhereInput[]
+    OR?: UserSportStatScalarWhereInput[]
+    NOT?: UserSportStatScalarWhereInput | UserSportStatScalarWhereInput[]
+    id?: StringFilter<"UserSportStat"> | string
+    memberId?: StringFilter<"UserSportStat"> | string
+    sportId?: StringFilter<"UserSportStat"> | string
+    bookingCount?: IntFilter<"UserSportStat"> | number
+    createdAt?: DateTimeFilter<"UserSportStat"> | Date | string
+    updatedAt?: DateTimeFilter<"UserSportStat"> | Date | string
+  }
+
   export type MemberCreateWithoutLoyaltyHistoryInput = {
     id?: string
     mobile: string
@@ -44142,6 +47248,7 @@ export namespace Prisma {
     couponAssignments?: CouponAssignmentCreateNestedManyWithoutMemberInput
     couponUsages?: CouponUsageCreateNestedManyWithoutMemberInput
     loyaltyAchievements?: LoyaltyAchievementCreateNestedManyWithoutMemberInput
+    sportStats?: UserSportStatCreateNestedManyWithoutMemberInput
   }
 
   export type MemberUncheckedCreateWithoutLoyaltyHistoryInput = {
@@ -44163,6 +47270,7 @@ export namespace Prisma {
     couponAssignments?: CouponAssignmentUncheckedCreateNestedManyWithoutMemberInput
     couponUsages?: CouponUsageUncheckedCreateNestedManyWithoutMemberInput
     loyaltyAchievements?: LoyaltyAchievementUncheckedCreateNestedManyWithoutMemberInput
+    sportStats?: UserSportStatUncheckedCreateNestedManyWithoutMemberInput
   }
 
   export type MemberCreateOrConnectWithoutLoyaltyHistoryInput = {
@@ -44200,6 +47308,7 @@ export namespace Prisma {
     couponAssignments?: CouponAssignmentUpdateManyWithoutMemberNestedInput
     couponUsages?: CouponUsageUpdateManyWithoutMemberNestedInput
     loyaltyAchievements?: LoyaltyAchievementUpdateManyWithoutMemberNestedInput
+    sportStats?: UserSportStatUpdateManyWithoutMemberNestedInput
   }
 
   export type MemberUncheckedUpdateWithoutLoyaltyHistoryInput = {
@@ -44221,6 +47330,7 @@ export namespace Prisma {
     couponAssignments?: CouponAssignmentUncheckedUpdateManyWithoutMemberNestedInput
     couponUsages?: CouponUsageUncheckedUpdateManyWithoutMemberNestedInput
     loyaltyAchievements?: LoyaltyAchievementUncheckedUpdateManyWithoutMemberNestedInput
+    sportStats?: UserSportStatUncheckedUpdateManyWithoutMemberNestedInput
   }
 
   export type TurfSportCreateWithoutSportInput = {
@@ -44418,6 +47528,56 @@ export namespace Prisma {
     data: TournamentCreateManySportInput | TournamentCreateManySportInput[]
   }
 
+  export type UserSportStatCreateWithoutSportInput = {
+    id?: string
+    bookingCount?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    member: MemberCreateNestedOneWithoutSportStatsInput
+  }
+
+  export type UserSportStatUncheckedCreateWithoutSportInput = {
+    id?: string
+    memberId: string
+    bookingCount?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type UserSportStatCreateOrConnectWithoutSportInput = {
+    where: UserSportStatWhereUniqueInput
+    create: XOR<UserSportStatCreateWithoutSportInput, UserSportStatUncheckedCreateWithoutSportInput>
+  }
+
+  export type UserSportStatCreateManySportInputEnvelope = {
+    data: UserSportStatCreateManySportInput | UserSportStatCreateManySportInput[]
+  }
+
+  export type BannerCreateWithoutTargetSportInput = {
+    id?: string
+    imageUrl: string
+    title?: string | null
+    isActive?: boolean
+    createdAt?: Date | string
+  }
+
+  export type BannerUncheckedCreateWithoutTargetSportInput = {
+    id?: string
+    imageUrl: string
+    title?: string | null
+    isActive?: boolean
+    createdAt?: Date | string
+  }
+
+  export type BannerCreateOrConnectWithoutTargetSportInput = {
+    where: BannerWhereUniqueInput
+    create: XOR<BannerCreateWithoutTargetSportInput, BannerUncheckedCreateWithoutTargetSportInput>
+  }
+
+  export type BannerCreateManyTargetSportInputEnvelope = {
+    data: BannerCreateManyTargetSportInput | BannerCreateManyTargetSportInput[]
+  }
+
   export type TurfSportUpsertWithWhereUniqueWithoutSportInput = {
     where: TurfSportWhereUniqueInput
     update: XOR<TurfSportUpdateWithoutSportInput, TurfSportUncheckedUpdateWithoutSportInput>
@@ -44549,6 +47709,50 @@ export namespace Prisma {
     cashResponsiblePerson?: StringNullableFilter<"Tournament"> | string | null
     createdAt?: DateTimeFilter<"Tournament"> | Date | string
     updatedAt?: DateTimeFilter<"Tournament"> | Date | string
+  }
+
+  export type UserSportStatUpsertWithWhereUniqueWithoutSportInput = {
+    where: UserSportStatWhereUniqueInput
+    update: XOR<UserSportStatUpdateWithoutSportInput, UserSportStatUncheckedUpdateWithoutSportInput>
+    create: XOR<UserSportStatCreateWithoutSportInput, UserSportStatUncheckedCreateWithoutSportInput>
+  }
+
+  export type UserSportStatUpdateWithWhereUniqueWithoutSportInput = {
+    where: UserSportStatWhereUniqueInput
+    data: XOR<UserSportStatUpdateWithoutSportInput, UserSportStatUncheckedUpdateWithoutSportInput>
+  }
+
+  export type UserSportStatUpdateManyWithWhereWithoutSportInput = {
+    where: UserSportStatScalarWhereInput
+    data: XOR<UserSportStatUpdateManyMutationInput, UserSportStatUncheckedUpdateManyWithoutSportInput>
+  }
+
+  export type BannerUpsertWithWhereUniqueWithoutTargetSportInput = {
+    where: BannerWhereUniqueInput
+    update: XOR<BannerUpdateWithoutTargetSportInput, BannerUncheckedUpdateWithoutTargetSportInput>
+    create: XOR<BannerCreateWithoutTargetSportInput, BannerUncheckedCreateWithoutTargetSportInput>
+  }
+
+  export type BannerUpdateWithWhereUniqueWithoutTargetSportInput = {
+    where: BannerWhereUniqueInput
+    data: XOR<BannerUpdateWithoutTargetSportInput, BannerUncheckedUpdateWithoutTargetSportInput>
+  }
+
+  export type BannerUpdateManyWithWhereWithoutTargetSportInput = {
+    where: BannerScalarWhereInput
+    data: XOR<BannerUpdateManyMutationInput, BannerUncheckedUpdateManyWithoutTargetSportInput>
+  }
+
+  export type BannerScalarWhereInput = {
+    AND?: BannerScalarWhereInput | BannerScalarWhereInput[]
+    OR?: BannerScalarWhereInput[]
+    NOT?: BannerScalarWhereInput | BannerScalarWhereInput[]
+    id?: StringFilter<"Banner"> | string
+    imageUrl?: StringFilter<"Banner"> | string
+    title?: StringNullableFilter<"Banner"> | string | null
+    targetSportId?: StringNullableFilter<"Banner"> | string | null
+    isActive?: BoolFilter<"Banner"> | boolean
+    createdAt?: DateTimeFilter<"Banner"> | Date | string
   }
 
   export type TurfCreateWithoutChildTurfsInput = {
@@ -44853,6 +48057,8 @@ export namespace Prisma {
     attendances?: AttendanceCreateNestedManyWithoutSportInput
     bookings?: BookingCreateNestedManyWithoutSportInput
     tournaments?: TournamentCreateNestedManyWithoutSportInput
+    sportStats?: UserSportStatCreateNestedManyWithoutSportInput
+    banners?: BannerCreateNestedManyWithoutTargetSportInput
   }
 
   export type SportUncheckedCreateWithoutTurfsInput = {
@@ -44866,6 +48072,8 @@ export namespace Prisma {
     attendances?: AttendanceUncheckedCreateNestedManyWithoutSportInput
     bookings?: BookingUncheckedCreateNestedManyWithoutSportInput
     tournaments?: TournamentUncheckedCreateNestedManyWithoutSportInput
+    sportStats?: UserSportStatUncheckedCreateNestedManyWithoutSportInput
+    banners?: BannerUncheckedCreateNestedManyWithoutTargetSportInput
   }
 
   export type SportCreateOrConnectWithoutTurfsInput = {
@@ -44938,6 +48146,8 @@ export namespace Prisma {
     attendances?: AttendanceUpdateManyWithoutSportNestedInput
     bookings?: BookingUpdateManyWithoutSportNestedInput
     tournaments?: TournamentUpdateManyWithoutSportNestedInput
+    sportStats?: UserSportStatUpdateManyWithoutSportNestedInput
+    banners?: BannerUpdateManyWithoutTargetSportNestedInput
   }
 
   export type SportUncheckedUpdateWithoutTurfsInput = {
@@ -44951,6 +48161,8 @@ export namespace Prisma {
     attendances?: AttendanceUncheckedUpdateManyWithoutSportNestedInput
     bookings?: BookingUncheckedUpdateManyWithoutSportNestedInput
     tournaments?: TournamentUncheckedUpdateManyWithoutSportNestedInput
+    sportStats?: UserSportStatUncheckedUpdateManyWithoutSportNestedInput
+    banners?: BannerUncheckedUpdateManyWithoutTargetSportNestedInput
   }
 
   export type SportCreateWithoutMembershipPlansInput = {
@@ -44964,6 +48176,8 @@ export namespace Prisma {
     attendances?: AttendanceCreateNestedManyWithoutSportInput
     bookings?: BookingCreateNestedManyWithoutSportInput
     tournaments?: TournamentCreateNestedManyWithoutSportInput
+    sportStats?: UserSportStatCreateNestedManyWithoutSportInput
+    banners?: BannerCreateNestedManyWithoutTargetSportInput
   }
 
   export type SportUncheckedCreateWithoutMembershipPlansInput = {
@@ -44977,6 +48191,8 @@ export namespace Prisma {
     attendances?: AttendanceUncheckedCreateNestedManyWithoutSportInput
     bookings?: BookingUncheckedCreateNestedManyWithoutSportInput
     tournaments?: TournamentUncheckedCreateNestedManyWithoutSportInput
+    sportStats?: UserSportStatUncheckedCreateNestedManyWithoutSportInput
+    banners?: BannerUncheckedCreateNestedManyWithoutTargetSportInput
   }
 
   export type SportCreateOrConnectWithoutMembershipPlansInput = {
@@ -45064,6 +48280,8 @@ export namespace Prisma {
     attendances?: AttendanceUpdateManyWithoutSportNestedInput
     bookings?: BookingUpdateManyWithoutSportNestedInput
     tournaments?: TournamentUpdateManyWithoutSportNestedInput
+    sportStats?: UserSportStatUpdateManyWithoutSportNestedInput
+    banners?: BannerUpdateManyWithoutTargetSportNestedInput
   }
 
   export type SportUncheckedUpdateWithoutMembershipPlansInput = {
@@ -45077,6 +48295,8 @@ export namespace Prisma {
     attendances?: AttendanceUncheckedUpdateManyWithoutSportNestedInput
     bookings?: BookingUncheckedUpdateManyWithoutSportNestedInput
     tournaments?: TournamentUncheckedUpdateManyWithoutSportNestedInput
+    sportStats?: UserSportStatUncheckedUpdateManyWithoutSportNestedInput
+    banners?: BannerUncheckedUpdateManyWithoutTargetSportNestedInput
   }
 
   export type MemberMembershipUpsertWithWhereUniqueWithoutMembershipPlanInput = {
@@ -45130,6 +48350,7 @@ export namespace Prisma {
     couponAssignments?: CouponAssignmentCreateNestedManyWithoutMemberInput
     couponUsages?: CouponUsageCreateNestedManyWithoutMemberInput
     loyaltyAchievements?: LoyaltyAchievementCreateNestedManyWithoutMemberInput
+    sportStats?: UserSportStatCreateNestedManyWithoutMemberInput
   }
 
   export type MemberUncheckedCreateWithoutMembershipsInput = {
@@ -45151,6 +48372,7 @@ export namespace Prisma {
     couponAssignments?: CouponAssignmentUncheckedCreateNestedManyWithoutMemberInput
     couponUsages?: CouponUsageUncheckedCreateNestedManyWithoutMemberInput
     loyaltyAchievements?: LoyaltyAchievementUncheckedCreateNestedManyWithoutMemberInput
+    sportStats?: UserSportStatUncheckedCreateNestedManyWithoutMemberInput
   }
 
   export type MemberCreateOrConnectWithoutMembershipsInput = {
@@ -45225,6 +48447,7 @@ export namespace Prisma {
     couponAssignments?: CouponAssignmentUpdateManyWithoutMemberNestedInput
     couponUsages?: CouponUsageUpdateManyWithoutMemberNestedInput
     loyaltyAchievements?: LoyaltyAchievementUpdateManyWithoutMemberNestedInput
+    sportStats?: UserSportStatUpdateManyWithoutMemberNestedInput
   }
 
   export type MemberUncheckedUpdateWithoutMembershipsInput = {
@@ -45246,6 +48469,7 @@ export namespace Prisma {
     couponAssignments?: CouponAssignmentUncheckedUpdateManyWithoutMemberNestedInput
     couponUsages?: CouponUsageUncheckedUpdateManyWithoutMemberNestedInput
     loyaltyAchievements?: LoyaltyAchievementUncheckedUpdateManyWithoutMemberNestedInput
+    sportStats?: UserSportStatUncheckedUpdateManyWithoutMemberNestedInput
   }
 
   export type MembershipPlanUpsertWithoutMembershipsInput = {
@@ -45310,6 +48534,7 @@ export namespace Prisma {
     couponAssignments?: CouponAssignmentCreateNestedManyWithoutMemberInput
     couponUsages?: CouponUsageCreateNestedManyWithoutMemberInput
     loyaltyAchievements?: LoyaltyAchievementCreateNestedManyWithoutMemberInput
+    sportStats?: UserSportStatCreateNestedManyWithoutMemberInput
   }
 
   export type MemberUncheckedCreateWithoutAttendancesInput = {
@@ -45331,6 +48556,7 @@ export namespace Prisma {
     couponAssignments?: CouponAssignmentUncheckedCreateNestedManyWithoutMemberInput
     couponUsages?: CouponUsageUncheckedCreateNestedManyWithoutMemberInput
     loyaltyAchievements?: LoyaltyAchievementUncheckedCreateNestedManyWithoutMemberInput
+    sportStats?: UserSportStatUncheckedCreateNestedManyWithoutMemberInput
   }
 
   export type MemberCreateOrConnectWithoutAttendancesInput = {
@@ -45349,6 +48575,8 @@ export namespace Prisma {
     membershipPlans?: MembershipPlanCreateNestedManyWithoutSportInput
     bookings?: BookingCreateNestedManyWithoutSportInput
     tournaments?: TournamentCreateNestedManyWithoutSportInput
+    sportStats?: UserSportStatCreateNestedManyWithoutSportInput
+    banners?: BannerCreateNestedManyWithoutTargetSportInput
   }
 
   export type SportUncheckedCreateWithoutAttendancesInput = {
@@ -45362,6 +48590,8 @@ export namespace Prisma {
     membershipPlans?: MembershipPlanUncheckedCreateNestedManyWithoutSportInput
     bookings?: BookingUncheckedCreateNestedManyWithoutSportInput
     tournaments?: TournamentUncheckedCreateNestedManyWithoutSportInput
+    sportStats?: UserSportStatUncheckedCreateNestedManyWithoutSportInput
+    banners?: BannerUncheckedCreateNestedManyWithoutTargetSportInput
   }
 
   export type SportCreateOrConnectWithoutAttendancesInput = {
@@ -45436,6 +48666,7 @@ export namespace Prisma {
     couponAssignments?: CouponAssignmentUpdateManyWithoutMemberNestedInput
     couponUsages?: CouponUsageUpdateManyWithoutMemberNestedInput
     loyaltyAchievements?: LoyaltyAchievementUpdateManyWithoutMemberNestedInput
+    sportStats?: UserSportStatUpdateManyWithoutMemberNestedInput
   }
 
   export type MemberUncheckedUpdateWithoutAttendancesInput = {
@@ -45457,6 +48688,7 @@ export namespace Prisma {
     couponAssignments?: CouponAssignmentUncheckedUpdateManyWithoutMemberNestedInput
     couponUsages?: CouponUsageUncheckedUpdateManyWithoutMemberNestedInput
     loyaltyAchievements?: LoyaltyAchievementUncheckedUpdateManyWithoutMemberNestedInput
+    sportStats?: UserSportStatUncheckedUpdateManyWithoutMemberNestedInput
   }
 
   export type SportUpsertWithoutAttendancesInput = {
@@ -45481,6 +48713,8 @@ export namespace Prisma {
     membershipPlans?: MembershipPlanUpdateManyWithoutSportNestedInput
     bookings?: BookingUpdateManyWithoutSportNestedInput
     tournaments?: TournamentUpdateManyWithoutSportNestedInput
+    sportStats?: UserSportStatUpdateManyWithoutSportNestedInput
+    banners?: BannerUpdateManyWithoutTargetSportNestedInput
   }
 
   export type SportUncheckedUpdateWithoutAttendancesInput = {
@@ -45494,6 +48728,8 @@ export namespace Prisma {
     membershipPlans?: MembershipPlanUncheckedUpdateManyWithoutSportNestedInput
     bookings?: BookingUncheckedUpdateManyWithoutSportNestedInput
     tournaments?: TournamentUncheckedUpdateManyWithoutSportNestedInput
+    sportStats?: UserSportStatUncheckedUpdateManyWithoutSportNestedInput
+    banners?: BannerUncheckedUpdateManyWithoutTargetSportNestedInput
   }
 
   export type MembershipPlanUpsertWithoutAttendancesInput = {
@@ -45595,6 +48831,7 @@ export namespace Prisma {
     couponAssignments?: CouponAssignmentCreateNestedManyWithoutMemberInput
     couponUsages?: CouponUsageCreateNestedManyWithoutMemberInput
     loyaltyAchievements?: LoyaltyAchievementCreateNestedManyWithoutMemberInput
+    sportStats?: UserSportStatCreateNestedManyWithoutMemberInput
   }
 
   export type MemberUncheckedCreateWithoutBookingsInput = {
@@ -45616,6 +48853,7 @@ export namespace Prisma {
     couponAssignments?: CouponAssignmentUncheckedCreateNestedManyWithoutMemberInput
     couponUsages?: CouponUsageUncheckedCreateNestedManyWithoutMemberInput
     loyaltyAchievements?: LoyaltyAchievementUncheckedCreateNestedManyWithoutMemberInput
+    sportStats?: UserSportStatUncheckedCreateNestedManyWithoutMemberInput
   }
 
   export type MemberCreateOrConnectWithoutBookingsInput = {
@@ -45634,6 +48872,8 @@ export namespace Prisma {
     membershipPlans?: MembershipPlanCreateNestedManyWithoutSportInput
     attendances?: AttendanceCreateNestedManyWithoutSportInput
     tournaments?: TournamentCreateNestedManyWithoutSportInput
+    sportStats?: UserSportStatCreateNestedManyWithoutSportInput
+    banners?: BannerCreateNestedManyWithoutTargetSportInput
   }
 
   export type SportUncheckedCreateWithoutBookingsInput = {
@@ -45647,6 +48887,8 @@ export namespace Prisma {
     membershipPlans?: MembershipPlanUncheckedCreateNestedManyWithoutSportInput
     attendances?: AttendanceUncheckedCreateNestedManyWithoutSportInput
     tournaments?: TournamentUncheckedCreateNestedManyWithoutSportInput
+    sportStats?: UserSportStatUncheckedCreateNestedManyWithoutSportInput
+    banners?: BannerUncheckedCreateNestedManyWithoutTargetSportInput
   }
 
   export type SportCreateOrConnectWithoutBookingsInput = {
@@ -45802,6 +49044,7 @@ export namespace Prisma {
     couponAssignments?: CouponAssignmentUpdateManyWithoutMemberNestedInput
     couponUsages?: CouponUsageUpdateManyWithoutMemberNestedInput
     loyaltyAchievements?: LoyaltyAchievementUpdateManyWithoutMemberNestedInput
+    sportStats?: UserSportStatUpdateManyWithoutMemberNestedInput
   }
 
   export type MemberUncheckedUpdateWithoutBookingsInput = {
@@ -45823,6 +49066,7 @@ export namespace Prisma {
     couponAssignments?: CouponAssignmentUncheckedUpdateManyWithoutMemberNestedInput
     couponUsages?: CouponUsageUncheckedUpdateManyWithoutMemberNestedInput
     loyaltyAchievements?: LoyaltyAchievementUncheckedUpdateManyWithoutMemberNestedInput
+    sportStats?: UserSportStatUncheckedUpdateManyWithoutMemberNestedInput
   }
 
   export type SportUpsertWithoutBookingsInput = {
@@ -45847,6 +49091,8 @@ export namespace Prisma {
     membershipPlans?: MembershipPlanUpdateManyWithoutSportNestedInput
     attendances?: AttendanceUpdateManyWithoutSportNestedInput
     tournaments?: TournamentUpdateManyWithoutSportNestedInput
+    sportStats?: UserSportStatUpdateManyWithoutSportNestedInput
+    banners?: BannerUpdateManyWithoutTargetSportNestedInput
   }
 
   export type SportUncheckedUpdateWithoutBookingsInput = {
@@ -45860,6 +49106,8 @@ export namespace Prisma {
     membershipPlans?: MembershipPlanUncheckedUpdateManyWithoutSportNestedInput
     attendances?: AttendanceUncheckedUpdateManyWithoutSportNestedInput
     tournaments?: TournamentUncheckedUpdateManyWithoutSportNestedInput
+    sportStats?: UserSportStatUncheckedUpdateManyWithoutSportNestedInput
+    banners?: BannerUncheckedUpdateManyWithoutTargetSportNestedInput
   }
 
   export type PaymentUpsertWithWhereUniqueWithoutBookingInput = {
@@ -46145,6 +49393,8 @@ export namespace Prisma {
     membershipPlans?: MembershipPlanCreateNestedManyWithoutSportInput
     attendances?: AttendanceCreateNestedManyWithoutSportInput
     bookings?: BookingCreateNestedManyWithoutSportInput
+    sportStats?: UserSportStatCreateNestedManyWithoutSportInput
+    banners?: BannerCreateNestedManyWithoutTargetSportInput
   }
 
   export type SportUncheckedCreateWithoutTournamentsInput = {
@@ -46158,6 +49408,8 @@ export namespace Prisma {
     membershipPlans?: MembershipPlanUncheckedCreateNestedManyWithoutSportInput
     attendances?: AttendanceUncheckedCreateNestedManyWithoutSportInput
     bookings?: BookingUncheckedCreateNestedManyWithoutSportInput
+    sportStats?: UserSportStatUncheckedCreateNestedManyWithoutSportInput
+    banners?: BannerUncheckedCreateNestedManyWithoutTargetSportInput
   }
 
   export type SportCreateOrConnectWithoutTournamentsInput = {
@@ -46222,6 +49474,8 @@ export namespace Prisma {
     membershipPlans?: MembershipPlanUpdateManyWithoutSportNestedInput
     attendances?: AttendanceUpdateManyWithoutSportNestedInput
     bookings?: BookingUpdateManyWithoutSportNestedInput
+    sportStats?: UserSportStatUpdateManyWithoutSportNestedInput
+    banners?: BannerUpdateManyWithoutTargetSportNestedInput
   }
 
   export type SportUncheckedUpdateWithoutTournamentsInput = {
@@ -46235,6 +49489,8 @@ export namespace Prisma {
     membershipPlans?: MembershipPlanUncheckedUpdateManyWithoutSportNestedInput
     attendances?: AttendanceUncheckedUpdateManyWithoutSportNestedInput
     bookings?: BookingUncheckedUpdateManyWithoutSportNestedInput
+    sportStats?: UserSportStatUncheckedUpdateManyWithoutSportNestedInput
+    banners?: BannerUncheckedUpdateManyWithoutTargetSportNestedInput
   }
 
   export type TournamentRegistrationUpsertWithWhereUniqueWithoutTournamentInput = {
@@ -46325,6 +49581,7 @@ export namespace Prisma {
     couponAssignments?: CouponAssignmentCreateNestedManyWithoutMemberInput
     couponUsages?: CouponUsageCreateNestedManyWithoutMemberInput
     loyaltyAchievements?: LoyaltyAchievementCreateNestedManyWithoutMemberInput
+    sportStats?: UserSportStatCreateNestedManyWithoutMemberInput
   }
 
   export type MemberUncheckedCreateWithoutTournamentRegistrationsInput = {
@@ -46346,6 +49603,7 @@ export namespace Prisma {
     couponAssignments?: CouponAssignmentUncheckedCreateNestedManyWithoutMemberInput
     couponUsages?: CouponUsageUncheckedCreateNestedManyWithoutMemberInput
     loyaltyAchievements?: LoyaltyAchievementUncheckedCreateNestedManyWithoutMemberInput
+    sportStats?: UserSportStatUncheckedCreateNestedManyWithoutMemberInput
   }
 
   export type MemberCreateOrConnectWithoutTournamentRegistrationsInput = {
@@ -46469,6 +49727,7 @@ export namespace Prisma {
     couponAssignments?: CouponAssignmentUpdateManyWithoutMemberNestedInput
     couponUsages?: CouponUsageUpdateManyWithoutMemberNestedInput
     loyaltyAchievements?: LoyaltyAchievementUpdateManyWithoutMemberNestedInput
+    sportStats?: UserSportStatUpdateManyWithoutMemberNestedInput
   }
 
   export type MemberUncheckedUpdateWithoutTournamentRegistrationsInput = {
@@ -46490,6 +49749,7 @@ export namespace Prisma {
     couponAssignments?: CouponAssignmentUncheckedUpdateManyWithoutMemberNestedInput
     couponUsages?: CouponUsageUncheckedUpdateManyWithoutMemberNestedInput
     loyaltyAchievements?: LoyaltyAchievementUncheckedUpdateManyWithoutMemberNestedInput
+    sportStats?: UserSportStatUncheckedUpdateManyWithoutMemberNestedInput
   }
 
   export type TournamentPlayerUpsertWithWhereUniqueWithoutRegistrationInput = {
@@ -46608,6 +49868,7 @@ export namespace Prisma {
     couponAssignments?: CouponAssignmentCreateNestedManyWithoutMemberInput
     couponUsages?: CouponUsageCreateNestedManyWithoutMemberInput
     loyaltyAchievements?: LoyaltyAchievementCreateNestedManyWithoutMemberInput
+    sportStats?: UserSportStatCreateNestedManyWithoutMemberInput
   }
 
   export type MemberUncheckedCreateWithoutWalletTransactionsInput = {
@@ -46629,6 +49890,7 @@ export namespace Prisma {
     couponAssignments?: CouponAssignmentUncheckedCreateNestedManyWithoutMemberInput
     couponUsages?: CouponUsageUncheckedCreateNestedManyWithoutMemberInput
     loyaltyAchievements?: LoyaltyAchievementUncheckedCreateNestedManyWithoutMemberInput
+    sportStats?: UserSportStatUncheckedCreateNestedManyWithoutMemberInput
   }
 
   export type MemberCreateOrConnectWithoutWalletTransactionsInput = {
@@ -46666,6 +49928,7 @@ export namespace Prisma {
     couponAssignments?: CouponAssignmentUpdateManyWithoutMemberNestedInput
     couponUsages?: CouponUsageUpdateManyWithoutMemberNestedInput
     loyaltyAchievements?: LoyaltyAchievementUpdateManyWithoutMemberNestedInput
+    sportStats?: UserSportStatUpdateManyWithoutMemberNestedInput
   }
 
   export type MemberUncheckedUpdateWithoutWalletTransactionsInput = {
@@ -46687,6 +49950,7 @@ export namespace Prisma {
     couponAssignments?: CouponAssignmentUncheckedUpdateManyWithoutMemberNestedInput
     couponUsages?: CouponUsageUncheckedUpdateManyWithoutMemberNestedInput
     loyaltyAchievements?: LoyaltyAchievementUncheckedUpdateManyWithoutMemberNestedInput
+    sportStats?: UserSportStatUncheckedUpdateManyWithoutMemberNestedInput
   }
 
   export type CouponUsageCreateWithoutCouponInput = {
@@ -46829,6 +50093,7 @@ export namespace Prisma {
     walletTransactions?: WalletTransactionCreateNestedManyWithoutMemberInput
     couponUsages?: CouponUsageCreateNestedManyWithoutMemberInput
     loyaltyAchievements?: LoyaltyAchievementCreateNestedManyWithoutMemberInput
+    sportStats?: UserSportStatCreateNestedManyWithoutMemberInput
   }
 
   export type MemberUncheckedCreateWithoutCouponAssignmentsInput = {
@@ -46850,6 +50115,7 @@ export namespace Prisma {
     walletTransactions?: WalletTransactionUncheckedCreateNestedManyWithoutMemberInput
     couponUsages?: CouponUsageUncheckedCreateNestedManyWithoutMemberInput
     loyaltyAchievements?: LoyaltyAchievementUncheckedCreateNestedManyWithoutMemberInput
+    sportStats?: UserSportStatUncheckedCreateNestedManyWithoutMemberInput
   }
 
   export type MemberCreateOrConnectWithoutCouponAssignmentsInput = {
@@ -46936,6 +50202,7 @@ export namespace Prisma {
     walletTransactions?: WalletTransactionUpdateManyWithoutMemberNestedInput
     couponUsages?: CouponUsageUpdateManyWithoutMemberNestedInput
     loyaltyAchievements?: LoyaltyAchievementUpdateManyWithoutMemberNestedInput
+    sportStats?: UserSportStatUpdateManyWithoutMemberNestedInput
   }
 
   export type MemberUncheckedUpdateWithoutCouponAssignmentsInput = {
@@ -46957,6 +50224,7 @@ export namespace Prisma {
     walletTransactions?: WalletTransactionUncheckedUpdateManyWithoutMemberNestedInput
     couponUsages?: CouponUsageUncheckedUpdateManyWithoutMemberNestedInput
     loyaltyAchievements?: LoyaltyAchievementUncheckedUpdateManyWithoutMemberNestedInput
+    sportStats?: UserSportStatUncheckedUpdateManyWithoutMemberNestedInput
   }
 
   export type CouponCreateWithoutUsagesInput = {
@@ -47021,6 +50289,7 @@ export namespace Prisma {
     walletTransactions?: WalletTransactionCreateNestedManyWithoutMemberInput
     couponAssignments?: CouponAssignmentCreateNestedManyWithoutMemberInput
     loyaltyAchievements?: LoyaltyAchievementCreateNestedManyWithoutMemberInput
+    sportStats?: UserSportStatCreateNestedManyWithoutMemberInput
   }
 
   export type MemberUncheckedCreateWithoutCouponUsagesInput = {
@@ -47042,6 +50311,7 @@ export namespace Prisma {
     walletTransactions?: WalletTransactionUncheckedCreateNestedManyWithoutMemberInput
     couponAssignments?: CouponAssignmentUncheckedCreateNestedManyWithoutMemberInput
     loyaltyAchievements?: LoyaltyAchievementUncheckedCreateNestedManyWithoutMemberInput
+    sportStats?: UserSportStatUncheckedCreateNestedManyWithoutMemberInput
   }
 
   export type MemberCreateOrConnectWithoutCouponUsagesInput = {
@@ -47175,6 +50445,7 @@ export namespace Prisma {
     walletTransactions?: WalletTransactionUpdateManyWithoutMemberNestedInput
     couponAssignments?: CouponAssignmentUpdateManyWithoutMemberNestedInput
     loyaltyAchievements?: LoyaltyAchievementUpdateManyWithoutMemberNestedInput
+    sportStats?: UserSportStatUpdateManyWithoutMemberNestedInput
   }
 
   export type MemberUncheckedUpdateWithoutCouponUsagesInput = {
@@ -47196,6 +50467,7 @@ export namespace Prisma {
     walletTransactions?: WalletTransactionUncheckedUpdateManyWithoutMemberNestedInput
     couponAssignments?: CouponAssignmentUncheckedUpdateManyWithoutMemberNestedInput
     loyaltyAchievements?: LoyaltyAchievementUncheckedUpdateManyWithoutMemberNestedInput
+    sportStats?: UserSportStatUncheckedUpdateManyWithoutMemberNestedInput
   }
 
   export type BookingUpsertWithoutCouponUsagesInput = {
@@ -47336,6 +50608,7 @@ export namespace Prisma {
     walletTransactions?: WalletTransactionCreateNestedManyWithoutMemberInput
     couponAssignments?: CouponAssignmentCreateNestedManyWithoutMemberInput
     couponUsages?: CouponUsageCreateNestedManyWithoutMemberInput
+    sportStats?: UserSportStatCreateNestedManyWithoutMemberInput
   }
 
   export type MemberUncheckedCreateWithoutLoyaltyAchievementsInput = {
@@ -47357,6 +50630,7 @@ export namespace Prisma {
     walletTransactions?: WalletTransactionUncheckedCreateNestedManyWithoutMemberInput
     couponAssignments?: CouponAssignmentUncheckedCreateNestedManyWithoutMemberInput
     couponUsages?: CouponUsageUncheckedCreateNestedManyWithoutMemberInput
+    sportStats?: UserSportStatUncheckedCreateNestedManyWithoutMemberInput
   }
 
   export type MemberCreateOrConnectWithoutLoyaltyAchievementsInput = {
@@ -47429,6 +50703,7 @@ export namespace Prisma {
     walletTransactions?: WalletTransactionUpdateManyWithoutMemberNestedInput
     couponAssignments?: CouponAssignmentUpdateManyWithoutMemberNestedInput
     couponUsages?: CouponUsageUpdateManyWithoutMemberNestedInput
+    sportStats?: UserSportStatUpdateManyWithoutMemberNestedInput
   }
 
   export type MemberUncheckedUpdateWithoutLoyaltyAchievementsInput = {
@@ -47450,6 +50725,263 @@ export namespace Prisma {
     walletTransactions?: WalletTransactionUncheckedUpdateManyWithoutMemberNestedInput
     couponAssignments?: CouponAssignmentUncheckedUpdateManyWithoutMemberNestedInput
     couponUsages?: CouponUsageUncheckedUpdateManyWithoutMemberNestedInput
+    sportStats?: UserSportStatUncheckedUpdateManyWithoutMemberNestedInput
+  }
+
+  export type SportCreateWithoutBannersInput = {
+    id?: string
+    name: string
+    description?: string | null
+    rewardPointsPerCheckin?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    turfs?: TurfSportCreateNestedManyWithoutSportInput
+    membershipPlans?: MembershipPlanCreateNestedManyWithoutSportInput
+    attendances?: AttendanceCreateNestedManyWithoutSportInput
+    bookings?: BookingCreateNestedManyWithoutSportInput
+    tournaments?: TournamentCreateNestedManyWithoutSportInput
+    sportStats?: UserSportStatCreateNestedManyWithoutSportInput
+  }
+
+  export type SportUncheckedCreateWithoutBannersInput = {
+    id?: string
+    name: string
+    description?: string | null
+    rewardPointsPerCheckin?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    turfs?: TurfSportUncheckedCreateNestedManyWithoutSportInput
+    membershipPlans?: MembershipPlanUncheckedCreateNestedManyWithoutSportInput
+    attendances?: AttendanceUncheckedCreateNestedManyWithoutSportInput
+    bookings?: BookingUncheckedCreateNestedManyWithoutSportInput
+    tournaments?: TournamentUncheckedCreateNestedManyWithoutSportInput
+    sportStats?: UserSportStatUncheckedCreateNestedManyWithoutSportInput
+  }
+
+  export type SportCreateOrConnectWithoutBannersInput = {
+    where: SportWhereUniqueInput
+    create: XOR<SportCreateWithoutBannersInput, SportUncheckedCreateWithoutBannersInput>
+  }
+
+  export type SportUpsertWithoutBannersInput = {
+    update: XOR<SportUpdateWithoutBannersInput, SportUncheckedUpdateWithoutBannersInput>
+    create: XOR<SportCreateWithoutBannersInput, SportUncheckedCreateWithoutBannersInput>
+    where?: SportWhereInput
+  }
+
+  export type SportUpdateToOneWithWhereWithoutBannersInput = {
+    where?: SportWhereInput
+    data: XOR<SportUpdateWithoutBannersInput, SportUncheckedUpdateWithoutBannersInput>
+  }
+
+  export type SportUpdateWithoutBannersInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    rewardPointsPerCheckin?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    turfs?: TurfSportUpdateManyWithoutSportNestedInput
+    membershipPlans?: MembershipPlanUpdateManyWithoutSportNestedInput
+    attendances?: AttendanceUpdateManyWithoutSportNestedInput
+    bookings?: BookingUpdateManyWithoutSportNestedInput
+    tournaments?: TournamentUpdateManyWithoutSportNestedInput
+    sportStats?: UserSportStatUpdateManyWithoutSportNestedInput
+  }
+
+  export type SportUncheckedUpdateWithoutBannersInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    rewardPointsPerCheckin?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    turfs?: TurfSportUncheckedUpdateManyWithoutSportNestedInput
+    membershipPlans?: MembershipPlanUncheckedUpdateManyWithoutSportNestedInput
+    attendances?: AttendanceUncheckedUpdateManyWithoutSportNestedInput
+    bookings?: BookingUncheckedUpdateManyWithoutSportNestedInput
+    tournaments?: TournamentUncheckedUpdateManyWithoutSportNestedInput
+    sportStats?: UserSportStatUncheckedUpdateManyWithoutSportNestedInput
+  }
+
+  export type MemberCreateWithoutSportStatsInput = {
+    id?: string
+    mobile: string
+    name: string
+    email?: string | null
+    dateOfBirth?: Date | string | null
+    loyaltyPoints?: number
+    walletBalance?: number
+    joinDate?: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    memberships?: MemberMembershipCreateNestedManyWithoutMemberInput
+    attendances?: AttendanceCreateNestedManyWithoutMemberInput
+    bookings?: BookingCreateNestedManyWithoutMemberInput
+    loyaltyHistory?: LoyaltyHistoryCreateNestedManyWithoutMemberInput
+    tournamentRegistrations?: TournamentRegistrationCreateNestedManyWithoutRegisteredByInput
+    walletTransactions?: WalletTransactionCreateNestedManyWithoutMemberInput
+    couponAssignments?: CouponAssignmentCreateNestedManyWithoutMemberInput
+    couponUsages?: CouponUsageCreateNestedManyWithoutMemberInput
+    loyaltyAchievements?: LoyaltyAchievementCreateNestedManyWithoutMemberInput
+  }
+
+  export type MemberUncheckedCreateWithoutSportStatsInput = {
+    id?: string
+    mobile: string
+    name: string
+    email?: string | null
+    dateOfBirth?: Date | string | null
+    loyaltyPoints?: number
+    walletBalance?: number
+    joinDate?: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    memberships?: MemberMembershipUncheckedCreateNestedManyWithoutMemberInput
+    attendances?: AttendanceUncheckedCreateNestedManyWithoutMemberInput
+    bookings?: BookingUncheckedCreateNestedManyWithoutMemberInput
+    loyaltyHistory?: LoyaltyHistoryUncheckedCreateNestedManyWithoutMemberInput
+    tournamentRegistrations?: TournamentRegistrationUncheckedCreateNestedManyWithoutRegisteredByInput
+    walletTransactions?: WalletTransactionUncheckedCreateNestedManyWithoutMemberInput
+    couponAssignments?: CouponAssignmentUncheckedCreateNestedManyWithoutMemberInput
+    couponUsages?: CouponUsageUncheckedCreateNestedManyWithoutMemberInput
+    loyaltyAchievements?: LoyaltyAchievementUncheckedCreateNestedManyWithoutMemberInput
+  }
+
+  export type MemberCreateOrConnectWithoutSportStatsInput = {
+    where: MemberWhereUniqueInput
+    create: XOR<MemberCreateWithoutSportStatsInput, MemberUncheckedCreateWithoutSportStatsInput>
+  }
+
+  export type SportCreateWithoutSportStatsInput = {
+    id?: string
+    name: string
+    description?: string | null
+    rewardPointsPerCheckin?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    turfs?: TurfSportCreateNestedManyWithoutSportInput
+    membershipPlans?: MembershipPlanCreateNestedManyWithoutSportInput
+    attendances?: AttendanceCreateNestedManyWithoutSportInput
+    bookings?: BookingCreateNestedManyWithoutSportInput
+    tournaments?: TournamentCreateNestedManyWithoutSportInput
+    banners?: BannerCreateNestedManyWithoutTargetSportInput
+  }
+
+  export type SportUncheckedCreateWithoutSportStatsInput = {
+    id?: string
+    name: string
+    description?: string | null
+    rewardPointsPerCheckin?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    turfs?: TurfSportUncheckedCreateNestedManyWithoutSportInput
+    membershipPlans?: MembershipPlanUncheckedCreateNestedManyWithoutSportInput
+    attendances?: AttendanceUncheckedCreateNestedManyWithoutSportInput
+    bookings?: BookingUncheckedCreateNestedManyWithoutSportInput
+    tournaments?: TournamentUncheckedCreateNestedManyWithoutSportInput
+    banners?: BannerUncheckedCreateNestedManyWithoutTargetSportInput
+  }
+
+  export type SportCreateOrConnectWithoutSportStatsInput = {
+    where: SportWhereUniqueInput
+    create: XOR<SportCreateWithoutSportStatsInput, SportUncheckedCreateWithoutSportStatsInput>
+  }
+
+  export type MemberUpsertWithoutSportStatsInput = {
+    update: XOR<MemberUpdateWithoutSportStatsInput, MemberUncheckedUpdateWithoutSportStatsInput>
+    create: XOR<MemberCreateWithoutSportStatsInput, MemberUncheckedCreateWithoutSportStatsInput>
+    where?: MemberWhereInput
+  }
+
+  export type MemberUpdateToOneWithWhereWithoutSportStatsInput = {
+    where?: MemberWhereInput
+    data: XOR<MemberUpdateWithoutSportStatsInput, MemberUncheckedUpdateWithoutSportStatsInput>
+  }
+
+  export type MemberUpdateWithoutSportStatsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    mobile?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    loyaltyPoints?: IntFieldUpdateOperationsInput | number
+    walletBalance?: FloatFieldUpdateOperationsInput | number
+    joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    memberships?: MemberMembershipUpdateManyWithoutMemberNestedInput
+    attendances?: AttendanceUpdateManyWithoutMemberNestedInput
+    bookings?: BookingUpdateManyWithoutMemberNestedInput
+    loyaltyHistory?: LoyaltyHistoryUpdateManyWithoutMemberNestedInput
+    tournamentRegistrations?: TournamentRegistrationUpdateManyWithoutRegisteredByNestedInput
+    walletTransactions?: WalletTransactionUpdateManyWithoutMemberNestedInput
+    couponAssignments?: CouponAssignmentUpdateManyWithoutMemberNestedInput
+    couponUsages?: CouponUsageUpdateManyWithoutMemberNestedInput
+    loyaltyAchievements?: LoyaltyAchievementUpdateManyWithoutMemberNestedInput
+  }
+
+  export type MemberUncheckedUpdateWithoutSportStatsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    mobile?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    loyaltyPoints?: IntFieldUpdateOperationsInput | number
+    walletBalance?: FloatFieldUpdateOperationsInput | number
+    joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    memberships?: MemberMembershipUncheckedUpdateManyWithoutMemberNestedInput
+    attendances?: AttendanceUncheckedUpdateManyWithoutMemberNestedInput
+    bookings?: BookingUncheckedUpdateManyWithoutMemberNestedInput
+    loyaltyHistory?: LoyaltyHistoryUncheckedUpdateManyWithoutMemberNestedInput
+    tournamentRegistrations?: TournamentRegistrationUncheckedUpdateManyWithoutRegisteredByNestedInput
+    walletTransactions?: WalletTransactionUncheckedUpdateManyWithoutMemberNestedInput
+    couponAssignments?: CouponAssignmentUncheckedUpdateManyWithoutMemberNestedInput
+    couponUsages?: CouponUsageUncheckedUpdateManyWithoutMemberNestedInput
+    loyaltyAchievements?: LoyaltyAchievementUncheckedUpdateManyWithoutMemberNestedInput
+  }
+
+  export type SportUpsertWithoutSportStatsInput = {
+    update: XOR<SportUpdateWithoutSportStatsInput, SportUncheckedUpdateWithoutSportStatsInput>
+    create: XOR<SportCreateWithoutSportStatsInput, SportUncheckedCreateWithoutSportStatsInput>
+    where?: SportWhereInput
+  }
+
+  export type SportUpdateToOneWithWhereWithoutSportStatsInput = {
+    where?: SportWhereInput
+    data: XOR<SportUpdateWithoutSportStatsInput, SportUncheckedUpdateWithoutSportStatsInput>
+  }
+
+  export type SportUpdateWithoutSportStatsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    rewardPointsPerCheckin?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    turfs?: TurfSportUpdateManyWithoutSportNestedInput
+    membershipPlans?: MembershipPlanUpdateManyWithoutSportNestedInput
+    attendances?: AttendanceUpdateManyWithoutSportNestedInput
+    bookings?: BookingUpdateManyWithoutSportNestedInput
+    tournaments?: TournamentUpdateManyWithoutSportNestedInput
+    banners?: BannerUpdateManyWithoutTargetSportNestedInput
+  }
+
+  export type SportUncheckedUpdateWithoutSportStatsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    rewardPointsPerCheckin?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    turfs?: TurfSportUncheckedUpdateManyWithoutSportNestedInput
+    membershipPlans?: MembershipPlanUncheckedUpdateManyWithoutSportNestedInput
+    attendances?: AttendanceUncheckedUpdateManyWithoutSportNestedInput
+    bookings?: BookingUncheckedUpdateManyWithoutSportNestedInput
+    tournaments?: TournamentUncheckedUpdateManyWithoutSportNestedInput
+    banners?: BannerUncheckedUpdateManyWithoutTargetSportNestedInput
   }
 
   export type MemberMembershipCreateManyMemberInput = {
@@ -47537,6 +51069,14 @@ export namespace Prisma {
     id?: string
     triggerId: string
     achievedAt?: Date | string
+  }
+
+  export type UserSportStatCreateManyMemberInput = {
+    id?: string
+    sportId: string
+    bookingCount?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type MemberMembershipUpdateWithoutMemberInput = {
@@ -47808,6 +51348,30 @@ export namespace Prisma {
     achievedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type UserSportStatUpdateWithoutMemberInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    bookingCount?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    sport?: SportUpdateOneRequiredWithoutSportStatsNestedInput
+  }
+
+  export type UserSportStatUncheckedUpdateWithoutMemberInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    sportId?: StringFieldUpdateOperationsInput | string
+    bookingCount?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserSportStatUncheckedUpdateManyWithoutMemberInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    sportId?: StringFieldUpdateOperationsInput | string
+    bookingCount?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type TurfSportCreateManySportInput = {
     turfId: string
   }
@@ -47875,6 +51439,22 @@ export namespace Prisma {
     cashResponsiblePerson?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+  }
+
+  export type UserSportStatCreateManySportInput = {
+    id?: string
+    memberId: string
+    bookingCount?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type BannerCreateManyTargetSportInput = {
+    id?: string
+    imageUrl: string
+    title?: string | null
+    isActive?: boolean
+    createdAt?: Date | string
   }
 
   export type TurfSportUpdateWithoutSportInput = {
@@ -48094,6 +51674,54 @@ export namespace Prisma {
     cashResponsiblePerson?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserSportStatUpdateWithoutSportInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    bookingCount?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    member?: MemberUpdateOneRequiredWithoutSportStatsNestedInput
+  }
+
+  export type UserSportStatUncheckedUpdateWithoutSportInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    memberId?: StringFieldUpdateOperationsInput | string
+    bookingCount?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserSportStatUncheckedUpdateManyWithoutSportInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    memberId?: StringFieldUpdateOperationsInput | string
+    bookingCount?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BannerUpdateWithoutTargetSportInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    imageUrl?: StringFieldUpdateOperationsInput | string
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BannerUncheckedUpdateWithoutTargetSportInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    imageUrl?: StringFieldUpdateOperationsInput | string
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BannerUncheckedUpdateManyWithoutTargetSportInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    imageUrl?: StringFieldUpdateOperationsInput | string
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type TurfCreateManyParentTurfInput = {

@@ -195,6 +195,24 @@ export async function GET(request: Request) {
       take: 5
     });
 
+    // 10. Fetch Banners based on user's top sport
+    const topSportStat = await prisma.userSportStat.findFirst({
+      where: { memberId: targetMemberId, bookingCount: { gt: 0 } },
+      orderBy: { bookingCount: 'desc' }
+    });
+
+    const banners = await prisma.banner.findMany({
+      where: {
+        isActive: true,
+        OR: [
+          { targetSportId: null },
+          ...(topSportStat ? [{ targetSportId: topSportStat.sportId }] : [])
+        ]
+      },
+      orderBy: { createdAt: 'desc' },
+      take: 5
+    });
+
     // Get global settings
     const globalSettings = await prisma.setting.findMany();
     const settingsMap = globalSettings.reduce((acc, s) => {
@@ -219,6 +237,7 @@ export async function GET(request: Request) {
       recentAttendance,
       registeredTournaments,
       upcomingTournaments,
+      banners,
       cancellationLimitHours,
       allowRescheduling,
       allowCancellation,

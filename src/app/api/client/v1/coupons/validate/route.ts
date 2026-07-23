@@ -19,7 +19,6 @@ export async function POST(request: Request) {
     const coupon = await prisma.coupon.findUnique({
       where: { code: code.toUpperCase() },
       include: {
-        usages: { select: { id: true, memberId: true } },
         assignments: { select: { memberId: true } }
       }
     });
@@ -34,13 +33,16 @@ export async function POST(request: Request) {
     }
 
     // Global limit check
-    if (coupon.maxUses !== null && coupon.usages.length >= coupon.maxUses) {
-      return jsonResponse({ error: 'This coupon has reached its maximum usage limit.' }, { status: 400 });
+    if (coupon.maxUses !== null) {
+      const globalUsages = await prisma.couponUsage.count({ where: { couponId: coupon.id } });
+      if (globalUsages >= coupon.maxUses) {
+        return jsonResponse({ error: 'This coupon has reached its maximum usage limit.' }, { status: 400 });
+      }
     }
 
     // Per-user limit check
     if (coupon.maxUsesPerUser !== null) {
-      const userUsages = coupon.usages.filter(u => u.memberId === member.id).length;
+      const userUsages = await prisma.couponUsage.count({ where: { couponId: coupon.id, memberId: member.id } });
       if (userUsages >= coupon.maxUsesPerUser) {
         return jsonResponse({ error: `You can only use this coupon ${coupon.maxUsesPerUser} time(s).` }, { status: 400 });
       }

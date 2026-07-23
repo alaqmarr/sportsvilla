@@ -153,6 +153,12 @@ export async function POST(request: Request, context: { params: Promise<{ id: st
       await tx.couponUsage.deleteMany({
         where: { bookingId: booking.id }
       });
+
+      // Update UserSportStat
+      await tx.userSportStat.updateMany({
+        where: { memberId: booking.memberId, sportId: booking.sportId },
+        data: { bookingCount: { decrement: 1 } }
+      });
     });
 
     await bumpSyncTimestamp('booking_cancel');

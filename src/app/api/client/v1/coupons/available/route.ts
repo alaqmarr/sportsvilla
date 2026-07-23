@@ -19,7 +19,6 @@ export async function GET(request: Request) {
         ]
       },
       include: {
-        usages: { select: { memberId: true } },
         assignments: { select: { memberId: true } }
       }
     });
@@ -42,13 +41,16 @@ export async function GET(request: Request) {
       if (!isVisible) continue;
 
       // 2. Global limit check
-      if (coupon.maxUses !== null && coupon.usages.length >= coupon.maxUses) {
-        continue;
+      if (coupon.maxUses !== null) {
+        const globalUsages = await prisma.couponUsage.count({ where: { couponId: coupon.id } });
+        if (globalUsages >= coupon.maxUses) {
+          continue;
+        }
       }
 
       // 3. Per-user limit check
       if (coupon.maxUsesPerUser !== null) {
-        const userUsages = coupon.usages.filter(u => u.memberId === member.id).length;
+        const userUsages = await prisma.couponUsage.count({ where: { couponId: coupon.id, memberId: member.id } });
         if (userUsages >= coupon.maxUsesPerUser) {
           continue;
         }

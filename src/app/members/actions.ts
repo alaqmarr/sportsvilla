@@ -192,3 +192,30 @@ export async function deleteMemberMembership(id: string) {
   await bumpSyncTimestamp('member');
   revalidatePath("/", "layout");
 }
+
+export async function resetWallet(id: string) {
+  const result = await prisma.$transaction(async (tx) => {
+    const member = await tx.member.findUnique({ where: { id }});
+    if (!member) throw new Error("Member not found");
+    
+    if (member.walletBalance === 0) return member;
+    
+    const updated = await tx.member.update({
+      where: { id },
+      data: { walletBalance: 0 }
+    });
+    
+    await tx.walletTransaction.create({
+      data: {
+        memberId: id,
+        amount: -member.walletBalance,
+        type: "DEBIT",
+        description: "Wallet reset by admin",
+      }
+    });
+    return updated;
+  });
+  await bumpSyncTimestamp('member');
+  revalidatePath("/", "layout");
+  return result;
+}

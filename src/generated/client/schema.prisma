@@ -41,6 +41,7 @@ model Member {
   couponAssignments       CouponAssignment[]
   couponUsages            CouponUsage[]
   loyaltyAchievements     LoyaltyAchievement[]
+  sportStats              UserSportStat[]
   createdAt               DateTime                 @default(now())
   updatedAt               DateTime                 @updatedAt
 
@@ -72,6 +73,8 @@ model Sport {
   attendances            Attendance[]
   bookings               Booking[]
   tournaments            Tournament[]
+  sportStats             UserSportStat[]
+  banners                Banner[]
   createdAt              DateTime         @default(now())
   updatedAt              DateTime         @updatedAt
 
@@ -356,7 +359,7 @@ model CouponUsage {
 
   coupon  Coupon  @relation(fields: [couponId], references: [id])
   member  Member  @relation(fields: [memberId], references: [id], onDelete: Cascade)
-  booking Booking @relation(fields: [bookingId], references: [id])
+  booking Booking @relation(fields: [bookingId], references: [id], onDelete: Cascade)
 }
 
 model LoyaltyTrigger {
@@ -426,4 +429,29 @@ model AuditLog {
 
   @@index([entity, entityId])
   @@index([createdAt])
+}
+
+model Banner {
+  id            String   @id @default(cuid())
+  imageUrl      String
+  title         String?
+  targetSportId String?
+  isActive      Boolean  @default(true)
+  createdAt     DateTime @default(now())
+
+  targetSport Sport? @relation(fields: [targetSportId], references: [id], onDelete: SetNull)
+}
+
+model UserSportStat {
+  id           String   @id @default(cuid())
+  memberId     String
+  sportId      String
+  bookingCount Int      @default(0)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  member Member @relation(fields: [memberId], references: [id], onDelete: Cascade)
+  sport  Sport  @relation(fields: [sportId], references: [id], onDelete: Cascade)
+
+  @@unique([memberId, sportId])
 }

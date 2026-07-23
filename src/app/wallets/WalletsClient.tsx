@@ -41,9 +41,10 @@ export default function WalletsClient({ initialMembers }: { initialMembers: any[
       
       // Update local state for immediate feedback
       const numAmount = Number(amount);
+      const amountInPaise = numAmount * 100;
       const newTransaction = {
         id: Math.random().toString(),
-        amount: numAmount,
+        amount: amountInPaise,
         type,
         description,
         createdAt: new Date().toISOString()
@@ -51,7 +52,7 @@ export default function WalletsClient({ initialMembers }: { initialMembers: any[
       
       setMembers(prev => prev.map(m => {
         if (m.id === selectedMember.id) {
-          const newBalance = type === "CREDIT" ? m.walletBalance + numAmount : m.walletBalance - numAmount;
+          const newBalance = type === "CREDIT" ? m.walletBalance + amountInPaise : m.walletBalance - amountInPaise;
           return { 
             ...m, 
             walletBalance: newBalance,
@@ -63,7 +64,7 @@ export default function WalletsClient({ initialMembers }: { initialMembers: any[
       
       setSelectedMember((prev: any) => ({
         ...prev,
-        walletBalance: type === "CREDIT" ? prev.walletBalance + numAmount : prev.walletBalance - numAmount,
+        walletBalance: type === "CREDIT" ? prev.walletBalance + amountInPaise : prev.walletBalance - amountInPaise,
         walletTransactions: [newTransaction, ...prev.walletTransactions]
       }));
 
@@ -119,7 +120,7 @@ export default function WalletsClient({ initialMembers }: { initialMembers: any[
                   <div className="text-xs text-gray-400">{member.mobile}</div>
                 </div>
                 <div className="text-right">
-                  <div className="text-sm font-bold text-white">₹{member.walletBalance.toFixed(2)}</div>
+                  <div className="text-sm font-bold text-white">₹{(member.walletBalance / 100).toFixed(2)}</div>
                 </div>
               </button>
             ))}
@@ -142,7 +143,7 @@ export default function WalletsClient({ initialMembers }: { initialMembers: any[
                 </div>
                 <div className="text-right">
                   <div className="text-xs text-gray-400 uppercase tracking-wider mb-1">Current Balance</div>
-                  <div className="text-3xl font-black text-green-400">₹{selectedMember.walletBalance.toFixed(2)}</div>
+                  <div className="text-3xl font-black text-green-400">₹{(selectedMember.walletBalance / 100).toFixed(2)}</div>
                 </div>
               </div>
 
@@ -223,7 +224,7 @@ export default function WalletsClient({ initialMembers }: { initialMembers: any[
                               <div className="text-xs text-gray-500">{new Date(tx.createdAt).toLocaleString('en-IN')}</div>
                             </div>
                             <div className={`font-bold ${tx.type === "CREDIT" ? "text-green-400" : "text-red-400"}`}>
-                              {tx.type === "CREDIT" ? "+" : "-"}₹{tx.amount.toFixed(2)}
+                              {tx.type === "CREDIT" ? "+" : "-"}₹{(tx.amount / 100).toFixed(2)}
                             </div>
                           </div>
                         ))}

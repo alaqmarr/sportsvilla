@@ -11,7 +11,9 @@ export async function addWalletTransaction(data: { memberId: string; amount: num
   const member = await prisma.member.findUnique({ where: { id: data.memberId } });
   if (!member) throw new Error("Member not found");
 
-  if (data.type === "DEBIT" && member.walletBalance < data.amount) {
+  const amountInPaise = data.amount * 100;
+
+  if (data.type === "DEBIT" && member.walletBalance < amountInPaise) {
     throw new Error("Insufficient wallet balance");
   }
 
@@ -21,7 +23,7 @@ export async function addWalletTransaction(data: { memberId: string; amount: num
     await tx.walletTransaction.create({
       data: {
         memberId: data.memberId,
-        amount: data.amount,
+        amount: amountInPaise,
         type: data.type,
         description: data.description,
       }
@@ -32,7 +34,7 @@ export async function addWalletTransaction(data: { memberId: string; amount: num
       where: { id: data.memberId },
       data: {
         walletBalance: {
-          [data.type === "CREDIT" ? "increment" : "decrement"]: data.amount
+          [data.type === "CREDIT" ? "increment" : "decrement"]: amountInPaise
         }
       }
     });

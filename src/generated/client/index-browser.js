@@ -424,6 +424,24 @@ exports.Prisma.AuditLogScalarFieldEnum = {
   createdAt: 'createdAt'
 };
 
+exports.Prisma.BannerScalarFieldEnum = {
+  id: 'id',
+  imageUrl: 'imageUrl',
+  title: 'title',
+  targetSportId: 'targetSportId',
+  isActive: 'isActive',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.UserSportStatScalarFieldEnum = {
+  id: 'id',
+  memberId: 'memberId',
+  sportId: 'sportId',
+  bookingCount: 'bookingCount',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -463,7 +481,9 @@ exports.Prisma.ModelName = {
   AppAnnouncement: 'AppAnnouncement',
   AppVersion: 'AppVersion',
   LastUpdate: 'LastUpdate',
-  AuditLog: 'AuditLog'
+  AuditLog: 'AuditLog',
+  Banner: 'Banner',
+  UserSportStat: 'UserSportStat'
 };
 
 /**

@@ -79,6 +79,7 @@ export function Navigation({ children }: { children: React.ReactNode }) {
         { href: "/wallets", label: "Member Wallets", icon: <FiCreditCard /> },
         { href: "/plans", label: "Memberships", icon: <FiLayers /> },
         { href: "/coupons", label: "Coupons", icon: <FiTag /> },
+        { href: "/banners", label: "Homepage Banners", icon: <FiTag /> },
         { href: "/loyalty", label: "Loyalty Leaderboard", icon: <FiAward /> },
         { href: "/sports", label: "Sports", icon: <FiActivity /> },
         { href: "/turfs", label: "Grounds & Turfs", icon: <FiMapPin /> },

@@ -1,13 +1,13 @@
 "use client";
 import { formatIST, todayIST } from "../../lib/dateUtils";
 import { useState, useRef, useMemo } from "react";
-import { createMember, updateMember, deleteMember, assignPlan, createFamily, updateMemberMembership, deleteMemberMembership } from "./actions";
+import { createMember, updateMember, deleteMember, assignPlan, createFamily, updateMemberMembership, deleteMemberMembership, resetWallet } from "./actions";
 import { useAlert } from "@/components/AlertProvider";
 
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import QRCodeLib from "qrcode";
-import { FiTrash2, FiEdit2, FiPlus, FiX, FiDownload, FiImage, FiMessageCircle, FiUserCheck, FiUsers, FiFileText } from "react-icons/fi";
+import { FiTrash2, FiEdit2, FiPlus, FiX, FiDownload, FiImage, FiMessageCircle, FiUserCheck, FiUsers, FiFileText, FiRefreshCcw } from "react-icons/fi";
 
 export default function MembersClient({ initialMembers, plans }: { initialMembers: any[], plans: any[] }) {
   const { showAlert } = useAlert();
@@ -80,6 +80,18 @@ export default function MembersClient({ initialMembers, plans }: { initialMember
     a.click();
     window.URL.revokeObjectURL(url);
   };
+
+  async function handleResetWallet(id: string) {
+    if (!confirm("Are you sure you want to reset this user's wallet balance to ₹0?")) return;
+    try {
+      await resetWallet(id);
+      showAlert("Success", "Wallet balance reset to 0.", "success");
+      const updatedMembers = members.map(m => m.id === id ? { ...m, walletBalance: 0 } : m);
+      setMembers(updatedMembers);
+    } catch (e: any) {
+      showAlert("Error", e.message, "error");
+    }
+  }
 
   function openCreateModal() {
     setEditingId(""); setName(""); setMobile(""); setEmail("");
@@ -352,7 +364,7 @@ export default function MembersClient({ initialMembers, plans }: { initialMember
                           <div>
                             <div className="font-semibold text-white">{member.name}</div>
                             <div className="text-xs text-gray-500 mt-0.5">ID: {member.id} • Joined {formatIST(new Date(member.joinDate), 'MMM d, yyyy')}</div>
-                            <div className="text-xs text-orange-400 mt-0.5 font-bold">{member.loyaltyPoints} Loyalty Pts</div>
+                            <div className="text-xs text-orange-400 mt-0.5 font-bold">{member.loyaltyPoints} Loyalty Pts • Wallet: ₹{(member.walletBalance || 0) / 100}</div>
                           </div>
                         </div>
                       </td>
@@ -382,8 +394,9 @@ export default function MembersClient({ initialMembers, plans }: { initialMember
                       <td className="px-6 py-5 text-sm border-b border-[#2a2d3e]">
                         <div className="flex gap-2 justify-end">
                           <button onClick={() => openIdCardModal(member)} className="border border-[#2a2d3e] hover:bg-orange-500/10 hover:text-orange-400 hover:border-orange-500/30 text-gray-400 rounded-lg px-3 py-1.5 text-xs font-semibold transition-colors cursor-pointer bg-transparent">ID CARD</button>
-                          <button onClick={() => openEditModal(member)} className="border border-[#2a2d3e] hover:bg-[#1c1f2e] text-gray-400 rounded-lg p-1.5 transition-colors cursor-pointer bg-transparent"><FiEdit2 /></button>
-                          <button onClick={() => handleDelete(member.id)} className="border border-[#2a2d3e] hover:bg-red-500/10 text-red-400 rounded-lg p-1.5 transition-colors cursor-pointer bg-transparent"><FiTrash2 /></button>
+                          <button onClick={() => handleResetWallet(member.id)} title="Reset Wallet" className="border border-[#2a2d3e] hover:bg-yellow-500/10 text-yellow-400 rounded-lg p-1.5 transition-colors cursor-pointer bg-transparent"><FiRefreshCcw /></button>
+                          <button onClick={() => openEditModal(member)} title="Edit Member" className="border border-[#2a2d3e] hover:bg-[#1c1f2e] text-gray-400 rounded-lg p-1.5 transition-colors cursor-pointer bg-transparent"><FiEdit2 /></button>
+                          <button onClick={() => handleDelete(member.id)} title="Delete Member" className="border border-[#2a2d3e] hover:bg-red-500/10 text-red-400 rounded-lg p-1.5 transition-colors cursor-pointer bg-transparent"><FiTrash2 /></button>
                         </div>
                       </td>
                     </tr>
