@@ -31,7 +31,7 @@ export default function BannersClient({ initialBanners, sports }: { initialBanne
         imageUrl: data.publicUrl,
         title,
         targetSportId: targetSportId || undefined
-      });
+      }) as any;
 
       // Let's attach targetSport if available for instant UI update
       if (targetSportId) {
