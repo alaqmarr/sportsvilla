@@ -3,10 +3,10 @@
 import { prisma } from "@/lib/prisma";
 import { subDays, startOfDay, endOfDay } from "date-fns";
 import { formatInTimeZone } from "date-fns-tz";
+import { getISTDateRange, todayIST } from "@/lib/dateUtils";
 
 export async function fetchRevenueData() {
-  const endDate = endOfDay(new Date());
-  const startDate = startOfDay(subDays(new Date(), 29)); // Last 30 days
+  const { start: startDate, end: endDate } = getISTDateRange(29); // Last 30 days including today
 
   const payments = await prisma.payment.findMany({
     where: {
@@ -31,7 +31,7 @@ export async function fetchRevenueData() {
   const dailyData: Record<string, { date: string; cash: number; online: number; wallet: number }> = {};
   
   for (let i = 29; i >= 0; i--) {
-    const d = subDays(new Date(), i);
+    const d = new Date(endDate.getTime() - i * 24 * 60 * 60 * 1000);
     const dateStr = formatInTimeZone(d, 'Asia/Kolkata', 'MMM dd');
     dailyData[dateStr] = { date: dateStr, cash: 0, online: 0, wallet: 0 };
   }

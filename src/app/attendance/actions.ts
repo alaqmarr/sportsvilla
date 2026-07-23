@@ -2,6 +2,7 @@
 import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 import { bumpSyncTimestamp } from '@/lib/sync';
+import { getISTDateBounds } from "@/lib/dateUtils";
 
 export async function fetchMembers(identifier: string) {
   const isMobile = /^\d{10}$/.test(identifier);
@@ -71,10 +72,7 @@ export async function fetchMembers(identifier: string) {
 
 export async function markAttendance(data: { memberId: string; sportId: string; membershipPlanId: string; notes?: string }) {
   // 1. Check slots for today for this specific plan
-  const todayStart = new Date();
-  todayStart.setHours(0,0,0,0);
-  const todayEnd = new Date();
-  todayEnd.setHours(23,59,59,999);
+  const { start: todayStart, end: todayEnd } = getISTDateBounds();
 
   const plan = await prisma.membershipPlan.findUnique({ where: { id: data.membershipPlanId }});
   if (!plan) throw new Error("Plan not found");

@@ -147,8 +147,8 @@ export async function POST(request: Request) {
       }
     }
 
-    // Fetch latest member wallet balance for target member
-    const memberData = await prisma.member.findUnique({ where: { id: targetMemberId } });
+    // Fetch latest member wallet balance for logged-in member (they are the one paying)
+    const memberData = await prisma.member.findUnique({ where: { id: member.id } });
     const currentWallet = memberData?.walletBalance || 0;
     
     // Validate Coupon if provided
@@ -267,7 +267,7 @@ export async function POST(request: Request) {
 
       // Re-check wallet balance inside transaction to prevent double-spending
       if (advancePaid > 0) {
-        const freshMember = await tx.member.findUnique({ where: { id: targetMemberId } });
+        const freshMember = await tx.member.findUnique({ where: { id: member.id } });
         if (!freshMember || freshMember.walletBalance < advancePaid) {
           throw new Error('INSUFFICIENT_WALLET');
         }
@@ -306,12 +306,12 @@ export async function POST(request: Request) {
       // Wallet deduction
       if (advancePaid > 0) {
         await tx.member.update({
-          where: { id: targetMemberId },
+          where: { id: member.id },
           data: { walletBalance: { decrement: advancePaid } }
         });
         await tx.walletTransaction.create({
           data: {
-            memberId: targetMemberId,
+            memberId: member.id,
             amount: advancePaid,
             type: 'DEBIT',
             description: `Payment for booking ${newBooking.id}`
@@ -326,15 +326,15 @@ export async function POST(request: Request) {
         });
       }
 
-      // Add loyalty points
+      // Add loyalty points to the logged-in user who paid
       if (pointsEarned > 0) {
         await tx.member.update({
-          where: { id: targetMemberId },
+          where: { id: member.id },
           data: { loyaltyPoints: { increment: pointsEarned } }
         });
         await tx.loyaltyHistory.create({
           data: {
-            memberId: targetMemberId,
+            memberId: member.id,
             points: pointsEarned,
             type: 'EARNED',
             source: 'BOOKING',
@@ -357,7 +357,7 @@ export async function POST(request: Request) {
     try {
       const userBookings = await prisma.booking.count({
         where: {
-          memberId: targetMemberId,
+          memberId: member.id,
           status: { in: ['CONFIRMED', 'COMPLETED'] }
         }
       });
@@ -372,7 +372,7 @@ export async function POST(request: Request) {
       if (activeTriggers.length > 0) {
         const existingAchievements = await prisma.loyaltyAchievement.findMany({
           where: {
-            memberId: targetMemberId,
+            memberId: member.id,
             triggerId: { in: activeTriggers.map(t => t.id) }
           }
         });
@@ -383,17 +383,17 @@ export async function POST(request: Request) {
           const triggerQueries: any[] = [];
           for (const trigger of newAchievements) {
             triggerQueries.push(prisma.loyaltyAchievement.create({
-              data: { triggerId: trigger.id, memberId: targetMemberId }
+              data: { triggerId: trigger.id, memberId: member.id }
             }));
             
             if (trigger.rewardAmount > 0) {
               triggerQueries.push(prisma.member.update({
-                where: { id: targetMemberId },
+                where: { id: member.id },
                 data: { walletBalance: { increment: trigger.rewardAmount } }
               }));
               triggerQueries.push(prisma.walletTransaction.create({
                 data: {
-                  memberId: targetMemberId,
+                  memberId: member.id,
                   amount: trigger.rewardAmount,
                   type: 'CREDIT',
                   description: `Reward for ${trigger.title}`
@@ -403,12 +403,12 @@ export async function POST(request: Request) {
 
             if (trigger.rewardPoints > 0) {
               triggerQueries.push(prisma.member.update({
-                where: { id: targetMemberId },
+                where: { id: member.id },
                 data: { loyaltyPoints: { increment: trigger.rewardPoints } }
               }));
               triggerQueries.push(prisma.loyaltyHistory.create({
                 data: {
-                  memberId: targetMemberId,
+                  memberId: member.id,
                   points: trigger.rewardPoints,
                   type: 'EARNED',
                   source: 'MANUAL',

@@ -3,7 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { randomUUID } from "crypto";
 import { revalidatePath } from "next/cache";
 import { getSettings } from "../settings/actions";
-import { formatIST } from "../../lib/dateUtils";
+import { formatIST, getISTDateBounds } from "../../lib/dateUtils";
 import { bumpSyncTimestamp } from '@/lib/sync';
 export async function fetchBookableTurfs() {
   return await prisma.turf.findMany({
@@ -16,11 +16,7 @@ export async function fetchBookableTurfs() {
 }
 
 export async function fetchBookingsByDate(date: string) {
-  const startOfDay = new Date(date);
-  startOfDay.setHours(0, 0, 0, 0);
-  
-  const endOfDay = new Date(date);
-  endOfDay.setHours(23, 59, 59, 999);
+  const { start: startOfDay, end: endOfDay } = getISTDateBounds(date);
 
   return await prisma.booking.findMany({
     where: {
@@ -226,10 +222,7 @@ export async function getUpiId() {
 }
 
 export async function fetchAllBookingsByDate(date: string) {
-  const startOfDay = new Date(date);
-  startOfDay.setHours(0, 0, 0, 0);
-  const endOfDay = new Date(date);
-  endOfDay.setHours(23, 59, 59, 999);
+  const { start: startOfDay, end: endOfDay } = getISTDateBounds(date);
 
   return await prisma.booking.findMany({
     where: {

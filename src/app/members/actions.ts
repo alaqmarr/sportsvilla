@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 import { addDays } from "date-fns";
 import { bumpSyncTimestamp } from '@/lib/sync';
+import { getISTDateBounds } from "../../lib/dateUtils";
 
 async function generateMemberId(mobile: string) {
   const count = await prisma.member.count({ where: { mobile } });
@@ -160,4 +161,34 @@ export async function assignPlan(data: { memberIds?: string[]; memberId?: string
   await bumpSyncTimestamp('member');
   revalidatePath("/", "layout");
   return createdMemberships;
+}
+
+export async function updateMemberMembership(id: string, data: { startDate?: string, endDate?: string, status?: string }) {
+  const updateData: any = {};
+  if (data.startDate) {
+    updateData.startDate = getISTDateBounds(data.startDate).start;
+  }
+  if (data.endDate) {
+    updateData.endDate = getISTDateBounds(data.endDate).end;
+  }
+  if (data.status) {
+    updateData.status = data.status;
+  }
+  
+  const updated = await prisma.memberMembership.update({
+    where: { id },
+    data: updateData
+  });
+  
+  await bumpSyncTimestamp('member');
+  revalidatePath("/", "layout");
+  return updated;
+}
+
+export async function deleteMemberMembership(id: string) {
+  await prisma.memberMembership.delete({
+    where: { id }
+  });
+  await bumpSyncTimestamp('member');
+  revalidatePath("/", "layout");
 }

@@ -1,7 +1,7 @@
 "use server";
 import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
-import { formatIST } from "@/lib/dateUtils";
+import { formatIST, getISTDateBounds } from "../../lib/dateUtils";
 
 export async function fetchSportsForCheckin() {
   return await prisma.sport.findMany();
@@ -49,8 +49,13 @@ export async function confirmTicketCheckin(ticketIdOrQrCode: string, deskSportId
   // Check validity dates
   const now = new Date();
   const startTime = new Date(ticket.booking.startTime);
-  const validityEnd = new Date(startTime.getTime());
-  validityEnd.setHours(23, 59, 59, 999);
+  
+  // Use getISTDateBounds to get the start of the booking day in IST,
+  // then figure out the validity end time from there.
+  const bookingDateStr = formatIST(ticket.booking.startTime, 'yyyy-MM-dd');
+  const { start: bookingDayStart, end: bookingDayEnd } = getISTDateBounds(bookingDateStr);
+  
+  const validityEnd = new Date(bookingDayEnd.getTime());
   
   if (ticket.booking.turf.bookingValidityDays > 0) {
     validityEnd.setDate(validityEnd.getDate() + ticket.booking.turf.bookingValidityDays);

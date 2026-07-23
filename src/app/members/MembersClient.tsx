@@ -1,7 +1,7 @@
 "use client";
 import { formatIST, todayIST } from "../../lib/dateUtils";
 import { useState, useRef, useMemo } from "react";
-import { createMember, updateMember, deleteMember, assignPlan, createFamily } from "./actions";
+import { createMember, updateMember, deleteMember, assignPlan, createFamily, updateMemberMembership, deleteMemberMembership } from "./actions";
 import { useAlert } from "@/components/AlertProvider";
 
 import html2canvas from "html2canvas";
@@ -41,6 +41,14 @@ export default function MembersClient({ initialMembers, plans }: { initialMember
   const [assignPlanId, setAssignPlanId] = useState("");
   const [startDate, setStartDate] = useState(todayIST());
   const [assignLoading, setAssignLoading] = useState(false);
+
+  // Edit Membership State
+  const [showEditMembershipModal, setShowEditMembershipModal] = useState(false);
+  const [editingMembership, setEditingMembership] = useState<any>(null);
+  const [editMembershipStart, setEditMembershipStart] = useState("");
+  const [editMembershipEnd, setEditMembershipEnd] = useState("");
+  const [editMembershipStatus, setEditMembershipStatus] = useState("ACTIVE");
+  const [membershipLoading, setMembershipLoading] = useState(false);
 
   // Derived state for assignment
   const existingAssignMembers = members.filter(m => m.mobile === assignMobile);
@@ -161,6 +169,44 @@ export default function MembersClient({ initialMembers, plans }: { initialMember
       showAlert("Assignment Failed", err.message || "There was an issue assigning the membership plan. Please try again.", "error");
     }
     setAssignLoading(false);
+  }
+
+  function openEditMembershipModal(membership: any) {
+    setEditingMembership(membership);
+    setEditMembershipStart(formatIST(new Date(membership.startDate), 'yyyy-MM-dd'));
+    setEditMembershipEnd(formatIST(new Date(membership.endDate), 'yyyy-MM-dd'));
+    setEditMembershipStatus(membership.status);
+    setShowEditMembershipModal(true);
+  }
+
+  async function handleUpdateMembership(e: React.FormEvent) {
+    e.preventDefault();
+    if (!editingMembership) return;
+    setMembershipLoading(true);
+    try {
+      await updateMemberMembership(editingMembership.id, {
+        startDate: editMembershipStart,
+        endDate: editMembershipEnd,
+        status: editMembershipStatus,
+      });
+      showAlert("Membership Updated", "The membership details have been updated.", "success");
+      setShowEditMembershipModal(false);
+      window.location.reload();
+    } catch (err: any) {
+      showAlert("Update Failed", err.message || "Failed to update membership.", "error");
+    }
+    setMembershipLoading(false);
+  }
+
+  async function handleDeleteMembership(id: string) {
+    if (!confirm("Are you sure you want to permanently delete this membership record? This action cannot be undone.")) return;
+    try {
+      await deleteMemberMembership(id);
+      showAlert("Membership Deleted", "The membership has been removed.", "success");
+      window.location.reload();
+    } catch (err: any) {
+      showAlert("Deletion Failed", err.message || "Failed to delete membership.", "error");
+    }
   }
 
   function openIdCardModal(member: any) {
@@ -321,7 +367,13 @@ export default function MembersClient({ initialMembers, plans }: { initialMember
                             return (
                               <div key={m.id} className={`text-xs py-1 px-3 rounded-md flex justify-between items-center ${isActive ? 'bg-emerald-500/10 border border-emerald-500/20 text-emerald-400' : 'bg-[#1c1f2e] border border-[#2a2d3e] text-gray-500 opacity-60'}`}>
                                 <span className="font-bold tracking-wide uppercase">{m.membershipPlan?.name} ({m.membershipPlan?.sport?.name})</span>
-                                <span className="opacity-80 font-medium tracking-tight">Expires: {formatIST(new Date(m.endDate), 'MMM d')}</span>
+                                <div className="flex items-center gap-3">
+                                  <span className="opacity-80 font-medium tracking-tight">Expires: {formatIST(new Date(m.endDate), 'MMM d')}</span>
+                                  <div className="flex items-center gap-1 border-l border-gray-700/50 pl-3">
+                                    <button onClick={() => openEditMembershipModal(m)} className="hover:text-white transition-colors p-1"><FiEdit2 size={12} /></button>
+                                    <button onClick={() => handleDeleteMembership(m.id)} className="hover:text-red-400 transition-colors p-1"><FiTrash2 size={12} /></button>
+                                  </div>
+                                </div>
                               </div>
                             );
                           }) : <span className="text-xs text-red-400 font-semibold bg-red-500/10 border border-red-500/20 px-3 py-1 rounded-md inline-block">No Active Plans</span>}
@@ -630,6 +682,65 @@ export default function MembersClient({ initialMembers, plans }: { initialMember
             <p className="text-center text-xs text-gray-500 mt-5">
               The WhatsApp link sends members directly to their own personalized online portal.
             </p>
+          </div>
+        </div>
+      )}
+
+      {showEditMembershipModal && editingMembership && (
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="bg-[#12141c] border border-[#2a2d3e] rounded-2xl w-full max-w-md overflow-hidden shadow-2xl relative">
+            <div className="p-6 border-b border-[#2a2d3e] flex justify-between items-center bg-[#181b25]">
+              <h3 className="text-lg font-bold text-white flex items-center gap-2">
+                <FiEdit2 className="text-orange-500" /> Edit Membership
+              </h3>
+              <button onClick={() => setShowEditMembershipModal(false)} className="text-gray-400 hover:text-white transition-colors cursor-pointer bg-transparent border-none p-1"><FiX size={20} /></button>
+            </div>
+            
+            <form onSubmit={handleUpdateMembership} className="p-6">
+              <div className="mb-5">
+                <label className="block text-xs uppercase tracking-wider font-semibold text-gray-500 mb-2">Start Date</label>
+                <input 
+                  type="date" 
+                  className="w-full bg-[#0f1117] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white focus:border-orange-500/50 focus:ring-2 focus:ring-orange-500/20 outline-none text-sm"
+                  value={editMembershipStart}
+                  onChange={e => setEditMembershipStart(e.target.value)}
+                  required
+                />
+              </div>
+
+              <div className="mb-5">
+                <label className="block text-xs uppercase tracking-wider font-semibold text-gray-500 mb-2">End Date</label>
+                <input 
+                  type="date" 
+                  className="w-full bg-[#0f1117] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white focus:border-orange-500/50 focus:ring-2 focus:ring-orange-500/20 outline-none text-sm"
+                  value={editMembershipEnd}
+                  onChange={e => setEditMembershipEnd(e.target.value)}
+                  required
+                />
+              </div>
+
+              <div className="mb-8">
+                <label className="block text-xs uppercase tracking-wider font-semibold text-gray-500 mb-2">Status</label>
+                <select 
+                  className="w-full bg-[#0f1117] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white focus:border-orange-500/50 focus:ring-2 focus:ring-orange-500/20 outline-none text-sm"
+                  value={editMembershipStatus}
+                  onChange={e => setEditMembershipStatus(e.target.value)}
+                  required
+                >
+                  <option value="ACTIVE">ACTIVE</option>
+                  <option value="EXPIRED">EXPIRED</option>
+                  <option value="CANCELLED">CANCELLED</option>
+                </select>
+              </div>
+
+              <button 
+                type="submit" 
+                disabled={membershipLoading} 
+                className="w-full bg-orange-500 hover:bg-orange-600 text-white rounded-lg px-4 py-3.5 text-sm font-bold shadow-lg shadow-orange-500/20 transition-all cursor-pointer border-none disabled:opacity-50"
+              >
+                {membershipLoading ? 'Saving...' : 'Save Changes'}
+              </button>
+            </form>
           </div>
         </div>
       )}

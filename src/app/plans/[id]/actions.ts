@@ -1,12 +1,11 @@
 "use server";
 
 import { prisma } from "@/lib/prisma";
+import { getISTStartOfMonth } from "@/lib/dateUtils";
 
 export async function fetchPlanDetail(planId: string) {
   try {
-    const startOfMonth = new Date();
-    startOfMonth.setDate(1);
-    startOfMonth.setHours(0, 0, 0, 0);
+    const startOfMonth = getISTStartOfMonth();
 
     const plan = await prisma.membershipPlan.findUnique({
       where: { id: planId },
