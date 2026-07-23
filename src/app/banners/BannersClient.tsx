@@ -17,7 +17,7 @@ export default function BannersClient({ initialBanners, sports }: { initialBanne
       // 1. Get presigned URL via Server Action
       const ext = file.name.split('.').pop() || 'png';
       const data = await getAdminPresignedUrl(file.type, ext);
-      if (!data.success) throw new Error(data.error);
+      if (!data.success) throw new Error("Failed to get presigned URL");
 
       // 2. Upload to R2 directly
       await fetch(data.signedUrl, {

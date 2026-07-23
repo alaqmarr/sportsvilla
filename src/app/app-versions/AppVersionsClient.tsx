@@ -53,7 +53,7 @@ export default function AppVersionsClient({ initialVersions }: { initialVersions
         const xhr = new XMLHttpRequest();
         xhr.open("PUT", signedUrl, true);
         xhr.setRequestHeader("Content-Type", type || 'application/vnd.android.package-archive');
-        
+
         xhr.upload.onprogress = (e) => {
           if (e.lengthComputable) {
             const percent = Math.round((e.loaded / e.total) * 100);
@@ -68,7 +68,7 @@ export default function AppVersionsClient({ initialVersions }: { initialVersions
             reject(new Error(`Upload failed with status: ${xhr.status}`));
           }
         };
-        
+
         xhr.onerror = () => reject(new Error("Network Error. Check if R2 Bucket CORS is configured."));
         xhr.send(file);
       });
