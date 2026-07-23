@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { formatIST } from '@/lib/dateUtils';
 import { useRouter } from 'next/navigation';
 import { deleteTournament } from './actions';
 import toast from 'react-hot-toast';
@@ -60,7 +61,7 @@ export default function TournamentsListClient({ initialTournaments }: any) {
               <div className="space-y-2 mb-4">
                 <div className="flex items-center text-sm text-gray-300">
                   <FiCalendar className="mr-2 text-gray-500" /> 
-                  {new Date(t.startDate).toLocaleDateString()}
+                  {formatIST(new Date(t.startDate), 'dd MMM yyyy')}
                 </div>
                 <div className="flex items-center text-sm text-gray-300">
                   <FiMapPin className="mr-2 text-gray-500" /> 

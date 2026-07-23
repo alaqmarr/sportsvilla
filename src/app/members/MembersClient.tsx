@@ -1,5 +1,5 @@
 "use client";
-import { formatIST } from "../../lib/dateUtils";
+import { formatIST, todayIST } from "../../lib/dateUtils";
 import { useState, useRef, useMemo } from "react";
 import { createMember, updateMember, deleteMember, assignPlan, createFamily } from "./actions";
 import { useAlert } from "@/components/AlertProvider";
@@ -39,7 +39,7 @@ export default function MembersClient({ initialMembers, plans }: { initialMember
   const [assignEmail, setAssignEmail] = useState("");
   const [assignMemberIds, setAssignMemberIds] = useState<string[]>([]);
   const [assignPlanId, setAssignPlanId] = useState("");
-  const [startDate, setStartDate] = useState(new Date().toISOString().split('T')[0]);
+  const [startDate, setStartDate] = useState(todayIST());
   const [assignLoading, setAssignLoading] = useState(false);
 
   // Derived state for assignment

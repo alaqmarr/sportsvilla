@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { formatIST } from "@/lib/dateUtils";
 import { FiTag, FiPlus, FiX, FiCheck, FiSearch, FiBarChart2, FiEyeOff } from "react-icons/fi";
 import { createCoupon, toggleCouponStatus } from "./actions";
 import LinkComponent from "next/link";
@@ -178,7 +179,7 @@ export default function CouponsClient({ initialCoupons, members }: { initialCoup
               {coupon.expiryDate && (
                 <div className="flex justify-between text-sm">
                   <span className="text-gray-500">Expires</span>
-                  <span className="text-red-400 font-medium">{new Date(coupon.expiryDate).toLocaleDateString()}</span>
+                  <span className="text-red-400 font-medium">{formatIST(new Date(coupon.expiryDate), 'dd MMM yyyy')}</span>
                 </div>
               )}
             </div>

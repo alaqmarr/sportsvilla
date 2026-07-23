@@ -1,5 +1,5 @@
 "use client";
-import { formatIST } from "../../../lib/dateUtils";
+import { formatIST, todayIST } from "../../../lib/dateUtils";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { fetchMembershipReports } from "./actions";
@@ -12,7 +12,7 @@ export default function MembershipReportClient() {
   const router = useRouter();
   
   // Default to today
-  const today = new Date().toISOString().split('T')[0];
+  const today = todayIST();
   const [startDate, setStartDate] = useState(today);
   const [endDate, setEndDate] = useState(today);
   

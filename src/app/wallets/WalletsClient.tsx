@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { FiSearch, FiCreditCard, FiArrowUpCircle, FiArrowDownCircle, FiPlus, FiX } from "react-icons/fi";
 import { addWalletTransaction } from "./actions";
+import { formatIST } from "@/lib/dateUtils";
 
 export default function WalletsClient({ initialMembers }: { initialMembers: any[] }) {
   const [members, setMembers] = useState(initialMembers);

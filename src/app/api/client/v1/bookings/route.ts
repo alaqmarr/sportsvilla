@@ -175,12 +175,12 @@ export async function POST(request: Request) {
       let isAllowed = true;
       let targetError = '';
       if (coupon.targetType === 'SPECIFIC_MEMBERS') {
-        isAllowed = coupon.assignments.some(a => a.memberId === targetMemberId);
+        isAllowed = coupon.assignments.some(a => a.memberId === member.id);
         if (!isAllowed) targetError = 'This coupon is not available for your account.';
       } else if (coupon.targetType === 'MILESTONE_ALL_TIME' || coupon.targetType === 'MILESTONE_FROM_CREATION') {
         // Bug #9: Count CONFIRMED + COMPLETED, not just COMPLETED
         const milestoneWhere: any = { 
-          memberId: targetMemberId, 
+          memberId: member.id, 
           status: { in: ['CONFIRMED', 'COMPLETED'] } 
         };
         // Bug #8: Handle MILESTONE_FROM_CREATION — count bookings since member joined
@@ -199,7 +199,7 @@ export async function POST(request: Request) {
         isAllowed = false;
         targetError = 'This coupon has reached its maximum usage limit.';
       }
-      if (coupon.maxUsesPerUser !== null && coupon.usages.filter(u => u.memberId === targetMemberId).length >= coupon.maxUsesPerUser) {
+      if (coupon.maxUsesPerUser !== null && coupon.usages.filter(u => u.memberId === member.id).length >= coupon.maxUsesPerUser) {
         isAllowed = false;
         targetError = 'You have already used this coupon the maximum number of times.';
       }
@@ -223,8 +223,9 @@ export async function POST(request: Request) {
     
     // Wallet deduction - allow any amount up to balance and subtotal
     let advancePaid = 0;
-    if (walletAmountToUse > 0) {
-      advancePaid = Math.min(walletAmountToUse, currentWallet, subtotal);
+    const requestedWallet = Number(walletAmountToUse) || 0;
+    if (requestedWallet > 0) {
+      advancePaid = Math.min(requestedWallet, currentWallet, subtotal);
     }
     
     const amountDue = subtotal - advancePaid;
@@ -285,7 +286,8 @@ export async function POST(request: Request) {
           status: "CONFIRMED",
           paymentStatus,
           advancePaid,
-          amountDue
+          amountDue,
+          discountAmount // Bug Fix: actually save the discountAmount to the booking!
         }
       });
 
@@ -294,7 +296,7 @@ export async function POST(request: Request) {
         await tx.couponUsage.create({
           data: {
             couponId: validCouponId,
-            memberId: targetMemberId,
+            memberId: member.id, // Save against the logged in user who paid, not targetMemberId
             bookingId: newBooking.id,
             discountAmount
           }

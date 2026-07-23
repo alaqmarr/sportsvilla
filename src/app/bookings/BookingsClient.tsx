@@ -4,7 +4,7 @@ import { useState, useEffect, useMemo } from "react";
 import { fetchBookingsByDate, createBooking, searchMember, getUpiId, addPayment, updateDisplaySession } from "./actions";
 import { useAlert } from "@/components/AlertProvider";
 import QRCodeLib from "qrcode";
-import { formatIST } from "../../lib/dateUtils";
+import { formatIST, todayIST } from "../../lib/dateUtils";
 import { FiCalendar, FiClock, FiCheck, FiX, FiUser, FiCreditCard, FiMapPin, FiList, FiPlus } from "react-icons/fi";
 import ManageBookings from "./ManageBookings";
 
@@ -50,7 +50,7 @@ export default function BookingsClient({ turfs, facilityHours = { openTime: '06:
     return Array.from(map.values());
   }, [turfs]);
 
-  const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
+  const [selectedDate, setSelectedDate] = useState(todayIST());
   const [selectedSportId, setSelectedSportId] = useState<string>(sports.length > 0 ? sports[0].id : "");
   
   const [bookings, setBookings] = useState<any[]>([]);

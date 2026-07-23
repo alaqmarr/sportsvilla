@@ -13,3 +13,12 @@ export function formatIST(date: Date | string | number, formatStr: string): stri
     return '';
   }
 }
+
+/**
+ * Returns today's date in IST as a YYYY-MM-DD string.
+ * Use this instead of `new Date().toISOString().split('T')[0]` which uses UTC
+ * and can return yesterday's date when it's early morning in IST.
+ */
+export function todayIST(): string {
+  return formatInTimeZone(new Date(), 'Asia/Kolkata', 'yyyy-MM-dd');
+}

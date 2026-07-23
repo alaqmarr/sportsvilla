@@ -3,6 +3,7 @@ import { prisma } from '@/lib/prisma';
 import { authenticateClient } from '@/lib/auth-middleware';
 import { logger } from '@/lib/logger';
 import { jsonResponse } from '@/lib/api-logger';
+import { formatIST } from '@/lib/dateUtils';
 
 export async function GET(request: Request) {
   console.log(`[API] GET /api/client/v1/home called`);
@@ -95,8 +96,8 @@ export async function GET(request: Request) {
           name: m.membershipPlan.name,
           sport: m.membershipPlan.sport,
           status: m.status,
-          startDate: m.startDate.toISOString().split('T')[0],
-          expiryDate: m.endDate.toISOString().split('T')[0],
+          startDate: formatIST(m.startDate, 'yyyy-MM-dd'),
+          expiryDate: formatIST(m.endDate, 'yyyy-MM-dd'),
           expiresInDays: expiresInDays > 0 ? expiresInDays : 0,
           totalDays: m.membershipPlan.durationInDays,
           slotsPerDay: m.membershipPlan.slotsPerDay,
@@ -145,9 +146,9 @@ export async function GET(request: Request) {
     const recentAttendance = attendances.slice(0, 5).map(a => {
       const d = new Date(a.date);
       // format date as "20 May 2024, Mon"
-      const dateStr = d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric', weekday: 'short' });
+      const dateStr = formatIST(d, 'dd MMM yyyy, EEE');
       // format time as "07:00 AM"
-      const timeStr = d.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+      const timeStr = formatIST(d, 'hh:mm a');
 
       return {
         id: a.id,

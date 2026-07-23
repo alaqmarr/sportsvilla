@@ -2,7 +2,7 @@
 
 import { FiArrowLeft, FiTag, FiTrendingUp, FiUsers, FiDollarSign, FiCalendar } from "react-icons/fi";
 import LinkComponent from "next/link";
-import { format } from "date-fns";
+import { formatIST } from "@/lib/dateUtils";
 
 export default function CouponStatsClient({ coupon }: { coupon: any }) {
   const totalUsages = coupon.usages.length;
@@ -53,7 +53,7 @@ export default function CouponStatsClient({ coupon }: { coupon: any }) {
             {coupon.isActive ? "ACTIVE" : "INACTIVE"}
           </div>
           <div className="text-xs text-gray-500 mt-1">
-            {coupon.expiryDate ? `Expires ${format(new Date(coupon.expiryDate), 'PPP')}` : "Never expires"}
+            {coupon.expiryDate ? `Expires ${formatIST(new Date(coupon.expiryDate), 'PPP')}` : "Never expires"}
           </div>
         </div>
       </div>
@@ -81,7 +81,7 @@ export default function CouponStatsClient({ coupon }: { coupon: any }) {
                 {coupon.usages.map((usage: any) => (
                   <tr key={usage.id} className="hover:bg-[#1c1f2e]/50 transition-colors">
                     <td className="px-6 py-4 text-white whitespace-nowrap">
-                      {format(new Date(usage.createdAt), 'dd MMM yyyy, h:mm a')}
+                      {formatIST(new Date(usage.createdAt), 'dd MMM yyyy, h:mm a')}
                     </td>
                     <td className="px-6 py-4 font-bold text-orange-400">
                       {usage.member?.name || "Unknown"}
@@ -95,7 +95,7 @@ export default function CouponStatsClient({ coupon }: { coupon: any }) {
                           <div className="text-white font-medium">{usage.booking.turf?.name} ({usage.booking.sport?.name})</div>
                           <div className="text-xs mt-0.5">Booking #{usage.booking.id.slice(-6).toUpperCase()}</div>
                           <div className="text-xs text-gray-500 mt-1">
-                            {format(new Date(usage.booking.startTime), 'MMM dd, h:mm a')}
+                            {formatIST(new Date(usage.booking.startTime), 'MMM dd, h:mm a')}
                           </div>
                         </div>
                       ) : (

@@ -3,13 +3,13 @@ import React, { useState, useEffect, useMemo } from "react";
 import { fetchAllBookingsByDate, cancelBooking, updateBookingPayment, previewExtension, confirmExtension, getUpiId, addPayment, updateDisplaySession } from "./actions";
 import { useAlert } from "@/components/AlertProvider";
 import QRCodeLib from "qrcode";
-import { formatIST } from "../../lib/dateUtils";
+import { formatIST, todayIST } from "../../lib/dateUtils";
 import { FiXCircle, FiCheckCircle, FiClock, FiCreditCard, FiTrash2, FiMaximize2, FiUser, FiMapPin, FiX, FiCheck, FiMonitor, FiPrinter, FiCalendar, FiFileText } from "react-icons/fi";
 import { rescheduleBooking } from "./actions";
 
 export default function ManageBookings() {
   const { showAlert } = useAlert();
-  const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
+  const [date, setDate] = useState(todayIST());
   const [bookings, setBookings] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   
@@ -425,7 +425,7 @@ export default function ManageBookings() {
                                     <FiMaximize2 size={16} />
                                   </button>
                                   <button 
-                                    onClick={() => setRescheduleModal({ show: true, booking: b, newDate: new Date(b.startTime).toISOString().split('T')[0], newTime: new Date(b.startTime).toTimeString().substring(0, 5), loading: false })}
+                                    onClick={() => setRescheduleModal({ show: true, booking: b, newDate: new Date(b.startTime).toISOString().split('T')[0], newTime: formatIST(new Date(b.startTime), 'HH:mm'), loading: false })}
                                     className="p-2 bg-[#0f1117] border border-[#2a2d3e] text-yellow-400 hover:border-yellow-500/50 rounded-lg transition-colors"
                                     title="Reschedule Booking"
                                   >

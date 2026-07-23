@@ -1,5 +1,5 @@
 "use client";
-import { formatIST } from "../../../lib/dateUtils";
+import { formatIST, todayIST } from "../../../lib/dateUtils";
 import { useState, useEffect } from "react";
 import { fetchAdvancedAttendance } from "./actions";
 
@@ -10,7 +10,7 @@ export default function AttendanceReportClient({ plans }: { plans: any[] }) {
   const { showAlert } = useAlert();
   
   // Default to today
-  const today = new Date().toISOString().split('T')[0];
+  const today = todayIST();
   const [startDate, setStartDate] = useState(today);
   const [startTime, setStartTime] = useState("00:00");
   const [endDate, setEndDate] = useState(today);

@@ -2,7 +2,8 @@
 
 import React, { useState, useEffect } from 'react';
 import { fetchCalendarData } from './actions';
-import { format, addDays, subDays } from 'date-fns';
+import { addDays, subDays } from 'date-fns';
+import { formatIST } from '@/lib/dateUtils';
 import { FiChevronLeft, FiChevronRight } from 'react-icons/fi';
 
 const START_HOUR = 6;
@@ -43,7 +44,7 @@ export default function CalendarClient() {
             <FiChevronLeft />
           </button>
           <div className="text-white font-medium min-w-[120px] text-center">
-            {format(date, 'MMM dd, yyyy')}
+            {formatIST(date, 'MMM dd, yyyy')}
           </div>
           <button onClick={handleNextDay} className="p-2 hover:bg-[#2a2d3e] rounded text-white">
             <FiChevronRight />
@@ -108,7 +109,7 @@ export default function CalendarClient() {
                           key={booking.id}
                           className="absolute top-2 bottom-2 bg-emerald-500/20 border border-emerald-500/50 rounded-md p-2 overflow-hidden flex flex-col justify-center"
                           style={{ left: `${leftPos}px`, width: `${blockWidth - 4}px` }}
-                          title={`${booking.member.name} (${format(start, 'hh:mm a')} - ${format(end, 'hh:mm a')})`}
+                          title={`${booking.member.name} (${formatIST(start, 'hh:mm a')} - ${formatIST(end, 'hh:mm a')})`}
                         >
                           <div className="text-xs font-bold text-emerald-400 truncate">{booking.member.name}</div>
                           <div className="text-[10px] text-emerald-500/80 truncate">{booking.member.mobile}</div>
