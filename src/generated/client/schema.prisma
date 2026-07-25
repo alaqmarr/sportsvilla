@@ -82,21 +82,22 @@ model Sport {
 }
 
 model Turf {
-  id                       String      @id @default(cuid())
+  id                       String             @id @default(cuid())
   name                     String
   location                 String?
   parentTurfId             String?
-  parentTurf               Turf?       @relation("TurfHierarchy", fields: [parentTurfId], references: [id])
-  childTurfs               Turf[]      @relation("TurfHierarchy")
+  parentTurf               Turf?              @relation("TurfHierarchy", fields: [parentTurfId], references: [id])
+  childTurfs               Turf[]             @relation("TurfHierarchy")
   sports                   TurfSport[]
   bookingPrice             Float? // Price per booking duration
   bookingDurationMinutes   Int? // Duration of a single booking slot in minutes
-  capacityPerSlot          Int         @default(1) // Number of bookings allowed per slot
-  requireEntryVerification Boolean     @default(false) // Uncapped bookings
-  bookingValidityDays      Int         @default(0) // Extra days valid
+  capacityPerSlot          Int                @default(1) // Number of bookings allowed per slot
+  requireEntryVerification Boolean            @default(false) // Uncapped bookings
+  bookingValidityDays      Int                @default(0) // Extra days valid
   bookings                 Booking[]
-  createdAt                DateTime    @default(now())
-  updatedAt                DateTime    @updatedAt
+  createdAt                DateTime           @default(now())
+  updatedAt                DateTime           @updatedAt
+  memberMemberships        MemberMembership[]
 
   @@index([updatedAt])
 }
@@ -137,8 +138,13 @@ model MemberMembership {
   startDate        DateTime
   endDate          DateTime
   status           String         @default("ACTIVE") // ACTIVE, EXPIRED, CANCELLED
-  createdAt        DateTime       @default(now())
-  updatedAt        DateTime       @updatedAt
+
+  turfId   String?
+  turf     Turf?   @relation(fields: [turfId], references: [id])
+  timeSlot String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@index([endDate])
   @@index([status])

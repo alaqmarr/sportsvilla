@@ -24,26 +24,26 @@ model Setting {
 }
 
 model Member {
-  id             String             @id @default(cuid())
-  mobile         String // Removed @unique to allow family accounts
-  name           String
-  email          String?
-  dateOfBirth    DateTime?
-  loyaltyPoints  Int                @default(0)
-  walletBalance  Float              @default(0)
-  joinDate              DateTime                 @default(now())
-  memberships           MemberMembership[]
-  attendances           Attendance[]
-  bookings              Booking[]
-  loyaltyHistory        LoyaltyHistory[]
+  id                      String                   @id @default(cuid())
+  mobile                  String // Removed @unique to allow family accounts
+  name                    String
+  email                   String?
+  dateOfBirth             DateTime?
+  loyaltyPoints           Int                      @default(0)
+  walletBalance           Float                    @default(0)
+  joinDate                DateTime                 @default(now())
+  memberships             MemberMembership[]
+  attendances             Attendance[]
+  bookings                Booking[]
+  loyaltyHistory          LoyaltyHistory[]
   tournamentRegistrations TournamentRegistration[]
-  walletTransactions    WalletTransaction[]
-  couponAssignments     CouponAssignment[]
-  couponUsages          CouponUsage[]
-  loyaltyAchievements   LoyaltyAchievement[]
-  sportStats            UserSportStat[]
-  createdAt             DateTime                 @default(now())
-  updatedAt             DateTime                 @updatedAt
+  walletTransactions      WalletTransaction[]
+  couponAssignments       CouponAssignment[]
+  couponUsages            CouponUsage[]
+  loyaltyAchievements     LoyaltyAchievement[]
+  sportStats              UserSportStat[]
+  createdAt               DateTime                 @default(now())
+  updatedAt               DateTime                 @updatedAt
 
   @@index([mobile])
   @@index([updatedAt])
@@ -82,21 +82,22 @@ model Sport {
 }
 
 model Turf {
-  id                       String      @id @default(cuid())
+  id                       String             @id @default(cuid())
   name                     String
   location                 String?
   parentTurfId             String?
-  parentTurf               Turf?       @relation("TurfHierarchy", fields: [parentTurfId], references: [id])
-  childTurfs               Turf[]      @relation("TurfHierarchy")
+  parentTurf               Turf?              @relation("TurfHierarchy", fields: [parentTurfId], references: [id])
+  childTurfs               Turf[]             @relation("TurfHierarchy")
   sports                   TurfSport[]
   bookingPrice             Float? // Price per booking duration
   bookingDurationMinutes   Int? // Duration of a single booking slot in minutes
-  capacityPerSlot          Int         @default(1) // Number of bookings allowed per slot
-  requireEntryVerification Boolean     @default(false) // Uncapped bookings
-  bookingValidityDays      Int         @default(0) // Extra days valid
+  capacityPerSlot          Int                @default(1) // Number of bookings allowed per slot
+  requireEntryVerification Boolean            @default(false) // Uncapped bookings
+  bookingValidityDays      Int                @default(0) // Extra days valid
   bookings                 Booking[]
-  createdAt                DateTime    @default(now())
-  updatedAt                DateTime    @updatedAt
+  createdAt                DateTime           @default(now())
+  updatedAt                DateTime           @updatedAt
+  memberMemberships        MemberMembership[]
 
   @@index([updatedAt])
 }
@@ -137,8 +138,13 @@ model MemberMembership {
   startDate        DateTime
   endDate          DateTime
   status           String         @default("ACTIVE") // ACTIVE, EXPIRED, CANCELLED
-  createdAt        DateTime       @default(now())
-  updatedAt        DateTime       @updatedAt
+
+  turfId   String?
+  turf     Turf?   @relation(fields: [turfId], references: [id])
+  timeSlot String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@index([endDate])
   @@index([status])
@@ -163,25 +169,25 @@ model Attendance {
 }
 
 model Booking {
-  id               String    @id @default(cuid())
+  id               String        @id @default(cuid())
   turfId           String
-  turf             Turf      @relation(fields: [turfId], references: [id])
+  turf             Turf          @relation(fields: [turfId], references: [id])
   memberId         String
-  member      Member   @relation(fields: [memberId], references: [id], onDelete: Cascade)
+  member           Member        @relation(fields: [memberId], references: [id], onDelete: Cascade)
   sportId          String
-  sport            Sport     @relation(fields: [sportId], references: [id])
+  sport            Sport         @relation(fields: [sportId], references: [id])
   startTime        DateTime
   endTime          DateTime
   price            Float
-  paymentStatus    String    @default("PENDING") // UNPAID, PARTIAL, PAID
-  status           String    @default("CONFIRMED") // CONFIRMED, CANCELLED
-  participantCount Int       @default(1)
-  pointsRedeemed   Int       @default(0)
-  discountAmount   Float     @default(0)
-  advancePaid      Float     @default(0)
-  amountDue        Float     @default(0)
-  createdAt        DateTime  @default(now())
-  updatedAt        DateTime  @updatedAt
+  paymentStatus    String        @default("PENDING") // UNPAID, PARTIAL, PAID
+  status           String        @default("CONFIRMED") // CONFIRMED, CANCELLED
+  participantCount Int           @default(1)
+  pointsRedeemed   Int           @default(0)
+  discountAmount   Float         @default(0)
+  advancePaid      Float         @default(0)
+  amountDue        Float         @default(0)
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
   payments         Payment[]
   tickets          Ticket[]
   couponUsages     CouponUsage[]
@@ -229,44 +235,44 @@ model Ticket {
 }
 
 model Otp {
-  id        String   @id @default(cuid())
-  mobile    String   @unique
-  code      String
-  expiresAt DateTime
-  attempts  Int      @default(0)
+  id          String    @id @default(cuid())
+  mobile      String    @unique
+  code        String
+  expiresAt   DateTime
+  attempts    Int       @default(0)
   lockedUntil DateTime?
-  createdAt DateTime @default(now())
+  createdAt   DateTime  @default(now())
 }
 
 model Tournament {
-  id                   String                   @id @default(cuid())
-  name                 String
-  description          String?
-  participationFee     Float                    @default(0)
-  teamSize             Int                      @default(1)
-  maxTeams             Int?
-  thumbnail            String?
-  rules                String?
-  status               String                   @default("UPCOMING") // UPCOMING, ONGOING, COMPLETED
-  startDate            DateTime
-  endDate              DateTime?
-  
+  id               String    @id @default(cuid())
+  name             String
+  description      String?
+  participationFee Float     @default(0)
+  teamSize         Int       @default(1)
+  maxTeams         Int?
+  thumbnail        String?
+  rules            String?
+  status           String    @default("UPCOMING") // UPCOMING, ONGOING, COMPLETED
+  startDate        DateTime
+  endDate          DateTime?
+
   // New fields for UI/UX refinement
-  isPublic             Boolean                  @default(true)
+  isPublic             Boolean   @default(true)
   prizePool            String?
   venue                String?
   registrationDeadline DateTime?
   sportId              String?
-  sport                Sport?                   @relation(fields: [sportId], references: [id])
+  sport                Sport?    @relation(fields: [sportId], references: [id])
   paymentUpiId         String?
-  
+
   // New Payment Fields
-  acceptsCash           Boolean                 @default(false)
+  acceptsCash           Boolean @default(false)
   cashResponsiblePerson String?
 
-  registrations        TournamentRegistration[]
-  createdAt            DateTime                 @default(now())
-  updatedAt            DateTime                 @updatedAt
+  registrations TournamentRegistration[]
+  createdAt     DateTime                 @default(now())
+  updatedAt     DateTime                 @updatedAt
 }
 
 model TournamentRegistration {
@@ -306,7 +312,7 @@ model WalletTransaction {
   memberId    String
   member      Member   @relation(fields: [memberId], references: [id], onDelete: Cascade)
   amount      Float
-  type        String   // "CREDIT" or "DEBIT"
+  type        String // "CREDIT" or "DEBIT"
   description String?
   createdAt   DateTime @default(now())
 
@@ -315,26 +321,26 @@ model WalletTransaction {
 }
 
 model Coupon {
-  id                      String    @id @default(cuid())
-  code                    String    @unique
-  discountAmount          Float?    
-  discountPercentage      Float?    
-  maxDiscount             Float?    
-  maxUses                 Int?
-  maxUsesPerUser          Int?
-  isActive                Boolean   @default(true)
-  expiryDate              DateTime?
-  
-  appOnly                 Boolean   @default(false)
-  isPublic                Boolean   @default(true)
+  id                 String    @id @default(cuid())
+  code               String    @unique
+  discountAmount     Float?
+  discountPercentage Float?
+  maxDiscount        Float?
+  maxUses            Int?
+  maxUsesPerUser     Int?
+  isActive           Boolean   @default(true)
+  expiryDate         DateTime?
 
-  targetType              String    @default("EVERYONE") // EVERYONE, SPECIFIC_MEMBERS, MILESTONE_ALL_TIME, MILESTONE_FROM_CREATION
-  milestoneBookingsCount  Int?      
-  createdAt               DateTime  @default(now())
-  updatedAt               DateTime  @updatedAt
+  appOnly  Boolean @default(false)
+  isPublic Boolean @default(true)
 
-  usages                  CouponUsage[]
-  assignments             CouponAssignment[]
+  targetType             String   @default("EVERYONE") // EVERYONE, SPECIFIC_MEMBERS, MILESTONE_ALL_TIME, MILESTONE_FROM_CREATION
+  milestoneBookingsCount Int?
+  createdAt              DateTime @default(now())
+  updatedAt              DateTime @updatedAt
+
+  usages      CouponUsage[]
+  assignments CouponAssignment[]
 }
 
 model CouponAssignment {
@@ -343,70 +349,70 @@ model CouponAssignment {
   memberId  String
   createdAt DateTime @default(now())
 
-  coupon    Coupon   @relation(fields: [couponId], references: [id], onDelete: Cascade)
-  member    Member   @relation(fields: [memberId], references: [id], onDelete: Cascade)
+  coupon Coupon @relation(fields: [couponId], references: [id], onDelete: Cascade)
+  member Member @relation(fields: [memberId], references: [id], onDelete: Cascade)
 
   @@unique([couponId, memberId])
 }
 
 model CouponUsage {
-  id        String   @id @default(cuid())
-  couponId  String
-  memberId  String
-  bookingId String
-  discountAmount Float @default(0)
-  createdAt DateTime @default(now())
+  id             String   @id @default(cuid())
+  couponId       String
+  memberId       String
+  bookingId      String
+  discountAmount Float    @default(0)
+  createdAt      DateTime @default(now())
 
-  coupon    Coupon   @relation(fields: [couponId], references: [id])
-  member      Member   @relation(fields: [memberId], references: [id], onDelete: Cascade)
-  booking   Booking  @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  coupon  Coupon  @relation(fields: [couponId], references: [id])
+  member  Member  @relation(fields: [memberId], references: [id], onDelete: Cascade)
+  booking Booking @relation(fields: [bookingId], references: [id], onDelete: Cascade)
 }
 
 model LoyaltyTrigger {
-  id                   String    @id @default(cuid())
-  title                String    // e.g. "Weekend Warrior"
-  description          String?   // e.g. "Play 5 matches and get ₹100!"
-  targetBookingsCount  Int
-  rewardAmount         Float     // Wallet cash reward
-  rewardPoints         Int       @default(0) // SV Points reward
-  isActive             Boolean   @default(true)
-  
-  createdAt            DateTime  @default(now())
-  updatedAt            DateTime  @updatedAt
+  id                  String  @id @default(cuid())
+  title               String // e.g. "Weekend Warrior"
+  description         String? // e.g. "Play 5 matches and get ₹100!"
+  targetBookingsCount Int
+  rewardAmount        Float // Wallet cash reward
+  rewardPoints        Int     @default(0) // SV Points reward
+  isActive            Boolean @default(true)
 
-  achievements         LoyaltyAchievement[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  achievements LoyaltyAchievement[]
 }
 
 model LoyaltyAchievement {
-  id               String   @id @default(cuid())
-  triggerId        String
-  memberId         String
-  achievedAt       DateTime @default(now())
+  id         String   @id @default(cuid())
+  triggerId  String
+  memberId   String
+  achievedAt DateTime @default(now())
 
-  trigger          LoyaltyTrigger @relation(fields: [triggerId], references: [id])
-  member      Member   @relation(fields: [memberId], references: [id], onDelete: Cascade)
+  trigger LoyaltyTrigger @relation(fields: [triggerId], references: [id])
+  member  Member         @relation(fields: [memberId], references: [id], onDelete: Cascade)
 
   @@unique([triggerId, memberId])
 }
 
 model AppAnnouncement {
-  id          String   @id @default(cuid())
-  title       String
-  content     String
-  imageUrl    String?
-  linkUrl     String?
-  isActive    Boolean  @default(true)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id        String   @id @default(cuid())
+  title     String
+  content   String
+  imageUrl  String?
+  linkUrl   String?
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model AppVersion {
   id           String   @id @default(cuid())
   platform     String   @unique // "android" or "ios"
-  version      String   // e.g. "1.0.1"
+  version      String // e.g. "1.0.1"
   forceUpdate  Boolean  @default(true)
-  downloadUrl  String?  
-  fileKey      String?  
+  downloadUrl  String?
+  fileKey      String?
   releaseNotes String?
   updatedAt    DateTime @updatedAt
 }
@@ -420,10 +426,10 @@ model LastUpdate {
 
 model AuditLog {
   id        String   @id @default(cuid())
-  action    String   // e.g. "CREATE_BOOKING", "CANCEL_BOOKING"
-  entity    String   // e.g. "Booking", "Member"
+  action    String // e.g. "CREATE_BOOKING", "CANCEL_BOOKING"
+  entity    String // e.g. "Booking", "Member"
   entityId  String
-  details   String?  // JSON string
+  details   String? // JSON string
   adminName String   @default("System")
   createdAt DateTime @default(now())
 
@@ -439,7 +445,7 @@ model Banner {
   isActive      Boolean  @default(true)
   createdAt     DateTime @default(now())
 
-  targetSport   Sport?   @relation(fields: [targetSportId], references: [id], onDelete: SetNull)
+  targetSport Sport? @relation(fields: [targetSportId], references: [id], onDelete: SetNull)
 }
 
 model UserSportStat {
@@ -450,9 +456,8 @@ model UserSportStat {
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 
-  member       Member   @relation(fields: [memberId], references: [id], onDelete: Cascade)
-  sport        Sport    @relation(fields: [sportId], references: [id], onDelete: Cascade)
+  member Member @relation(fields: [memberId], references: [id], onDelete: Cascade)
+  sport  Sport  @relation(fields: [sportId], references: [id], onDelete: Cascade)
 
   @@unique([memberId, sportId])
 }
-

@@ -66,7 +66,8 @@ export async function GET(request: Request) {
       include: {
         membershipPlan: {
           include: { sport: { select: { name: true } } }
-        }
+        },
+        turf: { select: { name: true } }
       },
       orderBy: { endDate: 'desc' }
     });
@@ -102,6 +103,8 @@ export async function GET(request: Request) {
           totalDays: m.membershipPlan.durationInDays,
           slotsPerDay: m.membershipPlan.slotsPerDay,
           rewardPointsPerCheckin: m.membershipPlan.rewardPointsPerCheckin,
+          turfName: m.turf?.name || null,
+          timeSlot: m.timeSlot || null,
           checkins,
           missedDays
         };

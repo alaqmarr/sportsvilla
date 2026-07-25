@@ -3705,12 +3705,14 @@ export namespace Prisma {
     childTurfs: number
     sports: number
     bookings: number
+    memberMemberships: number
   }
 
   export type TurfCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     childTurfs?: boolean | TurfCountOutputTypeCountChildTurfsArgs
     sports?: boolean | TurfCountOutputTypeCountSportsArgs
     bookings?: boolean | TurfCountOutputTypeCountBookingsArgs
+    memberMemberships?: boolean | TurfCountOutputTypeCountMemberMembershipsArgs
   }
 
   // Custom InputTypes
@@ -3743,6 +3745,13 @@ export namespace Prisma {
    */
   export type TurfCountOutputTypeCountBookingsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: BookingWhereInput
+  }
+
+  /**
+   * TurfCountOutputType without action
+   */
+  export type TurfCountOutputTypeCountMemberMembershipsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: MemberMembershipWhereInput
   }
 
 
@@ -10054,6 +10063,7 @@ export namespace Prisma {
     childTurfs?: boolean | Turf$childTurfsArgs<ExtArgs>
     sports?: boolean | Turf$sportsArgs<ExtArgs>
     bookings?: boolean | Turf$bookingsArgs<ExtArgs>
+    memberMemberships?: boolean | Turf$memberMembershipsArgs<ExtArgs>
     _count?: boolean | TurfCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["turf"]>
 
@@ -10107,6 +10117,7 @@ export namespace Prisma {
     childTurfs?: boolean | Turf$childTurfsArgs<ExtArgs>
     sports?: boolean | Turf$sportsArgs<ExtArgs>
     bookings?: boolean | Turf$bookingsArgs<ExtArgs>
+    memberMemberships?: boolean | Turf$memberMembershipsArgs<ExtArgs>
     _count?: boolean | TurfCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type TurfIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -10123,6 +10134,7 @@ export namespace Prisma {
       childTurfs: Prisma.$TurfPayload<ExtArgs>[]
       sports: Prisma.$TurfSportPayload<ExtArgs>[]
       bookings: Prisma.$BookingPayload<ExtArgs>[]
+      memberMemberships: Prisma.$MemberMembershipPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -10534,6 +10546,7 @@ export namespace Prisma {
     childTurfs<T extends Turf$childTurfsArgs<ExtArgs> = {}>(args?: Subset<T, Turf$childTurfsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TurfPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     sports<T extends Turf$sportsArgs<ExtArgs> = {}>(args?: Subset<T, Turf$sportsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TurfSportPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     bookings<T extends Turf$bookingsArgs<ExtArgs> = {}>(args?: Subset<T, Turf$bookingsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BookingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    memberMemberships<T extends Turf$memberMembershipsArgs<ExtArgs> = {}>(args?: Subset<T, Turf$memberMembershipsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MemberMembershipPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -11061,6 +11074,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: BookingScalarFieldEnum | BookingScalarFieldEnum[]
+  }
+
+  /**
+   * Turf.memberMemberships
+   */
+  export type Turf$memberMembershipsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MemberMembership
+     */
+    select?: MemberMembershipSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MemberMembership
+     */
+    omit?: MemberMembershipOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MemberMembershipInclude<ExtArgs> | null
+    where?: MemberMembershipWhereInput
+    orderBy?: MemberMembershipOrderByWithRelationInput | MemberMembershipOrderByWithRelationInput[]
+    cursor?: MemberMembershipWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: MemberMembershipScalarFieldEnum | MemberMembershipScalarFieldEnum[]
   }
 
   /**
@@ -13393,6 +13430,8 @@ export namespace Prisma {
     startDate: Date | null
     endDate: Date | null
     status: string | null
+    turfId: string | null
+    timeSlot: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -13404,6 +13443,8 @@ export namespace Prisma {
     startDate: Date | null
     endDate: Date | null
     status: string | null
+    turfId: string | null
+    timeSlot: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -13415,6 +13456,8 @@ export namespace Prisma {
     startDate: number
     endDate: number
     status: number
+    turfId: number
+    timeSlot: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -13428,6 +13471,8 @@ export namespace Prisma {
     startDate?: true
     endDate?: true
     status?: true
+    turfId?: true
+    timeSlot?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -13439,6 +13484,8 @@ export namespace Prisma {
     startDate?: true
     endDate?: true
     status?: true
+    turfId?: true
+    timeSlot?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -13450,6 +13497,8 @@ export namespace Prisma {
     startDate?: true
     endDate?: true
     status?: true
+    turfId?: true
+    timeSlot?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -13534,6 +13583,8 @@ export namespace Prisma {
     startDate: Date
     endDate: Date
     status: string
+    turfId: string | null
+    timeSlot: string | null
     createdAt: Date
     updatedAt: Date
     _count: MemberMembershipCountAggregateOutputType | null
@@ -13562,10 +13613,13 @@ export namespace Prisma {
     startDate?: boolean
     endDate?: boolean
     status?: boolean
+    turfId?: boolean
+    timeSlot?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     member?: boolean | MemberDefaultArgs<ExtArgs>
     membershipPlan?: boolean | MembershipPlanDefaultArgs<ExtArgs>
+    turf?: boolean | MemberMembership$turfArgs<ExtArgs>
   }, ExtArgs["result"]["memberMembership"]>
 
   export type MemberMembershipSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -13575,10 +13629,13 @@ export namespace Prisma {
     startDate?: boolean
     endDate?: boolean
     status?: boolean
+    turfId?: boolean
+    timeSlot?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     member?: boolean | MemberDefaultArgs<ExtArgs>
     membershipPlan?: boolean | MembershipPlanDefaultArgs<ExtArgs>
+    turf?: boolean | MemberMembership$turfArgs<ExtArgs>
   }, ExtArgs["result"]["memberMembership"]>
 
   export type MemberMembershipSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -13588,10 +13645,13 @@ export namespace Prisma {
     startDate?: boolean
     endDate?: boolean
     status?: boolean
+    turfId?: boolean
+    timeSlot?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     member?: boolean | MemberDefaultArgs<ExtArgs>
     membershipPlan?: boolean | MembershipPlanDefaultArgs<ExtArgs>
+    turf?: boolean | MemberMembership$turfArgs<ExtArgs>
   }, ExtArgs["result"]["memberMembership"]>
 
   export type MemberMembershipSelectScalar = {
@@ -13601,22 +13661,27 @@ export namespace Prisma {
     startDate?: boolean
     endDate?: boolean
     status?: boolean
+    turfId?: boolean
+    timeSlot?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type MemberMembershipOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "memberId" | "membershipPlanId" | "startDate" | "endDate" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["memberMembership"]>
+  export type MemberMembershipOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "memberId" | "membershipPlanId" | "startDate" | "endDate" | "status" | "turfId" | "timeSlot" | "createdAt" | "updatedAt", ExtArgs["result"]["memberMembership"]>
   export type MemberMembershipInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     member?: boolean | MemberDefaultArgs<ExtArgs>
     membershipPlan?: boolean | MembershipPlanDefaultArgs<ExtArgs>
+    turf?: boolean | MemberMembership$turfArgs<ExtArgs>
   }
   export type MemberMembershipIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     member?: boolean | MemberDefaultArgs<ExtArgs>
     membershipPlan?: boolean | MembershipPlanDefaultArgs<ExtArgs>
+    turf?: boolean | MemberMembership$turfArgs<ExtArgs>
   }
   export type MemberMembershipIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     member?: boolean | MemberDefaultArgs<ExtArgs>
     membershipPlan?: boolean | MembershipPlanDefaultArgs<ExtArgs>
+    turf?: boolean | MemberMembership$turfArgs<ExtArgs>
   }
 
   export type $MemberMembershipPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -13624,6 +13689,7 @@ export namespace Prisma {
     objects: {
       member: Prisma.$MemberPayload<ExtArgs>
       membershipPlan: Prisma.$MembershipPlanPayload<ExtArgs>
+      turf: Prisma.$TurfPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -13632,6 +13698,8 @@ export namespace Prisma {
       startDate: Date
       endDate: Date
       status: string
+      turfId: string | null
+      timeSlot: string | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["memberMembership"]>
@@ -14030,6 +14098,7 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     member<T extends MemberDefaultArgs<ExtArgs> = {}>(args?: Subset<T, MemberDefaultArgs<ExtArgs>>): Prisma__MemberClient<$Result.GetResult<Prisma.$MemberPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     membershipPlan<T extends MembershipPlanDefaultArgs<ExtArgs> = {}>(args?: Subset<T, MembershipPlanDefaultArgs<ExtArgs>>): Prisma__MembershipPlanClient<$Result.GetResult<Prisma.$MembershipPlanPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    turf<T extends MemberMembership$turfArgs<ExtArgs> = {}>(args?: Subset<T, MemberMembership$turfArgs<ExtArgs>>): Prisma__TurfClient<$Result.GetResult<Prisma.$TurfPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -14065,6 +14134,8 @@ export namespace Prisma {
     readonly startDate: FieldRef<"MemberMembership", 'DateTime'>
     readonly endDate: FieldRef<"MemberMembership", 'DateTime'>
     readonly status: FieldRef<"MemberMembership", 'String'>
+    readonly turfId: FieldRef<"MemberMembership", 'String'>
+    readonly timeSlot: FieldRef<"MemberMembership", 'String'>
     readonly createdAt: FieldRef<"MemberMembership", 'DateTime'>
     readonly updatedAt: FieldRef<"MemberMembership", 'DateTime'>
   }
@@ -14463,6 +14534,25 @@ export namespace Prisma {
      * Limit how many MemberMemberships to delete.
      */
     limit?: number
+  }
+
+  /**
+   * MemberMembership.turf
+   */
+  export type MemberMembership$turfArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Turf
+     */
+    select?: TurfSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Turf
+     */
+    omit?: TurfOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TurfInclude<ExtArgs> | null
+    where?: TurfWhereInput
   }
 
   /**
@@ -38105,6 +38195,8 @@ export namespace Prisma {
     startDate: 'startDate',
     endDate: 'endDate',
     status: 'status',
+    turfId: 'turfId',
+    timeSlot: 'timeSlot',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -38841,6 +38933,7 @@ export namespace Prisma {
     childTurfs?: TurfListRelationFilter
     sports?: TurfSportListRelationFilter
     bookings?: BookingListRelationFilter
+    memberMemberships?: MemberMembershipListRelationFilter
   }
 
   export type TurfOrderByWithRelationInput = {
@@ -38859,6 +38952,7 @@ export namespace Prisma {
     childTurfs?: TurfOrderByRelationAggregateInput
     sports?: TurfSportOrderByRelationAggregateInput
     bookings?: BookingOrderByRelationAggregateInput
+    memberMemberships?: MemberMembershipOrderByRelationAggregateInput
   }
 
   export type TurfWhereUniqueInput = Prisma.AtLeast<{
@@ -38880,6 +38974,7 @@ export namespace Prisma {
     childTurfs?: TurfListRelationFilter
     sports?: TurfSportListRelationFilter
     bookings?: BookingListRelationFilter
+    memberMemberships?: MemberMembershipListRelationFilter
   }, "id">
 
   export type TurfOrderByWithAggregationInput = {
@@ -39070,10 +39165,13 @@ export namespace Prisma {
     startDate?: DateTimeFilter<"MemberMembership"> | Date | string
     endDate?: DateTimeFilter<"MemberMembership"> | Date | string
     status?: StringFilter<"MemberMembership"> | string
+    turfId?: StringNullableFilter<"MemberMembership"> | string | null
+    timeSlot?: StringNullableFilter<"MemberMembership"> | string | null
     createdAt?: DateTimeFilter<"MemberMembership"> | Date | string
     updatedAt?: DateTimeFilter<"MemberMembership"> | Date | string
     member?: XOR<MemberScalarRelationFilter, MemberWhereInput>
     membershipPlan?: XOR<MembershipPlanScalarRelationFilter, MembershipPlanWhereInput>
+    turf?: XOR<TurfNullableScalarRelationFilter, TurfWhereInput> | null
   }
 
   export type MemberMembershipOrderByWithRelationInput = {
@@ -39083,10 +39181,13 @@ export namespace Prisma {
     startDate?: SortOrder
     endDate?: SortOrder
     status?: SortOrder
+    turfId?: SortOrderInput | SortOrder
+    timeSlot?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     member?: MemberOrderByWithRelationInput
     membershipPlan?: MembershipPlanOrderByWithRelationInput
+    turf?: TurfOrderByWithRelationInput
   }
 
   export type MemberMembershipWhereUniqueInput = Prisma.AtLeast<{
@@ -39099,10 +39200,13 @@ export namespace Prisma {
     startDate?: DateTimeFilter<"MemberMembership"> | Date | string
     endDate?: DateTimeFilter<"MemberMembership"> | Date | string
     status?: StringFilter<"MemberMembership"> | string
+    turfId?: StringNullableFilter<"MemberMembership"> | string | null
+    timeSlot?: StringNullableFilter<"MemberMembership"> | string | null
     createdAt?: DateTimeFilter<"MemberMembership"> | Date | string
     updatedAt?: DateTimeFilter<"MemberMembership"> | Date | string
     member?: XOR<MemberScalarRelationFilter, MemberWhereInput>
     membershipPlan?: XOR<MembershipPlanScalarRelationFilter, MembershipPlanWhereInput>
+    turf?: XOR<TurfNullableScalarRelationFilter, TurfWhereInput> | null
   }, "id">
 
   export type MemberMembershipOrderByWithAggregationInput = {
@@ -39112,6 +39216,8 @@ export namespace Prisma {
     startDate?: SortOrder
     endDate?: SortOrder
     status?: SortOrder
+    turfId?: SortOrderInput | SortOrder
+    timeSlot?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: MemberMembershipCountOrderByAggregateInput
@@ -39129,6 +39235,8 @@ export namespace Prisma {
     startDate?: DateTimeWithAggregatesFilter<"MemberMembership"> | Date | string
     endDate?: DateTimeWithAggregatesFilter<"MemberMembership"> | Date | string
     status?: StringWithAggregatesFilter<"MemberMembership"> | string
+    turfId?: StringNullableWithAggregatesFilter<"MemberMembership"> | string | null
+    timeSlot?: StringNullableWithAggregatesFilter<"MemberMembership"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"MemberMembership"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"MemberMembership"> | Date | string
   }
@@ -41077,6 +41185,7 @@ export namespace Prisma {
     childTurfs?: TurfCreateNestedManyWithoutParentTurfInput
     sports?: TurfSportCreateNestedManyWithoutTurfInput
     bookings?: BookingCreateNestedManyWithoutTurfInput
+    memberMemberships?: MemberMembershipCreateNestedManyWithoutTurfInput
   }
 
   export type TurfUncheckedCreateInput = {
@@ -41094,6 +41203,7 @@ export namespace Prisma {
     childTurfs?: TurfUncheckedCreateNestedManyWithoutParentTurfInput
     sports?: TurfSportUncheckedCreateNestedManyWithoutTurfInput
     bookings?: BookingUncheckedCreateNestedManyWithoutTurfInput
+    memberMemberships?: MemberMembershipUncheckedCreateNestedManyWithoutTurfInput
   }
 
   export type TurfUpdateInput = {
@@ -41111,6 +41221,7 @@ export namespace Prisma {
     childTurfs?: TurfUpdateManyWithoutParentTurfNestedInput
     sports?: TurfSportUpdateManyWithoutTurfNestedInput
     bookings?: BookingUpdateManyWithoutTurfNestedInput
+    memberMemberships?: MemberMembershipUpdateManyWithoutTurfNestedInput
   }
 
   export type TurfUncheckedUpdateInput = {
@@ -41128,6 +41239,7 @@ export namespace Prisma {
     childTurfs?: TurfUncheckedUpdateManyWithoutParentTurfNestedInput
     sports?: TurfSportUncheckedUpdateManyWithoutTurfNestedInput
     bookings?: BookingUncheckedUpdateManyWithoutTurfNestedInput
+    memberMemberships?: MemberMembershipUncheckedUpdateManyWithoutTurfNestedInput
   }
 
   export type TurfCreateManyInput = {
@@ -41322,10 +41434,12 @@ export namespace Prisma {
     startDate: Date | string
     endDate: Date | string
     status?: string
+    timeSlot?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     member: MemberCreateNestedOneWithoutMembershipsInput
     membershipPlan: MembershipPlanCreateNestedOneWithoutMembershipsInput
+    turf?: TurfCreateNestedOneWithoutMemberMembershipsInput
   }
 
   export type MemberMembershipUncheckedCreateInput = {
@@ -41335,6 +41449,8 @@ export namespace Prisma {
     startDate: Date | string
     endDate: Date | string
     status?: string
+    turfId?: string | null
+    timeSlot?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -41344,10 +41460,12 @@ export namespace Prisma {
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
     status?: StringFieldUpdateOperationsInput | string
+    timeSlot?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     member?: MemberUpdateOneRequiredWithoutMembershipsNestedInput
     membershipPlan?: MembershipPlanUpdateOneRequiredWithoutMembershipsNestedInput
+    turf?: TurfUpdateOneWithoutMemberMembershipsNestedInput
   }
 
   export type MemberMembershipUncheckedUpdateInput = {
@@ -41357,6 +41475,8 @@ export namespace Prisma {
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
     status?: StringFieldUpdateOperationsInput | string
+    turfId?: NullableStringFieldUpdateOperationsInput | string | null
+    timeSlot?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -41368,6 +41488,8 @@ export namespace Prisma {
     startDate: Date | string
     endDate: Date | string
     status?: string
+    turfId?: string | null
+    timeSlot?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -41377,6 +41499,7 @@ export namespace Prisma {
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
     status?: StringFieldUpdateOperationsInput | string
+    timeSlot?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -41388,6 +41511,8 @@ export namespace Prisma {
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
     status?: StringFieldUpdateOperationsInput | string
+    turfId?: NullableStringFieldUpdateOperationsInput | string | null
+    timeSlot?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -43758,6 +43883,8 @@ export namespace Prisma {
     startDate?: SortOrder
     endDate?: SortOrder
     status?: SortOrder
+    turfId?: SortOrder
+    timeSlot?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -43769,6 +43896,8 @@ export namespace Prisma {
     startDate?: SortOrder
     endDate?: SortOrder
     status?: SortOrder
+    turfId?: SortOrder
+    timeSlot?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -43780,6 +43909,8 @@ export namespace Prisma {
     startDate?: SortOrder
     endDate?: SortOrder
     status?: SortOrder
+    turfId?: SortOrder
+    timeSlot?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -45458,6 +45589,13 @@ export namespace Prisma {
     connect?: BookingWhereUniqueInput | BookingWhereUniqueInput[]
   }
 
+  export type MemberMembershipCreateNestedManyWithoutTurfInput = {
+    create?: XOR<MemberMembershipCreateWithoutTurfInput, MemberMembershipUncheckedCreateWithoutTurfInput> | MemberMembershipCreateWithoutTurfInput[] | MemberMembershipUncheckedCreateWithoutTurfInput[]
+    connectOrCreate?: MemberMembershipCreateOrConnectWithoutTurfInput | MemberMembershipCreateOrConnectWithoutTurfInput[]
+    createMany?: MemberMembershipCreateManyTurfInputEnvelope
+    connect?: MemberMembershipWhereUniqueInput | MemberMembershipWhereUniqueInput[]
+  }
+
   export type TurfUncheckedCreateNestedManyWithoutParentTurfInput = {
     create?: XOR<TurfCreateWithoutParentTurfInput, TurfUncheckedCreateWithoutParentTurfInput> | TurfCreateWithoutParentTurfInput[] | TurfUncheckedCreateWithoutParentTurfInput[]
     connectOrCreate?: TurfCreateOrConnectWithoutParentTurfInput | TurfCreateOrConnectWithoutParentTurfInput[]
@@ -45477,6 +45615,13 @@ export namespace Prisma {
     connectOrCreate?: BookingCreateOrConnectWithoutTurfInput | BookingCreateOrConnectWithoutTurfInput[]
     createMany?: BookingCreateManyTurfInputEnvelope
     connect?: BookingWhereUniqueInput | BookingWhereUniqueInput[]
+  }
+
+  export type MemberMembershipUncheckedCreateNestedManyWithoutTurfInput = {
+    create?: XOR<MemberMembershipCreateWithoutTurfInput, MemberMembershipUncheckedCreateWithoutTurfInput> | MemberMembershipCreateWithoutTurfInput[] | MemberMembershipUncheckedCreateWithoutTurfInput[]
+    connectOrCreate?: MemberMembershipCreateOrConnectWithoutTurfInput | MemberMembershipCreateOrConnectWithoutTurfInput[]
+    createMany?: MemberMembershipCreateManyTurfInputEnvelope
+    connect?: MemberMembershipWhereUniqueInput | MemberMembershipWhereUniqueInput[]
   }
 
   export type NullableFloatFieldUpdateOperationsInput = {
@@ -45551,6 +45696,20 @@ export namespace Prisma {
     deleteMany?: BookingScalarWhereInput | BookingScalarWhereInput[]
   }
 
+  export type MemberMembershipUpdateManyWithoutTurfNestedInput = {
+    create?: XOR<MemberMembershipCreateWithoutTurfInput, MemberMembershipUncheckedCreateWithoutTurfInput> | MemberMembershipCreateWithoutTurfInput[] | MemberMembershipUncheckedCreateWithoutTurfInput[]
+    connectOrCreate?: MemberMembershipCreateOrConnectWithoutTurfInput | MemberMembershipCreateOrConnectWithoutTurfInput[]
+    upsert?: MemberMembershipUpsertWithWhereUniqueWithoutTurfInput | MemberMembershipUpsertWithWhereUniqueWithoutTurfInput[]
+    createMany?: MemberMembershipCreateManyTurfInputEnvelope
+    set?: MemberMembershipWhereUniqueInput | MemberMembershipWhereUniqueInput[]
+    disconnect?: MemberMembershipWhereUniqueInput | MemberMembershipWhereUniqueInput[]
+    delete?: MemberMembershipWhereUniqueInput | MemberMembershipWhereUniqueInput[]
+    connect?: MemberMembershipWhereUniqueInput | MemberMembershipWhereUniqueInput[]
+    update?: MemberMembershipUpdateWithWhereUniqueWithoutTurfInput | MemberMembershipUpdateWithWhereUniqueWithoutTurfInput[]
+    updateMany?: MemberMembershipUpdateManyWithWhereWithoutTurfInput | MemberMembershipUpdateManyWithWhereWithoutTurfInput[]
+    deleteMany?: MemberMembershipScalarWhereInput | MemberMembershipScalarWhereInput[]
+  }
+
   export type TurfUncheckedUpdateManyWithoutParentTurfNestedInput = {
     create?: XOR<TurfCreateWithoutParentTurfInput, TurfUncheckedCreateWithoutParentTurfInput> | TurfCreateWithoutParentTurfInput[] | TurfUncheckedCreateWithoutParentTurfInput[]
     connectOrCreate?: TurfCreateOrConnectWithoutParentTurfInput | TurfCreateOrConnectWithoutParentTurfInput[]
@@ -45591,6 +45750,20 @@ export namespace Prisma {
     update?: BookingUpdateWithWhereUniqueWithoutTurfInput | BookingUpdateWithWhereUniqueWithoutTurfInput[]
     updateMany?: BookingUpdateManyWithWhereWithoutTurfInput | BookingUpdateManyWithWhereWithoutTurfInput[]
     deleteMany?: BookingScalarWhereInput | BookingScalarWhereInput[]
+  }
+
+  export type MemberMembershipUncheckedUpdateManyWithoutTurfNestedInput = {
+    create?: XOR<MemberMembershipCreateWithoutTurfInput, MemberMembershipUncheckedCreateWithoutTurfInput> | MemberMembershipCreateWithoutTurfInput[] | MemberMembershipUncheckedCreateWithoutTurfInput[]
+    connectOrCreate?: MemberMembershipCreateOrConnectWithoutTurfInput | MemberMembershipCreateOrConnectWithoutTurfInput[]
+    upsert?: MemberMembershipUpsertWithWhereUniqueWithoutTurfInput | MemberMembershipUpsertWithWhereUniqueWithoutTurfInput[]
+    createMany?: MemberMembershipCreateManyTurfInputEnvelope
+    set?: MemberMembershipWhereUniqueInput | MemberMembershipWhereUniqueInput[]
+    disconnect?: MemberMembershipWhereUniqueInput | MemberMembershipWhereUniqueInput[]
+    delete?: MemberMembershipWhereUniqueInput | MemberMembershipWhereUniqueInput[]
+    connect?: MemberMembershipWhereUniqueInput | MemberMembershipWhereUniqueInput[]
+    update?: MemberMembershipUpdateWithWhereUniqueWithoutTurfInput | MemberMembershipUpdateWithWhereUniqueWithoutTurfInput[]
+    updateMany?: MemberMembershipUpdateManyWithWhereWithoutTurfInput | MemberMembershipUpdateManyWithWhereWithoutTurfInput[]
+    deleteMany?: MemberMembershipScalarWhereInput | MemberMembershipScalarWhereInput[]
   }
 
   export type TurfCreateNestedOneWithoutSportsInput = {
@@ -45731,6 +45904,12 @@ export namespace Prisma {
     connect?: MembershipPlanWhereUniqueInput
   }
 
+  export type TurfCreateNestedOneWithoutMemberMembershipsInput = {
+    create?: XOR<TurfCreateWithoutMemberMembershipsInput, TurfUncheckedCreateWithoutMemberMembershipsInput>
+    connectOrCreate?: TurfCreateOrConnectWithoutMemberMembershipsInput
+    connect?: TurfWhereUniqueInput
+  }
+
   export type MemberUpdateOneRequiredWithoutMembershipsNestedInput = {
     create?: XOR<MemberCreateWithoutMembershipsInput, MemberUncheckedCreateWithoutMembershipsInput>
     connectOrCreate?: MemberCreateOrConnectWithoutMembershipsInput
@@ -45745,6 +45924,16 @@ export namespace Prisma {
     upsert?: MembershipPlanUpsertWithoutMembershipsInput
     connect?: MembershipPlanWhereUniqueInput
     update?: XOR<XOR<MembershipPlanUpdateToOneWithWhereWithoutMembershipsInput, MembershipPlanUpdateWithoutMembershipsInput>, MembershipPlanUncheckedUpdateWithoutMembershipsInput>
+  }
+
+  export type TurfUpdateOneWithoutMemberMembershipsNestedInput = {
+    create?: XOR<TurfCreateWithoutMemberMembershipsInput, TurfUncheckedCreateWithoutMemberMembershipsInput>
+    connectOrCreate?: TurfCreateOrConnectWithoutMemberMembershipsInput
+    upsert?: TurfUpsertWithoutMemberMembershipsInput
+    disconnect?: TurfWhereInput | boolean
+    delete?: TurfWhereInput | boolean
+    connect?: TurfWhereUniqueInput
+    update?: XOR<XOR<TurfUpdateToOneWithWhereWithoutMemberMembershipsInput, TurfUpdateWithoutMemberMembershipsInput>, TurfUncheckedUpdateWithoutMemberMembershipsInput>
   }
 
   export type MemberCreateNestedOneWithoutAttendancesInput = {
@@ -46651,9 +46840,11 @@ export namespace Prisma {
     startDate: Date | string
     endDate: Date | string
     status?: string
+    timeSlot?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     membershipPlan: MembershipPlanCreateNestedOneWithoutMembershipsInput
+    turf?: TurfCreateNestedOneWithoutMemberMembershipsInput
   }
 
   export type MemberMembershipUncheckedCreateWithoutMemberInput = {
@@ -46662,6 +46853,8 @@ export namespace Prisma {
     startDate: Date | string
     endDate: Date | string
     status?: string
+    turfId?: string | null
+    timeSlot?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -46960,6 +47153,8 @@ export namespace Prisma {
     startDate?: DateTimeFilter<"MemberMembership"> | Date | string
     endDate?: DateTimeFilter<"MemberMembership"> | Date | string
     status?: StringFilter<"MemberMembership"> | string
+    turfId?: StringNullableFilter<"MemberMembership"> | string | null
+    timeSlot?: StringNullableFilter<"MemberMembership"> | string | null
     createdAt?: DateTimeFilter<"MemberMembership"> | Date | string
     updatedAt?: DateTimeFilter<"MemberMembership"> | Date | string
   }
@@ -47769,6 +47964,7 @@ export namespace Prisma {
     parentTurf?: TurfCreateNestedOneWithoutChildTurfsInput
     sports?: TurfSportCreateNestedManyWithoutTurfInput
     bookings?: BookingCreateNestedManyWithoutTurfInput
+    memberMemberships?: MemberMembershipCreateNestedManyWithoutTurfInput
   }
 
   export type TurfUncheckedCreateWithoutChildTurfsInput = {
@@ -47785,6 +47981,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     sports?: TurfSportUncheckedCreateNestedManyWithoutTurfInput
     bookings?: BookingUncheckedCreateNestedManyWithoutTurfInput
+    memberMemberships?: MemberMembershipUncheckedCreateNestedManyWithoutTurfInput
   }
 
   export type TurfCreateOrConnectWithoutChildTurfsInput = {
@@ -47806,6 +48003,7 @@ export namespace Prisma {
     childTurfs?: TurfCreateNestedManyWithoutParentTurfInput
     sports?: TurfSportCreateNestedManyWithoutTurfInput
     bookings?: BookingCreateNestedManyWithoutTurfInput
+    memberMemberships?: MemberMembershipCreateNestedManyWithoutTurfInput
   }
 
   export type TurfUncheckedCreateWithoutParentTurfInput = {
@@ -47822,6 +48020,7 @@ export namespace Prisma {
     childTurfs?: TurfUncheckedCreateNestedManyWithoutParentTurfInput
     sports?: TurfSportUncheckedCreateNestedManyWithoutTurfInput
     bookings?: BookingUncheckedCreateNestedManyWithoutTurfInput
+    memberMemberships?: MemberMembershipUncheckedCreateNestedManyWithoutTurfInput
   }
 
   export type TurfCreateOrConnectWithoutParentTurfInput = {
@@ -47901,6 +48100,39 @@ export namespace Prisma {
     data: BookingCreateManyTurfInput | BookingCreateManyTurfInput[]
   }
 
+  export type MemberMembershipCreateWithoutTurfInput = {
+    id?: string
+    startDate: Date | string
+    endDate: Date | string
+    status?: string
+    timeSlot?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    member: MemberCreateNestedOneWithoutMembershipsInput
+    membershipPlan: MembershipPlanCreateNestedOneWithoutMembershipsInput
+  }
+
+  export type MemberMembershipUncheckedCreateWithoutTurfInput = {
+    id?: string
+    memberId: string
+    membershipPlanId: string
+    startDate: Date | string
+    endDate: Date | string
+    status?: string
+    timeSlot?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type MemberMembershipCreateOrConnectWithoutTurfInput = {
+    where: MemberMembershipWhereUniqueInput
+    create: XOR<MemberMembershipCreateWithoutTurfInput, MemberMembershipUncheckedCreateWithoutTurfInput>
+  }
+
+  export type MemberMembershipCreateManyTurfInputEnvelope = {
+    data: MemberMembershipCreateManyTurfInput | MemberMembershipCreateManyTurfInput[]
+  }
+
   export type TurfUpsertWithoutChildTurfsInput = {
     update: XOR<TurfUpdateWithoutChildTurfsInput, TurfUncheckedUpdateWithoutChildTurfsInput>
     create: XOR<TurfCreateWithoutChildTurfsInput, TurfUncheckedCreateWithoutChildTurfsInput>
@@ -47926,6 +48158,7 @@ export namespace Prisma {
     parentTurf?: TurfUpdateOneWithoutChildTurfsNestedInput
     sports?: TurfSportUpdateManyWithoutTurfNestedInput
     bookings?: BookingUpdateManyWithoutTurfNestedInput
+    memberMemberships?: MemberMembershipUpdateManyWithoutTurfNestedInput
   }
 
   export type TurfUncheckedUpdateWithoutChildTurfsInput = {
@@ -47942,6 +48175,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     sports?: TurfSportUncheckedUpdateManyWithoutTurfNestedInput
     bookings?: BookingUncheckedUpdateManyWithoutTurfNestedInput
+    memberMemberships?: MemberMembershipUncheckedUpdateManyWithoutTurfNestedInput
   }
 
   export type TurfUpsertWithWhereUniqueWithoutParentTurfInput = {
@@ -48009,6 +48243,22 @@ export namespace Prisma {
     data: XOR<BookingUpdateManyMutationInput, BookingUncheckedUpdateManyWithoutTurfInput>
   }
 
+  export type MemberMembershipUpsertWithWhereUniqueWithoutTurfInput = {
+    where: MemberMembershipWhereUniqueInput
+    update: XOR<MemberMembershipUpdateWithoutTurfInput, MemberMembershipUncheckedUpdateWithoutTurfInput>
+    create: XOR<MemberMembershipCreateWithoutTurfInput, MemberMembershipUncheckedCreateWithoutTurfInput>
+  }
+
+  export type MemberMembershipUpdateWithWhereUniqueWithoutTurfInput = {
+    where: MemberMembershipWhereUniqueInput
+    data: XOR<MemberMembershipUpdateWithoutTurfInput, MemberMembershipUncheckedUpdateWithoutTurfInput>
+  }
+
+  export type MemberMembershipUpdateManyWithWhereWithoutTurfInput = {
+    where: MemberMembershipScalarWhereInput
+    data: XOR<MemberMembershipUpdateManyMutationInput, MemberMembershipUncheckedUpdateManyWithoutTurfInput>
+  }
+
   export type TurfCreateWithoutSportsInput = {
     id?: string
     name: string
@@ -48023,6 +48273,7 @@ export namespace Prisma {
     parentTurf?: TurfCreateNestedOneWithoutChildTurfsInput
     childTurfs?: TurfCreateNestedManyWithoutParentTurfInput
     bookings?: BookingCreateNestedManyWithoutTurfInput
+    memberMemberships?: MemberMembershipCreateNestedManyWithoutTurfInput
   }
 
   export type TurfUncheckedCreateWithoutSportsInput = {
@@ -48039,6 +48290,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     childTurfs?: TurfUncheckedCreateNestedManyWithoutParentTurfInput
     bookings?: BookingUncheckedCreateNestedManyWithoutTurfInput
+    memberMemberships?: MemberMembershipUncheckedCreateNestedManyWithoutTurfInput
   }
 
   export type TurfCreateOrConnectWithoutSportsInput = {
@@ -48106,6 +48358,7 @@ export namespace Prisma {
     parentTurf?: TurfUpdateOneWithoutChildTurfsNestedInput
     childTurfs?: TurfUpdateManyWithoutParentTurfNestedInput
     bookings?: BookingUpdateManyWithoutTurfNestedInput
+    memberMemberships?: MemberMembershipUpdateManyWithoutTurfNestedInput
   }
 
   export type TurfUncheckedUpdateWithoutSportsInput = {
@@ -48122,6 +48375,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     childTurfs?: TurfUncheckedUpdateManyWithoutParentTurfNestedInput
     bookings?: BookingUncheckedUpdateManyWithoutTurfNestedInput
+    memberMemberships?: MemberMembershipUncheckedUpdateManyWithoutTurfNestedInput
   }
 
   export type SportUpsertWithoutTurfsInput = {
@@ -48205,9 +48459,11 @@ export namespace Prisma {
     startDate: Date | string
     endDate: Date | string
     status?: string
+    timeSlot?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     member: MemberCreateNestedOneWithoutMembershipsInput
+    turf?: TurfCreateNestedOneWithoutMemberMembershipsInput
   }
 
   export type MemberMembershipUncheckedCreateWithoutMembershipPlanInput = {
@@ -48216,6 +48472,8 @@ export namespace Prisma {
     startDate: Date | string
     endDate: Date | string
     status?: string
+    turfId?: string | null
+    timeSlot?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -48417,6 +48675,45 @@ export namespace Prisma {
     create: XOR<MembershipPlanCreateWithoutMembershipsInput, MembershipPlanUncheckedCreateWithoutMembershipsInput>
   }
 
+  export type TurfCreateWithoutMemberMembershipsInput = {
+    id?: string
+    name: string
+    location?: string | null
+    bookingPrice?: number | null
+    bookingDurationMinutes?: number | null
+    capacityPerSlot?: number
+    requireEntryVerification?: boolean
+    bookingValidityDays?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    parentTurf?: TurfCreateNestedOneWithoutChildTurfsInput
+    childTurfs?: TurfCreateNestedManyWithoutParentTurfInput
+    sports?: TurfSportCreateNestedManyWithoutTurfInput
+    bookings?: BookingCreateNestedManyWithoutTurfInput
+  }
+
+  export type TurfUncheckedCreateWithoutMemberMembershipsInput = {
+    id?: string
+    name: string
+    location?: string | null
+    parentTurfId?: string | null
+    bookingPrice?: number | null
+    bookingDurationMinutes?: number | null
+    capacityPerSlot?: number
+    requireEntryVerification?: boolean
+    bookingValidityDays?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    childTurfs?: TurfUncheckedCreateNestedManyWithoutParentTurfInput
+    sports?: TurfSportUncheckedCreateNestedManyWithoutTurfInput
+    bookings?: BookingUncheckedCreateNestedManyWithoutTurfInput
+  }
+
+  export type TurfCreateOrConnectWithoutMemberMembershipsInput = {
+    where: TurfWhereUniqueInput
+    create: XOR<TurfCreateWithoutMemberMembershipsInput, TurfUncheckedCreateWithoutMemberMembershipsInput>
+  }
+
   export type MemberUpsertWithoutMembershipsInput = {
     update: XOR<MemberUpdateWithoutMembershipsInput, MemberUncheckedUpdateWithoutMembershipsInput>
     create: XOR<MemberCreateWithoutMembershipsInput, MemberUncheckedCreateWithoutMembershipsInput>
@@ -48513,6 +48810,51 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     attendances?: AttendanceUncheckedUpdateManyWithoutMembershipPlanNestedInput
+  }
+
+  export type TurfUpsertWithoutMemberMembershipsInput = {
+    update: XOR<TurfUpdateWithoutMemberMembershipsInput, TurfUncheckedUpdateWithoutMemberMembershipsInput>
+    create: XOR<TurfCreateWithoutMemberMembershipsInput, TurfUncheckedCreateWithoutMemberMembershipsInput>
+    where?: TurfWhereInput
+  }
+
+  export type TurfUpdateToOneWithWhereWithoutMemberMembershipsInput = {
+    where?: TurfWhereInput
+    data: XOR<TurfUpdateWithoutMemberMembershipsInput, TurfUncheckedUpdateWithoutMemberMembershipsInput>
+  }
+
+  export type TurfUpdateWithoutMemberMembershipsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    bookingPrice?: NullableFloatFieldUpdateOperationsInput | number | null
+    bookingDurationMinutes?: NullableIntFieldUpdateOperationsInput | number | null
+    capacityPerSlot?: IntFieldUpdateOperationsInput | number
+    requireEntryVerification?: BoolFieldUpdateOperationsInput | boolean
+    bookingValidityDays?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    parentTurf?: TurfUpdateOneWithoutChildTurfsNestedInput
+    childTurfs?: TurfUpdateManyWithoutParentTurfNestedInput
+    sports?: TurfSportUpdateManyWithoutTurfNestedInput
+    bookings?: BookingUpdateManyWithoutTurfNestedInput
+  }
+
+  export type TurfUncheckedUpdateWithoutMemberMembershipsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    parentTurfId?: NullableStringFieldUpdateOperationsInput | string | null
+    bookingPrice?: NullableFloatFieldUpdateOperationsInput | number | null
+    bookingDurationMinutes?: NullableIntFieldUpdateOperationsInput | number | null
+    capacityPerSlot?: IntFieldUpdateOperationsInput | number
+    requireEntryVerification?: BoolFieldUpdateOperationsInput | boolean
+    bookingValidityDays?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    childTurfs?: TurfUncheckedUpdateManyWithoutParentTurfNestedInput
+    sports?: TurfSportUncheckedUpdateManyWithoutTurfNestedInput
+    bookings?: BookingUncheckedUpdateManyWithoutTurfNestedInput
   }
 
   export type MemberCreateWithoutAttendancesInput = {
@@ -48789,6 +49131,7 @@ export namespace Prisma {
     parentTurf?: TurfCreateNestedOneWithoutChildTurfsInput
     childTurfs?: TurfCreateNestedManyWithoutParentTurfInput
     sports?: TurfSportCreateNestedManyWithoutTurfInput
+    memberMemberships?: MemberMembershipCreateNestedManyWithoutTurfInput
   }
 
   export type TurfUncheckedCreateWithoutBookingsInput = {
@@ -48805,6 +49148,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     childTurfs?: TurfUncheckedCreateNestedManyWithoutParentTurfInput
     sports?: TurfSportUncheckedCreateNestedManyWithoutTurfInput
+    memberMemberships?: MemberMembershipUncheckedCreateNestedManyWithoutTurfInput
   }
 
   export type TurfCreateOrConnectWithoutBookingsInput = {
@@ -48996,6 +49340,7 @@ export namespace Prisma {
     parentTurf?: TurfUpdateOneWithoutChildTurfsNestedInput
     childTurfs?: TurfUpdateManyWithoutParentTurfNestedInput
     sports?: TurfSportUpdateManyWithoutTurfNestedInput
+    memberMemberships?: MemberMembershipUpdateManyWithoutTurfNestedInput
   }
 
   export type TurfUncheckedUpdateWithoutBookingsInput = {
@@ -49012,6 +49357,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     childTurfs?: TurfUncheckedUpdateManyWithoutParentTurfNestedInput
     sports?: TurfSportUncheckedUpdateManyWithoutTurfNestedInput
+    memberMemberships?: MemberMembershipUncheckedUpdateManyWithoutTurfNestedInput
   }
 
   export type MemberUpsertWithoutBookingsInput = {
@@ -50990,6 +51336,8 @@ export namespace Prisma {
     startDate: Date | string
     endDate: Date | string
     status?: string
+    turfId?: string | null
+    timeSlot?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -51084,9 +51432,11 @@ export namespace Prisma {
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
     status?: StringFieldUpdateOperationsInput | string
+    timeSlot?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     membershipPlan?: MembershipPlanUpdateOneRequiredWithoutMembershipsNestedInput
+    turf?: TurfUpdateOneWithoutMemberMembershipsNestedInput
   }
 
   export type MemberMembershipUncheckedUpdateWithoutMemberInput = {
@@ -51095,6 +51445,8 @@ export namespace Prisma {
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
     status?: StringFieldUpdateOperationsInput | string
+    turfId?: NullableStringFieldUpdateOperationsInput | string | null
+    timeSlot?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -51105,6 +51457,8 @@ export namespace Prisma {
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
     status?: StringFieldUpdateOperationsInput | string
+    turfId?: NullableStringFieldUpdateOperationsInput | string | null
+    timeSlot?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -51759,6 +52113,18 @@ export namespace Prisma {
     updatedAt?: Date | string
   }
 
+  export type MemberMembershipCreateManyTurfInput = {
+    id?: string
+    memberId: string
+    membershipPlanId: string
+    startDate: Date | string
+    endDate: Date | string
+    status?: string
+    timeSlot?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
   export type TurfUpdateWithoutParentTurfInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -51773,6 +52139,7 @@ export namespace Prisma {
     childTurfs?: TurfUpdateManyWithoutParentTurfNestedInput
     sports?: TurfSportUpdateManyWithoutTurfNestedInput
     bookings?: BookingUpdateManyWithoutTurfNestedInput
+    memberMemberships?: MemberMembershipUpdateManyWithoutTurfNestedInput
   }
 
   export type TurfUncheckedUpdateWithoutParentTurfInput = {
@@ -51789,6 +52156,7 @@ export namespace Prisma {
     childTurfs?: TurfUncheckedUpdateManyWithoutParentTurfNestedInput
     sports?: TurfSportUncheckedUpdateManyWithoutTurfNestedInput
     bookings?: BookingUncheckedUpdateManyWithoutTurfNestedInput
+    memberMemberships?: MemberMembershipUncheckedUpdateManyWithoutTurfNestedInput
   }
 
   export type TurfUncheckedUpdateManyWithoutParentTurfInput = {
@@ -51876,12 +52244,50 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type MemberMembershipUpdateWithoutTurfInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: StringFieldUpdateOperationsInput | string
+    timeSlot?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    member?: MemberUpdateOneRequiredWithoutMembershipsNestedInput
+    membershipPlan?: MembershipPlanUpdateOneRequiredWithoutMembershipsNestedInput
+  }
+
+  export type MemberMembershipUncheckedUpdateWithoutTurfInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    memberId?: StringFieldUpdateOperationsInput | string
+    membershipPlanId?: StringFieldUpdateOperationsInput | string
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: StringFieldUpdateOperationsInput | string
+    timeSlot?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MemberMembershipUncheckedUpdateManyWithoutTurfInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    memberId?: StringFieldUpdateOperationsInput | string
+    membershipPlanId?: StringFieldUpdateOperationsInput | string
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: StringFieldUpdateOperationsInput | string
+    timeSlot?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type MemberMembershipCreateManyMembershipPlanInput = {
     id?: string
     memberId: string
     startDate: Date | string
     endDate: Date | string
     status?: string
+    turfId?: string | null
+    timeSlot?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -51901,9 +52307,11 @@ export namespace Prisma {
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
     status?: StringFieldUpdateOperationsInput | string
+    timeSlot?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     member?: MemberUpdateOneRequiredWithoutMembershipsNestedInput
+    turf?: TurfUpdateOneWithoutMemberMembershipsNestedInput
   }
 
   export type MemberMembershipUncheckedUpdateWithoutMembershipPlanInput = {
@@ -51912,6 +52320,8 @@ export namespace Prisma {
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
     status?: StringFieldUpdateOperationsInput | string
+    turfId?: NullableStringFieldUpdateOperationsInput | string | null
+    timeSlot?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -51922,6 +52332,8 @@ export namespace Prisma {
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
     status?: StringFieldUpdateOperationsInput | string
+    turfId?: NullableStringFieldUpdateOperationsInput | string | null
+    timeSlot?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

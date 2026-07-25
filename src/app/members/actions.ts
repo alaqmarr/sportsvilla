@@ -69,7 +69,7 @@ export async function deleteMember(id: string) {
   revalidatePath("/", "layout");
 }
 
-export async function assignPlan(data: { memberIds?: string[]; memberId?: string; mobile?: string; name?: string; email?: string; planId: string; startDate: string }) {
+export async function assignPlan(data: { memberIds?: string[]; memberId?: string; mobile?: string; name?: string; email?: string; planId: string; startDate: string; turfId?: string; timeSlot?: string }) {
   const plan = await prisma.membershipPlan.findUnique({ where: { id: data.planId }});
   if (!plan) throw new Error("Plan not found");
   
@@ -131,7 +131,9 @@ export async function assignPlan(data: { memberIds?: string[]; memberId?: string
           membershipPlanId: data.planId,
           startDate: start,
           endDate: end,
-          status: "ACTIVE"
+          status: "ACTIVE",
+          turfId: data.turfId || null,
+          timeSlot: data.timeSlot || null
         },
         include: { membershipPlan: true }
       });
@@ -163,7 +165,7 @@ export async function assignPlan(data: { memberIds?: string[]; memberId?: string
   return createdMemberships;
 }
 
-export async function updateMemberMembership(id: string, data: { startDate?: string, endDate?: string, status?: string }) {
+export async function updateMemberMembership(id: string, data: { startDate?: string, endDate?: string, status?: string, turfId?: string, timeSlot?: string }) {
   const updateData: any = {};
   if (data.startDate) {
     updateData.startDate = getISTDateBounds(data.startDate).start;
@@ -173,6 +175,12 @@ export async function updateMemberMembership(id: string, data: { startDate?: str
   }
   if (data.status) {
     updateData.status = data.status;
+  }
+  if (data.turfId !== undefined) {
+    updateData.turfId = data.turfId || null;
+  }
+  if (data.timeSlot !== undefined) {
+    updateData.timeSlot = data.timeSlot || null;
   }
   
   const updated = await prisma.memberMembership.update({

@@ -9,7 +9,7 @@ import jsPDF from "jspdf";
 import QRCodeLib from "qrcode";
 import { FiTrash2, FiEdit2, FiPlus, FiX, FiDownload, FiImage, FiMessageCircle, FiUserCheck, FiUsers, FiFileText, FiRefreshCcw } from "react-icons/fi";
 
-export default function MembersClient({ initialMembers, plans }: { initialMembers: any[], plans: any[] }) {
+export default function MembersClient({ initialMembers, plans, turfs = [] }: { initialMembers: any[], plans: any[], turfs?: any[] }) {
   const { showAlert } = useAlert();
   const [members, setMembers] = useState(initialMembers);
   
@@ -40,6 +40,9 @@ export default function MembersClient({ initialMembers, plans }: { initialMember
   const [assignMemberIds, setAssignMemberIds] = useState<string[]>([]);
   const [assignPlanId, setAssignPlanId] = useState("");
   const [startDate, setStartDate] = useState(todayIST());
+  const [assignTurfId, setAssignTurfId] = useState("");
+  const [assignStartTime, setAssignStartTime] = useState("");
+  const [assignEndTime, setAssignEndTime] = useState("");
   const [assignLoading, setAssignLoading] = useState(false);
 
   // Edit Membership State
@@ -48,12 +51,27 @@ export default function MembersClient({ initialMembers, plans }: { initialMember
   const [editMembershipStart, setEditMembershipStart] = useState("");
   const [editMembershipEnd, setEditMembershipEnd] = useState("");
   const [editMembershipStatus, setEditMembershipStatus] = useState("ACTIVE");
+  const [editMembershipTurfId, setEditMembershipTurfId] = useState("");
+  const [editMembershipStartTime, setEditMembershipStartTime] = useState("");
+  const [editMembershipEndTime, setEditMembershipEndTime] = useState("");
   const [membershipLoading, setMembershipLoading] = useState(false);
 
   // Derived state for assignment
   const existingAssignMembers = members.filter(m => m.mobile === assignMobile);
   const [generatingIdCard, setGeneratingIdCard] = useState(false);
   const idCardRef = useRef<HTMLDivElement>(null);
+
+  const timeOptions = useMemo(() => {
+    const times = [];
+    for (let i = 5; i <= 23; i++) {
+      for (const min of ['00', '30']) {
+        const hour = i % 12 || 12;
+        const ampm = i < 12 ? 'AM' : 'PM';
+        times.push(`${hour.toString().padStart(2, '0')}:${min} ${ampm}`);
+      }
+    }
+    return times;
+  }, []);
   const [qrCodeData, setQrCodeData] = useState("");
 
   const selectedAssignPlan = useMemo(() => plans.find((p) => p.id === assignPlanId), [assignPlanId, plans]);
@@ -173,7 +191,9 @@ export default function MembersClient({ initialMembers, plans }: { initialMember
         name: existingAssignMembers.length > 0 ? undefined : assignName, 
         email: existingAssignMembers.length > 0 ? undefined : assignEmail,
         planId: assignPlanId, 
-        startDate 
+        startDate,
+        turfId: assignTurfId || undefined,
+        timeSlot: (assignStartTime && assignEndTime) ? `${assignStartTime} - ${assignEndTime}` : undefined
       });
       showAlert("Plan Assigned", "The membership plan has been successfully activated.", "success");
       setShowPlanModal(false); window.location.reload();
@@ -185,9 +205,13 @@ export default function MembersClient({ initialMembers, plans }: { initialMember
 
   function openEditMembershipModal(membership: any) {
     setEditingMembership(membership);
-    setEditMembershipStart(formatIST(new Date(membership.startDate), 'yyyy-MM-dd'));
-    setEditMembershipEnd(formatIST(new Date(membership.endDate), 'yyyy-MM-dd'));
+    setEditMembershipStart(new Date(membership.startDate).toISOString().split('T')[0]);
+    setEditMembershipEnd(new Date(membership.endDate).toISOString().split('T')[0]);
     setEditMembershipStatus(membership.status);
+    setEditMembershipTurfId(membership.turfId || "");
+    const parts = (membership.timeSlot || "").split(" - ");
+    setEditMembershipStartTime(parts[0] || "");
+    setEditMembershipEndTime(parts[1] || "");
     setShowEditMembershipModal(true);
   }
 
@@ -196,10 +220,12 @@ export default function MembersClient({ initialMembers, plans }: { initialMember
     if (!editingMembership) return;
     setMembershipLoading(true);
     try {
-      await updateMemberMembership(editingMembership.id, {
+      const data = await updateMemberMembership(editingMembership.id, {
         startDate: editMembershipStart,
         endDate: editMembershipEnd,
         status: editMembershipStatus,
+        turfId: editMembershipTurfId || undefined,
+        timeSlot: (editMembershipStartTime && editMembershipEndTime) ? `${editMembershipStartTime} - ${editMembershipEndTime}` : undefined,
       });
       showAlert("Membership Updated", "The membership details have been updated.", "success");
       setShowEditMembershipModal(false);
@@ -378,7 +404,14 @@ export default function MembersClient({ initialMembers, plans }: { initialMember
                             const isActive = m.status === 'ACTIVE' && new Date(m.endDate) >= new Date();
                             return (
                               <div key={m.id} className={`text-xs py-1 px-3 rounded-md flex justify-between items-center ${isActive ? 'bg-emerald-500/10 border border-emerald-500/20 text-emerald-400' : 'bg-[#1c1f2e] border border-[#2a2d3e] text-gray-500 opacity-60'}`}>
-                                <span className="font-bold tracking-wide uppercase">{m.membershipPlan?.name} ({m.membershipPlan?.sport?.name})</span>
+                                <div className="flex flex-col">
+                                  <span className="font-bold tracking-wide uppercase">{m.membershipPlan?.name} ({m.membershipPlan?.sport?.name})</span>
+                                  {(m.turf || m.timeSlot) && (
+                                    <span className="text-[10px] mt-0.5 opacity-80 font-medium">
+                                      {m.turf?.name || "Any Court"} {m.timeSlot && `• ${m.timeSlot}`}
+                                    </span>
+                                  )}
+                                </div>
                                 <div className="flex items-center gap-3">
                                   <span className="opacity-80 font-medium tracking-tight">Expires: {formatIST(new Date(m.endDate), 'MMM d')}</span>
                                   <div className="flex items-center gap-1 border-l border-gray-700/50 pl-3">
@@ -620,9 +653,42 @@ export default function MembersClient({ initialMembers, plans }: { initialMember
                   {plans.map(p => <option key={p.id} value={p.id}>{p.name} - {p.sport?.name} {p.isFamilyPlan && `(Family Size: ${p.familySize})`}</option>)}
                 </select>
               </div>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-5">
+                <div>
+                  <label className="block text-xs uppercase tracking-wider font-semibold text-gray-500 mb-2">Start Date</label>
+                  <input type="date" className="w-full bg-[#0f1117] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white placeholder-gray-600 focus:border-orange-500/50 focus:ring-2 focus:ring-orange-500/20 focus:outline-none text-sm" value={startDate} onChange={e => setStartDate(e.target.value)} required />
+                </div>
+                <div>
+                  <label className="block text-xs uppercase tracking-wider font-semibold text-gray-500 mb-2">Start Time</label>
+                  <select 
+                    className="w-full bg-[#0f1117] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white placeholder-gray-600 focus:border-orange-500/50 focus:ring-2 focus:ring-orange-500/20 focus:outline-none text-sm"
+                    value={assignStartTime}
+                    onChange={e => setAssignStartTime(e.target.value)}
+                  >
+                    <option value="">Any Time</option>
+                    {timeOptions.map(t => <option key={t} value={t}>{t}</option>)}
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-xs uppercase tracking-wider font-semibold text-gray-500 mb-2">End Time</label>
+                  <select 
+                    className="w-full bg-[#0f1117] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white placeholder-gray-600 focus:border-orange-500/50 focus:ring-2 focus:ring-orange-500/20 focus:outline-none text-sm"
+                    value={assignEndTime}
+                    onChange={e => setAssignEndTime(e.target.value)}
+                  >
+                    <option value="">Any Time</option>
+                    {timeOptions.map(t => <option key={t} value={t}>{t}</option>)}
+                  </select>
+                </div>
+              </div>
               <div className="mb-5">
-                <label className="block text-xs uppercase tracking-wider font-semibold text-gray-500 mb-2">Start Date</label>
-                <input type="date" className="w-full bg-[#0f1117] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white placeholder-gray-600 focus:border-orange-500/50 focus:ring-2 focus:ring-orange-500/20 focus:outline-none text-sm" value={startDate} onChange={e => setStartDate(e.target.value)} required />
+                <label className="block text-xs uppercase tracking-wider font-semibold text-gray-500 mb-2">Assigned Court/Turf</label>
+                <select className="w-full bg-[#0f1117] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white placeholder-gray-600 focus:border-orange-500/50 focus:ring-2 focus:ring-orange-500/20 focus:outline-none text-sm" value={assignTurfId} onChange={e => setAssignTurfId(e.target.value)}>
+                  <option value="">-- No Specific Court --</option>
+                  {turfs.filter(t => !selectedAssignPlan || t.sports?.some((ts: any) => ts.sportId === selectedAssignPlan.sportId)).map(t => (
+                    <option key={t.id} value={t.id}>{t.name}</option>
+                  ))}
+                </select>
               </div>
               <button type="submit" className="w-full bg-orange-500 hover:bg-orange-600 text-white rounded-lg px-5 py-3 text-sm font-semibold transition-colors cursor-pointer border-none disabled:opacity-50" disabled={assignLoading}>
                 {assignLoading ? "Assigning..." : "Confirm Assignment"}
@@ -710,26 +776,66 @@ export default function MembersClient({ initialMembers, plans }: { initialMember
             </div>
             
             <form onSubmit={handleUpdateMembership} className="p-6">
-              <div className="mb-5">
-                <label className="block text-xs uppercase tracking-wider font-semibold text-gray-500 mb-2">Start Date</label>
-                <input 
-                  type="date" 
-                  className="w-full bg-[#0f1117] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white focus:border-orange-500/50 focus:ring-2 focus:ring-orange-500/20 outline-none text-sm"
-                  value={editMembershipStart}
-                  onChange={e => setEditMembershipStart(e.target.value)}
-                  required
-                />
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-5">
+                <div>
+                  <label className="block text-xs uppercase tracking-wider font-semibold text-gray-500 mb-2">Start Date</label>
+                  <input 
+                    type="date" 
+                    className="w-full bg-[#0f1117] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white focus:border-orange-500/50 focus:ring-2 focus:ring-orange-500/20 outline-none text-sm"
+                    value={editMembershipStart}
+                    onChange={e => setEditMembershipStart(e.target.value)}
+                    required
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs uppercase tracking-wider font-semibold text-gray-500 mb-2">End Date</label>
+                  <input 
+                    type="date" 
+                    className="w-full bg-[#0f1117] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white focus:border-orange-500/50 focus:ring-2 focus:ring-orange-500/20 outline-none text-sm"
+                    value={editMembershipEnd}
+                    onChange={e => setEditMembershipEnd(e.target.value)}
+                    required
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4 mb-5">
+                <div>
+                  <label className="block text-xs uppercase tracking-wider font-semibold text-gray-500 mb-2">Start Time</label>
+                  <select 
+                    className="w-full bg-[#0f1117] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white focus:border-orange-500/50 focus:ring-2 focus:ring-orange-500/20 outline-none text-sm"
+                    value={editMembershipStartTime}
+                    onChange={e => setEditMembershipStartTime(e.target.value)}
+                  >
+                    <option value="">Any Time</option>
+                    {timeOptions.map(t => <option key={t} value={t}>{t}</option>)}
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-xs uppercase tracking-wider font-semibold text-gray-500 mb-2">End Time</label>
+                  <select 
+                    className="w-full bg-[#0f1117] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white focus:border-orange-500/50 focus:ring-2 focus:ring-orange-500/20 outline-none text-sm"
+                    value={editMembershipEndTime}
+                    onChange={e => setEditMembershipEndTime(e.target.value)}
+                  >
+                    <option value="">Any Time</option>
+                    {timeOptions.map(t => <option key={t} value={t}>{t}</option>)}
+                  </select>
+                </div>
               </div>
 
               <div className="mb-5">
-                <label className="block text-xs uppercase tracking-wider font-semibold text-gray-500 mb-2">End Date</label>
-                <input 
-                  type="date" 
+                <label className="block text-xs uppercase tracking-wider font-semibold text-gray-500 mb-2">Assigned Court/Turf</label>
+                <select 
                   className="w-full bg-[#0f1117] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white focus:border-orange-500/50 focus:ring-2 focus:ring-orange-500/20 outline-none text-sm"
-                  value={editMembershipEnd}
-                  onChange={e => setEditMembershipEnd(e.target.value)}
-                  required
-                />
+                  value={editMembershipTurfId}
+                  onChange={e => setEditMembershipTurfId(e.target.value)}
+                >
+                  <option value="">-- No Specific Court --</option>
+                  {turfs.filter(t => !editingMembership.membershipPlan?.sportId || t.sports?.some((ts: any) => ts.sportId === editingMembership.membershipPlan.sportId)).map(t => (
+                    <option key={t.id} value={t.id}>{t.name}</option>
+                  ))}
+                </select>
               </div>
 
               <div className="mb-8">

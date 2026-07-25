@@ -3,11 +3,14 @@ import { prisma } from "@/lib/prisma";
 import MembersClient from "./MembersClient";
 
 export default async function MembersPage() {
-  const [members, plans] = await Promise.all([
+  const [members, plans, turfs] = await Promise.all([
     prisma.member.findMany({
       include: {
         memberships: {
-          include: { membershipPlan: { include: { sport: true } } }
+          include: { 
+            membershipPlan: { include: { sport: true } },
+            turf: true 
+          }
         }
       },
       orderBy: { createdAt: "desc" }
@@ -15,8 +18,12 @@ export default async function MembersPage() {
     prisma.membershipPlan.findMany({
       include: { sport: true },
       orderBy: { name: "asc" }
+    }),
+    prisma.turf.findMany({
+      include: { sports: true },
+      orderBy: { name: "asc" }
     })
   ]);
   
-  return <MembersClient initialMembers={members} plans={plans} />;
+  return <MembersClient initialMembers={members} plans={plans} turfs={turfs} />;
 }
