@@ -50,11 +50,6 @@ export function Navigation({ children }: { children: React.ReactNode }) {
     return () => clearInterval(interval);
   }, [pathname, router]);
 
-  // If we are on the public member portal, CFD, or print page, don't show the admin sidebar
-  if (pathname.startsWith('/m/') || pathname === '/m' || pathname === '/display' || pathname.startsWith('/print') || pathname === '/downloads') {
-    return <>{children}</>;
-  }
-
   const linkGroups = [
     {
       title: "Core",
@@ -184,7 +179,7 @@ export function Navigation({ children }: { children: React.ReactNode }) {
         </nav>
         <div className="mt-auto pt-6 pb-2 border-t border-[#2a2d3e]">
           <button 
-            onClick={() => signOut()}
+            onClick={() => signOut({ callbackUrl: "/login" })}
             className="flex w-full items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-gray-400 hover:bg-red-500/10 hover:text-red-400 transition-colors cursor-pointer border-none bg-transparent"
           >
             <FiLogOut className="text-lg" />

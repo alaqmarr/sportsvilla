@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { lookupTicket, confirmTicketCheckin } from "@/app/checkin/actions";
+import { lookupTicket, confirmTicketCheckin } from "@/app/(admin)/checkin/actions";
 import { useAlert } from "@/components/AlertProvider";
 import { FiCheckCircle, FiXCircle, FiSearch, FiCamera, FiX } from "react-icons/fi";
 import { formatIST } from "@/lib/dateUtils";

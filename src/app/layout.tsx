@@ -1,6 +1,5 @@
 import "./globals.css";
 import { AlertProvider } from "@/components/AlertProvider";
-import { Navigation } from "@/components/Navigation";
 
 export const metadata = {
   title: "Sportsvilla Management",
@@ -17,9 +16,7 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <AlertProvider>
-          <Navigation>
-            {children}
-          </Navigation>
+          {children}
         </AlertProvider>
       </body>
     </html>

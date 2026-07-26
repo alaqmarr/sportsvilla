@@ -8,8 +8,13 @@ export async function middleware(req: any) {
   // Subdomain detection
   const isMemberSubdomain = host === "m.sportsvilla.co.in" || host === "m.sv.thewebsensei.dev" || host.startsWith("m.");
   
-  // Ignore static assets and APIs for rewrites
-  if (pathname.startsWith("/api") || pathname.startsWith("/_next") || pathname.includes("favicon.ico")) {
+  // Ignore static assets (images, fonts, css, js) and APIs
+  if (
+    pathname.startsWith("/api") ||
+    pathname.startsWith("/_next") ||
+    pathname.includes("favicon.ico") ||
+    /\.(svg|png|jpg|jpeg|gif|webp|ico|css|js|woff|woff2|ttf|eot)$/i.test(pathname)
+  ) {
     return NextResponse.next();
   }
   
@@ -27,16 +32,26 @@ export async function middleware(req: any) {
     return NextResponse.next();
   }
 
-  // Auth logic
-  if (pathname.startsWith("/m") || pathname === "/login" || pathname === "/setup" || pathname === "/downloads" || pathname === "/privacy-policy" || pathname === "/request-delete") {
+  // Auth logic - strict public routes whitelist
+  const isPublicRoute = 
+    pathname.startsWith("/m") ||
+    pathname.startsWith("/t/") ||
+    pathname.startsWith("/android") ||
+    pathname.startsWith("/ios") ||
+    pathname === "/login" ||
+    pathname === "/setup" ||
+    pathname === "/downloads" ||
+    pathname === "/privacy-policy" ||
+    pathname === "/request-delete";
+
+  if (isPublicRoute) {
     return NextResponse.next();
   }
 
-  // Check token
+  // Check token for all admin and protected routes
   const token = await getToken({ 
     req, 
     secret: process.env.NEXTAUTH_SECRET || "fallback_secret_for_development",
-    secureCookie: process.env.NODE_ENV === "production"
   });
 
   if (!token) {
@@ -55,7 +70,8 @@ export const config = {
      * - _next/static (static files)
      * - _next/image (image optimization files)
      * - favicon.ico (favicon file)
+     * - all static files (.png, .svg, .jpg, etc.)
      */
-    "/((?!_next/static|_next/image|favicon.ico).*)",
+    "/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico|css|js|woff|woff2|ttf|eot)$).*)",
   ],
 };

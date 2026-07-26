@@ -1,0 +1,52 @@
+generator client {
+  provider   = "prisma-client-js"
+  engineType = "library"
+  output     = "../src/generated/whatsapp-client"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model WhatsAppMessage {
+  id           String    @id @default(cuid())
+  wamid        String?   @unique // Meta WhatsApp Message ID (e.g. wamid.XXX)
+  phoneNumber  String    // Recipient or sender phone number (e.g. 919876543210)
+  direction    String    // "OUTGOING" or "INCOMING"
+  type         String    // "TEXT", "TEMPLATE", "OTP", "IMAGE", "INTERACTIVE"
+  content      String    // Text body or JSON string of template/message payload
+  status       String    // "PENDING", "SENT", "DELIVERED", "READ", "FAILED", "RECEIVED"
+  errorCode    String?   // Meta error code if status is FAILED
+  errorMessage String?   // Detailed error explanation
+  metadata     String?   // Optional extra metadata as JSON string
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  @@index([phoneNumber])
+  @@index([status])
+  @@index([createdAt])
+}
+
+model WhatsAppOtp {
+  id           String    @id @default(cuid())
+  phoneNumber  String    // Recipient phone number (e.g. 919876543210)
+  otp          String    // 6-digit OTP code
+  purpose      String    // "LOGIN", "REGISTER", "VERIFY"
+  verified     Boolean   @default(false)
+  expiresAt    DateTime  // Timestamp when OTP expires
+  createdAt    DateTime  @default(now())
+
+  @@index([phoneNumber, purpose])
+  @@index([createdAt])
+}
+
+model WhatsAppWebhookLog {
+  id           String    @id @default(cuid())
+  event        String    // e.g. "messages", "statuses", "verification"
+  payload      String    // Full JSON string of the incoming Meta webhook payload
+  processed    Boolean   @default(false)
+  createdAt    DateTime  @default(now())
+
+  @@index([event])
+  @@index([createdAt])
+}
