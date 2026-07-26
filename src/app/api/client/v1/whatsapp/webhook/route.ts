@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { whatsappDb } from "@/lib/whatsappDb";
+import { sendWhatsAppMessage } from "@/lib/whatsapp";
 
 const DEFAULT_VERIFY_TOKEN = "sportsvilla_whatsapp_webhook_token_2026";
 
@@ -86,6 +87,31 @@ export async function POST(req: NextRequest) {
                 status: "RECEIVED",
               },
             });
+
+            // Auto-Reply: If no outgoing reply was sent to this user in the last 10 minutes, send introduction & redirect
+            try {
+              const tenMinutesAgo = new Date(Date.now() - 10 * 60 * 1000);
+              const recentReply = await whatsappDb.whatsAppMessage.findFirst({
+                where: {
+                  phoneNumber: from,
+                  direction: "OUTGOING",
+                  createdAt: { gte: tenMinutesAgo },
+                },
+              });
+
+              if (!recentReply) {
+                const introText = `Welcome to *SportsVilla*! 🏆\nThank you for reaching out. Our automated sports booking & tournament platform is currently in active beta.\n\nFor immediate assistance, booking inquiries, or support, please contact Alaqmar directly:\n📞 *Phone / WhatsApp*: +91 9618443558\n🌐 *Website*: https://sportsvilla.co.in\n\nWe will get back to you shortly!`;
+
+                await sendWhatsAppMessage({
+                  to: from,
+                  type: "text",
+                  text: introText,
+                  metadata: { purpose: "AUTO_REPLY", triggeredBy: wamid },
+                });
+              }
+            } catch (replyErr) {
+              console.error("[AUTO REPLY ERROR]", replyErr);
+            }
           }
         }
       }

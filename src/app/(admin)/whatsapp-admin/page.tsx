@@ -5,12 +5,20 @@ import { FiMessageSquare, FiSend, FiRefreshCw, FiCheckCircle, FiAlertCircle, FiC
 import toast from "react-hot-toast";
 
 export default function WhatsAppAdminPage() {
-  const [activeTab, setActiveTab] = useState<"templates" | "logs">("templates");
+  const [activeTab, setActiveTab] = useState<"templates" | "logs" | "chat">("templates");
   const [templates, setTemplates] = useState<any[]>([]);
   const [messages, setMessages] = useState<any[]>([]);
   const [otps, setOtps] = useState<any[]>([]);
+  const [webhookLogs, setWebhookLogs] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [testingTemplate, setTestingTemplate] = useState<any | null>(null);
+
+  // CRM Chat state
+  const [conversations, setConversations] = useState<any[]>([]);
+  const [selectedPhone, setSelectedPhone] = useState<string | null>(null);
+  const [chatMessages, setChatMessages] = useState<any[]>([]);
+  const [chatInput, setChatInput] = useState("");
+  const [sendingChat, setSendingChat] = useState(false);
 
   // Test form state
   const [testMobile, setTestMobile] = useState("9618443558");
@@ -43,6 +51,7 @@ export default function WhatsAppAdminPage() {
       if (data.success) {
         setMessages(data.messages || []);
         setOtps(data.otps || []);
+        setWebhookLogs(data.webhookLogs || []);
       }
     } catch (err: any) {
       toast.error("Error loading logs");
@@ -51,13 +60,86 @@ export default function WhatsAppAdminPage() {
     }
   };
 
+  const fetchConversations = async () => {
+    try {
+      const res = await fetch("/api/client/v1/whatsapp/conversations");
+      const data = await res.json();
+      if (data.success) {
+        setConversations(data.conversations || []);
+        if (!selectedPhone && data.conversations?.length > 0) {
+          setSelectedPhone(data.conversations[0].phoneNumber);
+        }
+      }
+    } catch (err: any) {
+      console.error("Error fetching conversations", err);
+    }
+  };
+
+  const fetchChatMessages = async (phone: string) => {
+    try {
+      const res = await fetch(`/api/client/v1/whatsapp/chat?phoneNumber=${encodeURIComponent(phone)}`);
+      const data = await res.json();
+      if (data.success) {
+        setChatMessages(data.messages || []);
+      }
+    } catch (err: any) {
+      console.error("Error fetching chat messages", err);
+    }
+  };
+
   useEffect(() => {
     if (activeTab === "templates") {
       fetchTemplates();
-    } else {
+    } else if (activeTab === "logs") {
       fetchLogs();
+    } else if (activeTab === "chat") {
+      fetchConversations();
     }
   }, [activeTab]);
+
+  useEffect(() => {
+    if (activeTab === "chat" && selectedPhone) {
+      fetchChatMessages(selectedPhone);
+      const interval = setInterval(() => {
+        fetchChatMessages(selectedPhone);
+        fetchConversations();
+      }, 4000);
+      return () => clearInterval(interval);
+    }
+  }, [activeTab, selectedPhone]);
+
+  const handleSendChatMessage = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!selectedPhone || !chatInput.trim() || sendingChat) return;
+
+    setSendingChat(true);
+    const textToSend = chatInput.trim();
+    setChatInput("");
+
+    try {
+      const res = await fetch("/api/client/v1/whatsapp/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          phoneNumber: selectedPhone,
+          message: textToSend,
+        }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        toast.success("Message sent!");
+        await fetchChatMessages(selectedPhone);
+      } else {
+        toast.error(`Send failed: ${data.error}`);
+        setChatInput(textToSend); // Restore text on error
+      }
+    } catch (err: any) {
+      toast.error("Error sending message");
+      setChatInput(textToSend);
+    } finally {
+      setSendingChat(false);
+    }
+  };
 
   const handleSendTest = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -124,7 +206,14 @@ export default function WhatsAppAdminPage() {
 
         <div className="flex items-center gap-3">
           <button
-            onClick={() => activeTab === "templates" ? fetchTemplates() : fetchLogs()}
+            onClick={() => {
+              if (activeTab === "templates") fetchTemplates();
+              else if (activeTab === "logs") fetchLogs();
+              else {
+                fetchConversations();
+                if (selectedPhone) fetchChatMessages(selectedPhone);
+              }
+            }}
             className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#202433] hover:bg-[#2a2d3e] border border-[#2a2d3e] text-white text-sm font-semibold transition-all shadow-lg"
           >
             <FiRefreshCw className={loading ? "animate-spin" : ""} /> Refresh
@@ -153,6 +242,16 @@ export default function WhatsAppAdminPage() {
           }`}
         >
           <FiActivity /> Live Message Logs ({messages.length})
+        </button>
+        <button
+          onClick={() => setActiveTab("chat")}
+          className={`inline-flex items-center gap-2 px-5 py-3 rounded-t-xl text-sm font-bold transition-all ${
+            activeTab === "chat"
+              ? "bg-[#161923] text-orange-400 border-t-2 border-orange-500 border-x border-[#2a2d3e]"
+              : "text-gray-400 hover:text-white"
+          }`}
+        >
+          <FiMessageSquare /> 💬 Live CRM Chat ({conversations.length})
         </button>
       </div>
 
@@ -292,7 +391,7 @@ export default function WhatsAppAdminPage() {
             </div>
           </div>
         </div>
-      ) : (
+      ) : activeTab === "logs" ? (
         /* Logs Tab */
         <div className="space-y-6">
           <div className="bg-[#161923] border border-[#2a2d3e] rounded-2xl overflow-hidden shadow-2xl">
@@ -345,6 +444,200 @@ export default function WhatsAppAdminPage() {
                 </tbody>
               </table>
             </div>
+          </div>
+
+          {/* Raw Webhook Hits Debug Table */}
+          <div className="bg-[#161923] border border-[#2a2d3e] rounded-2xl overflow-hidden shadow-2xl">
+            <div className="p-5 border-b border-[#2a2d3e] flex items-center justify-between">
+              <div>
+                <h3 className="font-bold text-white text-base">Live Meta Webhook Debug Logs (Raw Hits)</h3>
+                <p className="text-xs text-gray-400">Shows every raw HTTP request sent by Meta to /api/client/v1/whatsapp/webhook</p>
+              </div>
+            </div>
+
+            <div className="overflow-x-auto">
+              <table className="w-full text-left border-collapse">
+                <thead>
+                  <tr className="border-b border-[#2a2d3e] bg-[#0f1117]/50 text-xs font-semibold text-gray-400 uppercase tracking-wider">
+                    <th className="p-4">Time</th>
+                    <th className="p-4">Event Type</th>
+                    <th className="p-4">Raw Payload Preview</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-[#2a2d3e]/60 text-sm">
+                  {webhookLogs.length === 0 ? (
+                    <tr>
+                      <td colSpan={3} className="p-8 text-center text-gray-500">
+                        No raw webhook requests received from Meta yet. Check your Meta Developer Dashboard webhook subscriptions!
+                      </td>
+                    </tr>
+                  ) : (
+                    webhookLogs.map((log: any, idx: number) => (
+                      <tr key={idx} className="hover:bg-[#202433]/40 transition-colors">
+                        <td className="p-4 text-gray-400 text-xs font-mono whitespace-nowrap">
+                          {new Date(log.createdAt).toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })}
+                        </td>
+                        <td className="p-4 font-mono text-orange-400 text-xs font-bold">{log.event}</td>
+                        <td className="p-4 text-gray-300 text-xs max-w-xl truncate font-mono" title={log.payload}>
+                          {log.payload}
+                        </td>
+                      </tr>
+                    ))
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      ) : (
+        /* CRM Live Chat Tab */
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* Left: Conversation List */}
+          <div className="lg:col-span-1 bg-[#161923] border border-[#2a2d3e] rounded-2xl overflow-hidden shadow-2xl flex flex-col h-[600px]">
+            <div className="p-4 border-b border-[#2a2d3e] flex items-center justify-between">
+              <h3 className="font-bold text-white text-sm">Active Conversations ({conversations.length})</h3>
+              <span className="text-xs text-orange-400 font-mono">Live CRM</span>
+            </div>
+
+            <div className="overflow-y-auto flex-1 divide-y divide-[#2a2d3e]/60">
+              {conversations.length === 0 ? (
+                <div className="p-8 text-center text-gray-500 text-xs">
+                  No conversations yet. When users message your WhatsApp API, they will appear here!
+                </div>
+              ) : (
+                conversations.map((conv: any, idx: number) => {
+                  const isSelected = selectedPhone === conv.phoneNumber;
+                  return (
+                    <button
+                      key={idx}
+                      onClick={() => setSelectedPhone(conv.phoneNumber)}
+                      className={`w-full text-left p-4 hover:bg-[#202433]/60 transition-all ${
+                        isSelected ? "bg-[#202433] border-l-4 border-orange-500" : ""
+                      }`}
+                    >
+                      <div className="flex items-center justify-between gap-2 mb-1">
+                        <span className="font-mono font-bold text-white text-xs">{conv.phoneNumber}</span>
+                        <span className="text-[10px] text-gray-400">
+                          {new Date(conv.updatedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                        </span>
+                      </div>
+
+                      <p className="text-xs text-gray-400 truncate font-mono mb-2">
+                        {conv.lastDirection === "OUTGOING" ? "You: " : ""}{conv.lastMessage}
+                      </p>
+
+                      <div className="flex items-center justify-between">
+                        {conv.is24HourWindowOpen ? (
+                          <span className="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20">
+                            🟢 24h Window Open
+                          </span>
+                        ) : (
+                          <span className="inline-flex items-center gap-1 text-[10px] font-bold text-rose-400 bg-rose-500/10 px-2 py-0.5 rounded-full border border-rose-500/20">
+                            🔴 Window Expired
+                          </span>
+                        )}
+                        <span className="text-[10px] text-gray-500">{conv.totalMessages} msgs</span>
+                      </div>
+                    </button>
+                  );
+                })
+              )}
+            </div>
+          </div>
+
+          {/* Right: Live Chat Box */}
+          <div className="lg:col-span-2 bg-[#161923] border border-[#2a2d3e] rounded-2xl overflow-hidden shadow-2xl flex flex-col h-[600px]">
+            {selectedPhone ? (
+              <>
+                {/* Chat Header */}
+                <div className="p-4 border-b border-[#2a2d3e] flex items-center justify-between bg-[#0f1117]/60">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-full bg-orange-500/20 border border-orange-500/40 flex items-center justify-center text-orange-400 font-bold font-mono">
+                      {selectedPhone.slice(-2)}
+                    </div>
+                    <div>
+                      <h3 className="font-bold text-white text-sm font-mono">+91 {selectedPhone}</h3>
+                      <p className="text-[11px] text-gray-400">Real-time WhatsApp Cloud API Connection</p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-2">
+                    {conversations.find((c) => c.phoneNumber === selectedPhone)?.is24HourWindowOpen ? (
+                      <span className="px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                        🟢 Free Messaging Open
+                      </span>
+                    ) : (
+                      <span className="px-3 py-1 rounded-full text-xs font-semibold bg-amber-500/10 text-amber-400 border border-amber-500/20">
+                        ⚠️ Send Template to Re-open
+                      </span>
+                    )}
+                  </div>
+                </div>
+
+                {/* Messages Container */}
+                <div className="flex-1 p-6 overflow-y-auto space-y-4 bg-[#0a0c10]/40">
+                  {chatMessages.length === 0 ? (
+                    <div className="text-center py-12 text-gray-500 text-xs">
+                      No message history found for this phone number.
+                    </div>
+                  ) : (
+                    chatMessages.map((msg: any, idx: number) => {
+                      const isOutgoing = msg.direction === "OUTGOING";
+                      return (
+                        <div
+                          key={idx}
+                          className={`flex flex-col ${isOutgoing ? "items-end" : "items-start"}`}
+                        >
+                          <div
+                            className={`max-w-md px-4 py-3 rounded-2xl text-xs font-mono shadow-md ${
+                              isOutgoing
+                                ? "bg-orange-500/20 border border-orange-500/30 text-white rounded-br-none"
+                                : "bg-[#202433] border border-[#2a2d3e] text-gray-200 rounded-bl-none"
+                            }`}
+                          >
+                            <p className="whitespace-pre-wrap">{msg.content}</p>
+                          </div>
+                          <div className="flex items-center gap-1.5 mt-1 px-1">
+                            <span className="text-[10px] text-gray-500">
+                              {new Date(msg.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                            </span>
+                            {isOutgoing && (
+                              <span className="text-[10px] text-orange-400 font-bold">
+                                • {msg.status}
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                      );
+                    })
+                  )}
+                </div>
+
+                {/* Input Bar */}
+                <form onSubmit={handleSendChatMessage} className="p-4 border-t border-[#2a2d3e] bg-[#0f1117]/60 flex items-center gap-3">
+                  <input
+                    type="text"
+                    value={chatInput}
+                    onChange={(e) => setChatInput(e.target.value)}
+                    placeholder="Type free-form WhatsApp message..."
+                    disabled={sendingChat}
+                    className="flex-1 bg-[#161923] border border-[#2a2d3e] rounded-xl px-4 py-2.5 text-white font-mono text-xs focus:border-orange-500 outline-none"
+                  />
+                  <button
+                    type="submit"
+                    disabled={sendingChat || !chatInput.trim()}
+                    className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-orange-500 hover:bg-orange-600 disabled:opacity-50 text-white font-bold text-xs shadow-lg shadow-orange-500/20 transition-all"
+                  >
+                    <FiSend /> {sendingChat ? "Sending..." : "Send via Meta"}
+                  </button>
+                </form>
+              </>
+            ) : (
+              <div className="flex-1 flex flex-col items-center justify-center text-gray-500 space-y-2 p-8">
+                <FiMessageSquare className="text-4xl opacity-30" />
+                <p className="text-sm">Select a customer conversation from the left to start live WhatsApp chat!</p>
+              </div>
+            )}
           </div>
         </div>
       )}

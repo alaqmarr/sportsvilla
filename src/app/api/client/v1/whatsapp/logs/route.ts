@@ -16,10 +16,16 @@ export async function GET() {
       take: 20,
     });
 
+    const webhookLogs = await whatsappDb.whatsAppWebhookLog.findMany({
+      orderBy: { createdAt: 'desc' },
+      take: 20,
+    });
+
     return jsonResponse({
       success: true,
       messages,
       otps,
+      webhookLogs,
     });
   } catch (err: any) {
     console.error("[WHATSAPP LOGS API ERROR]", err);
