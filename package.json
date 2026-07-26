@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "db:push": "npx prisma generate && npx prisma db push && npx prisma generate --schema=prisma/whatsapp.prisma && npx prisma db push --schema=prisma/whatsapp.prisma",
+    "db:push": "npx prisma generate && npx prisma db push && npx prisma generate --config=prisma.whatsapp.config.ts && npx prisma db push --config=prisma.whatsapp.config.ts",
     "postinstall": "npm run db:push",
     "updatebeta": "git stash && git pull && npm i --legacy-peer-deps && npm run db:push && npm run build && pm2 restart sportsvilla",
     "updateprod": "git stash && git pull && npm i --legacy-peer-deps && npm run db:push && npm run build && pm2 restart sportsvilla-production"
