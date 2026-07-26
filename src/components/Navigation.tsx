@@ -1,7 +1,7 @@
 "use client";
 import { usePathname, useRouter } from "next/navigation";
 import { useState, useEffect, useRef } from "react";
-import { FiHome, FiUsers, FiMapPin, FiActivity, FiLayers, FiShield, FiFileText, FiMenu, FiX, FiUser, FiCalendar, FiServer, FiLogOut, FiSettings, FiCalendar as FiCalendar2, FiAward, FiCheckCircle, FiTag, FiCreditCard, FiSmartphone } from "react-icons/fi";
+import { FiHome, FiUsers, FiMapPin, FiActivity, FiLayers, FiShield, FiFileText, FiMenu, FiX, FiUser, FiCalendar, FiServer, FiLogOut, FiSettings, FiCalendar as FiCalendar2, FiAward, FiCheckCircle, FiTag, FiCreditCard, FiSmartphone, FiMessageSquare } from "react-icons/fi";
 import { signOut } from "next-auth/react";
 import LinkComponent from "next/link";
 import Image from "next/image";
@@ -92,6 +92,7 @@ export function Navigation({ children }: { children: React.ReactNode }) {
     {
       title: "System",
       links: [
+        { href: "/whatsapp-admin", label: "WhatsApp & Templates", icon: <FiMessageSquare /> },
         { href: "/audit", label: "Audit Logs", icon: <FiShield /> },
         { href: "/admin", label: "Manage Admins", icon: <FiShield /> },
         { href: "/settings", label: "Settings", icon: <FiSettings /> },

@@ -3,6 +3,7 @@ import { prisma } from '@/lib/prisma';
 import { logger } from '@/lib/logger';
 import { jsonResponse } from '@/lib/api-logger';
 import { randomInt } from 'crypto';
+import { sendWhatsAppOtp } from '@/lib/whatsapp';
 
 const INFOBIP_API_KEY = process.env.INFOBIP_API_KEY || '';
 const INFOBIP_BASE_URL = process.env.INFOBIP_BASE_URL || '';
@@ -47,30 +48,13 @@ export async function POST(request: Request) {
       create: { mobile: cleanMobile, code, expiresAt }
     });
 
-    // Send real SMS via Infobip
+    // Send OTP via Meta WhatsApp Business API
     try {
-      const infobipRes = await fetch(`https://${INFOBIP_BASE_URL}/sms/2/text/advanced`, {
-        method: 'POST',
-        headers: {
-          'Authorization': `App ${INFOBIP_API_KEY}`,
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
-        },
-        body: JSON.stringify({
-          messages: [
-            {
-              destinations: [{ to: `91${cleanMobile}` }],
-              from: 'SportsVilla',
-              text: `Your SportsVilla login code is ${code}. Do not share this with anyone.`
-            }
-          ]
-        })
-      });
-      const infobipData = await infobipRes.json();
-      logger.info('Infobip SMS Sent', { mobile: cleanMobile, response: infobipData });
+      const waRes = await sendWhatsAppOtp(cleanMobile, code, "LOGIN");
+      logger.info('WhatsApp OTP Sent', { mobile: cleanMobile, response: waRes });
     } catch (smsError: any) {
-    console.error(`[API ERROR] POST /api/client/v1/auth/otp/send ->`, smsError);
-      logger.error('Infobip SMS Failed', { mobile: cleanMobile, error: smsError.message });
+      console.error(`[API ERROR] POST /api/client/v1/auth/otp/send ->`, smsError);
+      logger.error('WhatsApp OTP Failed', { mobile: cleanMobile, error: smsError?.message });
     }
 
     return jsonResponse({ 
