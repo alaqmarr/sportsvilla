@@ -34,14 +34,18 @@ export async function POST(req: NextRequest) {
       body = { raw: rawBody };
     }
 
-    // Log the raw webhook payload
-    await whatsappDb.whatsAppWebhookLog.create({
-      data: {
-        event: body.object || "messages",
-        payload: rawBody,
-        processed: true,
-      },
-    });
+    // Log the raw webhook payload safely (won't crash if db push was forgotten)
+    try {
+      await whatsappDb.whatsAppWebhookLog.create({
+        data: {
+          event: body.object || "messages",
+          payload: rawBody,
+          processed: true,
+        },
+      });
+    } catch (logErr) {
+      console.error("[WEBHOOK RAW LOG CREATE ERROR - Run npx prisma db push --schema=prisma/whatsapp.prisma]", logErr);
+    }
 
     // Check if event is from WhatsApp API
     if (body.object === "whatsapp_business_account") {

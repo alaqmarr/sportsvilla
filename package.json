@@ -7,9 +7,10 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "postinstall": "npx prisma generate && npx prisma db push",
-    "updatebeta": "git stash && git pull && npm i --legacy-peer-deps && npm run build && pm2 restart sportsvilla",
-    "updateprod": "git stash && git pull && npm i --legacy-peer-deps && npm run build && pm2 restart sportsvilla-production"
+    "db:push": "npx prisma generate && npx prisma db push && npx prisma generate --schema=prisma/whatsapp.prisma && npx prisma db push --schema=prisma/whatsapp.prisma",
+    "postinstall": "npm run db:push",
+    "updatebeta": "git stash && git pull && npm i --legacy-peer-deps && npm run db:push && npm run build && pm2 restart sportsvilla",
+    "updateprod": "git stash && git pull && npm i --legacy-peer-deps && npm run db:push && npm run build && pm2 restart sportsvilla-production"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.1090.0",
