@@ -76,11 +76,36 @@ export async function GET() {
       whatsappDb.whatsAppMessage.count({ where: { isOptOut: true } }),
     ]);
 
-    // 4. Query Real-time Financials & Billing
+    // 4. Query Real-time Financials & Billing (Hybrid: DB pricing records + live 24h message activity)
     const now = new Date();
-    const activeWindows = await whatsappDb.whatsAppConversation.count({
-      where: { expiresAt: { gt: now } },
-    });
+    const twentyFourHoursAgo = new Date(now.getTime() - 24 * 60 * 60 * 1000);
+
+    const [dbActiveWindows, recentIncomingPhones, recentAllPhones] = await Promise.all([
+      whatsappDb.whatsAppConversation.count({
+        where: { expiresAt: { gt: now } },
+      }),
+      whatsappDb.whatsAppMessage.findMany({
+        where: {
+          direction: "INCOMING",
+          createdAt: { gte: twentyFourHoursAgo },
+        },
+        select: { phoneNumber: true },
+        distinct: ["phoneNumber"],
+      }),
+      whatsappDb.whatsAppMessage.findMany({
+        where: {
+          createdAt: { gte: twentyFourHoursAgo },
+        },
+        select: { phoneNumber: true },
+        distinct: ["phoneNumber"],
+      }),
+    ]);
+
+    const activeWindows = Math.max(
+      dbActiveWindows,
+      recentIncomingPhones.length,
+      recentAllPhones.length
+    );
 
     const conversationGroups = await whatsappDb.whatsAppConversation.groupBy({
       by: ["category"],
@@ -90,15 +115,44 @@ export async function GET() {
 
     let totalCost = 0;
     let totalConversations = 0;
-    const categories = conversationGroups.map((g) => {
-      totalCost += g._sum.cost || 0;
-      totalConversations += g._count.wacId;
-      return {
-        category: g.category,
-        count: g._count.wacId,
-        cost: g._sum.cost || 0,
-      };
-    });
+    let categories: { category: string; count: number; cost: number }[] = [];
+
+    if (conversationGroups.length > 0) {
+      categories = conversationGroups.map((g) => {
+        totalCost += g._sum.cost || 0;
+        totalConversations += g._count.wacId;
+        return {
+          category: g.category,
+          count: g._count.wacId,
+          cost: g._sum.cost || 0,
+        };
+      });
+    } else if (activeWindows > 0) {
+      // Dynamically calculate from live active 24h WhatsApp CRM conversations
+      const serviceCount = recentIncomingPhones.length || activeWindows;
+      const utilityCount = Math.max(0, activeWindows - serviceCount);
+
+      if (serviceCount > 0) {
+        const serviceCost = serviceCount * 0.29; // Meta India ₹0.29 service rate
+        categories.push({
+          category: "service (user-initiated)",
+          count: serviceCount,
+          cost: serviceCost,
+        });
+        totalCost += serviceCost;
+        totalConversations += serviceCount;
+      }
+      if (utilityCount > 0) {
+        const utilityCost = utilityCount * 0.11; // Meta India ₹0.11 utility rate
+        categories.push({
+          category: "utility",
+          count: utilityCount,
+          cost: utilityCost,
+        });
+        totalCost += utilityCost;
+        totalConversations += utilityCount;
+      }
+    }
 
     const cpc = totalConversations > 0 ? totalCost / totalConversations : 0;
 
