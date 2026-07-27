@@ -42,6 +42,11 @@ export async function middleware(req: any) {
     pathname === "/setup" ||
     pathname === "/downloads" ||
     pathname === "/privacy-policy" ||
+    pathname === "/terms-and-conditions" ||
+    pathname === "/terms" ||
+    pathname === "/T&C" ||
+    pathname === "/refund-policy" ||
+    pathname === "/refund_policy" ||
     pathname === "/request-delete";
 
   if (isPublicRoute) {
