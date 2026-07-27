@@ -12,20 +12,35 @@ export interface AppLog {
 
 export async function fetchLogs(): Promise<AppLog[]> {
   try {
-    const logFilePath = path.join(process.cwd(), 'logs', 'app.log');
-    if (!fs.existsSync(logFilePath)) {
+    const logDir = path.join(process.cwd(), 'logs');
+    if (!fs.existsSync(logDir)) {
       return [];
     }
 
-    const content = fs.readFileSync(logFilePath, 'utf-8');
-    const lines = content.split('\n').filter(line => line.trim() !== '');
+    const files = fs.readdirSync(logDir)
+      .filter(f => (f.startsWith('app-') && f.endsWith('.log')) || f === 'app.log')
+      .sort()
+      .reverse();
+      
+    if (files.length === 0) return [];
+    
+    let allLines: string[] = [];
+    
+    // Read from the newest file(s) until we have at least 200 lines
+    for (const file of files) {
+      const filePath = path.join(logDir, file);
+      const content = fs.readFileSync(filePath, 'utf-8');
+      const lines = content.split('\n').filter(line => line.trim() !== '');
+      allLines = [...lines, ...allLines]; // older files go before newer files
+      if (allLines.length >= 200) break;
+    }
     
     const logs: AppLog[] = [];
-    const startIdx = Math.max(0, lines.length - 200);
+    const startIdx = Math.max(0, allLines.length - 200);
     
-    for (let i = lines.length - 1; i >= startIdx; i--) {
+    for (let i = allLines.length - 1; i >= startIdx; i--) {
       try {
-        logs.push(JSON.parse(lines[i]));
+        logs.push(JSON.parse(allLines[i]));
       } catch (e) {
         // Skip invalid JSON
       }
