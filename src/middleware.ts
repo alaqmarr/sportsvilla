@@ -39,6 +39,7 @@ export async function middleware(req: any) {
     pathname.startsWith("/android") ||
     pathname.startsWith("/ios") ||
     pathname === "/login" ||
+    pathname === "/onelogin" ||
     pathname === "/setup" ||
     pathname === "/downloads" ||
     pathname === "/privacy-policy" ||
@@ -61,7 +62,7 @@ export async function middleware(req: any) {
 
   if (!token) {
     const url = req.nextUrl.clone();
-    url.pathname = "/login";
+    url.pathname = "/onelogin";
     return NextResponse.redirect(url);
   }
   
