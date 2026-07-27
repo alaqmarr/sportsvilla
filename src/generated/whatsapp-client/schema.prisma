@@ -92,3 +92,12 @@ model WhatsAppTemplate {
 
   @@index([status])
 }
+
+model WhatsAppEventTrigger {
+  id           String   @id @default(cuid())
+  eventName    String   @unique // e.g. "BOOKING_CONFIRMED", "PAYMENT_RECEIVED", "MEMBERSHIP_EXPIRED"
+  templateName String? // Meta template name to use
+  isActive     Boolean  @default(false)
+  variableMap  String? // JSON string: e.g. {"1": "bookingId", "2": "turfName"}
+  updatedAt    DateTime @updatedAt
+}

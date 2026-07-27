@@ -39,7 +39,7 @@ export async function confirmTicketCheckin(ticketIdOrQrCode: string, deskSportId
         { qrCode: ticketIdOrQrCode }
       ]
     },
-    include: { booking: { include: { turf: true } } }
+    include: { booking: { include: { turf: true, member: true } } }
   });
 
   if (!ticket) return { error: "Ticket not found." };
@@ -99,5 +99,19 @@ export async function confirmTicketCheckin(ticketIdOrQrCode: string, deskSportId
   }
 
   revalidatePath("/", "layout");
+
+  if (ticket.booking.member?.mobile) {
+    try {
+      const { sendEventMessage } = require("@/lib/whatsapp");
+      const payload = {
+        member: { name: ticket.booking.member.name },
+        booking: { id: ticket.booking.id }
+      };
+      sendEventMessage("ADMIN_CHECKIN", ticket.booking.member.mobile, payload).catch(console.error);
+    } catch(e) {
+      console.error("Failed to dispatch ADMIN_CHECKIN event", e);
+    }
+  }
+
   return { success: true };
 }

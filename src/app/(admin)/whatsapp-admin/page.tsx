@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
+import EventsTab from "./EventsTab";
 import {
   FiMessageSquare,
   FiSend,
@@ -35,7 +36,7 @@ import { FaWhatsapp } from "react-icons/fa";
 const DEFAULT_INTRO = `Welcome to *SportsVilla*! 🏆\nThank you for reaching out. Our automated sports booking & tournament platform is currently in active beta.\n\nFor immediate assistance, booking inquiries, or support, please contact Alaqmar directly:\n📞 *Phone / WhatsApp*: +91 9618443558\n🌐 *Website*: https://sportsvilla.co.in\n\nWe will get back to you shortly!`;
 
 export default function WhatsAppAdminPage() {
-  const [activeTab, setActiveTab] = useState<"chat" | "health" | "templates">("chat");
+  const [activeTab, setActiveTab] = useState<"chat" | "health" | "templates" | "events">("chat");
   const [templates, setTemplates] = useState<any[]>([]);
   const [messages, setMessages] = useState<any[]>([]);
   const [otps, setOtps] = useState<any[]>([]);
@@ -54,6 +55,7 @@ export default function WhatsAppAdminPage() {
 
   // Quoting / Reply state
   const [replyingTo, setReplyingTo] = useState<{ id?: string; wamid?: string; content: string; sender: string } | null>(null);
+  const [showQuickReplies, setShowQuickReplies] = useState(false);
 
   // CRM Member Context state
   const [memberContext, setMemberContext] = useState<any | null>(null);
@@ -178,6 +180,13 @@ export default function WhatsAppAdminPage() {
       const data = await res.json();
       if (data.success) {
         setChatMessages(data.messages || []);
+        
+        // Mark messages as read in the background
+        fetch("/api/client/v1/whatsapp/mark-read", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ phoneNumber: phone }),
+        }).then(() => fetchConversations());
       }
     } catch (err: any) {
       console.error("Error fetching chat messages", err);
@@ -398,7 +407,7 @@ export default function WhatsAppAdminPage() {
   );
 
   return (
-    <div className="flex flex-col w-full h-screen bg-[#0b141a] overflow-hidden text-gray-200">
+    <div className="flex flex-col w-full h-[100dvh] bg-[#0b141a] overflow-hidden text-gray-200">
       {/* Edge-to-Edge Compact Top Navbar */}
       <div className="bg-[#111b21] border-b border-[#222d34] px-4 py-2 flex items-center justify-between shrink-0">
         <div className="flex items-center gap-4">
@@ -443,6 +452,16 @@ export default function WhatsAppAdminPage() {
             >
               🧪 Templates Tester
             </button>
+            <button
+              onClick={() => setActiveTab("events")}
+              className={`px-3 py-1 rounded-md text-xs font-bold transition-all ${
+                activeTab === "events"
+                  ? "bg-[#00a884] text-white shadow"
+                  : "text-gray-400 hover:text-white"
+              }`}
+            >
+              ⚡ Event Triggers
+            </button>
           </div>
         </div>
 
@@ -484,8 +503,12 @@ export default function WhatsAppAdminPage() {
       {/* Tab 1: Edge-to-Edge 3-Column WhatsApp CRM Layout */}
       {activeTab === "chat" && (
         <div className="flex-1 grid grid-cols-12 overflow-hidden">
-          {/* Column 1: Conversations List */}
-          <div className="col-span-3 border-r border-[#222d34] bg-[#111b21] flex flex-col h-full overflow-hidden">
+          {/* Column 1: Conversations List (Responsive: full screen on mobile when no chat selected) */}
+          <div
+            className={`${
+              selectedPhone ? "hidden md:flex" : "flex"
+            } col-span-12 md:col-span-3 border-r border-[#222d34] bg-[#111b21] flex-col h-full overflow-hidden`}
+          >
             <div className="p-3 border-b border-[#222d34] bg-[#111b21]">
               <div className="relative">
                 <FiSearch className="absolute left-3 top-2.5 text-gray-400 text-xs" />
@@ -493,8 +516,8 @@ export default function WhatsAppAdminPage() {
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Search number or message..."
-                  className="w-full bg-[#202c33] border border-transparent rounded-lg pl-8 pr-3 py-1.5 text-xs text-white placeholder-gray-400 focus:border-[#00a884] outline-none transition-all font-sans"
+                  placeholder="Search name, phone, or messages..."
+                  className="w-full pl-8 pr-3 py-1.5 bg-[#202c33] text-white text-xs rounded-lg border border-[#2a3942] focus:outline-none focus:border-[#00a884] placeholder-gray-500"
                 />
               </div>
             </div>
@@ -516,14 +539,32 @@ export default function WhatsAppAdminPage() {
                       }`}
                     >
                       <div className="flex items-center justify-between gap-2">
-                        <span className="font-sans font-bold text-white text-xs">+91 {conv.phoneNumber}</span>
-                        <span className="text-[10px] text-gray-400">
-                          {new Date(conv.updatedAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+                        <span className="font-sans font-bold text-white text-xs truncate">
+                          {conv.memberName
+                            ? `${conv.memberName} (${conv.phoneNumber})`
+                            : `+91 ${conv.phoneNumber}`}
                         </span>
+                        <div className="flex items-center gap-1.5 shrink-0">
+                          {conv.unreadCount > 0 && (
+                            <span className="w-5 h-5 rounded-full bg-red-500 shadow-sm text-white text-[10px] font-bold flex items-center justify-center">
+                              {conv.unreadCount}
+                            </span>
+                          )}
+                          <span className="text-[10px] text-gray-400">
+                            {new Date(conv.updatedAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+                          </span>
+                        </div>
                       </div>
 
-                      <p className="text-xs text-gray-400 truncate font-sans">
-                        {conv.lastDirection === "OUTGOING" ? "You: " : ""}{conv.lastMessage}
+                      <p className="text-xs text-gray-400 truncate font-sans flex items-center gap-1">
+                        {conv.lastDirection === "OUTGOING" && (
+                          <span className={conv.lastStatus === "READ" ? "text-[#53bdeb]" : "text-gray-500"} title={conv.lastStatus}>
+                            {conv.lastStatus === "READ" || conv.lastStatus === "DELIVERED" ? "✓✓" : "✓"}
+                          </span>
+                        )}
+                        <span className="truncate">
+                          {conv.lastDirection === "OUTGOING" ? "You: " : ""}{conv.lastMessage}
+                        </span>
                       </p>
 
                       <div className="flex items-center justify-between mt-0.5">
@@ -546,18 +587,30 @@ export default function WhatsAppAdminPage() {
           </div>
 
           {/* Column 2: WhatsApp Web Dark Real-Time Chat Area */}
-          <div className="col-span-6 bg-[#0b141a] flex flex-col h-full overflow-hidden relative">
+          <div className="col-span-12 md:col-span-6 bg-[#0b141a] flex flex-col h-full overflow-hidden relative">
             {selectedPhone ? (
               <>
                 {/* Edge-to-Edge Chat Header */}
                 <div className="px-4 py-2.5 border-b border-[#222d34] bg-[#202c33] flex items-center justify-between shrink-0">
                   <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-full bg-[#00a884]/20 border border-[#00a884]/40 flex items-center justify-center text-[#00a884] font-bold font-sans text-xs">
+                    {/* Mobile Back Button */}
+                    <button 
+                      className="md:hidden text-[#00a884] hover:bg-white/5 p-1 rounded-full mr-1 transition-colors"
+                      onClick={() => setSelectedPhone(null)}
+                    >
+                      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
+                    </button>
+                    
+                    <div className="w-8 h-8 rounded-full bg-[#00a884]/20 border border-[#00a884]/40 flex items-center justify-center text-[#00a884] font-bold font-sans text-xs shrink-0">
                       {selectedPhone.slice(-2)}
                     </div>
-                    <div>
-                      <h3 className="font-bold text-white text-xs font-sans">+91 {selectedPhone}</h3>
-                      <p className="text-[10px] text-gray-300">
+                    <div className="flex flex-col truncate">
+                      <h3 className="font-bold text-white text-[15px] font-sans truncate">
+                        {conversations.find((c) => c.phoneNumber === selectedPhone)?.memberName 
+                          ? `${conversations.find((c) => c.phoneNumber === selectedPhone)?.memberName} (${selectedPhone})` 
+                          : `+91 ${selectedPhone}`}
+                      </h3>
+                      <p className="text-[11px] text-gray-300 truncate">
                         {conversations.find((c) => c.phoneNumber === selectedPhone)?.is24HourWindowOpen
                           ? "🟢 Online • 24h Free Reply Window Open"
                           : "🔴 Window Expired • Send template to start session"}
@@ -565,7 +618,7 @@ export default function WhatsAppAdminPage() {
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2 shrink-0">
                     <button
                       onClick={() => {
                         fetchChatMessages(selectedPhone);
@@ -629,14 +682,14 @@ export default function WhatsAppAdminPage() {
                                 {renderWhatsAppRichText(msg.content)}
                               </div>
                               <div className="flex items-center justify-end gap-1.5 mt-1 -mb-0.5">
-                                <span className="text-[9px] text-gray-300">
+                                <span className="text-[9px] text-gray-400">
                                   {new Date(msg.createdAt).toLocaleTimeString([], {
                                     hour: "2-digit",
                                     minute: "2-digit",
                                   })}
                                 </span>
                                 {isOutgoing && (
-                                  <span className="text-emerald-300 text-xs" title={msg.status}>
+                                  <span className={`text-[13px] ${msg.status === "READ" ? "text-[#53bdeb]" : "text-gray-400"}`} title={msg.status}>
                                     {msg.status === "READ" || msg.status === "DELIVERED" ? "✓✓" : "✓"}
                                   </span>
                                 )}
@@ -688,26 +741,56 @@ export default function WhatsAppAdminPage() {
                 )}
 
                 {/* WhatsApp Edge-to-Edge Input Bar */}
-                <form
-                  onSubmit={handleSendChatMessage}
-                  className="p-3 border-t border-[#202c33] bg-[#202c33] flex items-center gap-2 shrink-0"
-                >
-                  <input
-                    type="text"
-                    value={chatInput}
-                    onChange={(e) => setChatInput(e.target.value)}
-                    placeholder={replyingTo ? "Type your reply..." : "Type a WhatsApp message..."}
-                    disabled={sendingChat}
-                    className="flex-1 bg-[#2a3942] border border-transparent rounded-xl px-4 py-2 text-white font-sans text-sm focus:border-[#00a884] outline-none transition-all placeholder-gray-400"
-                  />
-                  <button
-                    type="submit"
-                    disabled={sendingChat || !chatInput.trim()}
-                    className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#00a884] hover:bg-[#008f6f] disabled:opacity-50 text-white font-bold text-xs shadow transition-all shrink-0"
+                <div className="relative border-t border-[#202c33] bg-[#202c33] shrink-0">
+                  {showQuickReplies && (
+                    <div className="absolute bottom-full left-2 mb-2 w-64 bg-[#2a3942] border border-[#3b4a54] rounded-xl shadow-lg overflow-hidden z-10">
+                      <div className="p-2 border-b border-[#3b4a54] text-xs font-bold text-gray-400 uppercase tracking-wider">Quick Replies</div>
+                      <div className="max-h-48 overflow-y-auto">
+                        {["Sure, checking this for you.", "Your slot is confirmed!", "Can you please share the date?", "Apologies, this slot is already booked."].map((reply, i) => (
+                          <button
+                            key={i}
+                            onClick={() => {
+                              setChatInput(reply);
+                              setShowQuickReplies(false);
+                            }}
+                            className="w-full text-left px-4 py-2.5 text-sm text-gray-200 hover:bg-[#3b4a54] transition-colors"
+                          >
+                            {reply}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                  
+                  <form
+                    onSubmit={handleSendChatMessage}
+                    className="p-3 flex items-center gap-2"
                   >
-                    <FiSend /> {sendingChat ? "..." : "Send"}
-                  </button>
-                </form>
+                    <button
+                      type="button"
+                      onClick={() => setShowQuickReplies(!showQuickReplies)}
+                      className="text-gray-400 hover:text-white p-2 shrink-0 transition-colors"
+                      title="Quick Replies"
+                    >
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
+                    </button>
+                    <input
+                      type="text"
+                      value={chatInput}
+                      onChange={(e) => setChatInput(e.target.value)}
+                      placeholder={replyingTo ? "Type your reply..." : "Type a WhatsApp message..."}
+                      disabled={sendingChat}
+                      className="flex-1 bg-[#2a3942] border border-transparent rounded-xl px-4 py-2 text-white font-sans text-sm focus:border-[#00a884] outline-none transition-all placeholder-gray-400"
+                    />
+                    <button
+                      type="submit"
+                      disabled={sendingChat || !chatInput.trim()}
+                      className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#00a884] hover:bg-[#008f6f] disabled:opacity-50 text-white font-bold text-xs shadow transition-all shrink-0"
+                    >
+                      <FiSend /> {sendingChat ? "..." : "Send"}
+                    </button>
+                  </form>
+                </div>
               </>
             ) : (
               <div className="flex-1 flex flex-col items-center justify-center text-gray-500 space-y-3 p-8">
@@ -721,7 +804,7 @@ export default function WhatsAppAdminPage() {
           </div>
 
           {/* Column 3: Member CRM Profile & Family Context Sidebar (Edge-to-Edge) */}
-          <div className="col-span-3 border-l border-[#222d34] bg-[#111b21] flex flex-col h-full overflow-y-auto">
+          <div className="hidden md:flex col-span-3 border-l border-[#222d34] bg-[#111b21] flex-col h-full overflow-y-auto">
             <div className="p-3 border-b border-[#222d34] bg-[#111b21] flex items-center justify-between shrink-0">
               <h3 className="font-bold text-white text-xs flex items-center gap-2">
                 <FiUser className="text-emerald-400" /> Member & Family Context
@@ -1571,6 +1654,12 @@ export default function WhatsAppAdminPage() {
               </button>
             </div>
           </div>
+        </div>
+      )}
+      
+      {activeTab === "events" && (
+        <div className="flex-1 overflow-y-auto p-4 lg:p-8 custom-scrollbar">
+          <EventsTab />
         </div>
       )}
     </div>

@@ -41,6 +41,7 @@ export async function GET(request: Request) {
     let completed = 0;
     let upcoming = 0;
     let cancelled = 0;
+    let ongoing = 0;
 
     allBookings.forEach(b => {
       if (b.status === 'CANCELLED') {
@@ -48,6 +49,8 @@ export async function GET(request: Request) {
       } else if (b.status === 'CONFIRMED') {
         if (new Date(b.startTime) > now) {
           upcoming++;
+        } else if (new Date(b.endTime) > now) {
+          ongoing++;
         } else {
           completed++;
         }
@@ -63,7 +66,8 @@ export async function GET(request: Request) {
         total: totalBookings,
         completed,
         upcoming,
-        cancelled
+        cancelled,
+        ongoing
       }
     });
   } catch (error: any) {

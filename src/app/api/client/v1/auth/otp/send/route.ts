@@ -44,7 +44,7 @@ export async function POST(request: Request) {
 
     await prisma.otp.upsert({
       where: { mobile: cleanMobile },
-      update: { code, expiresAt },
+      update: { code, expiresAt, attempts: 0, lockedUntil: null },
       create: { mobile: cleanMobile, code, expiresAt }
     });
 

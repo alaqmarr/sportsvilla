@@ -185,9 +185,27 @@ export async function updateMemberMembership(id: string, data: { startDate?: str
   
   const updated = await prisma.memberMembership.update({
     where: { id },
-    data: updateData
+    data: updateData,
+    include: { member: true, membershipPlan: true }
   });
-  
+
+  // Trigger WhatsApp event if status changed to EXPIRED
+  if (data.status === "EXPIRED") {
+    try {
+      const { sendEventMessage } = require("@/lib/whatsapp");
+      const payload = {
+        member: { name: updated.member.name, mobile: updated.member.mobile },
+        membership: { 
+          planName: updated.membershipPlan.name, 
+          endDate: updated.endDate.toISOString().split("T")[0]
+        }
+      };
+      sendEventMessage("MEMBERSHIP_EXPIRED", updated.member.mobile, payload).catch(console.error);
+    } catch (e) {
+      console.error("Failed to send WhatsApp Event", e);
+    }
+  }
+
   await bumpSyncTimestamp('member');
   revalidatePath("/", "layout");
   return updated;

@@ -234,6 +234,25 @@ export async function createBooking(data: {
 
   await bumpSyncTimestamp('admin_booking');
   revalidatePath("/", "layout");
+
+  // Dispatch WhatsApp Event for Manual Bookings
+  if (data.mobile) {
+    try {
+      const { sendEventMessage } = require("@/lib/whatsapp");
+      for (const b of bookings) {
+        const payload = {
+          member: { name: b.member?.name || "Customer" },
+          turf: { name: bookingItems.find(i => i.turf.id === b.turfId)?.turf.name || "" },
+          booking: { startTime: b.startTime }
+        };
+        // Background dispatch
+        sendEventMessage("ADMIN_MANUAL_BOOKING", data.mobile, payload).catch(console.error);
+      }
+    } catch(e) {
+      console.error("Error triggering ADMIN_MANUAL_BOOKING", e);
+    }
+  }
+
   return bookings;
 }
 

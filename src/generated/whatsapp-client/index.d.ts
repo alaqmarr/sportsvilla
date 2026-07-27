@@ -48,6 +48,11 @@ export type WhatsAppAccountMetric = $Result.DefaultSelection<Prisma.$WhatsAppAcc
  * 
  */
 export type WhatsAppTemplate = $Result.DefaultSelection<Prisma.$WhatsAppTemplatePayload>
+/**
+ * Model WhatsAppEventTrigger
+ * 
+ */
+export type WhatsAppEventTrigger = $Result.DefaultSelection<Prisma.$WhatsAppEventTriggerPayload>
 
 /**
  * ##  Prisma Client ʲˢ
@@ -239,6 +244,16 @@ export class PrismaClient<
     * ```
     */
   get whatsAppTemplate(): Prisma.WhatsAppTemplateDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.whatsAppEventTrigger`: Exposes CRUD operations for the **WhatsAppEventTrigger** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more WhatsAppEventTriggers
+    * const whatsAppEventTriggers = await prisma.whatsAppEventTrigger.findMany()
+    * ```
+    */
+  get whatsAppEventTrigger(): Prisma.WhatsAppEventTriggerDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -679,7 +694,8 @@ export namespace Prisma {
     WhatsAppConfig: 'WhatsAppConfig',
     WhatsAppConversation: 'WhatsAppConversation',
     WhatsAppAccountMetric: 'WhatsAppAccountMetric',
-    WhatsAppTemplate: 'WhatsAppTemplate'
+    WhatsAppTemplate: 'WhatsAppTemplate',
+    WhatsAppEventTrigger: 'WhatsAppEventTrigger'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -695,7 +711,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "whatsAppMessage" | "whatsAppOtp" | "whatsAppWebhookLog" | "whatsAppConfig" | "whatsAppConversation" | "whatsAppAccountMetric" | "whatsAppTemplate"
+      modelProps: "whatsAppMessage" | "whatsAppOtp" | "whatsAppWebhookLog" | "whatsAppConfig" | "whatsAppConversation" | "whatsAppAccountMetric" | "whatsAppTemplate" | "whatsAppEventTrigger"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1217,6 +1233,80 @@ export namespace Prisma {
           }
         }
       }
+      WhatsAppEventTrigger: {
+        payload: Prisma.$WhatsAppEventTriggerPayload<ExtArgs>
+        fields: Prisma.WhatsAppEventTriggerFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.WhatsAppEventTriggerFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WhatsAppEventTriggerPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.WhatsAppEventTriggerFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WhatsAppEventTriggerPayload>
+          }
+          findFirst: {
+            args: Prisma.WhatsAppEventTriggerFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WhatsAppEventTriggerPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.WhatsAppEventTriggerFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WhatsAppEventTriggerPayload>
+          }
+          findMany: {
+            args: Prisma.WhatsAppEventTriggerFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WhatsAppEventTriggerPayload>[]
+          }
+          create: {
+            args: Prisma.WhatsAppEventTriggerCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WhatsAppEventTriggerPayload>
+          }
+          createMany: {
+            args: Prisma.WhatsAppEventTriggerCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.WhatsAppEventTriggerCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WhatsAppEventTriggerPayload>[]
+          }
+          delete: {
+            args: Prisma.WhatsAppEventTriggerDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WhatsAppEventTriggerPayload>
+          }
+          update: {
+            args: Prisma.WhatsAppEventTriggerUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WhatsAppEventTriggerPayload>
+          }
+          deleteMany: {
+            args: Prisma.WhatsAppEventTriggerDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.WhatsAppEventTriggerUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.WhatsAppEventTriggerUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WhatsAppEventTriggerPayload>[]
+          }
+          upsert: {
+            args: Prisma.WhatsAppEventTriggerUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WhatsAppEventTriggerPayload>
+          }
+          aggregate: {
+            args: Prisma.WhatsAppEventTriggerAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateWhatsAppEventTrigger>
+          }
+          groupBy: {
+            args: Prisma.WhatsAppEventTriggerGroupByArgs<ExtArgs>
+            result: $Utils.Optional<WhatsAppEventTriggerGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.WhatsAppEventTriggerCountArgs<ExtArgs>
+            result: $Utils.Optional<WhatsAppEventTriggerCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -1332,6 +1422,7 @@ export namespace Prisma {
     whatsAppConversation?: WhatsAppConversationOmit
     whatsAppAccountMetric?: WhatsAppAccountMetricOmit
     whatsAppTemplate?: WhatsAppTemplateOmit
+    whatsAppEventTrigger?: WhatsAppEventTriggerOmit
   }
 
   /* Types for Logging */
@@ -8615,6 +8706,1017 @@ export namespace Prisma {
 
 
   /**
+   * Model WhatsAppEventTrigger
+   */
+
+  export type AggregateWhatsAppEventTrigger = {
+    _count: WhatsAppEventTriggerCountAggregateOutputType | null
+    _min: WhatsAppEventTriggerMinAggregateOutputType | null
+    _max: WhatsAppEventTriggerMaxAggregateOutputType | null
+  }
+
+  export type WhatsAppEventTriggerMinAggregateOutputType = {
+    id: string | null
+    eventName: string | null
+    templateName: string | null
+    isActive: boolean | null
+    variableMap: string | null
+    updatedAt: Date | null
+  }
+
+  export type WhatsAppEventTriggerMaxAggregateOutputType = {
+    id: string | null
+    eventName: string | null
+    templateName: string | null
+    isActive: boolean | null
+    variableMap: string | null
+    updatedAt: Date | null
+  }
+
+  export type WhatsAppEventTriggerCountAggregateOutputType = {
+    id: number
+    eventName: number
+    templateName: number
+    isActive: number
+    variableMap: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type WhatsAppEventTriggerMinAggregateInputType = {
+    id?: true
+    eventName?: true
+    templateName?: true
+    isActive?: true
+    variableMap?: true
+    updatedAt?: true
+  }
+
+  export type WhatsAppEventTriggerMaxAggregateInputType = {
+    id?: true
+    eventName?: true
+    templateName?: true
+    isActive?: true
+    variableMap?: true
+    updatedAt?: true
+  }
+
+  export type WhatsAppEventTriggerCountAggregateInputType = {
+    id?: true
+    eventName?: true
+    templateName?: true
+    isActive?: true
+    variableMap?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type WhatsAppEventTriggerAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which WhatsAppEventTrigger to aggregate.
+     */
+    where?: WhatsAppEventTriggerWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of WhatsAppEventTriggers to fetch.
+     */
+    orderBy?: WhatsAppEventTriggerOrderByWithRelationInput | WhatsAppEventTriggerOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: WhatsAppEventTriggerWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` WhatsAppEventTriggers from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` WhatsAppEventTriggers.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned WhatsAppEventTriggers
+    **/
+    _count?: true | WhatsAppEventTriggerCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: WhatsAppEventTriggerMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: WhatsAppEventTriggerMaxAggregateInputType
+  }
+
+  export type GetWhatsAppEventTriggerAggregateType<T extends WhatsAppEventTriggerAggregateArgs> = {
+        [P in keyof T & keyof AggregateWhatsAppEventTrigger]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateWhatsAppEventTrigger[P]>
+      : GetScalarType<T[P], AggregateWhatsAppEventTrigger[P]>
+  }
+
+
+
+
+  export type WhatsAppEventTriggerGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: WhatsAppEventTriggerWhereInput
+    orderBy?: WhatsAppEventTriggerOrderByWithAggregationInput | WhatsAppEventTriggerOrderByWithAggregationInput[]
+    by: WhatsAppEventTriggerScalarFieldEnum[] | WhatsAppEventTriggerScalarFieldEnum
+    having?: WhatsAppEventTriggerScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: WhatsAppEventTriggerCountAggregateInputType | true
+    _min?: WhatsAppEventTriggerMinAggregateInputType
+    _max?: WhatsAppEventTriggerMaxAggregateInputType
+  }
+
+  export type WhatsAppEventTriggerGroupByOutputType = {
+    id: string
+    eventName: string
+    templateName: string | null
+    isActive: boolean
+    variableMap: string | null
+    updatedAt: Date
+    _count: WhatsAppEventTriggerCountAggregateOutputType | null
+    _min: WhatsAppEventTriggerMinAggregateOutputType | null
+    _max: WhatsAppEventTriggerMaxAggregateOutputType | null
+  }
+
+  type GetWhatsAppEventTriggerGroupByPayload<T extends WhatsAppEventTriggerGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<WhatsAppEventTriggerGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof WhatsAppEventTriggerGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], WhatsAppEventTriggerGroupByOutputType[P]>
+            : GetScalarType<T[P], WhatsAppEventTriggerGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type WhatsAppEventTriggerSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    eventName?: boolean
+    templateName?: boolean
+    isActive?: boolean
+    variableMap?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["whatsAppEventTrigger"]>
+
+  export type WhatsAppEventTriggerSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    eventName?: boolean
+    templateName?: boolean
+    isActive?: boolean
+    variableMap?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["whatsAppEventTrigger"]>
+
+  export type WhatsAppEventTriggerSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    eventName?: boolean
+    templateName?: boolean
+    isActive?: boolean
+    variableMap?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["whatsAppEventTrigger"]>
+
+  export type WhatsAppEventTriggerSelectScalar = {
+    id?: boolean
+    eventName?: boolean
+    templateName?: boolean
+    isActive?: boolean
+    variableMap?: boolean
+    updatedAt?: boolean
+  }
+
+  export type WhatsAppEventTriggerOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "eventName" | "templateName" | "isActive" | "variableMap" | "updatedAt", ExtArgs["result"]["whatsAppEventTrigger"]>
+
+  export type $WhatsAppEventTriggerPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "WhatsAppEventTrigger"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      eventName: string
+      templateName: string | null
+      isActive: boolean
+      variableMap: string | null
+      updatedAt: Date
+    }, ExtArgs["result"]["whatsAppEventTrigger"]>
+    composites: {}
+  }
+
+  type WhatsAppEventTriggerGetPayload<S extends boolean | null | undefined | WhatsAppEventTriggerDefaultArgs> = $Result.GetResult<Prisma.$WhatsAppEventTriggerPayload, S>
+
+  type WhatsAppEventTriggerCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<WhatsAppEventTriggerFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: WhatsAppEventTriggerCountAggregateInputType | true
+    }
+
+  export interface WhatsAppEventTriggerDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['WhatsAppEventTrigger'], meta: { name: 'WhatsAppEventTrigger' } }
+    /**
+     * Find zero or one WhatsAppEventTrigger that matches the filter.
+     * @param {WhatsAppEventTriggerFindUniqueArgs} args - Arguments to find a WhatsAppEventTrigger
+     * @example
+     * // Get one WhatsAppEventTrigger
+     * const whatsAppEventTrigger = await prisma.whatsAppEventTrigger.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends WhatsAppEventTriggerFindUniqueArgs>(args: SelectSubset<T, WhatsAppEventTriggerFindUniqueArgs<ExtArgs>>): Prisma__WhatsAppEventTriggerClient<$Result.GetResult<Prisma.$WhatsAppEventTriggerPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one WhatsAppEventTrigger that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {WhatsAppEventTriggerFindUniqueOrThrowArgs} args - Arguments to find a WhatsAppEventTrigger
+     * @example
+     * // Get one WhatsAppEventTrigger
+     * const whatsAppEventTrigger = await prisma.whatsAppEventTrigger.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends WhatsAppEventTriggerFindUniqueOrThrowArgs>(args: SelectSubset<T, WhatsAppEventTriggerFindUniqueOrThrowArgs<ExtArgs>>): Prisma__WhatsAppEventTriggerClient<$Result.GetResult<Prisma.$WhatsAppEventTriggerPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first WhatsAppEventTrigger that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WhatsAppEventTriggerFindFirstArgs} args - Arguments to find a WhatsAppEventTrigger
+     * @example
+     * // Get one WhatsAppEventTrigger
+     * const whatsAppEventTrigger = await prisma.whatsAppEventTrigger.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends WhatsAppEventTriggerFindFirstArgs>(args?: SelectSubset<T, WhatsAppEventTriggerFindFirstArgs<ExtArgs>>): Prisma__WhatsAppEventTriggerClient<$Result.GetResult<Prisma.$WhatsAppEventTriggerPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first WhatsAppEventTrigger that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WhatsAppEventTriggerFindFirstOrThrowArgs} args - Arguments to find a WhatsAppEventTrigger
+     * @example
+     * // Get one WhatsAppEventTrigger
+     * const whatsAppEventTrigger = await prisma.whatsAppEventTrigger.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends WhatsAppEventTriggerFindFirstOrThrowArgs>(args?: SelectSubset<T, WhatsAppEventTriggerFindFirstOrThrowArgs<ExtArgs>>): Prisma__WhatsAppEventTriggerClient<$Result.GetResult<Prisma.$WhatsAppEventTriggerPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more WhatsAppEventTriggers that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WhatsAppEventTriggerFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all WhatsAppEventTriggers
+     * const whatsAppEventTriggers = await prisma.whatsAppEventTrigger.findMany()
+     * 
+     * // Get first 10 WhatsAppEventTriggers
+     * const whatsAppEventTriggers = await prisma.whatsAppEventTrigger.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const whatsAppEventTriggerWithIdOnly = await prisma.whatsAppEventTrigger.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends WhatsAppEventTriggerFindManyArgs>(args?: SelectSubset<T, WhatsAppEventTriggerFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WhatsAppEventTriggerPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a WhatsAppEventTrigger.
+     * @param {WhatsAppEventTriggerCreateArgs} args - Arguments to create a WhatsAppEventTrigger.
+     * @example
+     * // Create one WhatsAppEventTrigger
+     * const WhatsAppEventTrigger = await prisma.whatsAppEventTrigger.create({
+     *   data: {
+     *     // ... data to create a WhatsAppEventTrigger
+     *   }
+     * })
+     * 
+     */
+    create<T extends WhatsAppEventTriggerCreateArgs>(args: SelectSubset<T, WhatsAppEventTriggerCreateArgs<ExtArgs>>): Prisma__WhatsAppEventTriggerClient<$Result.GetResult<Prisma.$WhatsAppEventTriggerPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many WhatsAppEventTriggers.
+     * @param {WhatsAppEventTriggerCreateManyArgs} args - Arguments to create many WhatsAppEventTriggers.
+     * @example
+     * // Create many WhatsAppEventTriggers
+     * const whatsAppEventTrigger = await prisma.whatsAppEventTrigger.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends WhatsAppEventTriggerCreateManyArgs>(args?: SelectSubset<T, WhatsAppEventTriggerCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many WhatsAppEventTriggers and returns the data saved in the database.
+     * @param {WhatsAppEventTriggerCreateManyAndReturnArgs} args - Arguments to create many WhatsAppEventTriggers.
+     * @example
+     * // Create many WhatsAppEventTriggers
+     * const whatsAppEventTrigger = await prisma.whatsAppEventTrigger.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many WhatsAppEventTriggers and only return the `id`
+     * const whatsAppEventTriggerWithIdOnly = await prisma.whatsAppEventTrigger.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends WhatsAppEventTriggerCreateManyAndReturnArgs>(args?: SelectSubset<T, WhatsAppEventTriggerCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WhatsAppEventTriggerPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a WhatsAppEventTrigger.
+     * @param {WhatsAppEventTriggerDeleteArgs} args - Arguments to delete one WhatsAppEventTrigger.
+     * @example
+     * // Delete one WhatsAppEventTrigger
+     * const WhatsAppEventTrigger = await prisma.whatsAppEventTrigger.delete({
+     *   where: {
+     *     // ... filter to delete one WhatsAppEventTrigger
+     *   }
+     * })
+     * 
+     */
+    delete<T extends WhatsAppEventTriggerDeleteArgs>(args: SelectSubset<T, WhatsAppEventTriggerDeleteArgs<ExtArgs>>): Prisma__WhatsAppEventTriggerClient<$Result.GetResult<Prisma.$WhatsAppEventTriggerPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one WhatsAppEventTrigger.
+     * @param {WhatsAppEventTriggerUpdateArgs} args - Arguments to update one WhatsAppEventTrigger.
+     * @example
+     * // Update one WhatsAppEventTrigger
+     * const whatsAppEventTrigger = await prisma.whatsAppEventTrigger.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends WhatsAppEventTriggerUpdateArgs>(args: SelectSubset<T, WhatsAppEventTriggerUpdateArgs<ExtArgs>>): Prisma__WhatsAppEventTriggerClient<$Result.GetResult<Prisma.$WhatsAppEventTriggerPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more WhatsAppEventTriggers.
+     * @param {WhatsAppEventTriggerDeleteManyArgs} args - Arguments to filter WhatsAppEventTriggers to delete.
+     * @example
+     * // Delete a few WhatsAppEventTriggers
+     * const { count } = await prisma.whatsAppEventTrigger.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends WhatsAppEventTriggerDeleteManyArgs>(args?: SelectSubset<T, WhatsAppEventTriggerDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more WhatsAppEventTriggers.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WhatsAppEventTriggerUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many WhatsAppEventTriggers
+     * const whatsAppEventTrigger = await prisma.whatsAppEventTrigger.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends WhatsAppEventTriggerUpdateManyArgs>(args: SelectSubset<T, WhatsAppEventTriggerUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more WhatsAppEventTriggers and returns the data updated in the database.
+     * @param {WhatsAppEventTriggerUpdateManyAndReturnArgs} args - Arguments to update many WhatsAppEventTriggers.
+     * @example
+     * // Update many WhatsAppEventTriggers
+     * const whatsAppEventTrigger = await prisma.whatsAppEventTrigger.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more WhatsAppEventTriggers and only return the `id`
+     * const whatsAppEventTriggerWithIdOnly = await prisma.whatsAppEventTrigger.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends WhatsAppEventTriggerUpdateManyAndReturnArgs>(args: SelectSubset<T, WhatsAppEventTriggerUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WhatsAppEventTriggerPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one WhatsAppEventTrigger.
+     * @param {WhatsAppEventTriggerUpsertArgs} args - Arguments to update or create a WhatsAppEventTrigger.
+     * @example
+     * // Update or create a WhatsAppEventTrigger
+     * const whatsAppEventTrigger = await prisma.whatsAppEventTrigger.upsert({
+     *   create: {
+     *     // ... data to create a WhatsAppEventTrigger
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the WhatsAppEventTrigger we want to update
+     *   }
+     * })
+     */
+    upsert<T extends WhatsAppEventTriggerUpsertArgs>(args: SelectSubset<T, WhatsAppEventTriggerUpsertArgs<ExtArgs>>): Prisma__WhatsAppEventTriggerClient<$Result.GetResult<Prisma.$WhatsAppEventTriggerPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of WhatsAppEventTriggers.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WhatsAppEventTriggerCountArgs} args - Arguments to filter WhatsAppEventTriggers to count.
+     * @example
+     * // Count the number of WhatsAppEventTriggers
+     * const count = await prisma.whatsAppEventTrigger.count({
+     *   where: {
+     *     // ... the filter for the WhatsAppEventTriggers we want to count
+     *   }
+     * })
+    **/
+    count<T extends WhatsAppEventTriggerCountArgs>(
+      args?: Subset<T, WhatsAppEventTriggerCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], WhatsAppEventTriggerCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a WhatsAppEventTrigger.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WhatsAppEventTriggerAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends WhatsAppEventTriggerAggregateArgs>(args: Subset<T, WhatsAppEventTriggerAggregateArgs>): Prisma.PrismaPromise<GetWhatsAppEventTriggerAggregateType<T>>
+
+    /**
+     * Group by WhatsAppEventTrigger.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WhatsAppEventTriggerGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends WhatsAppEventTriggerGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: WhatsAppEventTriggerGroupByArgs['orderBy'] }
+        : { orderBy?: WhatsAppEventTriggerGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, WhatsAppEventTriggerGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetWhatsAppEventTriggerGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the WhatsAppEventTrigger model
+   */
+  readonly fields: WhatsAppEventTriggerFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for WhatsAppEventTrigger.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__WhatsAppEventTriggerClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the WhatsAppEventTrigger model
+   */
+  interface WhatsAppEventTriggerFieldRefs {
+    readonly id: FieldRef<"WhatsAppEventTrigger", 'String'>
+    readonly eventName: FieldRef<"WhatsAppEventTrigger", 'String'>
+    readonly templateName: FieldRef<"WhatsAppEventTrigger", 'String'>
+    readonly isActive: FieldRef<"WhatsAppEventTrigger", 'Boolean'>
+    readonly variableMap: FieldRef<"WhatsAppEventTrigger", 'String'>
+    readonly updatedAt: FieldRef<"WhatsAppEventTrigger", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * WhatsAppEventTrigger findUnique
+   */
+  export type WhatsAppEventTriggerFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WhatsAppEventTrigger
+     */
+    select?: WhatsAppEventTriggerSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WhatsAppEventTrigger
+     */
+    omit?: WhatsAppEventTriggerOmit<ExtArgs> | null
+    /**
+     * Filter, which WhatsAppEventTrigger to fetch.
+     */
+    where: WhatsAppEventTriggerWhereUniqueInput
+  }
+
+  /**
+   * WhatsAppEventTrigger findUniqueOrThrow
+   */
+  export type WhatsAppEventTriggerFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WhatsAppEventTrigger
+     */
+    select?: WhatsAppEventTriggerSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WhatsAppEventTrigger
+     */
+    omit?: WhatsAppEventTriggerOmit<ExtArgs> | null
+    /**
+     * Filter, which WhatsAppEventTrigger to fetch.
+     */
+    where: WhatsAppEventTriggerWhereUniqueInput
+  }
+
+  /**
+   * WhatsAppEventTrigger findFirst
+   */
+  export type WhatsAppEventTriggerFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WhatsAppEventTrigger
+     */
+    select?: WhatsAppEventTriggerSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WhatsAppEventTrigger
+     */
+    omit?: WhatsAppEventTriggerOmit<ExtArgs> | null
+    /**
+     * Filter, which WhatsAppEventTrigger to fetch.
+     */
+    where?: WhatsAppEventTriggerWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of WhatsAppEventTriggers to fetch.
+     */
+    orderBy?: WhatsAppEventTriggerOrderByWithRelationInput | WhatsAppEventTriggerOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for WhatsAppEventTriggers.
+     */
+    cursor?: WhatsAppEventTriggerWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` WhatsAppEventTriggers from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` WhatsAppEventTriggers.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of WhatsAppEventTriggers.
+     */
+    distinct?: WhatsAppEventTriggerScalarFieldEnum | WhatsAppEventTriggerScalarFieldEnum[]
+  }
+
+  /**
+   * WhatsAppEventTrigger findFirstOrThrow
+   */
+  export type WhatsAppEventTriggerFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WhatsAppEventTrigger
+     */
+    select?: WhatsAppEventTriggerSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WhatsAppEventTrigger
+     */
+    omit?: WhatsAppEventTriggerOmit<ExtArgs> | null
+    /**
+     * Filter, which WhatsAppEventTrigger to fetch.
+     */
+    where?: WhatsAppEventTriggerWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of WhatsAppEventTriggers to fetch.
+     */
+    orderBy?: WhatsAppEventTriggerOrderByWithRelationInput | WhatsAppEventTriggerOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for WhatsAppEventTriggers.
+     */
+    cursor?: WhatsAppEventTriggerWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` WhatsAppEventTriggers from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` WhatsAppEventTriggers.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of WhatsAppEventTriggers.
+     */
+    distinct?: WhatsAppEventTriggerScalarFieldEnum | WhatsAppEventTriggerScalarFieldEnum[]
+  }
+
+  /**
+   * WhatsAppEventTrigger findMany
+   */
+  export type WhatsAppEventTriggerFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WhatsAppEventTrigger
+     */
+    select?: WhatsAppEventTriggerSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WhatsAppEventTrigger
+     */
+    omit?: WhatsAppEventTriggerOmit<ExtArgs> | null
+    /**
+     * Filter, which WhatsAppEventTriggers to fetch.
+     */
+    where?: WhatsAppEventTriggerWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of WhatsAppEventTriggers to fetch.
+     */
+    orderBy?: WhatsAppEventTriggerOrderByWithRelationInput | WhatsAppEventTriggerOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing WhatsAppEventTriggers.
+     */
+    cursor?: WhatsAppEventTriggerWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` WhatsAppEventTriggers from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` WhatsAppEventTriggers.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of WhatsAppEventTriggers.
+     */
+    distinct?: WhatsAppEventTriggerScalarFieldEnum | WhatsAppEventTriggerScalarFieldEnum[]
+  }
+
+  /**
+   * WhatsAppEventTrigger create
+   */
+  export type WhatsAppEventTriggerCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WhatsAppEventTrigger
+     */
+    select?: WhatsAppEventTriggerSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WhatsAppEventTrigger
+     */
+    omit?: WhatsAppEventTriggerOmit<ExtArgs> | null
+    /**
+     * The data needed to create a WhatsAppEventTrigger.
+     */
+    data: XOR<WhatsAppEventTriggerCreateInput, WhatsAppEventTriggerUncheckedCreateInput>
+  }
+
+  /**
+   * WhatsAppEventTrigger createMany
+   */
+  export type WhatsAppEventTriggerCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many WhatsAppEventTriggers.
+     */
+    data: WhatsAppEventTriggerCreateManyInput | WhatsAppEventTriggerCreateManyInput[]
+  }
+
+  /**
+   * WhatsAppEventTrigger createManyAndReturn
+   */
+  export type WhatsAppEventTriggerCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WhatsAppEventTrigger
+     */
+    select?: WhatsAppEventTriggerSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the WhatsAppEventTrigger
+     */
+    omit?: WhatsAppEventTriggerOmit<ExtArgs> | null
+    /**
+     * The data used to create many WhatsAppEventTriggers.
+     */
+    data: WhatsAppEventTriggerCreateManyInput | WhatsAppEventTriggerCreateManyInput[]
+  }
+
+  /**
+   * WhatsAppEventTrigger update
+   */
+  export type WhatsAppEventTriggerUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WhatsAppEventTrigger
+     */
+    select?: WhatsAppEventTriggerSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WhatsAppEventTrigger
+     */
+    omit?: WhatsAppEventTriggerOmit<ExtArgs> | null
+    /**
+     * The data needed to update a WhatsAppEventTrigger.
+     */
+    data: XOR<WhatsAppEventTriggerUpdateInput, WhatsAppEventTriggerUncheckedUpdateInput>
+    /**
+     * Choose, which WhatsAppEventTrigger to update.
+     */
+    where: WhatsAppEventTriggerWhereUniqueInput
+  }
+
+  /**
+   * WhatsAppEventTrigger updateMany
+   */
+  export type WhatsAppEventTriggerUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update WhatsAppEventTriggers.
+     */
+    data: XOR<WhatsAppEventTriggerUpdateManyMutationInput, WhatsAppEventTriggerUncheckedUpdateManyInput>
+    /**
+     * Filter which WhatsAppEventTriggers to update
+     */
+    where?: WhatsAppEventTriggerWhereInput
+    /**
+     * Limit how many WhatsAppEventTriggers to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * WhatsAppEventTrigger updateManyAndReturn
+   */
+  export type WhatsAppEventTriggerUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WhatsAppEventTrigger
+     */
+    select?: WhatsAppEventTriggerSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the WhatsAppEventTrigger
+     */
+    omit?: WhatsAppEventTriggerOmit<ExtArgs> | null
+    /**
+     * The data used to update WhatsAppEventTriggers.
+     */
+    data: XOR<WhatsAppEventTriggerUpdateManyMutationInput, WhatsAppEventTriggerUncheckedUpdateManyInput>
+    /**
+     * Filter which WhatsAppEventTriggers to update
+     */
+    where?: WhatsAppEventTriggerWhereInput
+    /**
+     * Limit how many WhatsAppEventTriggers to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * WhatsAppEventTrigger upsert
+   */
+  export type WhatsAppEventTriggerUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WhatsAppEventTrigger
+     */
+    select?: WhatsAppEventTriggerSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WhatsAppEventTrigger
+     */
+    omit?: WhatsAppEventTriggerOmit<ExtArgs> | null
+    /**
+     * The filter to search for the WhatsAppEventTrigger to update in case it exists.
+     */
+    where: WhatsAppEventTriggerWhereUniqueInput
+    /**
+     * In case the WhatsAppEventTrigger found by the `where` argument doesn't exist, create a new WhatsAppEventTrigger with this data.
+     */
+    create: XOR<WhatsAppEventTriggerCreateInput, WhatsAppEventTriggerUncheckedCreateInput>
+    /**
+     * In case the WhatsAppEventTrigger was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<WhatsAppEventTriggerUpdateInput, WhatsAppEventTriggerUncheckedUpdateInput>
+  }
+
+  /**
+   * WhatsAppEventTrigger delete
+   */
+  export type WhatsAppEventTriggerDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WhatsAppEventTrigger
+     */
+    select?: WhatsAppEventTriggerSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WhatsAppEventTrigger
+     */
+    omit?: WhatsAppEventTriggerOmit<ExtArgs> | null
+    /**
+     * Filter which WhatsAppEventTrigger to delete.
+     */
+    where: WhatsAppEventTriggerWhereUniqueInput
+  }
+
+  /**
+   * WhatsAppEventTrigger deleteMany
+   */
+  export type WhatsAppEventTriggerDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which WhatsAppEventTriggers to delete
+     */
+    where?: WhatsAppEventTriggerWhereInput
+    /**
+     * Limit how many WhatsAppEventTriggers to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * WhatsAppEventTrigger without action
+   */
+  export type WhatsAppEventTriggerDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WhatsAppEventTrigger
+     */
+    select?: WhatsAppEventTriggerSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WhatsAppEventTrigger
+     */
+    omit?: WhatsAppEventTriggerOmit<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -8714,6 +9816,18 @@ export namespace Prisma {
   };
 
   export type WhatsAppTemplateScalarFieldEnum = (typeof WhatsAppTemplateScalarFieldEnum)[keyof typeof WhatsAppTemplateScalarFieldEnum]
+
+
+  export const WhatsAppEventTriggerScalarFieldEnum: {
+    id: 'id',
+    eventName: 'eventName',
+    templateName: 'templateName',
+    isActive: 'isActive',
+    variableMap: 'variableMap',
+    updatedAt: 'updatedAt'
+  };
+
+  export type WhatsAppEventTriggerScalarFieldEnum = (typeof WhatsAppEventTriggerScalarFieldEnum)[keyof typeof WhatsAppEventTriggerScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -9211,6 +10325,63 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"WhatsAppTemplate"> | Date | string
   }
 
+  export type WhatsAppEventTriggerWhereInput = {
+    AND?: WhatsAppEventTriggerWhereInput | WhatsAppEventTriggerWhereInput[]
+    OR?: WhatsAppEventTriggerWhereInput[]
+    NOT?: WhatsAppEventTriggerWhereInput | WhatsAppEventTriggerWhereInput[]
+    id?: StringFilter<"WhatsAppEventTrigger"> | string
+    eventName?: StringFilter<"WhatsAppEventTrigger"> | string
+    templateName?: StringNullableFilter<"WhatsAppEventTrigger"> | string | null
+    isActive?: BoolFilter<"WhatsAppEventTrigger"> | boolean
+    variableMap?: StringNullableFilter<"WhatsAppEventTrigger"> | string | null
+    updatedAt?: DateTimeFilter<"WhatsAppEventTrigger"> | Date | string
+  }
+
+  export type WhatsAppEventTriggerOrderByWithRelationInput = {
+    id?: SortOrder
+    eventName?: SortOrder
+    templateName?: SortOrderInput | SortOrder
+    isActive?: SortOrder
+    variableMap?: SortOrderInput | SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type WhatsAppEventTriggerWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    eventName?: string
+    AND?: WhatsAppEventTriggerWhereInput | WhatsAppEventTriggerWhereInput[]
+    OR?: WhatsAppEventTriggerWhereInput[]
+    NOT?: WhatsAppEventTriggerWhereInput | WhatsAppEventTriggerWhereInput[]
+    templateName?: StringNullableFilter<"WhatsAppEventTrigger"> | string | null
+    isActive?: BoolFilter<"WhatsAppEventTrigger"> | boolean
+    variableMap?: StringNullableFilter<"WhatsAppEventTrigger"> | string | null
+    updatedAt?: DateTimeFilter<"WhatsAppEventTrigger"> | Date | string
+  }, "id" | "eventName">
+
+  export type WhatsAppEventTriggerOrderByWithAggregationInput = {
+    id?: SortOrder
+    eventName?: SortOrder
+    templateName?: SortOrderInput | SortOrder
+    isActive?: SortOrder
+    variableMap?: SortOrderInput | SortOrder
+    updatedAt?: SortOrder
+    _count?: WhatsAppEventTriggerCountOrderByAggregateInput
+    _max?: WhatsAppEventTriggerMaxOrderByAggregateInput
+    _min?: WhatsAppEventTriggerMinOrderByAggregateInput
+  }
+
+  export type WhatsAppEventTriggerScalarWhereWithAggregatesInput = {
+    AND?: WhatsAppEventTriggerScalarWhereWithAggregatesInput | WhatsAppEventTriggerScalarWhereWithAggregatesInput[]
+    OR?: WhatsAppEventTriggerScalarWhereWithAggregatesInput[]
+    NOT?: WhatsAppEventTriggerScalarWhereWithAggregatesInput | WhatsAppEventTriggerScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"WhatsAppEventTrigger"> | string
+    eventName?: StringWithAggregatesFilter<"WhatsAppEventTrigger"> | string
+    templateName?: StringNullableWithAggregatesFilter<"WhatsAppEventTrigger"> | string | null
+    isActive?: BoolWithAggregatesFilter<"WhatsAppEventTrigger"> | boolean
+    variableMap?: StringNullableWithAggregatesFilter<"WhatsAppEventTrigger"> | string | null
+    updatedAt?: DateTimeWithAggregatesFilter<"WhatsAppEventTrigger"> | Date | string
+  }
+
   export type WhatsAppMessageCreateInput = {
     id?: string
     wamid?: string | null
@@ -9701,6 +10872,69 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type WhatsAppEventTriggerCreateInput = {
+    id?: string
+    eventName: string
+    templateName?: string | null
+    isActive?: boolean
+    variableMap?: string | null
+    updatedAt?: Date | string
+  }
+
+  export type WhatsAppEventTriggerUncheckedCreateInput = {
+    id?: string
+    eventName: string
+    templateName?: string | null
+    isActive?: boolean
+    variableMap?: string | null
+    updatedAt?: Date | string
+  }
+
+  export type WhatsAppEventTriggerUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    eventName?: StringFieldUpdateOperationsInput | string
+    templateName?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    variableMap?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type WhatsAppEventTriggerUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    eventName?: StringFieldUpdateOperationsInput | string
+    templateName?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    variableMap?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type WhatsAppEventTriggerCreateManyInput = {
+    id?: string
+    eventName: string
+    templateName?: string | null
+    isActive?: boolean
+    variableMap?: string | null
+    updatedAt?: Date | string
+  }
+
+  export type WhatsAppEventTriggerUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    eventName?: StringFieldUpdateOperationsInput | string
+    templateName?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    variableMap?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type WhatsAppEventTriggerUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    eventName?: StringFieldUpdateOperationsInput | string
+    templateName?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    variableMap?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type StringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[]
@@ -10048,6 +11282,33 @@ export namespace Prisma {
     language?: SortOrder
     status?: SortOrder
     createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type WhatsAppEventTriggerCountOrderByAggregateInput = {
+    id?: SortOrder
+    eventName?: SortOrder
+    templateName?: SortOrder
+    isActive?: SortOrder
+    variableMap?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type WhatsAppEventTriggerMaxOrderByAggregateInput = {
+    id?: SortOrder
+    eventName?: SortOrder
+    templateName?: SortOrder
+    isActive?: SortOrder
+    variableMap?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type WhatsAppEventTriggerMinOrderByAggregateInput = {
+    id?: SortOrder
+    eventName?: SortOrder
+    templateName?: SortOrder
+    isActive?: SortOrder
+    variableMap?: SortOrder
     updatedAt?: SortOrder
   }
 

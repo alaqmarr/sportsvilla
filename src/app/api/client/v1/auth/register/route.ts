@@ -58,9 +58,14 @@ export async function POST(request: Request) {
 
     // Mint a custom JWT
     const uid = cleanMobile.startsWith('+') ? cleanMobile : `+91${cleanMobile}`;
+    const secret = process.env.NEXTAUTH_SECRET;
+    if (!secret) {
+      throw new Error("NEXTAUTH_SECRET is not configured");
+    }
+
     const customToken = jwt.sign(
       { uid, memberId: member.id },
-      process.env.NEXTAUTH_SECRET || 'fallback_secret_for_dev',
+      secret,
       { expiresIn: '30d' }
     );
 

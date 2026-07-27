@@ -84,6 +84,40 @@ export async function GET(request: Request) {
   if (!token) {
     return NextResponse.json({ error: "Missing token parameter" }, { status: 400 });
   }
-  // For web browsers: redirect to frontend login with verified token
-  return NextResponse.redirect(new URL(`/login?magic_verified=${token}`, request.url));
+  
+  // Return an HTML page that attempts to open the app via custom scheme
+  // and falls back to the web login after a short delay
+  const html = `
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <title>SportsVilla Login</title>
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <style>
+        body { font-family: sans-serif; text-align: center; padding-top: 50px; background: #000; color: #fff; }
+        .spinner { margin: 20px auto; width: 40px; height: 40px; border: 4px solid rgba(255,255,255,0.3); border-radius: 50%; border-top-color: #16a34a; animation: spin 1s ease-in-out infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+      </style>
+    </head>
+    <body>
+      <h2>Opening SportsVilla App...</h2>
+      <div class="spinner"></div>
+      <p>If the app doesn't open automatically, <a href="/login?magic_verified=${token}" style="color: #16a34a;">continue on web</a>.</p>
+      
+      <script>
+        // Try opening the app via custom scheme
+        window.location.href = 'sportsvillaapp://login?token=${token}';
+        
+        // Fallback to web login if app is not installed
+        setTimeout(function() {
+          window.location.href = '/login?magic_verified=${token}';
+        }, 2500);
+      </script>
+    </body>
+    </html>
+  `;
+
+  return new NextResponse(html, {
+    headers: { 'Content-Type': 'text/html' }
+  });
 }

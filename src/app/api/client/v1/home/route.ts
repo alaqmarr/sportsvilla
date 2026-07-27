@@ -47,7 +47,8 @@ export async function GET(request: Request) {
         },
         tickets: true
       },
-      orderBy: { startTime: 'asc' }
+      orderBy: { startTime: 'asc' },
+      take: 50
     });
 
     const now = new Date();
@@ -69,7 +70,8 @@ export async function GET(request: Request) {
         },
         turf: { select: { name: true } }
       },
-      orderBy: { endDate: 'desc' }
+      orderBy: { endDate: 'desc' },
+      take: 20
     });
 
     // Limit attendance to last 60 days for performance (avoid loading years of history)
@@ -79,7 +81,8 @@ export async function GET(request: Request) {
     const attendances = await prisma.attendance.findMany({
       where: { memberId: targetMemberId, date: { gte: sixtyDaysAgo } },
       include: { sport: { select: { name: true } } },
-      orderBy: { date: 'desc' }
+      orderBy: { date: 'desc' },
+      take: 100
     });
 
     const activeMemberships = memberMemberships
@@ -176,7 +179,8 @@ export async function GET(request: Request) {
           include: { sport: true }
         }
       },
-      orderBy: { tournament: { startDate: 'asc' } }
+      orderBy: { tournament: { startDate: 'asc' } },
+      take: 20
     });
     
     const registeredTournaments = registrations.map(r => ({

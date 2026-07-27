@@ -187,6 +187,15 @@ exports.Prisma.WhatsAppTemplateScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.WhatsAppEventTriggerScalarFieldEnum = {
+  id: 'id',
+  eventName: 'eventName',
+  templateName: 'templateName',
+  isActive: 'isActive',
+  variableMap: 'variableMap',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -205,7 +214,8 @@ exports.Prisma.ModelName = {
   WhatsAppConfig: 'WhatsAppConfig',
   WhatsAppConversation: 'WhatsAppConversation',
   WhatsAppAccountMetric: 'WhatsAppAccountMetric',
-  WhatsAppTemplate: 'WhatsAppTemplate'
+  WhatsAppTemplate: 'WhatsAppTemplate',
+  WhatsAppEventTrigger: 'WhatsAppEventTrigger'
 };
 
 /**

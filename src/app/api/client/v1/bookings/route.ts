@@ -368,6 +368,33 @@ export async function POST(request: Request) {
       return newBooking;
     });
 
+    // Dispatch WhatsApp Event Trigger
+    try {
+      const { sendEventMessage } = require("@/lib/whatsapp");
+      const payload = {
+        booking: {
+          id: booking.id,
+          startTime: booking.startTime.toISOString(),
+          price: booking.price,
+          amountDue: booking.amountDue,
+          participantCount: booking.participantCount,
+          ticketCode: ticketData.length > 0 ? ticketData[0].qrCode : "N/A"
+        },
+        turf: {
+          name: turf.name,
+          location: turf.location || ""
+        },
+        member: {
+          name: member.name,
+          mobile: member.mobile
+        }
+      };
+      // Send asynchronously without blocking the API response
+      sendEventMessage("BOOKING_CONFIRMED", member.mobile, payload).catch((e: any) => console.error("WhatsApp trigger error:", e));
+    } catch (e) {
+      console.error("Failed to send WhatsApp Event", e);
+    }
+
     // Evaluate Loyalty Triggers (outside main transaction — non-critical)
     try {
       const userBookings = await prisma.booking.count({
