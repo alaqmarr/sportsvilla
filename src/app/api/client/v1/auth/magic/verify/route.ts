@@ -3,11 +3,12 @@ import { prisma } from '@/lib/prisma';
 import { whatsappDb } from '@/lib/whatsappDb';
 import jwt from 'jsonwebtoken';
 import { jsonResponse } from '@/lib/api-logger';
+import { logger } from '@/lib/logger';
 
 const JWT_SECRET = process.env.NEXTAUTH_SECRET || 'fallback_secret_for_dev';
 
 export async function POST(request: Request) {
-  console.log(`[API] POST /api/client/v1/auth/magic/verify called`);
+  logger.info(`[API] POST /api/client/v1/auth/magic/verify called`);
   try {
     const { token } = await request.json();
 
@@ -15,17 +16,21 @@ export async function POST(request: Request) {
       return jsonResponse({ error: "Missing magic token" }, { status: 400 });
     }
 
+    const cleanToken = typeof token === 'string' ? token.trim() : String(token).trim();
+    logger.info(`[MAGIC LOGIN] Verifying token: "${cleanToken}"`);
+
     // 1. Look up token in WhatsApp SQLite DB
     const otpRecord = await whatsappDb.whatsAppOtp.findFirst({
       where: {
-        otp: token,
+        otp: cleanToken,
         purpose: "MAGIC_LOGIN",
       },
       orderBy: { createdAt: "desc" },
     });
 
     if (!otpRecord) {
-      return jsonResponse({ error: "Invalid login link" }, { status: 404 });
+      logger.info(`[MAGIC LOGIN] Token not found in DB: "${cleanToken}"`);
+      return jsonResponse({ error: `Invalid login link (Token received: ${cleanToken.substring(0, 6)}...)` }, { status: 404 });
     }
 
     if (otpRecord.verified) {
@@ -73,7 +78,7 @@ export async function POST(request: Request) {
       member,
     });
   } catch (error: any) {
-    console.error(`[API ERROR] POST /api/client/v1/auth/magic/verify ->`, error);
+    logger.error(`[API ERROR] POST /api/client/v1/auth/magic/verify ->`, error);
     return jsonResponse({ error: "Internal server error" }, { status: 500 });
   }
 }

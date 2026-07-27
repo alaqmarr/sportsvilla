@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
+import { logger } from './logger';
 
 export function jsonResponse(data: any, init?: ResponseInit) {
-  console.log(`[API RESPONSE]`, JSON.stringify(data, null, 2));
+  logger.info(`[API RESPONSE]`, data);
   return NextResponse.json(data, init);
 }

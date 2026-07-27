@@ -3,11 +3,16 @@ import { whatsappDb } from '@/lib/whatsappDb';
 import { sendWhatsAppMagicLogin } from '@/lib/whatsapp';
 import { jsonResponse } from '@/lib/api-logger';
 import { randomBytes } from 'crypto';
+import { logger } from '@/lib/logger';
 
 export async function POST(request: Request) {
-  console.log(`[API] POST /api/client/v1/auth/magic/send called`);
+  logger.info(`[API] POST /api/client/v1/auth/magic/send called`);
   try {
     const { mobile } = await request.json();
+
+    if (!mobile) {
+      return jsonResponse({ error: "Mobile number is required" }, { status: 400 });
+    }
     
     // Clean mobile number
     let cleanMobile = mobile.replace(/^\+91/, "").replace(/[^0-9]/g, '');
@@ -38,22 +43,19 @@ export async function POST(request: Request) {
 
     // Generate secure random 32-char hex token
     const magicToken = randomBytes(16).toString("hex");
+    logger.info(`[MAGIC LOGIN] Generated token for ${cleanMobile}: "${magicToken}"`);
 
     // Send WhatsApp Magic Login Template
     const result = await sendWhatsAppMagicLogin(cleanMobile, magicToken, "MAGIC_LOGIN");
 
     if (!result.success) {
-      console.error("[MAGIC LOGIN ERROR]", result.error);
+      logger.error("[MAGIC LOGIN ERROR]", result.error);
       return jsonResponse({ error: "Failed to send WhatsApp login link: " + result.error }, { status: 500 });
     }
 
-    return jsonResponse({
-      success: true,
-      message: "Magic login link sent via WhatsApp",
-      expiresIn: 600,
-    });
+    return jsonResponse({ success: true, message: "Login link sent to WhatsApp" });
   } catch (error: any) {
-    console.error(`[API ERROR] POST /api/client/v1/auth/magic/send ->`, error);
+    logger.error(`[API ERROR] POST /api/client/v1/auth/magic/send ->`, error);
     return jsonResponse({ error: "Internal server error" }, { status: 500 });
   }
 }
