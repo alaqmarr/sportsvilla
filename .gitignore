@@ -23,6 +23,8 @@
 *.log
 *.logs
 
+*.md
+
 *.firebase-admin.jsons
 firebase-admin.json
 
