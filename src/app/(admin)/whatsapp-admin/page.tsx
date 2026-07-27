@@ -55,11 +55,24 @@ export default async function WhatsAppAdminPage() {
 
     initialConversations = initialConversations.map((c) => ({
       ...c,
-      name: memberMap.get(c.phoneNumber) || c.name || c.phoneNumber,
+      memberName: memberMap.get(c.phoneNumber) || c.name || null,
     }));
   } catch (err) {
     console.error("Error fetching initial conversations:", err);
   }
 
-  return <WhatsAppClient initialConversations={initialConversations} />;
+  // Pre-fetch messages for the first conversation so the chat pane loads instantly
+  let initialMessages: any[] = [];
+  try {
+    if (initialConversations.length > 0) {
+      initialMessages = await whatsappDb.whatsAppMessage.findMany({
+        where: { phoneNumber: initialConversations[0].phoneNumber },
+        orderBy: { createdAt: "asc" },
+      });
+    }
+  } catch (err) {
+    console.error("Error fetching initial messages:", err);
+  }
+
+  return <WhatsAppClient initialConversations={initialConversations} initialMessages={initialMessages} />;
 }

@@ -16,7 +16,16 @@ export async function POST(request: Request) {
       return jsonResponse({ error: "Missing magic token" }, { status: 400 });
     }
 
-    const cleanToken = typeof token === 'string' ? token.trim() : String(token).trim();
+    let cleanToken = typeof token === 'string' ? token.trim() : String(token).trim();
+
+    // Workaround for Meta WhatsApp template misconfiguration where the URL contains another URL:
+    // "https://beta.sportsvilla.co.in/login?magic=https://beta.sportsvilla.co.in/login?magic=TOKEN"
+    if (cleanToken.includes('magic=')) {
+      cleanToken = cleanToken.split('magic=').pop()?.trim() || cleanToken;
+    }
+    // Also remove any trailing characters or paths just in case
+    cleanToken = cleanToken.split('&')[0];
+
     logger.info(`[MAGIC LOGIN] Verifying token: "${cleanToken}"`);
 
     // 1. Look up token in WhatsApp SQLite DB

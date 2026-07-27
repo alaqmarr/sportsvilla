@@ -88,7 +88,7 @@ const PreviewTicks = ({ status }: { status: string }) => {
   }
 };
 
-export default function WhatsAppClient({ initialConversations }: { initialConversations: any[] }) {
+export default function WhatsAppClient({ initialConversations, initialMessages = [] }: { initialConversations: any[], initialMessages?: any[] }) {
   const [conversations, setConversations] = useState<any[]>(initialConversations);
   const [messages, setMessages] = useState<any[]>([]);
   const [otps, setOtps] = useState<any[]>([]);
@@ -97,8 +97,11 @@ export default function WhatsAppClient({ initialConversations }: { initialConver
   const [showDebugModal, setShowDebugModal] = useState(false);
 
   // CRM Chat state
-  const [selectedPhone, setSelectedPhone] = useState<string | null>(null);
-  const [chatMessages, setChatMessages] = useState<any[]>([]);
+  const [selectedPhone, setSelectedPhone] = useState<string | null>(
+    initialConversations.length > 0 ? initialConversations[0].phoneNumber : null
+  );
+  const [chatMessages, setChatMessages] = useState<any[]>(initialMessages);
+  const [chatLoading, setChatLoading] = useState(false);
   const [chatInput, setChatInput] = useState("");
   const [sendingChat, setSendingChat] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
@@ -248,9 +251,21 @@ export default function WhatsAppClient({ initialConversations }: { initialConver
 
   useEffect(() => {
     if (selectedPhone) {
-      fetchChatMessages(selectedPhone);
-      fetchMemberContext(selectedPhone);
+      // Only show loading if we don't already have messages for this phone
+      if (chatMessages.length === 0 || (chatMessages[0] && chatMessages[0].phoneNumber !== selectedPhone)) {
+        setChatLoading(true);
+      }
+      // Do not clear chatMessages array to prevent blinking/flashing
+      setMemberContext(null);
       setReplyingTo(null);
+
+      Promise.all([
+        fetchChatMessages(selectedPhone),
+        fetchMemberContext(selectedPhone)
+      ]).finally(() => {
+        setChatLoading(false);
+      });
+
       const interval = setInterval(() => {
         fetchChatMessages(selectedPhone);
         fetchConversations();
@@ -489,7 +504,12 @@ export default function WhatsAppClient({ initialConversations }: { initialConver
                   backgroundImage: "radial-gradient(circle at 50% 50%, rgba(20, 30, 36, 0.4) 0%, transparent 100%)",
                 }}
               >
-                {chatMessages.length === 0 ? (
+                {chatLoading ? (
+                  <div className="flex flex-col items-center justify-center h-full space-y-3">
+                    <FiRefreshCw className="animate-spin text-2xl text-emerald-400" />
+                    <p className="text-gray-400 text-xs">Loading chat history...</p>
+                  </div>
+                ) : chatMessages.length === 0 ? (
                   <div className="text-center py-12 text-gray-500 text-xs">
                     No WhatsApp messages recorded with this number yet.
                   </div>
