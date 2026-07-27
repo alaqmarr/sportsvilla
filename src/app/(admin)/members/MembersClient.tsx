@@ -1,6 +1,7 @@
 "use client";
 import { formatIST, todayIST } from "@/lib/dateUtils";
-import { useState, useRef, useMemo } from "react";
+import { useState, useRef, useMemo, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 import { createMember, updateMember, deleteMember, assignPlan, createFamily, updateMemberMembership, deleteMemberMembership, resetWallet } from "./actions";
 import { useAlert } from "@/components/AlertProvider";
 
@@ -11,6 +12,7 @@ import { FiTrash2, FiEdit2, FiPlus, FiX, FiDownload, FiImage, FiMessageCircle, F
 
 export default function MembersClient({ initialMembers, plans, turfs = [] }: { initialMembers: any[], plans: any[], turfs?: any[] }) {
   const { showAlert } = useAlert();
+  const searchParams = useSearchParams();
   const [members, setMembers] = useState(initialMembers);
   
   const [activeTab, setActiveTab] = useState<'MEMBERS'|'FAMILIES'>('MEMBERS');
@@ -28,6 +30,14 @@ export default function MembersClient({ initialMembers, plans, turfs = [] }: { i
   const [mobile, setMobile] = useState("");
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const addMobile = searchParams.get("addMobile");
+    if (addMobile) {
+      setMobile(addMobile);
+      setShowMemberModal(true);
+    }
+  }, [searchParams]);
 
   // Family State
   const [familyMobile, setFamilyMobile] = useState("");

@@ -8,12 +8,13 @@ export interface SendWhatsAppOptions {
   languageCode?: string;
   templateComponents?: any[];
   metadata?: Record<string, any>;
+  contextMessageId?: string; // Meta WAMID of message to quote/reply to
 }
 
 const META_GRAPH_URL = "https://graph.facebook.com/v21.0";
 
 export async function sendWhatsAppMessage(options: SendWhatsAppOptions) {
-  const { to, type, text, templateName, languageCode = "en", templateComponents, metadata } = options;
+  const { to, type, text, templateName, languageCode = "en", templateComponents, metadata, contextMessageId } = options;
   const token = process.env.WHATSAPP_ACCESS_TOKEN;
   const phoneNumberId = process.env.WHATSAPP_PHONE_NUMBER_ID;
 
@@ -26,6 +27,12 @@ export async function sendWhatsAppMessage(options: SendWhatsAppOptions) {
     to: formattedTo,
     type,
   };
+
+  if (contextMessageId) {
+    payload.context = {
+      message_id: contextMessageId,
+    };
+  }
 
   if (type === "text") {
     payload.text = { preview_url: false, body: text };

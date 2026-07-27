@@ -44,6 +44,26 @@ export const authOptions: NextAuthOptions = {
   session: {
     strategy: "jwt",
   },
+  callbacks: {
+    async jwt({ token }) {
+      if (token?.email) {
+        const admin = await prisma.admin.findUnique({
+          where: { email: token.email },
+        });
+        if (!admin || !admin.isActive) {
+          return {}; // Return empty token to invalidate
+        }
+      }
+      return token;
+    },
+    async session({ session, token }) {
+      if (!token?.email) {
+        // @ts-ignore - invalidate session
+        session.user = null;
+      }
+      return session;
+    }
+  },
   cookies: {
     sessionToken: {
       name: process.env.NODE_ENV === "production" ? "__Secure-next-auth.session-token" : "next-auth.session-token",

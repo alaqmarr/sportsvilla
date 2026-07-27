@@ -5,6 +5,8 @@ import { revalidatePath } from "next/cache";
 import { getSettings } from "../settings/actions";
 import { formatIST, getISTDateBounds } from "@/lib/dateUtils";
 import { bumpSyncTimestamp } from '@/lib/sync';
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
 export async function fetchBookableTurfs() {
   return await prisma.turf.findMany({
     where: { 
@@ -208,6 +210,25 @@ export async function createBooking(data: {
       });
     }
 
+    const session = await getServerSession(authOptions);
+    if (session?.user?.email) {
+      const admin = await tx.admin.findUnique({ where: { email: session.user.email } });
+      if (admin) {
+        for (const b of createdBookings) {
+          await tx.auditLog.create({
+            data: {
+              action: "CREATE_BOOKING",
+              entity: "Booking",
+              entityId: b.id,
+              details: JSON.stringify({ price: b.price, turfId: b.turfId }),
+              adminId: admin.id,
+              adminName: admin.name || admin.email,
+            }
+          });
+        }
+      }
+    }
+
     return createdBookings;
   });
 
@@ -274,13 +295,26 @@ export async function cancelBooking(id: string) {
       );
     }
     
+    const session = await getServerSession(authOptions);
+    let adminId = undefined;
+    let adminName = "System";
+    if (session?.user?.email) {
+      const admin = await prisma.admin.findUnique({ where: { email: session.user.email } });
+      if (admin) {
+        adminId = admin.id;
+        adminName = admin.name || admin.email;
+      }
+    }
+    
     queries.push(
       prisma.auditLog.create({
         data: {
           action: "CANCEL_BOOKING",
           entity: "Booking",
           entityId: id,
-          details: JSON.stringify({ previousStatus: booking.status })
+          details: JSON.stringify({ previousStatus: booking.status }),
+          adminId,
+          adminName
         }
       })
     );
@@ -326,10 +360,35 @@ export async function rescheduleBooking(id: string, newTurfId: string, newStartT
 }
 
 export async function updateBookingPayment(id: string, paymentStatus: "PAID" | "UNPAID") {
-  await prisma.booking.update({
-    where: { id },
-    data: { paymentStatus }
+  const session = await getServerSession(authOptions);
+  let adminId = undefined;
+  let adminName = "System";
+  if (session?.user?.email) {
+    const admin = await prisma.admin.findUnique({ where: { email: session.user.email } });
+    if (admin) {
+      adminId = admin.id;
+      adminName = admin.name || admin.email;
+    }
+  }
+
+  await prisma.$transaction(async (tx) => {
+    await tx.booking.update({
+      where: { id },
+      data: { paymentStatus }
+    });
+
+    await tx.auditLog.create({
+      data: {
+        action: "UPDATE_PAYMENT",
+        entity: "Booking",
+        entityId: id,
+        details: JSON.stringify({ paymentStatus }),
+        adminId,
+        adminName
+      }
+    });
   });
+
   await bumpSyncTimestamp('admin_booking');
   revalidatePath("/", "layout");
 }

@@ -128,6 +128,7 @@ exports.Prisma.WhatsAppMessageScalarFieldEnum = {
   errorCode: 'errorCode',
   errorMessage: 'errorMessage',
   metadata: 'metadata',
+  isOptOut: 'isOptOut',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -150,6 +151,42 @@ exports.Prisma.WhatsAppWebhookLogScalarFieldEnum = {
   createdAt: 'createdAt'
 };
 
+exports.Prisma.WhatsAppConfigScalarFieldEnum = {
+  key: 'key',
+  value: 'value',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.WhatsAppConversationScalarFieldEnum = {
+  id: 'id',
+  wacId: 'wacId',
+  recipientMobile: 'recipientMobile',
+  category: 'category',
+  isFreeTier: 'isFreeTier',
+  openedAt: 'openedAt',
+  expiresAt: 'expiresAt',
+  cost: 'cost',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.WhatsAppAccountMetricScalarFieldEnum = {
+  id: 'id',
+  phoneNumberId: 'phoneNumberId',
+  qualityRating: 'qualityRating',
+  messagingLimit: 'messagingLimit',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.WhatsAppTemplateScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  category: 'category',
+  language: 'language',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -164,7 +201,11 @@ exports.Prisma.NullsOrder = {
 exports.Prisma.ModelName = {
   WhatsAppMessage: 'WhatsAppMessage',
   WhatsAppOtp: 'WhatsAppOtp',
-  WhatsAppWebhookLog: 'WhatsAppWebhookLog'
+  WhatsAppWebhookLog: 'WhatsAppWebhookLog',
+  WhatsAppConfig: 'WhatsAppConfig',
+  WhatsAppConversation: 'WhatsAppConversation',
+  WhatsAppAccountMetric: 'WhatsAppAccountMetric',
+  WhatsAppTemplate: 'WhatsAppTemplate'
 };
 
 /**

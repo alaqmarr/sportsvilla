@@ -3501,6 +3501,37 @@ export namespace Prisma {
 
 
   /**
+   * Count Type AdminCountOutputType
+   */
+
+  export type AdminCountOutputType = {
+    auditLogs: number
+  }
+
+  export type AdminCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    auditLogs?: boolean | AdminCountOutputTypeCountAuditLogsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * AdminCountOutputType without action
+   */
+  export type AdminCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminCountOutputType
+     */
+    select?: AdminCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * AdminCountOutputType without action
+   */
+  export type AdminCountOutputTypeCountAuditLogsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AuditLogWhereInput
+  }
+
+
+  /**
    * Count Type MemberCountOutputType
    */
 
@@ -3996,6 +4027,9 @@ export namespace Prisma {
     email: string | null
     password: string | null
     name: string | null
+    role: string | null
+    permissions: string | null
+    isActive: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -4005,6 +4039,9 @@ export namespace Prisma {
     email: string | null
     password: string | null
     name: string | null
+    role: string | null
+    permissions: string | null
+    isActive: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -4014,6 +4051,9 @@ export namespace Prisma {
     email: number
     password: number
     name: number
+    role: number
+    permissions: number
+    isActive: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -4025,6 +4065,9 @@ export namespace Prisma {
     email?: true
     password?: true
     name?: true
+    role?: true
+    permissions?: true
+    isActive?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -4034,6 +4077,9 @@ export namespace Prisma {
     email?: true
     password?: true
     name?: true
+    role?: true
+    permissions?: true
+    isActive?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -4043,6 +4089,9 @@ export namespace Prisma {
     email?: true
     password?: true
     name?: true
+    role?: true
+    permissions?: true
+    isActive?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -4125,6 +4174,9 @@ export namespace Prisma {
     email: string
     password: string
     name: string | null
+    role: string
+    permissions: string
+    isActive: boolean
     createdAt: Date
     updatedAt: Date
     _count: AdminCountAggregateOutputType | null
@@ -4151,8 +4203,13 @@ export namespace Prisma {
     email?: boolean
     password?: boolean
     name?: boolean
+    role?: boolean
+    permissions?: boolean
+    isActive?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    auditLogs?: boolean | Admin$auditLogsArgs<ExtArgs>
+    _count?: boolean | AdminCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["admin"]>
 
   export type AdminSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -4160,6 +4217,9 @@ export namespace Prisma {
     email?: boolean
     password?: boolean
     name?: boolean
+    role?: boolean
+    permissions?: boolean
+    isActive?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["admin"]>
@@ -4169,6 +4229,9 @@ export namespace Prisma {
     email?: boolean
     password?: boolean
     name?: boolean
+    role?: boolean
+    permissions?: boolean
+    isActive?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["admin"]>
@@ -4178,20 +4241,34 @@ export namespace Prisma {
     email?: boolean
     password?: boolean
     name?: boolean
+    role?: boolean
+    permissions?: boolean
+    isActive?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type AdminOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "email" | "password" | "name" | "createdAt" | "updatedAt", ExtArgs["result"]["admin"]>
+  export type AdminOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "email" | "password" | "name" | "role" | "permissions" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["admin"]>
+  export type AdminInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    auditLogs?: boolean | Admin$auditLogsArgs<ExtArgs>
+    _count?: boolean | AdminCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type AdminIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type AdminIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
 
   export type $AdminPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Admin"
-    objects: {}
+    objects: {
+      auditLogs: Prisma.$AuditLogPayload<ExtArgs>[]
+    }
     scalars: $Extensions.GetPayloadResult<{
       id: string
       email: string
       password: string
       name: string | null
+      role: string
+      permissions: string
+      isActive: boolean
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["admin"]>
@@ -4588,6 +4665,7 @@ export namespace Prisma {
    */
   export interface Prisma__AdminClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    auditLogs<T extends Admin$auditLogsArgs<ExtArgs> = {}>(args?: Subset<T, Admin$auditLogsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AuditLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -4621,6 +4699,9 @@ export namespace Prisma {
     readonly email: FieldRef<"Admin", 'String'>
     readonly password: FieldRef<"Admin", 'String'>
     readonly name: FieldRef<"Admin", 'String'>
+    readonly role: FieldRef<"Admin", 'String'>
+    readonly permissions: FieldRef<"Admin", 'String'>
+    readonly isActive: FieldRef<"Admin", 'Boolean'>
     readonly createdAt: FieldRef<"Admin", 'DateTime'>
     readonly updatedAt: FieldRef<"Admin", 'DateTime'>
   }
@@ -4640,6 +4721,10 @@ export namespace Prisma {
      */
     omit?: AdminOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminInclude<ExtArgs> | null
+    /**
      * Filter, which Admin to fetch.
      */
     where: AdminWhereUniqueInput
@@ -4658,6 +4743,10 @@ export namespace Prisma {
      */
     omit?: AdminOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminInclude<ExtArgs> | null
+    /**
      * Filter, which Admin to fetch.
      */
     where: AdminWhereUniqueInput
@@ -4675,6 +4764,10 @@ export namespace Prisma {
      * Omit specific fields from the Admin
      */
     omit?: AdminOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminInclude<ExtArgs> | null
     /**
      * Filter, which Admin to fetch.
      */
@@ -4724,6 +4817,10 @@ export namespace Prisma {
      */
     omit?: AdminOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminInclude<ExtArgs> | null
+    /**
      * Filter, which Admin to fetch.
      */
     where?: AdminWhereInput
@@ -4771,6 +4868,10 @@ export namespace Prisma {
      * Omit specific fields from the Admin
      */
     omit?: AdminOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminInclude<ExtArgs> | null
     /**
      * Filter, which Admins to fetch.
      */
@@ -4820,6 +4921,10 @@ export namespace Prisma {
      */
     omit?: AdminOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminInclude<ExtArgs> | null
+    /**
      * The data needed to create a Admin.
      */
     data: XOR<AdminCreateInput, AdminUncheckedCreateInput>
@@ -4865,6 +4970,10 @@ export namespace Prisma {
      * Omit specific fields from the Admin
      */
     omit?: AdminOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminInclude<ExtArgs> | null
     /**
      * The data needed to update a Admin.
      */
@@ -4932,6 +5041,10 @@ export namespace Prisma {
      */
     omit?: AdminOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminInclude<ExtArgs> | null
+    /**
      * The filter to search for the Admin to update in case it exists.
      */
     where: AdminWhereUniqueInput
@@ -4958,6 +5071,10 @@ export namespace Prisma {
      */
     omit?: AdminOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminInclude<ExtArgs> | null
+    /**
      * Filter which Admin to delete.
      */
     where: AdminWhereUniqueInput
@@ -4978,6 +5095,30 @@ export namespace Prisma {
   }
 
   /**
+   * Admin.auditLogs
+   */
+  export type Admin$auditLogsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AuditLog
+     */
+    select?: AuditLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AuditLog
+     */
+    omit?: AuditLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AuditLogInclude<ExtArgs> | null
+    where?: AuditLogWhereInput
+    orderBy?: AuditLogOrderByWithRelationInput | AuditLogOrderByWithRelationInput[]
+    cursor?: AuditLogWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: AuditLogScalarFieldEnum | AuditLogScalarFieldEnum[]
+  }
+
+  /**
    * Admin without action
    */
   export type AdminDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -4989,6 +5130,10 @@ export namespace Prisma {
      * Omit specific fields from the Admin
      */
     omit?: AdminOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminInclude<ExtArgs> | null
   }
 
 
@@ -34856,6 +35001,7 @@ export namespace Prisma {
     entityId: string | null
     details: string | null
     adminName: string | null
+    adminId: string | null
     createdAt: Date | null
   }
 
@@ -34866,6 +35012,7 @@ export namespace Prisma {
     entityId: string | null
     details: string | null
     adminName: string | null
+    adminId: string | null
     createdAt: Date | null
   }
 
@@ -34876,6 +35023,7 @@ export namespace Prisma {
     entityId: number
     details: number
     adminName: number
+    adminId: number
     createdAt: number
     _all: number
   }
@@ -34888,6 +35036,7 @@ export namespace Prisma {
     entityId?: true
     details?: true
     adminName?: true
+    adminId?: true
     createdAt?: true
   }
 
@@ -34898,6 +35047,7 @@ export namespace Prisma {
     entityId?: true
     details?: true
     adminName?: true
+    adminId?: true
     createdAt?: true
   }
 
@@ -34908,6 +35058,7 @@ export namespace Prisma {
     entityId?: true
     details?: true
     adminName?: true
+    adminId?: true
     createdAt?: true
     _all?: true
   }
@@ -34991,6 +35142,7 @@ export namespace Prisma {
     entityId: string
     details: string | null
     adminName: string
+    adminId: string | null
     createdAt: Date
     _count: AuditLogCountAggregateOutputType | null
     _min: AuditLogMinAggregateOutputType | null
@@ -35018,7 +35170,9 @@ export namespace Prisma {
     entityId?: boolean
     details?: boolean
     adminName?: boolean
+    adminId?: boolean
     createdAt?: boolean
+    admin?: boolean | AuditLog$adminArgs<ExtArgs>
   }, ExtArgs["result"]["auditLog"]>
 
   export type AuditLogSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -35028,7 +35182,9 @@ export namespace Prisma {
     entityId?: boolean
     details?: boolean
     adminName?: boolean
+    adminId?: boolean
     createdAt?: boolean
+    admin?: boolean | AuditLog$adminArgs<ExtArgs>
   }, ExtArgs["result"]["auditLog"]>
 
   export type AuditLogSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -35038,7 +35194,9 @@ export namespace Prisma {
     entityId?: boolean
     details?: boolean
     adminName?: boolean
+    adminId?: boolean
     createdAt?: boolean
+    admin?: boolean | AuditLog$adminArgs<ExtArgs>
   }, ExtArgs["result"]["auditLog"]>
 
   export type AuditLogSelectScalar = {
@@ -35048,14 +35206,26 @@ export namespace Prisma {
     entityId?: boolean
     details?: boolean
     adminName?: boolean
+    adminId?: boolean
     createdAt?: boolean
   }
 
-  export type AuditLogOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "action" | "entity" | "entityId" | "details" | "adminName" | "createdAt", ExtArgs["result"]["auditLog"]>
+  export type AuditLogOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "action" | "entity" | "entityId" | "details" | "adminName" | "adminId" | "createdAt", ExtArgs["result"]["auditLog"]>
+  export type AuditLogInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    admin?: boolean | AuditLog$adminArgs<ExtArgs>
+  }
+  export type AuditLogIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    admin?: boolean | AuditLog$adminArgs<ExtArgs>
+  }
+  export type AuditLogIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    admin?: boolean | AuditLog$adminArgs<ExtArgs>
+  }
 
   export type $AuditLogPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "AuditLog"
-    objects: {}
+    objects: {
+      admin: Prisma.$AdminPayload<ExtArgs> | null
+    }
     scalars: $Extensions.GetPayloadResult<{
       id: string
       action: string
@@ -35063,6 +35233,7 @@ export namespace Prisma {
       entityId: string
       details: string | null
       adminName: string
+      adminId: string | null
       createdAt: Date
     }, ExtArgs["result"]["auditLog"]>
     composites: {}
@@ -35458,6 +35629,7 @@ export namespace Prisma {
    */
   export interface Prisma__AuditLogClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    admin<T extends AuditLog$adminArgs<ExtArgs> = {}>(args?: Subset<T, AuditLog$adminArgs<ExtArgs>>): Prisma__AdminClient<$Result.GetResult<Prisma.$AdminPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -35493,6 +35665,7 @@ export namespace Prisma {
     readonly entityId: FieldRef<"AuditLog", 'String'>
     readonly details: FieldRef<"AuditLog", 'String'>
     readonly adminName: FieldRef<"AuditLog", 'String'>
+    readonly adminId: FieldRef<"AuditLog", 'String'>
     readonly createdAt: FieldRef<"AuditLog", 'DateTime'>
   }
     
@@ -35510,6 +35683,10 @@ export namespace Prisma {
      * Omit specific fields from the AuditLog
      */
     omit?: AuditLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AuditLogInclude<ExtArgs> | null
     /**
      * Filter, which AuditLog to fetch.
      */
@@ -35529,6 +35706,10 @@ export namespace Prisma {
      */
     omit?: AuditLogOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AuditLogInclude<ExtArgs> | null
+    /**
      * Filter, which AuditLog to fetch.
      */
     where: AuditLogWhereUniqueInput
@@ -35546,6 +35727,10 @@ export namespace Prisma {
      * Omit specific fields from the AuditLog
      */
     omit?: AuditLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AuditLogInclude<ExtArgs> | null
     /**
      * Filter, which AuditLog to fetch.
      */
@@ -35595,6 +35780,10 @@ export namespace Prisma {
      */
     omit?: AuditLogOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AuditLogInclude<ExtArgs> | null
+    /**
      * Filter, which AuditLog to fetch.
      */
     where?: AuditLogWhereInput
@@ -35642,6 +35831,10 @@ export namespace Prisma {
      * Omit specific fields from the AuditLog
      */
     omit?: AuditLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AuditLogInclude<ExtArgs> | null
     /**
      * Filter, which AuditLogs to fetch.
      */
@@ -35691,6 +35884,10 @@ export namespace Prisma {
      */
     omit?: AuditLogOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AuditLogInclude<ExtArgs> | null
+    /**
      * The data needed to create a AuditLog.
      */
     data: XOR<AuditLogCreateInput, AuditLogUncheckedCreateInput>
@@ -35722,6 +35919,10 @@ export namespace Prisma {
      * The data used to create many AuditLogs.
      */
     data: AuditLogCreateManyInput | AuditLogCreateManyInput[]
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AuditLogIncludeCreateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -35736,6 +35937,10 @@ export namespace Prisma {
      * Omit specific fields from the AuditLog
      */
     omit?: AuditLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AuditLogInclude<ExtArgs> | null
     /**
      * The data needed to update a AuditLog.
      */
@@ -35788,6 +35993,10 @@ export namespace Prisma {
      * Limit how many AuditLogs to update.
      */
     limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AuditLogIncludeUpdateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -35802,6 +36011,10 @@ export namespace Prisma {
      * Omit specific fields from the AuditLog
      */
     omit?: AuditLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AuditLogInclude<ExtArgs> | null
     /**
      * The filter to search for the AuditLog to update in case it exists.
      */
@@ -35829,6 +36042,10 @@ export namespace Prisma {
      */
     omit?: AuditLogOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AuditLogInclude<ExtArgs> | null
+    /**
      * Filter which AuditLog to delete.
      */
     where: AuditLogWhereUniqueInput
@@ -35849,6 +36066,25 @@ export namespace Prisma {
   }
 
   /**
+   * AuditLog.admin
+   */
+  export type AuditLog$adminArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Admin
+     */
+    select?: AdminSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Admin
+     */
+    omit?: AdminOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminInclude<ExtArgs> | null
+    where?: AdminWhereInput
+  }
+
+  /**
    * AuditLog without action
    */
   export type AuditLogDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -35860,6 +36096,10 @@ export namespace Prisma {
      * Omit specific fields from the AuditLog
      */
     omit?: AuditLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AuditLogInclude<ExtArgs> | null
   }
 
 
@@ -38088,6 +38328,9 @@ export namespace Prisma {
     email: 'email',
     password: 'password',
     name: 'name',
+    role: 'role',
+    permissions: 'permissions',
+    isActive: 'isActive',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -38470,6 +38713,7 @@ export namespace Prisma {
     entityId: 'entityId',
     details: 'details',
     adminName: 'adminName',
+    adminId: 'adminId',
     createdAt: 'createdAt'
   };
 
@@ -38529,6 +38773,13 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'Boolean'
+   */
+  export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
+    
+
+
+  /**
    * Reference to a field of type 'DateTime'
    */
   export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime'>
@@ -38547,13 +38798,6 @@ export namespace Prisma {
    */
   export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
     
-
-
-  /**
-   * Reference to a field of type 'Boolean'
-   */
-  export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
-    
   /**
    * Deep Input Types
    */
@@ -38567,8 +38811,12 @@ export namespace Prisma {
     email?: StringFilter<"Admin"> | string
     password?: StringFilter<"Admin"> | string
     name?: StringNullableFilter<"Admin"> | string | null
+    role?: StringFilter<"Admin"> | string
+    permissions?: StringFilter<"Admin"> | string
+    isActive?: BoolFilter<"Admin"> | boolean
     createdAt?: DateTimeFilter<"Admin"> | Date | string
     updatedAt?: DateTimeFilter<"Admin"> | Date | string
+    auditLogs?: AuditLogListRelationFilter
   }
 
   export type AdminOrderByWithRelationInput = {
@@ -38576,8 +38824,12 @@ export namespace Prisma {
     email?: SortOrder
     password?: SortOrder
     name?: SortOrderInput | SortOrder
+    role?: SortOrder
+    permissions?: SortOrder
+    isActive?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    auditLogs?: AuditLogOrderByRelationAggregateInput
   }
 
   export type AdminWhereUniqueInput = Prisma.AtLeast<{
@@ -38588,8 +38840,12 @@ export namespace Prisma {
     NOT?: AdminWhereInput | AdminWhereInput[]
     password?: StringFilter<"Admin"> | string
     name?: StringNullableFilter<"Admin"> | string | null
+    role?: StringFilter<"Admin"> | string
+    permissions?: StringFilter<"Admin"> | string
+    isActive?: BoolFilter<"Admin"> | boolean
     createdAt?: DateTimeFilter<"Admin"> | Date | string
     updatedAt?: DateTimeFilter<"Admin"> | Date | string
+    auditLogs?: AuditLogListRelationFilter
   }, "id" | "email">
 
   export type AdminOrderByWithAggregationInput = {
@@ -38597,6 +38853,9 @@ export namespace Prisma {
     email?: SortOrder
     password?: SortOrder
     name?: SortOrderInput | SortOrder
+    role?: SortOrder
+    permissions?: SortOrder
+    isActive?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: AdminCountOrderByAggregateInput
@@ -38612,6 +38871,9 @@ export namespace Prisma {
     email?: StringWithAggregatesFilter<"Admin"> | string
     password?: StringWithAggregatesFilter<"Admin"> | string
     name?: StringNullableWithAggregatesFilter<"Admin"> | string | null
+    role?: StringWithAggregatesFilter<"Admin"> | string
+    permissions?: StringWithAggregatesFilter<"Admin"> | string
+    isActive?: BoolWithAggregatesFilter<"Admin"> | boolean
     createdAt?: DateTimeWithAggregatesFilter<"Admin"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Admin"> | Date | string
   }
@@ -40596,7 +40858,9 @@ export namespace Prisma {
     entityId?: StringFilter<"AuditLog"> | string
     details?: StringNullableFilter<"AuditLog"> | string | null
     adminName?: StringFilter<"AuditLog"> | string
+    adminId?: StringNullableFilter<"AuditLog"> | string | null
     createdAt?: DateTimeFilter<"AuditLog"> | Date | string
+    admin?: XOR<AdminNullableScalarRelationFilter, AdminWhereInput> | null
   }
 
   export type AuditLogOrderByWithRelationInput = {
@@ -40606,7 +40870,9 @@ export namespace Prisma {
     entityId?: SortOrder
     details?: SortOrderInput | SortOrder
     adminName?: SortOrder
+    adminId?: SortOrderInput | SortOrder
     createdAt?: SortOrder
+    admin?: AdminOrderByWithRelationInput
   }
 
   export type AuditLogWhereUniqueInput = Prisma.AtLeast<{
@@ -40619,7 +40885,9 @@ export namespace Prisma {
     entityId?: StringFilter<"AuditLog"> | string
     details?: StringNullableFilter<"AuditLog"> | string | null
     adminName?: StringFilter<"AuditLog"> | string
+    adminId?: StringNullableFilter<"AuditLog"> | string | null
     createdAt?: DateTimeFilter<"AuditLog"> | Date | string
+    admin?: XOR<AdminNullableScalarRelationFilter, AdminWhereInput> | null
   }, "id">
 
   export type AuditLogOrderByWithAggregationInput = {
@@ -40629,6 +40897,7 @@ export namespace Prisma {
     entityId?: SortOrder
     details?: SortOrderInput | SortOrder
     adminName?: SortOrder
+    adminId?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     _count?: AuditLogCountOrderByAggregateInput
     _max?: AuditLogMaxOrderByAggregateInput
@@ -40645,6 +40914,7 @@ export namespace Prisma {
     entityId?: StringWithAggregatesFilter<"AuditLog"> | string
     details?: StringNullableWithAggregatesFilter<"AuditLog"> | string | null
     adminName?: StringWithAggregatesFilter<"AuditLog"> | string
+    adminId?: StringNullableWithAggregatesFilter<"AuditLog"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"AuditLog"> | Date | string
   }
 
@@ -40779,8 +41049,12 @@ export namespace Prisma {
     email: string
     password: string
     name?: string | null
+    role?: string
+    permissions?: string
+    isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    auditLogs?: AuditLogCreateNestedManyWithoutAdminInput
   }
 
   export type AdminUncheckedCreateInput = {
@@ -40788,8 +41062,12 @@ export namespace Prisma {
     email: string
     password: string
     name?: string | null
+    role?: string
+    permissions?: string
+    isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    auditLogs?: AuditLogUncheckedCreateNestedManyWithoutAdminInput
   }
 
   export type AdminUpdateInput = {
@@ -40797,8 +41075,12 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: StringFieldUpdateOperationsInput | string
+    permissions?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    auditLogs?: AuditLogUpdateManyWithoutAdminNestedInput
   }
 
   export type AdminUncheckedUpdateInput = {
@@ -40806,8 +41088,12 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: StringFieldUpdateOperationsInput | string
+    permissions?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    auditLogs?: AuditLogUncheckedUpdateManyWithoutAdminNestedInput
   }
 
   export type AdminCreateManyInput = {
@@ -40815,6 +41101,9 @@ export namespace Prisma {
     email: string
     password: string
     name?: string | null
+    role?: string
+    permissions?: string
+    isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -40824,6 +41113,9 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: StringFieldUpdateOperationsInput | string
+    permissions?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -40833,6 +41125,9 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: StringFieldUpdateOperationsInput | string
+    permissions?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -42972,6 +43267,7 @@ export namespace Prisma {
     details?: string | null
     adminName?: string
     createdAt?: Date | string
+    admin?: AdminCreateNestedOneWithoutAuditLogsInput
   }
 
   export type AuditLogUncheckedCreateInput = {
@@ -42981,6 +43277,7 @@ export namespace Prisma {
     entityId: string
     details?: string | null
     adminName?: string
+    adminId?: string | null
     createdAt?: Date | string
   }
 
@@ -42992,6 +43289,7 @@ export namespace Prisma {
     details?: NullableStringFieldUpdateOperationsInput | string | null
     adminName?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    admin?: AdminUpdateOneWithoutAuditLogsNestedInput
   }
 
   export type AuditLogUncheckedUpdateInput = {
@@ -43001,6 +43299,7 @@ export namespace Prisma {
     entityId?: StringFieldUpdateOperationsInput | string
     details?: NullableStringFieldUpdateOperationsInput | string | null
     adminName?: StringFieldUpdateOperationsInput | string
+    adminId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -43011,6 +43310,7 @@ export namespace Prisma {
     entityId: string
     details?: string | null
     adminName?: string
+    adminId?: string | null
     createdAt?: Date | string
   }
 
@@ -43031,6 +43331,7 @@ export namespace Prisma {
     entityId?: StringFieldUpdateOperationsInput | string
     details?: NullableStringFieldUpdateOperationsInput | string | null
     adminName?: StringFieldUpdateOperationsInput | string
+    adminId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -43185,6 +43486,11 @@ export namespace Prisma {
     not?: NestedStringNullableFilter<$PrismaModel> | string | null
   }
 
+  export type BoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
   export type DateTimeFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     in?: Date[] | string[]
@@ -43196,9 +43502,19 @@ export namespace Prisma {
     not?: NestedDateTimeFilter<$PrismaModel> | Date | string
   }
 
+  export type AuditLogListRelationFilter = {
+    every?: AuditLogWhereInput
+    some?: AuditLogWhereInput
+    none?: AuditLogWhereInput
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
+  }
+
+  export type AuditLogOrderByRelationAggregateInput = {
+    _count?: SortOrder
   }
 
   export type AdminCountOrderByAggregateInput = {
@@ -43206,6 +43522,9 @@ export namespace Prisma {
     email?: SortOrder
     password?: SortOrder
     name?: SortOrder
+    role?: SortOrder
+    permissions?: SortOrder
+    isActive?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -43215,6 +43534,9 @@ export namespace Prisma {
     email?: SortOrder
     password?: SortOrder
     name?: SortOrder
+    role?: SortOrder
+    permissions?: SortOrder
+    isActive?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -43224,6 +43546,9 @@ export namespace Prisma {
     email?: SortOrder
     password?: SortOrder
     name?: SortOrder
+    role?: SortOrder
+    permissions?: SortOrder
+    isActive?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -43260,6 +43585,14 @@ export namespace Prisma {
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedStringNullableFilter<$PrismaModel>
     _max?: NestedStringNullableFilter<$PrismaModel>
+  }
+
+  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
   }
 
   export type DateTimeWithAggregatesFilter<$PrismaModel = never> = {
@@ -43662,11 +43995,6 @@ export namespace Prisma {
     not?: NestedIntNullableFilter<$PrismaModel> | number | null
   }
 
-  export type BoolFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolFilter<$PrismaModel> | boolean
-  }
-
   export type TurfNullableScalarRelationFilter = {
     is?: TurfWhereInput | null
     isNot?: TurfWhereInput | null
@@ -43768,14 +44096,6 @@ export namespace Prisma {
     _sum?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedIntNullableFilter<$PrismaModel>
     _max?: NestedIntNullableFilter<$PrismaModel>
-  }
-
-  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedBoolFilter<$PrismaModel>
-    _max?: NestedBoolFilter<$PrismaModel>
   }
 
   export type TurfScalarRelationFilter = {
@@ -44705,6 +45025,11 @@ export namespace Prisma {
     source?: SortOrder
   }
 
+  export type AdminNullableScalarRelationFilter = {
+    is?: AdminWhereInput | null
+    isNot?: AdminWhereInput | null
+  }
+
   export type AuditLogCountOrderByAggregateInput = {
     id?: SortOrder
     action?: SortOrder
@@ -44712,6 +45037,7 @@ export namespace Prisma {
     entityId?: SortOrder
     details?: SortOrder
     adminName?: SortOrder
+    adminId?: SortOrder
     createdAt?: SortOrder
   }
 
@@ -44722,6 +45048,7 @@ export namespace Prisma {
     entityId?: SortOrder
     details?: SortOrder
     adminName?: SortOrder
+    adminId?: SortOrder
     createdAt?: SortOrder
   }
 
@@ -44732,6 +45059,7 @@ export namespace Prisma {
     entityId?: SortOrder
     details?: SortOrder
     adminName?: SortOrder
+    adminId?: SortOrder
     createdAt?: SortOrder
   }
 
@@ -44802,6 +45130,20 @@ export namespace Prisma {
     bookingCount?: SortOrder
   }
 
+  export type AuditLogCreateNestedManyWithoutAdminInput = {
+    create?: XOR<AuditLogCreateWithoutAdminInput, AuditLogUncheckedCreateWithoutAdminInput> | AuditLogCreateWithoutAdminInput[] | AuditLogUncheckedCreateWithoutAdminInput[]
+    connectOrCreate?: AuditLogCreateOrConnectWithoutAdminInput | AuditLogCreateOrConnectWithoutAdminInput[]
+    createMany?: AuditLogCreateManyAdminInputEnvelope
+    connect?: AuditLogWhereUniqueInput | AuditLogWhereUniqueInput[]
+  }
+
+  export type AuditLogUncheckedCreateNestedManyWithoutAdminInput = {
+    create?: XOR<AuditLogCreateWithoutAdminInput, AuditLogUncheckedCreateWithoutAdminInput> | AuditLogCreateWithoutAdminInput[] | AuditLogUncheckedCreateWithoutAdminInput[]
+    connectOrCreate?: AuditLogCreateOrConnectWithoutAdminInput | AuditLogCreateOrConnectWithoutAdminInput[]
+    createMany?: AuditLogCreateManyAdminInputEnvelope
+    connect?: AuditLogWhereUniqueInput | AuditLogWhereUniqueInput[]
+  }
+
   export type StringFieldUpdateOperationsInput = {
     set?: string
   }
@@ -44810,8 +45152,40 @@ export namespace Prisma {
     set?: string | null
   }
 
+  export type BoolFieldUpdateOperationsInput = {
+    set?: boolean
+  }
+
   export type DateTimeFieldUpdateOperationsInput = {
     set?: Date | string
+  }
+
+  export type AuditLogUpdateManyWithoutAdminNestedInput = {
+    create?: XOR<AuditLogCreateWithoutAdminInput, AuditLogUncheckedCreateWithoutAdminInput> | AuditLogCreateWithoutAdminInput[] | AuditLogUncheckedCreateWithoutAdminInput[]
+    connectOrCreate?: AuditLogCreateOrConnectWithoutAdminInput | AuditLogCreateOrConnectWithoutAdminInput[]
+    upsert?: AuditLogUpsertWithWhereUniqueWithoutAdminInput | AuditLogUpsertWithWhereUniqueWithoutAdminInput[]
+    createMany?: AuditLogCreateManyAdminInputEnvelope
+    set?: AuditLogWhereUniqueInput | AuditLogWhereUniqueInput[]
+    disconnect?: AuditLogWhereUniqueInput | AuditLogWhereUniqueInput[]
+    delete?: AuditLogWhereUniqueInput | AuditLogWhereUniqueInput[]
+    connect?: AuditLogWhereUniqueInput | AuditLogWhereUniqueInput[]
+    update?: AuditLogUpdateWithWhereUniqueWithoutAdminInput | AuditLogUpdateWithWhereUniqueWithoutAdminInput[]
+    updateMany?: AuditLogUpdateManyWithWhereWithoutAdminInput | AuditLogUpdateManyWithWhereWithoutAdminInput[]
+    deleteMany?: AuditLogScalarWhereInput | AuditLogScalarWhereInput[]
+  }
+
+  export type AuditLogUncheckedUpdateManyWithoutAdminNestedInput = {
+    create?: XOR<AuditLogCreateWithoutAdminInput, AuditLogUncheckedCreateWithoutAdminInput> | AuditLogCreateWithoutAdminInput[] | AuditLogUncheckedCreateWithoutAdminInput[]
+    connectOrCreate?: AuditLogCreateOrConnectWithoutAdminInput | AuditLogCreateOrConnectWithoutAdminInput[]
+    upsert?: AuditLogUpsertWithWhereUniqueWithoutAdminInput | AuditLogUpsertWithWhereUniqueWithoutAdminInput[]
+    createMany?: AuditLogCreateManyAdminInputEnvelope
+    set?: AuditLogWhereUniqueInput | AuditLogWhereUniqueInput[]
+    disconnect?: AuditLogWhereUniqueInput | AuditLogWhereUniqueInput[]
+    delete?: AuditLogWhereUniqueInput | AuditLogWhereUniqueInput[]
+    connect?: AuditLogWhereUniqueInput | AuditLogWhereUniqueInput[]
+    update?: AuditLogUpdateWithWhereUniqueWithoutAdminInput | AuditLogUpdateWithWhereUniqueWithoutAdminInput[]
+    updateMany?: AuditLogUpdateManyWithWhereWithoutAdminInput | AuditLogUpdateManyWithWhereWithoutAdminInput[]
+    deleteMany?: AuditLogScalarWhereInput | AuditLogScalarWhereInput[]
   }
 
   export type MemberMembershipCreateNestedManyWithoutMemberInput = {
@@ -45638,10 +46012,6 @@ export namespace Prisma {
     decrement?: number
     multiply?: number
     divide?: number
-  }
-
-  export type BoolFieldUpdateOperationsInput = {
-    set?: boolean
   }
 
   export type TurfUpdateOneWithoutChildTurfsNestedInput = {
@@ -46558,6 +46928,22 @@ export namespace Prisma {
     update?: XOR<XOR<MemberUpdateToOneWithWhereWithoutLoyaltyAchievementsInput, MemberUpdateWithoutLoyaltyAchievementsInput>, MemberUncheckedUpdateWithoutLoyaltyAchievementsInput>
   }
 
+  export type AdminCreateNestedOneWithoutAuditLogsInput = {
+    create?: XOR<AdminCreateWithoutAuditLogsInput, AdminUncheckedCreateWithoutAuditLogsInput>
+    connectOrCreate?: AdminCreateOrConnectWithoutAuditLogsInput
+    connect?: AdminWhereUniqueInput
+  }
+
+  export type AdminUpdateOneWithoutAuditLogsNestedInput = {
+    create?: XOR<AdminCreateWithoutAuditLogsInput, AdminUncheckedCreateWithoutAuditLogsInput>
+    connectOrCreate?: AdminCreateOrConnectWithoutAuditLogsInput
+    upsert?: AdminUpsertWithoutAuditLogsInput
+    disconnect?: AdminWhereInput | boolean
+    delete?: AdminWhereInput | boolean
+    connect?: AdminWhereUniqueInput
+    update?: XOR<XOR<AdminUpdateToOneWithWhereWithoutAuditLogsInput, AdminUpdateWithoutAuditLogsInput>, AdminUncheckedUpdateWithoutAuditLogsInput>
+  }
+
   export type SportCreateNestedOneWithoutBannersInput = {
     create?: XOR<SportCreateWithoutBannersInput, SportUncheckedCreateWithoutBannersInput>
     connectOrCreate?: SportCreateOrConnectWithoutBannersInput
@@ -46630,6 +47016,11 @@ export namespace Prisma {
     not?: NestedStringNullableFilter<$PrismaModel> | string | null
   }
 
+  export type NestedBoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
   export type NestedDateTimeFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     in?: Date[] | string[]
@@ -46695,6 +47086,14 @@ export namespace Prisma {
     gt?: number | IntFieldRefInput<$PrismaModel>
     gte?: number | IntFieldRefInput<$PrismaModel>
     not?: NestedIntNullableFilter<$PrismaModel> | number | null
+  }
+
+  export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
   }
 
   export type NestedDateTimeWithAggregatesFilter<$PrismaModel = never> = {
@@ -46790,11 +47189,6 @@ export namespace Prisma {
     not?: NestedFloatNullableFilter<$PrismaModel> | number | null
   }
 
-  export type NestedBoolFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolFilter<$PrismaModel> | boolean
-  }
-
   export type NestedFloatNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: number | FloatFieldRefInput<$PrismaModel> | null
     in?: number[] | null
@@ -46827,12 +47221,63 @@ export namespace Prisma {
     _max?: NestedIntNullableFilter<$PrismaModel>
   }
 
-  export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedBoolFilter<$PrismaModel>
-    _max?: NestedBoolFilter<$PrismaModel>
+  export type AuditLogCreateWithoutAdminInput = {
+    id?: string
+    action: string
+    entity: string
+    entityId: string
+    details?: string | null
+    adminName?: string
+    createdAt?: Date | string
+  }
+
+  export type AuditLogUncheckedCreateWithoutAdminInput = {
+    id?: string
+    action: string
+    entity: string
+    entityId: string
+    details?: string | null
+    adminName?: string
+    createdAt?: Date | string
+  }
+
+  export type AuditLogCreateOrConnectWithoutAdminInput = {
+    where: AuditLogWhereUniqueInput
+    create: XOR<AuditLogCreateWithoutAdminInput, AuditLogUncheckedCreateWithoutAdminInput>
+  }
+
+  export type AuditLogCreateManyAdminInputEnvelope = {
+    data: AuditLogCreateManyAdminInput | AuditLogCreateManyAdminInput[]
+  }
+
+  export type AuditLogUpsertWithWhereUniqueWithoutAdminInput = {
+    where: AuditLogWhereUniqueInput
+    update: XOR<AuditLogUpdateWithoutAdminInput, AuditLogUncheckedUpdateWithoutAdminInput>
+    create: XOR<AuditLogCreateWithoutAdminInput, AuditLogUncheckedCreateWithoutAdminInput>
+  }
+
+  export type AuditLogUpdateWithWhereUniqueWithoutAdminInput = {
+    where: AuditLogWhereUniqueInput
+    data: XOR<AuditLogUpdateWithoutAdminInput, AuditLogUncheckedUpdateWithoutAdminInput>
+  }
+
+  export type AuditLogUpdateManyWithWhereWithoutAdminInput = {
+    where: AuditLogScalarWhereInput
+    data: XOR<AuditLogUpdateManyMutationInput, AuditLogUncheckedUpdateManyWithoutAdminInput>
+  }
+
+  export type AuditLogScalarWhereInput = {
+    AND?: AuditLogScalarWhereInput | AuditLogScalarWhereInput[]
+    OR?: AuditLogScalarWhereInput[]
+    NOT?: AuditLogScalarWhereInput | AuditLogScalarWhereInput[]
+    id?: StringFilter<"AuditLog"> | string
+    action?: StringFilter<"AuditLog"> | string
+    entity?: StringFilter<"AuditLog"> | string
+    entityId?: StringFilter<"AuditLog"> | string
+    details?: StringNullableFilter<"AuditLog"> | string | null
+    adminName?: StringFilter<"AuditLog"> | string
+    adminId?: StringNullableFilter<"AuditLog"> | string | null
+    createdAt?: DateTimeFilter<"AuditLog"> | Date | string
   }
 
   export type MemberMembershipCreateWithoutMemberInput = {
@@ -51074,6 +51519,70 @@ export namespace Prisma {
     sportStats?: UserSportStatUncheckedUpdateManyWithoutMemberNestedInput
   }
 
+  export type AdminCreateWithoutAuditLogsInput = {
+    id?: string
+    email: string
+    password: string
+    name?: string | null
+    role?: string
+    permissions?: string
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AdminUncheckedCreateWithoutAuditLogsInput = {
+    id?: string
+    email: string
+    password: string
+    name?: string | null
+    role?: string
+    permissions?: string
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AdminCreateOrConnectWithoutAuditLogsInput = {
+    where: AdminWhereUniqueInput
+    create: XOR<AdminCreateWithoutAuditLogsInput, AdminUncheckedCreateWithoutAuditLogsInput>
+  }
+
+  export type AdminUpsertWithoutAuditLogsInput = {
+    update: XOR<AdminUpdateWithoutAuditLogsInput, AdminUncheckedUpdateWithoutAuditLogsInput>
+    create: XOR<AdminCreateWithoutAuditLogsInput, AdminUncheckedCreateWithoutAuditLogsInput>
+    where?: AdminWhereInput
+  }
+
+  export type AdminUpdateToOneWithWhereWithoutAuditLogsInput = {
+    where?: AdminWhereInput
+    data: XOR<AdminUpdateWithoutAuditLogsInput, AdminUncheckedUpdateWithoutAuditLogsInput>
+  }
+
+  export type AdminUpdateWithoutAuditLogsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: StringFieldUpdateOperationsInput | string
+    permissions?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AdminUncheckedUpdateWithoutAuditLogsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: StringFieldUpdateOperationsInput | string
+    permissions?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type SportCreateWithoutBannersInput = {
     id?: string
     name: string
@@ -51328,6 +51837,46 @@ export namespace Prisma {
     bookings?: BookingUncheckedUpdateManyWithoutSportNestedInput
     tournaments?: TournamentUncheckedUpdateManyWithoutSportNestedInput
     banners?: BannerUncheckedUpdateManyWithoutTargetSportNestedInput
+  }
+
+  export type AuditLogCreateManyAdminInput = {
+    id?: string
+    action: string
+    entity: string
+    entityId: string
+    details?: string | null
+    adminName?: string
+    createdAt?: Date | string
+  }
+
+  export type AuditLogUpdateWithoutAdminInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    action?: StringFieldUpdateOperationsInput | string
+    entity?: StringFieldUpdateOperationsInput | string
+    entityId?: StringFieldUpdateOperationsInput | string
+    details?: NullableStringFieldUpdateOperationsInput | string | null
+    adminName?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AuditLogUncheckedUpdateWithoutAdminInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    action?: StringFieldUpdateOperationsInput | string
+    entity?: StringFieldUpdateOperationsInput | string
+    entityId?: StringFieldUpdateOperationsInput | string
+    details?: NullableStringFieldUpdateOperationsInput | string | null
+    adminName?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AuditLogUncheckedUpdateManyWithoutAdminInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    action?: StringFieldUpdateOperationsInput | string
+    entity?: StringFieldUpdateOperationsInput | string
+    entityId?: StringFieldUpdateOperationsInput | string
+    details?: NullableStringFieldUpdateOperationsInput | string | null
+    adminName?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type MemberMembershipCreateManyMemberInput = {

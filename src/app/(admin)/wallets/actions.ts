@@ -2,6 +2,8 @@
 import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 import { bumpSyncTimestamp } from '@/lib/sync';
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
 
 export async function addWalletTransaction(data: { memberId: string; amount: number; type: "CREDIT" | "DEBIT"; description?: string }) {
   if (!data.memberId || !data.amount || data.amount <= 0) {
@@ -38,6 +40,24 @@ export async function addWalletTransaction(data: { memberId: string; amount: num
         }
       }
     });
+
+    // 3. Create the audit log
+    const session = await getServerSession(authOptions);
+    if (session?.user?.email) {
+      const admin = await tx.admin.findUnique({ where: { email: session.user.email } });
+      if (admin) {
+        await tx.auditLog.create({
+          data: {
+            action: data.type === "CREDIT" ? "WALLET_CREDIT" : "WALLET_DEBIT",
+            entity: "Member",
+            entityId: data.memberId,
+            details: JSON.stringify({ amount: data.amount, description: data.description }),
+            adminId: admin.id,
+            adminName: admin.name || admin.email,
+          }
+        });
+      }
+    }
   });
 
   await bumpSyncTimestamp('wallet');

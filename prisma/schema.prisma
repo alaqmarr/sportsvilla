@@ -9,12 +9,16 @@ datasource db {
 }
 
 model Admin {
-  id        String   @id @default(cuid())
-  email     String   @unique
-  password  String
-  name      String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id          String   @id @default(cuid())
+  email       String   @unique
+  password    String
+  name        String?
+  role        String   @default("SUPERADMIN") // "SUPERADMIN" | "ADMIN"
+  permissions String   @default("") // Comma-separated permission keys
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  auditLogs   AuditLog[]
 }
 
 model Setting {
@@ -431,6 +435,8 @@ model AuditLog {
   entityId  String
   details   String? // JSON string
   adminName String   @default("System")
+  adminId   String?  // Relation to Admin who performed the action
+  admin     Admin?   @relation(fields: [adminId], references: [id])
   createdAt DateTime @default(now())
 
   @@index([entity, entityId])

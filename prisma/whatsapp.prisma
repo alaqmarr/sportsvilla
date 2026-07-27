@@ -19,6 +19,7 @@ model WhatsAppMessage {
   errorCode    String?   // Meta error code if status is FAILED
   errorMessage String?   // Detailed error explanation
   metadata     String?   // Optional extra metadata as JSON string
+  isOptOut     Boolean   @default(false)
   createdAt    DateTime  @default(now())
   updatedAt    DateTime  @updatedAt
 
@@ -49,4 +50,45 @@ model WhatsAppWebhookLog {
 
   @@index([event])
   @@index([createdAt])
+}
+
+model WhatsAppConfig {
+  key       String   @id // e.g. "AUTO_REPLY_ENABLED", "AUTO_REPLY_MESSAGE", "AUTO_REPLY_COOLDOWN_MINUTES"
+  value     String   // e.g. "true" or custom message text
+  updatedAt DateTime @updatedAt
+}
+
+model WhatsAppConversation {
+  id              String   @id @default(cuid()) // Our internal ID
+  wacId           String   @unique // WhatsApp Conversation ID from pricing webhook
+  recipientMobile String
+  category        String   // "marketing", "utility", "authentication", "service", "referral_conversion"
+  isFreeTier      Boolean  @default(false)
+  openedAt        DateTime
+  expiresAt       DateTime // openedAt + 24 hours
+  cost            Float    @default(0)
+  createdAt       DateTime @default(now())
+  
+  @@index([category])
+  @@index([expiresAt])
+}
+
+model WhatsAppAccountMetric {
+  id               String   @id @default("singleton")
+  phoneNumberId    String?
+  qualityRating    String   @default("GREEN") // "GREEN", "YELLOW", "RED"
+  messagingLimit   String   @default("UNKNOWN") // "250", "1K", "10K", "100K", "UNLIMITED"
+  updatedAt        DateTime @updatedAt
+}
+
+model WhatsAppTemplate {
+  id               String   @id @default(cuid())
+  name             String   @unique
+  category         String   @default("MARKETING")
+  language         String   @default("en")
+  status           String   // "APPROVED", "PAUSED", "REJECTED", "PENDING"
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+  
+  @@index([status])
 }

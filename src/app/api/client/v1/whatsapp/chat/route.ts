@@ -37,7 +37,7 @@ export async function GET(req: NextRequest) {
 
 export async function POST(req: NextRequest) {
   try {
-    const { phoneNumber, message } = await req.json();
+    const { phoneNumber, message, contextMessageId } = await req.json();
 
     if (!phoneNumber || !message?.trim()) {
       return jsonResponse({ success: false, error: "phoneNumber and message are required" }, { status: 400 });
@@ -48,6 +48,7 @@ export async function POST(req: NextRequest) {
       type: "text",
       text: message.trim(),
       metadata: { purpose: "CRM_LIVE_CHAT" },
+      contextMessageId: contextMessageId || undefined,
     });
 
     if (!res.success) {

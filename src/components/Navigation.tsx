@@ -2,11 +2,19 @@
 import { usePathname, useRouter } from "next/navigation";
 import { useState, useEffect, useRef } from "react";
 import { FiHome, FiUsers, FiMapPin, FiActivity, FiLayers, FiShield, FiFileText, FiMenu, FiX, FiUser, FiCalendar, FiServer, FiLogOut, FiSettings, FiCalendar as FiCalendar2, FiAward, FiCheckCircle, FiTag, FiCreditCard, FiSmartphone, FiMessageSquare } from "react-icons/fi";
+import { FaWhatsapp } from "react-icons/fa";
 import { signOut } from "next-auth/react";
 import LinkComponent from "next/link";
 import Image from "next/image";
+import { canViewPage, AdminUser } from "@/lib/rbac";
 
-export function Navigation({ children }: { children: React.ReactNode }) {
+export function Navigation({
+  children,
+  admin,
+}: {
+  children: React.ReactNode;
+  admin?: AdminUser | null;
+}) {
   const pathname = usePathname();
   const router = useRouter();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -84,6 +92,7 @@ export function Navigation({ children }: { children: React.ReactNode }) {
       title: "Reports",
       links: [
         { href: "/reports/revenue", label: "Revenue Dashboard", icon: <FiFileText /> },
+        { href: "/whatsapp/dashboard", label: "WhatsApp Analytics", icon: <FaWhatsapp className="text-[#25D366] text-base" /> },
         { href: "/reports/member", label: "Member Reports", icon: <FiUser /> },
         { href: "/reports/attendance", label: "Attendance Reports", icon: <FiCalendar /> },
         { href: "/reports/memberships", label: "Membership Reports", icon: <FiLayers /> },
@@ -92,9 +101,10 @@ export function Navigation({ children }: { children: React.ReactNode }) {
     {
       title: "System",
       links: [
-        { href: "/whatsapp-admin", label: "WhatsApp & Templates", icon: <FiMessageSquare /> },
+        { href: "/whatsapp-admin", label: "WhatsApp CRM & Bots", icon: <FaWhatsapp className="text-[#25D366] text-base" /> },
+        { href: "/whatsapp/dashboard", label: "WhatsApp Analytics", icon: <FaWhatsapp className="text-[#25D366] text-base" /> },
         { href: "/audit", label: "Audit Logs", icon: <FiShield /> },
-        { href: "/admin", label: "Manage Admins", icon: <FiShield /> },
+        { href: "/admin", label: "Role & Admin Users", icon: <FiShield /> },
         { href: "/settings", label: "Settings", icon: <FiSettings /> },
         { href: "/app-versions", label: "App Versions", icon: <FiSmartphone /> },
         { href: "/server", label: "Server Health", icon: <FiServer /> },
@@ -102,6 +112,13 @@ export function Navigation({ children }: { children: React.ReactNode }) {
       ]
     }
   ];
+
+  const filteredLinkGroups = linkGroups
+    .map((group) => ({
+      ...group,
+      links: group.links.filter((link) => canViewPage(admin, link.href)),
+    }))
+    .filter((group) => group.links.length > 0);
 
   return (
     <div className="flex flex-col lg:flex-row min-h-screen bg-[#0f1117] overflow-x-hidden">
@@ -122,29 +139,15 @@ export function Navigation({ children }: { children: React.ReactNode }) {
         </button>
       </div>
 
-      {/* Overlay for mobile sidebar */}
-      {isSidebarOpen && (
-        <div 
-          className="fixed inset-0 bg-black/60 z-40 lg:hidden cursor-pointer"
-          onClick={() => setIsSidebarOpen(false)}
-        />
-      )}
-
-      <aside className={`
-        w-64 bg-[#161923] border-r border-[#2a2d3e] py-6 flex flex-col gap-2 shrink-0 h-screen fixed top-0 left-0 z-50 transition-transform duration-300
-        ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
-      `}>
-        <div className="flex flex-col mb-8 px-6">
-          <div className="flex justify-between items-center">
-            <div className="font-['Outfit'] text-xl font-black text-orange-500 tracking-wider uppercase hidden lg:block">
-              <Image src="/long-logo.png" alt="SportsVilla" width={160} height={40} unoptimized className="h-10 w-auto object-contain" />
-            </div>
-            <div className="font-['Outfit'] text-xl font-black text-orange-500 tracking-wider uppercase lg:hidden">
-              MENU
-            </div>
-            <button onClick={() => setIsSidebarOpen(false)} className="text-gray-400 lg:hidden">
-              <FiX size={24} />
-            </button>
+      {/* Sidebar */}
+      <aside
+        className={`fixed top-0 left-0 h-full w-64 bg-[#161923] border-r border-[#2a2d3e] flex flex-col z-50 transform transition-transform duration-200 ease-in-out ${
+          isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+        } lg:translate-x-0`}
+      >
+        <div className="p-6 pb-4 flex flex-col">
+          <div className="font-['Outfit'] text-2xl font-black text-orange-500 tracking-wider uppercase">
+            <Image src="/long-logo.png" alt="SportsVilla" width={200} height={48} unoptimized className="h-11 w-auto object-contain" />
           </div>
           {currentTime && (
             <div className="text-xs font-medium text-gray-500 mt-1 hidden lg:block">
@@ -154,7 +157,7 @@ export function Navigation({ children }: { children: React.ReactNode }) {
         </div>
         
         <nav className="flex flex-col gap-5 flex-1 overflow-y-auto px-3 pb-4 styled-scrollbar">
-          {linkGroups.map((group, index) => (
+          {filteredLinkGroups.map((group, index) => (
             <div key={index} className="flex flex-col gap-1">
               {group.title !== "Core" && (
                 <div className="px-3 mb-1 text-[11px] font-bold text-gray-500 uppercase tracking-widest">
@@ -178,10 +181,27 @@ export function Navigation({ children }: { children: React.ReactNode }) {
             </div>
           ))}
         </nav>
-        <div className="mt-auto pt-6 pb-2 border-t border-[#2a2d3e]">
+        <div className="mt-auto pt-4 pb-2 border-t border-[#2a2d3e] px-3 space-y-2">
+          {admin && (
+            <div className="px-3 py-2 bg-[#0f1117] rounded-lg border border-[#2a2d3e] flex items-center justify-between">
+              <div className="truncate">
+                <p className="text-xs font-bold text-white truncate">{admin.name || admin.email}</p>
+                <p className="text-[10px] text-gray-500 truncate">{admin.email}</p>
+              </div>
+              <span
+                className={`px-1.5 py-0.5 rounded text-[9px] font-black uppercase tracking-wider ${
+                  admin.role === "SUPERADMIN"
+                    ? "bg-amber-500/20 text-amber-300 border border-amber-500/30"
+                    : "bg-blue-500/20 text-blue-300 border border-blue-500/30"
+                }`}
+              >
+                {admin.role || "ADMIN"}
+              </span>
+            </div>
+          )}
           <button 
             onClick={() => signOut({ callbackUrl: "/login" })}
-            className="flex w-full items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-gray-400 hover:bg-red-500/10 hover:text-red-400 transition-colors cursor-pointer border-none bg-transparent"
+            className="flex w-full items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-gray-400 hover:bg-red-500/10 hover:text-red-400 transition-colors cursor-pointer border-none bg-transparent"
           >
             <FiLogOut className="text-lg" />
             Sign Out
@@ -189,8 +209,28 @@ export function Navigation({ children }: { children: React.ReactNode }) {
         </div>
       </aside>
       
-      <main className="flex-1 p-4 lg:p-10 w-full lg:max-w-[calc(100vw-16rem)] lg:ml-64 overflow-x-hidden">
-        {children}
+      <main
+        className={`flex-1 w-full lg:max-w-[calc(100vw-16rem)] lg:ml-64 overflow-x-hidden ${
+          pathname.startsWith("/whatsapp-admin") ? "p-0" : "p-4 lg:p-10"
+        }`}
+      >
+        {!canViewPage(admin, pathname) ? (
+          <div className="max-w-xl mx-auto my-16 bg-[#161923] border border-[#2a2d3e] rounded-2xl p-8 text-center space-y-4 shadow-xl">
+            <div className="w-16 h-16 rounded-full bg-red-500/10 border border-red-500/20 flex items-center justify-center text-red-400 mx-auto text-2xl">
+              <FiShield />
+            </div>
+            <h2 className="text-xl font-bold font-['Outfit'] text-white">Access Denied</h2>
+            <p className="text-sm text-gray-400 leading-relaxed">
+              You do not have permission to view or manage this module. Your current role is{" "}
+              <span className="font-semibold text-orange-400">{admin?.role || "ADMIN"}</span>.
+            </p>
+            <p className="text-xs text-gray-500">
+              Please contact a Superadmin if you require access to this page.
+            </p>
+          </div>
+        ) : (
+          children
+        )}
       </main>
     </div>
   );

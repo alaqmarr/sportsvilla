@@ -55,16 +55,98 @@ export async function POST(req: NextRequest) {
         for (const change of changes) {
           const value = change.value || {};
 
+          const field = change.field;
+
+          // Account Health Metrics
+          if (field === "phone_number_quality_update") {
+            const displayPhoneNumber = value.display_phone_number;
+            const event = value.event; // e.g. "FLAGGED", "RESTORED", "APPROVED"
+            
+            // Map event to quality rating roughly
+            let quality = "YELLOW";
+            if (event === "RESTORED" || event === "APPROVED") quality = "GREEN";
+            if (event === "FLAGGED") quality = "RED";
+
+            await whatsappDb.whatsAppAccountMetric.upsert({
+              where: { id: "singleton" },
+              update: { qualityRating: quality },
+              create: { qualityRating: quality }
+            });
+            continue;
+          }
+
+          if (field === "business_capability_update") {
+            const limit = value.max_daily_conversation_per_phone_number;
+            let limitStr = "UNKNOWN";
+            if (limit === 250) limitStr = "250";
+            if (limit === 1000) limitStr = "1K";
+            if (limit === 10000) limitStr = "10K";
+            if (limit === 100000) limitStr = "100K";
+            if (limit === "UNLIMITED") limitStr = "UNLIMITED";
+
+            await whatsappDb.whatsAppAccountMetric.upsert({
+              where: { id: "singleton" },
+              update: { messagingLimit: limitStr },
+              create: { messagingLimit: limitStr }
+            });
+            continue;
+          }
+
+          if (field === "message_template_status_update") {
+            const templateName = value.message_template_name;
+            const language = value.message_template_language;
+            const event = value.event; // APPROVED, REJECTED, PAUSED
+
+            if (templateName) {
+              await whatsappDb.whatsAppTemplate.upsert({
+                where: { name: templateName },
+                update: { status: event, language: language || "en" },
+                create: { name: templateName, status: event, language: language || "en" }
+              });
+            }
+            continue;
+          }
+
           // Handle delivery/read status updates
           const statuses = value.statuses || [];
           for (const statusObj of statuses) {
             const wamid = statusObj.id;
             const newStatus = statusObj.status?.toUpperCase() || "RECEIVED";
             if (wamid) {
+              let isOptOut = false;
+              if (newStatus === "FAILED" && statusObj.errors?.some((e: any) => e.code === 131047)) {
+                // User blocked or opted out
+                isOptOut = true;
+              }
+
               await whatsappDb.whatsAppMessage.updateMany({
                 where: { wamid },
-                data: { status: newStatus },
+                data: { status: newStatus, ...(isOptOut && { isOptOut }) },
               });
+            }
+
+            // Handle conversations for billing
+            if (statusObj.conversation) {
+              const convId = statusObj.conversation.id;
+              const category = statusObj.pricing?.category || statusObj.conversation.origin?.type || "unknown";
+              const expStr = statusObj.conversation.expiration_timestamp;
+              
+              if (convId && expStr) {
+                const expiresAt = new Date(parseInt(expStr, 10) * 1000);
+                
+                await whatsappDb.whatsAppConversation.upsert({
+                  where: { wacId: convId },
+                  update: { expiresAt },
+                  create: {
+                    wacId: convId,
+                    recipientMobile: statusObj.recipient_id || "",
+                    category,
+                    openedAt: new Date(),
+                    expiresAt,
+                    cost: 0.8 // Approx cost for INR, can be tuned
+                  }
+                });
+              }
             }
           }
 
@@ -79,6 +161,8 @@ export async function POST(req: NextRequest) {
               msg.button?.text ||
               JSON.stringify(msg[msg.type] || {});
 
+            const isOptOutMsg = content.trim().toLowerCase() === "stop";
+
             await whatsappDb.whatsAppMessage.upsert({
               where: { wamid: wamid || "unknown_incoming_" + Date.now() },
               update: {},
@@ -89,29 +173,45 @@ export async function POST(req: NextRequest) {
                 type,
                 content: content || "",
                 status: "RECEIVED",
+                isOptOut: isOptOutMsg
               },
             });
 
-            // Auto-Reply: If no outgoing reply was sent to this user in the last 10 minutes, send introduction & redirect
+            if (isOptOutMsg) {
+              // No auto-reply for opt-outs
+              continue;
+            }
+
+            // Auto-Reply: Customizable via WhatsAppConfig table
             try {
-              const tenMinutesAgo = new Date(Date.now() - 10 * 60 * 1000);
-              const recentReply = await whatsappDb.whatsAppMessage.findFirst({
-                where: {
-                  phoneNumber: from,
-                  direction: "OUTGOING",
-                  createdAt: { gte: tenMinutesAgo },
-                },
-              });
+              const configs = await whatsappDb.whatsAppConfig.findMany();
+              const configMap: Record<string, string> = {};
+              for (const c of configs) configMap[c.key] = c.value;
 
-              if (!recentReply) {
-                const introText = `Welcome to *SportsVilla*! 🏆\nThank you for reaching out. Our automated sports booking & tournament platform is currently in active beta.\n\nFor immediate assistance, booking inquiries, or support, please contact Alaqmar directly:\n📞 *Phone / WhatsApp*: +91 9618443558\n🌐 *Website*: https://sportsvilla.co.in\n\nWe will get back to you shortly!`;
+              const isEnabled = configMap["AUTO_REPLY_ENABLED"] !== "false"; // Default true
+              if (isEnabled) {
+                const cooldownMins = parseInt(configMap["AUTO_REPLY_COOLDOWN_MINUTES"] || "10", 10) || 10;
+                const cooldownTime = new Date(Date.now() - cooldownMins * 60 * 1000);
 
-                await sendWhatsAppMessage({
-                  to: from,
-                  type: "text",
-                  text: introText,
-                  metadata: { purpose: "AUTO_REPLY", triggeredBy: wamid },
+                const recentReply = await whatsappDb.whatsAppMessage.findFirst({
+                  where: {
+                    phoneNumber: from,
+                    direction: "OUTGOING",
+                    createdAt: { gte: cooldownTime },
+                  },
                 });
+
+                if (!recentReply) {
+                  const defaultIntro = `Welcome to *SportsVilla*! 🏆\nThank you for reaching out. Our automated sports booking & tournament platform is currently in active beta.\n\nFor immediate assistance, booking inquiries, or support, please contact Alaqmar directly:\n📞 *Phone / WhatsApp*: +91 9618443558\n🌐 *Website*: https://sportsvilla.co.in\n\nWe will get back to you shortly!`;
+                  const replyText = configMap["AUTO_REPLY_MESSAGE"] || defaultIntro;
+
+                  await sendWhatsAppMessage({
+                    to: from,
+                    type: "text",
+                    text: replyText,
+                    metadata: { purpose: "AUTO_REPLY", triggeredBy: wamid },
+                  });
+                }
               }
             } catch (replyErr) {
               console.error("[AUTO REPLY ERROR]", replyErr);

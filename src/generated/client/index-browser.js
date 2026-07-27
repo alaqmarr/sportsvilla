@@ -122,6 +122,9 @@ exports.Prisma.AdminScalarFieldEnum = {
   email: 'email',
   password: 'password',
   name: 'name',
+  role: 'role',
+  permissions: 'permissions',
+  isActive: 'isActive',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -423,6 +426,7 @@ exports.Prisma.AuditLogScalarFieldEnum = {
   entityId: 'entityId',
   details: 'details',
   adminName: 'adminName',
+  adminId: 'adminId',
   createdAt: 'createdAt'
 };
 
