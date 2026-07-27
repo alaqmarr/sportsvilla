@@ -6,7 +6,11 @@ import { prisma } from "@/lib/prisma";
 
 export const dynamic = 'force-dynamic';
 
-export default async function LoginPage() {
+export default async function LoginPage({ searchParams }: { searchParams: { magic?: string, magic_verified?: string } }) {
+  if (searchParams.magic) {
+    redirect(`/api/client/v1/auth/magic/verify?token=${searchParams.magic}`);
+  }
+
   const session = await getServerSession(authOptions);
 
   if (session) {
@@ -19,5 +23,5 @@ export default async function LoginPage() {
     redirect("/setup");
   }
 
-  return <LoginClient />;
+  return <LoginClient magicVerified={searchParams.magic_verified} />;
 }

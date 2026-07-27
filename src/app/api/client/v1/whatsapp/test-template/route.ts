@@ -44,7 +44,7 @@ export async function POST(request: Request) {
       to: cleanMobile,
       type: "template",
       templateName: templateName,
-      languageCode: languageCode || "en_US",
+      languageCode: languageCode || "en",
       templateComponents: templateComponents.length > 0 ? templateComponents : undefined,
       metadata: { purpose: "TEST_TEMPLATE", templateName }
     });

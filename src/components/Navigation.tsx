@@ -1,7 +1,7 @@
 "use client";
 import { usePathname, useRouter } from "next/navigation";
 import { useState, useEffect, useRef } from "react";
-import { FiHome, FiUsers, FiMapPin, FiActivity, FiLayers, FiShield, FiFileText, FiMenu, FiX, FiUser, FiCalendar, FiServer, FiLogOut, FiSettings, FiCalendar as FiCalendar2, FiAward, FiCheckCircle, FiTag, FiCreditCard, FiSmartphone, FiMessageSquare } from "react-icons/fi";
+import { FiHome, FiUsers, FiMapPin, FiActivity, FiLayers, FiShield, FiFileText, FiMenu, FiX, FiUser, FiCalendar, FiServer, FiLogOut, FiSettings, FiCalendar as FiCalendar2, FiAward, FiCheckCircle, FiTag, FiCreditCard, FiSmartphone, FiMessageSquare, FiHeart, FiZap } from "react-icons/fi";
 import { FaWhatsapp } from "react-icons/fa";
 import { signOut } from "next-auth/react";
 import LinkComponent from "next/link";
@@ -99,10 +99,18 @@ export function Navigation({
       ]
     },
     {
+      title: "WhatsApp",
+      links: [
+        { href: "/whatsapp-admin", label: "Live CRM Chat", icon: <FaWhatsapp className="text-[#25D366] text-base" /> },
+        { href: "/whatsapp-admin/health", label: "Health & Config", icon: <FiHeart /> },
+        { href: "/whatsapp-admin/templates", label: "Templates Tester", icon: <FiLayers /> },
+        { href: "/whatsapp-admin/events", label: "Event Triggers", icon: <FiZap /> },
+        { href: "/whatsapp/dashboard", label: "Analytics Dashboard", icon: <FiActivity /> },
+      ]
+    },
+    {
       title: "System",
       links: [
-        { href: "/whatsapp-admin", label: "WhatsApp CRM & Bots", icon: <FaWhatsapp className="text-[#25D366] text-base" /> },
-        { href: "/whatsapp/dashboard", label: "WhatsApp Analytics", icon: <FaWhatsapp className="text-[#25D366] text-base" /> },
         { href: "/audit", label: "Audit Logs", icon: <FiShield /> },
         { href: "/admin", label: "Role & Admin Users", icon: <FiShield /> },
         { href: "/settings", label: "Settings", icon: <FiSettings /> },
@@ -169,7 +177,7 @@ export function Navigation({
                   key={link.href}
                   href={link.href}
                   className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
-                    pathname === link.href
+                    (link.href === "/" ? pathname === "/" : pathname === link.href || (link.href !== "/whatsapp/dashboard" && pathname.startsWith(link.href + "/")))
                       ? 'bg-orange-500/10 text-orange-400 border-l-[3px] border-orange-500 rounded-l-none'
                       : 'text-gray-400 hover:bg-[#1c1f2e] hover:text-white'
                   }`}

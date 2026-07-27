@@ -152,7 +152,7 @@ export async function sendWhatsAppMagicLogin(phoneNumber: string, magicToken: st
     to: formattedPhone,
     type: "template",
     templateName: "sportsvilla_magic_login",
-    languageCode: "en_US",
+    languageCode: "en",
     templateComponents: [
       {
         type: "button",
