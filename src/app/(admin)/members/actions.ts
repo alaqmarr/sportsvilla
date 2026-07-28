@@ -188,7 +188,7 @@ export async function assignPlan(data: { memberIds?: string[]; memberId?: string
           if (turf) turfName = turf.name;
         }
         const eligibleSlot = data.timeSlot || "Any open slot";
-        const validUntil = new Date(memberMembership.endDate).toLocaleDateString('en-IN');
+        const validUntil = new Date(memberMembership.endDate).toLocaleDateString('en-IN', { timeZone: 'Asia/Kolkata' });
 
         await sendWhatsAppMembershipPurchasedTemplate(
           member.name,
@@ -240,7 +240,7 @@ export async function updateMemberMembership(id: string, data: { startDate?: str
     try {
       const { sendWhatsAppMembershipExpiringTemplate } = require("@/lib/whatsapp");
       
-      const formattedDate = new Date(updated.endDate).toLocaleDateString('en-IN', { month: 'short', day: 'numeric', year: 'numeric' });
+      const formattedDate = new Date(updated.endDate).toLocaleDateString('en-IN', { timeZone: 'Asia/Kolkata', month: 'short', day: 'numeric', year: 'numeric' });
       
       sendWhatsAppMembershipExpiringTemplate(updated.member.mobile, {
         customerName: updated.member.name || "Customer",

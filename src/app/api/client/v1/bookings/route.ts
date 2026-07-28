@@ -444,9 +444,9 @@ export async function POST(request: Request) {
     // Send Booking Confirmation via WhatsApp
     try {
       if (memberData) {
-        const formattedDate = start.toLocaleDateString('en-IN', { weekday: 'short', month: 'short', day: 'numeric' });
-        const formattedTime = start.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: true });
-        const endFormatted = end.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: true });
+        const formattedDate = start.toLocaleDateString('en-IN', { timeZone: 'Asia/Kolkata', weekday: 'short', month: 'short', day: 'numeric' });
+        const formattedTime = start.toLocaleTimeString('en-IN', { timeZone: 'Asia/Kolkata', hour: '2-digit', minute: '2-digit', hour12: true });
+        const endFormatted = end.toLocaleTimeString('en-IN', { timeZone: 'Asia/Kolkata', hour: '2-digit', minute: '2-digit', hour12: true });
         const timeString = `${formattedDate}, ${formattedTime} - ${endFormatted}`;
         const priceStr = `₹${booking.price - booking.discountAmount}`;
         const paymentStr = booking.paymentStatus === 'UNPAID' ? `${priceStr} (DUE)` : `${priceStr} (${booking.paymentStatus})`;

@@ -21,6 +21,30 @@ export default async function MemberPortal({ params }: { params: Promise<{ ident
         orderBy: { createdAt: "desc" },
         take: 10,
         include: { sport: true, membershipPlan: true }
+      },
+      bookings: {
+        where: { 
+          startTime: { gt: new Date() },
+          status: { not: "CANCELLED" }
+        },
+        orderBy: { startTime: "asc" },
+        take: 5,
+        include: { turf: true, sport: true }
+      },
+      tournamentRegistrations: {
+        include: { tournament: true }
+      },
+      couponAssignments: {
+        where: {
+          coupon: {
+            isActive: true,
+            OR: [
+              { expiryDate: null },
+              { expiryDate: { gt: new Date() } }
+            ]
+          }
+        },
+        include: { coupon: true }
       }
     }
   });
@@ -66,6 +90,15 @@ export default async function MemberPortal({ params }: { params: Promise<{ ident
   const now = new Date();
   const activePlans = member.memberships.filter(m => new Date(m.endDate) >= now && m.status === "ACTIVE");
   const expiredPlans = member.memberships.filter(m => new Date(m.endDate) < now || m.status !== "ACTIVE");
-
-  return <PortalClient member={member} activePlans={activePlans} expiredPlans={expiredPlans} attendances={member.attendances} />;
+  return (
+    <PortalClient 
+      member={member} 
+      activePlans={activePlans} 
+      expiredPlans={expiredPlans} 
+      attendances={member.attendances}
+      upcomingBookings={member.bookings}
+      tournaments={member.tournamentRegistrations}
+      coupons={member.couponAssignments}
+    />
+  );
 }

@@ -4,9 +4,9 @@ import { startOfMonth, endOfMonth, startOfWeek, endOfWeek, isSameMonth, isSameDa
 
 import { useEffect, useState } from "react";
 import QRCodeLib from "qrcode";
-import { FiCheckCircle, FiClock, FiCalendar, FiActivity } from "react-icons/fi";
+import { FiCheckCircle, FiClock, FiCalendar, FiActivity, FiStar, FiAward, FiTag, FiDollarSign } from "react-icons/fi";
 
-export default function PortalClient({ member, activePlans, expiredPlans, attendances }: any) {
+export default function PortalClient({ member, activePlans, expiredPlans, attendances, upcomingBookings = [], tournaments = [], coupons = [] }: any) {
   const [qrCodeData, setQrCodeData] = useState("");
   const [currentMonth, setCurrentMonth] = useState(new Date());
 
@@ -78,7 +78,11 @@ export default function PortalClient({ member, activePlans, expiredPlans, attend
                       </div>
                       <div className="id-card-detail-group">
                         <div className="id-card-label">Loyalty</div>
-                        <div className="id-card-value">{member.loyaltyPoints} Pts</div>
+                        <div className="id-card-value text-orange-400 font-bold">{member.loyaltyPoints} Pts</div>
+                      </div>
+                      <div className="id-card-detail-group">
+                        <div className="id-card-label">Wallet</div>
+                        <div className="id-card-value text-emerald-400 font-bold">₹{member.walletBalance}</div>
                       </div>
                     </div>
                   </div>
@@ -122,6 +126,85 @@ export default function PortalClient({ member, activePlans, expiredPlans, attend
             ))
           )}
         </div>
+
+        {/* Upcoming Bookings */}
+        {upcomingBookings.length > 0 && (
+          <>
+            <h3 className="text-base font-semibold text-gray-800 flex items-center gap-2 mb-4">
+              <FiClock className="text-orange-500" /> Upcoming Bookings
+            </h3>
+            <div className="flex flex-col gap-3 mb-10">
+              {upcomingBookings.map((b: any) => (
+                <div key={b.id} className="bg-white border border-gray-200 p-4 rounded-xl flex justify-between items-center shadow-sm">
+                  <div>
+                    <div className="font-semibold text-emerald-600 text-sm">{b.sport?.name || "Sport"} at {b.turf?.name || "Turf"}</div>
+                    <div className="text-xs text-gray-500 mt-1 flex items-center gap-1 font-medium">
+                      <FiCalendar /> {formatIST(new Date(b.startTime), 'MMM d, yyyy • h:mm a')}
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <div className="text-xs font-semibold bg-blue-50 text-blue-600 px-2 py-1 rounded-full uppercase">
+                      {b.status}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </>
+        )}
+
+        {/* My Tournaments */}
+        {tournaments.length > 0 && (
+          <>
+            <h3 className="text-base font-semibold text-gray-800 flex items-center gap-2 mb-4">
+              <FiAward className="text-orange-500" /> My Tournaments
+            </h3>
+            <div className="flex flex-col gap-3 mb-10">
+              {tournaments.map((reg: any) => (
+                <div key={reg.id} className="bg-white border border-gray-200 p-4 rounded-xl shadow-sm relative overflow-hidden">
+                  <div className="absolute top-0 right-0 w-16 h-16 bg-gradient-to-bl from-amber-200 to-amber-500 opacity-20 rounded-bl-full z-0"></div>
+                  <div className="relative z-10">
+                    <div className="font-semibold text-gray-800 text-sm">{reg.tournament?.name}</div>
+                    {reg.teamName && (
+                      <div className="text-sm text-gray-600 mt-0.5">Team: <span className="font-medium text-amber-600">{reg.teamName}</span></div>
+                    )}
+                    <div className="text-xs text-gray-400 mt-2 flex items-center gap-1">
+                      <FiCalendar /> {formatIST(new Date(reg.tournament?.startDate), 'MMM d')} - {formatIST(new Date(reg.tournament?.endDate), 'MMM d, yyyy')}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </>
+        )}
+
+        {/* Coupons & Offers */}
+        {coupons.length > 0 && (
+          <>
+            <h3 className="text-base font-semibold text-gray-800 flex items-center gap-2 mb-4">
+              <FiTag className="text-emerald-500" /> My Coupons
+            </h3>
+            <div className="flex flex-col gap-3 mb-10">
+              {coupons.map((c: any) => (
+                <div key={c.id} className="bg-gradient-to-r from-emerald-50 to-white border border-emerald-100 p-4 rounded-xl shadow-sm flex items-center justify-between border-dashed">
+                  <div>
+                    <div className="font-bold text-emerald-700 font-mono tracking-widest text-sm">{c.coupon?.code}</div>
+                    <div className="text-xs text-gray-600 mt-0.5 font-medium">
+                      {c.coupon?.discountType === "PERCENTAGE" 
+                        ? `${c.coupon?.discountValue}% OFF` 
+                        : `₹${c.coupon?.discountValue} OFF`}
+                    </div>
+                  </div>
+                  {c.coupon?.expiryDate && (
+                    <div className="text-[10px] text-gray-400 font-medium">
+                      Valid till {formatIST(new Date(c.coupon.expiryDate), 'MMM d')}
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </>
+        )}
 
         {/* Recent Attendance */}
         <h3 className="text-base font-semibold text-gray-800 flex items-center gap-2 mb-4">
