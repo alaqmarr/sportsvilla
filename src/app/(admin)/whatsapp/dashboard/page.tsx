@@ -19,13 +19,61 @@ export default async function WhatsAppDashboardPage() {
     redirect("/admin");
   }
 
-  // 1. Account Metrics
-  const accountMetrics = await whatsappDb.whatsAppAccountMetric.findUnique({
-    where: { id: "singleton" }
-  }) || { qualityRating: "GREEN", messagingLimit: "UNKNOWN" };
+  // 1. Account Metrics & Templates strictly from Meta API
+  let qualityRating = "UNKNOWN";
+  let messagingLimit = "UNKNOWN";
+  let templates: any[] = [];
+  let metaApiError = null;
 
-  // 2. Templates
-  const templates = await whatsappDb.whatsAppTemplate.findMany();
+  const accessToken = process.env.WHATSAPP_ACCESS_TOKEN;
+  const phoneNumberId = process.env.WHATSAPP_PHONE_NUMBER_ID;
+  const wabaId = process.env.WHATSAPP_BUSINESS_ACCOUNT_ID;
+
+  if (accessToken && phoneNumberId) {
+    try {
+      const res = await fetch(
+        `https://graph.facebook.com/v21.0/${phoneNumberId}?fields=display_phone_number,verified_name,quality_rating,name_status,messaging_limit_tier,status,account_mode`,
+        { headers: { Authorization: `Bearer ${accessToken}` }, cache: "no-store" }
+      );
+      const data = await res.json();
+      if (res.ok && !data.error) {
+        if (data.quality_rating) qualityRating = data.quality_rating;
+        if (data.messaging_limit_tier) {
+          const tier = data.messaging_limit_tier.toUpperCase();
+          if (tier.includes("50") && !tier.includes("250")) messagingLimit = "50 / 24h";
+          else if (tier.includes("250")) messagingLimit = "250 / 24h";
+          else if (tier.includes("1K")) messagingLimit = "1,000 / 24h";
+          else if (tier.includes("10K")) messagingLimit = "10,000 / 24h";
+          else if (tier.includes("100K")) messagingLimit = "100,000 / 24h";
+          else if (tier.includes("UNLIMITED")) messagingLimit = "Unlimited";
+          else messagingLimit = tier.replace("TIER_", "") + " / 24h";
+        }
+      } else {
+        metaApiError = data.error?.message || "Failed to fetch quality rating";
+      }
+    } catch (e: any) {
+      metaApiError = e.message;
+    }
+  } else {
+    metaApiError = "Missing Meta Credentials in ENV";
+  }
+
+  if (accessToken && wabaId) {
+    try {
+      const res = await fetch(
+        `https://graph.facebook.com/v21.0/${wabaId}/message_templates?limit=100`,
+        { headers: { Authorization: `Bearer ${accessToken}` }, cache: "no-store" }
+      );
+      const data = await res.json();
+      if (res.ok && data.data) {
+        templates = data.data;
+      }
+    } catch (e) {
+      // Ignore template fetch error, let it be empty
+    }
+  }
+
+  const accountMetrics = { qualityRating, messagingLimit };
 
   // 3. Funnel Metrics
   const totalSent = await whatsappDb.whatsAppMessage.count({
@@ -94,6 +142,7 @@ export default async function WhatsAppDashboardPage() {
         totalConversations,
         cpc
       }}
+      initialError={metaApiError}
     />
   );
 }

@@ -210,6 +210,7 @@ exports.Prisma.MemberMembershipScalarFieldEnum = {
   status: 'status',
   turfId: 'turfId',
   timeSlot: 'timeSlot',
+  allowedDays: 'allowedDays',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };

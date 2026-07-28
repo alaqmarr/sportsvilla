@@ -19,51 +19,51 @@ function formatMessagingLimit(tier?: string): string {
 export async function GET() {
   try {
     const accessToken = process.env.WHATSAPP_ACCESS_TOKEN;
-    const phoneNumberId = process.env.WHATSAPP_PHONE_NUMBER_ID || "549503484903993";
-    const wabaId = process.env.WHATSAPP_BUSINESS_ACCOUNT_ID || "4575637675998391";
+    const phoneNumberId = process.env.WHATSAPP_PHONE_NUMBER_ID;
+    const wabaId = process.env.WHATSAPP_BUSINESS_ACCOUNT_ID;
+
+    if (!accessToken || !phoneNumberId || !wabaId) {
+      throw new Error("Missing Meta API Credentials in environment variables. Cannot fetch strict real-time data.");
+    }
 
     // 1. Fetch Real-time Number Quality & Limit from Meta Graph API
-    let qualityRating = "GREEN";
-    let messagingLimit = "1,000 / 24h";
+    let qualityRating = "UNKNOWN";
+    let messagingLimit = "UNKNOWN";
 
     if (accessToken && phoneNumberId) {
-      try {
-        const res = await fetch(
-          `https://graph.facebook.com/v21.0/${phoneNumberId}?fields=display_phone_number,verified_name,quality_rating,name_status,messaging_limit_tier,status,account_mode`,
-          {
-            headers: { Authorization: `Bearer ${accessToken}` },
-            next: { revalidate: 0 },
-          }
-        );
-        const data = await res.json();
-        if (res.ok && !data.error) {
-          if (data.quality_rating) qualityRating = data.quality_rating;
-          if (data.messaging_limit_tier) {
-            messagingLimit = formatMessagingLimit(data.messaging_limit_tier);
-          }
+      const res = await fetch(
+        `https://graph.facebook.com/v21.0/${phoneNumberId}?fields=display_phone_number,verified_name,quality_rating,name_status,messaging_limit_tier,status,account_mode`,
+        {
+          headers: { Authorization: `Bearer ${accessToken}` },
+          next: { revalidate: 0 },
         }
-      } catch (err) {
-        console.error("[META GRAPH API HEALTH ERROR]", err);
+      );
+      const data = await res.json();
+      if (res.ok && !data.error) {
+        if (data.quality_rating) qualityRating = data.quality_rating;
+        if (data.messaging_limit_tier) {
+          messagingLimit = formatMessagingLimit(data.messaging_limit_tier);
+        }
+      } else {
+        throw new Error(data.error?.message || "Failed to fetch quality rating from Meta Graph API");
       }
     }
 
     // 2. Fetch Real-time Templates from Meta Graph API
     let templates: any[] = [];
     if (accessToken && wabaId) {
-      try {
-        const res = await fetch(
-          `https://graph.facebook.com/v21.0/${wabaId}/message_templates?limit=100`,
-          {
-            headers: { Authorization: `Bearer ${accessToken}` },
-            next: { revalidate: 0 },
-          }
-        );
-        const data = await res.json();
-        if (res.ok && data.data) {
-          templates = data.data;
+      const res = await fetch(
+        `https://graph.facebook.com/v21.0/${wabaId}/message_templates?limit=100`,
+        {
+          headers: { Authorization: `Bearer ${accessToken}` },
+          next: { revalidate: 0 },
         }
-      } catch (err) {
-        console.error("[META GRAPH API TEMPLATES ERROR]", err);
+      );
+      const data = await res.json();
+      if (res.ok && data.data) {
+        templates = data.data;
+      } else {
+        throw new Error(data.error?.message || "Failed to fetch templates from Meta Graph API");
       }
     }
 

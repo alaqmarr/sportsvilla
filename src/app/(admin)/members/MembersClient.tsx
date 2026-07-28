@@ -53,6 +53,7 @@ export default function MembersClient({ initialMembers, plans, turfs = [] }: { i
   const [assignTurfId, setAssignTurfId] = useState("");
   const [assignStartTime, setAssignStartTime] = useState("");
   const [assignEndTime, setAssignEndTime] = useState("");
+  const [assignAllowedDays, setAssignAllowedDays] = useState<number[]>([0,1,2,3,4,5,6]); // 0=Sun, 1=Mon...
   const [assignLoading, setAssignLoading] = useState(false);
 
   // Edit Membership State
@@ -199,11 +200,12 @@ export default function MembersClient({ initialMembers, plans, turfs = [] }: { i
         memberIds: assignMemberIds.length > 0 ? assignMemberIds : undefined,
         mobile: assignMobile, 
         name: existingAssignMembers.length > 0 ? undefined : assignName, 
-        email: existingAssignMembers.length > 0 ? undefined : assignEmail,
+        email: existingAssignMembers.length > 0 ? undefined : assignEmail || undefined,
         planId: assignPlanId, 
         startDate,
         turfId: assignTurfId || undefined,
-        timeSlot: (assignStartTime && assignEndTime) ? `${assignStartTime} - ${assignEndTime}` : undefined
+        timeSlot: (assignStartTime && assignEndTime) ? `${assignStartTime} - ${assignEndTime}` : undefined,
+        allowedDays: assignAllowedDays.length < 7 ? assignAllowedDays : undefined
       });
       showAlert("Plan Assigned", "The membership plan has been successfully activated.", "success");
       setShowPlanModal(false); window.location.reload();
@@ -663,6 +665,37 @@ export default function MembersClient({ initialMembers, plans, turfs = [] }: { i
                   {plans.map(p => <option key={p.id} value={p.id}>{p.name} - {p.sport?.name} {p.isFamilyPlan && `(Family Size: ${p.familySize})`}</option>)}
                 </select>
               </div>
+
+              <div className="mb-5">
+                <label className="block text-xs uppercase tracking-wider font-semibold text-gray-500 mb-2">Allowed Days</label>
+                <div className="flex flex-wrap gap-2">
+                  {[
+                    { id: 1, label: "Mon" }, { id: 2, label: "Tue" }, { id: 3, label: "Wed" },
+                    { id: 4, label: "Thu" }, { id: 5, label: "Fri" }, { id: 6, label: "Sat" }, { id: 0, label: "Sun" }
+                  ].map(day => (
+                    <button
+                      key={day.id}
+                      type="button"
+                      onClick={() => {
+                        if (assignAllowedDays.includes(day.id)) {
+                          setAssignAllowedDays(assignAllowedDays.filter(d => d !== day.id));
+                        } else {
+                          setAssignAllowedDays([...assignAllowedDays, day.id]);
+                        }
+                      }}
+                      className={`px-3 py-1.5 text-xs font-medium rounded-md border transition-colors ${
+                        assignAllowedDays.includes(day.id) 
+                          ? 'bg-orange-500/20 border-orange-500/50 text-orange-400' 
+                          : 'bg-[#0f1117] border-[#2a2d3e] text-gray-500 hover:border-gray-600'
+                      }`}
+                    >
+                      {day.label}
+                    </button>
+                  ))}
+                </div>
+                {assignAllowedDays.length === 0 && <p className="text-red-400 text-xs mt-2">Select at least one day.</p>}
+              </div>
+
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-5">
                 <div>
                   <label className="block text-xs uppercase tracking-wider font-semibold text-gray-500 mb-2">Start Date</label>

@@ -99,15 +99,7 @@ export default async function WhatsAppHealthPage() {
       hasWabaId: Boolean(wabaId),
       hasVerifyToken: Boolean(verifyToken),
     },
-    metaPhoneInfo: metaPhoneInfo || {
-      display_phone_number: "+91 96184 43558 (Configured)",
-      verified_name: "SportsVilla Cloud API",
-      quality_rating: "GREEN",
-      name_status: "APPROVED",
-      messaging_limit_tier: "TIER_250",
-      status: "CONNECTED",
-      account_mode: "LIVE",
-    },
+    metaPhoneInfo: metaPhoneInfo,
     metaApiError,
   };
 

@@ -15,7 +15,8 @@ import {
   FiClock,
   FiAlertCircle,
   FiCornerUpLeft,
-  FiRefreshCw
+  FiRefreshCw,
+  FiSmartphone
 } from "react-icons/fi";
 import { FaWhatsapp } from "react-icons/fa";
 import toast from "react-hot-toast";
@@ -76,8 +77,9 @@ export default function HealthClient({ initialHealthData, initialAutoReply }: { 
   };
 
   useEffect(() => {
-    if (!initialHealthData) {
-      fetchConfigAndHealth();
+    // If the server-side fetch passed down an error, display it immediately
+    if (initialHealthData?.metaApiError) {
+      toast.error(initialHealthData.metaApiError);
     }
   }, [initialHealthData]);
 
@@ -186,23 +188,23 @@ export default function HealthClient({ initialHealthData, initialAutoReply }: { 
       <div className="flex-1 p-6 overflow-y-auto max-w-7xl mx-auto space-y-6 w-full">
         {/* Top Row: 4 Live Health Status Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          {/* Card 1: Meta Phone Number Status */}
+          {/* Card 1: Meta Connection Status */}
           <div className="bg-[#161923] border border-[#2a2d3e] rounded-2xl p-5 flex flex-col justify-between shadow-xl">
             <div className="flex items-center justify-between mb-3">
-              <span className="text-xs font-bold text-gray-400 uppercase tracking-wider">Meta Phone Profile</span>
-              <FiPhoneCall className="text-emerald-400 text-lg" />
+              <span className="text-xs font-bold text-gray-400 uppercase tracking-wider">Meta API Connection</span>
+              <FiSmartphone className="text-emerald-400 text-lg" />
             </div>
             <div>
-              <h3 className="text-base font-extrabold text-white font-sans">
-                {healthData?.metaPhoneInfo?.display_phone_number || "+91 96184 43558"}
+              <h3 className="text-xl font-extrabold text-white font-sans tracking-wide">
+                {healthData?.metaPhoneInfo?.display_phone_number || "UNKNOWN"}
               </h3>
               <p className="text-xs text-gray-300 mt-1">
-                {healthData?.metaPhoneInfo?.verified_name || "SportsVilla Cloud API"}
+                {healthData?.metaPhoneInfo?.verified_name || "UNKNOWN"}
               </p>
             </div>
             <div className="mt-4 pt-3 border-t border-[#2a2d3e] flex items-center justify-between text-xs">
               <span className="text-gray-400">Quality:</span>
-              {getStatusBadge(healthData?.metaPhoneInfo?.quality_rating || "GREEN")}
+              {getStatusBadge(healthData?.metaPhoneInfo?.quality_rating || "UNKNOWN")}
             </div>
           </div>
 
@@ -232,7 +234,7 @@ export default function HealthClient({ initialHealthData, initialAutoReply }: { 
             </div>
             <div>
               <h3 className="text-xl font-extrabold text-white font-sans">
-                {healthData?.metaPhoneInfo?.messaging_limit_tier || "TIER_250 / 24H"}
+                {healthData?.metaPhoneInfo?.messaging_limit_tier || "UNKNOWN"}
               </h3>
               <p className="text-xs text-gray-300 mt-1">
                 Total Msgs Processed: {healthData?.database?.stats?.totalMessages ?? 0}
@@ -240,7 +242,9 @@ export default function HealthClient({ initialHealthData, initialAutoReply }: { 
             </div>
             <div className="mt-4 pt-3 border-t border-[#2a2d3e] flex items-center justify-between text-xs">
               <span className="text-gray-400">Account Mode:</span>
-              <span className="text-emerald-400 font-bold">LIVE (PRODUCTION)</span>
+              <span className={`font-bold ${healthData?.metaPhoneInfo?.account_mode === "LIVE" ? "text-emerald-400" : "text-gray-400"}`}>
+                {healthData?.metaPhoneInfo?.account_mode || "UNKNOWN"}
+              </span>
             </div>
           </div>
 

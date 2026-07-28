@@ -146,6 +146,7 @@ model MemberMembership {
   turfId   String?
   turf     Turf?   @relation(fields: [turfId], references: [id])
   timeSlot String?
+  allowedDays String? // Comma-separated day indices, e.g. "0,6" for Sun,Sat
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

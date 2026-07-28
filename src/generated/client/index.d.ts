@@ -13577,6 +13577,7 @@ export namespace Prisma {
     status: string | null
     turfId: string | null
     timeSlot: string | null
+    allowedDays: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -13590,6 +13591,7 @@ export namespace Prisma {
     status: string | null
     turfId: string | null
     timeSlot: string | null
+    allowedDays: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -13603,6 +13605,7 @@ export namespace Prisma {
     status: number
     turfId: number
     timeSlot: number
+    allowedDays: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -13618,6 +13621,7 @@ export namespace Prisma {
     status?: true
     turfId?: true
     timeSlot?: true
+    allowedDays?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -13631,6 +13635,7 @@ export namespace Prisma {
     status?: true
     turfId?: true
     timeSlot?: true
+    allowedDays?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -13644,6 +13649,7 @@ export namespace Prisma {
     status?: true
     turfId?: true
     timeSlot?: true
+    allowedDays?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -13730,6 +13736,7 @@ export namespace Prisma {
     status: string
     turfId: string | null
     timeSlot: string | null
+    allowedDays: string | null
     createdAt: Date
     updatedAt: Date
     _count: MemberMembershipCountAggregateOutputType | null
@@ -13760,6 +13767,7 @@ export namespace Prisma {
     status?: boolean
     turfId?: boolean
     timeSlot?: boolean
+    allowedDays?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     member?: boolean | MemberDefaultArgs<ExtArgs>
@@ -13776,6 +13784,7 @@ export namespace Prisma {
     status?: boolean
     turfId?: boolean
     timeSlot?: boolean
+    allowedDays?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     member?: boolean | MemberDefaultArgs<ExtArgs>
@@ -13792,6 +13801,7 @@ export namespace Prisma {
     status?: boolean
     turfId?: boolean
     timeSlot?: boolean
+    allowedDays?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     member?: boolean | MemberDefaultArgs<ExtArgs>
@@ -13808,11 +13818,12 @@ export namespace Prisma {
     status?: boolean
     turfId?: boolean
     timeSlot?: boolean
+    allowedDays?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type MemberMembershipOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "memberId" | "membershipPlanId" | "startDate" | "endDate" | "status" | "turfId" | "timeSlot" | "createdAt" | "updatedAt", ExtArgs["result"]["memberMembership"]>
+  export type MemberMembershipOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "memberId" | "membershipPlanId" | "startDate" | "endDate" | "status" | "turfId" | "timeSlot" | "allowedDays" | "createdAt" | "updatedAt", ExtArgs["result"]["memberMembership"]>
   export type MemberMembershipInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     member?: boolean | MemberDefaultArgs<ExtArgs>
     membershipPlan?: boolean | MembershipPlanDefaultArgs<ExtArgs>
@@ -13845,6 +13856,7 @@ export namespace Prisma {
       status: string
       turfId: string | null
       timeSlot: string | null
+      allowedDays: string | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["memberMembership"]>
@@ -14281,6 +14293,7 @@ export namespace Prisma {
     readonly status: FieldRef<"MemberMembership", 'String'>
     readonly turfId: FieldRef<"MemberMembership", 'String'>
     readonly timeSlot: FieldRef<"MemberMembership", 'String'>
+    readonly allowedDays: FieldRef<"MemberMembership", 'String'>
     readonly createdAt: FieldRef<"MemberMembership", 'DateTime'>
     readonly updatedAt: FieldRef<"MemberMembership", 'DateTime'>
   }
@@ -38440,6 +38453,7 @@ export namespace Prisma {
     status: 'status',
     turfId: 'turfId',
     timeSlot: 'timeSlot',
+    allowedDays: 'allowedDays',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -39429,6 +39443,7 @@ export namespace Prisma {
     status?: StringFilter<"MemberMembership"> | string
     turfId?: StringNullableFilter<"MemberMembership"> | string | null
     timeSlot?: StringNullableFilter<"MemberMembership"> | string | null
+    allowedDays?: StringNullableFilter<"MemberMembership"> | string | null
     createdAt?: DateTimeFilter<"MemberMembership"> | Date | string
     updatedAt?: DateTimeFilter<"MemberMembership"> | Date | string
     member?: XOR<MemberScalarRelationFilter, MemberWhereInput>
@@ -39445,6 +39460,7 @@ export namespace Prisma {
     status?: SortOrder
     turfId?: SortOrderInput | SortOrder
     timeSlot?: SortOrderInput | SortOrder
+    allowedDays?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     member?: MemberOrderByWithRelationInput
@@ -39464,6 +39480,7 @@ export namespace Prisma {
     status?: StringFilter<"MemberMembership"> | string
     turfId?: StringNullableFilter<"MemberMembership"> | string | null
     timeSlot?: StringNullableFilter<"MemberMembership"> | string | null
+    allowedDays?: StringNullableFilter<"MemberMembership"> | string | null
     createdAt?: DateTimeFilter<"MemberMembership"> | Date | string
     updatedAt?: DateTimeFilter<"MemberMembership"> | Date | string
     member?: XOR<MemberScalarRelationFilter, MemberWhereInput>
@@ -39480,6 +39497,7 @@ export namespace Prisma {
     status?: SortOrder
     turfId?: SortOrderInput | SortOrder
     timeSlot?: SortOrderInput | SortOrder
+    allowedDays?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: MemberMembershipCountOrderByAggregateInput
@@ -39499,6 +39517,7 @@ export namespace Prisma {
     status?: StringWithAggregatesFilter<"MemberMembership"> | string
     turfId?: StringNullableWithAggregatesFilter<"MemberMembership"> | string | null
     timeSlot?: StringNullableWithAggregatesFilter<"MemberMembership"> | string | null
+    allowedDays?: StringNullableWithAggregatesFilter<"MemberMembership"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"MemberMembership"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"MemberMembership"> | Date | string
   }
@@ -41730,6 +41749,7 @@ export namespace Prisma {
     endDate: Date | string
     status?: string
     timeSlot?: string | null
+    allowedDays?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     member: MemberCreateNestedOneWithoutMembershipsInput
@@ -41746,6 +41766,7 @@ export namespace Prisma {
     status?: string
     turfId?: string | null
     timeSlot?: string | null
+    allowedDays?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -41756,6 +41777,7 @@ export namespace Prisma {
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
     status?: StringFieldUpdateOperationsInput | string
     timeSlot?: NullableStringFieldUpdateOperationsInput | string | null
+    allowedDays?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     member?: MemberUpdateOneRequiredWithoutMembershipsNestedInput
@@ -41772,6 +41794,7 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     turfId?: NullableStringFieldUpdateOperationsInput | string | null
     timeSlot?: NullableStringFieldUpdateOperationsInput | string | null
+    allowedDays?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -41785,6 +41808,7 @@ export namespace Prisma {
     status?: string
     turfId?: string | null
     timeSlot?: string | null
+    allowedDays?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -41795,6 +41819,7 @@ export namespace Prisma {
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
     status?: StringFieldUpdateOperationsInput | string
     timeSlot?: NullableStringFieldUpdateOperationsInput | string | null
+    allowedDays?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -41808,6 +41833,7 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     turfId?: NullableStringFieldUpdateOperationsInput | string | null
     timeSlot?: NullableStringFieldUpdateOperationsInput | string | null
+    allowedDays?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -44205,6 +44231,7 @@ export namespace Prisma {
     status?: SortOrder
     turfId?: SortOrder
     timeSlot?: SortOrder
+    allowedDays?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -44218,6 +44245,7 @@ export namespace Prisma {
     status?: SortOrder
     turfId?: SortOrder
     timeSlot?: SortOrder
+    allowedDays?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -44231,6 +44259,7 @@ export namespace Prisma {
     status?: SortOrder
     turfId?: SortOrder
     timeSlot?: SortOrder
+    allowedDays?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -47286,6 +47315,7 @@ export namespace Prisma {
     endDate: Date | string
     status?: string
     timeSlot?: string | null
+    allowedDays?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     membershipPlan: MembershipPlanCreateNestedOneWithoutMembershipsInput
@@ -47300,6 +47330,7 @@ export namespace Prisma {
     status?: string
     turfId?: string | null
     timeSlot?: string | null
+    allowedDays?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -47600,6 +47631,7 @@ export namespace Prisma {
     status?: StringFilter<"MemberMembership"> | string
     turfId?: StringNullableFilter<"MemberMembership"> | string | null
     timeSlot?: StringNullableFilter<"MemberMembership"> | string | null
+    allowedDays?: StringNullableFilter<"MemberMembership"> | string | null
     createdAt?: DateTimeFilter<"MemberMembership"> | Date | string
     updatedAt?: DateTimeFilter<"MemberMembership"> | Date | string
   }
@@ -48551,6 +48583,7 @@ export namespace Prisma {
     endDate: Date | string
     status?: string
     timeSlot?: string | null
+    allowedDays?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     member: MemberCreateNestedOneWithoutMembershipsInput
@@ -48565,6 +48598,7 @@ export namespace Prisma {
     endDate: Date | string
     status?: string
     timeSlot?: string | null
+    allowedDays?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -48905,6 +48939,7 @@ export namespace Prisma {
     endDate: Date | string
     status?: string
     timeSlot?: string | null
+    allowedDays?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     member: MemberCreateNestedOneWithoutMembershipsInput
@@ -48919,6 +48954,7 @@ export namespace Prisma {
     status?: string
     turfId?: string | null
     timeSlot?: string | null
+    allowedDays?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -51887,6 +51923,7 @@ export namespace Prisma {
     status?: string
     turfId?: string | null
     timeSlot?: string | null
+    allowedDays?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -51982,6 +52019,7 @@ export namespace Prisma {
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
     status?: StringFieldUpdateOperationsInput | string
     timeSlot?: NullableStringFieldUpdateOperationsInput | string | null
+    allowedDays?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     membershipPlan?: MembershipPlanUpdateOneRequiredWithoutMembershipsNestedInput
@@ -51996,6 +52034,7 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     turfId?: NullableStringFieldUpdateOperationsInput | string | null
     timeSlot?: NullableStringFieldUpdateOperationsInput | string | null
+    allowedDays?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -52008,6 +52047,7 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     turfId?: NullableStringFieldUpdateOperationsInput | string | null
     timeSlot?: NullableStringFieldUpdateOperationsInput | string | null
+    allowedDays?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -52670,6 +52710,7 @@ export namespace Prisma {
     endDate: Date | string
     status?: string
     timeSlot?: string | null
+    allowedDays?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -52799,6 +52840,7 @@ export namespace Prisma {
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
     status?: StringFieldUpdateOperationsInput | string
     timeSlot?: NullableStringFieldUpdateOperationsInput | string | null
+    allowedDays?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     member?: MemberUpdateOneRequiredWithoutMembershipsNestedInput
@@ -52813,6 +52855,7 @@ export namespace Prisma {
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
     status?: StringFieldUpdateOperationsInput | string
     timeSlot?: NullableStringFieldUpdateOperationsInput | string | null
+    allowedDays?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -52825,6 +52868,7 @@ export namespace Prisma {
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
     status?: StringFieldUpdateOperationsInput | string
     timeSlot?: NullableStringFieldUpdateOperationsInput | string | null
+    allowedDays?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -52837,6 +52881,7 @@ export namespace Prisma {
     status?: string
     turfId?: string | null
     timeSlot?: string | null
+    allowedDays?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -52857,6 +52902,7 @@ export namespace Prisma {
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
     status?: StringFieldUpdateOperationsInput | string
     timeSlot?: NullableStringFieldUpdateOperationsInput | string | null
+    allowedDays?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     member?: MemberUpdateOneRequiredWithoutMembershipsNestedInput
@@ -52871,6 +52917,7 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     turfId?: NullableStringFieldUpdateOperationsInput | string | null
     timeSlot?: NullableStringFieldUpdateOperationsInput | string | null
+    allowedDays?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -52883,6 +52930,7 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     turfId?: NullableStringFieldUpdateOperationsInput | string | null
     timeSlot?: NullableStringFieldUpdateOperationsInput | string | null
+    allowedDays?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

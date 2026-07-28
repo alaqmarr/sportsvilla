@@ -47,7 +47,7 @@ export async function fetchRevenueData() {
   walletTx.forEach(w => {
     const dateStr = formatInTimeZone(new Date(w.createdAt), 'Asia/Kolkata', 'MMM dd');
     if (dailyData[dateStr]) {
-      dailyData[dateStr].wallet += w.amount;
+      dailyData[dateStr].wallet += w.amount / 100;
     }
   });
 

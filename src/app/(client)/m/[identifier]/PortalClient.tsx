@@ -4,7 +4,7 @@ import { startOfMonth, endOfMonth, startOfWeek, endOfWeek, isSameMonth, isSameDa
 
 import { useEffect, useState } from "react";
 import QRCodeLib from "qrcode";
-import { FiCheckCircle, FiClock, FiCalendar, FiActivity, FiStar, FiAward, FiTag, FiDollarSign } from "react-icons/fi";
+import { FiCheckCircle, FiClock, FiCalendar, FiActivity, FiStar, FiAward, FiTag, FiDollarSign, FiX } from "react-icons/fi";
 
 export default function PortalClient({ member, activePlans, expiredPlans, attendances, upcomingBookings = [], tournaments = [], coupons = [] }: any) {
   const [qrCodeData, setQrCodeData] = useState("");
@@ -21,6 +21,20 @@ export default function PortalClient({ member, activePlans, expiredPlans, attend
   const monthEnd = endOfMonth(currentMonth);
   const startDateCalendar = startOfWeek(monthStart);
   const endDateCalendar = endOfWeek(monthEnd);
+  
+  // Calculate which days are allowed across all active plans
+  const allowedDaysSet = activePlans.length > 0 ? (() => {
+    let days = new Set<number>();
+    let hasUnrestricted = false;
+    for (const plan of activePlans) {
+      if (!plan.allowedDays) {
+        hasUnrestricted = true;
+        break;
+      }
+      plan.allowedDays.split(',').map(Number).forEach((d: number) => days.add(d));
+    }
+    return hasUnrestricted ? null : Array.from(days);
+  })() : null;
   
   let days = [];
   let day = startDateCalendar;
@@ -255,6 +269,7 @@ export default function PortalClient({ member, activePlans, expiredPlans, attend
                 const dayAttendances = attendances.filter((a: any) => isSameDay(new Date(a.date), d));
                 const attendedDay = dayAttendances.length > 0;
                 const isFuture = d > today;
+                const isAllowedDay = allowedDaysSet === null || allowedDaysSet.includes(d.getDay());
 
                 return (
                   <div 
@@ -264,12 +279,23 @@ export default function PortalClient({ member, activePlans, expiredPlans, attend
                         ? 'opacity-30 bg-gray-50 border-transparent' 
                         : attendedDay
                           ? 'bg-emerald-50 border-emerald-200 shadow-[inset_0_0_10px_rgba(52,211,153,0.1)]'
-                          : isFuture
-                            ? 'bg-white border-gray-100'
-                            : 'bg-gray-50 border-gray-200'
+                          : !isAllowedDay
+                            ? 'bg-gray-100 border-gray-100 opacity-60'
+                            : isFuture
+                              ? 'bg-white border-gray-100'
+                              : 'bg-gray-50 border-gray-200'
                     }`}
                   >
-                    <div className={`text-right text-[10px] sm:text-xs font-bold ${isCurrentMonth ? (attendedDay ? 'text-emerald-600' : 'text-gray-500') : 'text-gray-400'}`}>
+                    <div className={`text-right text-[10px] sm:text-xs font-bold ${
+                      isCurrentMonth 
+                        ? (attendedDay 
+                            ? 'text-emerald-600' 
+                            : !isAllowedDay 
+                              ? 'text-gray-300'
+                              : 'text-gray-500'
+                          ) 
+                        : 'text-gray-400'
+                    }`}>
                       {formatIST(d, 'd')}
                     </div>
                     <div className="flex-1 flex flex-col gap-0.5 mt-1 overflow-hidden">
@@ -280,6 +306,11 @@ export default function PortalClient({ member, activePlans, expiredPlans, attend
                           </div>
                         </div>
                       ))}
+                      {!attendedDay && !isFuture && !isAllowedDay && isCurrentMonth && (
+                        <div className="text-[8px] text-gray-400 flex items-center justify-center h-full">
+                          <FiX className="mr-0.5" /> N/A
+                        </div>
+                      )}
                     </div>
                   </div>
                 );

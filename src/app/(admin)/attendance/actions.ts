@@ -77,6 +77,27 @@ export async function markAttendance(data: { memberId: string; sportId: string; 
   const plan = await prisma.membershipPlan.findUnique({ where: { id: data.membershipPlanId }});
   if (!plan) throw new Error("Plan not found");
 
+  const memberMembership = await prisma.memberMembership.findFirst({
+    where: {
+      memberId: data.memberId,
+      membershipPlanId: data.membershipPlanId,
+      status: "ACTIVE",
+      startDate: { lte: new Date() },
+      endDate: { gte: new Date() }
+    }
+  });
+
+  if (!memberMembership) throw new Error("Active membership not found for this member and plan.");
+
+  if (memberMembership.allowedDays) {
+    const todayDay = new Date().getDay(); // 0 = Sun, 1 = Mon...
+    const allowedDaysArray = memberMembership.allowedDays.split(',').map(Number);
+    if (!allowedDaysArray.includes(todayDay)) {
+      const daysMap = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+      throw new Error(`Membership is not valid on ${daysMap[todayDay]}.`);
+    }
+  }
+
   const todayVisits = await prisma.attendance.count({
     where: {
       memberId: data.memberId,

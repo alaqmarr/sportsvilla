@@ -11,6 +11,7 @@ import {
   FiRefreshCw,
 } from "react-icons/fi";
 import { FaWhatsapp } from "react-icons/fa";
+import { toast } from "react-hot-toast";
 
 type AccountMetrics = {
   qualityRating: string;
@@ -45,18 +46,26 @@ export default function DashboardClient({
   templates: initialTemplates,
   funnel: initialFunnel,
   financials: initialFinancials,
+  initialError,
 }: {
   accountMetrics: AccountMetrics;
   templates: Template[];
   funnel: Funnel;
   financials: Financials;
+  initialError?: string | null;
 }) {
   const [accountMetrics, setAccountMetrics] = useState<AccountMetrics>(initialMetrics);
   const [templates, setTemplates] = useState<Template[]>(initialTemplates);
   const [funnel, setFunnel] = useState<Funnel>(initialFunnel);
   const [financials, setFinancials] = useState<Financials>(initialFinancials);
   const [loading, setLoading] = useState(false);
-  const [lastSync, setLastSync] = useState<string>("Initial load");
+  const [lastSync, setLastSync] = useState<string>("Server-side fetch");
+
+  useEffect(() => {
+    if (initialError) {
+      toast.error(initialError);
+    }
+  }, [initialError]);
 
   const fetchRealtimeAnalytics = async (silent = false) => {
     if (!silent) setLoading(true);
@@ -76,18 +85,19 @@ export default function DashboardClient({
           hour12: true,
         });
         setLastSync(`${timeStr} IST`);
+      } else {
+        toast.error(data.error || "Failed to fetch live analytics from Meta API");
       }
     } catch (err) {
       console.error("Error fetching live analytics:", err);
+      toast.error("Failed to connect to Analytics API");
     } finally {
       if (!silent) setLoading(false);
     }
   };
 
   useEffect(() => {
-    // Fetch live from Meta API immediately on mount
-    fetchRealtimeAnalytics(true);
-
+    // We already have the server-side data, no need to fetch on mount!
     // Auto-poll every 15 seconds for real-time live metrics
     const interval = setInterval(() => {
       fetchRealtimeAnalytics(true);

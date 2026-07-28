@@ -1,6 +1,6 @@
-export default function DashboardLoading() {
+export default function AdminLoading() {
   return (
-    <div className="animate-pulse">
+    <div className="animate-pulse w-full max-w-7xl mx-auto p-6 lg:p-8">
       <div className="mb-10">
         <div className="h-8 w-64 bg-[#1c1f2e] rounded-lg mb-3"></div>
         <div className="h-4 w-96 bg-[#161923] rounded-lg"></div>
@@ -8,7 +8,7 @@ export default function DashboardLoading() {
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
         {[1, 2, 3].map((i) => (
-          <div key={i} className="bg-[#161923] border border-[#2a2d3e] rounded-xl p-6 flex items-center gap-5">
+          <div key={i} className="bg-[#161923] border border-[#2a2d3e] rounded-xl p-6 flex items-center gap-5 shadow-lg">
             <div className="w-12 h-12 rounded-xl bg-[#1c1f2e]"></div>
             <div>
               <div className="h-8 w-16 bg-[#1c1f2e] rounded-lg mb-2"></div>
@@ -18,7 +18,7 @@ export default function DashboardLoading() {
         ))}
       </div>
 
-      <div className="bg-[#161923] border border-[#2a2d3e] rounded-xl p-6">
+      <div className="bg-[#161923] border border-[#2a2d3e] rounded-xl p-6 shadow-lg">
         <div className="h-6 w-48 bg-[#1c1f2e] rounded-lg mb-5"></div>
         <div className="flex flex-col gap-3">
           {[1, 2, 3].map((i) => (

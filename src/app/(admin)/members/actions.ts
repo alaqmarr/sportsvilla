@@ -83,7 +83,7 @@ export async function deleteMember(id: string) {
   revalidatePath("/", "layout");
 }
 
-export async function assignPlan(data: { memberIds?: string[]; memberId?: string; mobile?: string; name?: string; email?: string; planId: string; startDate: string; turfId?: string; timeSlot?: string }) {
+export async function assignPlan(data: { memberIds?: string[]; memberId?: string; mobile?: string; name?: string; email?: string; planId: string; startDate: string; turfId?: string; timeSlot?: string; allowedDays?: number[] }) {
   const plan = await prisma.membershipPlan.findUnique({ where: { id: data.planId }});
   if (!plan) throw new Error("Plan not found");
   
@@ -123,7 +123,23 @@ export async function assignPlan(data: { memberIds?: string[]; memberId?: string
   }
 
   const start = new Date(data.startDate);
-  const end = addDays(start, plan.durationInDays);
+  let end = new Date(start);
+
+  if (data.allowedDays && data.allowedDays.length > 0 && data.allowedDays.length < 7) {
+    let activeDaysCount = 0;
+    let current = new Date(start);
+    while (activeDaysCount < plan.durationInDays) {
+      if (data.allowedDays.includes(current.getDay())) {
+        activeDaysCount++;
+      }
+      if (activeDaysCount < plan.durationInDays) {
+        current = addDays(current, 1);
+      }
+    }
+    end = current;
+  } else {
+    end = addDays(start, plan.durationInDays);
+  }
   
   const createdMemberships = [];
 
@@ -154,7 +170,8 @@ export async function assignPlan(data: { memberIds?: string[]; memberId?: string
           endDate: end,
           status: "ACTIVE",
           turfId: data.turfId || null,
-          timeSlot: data.timeSlot || null
+          timeSlot: data.timeSlot || null,
+          allowedDays: data.allowedDays && data.allowedDays.length < 7 ? data.allowedDays.join(',') : null
         },
         include: { membershipPlan: true }
       });
