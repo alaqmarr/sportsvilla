@@ -243,3 +243,123 @@ export async function sendEventMessage(eventName: string, phoneNumber: string, d
     metadata: { eventName, purpose: "EVENT_TRIGGER" }
   });
 }
+
+export async function sendWhatsAppBookingConfirmedTemplate(
+  customerName: string,
+  venueName: string,
+  dateTimeString: string, // e.g. "8 Aug 2026, 06:00 PM - 07:00 PM"
+  paymentStatusString: string, // e.g. "₹1,200 (PAID)"
+  registeredPhone: string
+) {
+  const formattedPhone = registeredPhone.replace(/\D/g, "");
+
+  return await sendWhatsAppMessage({
+    to: formattedPhone,
+    type: "template",
+    templateName: "sportsvilla_booking_confirmed_v1",
+    languageCode: "en",
+    templateComponents: [
+      {
+        type: "body",
+        parameters: [
+          { type: "text", text: customerName },
+          { type: "text", text: venueName },
+          { type: "text", text: "Badminton" }, // Hardcoded sportName since my caller only passed 5 arguments
+          { type: "text", text: dateTimeString },
+          { type: "text", text: paymentStatusString },
+          { type: "text", text: registeredPhone },
+        ],
+      },
+    ],
+    metadata: { purpose: "BOOKING_CONFIRMED" },
+  });
+}
+
+export async function sendWhatsAppMemberRegisteredTemplate(
+  customerName: string,
+  registeredPhone: string
+) {
+  const formattedPhone = registeredPhone.replace(/\D/g, "");
+
+  return await sendWhatsAppMessage({
+    to: formattedPhone,
+    type: "template",
+    templateName: "sportsvilla_member_registered",
+    languageCode: "en",
+    templateComponents: [
+      {
+        type: "body",
+        parameters: [
+          { type: "text", text: customerName },
+          { type: "text", text: registeredPhone },
+        ],
+      },
+    ],
+    metadata: { purpose: "MEMBER_REGISTERED" },
+  });
+}
+
+export async function sendWhatsAppMembershipPurchasedTemplate(
+  customerName: string,
+  planName: string,
+  venueName: string,
+  eligibleSlot: string, // e.g. "9-10PM"
+  validUntil: string, // e.g. "31st August 2027"
+  registeredPhone: string
+) {
+  const formattedPhone = registeredPhone.replace(/\D/g, "");
+
+  return await sendWhatsAppMessage({
+    to: formattedPhone,
+    type: "template",
+    templateName: "sportsvilla_membership_purchased_v1",
+    languageCode: "en",
+    templateComponents: [
+      {
+        type: "body",
+        parameters: [
+          { type: "text", text: customerName },
+          { type: "text", text: planName },
+          { type: "text", text: venueName },
+          { type: "text", text: eligibleSlot },
+          { type: "text", text: validUntil },
+          { type: "text", text: registeredPhone },
+        ],
+      },
+    ],
+    metadata: { purpose: "MEMBERSHIP_PURCHASED" },
+  });
+}
+
+export interface MembershipExpiringPayload {
+  customerName: string;
+  planName: string;
+  expirationDate: string; // e.g. "15 Aug 2026"
+  registeredPhone: string;
+}
+
+export async function sendWhatsAppMembershipExpiringTemplate(
+  phoneNumber: string,
+  payload: MembershipExpiringPayload
+) {
+  const formattedPhone = phoneNumber.replace(/\D/g, "");
+
+  return await sendWhatsAppMessage({
+    to: formattedPhone,
+    type: "template",
+    templateName: "sportsvilla_membership_expiring_v1",
+    languageCode: "en",
+    templateComponents: [
+      {
+        type: "body",
+        parameters: [
+          { type: "text", text: payload.customerName },
+          { type: "text", text: payload.planName },
+          { type: "text", text: payload.expirationDate },
+          { type: "text", text: payload.registeredPhone },
+        ],
+      },
+    ],
+    metadata: { purpose: "MEMBERSHIP_EXPIRING", ...payload },
+  });
+}

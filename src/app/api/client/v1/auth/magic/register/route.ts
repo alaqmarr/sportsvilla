@@ -3,7 +3,7 @@ import { prisma } from '@/lib/prisma';
 import { whatsappDb } from '@/lib/whatsappDb';
 import jwt from 'jsonwebtoken';
 import { jsonResponse } from '@/lib/api-logger';
-
+import { sendWhatsAppMemberRegisteredTemplate } from '@/lib/whatsapp';
 const JWT_SECRET = process.env.NEXTAUTH_SECRET;
 
 export async function POST(request: Request) {
@@ -59,6 +59,12 @@ export async function POST(request: Request) {
         loyaltyPoints: 0
       }
     });
+
+    try {
+      await sendWhatsAppMemberRegisteredTemplate(member.name, member.mobile);
+    } catch (waError) {
+      console.error('WhatsApp welcome message failed', waError);
+    }
 
     if (!JWT_SECRET) {
       throw new Error("NEXTAUTH_SECRET is not configured");

@@ -4,7 +4,7 @@ import { authenticateClient } from '@/lib/auth-middleware';
 import { jsonResponse } from '@/lib/api-logger';
 import { randomUUID } from 'crypto';
 import { bumpSyncTimestamp } from '@/lib/sync';
-
+import { sendWhatsAppBookingConfirmedTemplate } from '@/lib/whatsapp';
 export async function GET(request: Request) {
   console.log(`[API] GET /api/client/v1/bookings called`);
   const authRes = await authenticateClient(request);
@@ -464,6 +464,25 @@ export async function POST(request: Request) {
       }
     } catch (triggerError) {
       console.error(`[API ERROR] POST /api/client/v1/bookings -> Loyalty triggers:`, triggerError);
+    }
+
+    // Send Booking Confirmation via WhatsApp
+    try {
+      if (memberData) {
+        const formattedDate = start.toLocaleDateString('en-IN', { weekday: 'short', month: 'short', day: 'numeric' });
+        const formattedTime = start.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: true });
+        const timeString = `${formattedDate} at ${formattedTime}`;
+        
+        await sendWhatsAppBookingConfirmedTemplate(
+          memberData.name, 
+          turf.name, 
+          timeString,
+          booking.id,
+          memberData.mobile
+        );
+      }
+    } catch (waError) {
+      console.error('WhatsApp booking confirmed message failed', waError);
     }
 
     await bumpSyncTimestamp('booking');

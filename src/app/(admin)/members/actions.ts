@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache";
 import { addDays } from "date-fns";
 import { bumpSyncTimestamp } from '@/lib/sync';
 import { getISTDateBounds } from "@/lib/dateUtils";
-
+import { sendWhatsAppMemberRegisteredTemplate, sendWhatsAppMembershipPurchasedTemplate } from "@/lib/whatsapp";
 async function generateMemberId(mobile: string) {
   const count = await prisma.member.count({ where: { mobile } });
   return `${mobile}_${count + 1}`;
@@ -21,6 +21,13 @@ export async function createMember(data: { name: string; mobile: string; email?:
     },
     include: { memberships: { include: { membershipPlan: { include: { sport: true } } } } }
   });
+
+  try {
+    await sendWhatsAppMemberRegisteredTemplate(member.name, member.mobile);
+  } catch (waError) {
+    console.error('WhatsApp welcome message failed', waError);
+  }
+
   await bumpSyncTimestamp('member');
   revalidatePath("/", "layout");
   return member;
@@ -41,6 +48,13 @@ export async function createFamily(data: { mobile: string; members: { name: stri
         email: m.email || null,
       }
     });
+    
+    try {
+      await sendWhatsAppMemberRegisteredTemplate(member.name, member.mobile);
+    } catch (waError) {
+      console.error('WhatsApp welcome message failed for family member', waError);
+    }
+
     createdMembers.push(member);
   }
   
@@ -88,6 +102,13 @@ export async function assignPlan(data: { memberIds?: string[]; memberId?: string
       const newMember = await prisma.member.create({
         data: { id, mobile: data.mobile, name: data.name, email: data.email || null }
       });
+
+      try {
+        await sendWhatsAppMemberRegisteredTemplate(newMember.name, newMember.mobile);
+      } catch (waError) {
+        console.error('WhatsApp welcome message failed', waError);
+      }
+
       targetMemberIds = [newMember.id];
     } else {
       targetMemberIds = [member.id];
@@ -156,6 +177,31 @@ export async function assignPlan(data: { memberIds?: string[]; memberId?: string
       
       return created;
     });
+
+    // Send Membership Notification
+    try {
+      const member = await prisma.member.findUnique({ where: { id: tMemberId } });
+      if (member) {
+        let turfName = "Sports Villa";
+        if (data.turfId) {
+          const turf = await prisma.turf.findUnique({ where: { id: data.turfId } });
+          if (turf) turfName = turf.name;
+        }
+        const eligibleSlot = data.timeSlot || "Any open slot";
+        const validUntil = new Date(memberMembership.endDate).toLocaleDateString('en-IN');
+
+        await sendWhatsAppMembershipPurchasedTemplate(
+          member.name,
+          plan.name,
+          turfName,
+          eligibleSlot,
+          validUntil,
+          member.mobile
+        );
+      }
+    } catch (waError) {
+      console.error('WhatsApp membership purchased message failed', waError);
+    }
 
     createdMemberships.push(memberMembership);
   }

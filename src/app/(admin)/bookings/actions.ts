@@ -7,6 +7,7 @@ import { formatIST, getISTDateBounds } from "@/lib/dateUtils";
 import { bumpSyncTimestamp } from '@/lib/sync';
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
+import { sendWhatsAppBookingConfirmedTemplate } from "@/lib/whatsapp";
 export async function fetchBookableTurfs() {
   return await prisma.turf.findMany({
     where: { 
@@ -236,20 +237,24 @@ export async function createBooking(data: {
   revalidatePath("/", "layout");
 
   // Dispatch WhatsApp Event for Manual Bookings
-  if (data.mobile) {
+  if (data.mobile && member) {
     try {
-      const { sendEventMessage } = require("@/lib/whatsapp");
       for (const b of bookings) {
-        const payload = {
-          member: { name: b.member?.name || "Customer" },
-          turf: { name: bookingItems.find(i => i.turf.id === b.turfId)?.turf.name || "" },
-          booking: { startTime: b.startTime }
-        };
-        // Background dispatch
-        sendEventMessage("ADMIN_MANUAL_BOOKING", data.mobile, payload).catch(console.error);
+        const turfName = bookingItems.find(i => i.turf.id === b.turfId)?.turf.name || "";
+        const formattedDate = new Date(b.startTime).toLocaleDateString('en-IN', { weekday: 'short', month: 'short', day: 'numeric' });
+        const formattedTime = new Date(b.startTime).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: true });
+        const timeString = `${formattedDate} at ${formattedTime}`;
+        
+        sendWhatsAppBookingConfirmedTemplate(
+          member.name,
+          turfName,
+          timeString,
+          b.id,
+          data.mobile
+        ).catch(console.error);
       }
     } catch(e) {
-      console.error("Error triggering ADMIN_MANUAL_BOOKING", e);
+      console.error("Error triggering WhatsApp booking confirmation", e);
     }
   }
 

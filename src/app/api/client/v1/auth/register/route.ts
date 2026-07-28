@@ -3,7 +3,7 @@ import { prisma } from '@/lib/prisma';
 import jwt from 'jsonwebtoken';
 import { logger } from '@/lib/logger';
 import { jsonResponse } from '@/lib/api-logger';
-
+import { sendWhatsAppMemberRegisteredTemplate } from '@/lib/whatsapp';
 export async function POST(request: Request) {
   console.log(`[API] POST /api/client/v1/auth/register called`);
   try {
@@ -55,6 +55,12 @@ export async function POST(request: Request) {
         loyaltyPoints: 0
       }
     });
+
+    try {
+      await sendWhatsAppMemberRegisteredTemplate(member.name, member.mobile);
+    } catch (waError) {
+      logger.error('WhatsApp welcome message failed', { memberId: member.id, error: waError });
+    }
 
     // Mint a custom JWT
     const uid = cleanMobile.startsWith('+') ? cleanMobile : `+91${cleanMobile}`;
