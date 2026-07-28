@@ -247,8 +247,9 @@ export async function sendEventMessage(eventName: string, phoneNumber: string, d
 export async function sendWhatsAppBookingConfirmedTemplate(
   customerName: string,
   venueName: string,
-  dateTimeString: string, // e.g. "8 Aug 2026, 06:00 PM - 07:00 PM"
-  paymentStatusString: string, // e.g. "₹1,200 (PAID)"
+  sportName: string,
+  dateTimeString: string,
+  paymentStatusString: string,
   registeredPhone: string
 ) {
   const formattedPhone = registeredPhone.replace(/\D/g, "");
@@ -264,7 +265,7 @@ export async function sendWhatsAppBookingConfirmedTemplate(
         parameters: [
           { type: "text", text: customerName },
           { type: "text", text: venueName },
-          { type: "text", text: "Badminton" }, // Hardcoded sportName since my caller only passed 5 arguments
+          { type: "text", text: sportName },
           { type: "text", text: dateTimeString },
           { type: "text", text: paymentStatusString },
           { type: "text", text: registeredPhone },

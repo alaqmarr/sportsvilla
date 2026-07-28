@@ -237,20 +237,27 @@ export async function createBooking(data: {
   revalidatePath("/", "layout");
 
   // Dispatch WhatsApp Event for Manual Bookings
-  if (data.mobile && member) {
+  const targetMobile = data.mobile || member?.mobile;
+  if (targetMobile && member) {
     try {
+      const sportRecord = await prisma.sport.findUnique({ where: { id: data.sportId } });
+      const sportName = sportRecord?.name || "Sports";
       for (const b of bookings) {
         const turfName = bookingItems.find(i => i.turf.id === b.turfId)?.turf.name || "";
         const formattedDate = new Date(b.startTime).toLocaleDateString('en-IN', { weekday: 'short', month: 'short', day: 'numeric' });
         const formattedTime = new Date(b.startTime).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: true });
-        const timeString = `${formattedDate} at ${formattedTime}`;
+        const endFormatted = new Date(b.endTime).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: true });
+        const timeString = `${formattedDate}, ${formattedTime} - ${endFormatted}`;
+        const priceStr = `₹${b.price - b.discountAmount}`;
+        const paymentStr = b.paymentStatus === "UNPAID" ? `${priceStr} (DUE)` : `${priceStr} (${b.paymentStatus})`;
         
         sendWhatsAppBookingConfirmedTemplate(
           member.name,
           turfName,
+          sportName,
           timeString,
-          b.id,
-          data.mobile
+          paymentStr,
+          targetMobile
         ).catch(console.error);
       }
     } catch(e) {

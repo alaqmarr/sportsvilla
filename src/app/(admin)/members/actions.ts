@@ -238,15 +238,16 @@ export async function updateMemberMembership(id: string, data: { startDate?: str
   // Trigger WhatsApp event if status changed to EXPIRED
   if (data.status === "EXPIRED") {
     try {
-      const { sendEventMessage } = require("@/lib/whatsapp");
-      const payload = {
-        member: { name: updated.member.name, mobile: updated.member.mobile },
-        membership: { 
-          planName: updated.membershipPlan.name, 
-          endDate: updated.endDate.toISOString().split("T")[0]
-        }
-      };
-      sendEventMessage("MEMBERSHIP_EXPIRED", updated.member.mobile, payload).catch(console.error);
+      const { sendWhatsAppMembershipExpiringTemplate } = require("@/lib/whatsapp");
+      
+      const formattedDate = new Date(updated.endDate).toLocaleDateString('en-IN', { month: 'short', day: 'numeric', year: 'numeric' });
+      
+      sendWhatsAppMembershipExpiringTemplate(updated.member.mobile, {
+        customerName: updated.member.name || "Customer",
+        planName: updated.membershipPlan.name,
+        expirationDate: formattedDate,
+        registeredPhone: updated.member.mobile
+      }).catch(console.error);
     } catch (e) {
       console.error("Failed to send WhatsApp Event", e);
     }

@@ -368,32 +368,7 @@ export async function POST(request: Request) {
       return newBooking;
     });
 
-    // Dispatch WhatsApp Event Trigger
-    try {
-      const { sendEventMessage } = require("@/lib/whatsapp");
-      const payload = {
-        booking: {
-          id: booking.id,
-          startTime: booking.startTime.toISOString(),
-          price: booking.price,
-          amountDue: booking.amountDue,
-          participantCount: booking.participantCount,
-          ticketCode: ticketData.length > 0 ? ticketData[0].qrCode : "N/A"
-        },
-        turf: {
-          name: turf.name,
-          location: turf.location || ""
-        },
-        member: {
-          name: member.name,
-          mobile: member.mobile
-        }
-      };
-      // Send asynchronously without blocking the API response
-      sendEventMessage("BOOKING_CONFIRMED", member.mobile, payload).catch((e: any) => console.error("WhatsApp trigger error:", e));
-    } catch (e) {
-      console.error("Failed to send WhatsApp Event", e);
-    }
+    // (WhatsApp Event Trigger legacy block removed to prevent double-firing. Handled via explicitly typed templates below.)
 
     // Evaluate Loyalty Triggers (outside main transaction — non-critical)
     try {
@@ -471,13 +446,17 @@ export async function POST(request: Request) {
       if (memberData) {
         const formattedDate = start.toLocaleDateString('en-IN', { weekday: 'short', month: 'short', day: 'numeric' });
         const formattedTime = start.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: true });
-        const timeString = `${formattedDate} at ${formattedTime}`;
+        const endFormatted = end.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: true });
+        const timeString = `${formattedDate}, ${formattedTime} - ${endFormatted}`;
+        const priceStr = `₹${booking.price - booking.discountAmount}`;
+        const paymentStr = booking.paymentStatus === 'UNPAID' ? `${priceStr} (DUE)` : `${priceStr} (${booking.paymentStatus})`;
         
         await sendWhatsAppBookingConfirmedTemplate(
           memberData.name, 
-          turf.name, 
+          turf.name,
+          sport.name,
           timeString,
-          booking.id,
+          paymentStr,
           memberData.mobile
         );
       }
