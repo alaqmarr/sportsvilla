@@ -12,14 +12,21 @@ export interface SendWhatsAppOptions {
 }
 
 const META_GRAPH_URL = "https://graph.facebook.com/v21.0";
+export function formatWhatsAppNumber(phone: string): string {
+  const digits = phone.replace(/\D/g, "");
+  if (digits.length === 10) {
+    return "91" + digits;
+  }
+  return digits;
+}
 
 export async function sendWhatsAppMessage(options: SendWhatsAppOptions) {
   const { to, type, text, templateName, languageCode = "en", templateComponents, metadata, contextMessageId } = options;
   const token = process.env.WHATSAPP_ACCESS_TOKEN;
   const phoneNumberId = process.env.WHATSAPP_PHONE_NUMBER_ID;
 
-  // Format recipient phone number (remove non-digits)
-  const formattedTo = to.replace(/\D/g, "");
+  // Format recipient phone number
+  const formattedTo = formatWhatsAppNumber(to);
 
   let payload: any = {
     messaging_product: "whatsapp",
@@ -110,7 +117,7 @@ export async function sendWhatsAppMessage(options: SendWhatsAppOptions) {
 }
 
 export async function sendWhatsAppOtp(phoneNumber: string, otp: string, purpose: string = "LOGIN") {
-  const formattedPhone = phoneNumber.replace(/\D/g, "");
+  const formattedPhone = formatWhatsAppNumber(phoneNumber);
   const expiresAt = new Date(Date.now() + 10 * 60 * 1000); // 10 mins validity
 
   // Save OTP to DB
@@ -134,7 +141,7 @@ export async function sendWhatsAppOtp(phoneNumber: string, otp: string, purpose:
 }
 
 export async function sendWhatsAppMagicLogin(phoneNumber: string, magicToken: string, purpose: string = "MAGIC_LOGIN") {
-  const formattedPhone = phoneNumber.replace(/\D/g, "");
+  const formattedPhone = formatWhatsAppNumber(phoneNumber);
   const expiresAt = new Date(Date.now() + 10 * 60 * 1000); // 10 mins validity
 
   // Save Magic Token to WhatsApp DB
@@ -252,7 +259,7 @@ export async function sendWhatsAppBookingConfirmedTemplate(
   paymentStatusString: string,
   registeredPhone: string
 ) {
-  const formattedPhone = registeredPhone.replace(/\D/g, "");
+  const formattedPhone = formatWhatsAppNumber(registeredPhone);
 
   return await sendWhatsAppMessage({
     to: formattedPhone,
@@ -280,7 +287,7 @@ export async function sendWhatsAppMemberRegisteredTemplate(
   customerName: string,
   registeredPhone: string
 ) {
-  const formattedPhone = registeredPhone.replace(/\D/g, "");
+  const formattedPhone = formatWhatsAppNumber(registeredPhone);
 
   return await sendWhatsAppMessage({
     to: formattedPhone,
@@ -308,7 +315,7 @@ export async function sendWhatsAppMembershipPurchasedTemplate(
   validUntil: string, // e.g. "31st August 2027"
   registeredPhone: string
 ) {
-  const formattedPhone = registeredPhone.replace(/\D/g, "");
+  const formattedPhone = formatWhatsAppNumber(registeredPhone);
 
   return await sendWhatsAppMessage({
     to: formattedPhone,
@@ -343,7 +350,7 @@ export async function sendWhatsAppMembershipExpiringTemplate(
   phoneNumber: string,
   payload: MembershipExpiringPayload
 ) {
-  const formattedPhone = phoneNumber.replace(/\D/g, "");
+  const formattedPhone = formatWhatsAppNumber(phoneNumber);
 
   return await sendWhatsAppMessage({
     to: formattedPhone,
