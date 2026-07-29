@@ -443,7 +443,8 @@ export async function POST(request: Request) {
 
     // Send Booking Confirmation via WhatsApp
     try {
-      if (memberData) {
+      const targetMemberData = await prisma.member.findUnique({ where: { id: targetMemberId } });
+      if (targetMemberData) {
         const formattedDate = start.toLocaleDateString('en-IN', { timeZone: 'Asia/Kolkata', weekday: 'short', month: 'short', day: 'numeric' });
         const formattedTime = start.toLocaleTimeString('en-IN', { timeZone: 'Asia/Kolkata', hour: '2-digit', minute: '2-digit', hour12: true });
         const endFormatted = end.toLocaleTimeString('en-IN', { timeZone: 'Asia/Kolkata', hour: '2-digit', minute: '2-digit', hour12: true });
@@ -452,12 +453,12 @@ export async function POST(request: Request) {
         const paymentStr = booking.paymentStatus === 'UNPAID' ? `${priceStr} (DUE)` : `${priceStr} (${booking.paymentStatus})`;
         
         await sendWhatsAppBookingConfirmedTemplate(
-          memberData.name, 
+          targetMemberData.name, 
           turf.name,
           sport.name,
           timeString,
           paymentStr,
-          memberData.mobile
+          targetMemberData.mobile
         );
       }
     } catch (waError) {

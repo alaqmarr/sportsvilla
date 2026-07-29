@@ -34,18 +34,29 @@ export async function authenticateClient(request: Request) {
       };
     }
 
-    let lookupMobile = "";
-    if (phoneNumber) {
-      let cleanMobile = phoneNumber.replace(/^\+91/, "");
-      if (cleanMobile.startsWith("+")) cleanMobile = cleanMobile.substring(1);
-      lookupMobile = cleanMobile;
-    } else if (email) {
-      lookupMobile = email.split("@")[0];
+    let member = null;
+
+    if (decodedToken.memberId) {
+      member = await prisma.member.findUnique({
+        where: { id: decodedToken.memberId },
+      });
     }
 
-    const member = await prisma.member.findFirst({
-      where: { mobile: lookupMobile },
-    });
+    if (!member) {
+      // Fallback for older tokens that don't have memberId
+      let lookupMobile = "";
+      if (phoneNumber) {
+        let cleanMobile = phoneNumber.replace(/^\+91/, "");
+        if (cleanMobile.startsWith("+")) cleanMobile = cleanMobile.substring(1);
+        lookupMobile = cleanMobile;
+      } else if (email) {
+        lookupMobile = email.split("@")[0];
+      }
+  
+      member = await prisma.member.findFirst({
+        where: { mobile: lookupMobile },
+      });
+    }
 
     if (!member) {
       return {
