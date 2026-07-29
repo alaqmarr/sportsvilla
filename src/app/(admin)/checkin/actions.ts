@@ -102,14 +102,21 @@ export async function confirmTicketCheckin(ticketIdOrQrCode: string, deskSportId
 
   if (ticket.booking.member?.mobile) {
     try {
-      const { sendEventMessage } = require("@/lib/whatsapp");
-      const payload = {
-        member: { name: ticket.booking.member.name },
-        booking: { id: ticket.booking.id }
-      };
-      sendEventMessage("ADMIN_CHECKIN", ticket.booking.member.mobile, payload).catch(console.error);
+      const { sendWhatsAppCheckinTemplate } = require("@/lib/whatsapp");
+      const formattedTime = new Date().toLocaleTimeString('en-IN', {
+        hour: 'numeric',
+        minute: '2-digit',
+        hour12: true,
+        timeZone: 'Asia/Kolkata'
+      });
+      sendWhatsAppCheckinTemplate(
+        ticket.booking.member.name,
+        sport?.name || "Sportsvilla",
+        formattedTime,
+        ticket.booking.member.mobile
+      ).catch(console.error);
     } catch(e) {
-      console.error("Failed to dispatch ADMIN_CHECKIN event", e);
+      console.error("Failed to dispatch checkin template", e);
     }
   }
 
