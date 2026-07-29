@@ -49,6 +49,13 @@ export async function sendWhatsAppMessage(options: SendWhatsAppOptions) {
     // Check if we have a locally configured header image for this template
     try {
       const tplConfig = await whatsappDb.whatsAppTemplate.findUnique({ where: { name: templateName }});
+      
+      // Globally enforce template approval status before dispatch
+      if (tplConfig && tplConfig.status !== "APPROVED") {
+        console.warn(`Template ${templateName} is not approved (status: ${tplConfig.status}). Skipping dispatch.`);
+        return { success: false, reason: `Template ${templateName} is not approved (status: ${tplConfig.status})` };
+      }
+
       if (tplConfig?.headerImageUrl) {
         const headerIdx = finalComponents.findIndex(c => c.type === 'header' || c.type === 'HEADER');
         if (headerIdx !== -1) {
@@ -491,5 +498,70 @@ export async function sendWhatsAppCheckinTemplate(
       },
     ],
     metadata: { purpose: "CHECKIN_CONFIRMED" },
+  });
+}
+
+export async function sendWhatsAppBookingCancelledTemplate(
+  customerName: string,
+  turfName: string,
+  timeString: string,
+  refundAmount: number,
+  registeredPhone: string
+) {
+  const formattedPhone = formatWhatsAppNumber(registeredPhone);
+
+  return await sendWhatsAppMessage({
+    to: formattedPhone,
+    type: "template",
+    templateName: "booking_cancelled_v1",
+    languageCode: "en",
+    templateComponents: [
+      {
+        type: "body",
+        parameters: [
+          { type: "text", text: customerName },
+          { type: "text", text: turfName },
+          { type: "text", text: timeString },
+          { type: "text", text: String(refundAmount) },
+        ],
+      },
+    ],
+    metadata: { purpose: "BOOKING_CANCELLED" },
+  });
+}
+
+export async function sendWhatsAppWalletCreditTemplate(
+  customerName: string,
+  rechargeAmount: number,
+  newBalance: number,
+  registeredPhone: string
+) {
+  const formattedPhone = formatWhatsAppNumber(registeredPhone);
+
+  return await sendWhatsAppMessage({
+    to: formattedPhone,
+    type: "template",
+    templateName: "wallet_credit_v1",
+    languageCode: "en",
+    templateComponents: [
+      {
+        type: "header",
+        parameters: [
+          {
+            type: "image",
+            image: { link: "https://sportsvilla.co.in/short-logo.png" }
+          }
+        ]
+      },
+      {
+        type: "body",
+        parameters: [
+          { type: "text", text: customerName },
+          { type: "text", text: String(rechargeAmount) },
+          { type: "text", text: String(newBalance) },
+        ],
+      },
+    ],
+    metadata: { purpose: "WALLET_CREDITED" },
   });
 }

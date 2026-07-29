@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { bumpSyncTimestamp } from '@/lib/sync';
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
+import { sendWhatsAppWalletCreditTemplate } from '@/lib/whatsapp';
 
 export async function addWalletTransaction(data: { memberId: string; amount: number; type: "CREDIT" | "DEBIT"; description?: string }) {
   if (!data.memberId || !data.amount || data.amount <= 0) {
@@ -59,6 +60,21 @@ export async function addWalletTransaction(data: { memberId: string; amount: num
       }
     }
   });
+
+  if (data.type === "CREDIT" && member.mobile) {
+    try {
+      const rechargeAmount = data.amount;
+      const newBalance = (member.walletBalance + amountInPaise) / 100;
+      await sendWhatsAppWalletCreditTemplate(
+        member.name,
+        rechargeAmount,
+        newBalance,
+        member.mobile
+      );
+    } catch (waErr) {
+      console.error("Failed to send wallet credit WhatsApp message", waErr);
+    }
+  }
 
   await bumpSyncTimestamp('wallet');
   revalidatePath("/", "layout");

@@ -3,6 +3,7 @@ import { prisma } from '@/lib/prisma';
 import { authenticateClient } from '@/lib/auth-middleware';
 import { jsonResponse } from '@/lib/api-logger';
 import { bumpSyncTimestamp } from '@/lib/sync';
+import { sendWhatsAppBookingCancelledTemplate } from "@/lib/whatsapp";
 
 export async function POST(request: Request, context: { params: Promise<{ id: string }> }) {
   console.log(`[API] POST /api/client/v1/bookings/[id]/cancel called`);
@@ -143,6 +144,29 @@ export async function POST(request: Request, context: { params: Promise<{ id: st
         where: { bookingId: booking.id }
       });
     });
+
+    if (booking.member.mobile) {
+      try {
+        const formattedTime = new Date(booking.startTime).toLocaleTimeString('en-IN', {
+          hour: 'numeric',
+          minute: '2-digit',
+          hour12: true,
+          timeZone: 'Asia/Kolkata',
+          day: 'numeric',
+          month: 'short'
+        });
+        
+        await sendWhatsAppBookingCancelledTemplate(
+          booking.member.name,
+          booking.turf.name,
+          formattedTime,
+          refundAmountPaise / 100,
+          booking.member.mobile
+        );
+      } catch (waErr) {
+        console.error("Failed to send booking cancelled WhatsApp template:", waErr);
+      }
+    }
 
     await bumpSyncTimestamp('booking_cancel');
     return jsonResponse({ success: true, message: "Booking cancelled successfully and amount refunded to wallet." });
