@@ -38985,12 +38985,12 @@ export namespace Prisma {
 
   export type MemberWhereUniqueInput = Prisma.AtLeast<{
     id?: string
+    email?: string
     AND?: MemberWhereInput | MemberWhereInput[]
     OR?: MemberWhereInput[]
     NOT?: MemberWhereInput | MemberWhereInput[]
     mobile?: StringFilter<"Member"> | string
     name?: StringFilter<"Member"> | string
-    email?: StringNullableFilter<"Member"> | string | null
     dateOfBirth?: DateTimeNullableFilter<"Member"> | Date | string | null
     loyaltyPoints?: IntFilter<"Member"> | number
     walletBalance?: FloatFilter<"Member"> | number
@@ -39007,7 +39007,7 @@ export namespace Prisma {
     couponUsages?: CouponUsageListRelationFilter
     loyaltyAchievements?: LoyaltyAchievementListRelationFilter
     sportStats?: UserSportStatListRelationFilter
-  }, "id">
+  }, "id" | "email">
 
   export type MemberOrderByWithAggregationInput = {
     id?: SortOrder

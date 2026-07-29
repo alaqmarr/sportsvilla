@@ -82,7 +82,7 @@ export async function POST(request: Request, context: { params: Promise<{ id: st
     // Find original payer from wallet transactions
     const walletDebit = await prisma.walletTransaction.findFirst({
       where: {
-        description: { contains: booking.id },
+        description: `Payment for booking ${booking.id}`,
         type: 'DEBIT'
       }
     });
@@ -137,17 +137,10 @@ export async function POST(request: Request, context: { params: Promise<{ id: st
         where: { memberId: booking.memberId, sportId: booking.sportId, bookingCount: { gt: 0 } },
         data: { bookingCount: { decrement: 1 } }
       });
-    });
 
       // Bug #7: Delete CouponUsage so the coupon slot is freed up
       await tx.couponUsage.deleteMany({
         where: { bookingId: booking.id }
-      });
-
-      // Update UserSportStat
-      await tx.userSportStat.updateMany({
-        where: { memberId: booking.memberId, sportId: booking.sportId },
-        data: { bookingCount: { decrement: 1 } }
       });
     });
 

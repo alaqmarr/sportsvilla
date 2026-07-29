@@ -77,20 +77,26 @@ export async function sendWhatsAppMessage(options: SendWhatsAppOptions) {
   }
 
   // Record outgoing message in SQLite database as PENDING
-  const dbMsg = await whatsappDb.whatsAppMessage.create({
-    data: {
-      phoneNumber: formattedTo,
-      direction: "OUTGOING",
-      type: type.toUpperCase(),
-      content: type === "text" ? (text || "") : JSON.stringify(payload.template),
-      status: "PENDING",
-      metadata: metadata ? JSON.stringify(metadata) : null,
-    },
-  });
+  let dbMsgId: string | undefined;
+  try {
+    const dbMsg = await whatsappDb.whatsAppMessage.create({
+      data: {
+        phoneNumber: formattedTo,
+        direction: "OUTGOING",
+        type: type.toUpperCase(),
+        content: type === "text" ? (text || "") : JSON.stringify(payload.template),
+        status: "PENDING",
+        metadata: metadata ? JSON.stringify(metadata) : null,
+      },
+    });
+    dbMsgId = dbMsg.id;
+  } catch (dbErr) {
+    console.error("Failed to save pending WhatsApp message to local SQLite DB, but will attempt to send via Meta API anyway", dbErr);
+  }
 
   if (!token || !phoneNumberId) {
     console.warn("Meta WhatsApp API credentials missing (WHATSAPP_ACCESS_TOKEN / WHATSAPP_PHONE_NUMBER_ID). Logged message locally.");
-    return { success: false, id: dbMsg.id, error: "Missing Meta credentials" };
+    return { success: false, id: dbMsgId, error: "Missing Meta credentials" };
   }
 
   try {
@@ -108,36 +114,55 @@ export async function sendWhatsAppMessage(options: SendWhatsAppOptions) {
     if (!res.ok || data.error) {
       const errCode = String(data.error?.code || res.status);
       const errMsg = data.error?.message || "WhatsApp Meta API Error";
-      await whatsappDb.whatsAppMessage.update({
-        where: { id: dbMsg.id },
-        data: {
-          status: "FAILED",
-          errorCode: errCode,
-          errorMessage: errMsg,
-        },
-      });
-      return { success: false, id: dbMsg.id, error: errMsg, code: errCode };
+      
+      if (dbMsgId) {
+        try {
+          await whatsappDb.whatsAppMessage.update({
+            where: { id: dbMsgId },
+            data: {
+              status: "FAILED",
+              errorCode: errCode,
+              errorMessage: errMsg,
+            },
+          });
+        } catch (updateErr) {
+           console.error("Failed to update WhatsApp message status to FAILED in local DB", updateErr);
+        }
+      }
+      return { success: false, id: dbMsgId, error: errMsg, code: errCode };
     }
 
     const wamid = data.messages?.[0]?.id;
-    await whatsappDb.whatsAppMessage.update({
-      where: { id: dbMsg.id },
-      data: {
-        status: "SENT",
-        wamid: wamid || null,
-      },
-    });
+    if (dbMsgId) {
+      try {
+        await whatsappDb.whatsAppMessage.update({
+          where: { id: dbMsgId },
+          data: {
+            status: "SENT",
+            wamid: wamid || null,
+          },
+        });
+      } catch (updateErr) {
+         console.error("Failed to update WhatsApp message status to SENT in local DB", updateErr);
+      }
+    }
 
-    return { success: true, id: dbMsg.id, wamid };
+    return { success: true, id: dbMsgId, wamid };
   } catch (err: any) {
-    await whatsappDb.whatsAppMessage.update({
-      where: { id: dbMsg.id },
-      data: {
-        status: "FAILED",
-        errorMessage: err?.message || String(err),
-      },
-    });
-    return { success: false, id: dbMsg.id, error: err?.message };
+    if (dbMsgId) {
+      try {
+        await whatsappDb.whatsAppMessage.update({
+          where: { id: dbMsgId },
+          data: {
+            status: "FAILED",
+            errorMessage: err?.message || String(err),
+          },
+        });
+      } catch (updateErr) {
+         console.error("Failed to update WhatsApp message status to FAILED (exception) in local DB", updateErr);
+      }
+    }
+    return { success: false, id: dbMsgId, error: err?.message };
   }
 }
 

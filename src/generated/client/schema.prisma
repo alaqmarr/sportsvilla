@@ -31,7 +31,7 @@ model Member {
   id                      String                   @id @default(cuid())
   mobile                  String // Removed @unique to allow family accounts
   name                    String
-  email                   String?
+  email                   String?                  @unique
   dateOfBirth             DateTime?
   loyaltyPoints           Int                      @default(0)
   walletBalance           Float                    @default(0)
@@ -109,8 +109,8 @@ model Turf {
 model TurfSport {
   turfId  String
   sportId String
-  turf    Turf   @relation(fields: [turfId], references: [id])
-  sport   Sport  @relation(fields: [sportId], references: [id])
+  turf    Turf   @relation(fields: [turfId], references: [id], onDelete: Cascade)
+  sport   Sport  @relation(fields: [sportId], references: [id], onDelete: Cascade)
 
   @@id([turfId, sportId])
 }
@@ -119,7 +119,7 @@ model MembershipPlan {
   id                     String             @id @default(cuid())
   name                   String
   sportId                String
-  sport                  Sport              @relation(fields: [sportId], references: [id])
+  sport                  Sport              @relation(fields: [sportId], references: [id], onDelete: Cascade)
   durationInDays         Int
   price                  Float
   slotsPerDay            Int                @default(1)
@@ -138,13 +138,13 @@ model MemberMembership {
   memberId         String
   member           Member         @relation(fields: [memberId], references: [id], onDelete: Cascade)
   membershipPlanId String
-  membershipPlan   MembershipPlan @relation(fields: [membershipPlanId], references: [id])
+  membershipPlan   MembershipPlan @relation(fields: [membershipPlanId], references: [id], onDelete: Cascade)
   startDate        DateTime
   endDate          DateTime
   status           String         @default("ACTIVE") // ACTIVE, EXPIRED, CANCELLED
 
   turfId      String?
-  turf        Turf?   @relation(fields: [turfId], references: [id])
+  turf        Turf?   @relation(fields: [turfId], references: [id], onDelete: Cascade)
   timeSlot    String?
   allowedDays String? // Comma-separated day indices, e.g. "0,6" for Sun,Sat
 
@@ -162,9 +162,9 @@ model Attendance {
   date             DateTime        @default(now())
   status           String          @default("PRESENT")
   sportId          String? // Optional: what sport they played
-  sport            Sport?          @relation(fields: [sportId], references: [id])
+  sport            Sport?          @relation(fields: [sportId], references: [id], onDelete: Cascade)
   membershipPlanId String?
-  membershipPlan   MembershipPlan? @relation(fields: [membershipPlanId], references: [id])
+  membershipPlan   MembershipPlan? @relation(fields: [membershipPlanId], references: [id], onDelete: Cascade)
   notes            String?
   createdAt        DateTime        @default(now())
 
@@ -176,11 +176,11 @@ model Attendance {
 model Booking {
   id               String        @id @default(cuid())
   turfId           String
-  turf             Turf          @relation(fields: [turfId], references: [id])
+  turf             Turf          @relation(fields: [turfId], references: [id], onDelete: Cascade)
   memberId         String
   member           Member        @relation(fields: [memberId], references: [id], onDelete: Cascade)
   sportId          String
-  sport            Sport         @relation(fields: [sportId], references: [id])
+  sport            Sport         @relation(fields: [sportId], references: [id], onDelete: Cascade)
   startTime        DateTime
   endTime          DateTime
   price            Float
@@ -201,6 +201,7 @@ model Booking {
   @@index([turfId])
   @@index([memberId])
   @@index([updatedAt])
+  @@index([status])
 }
 
 model Payment {
@@ -290,7 +291,7 @@ model TournamentRegistration {
   paymentUtr           String?
   status               String             @default("PENDING") // PENDING, VERIFIED, REJECTED
   registeredById       String
-  registeredBy         Member             @relation(fields: [registeredById], references: [id])
+  registeredBy         Member             @relation(fields: [registeredById], references: [id], onDelete: Cascade)
   players              TournamentPlayer[]
   createdAt            DateTime           @default(now())
   updatedAt            DateTime           @updatedAt
@@ -368,7 +369,7 @@ model CouponUsage {
   discountAmount Float    @default(0)
   createdAt      DateTime @default(now())
 
-  coupon  Coupon  @relation(fields: [couponId], references: [id])
+  coupon  Coupon  @relation(fields: [couponId], references: [id], onDelete: Cascade)
   member  Member  @relation(fields: [memberId], references: [id], onDelete: Cascade)
   booking Booking @relation(fields: [bookingId], references: [id], onDelete: Cascade)
 }
@@ -394,7 +395,7 @@ model LoyaltyAchievement {
   memberId   String
   achievedAt DateTime @default(now())
 
-  trigger LoyaltyTrigger @relation(fields: [triggerId], references: [id])
+  trigger LoyaltyTrigger @relation(fields: [triggerId], references: [id], onDelete: Cascade)
   member  Member         @relation(fields: [memberId], references: [id], onDelete: Cascade)
 
   @@unique([triggerId, memberId])
