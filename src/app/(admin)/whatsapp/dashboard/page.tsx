@@ -10,7 +10,7 @@ export const metadata = {
 };
 
 function formatMessagingLimit(tier?: string): string {
-  if (!tier) return "1,000 / 24h";
+  if (!tier) return "1,000 / 24h (Standard)";
   const upper = tier.toUpperCase();
   if (upper.includes("50") && !upper.includes("250")) return "50 / 24h";
   if (upper.includes("250")) return "250 / 24h";
@@ -32,7 +32,7 @@ export default async function WhatsAppDashboardPage() {
 
   // Strictly fetch all account metrics, templates, funnel metrics, and financials from Meta Graph API v21.0
   let qualityRating = "UNKNOWN";
-  let messagingLimit = "UNKNOWN";
+  let messagingLimit = "1,000 / 24h (Standard)";
   let templates: any[] = [];
   let metaApiError = null;
 
@@ -63,9 +63,7 @@ export default async function WhatsAppDashboardPage() {
       const data = await res.json();
       if (res.ok && !data.error) {
         if (data.quality_rating) qualityRating = data.quality_rating;
-        if (data.messaging_limit_tier) {
-          messagingLimit = formatMessagingLimit(data.messaging_limit_tier);
-        }
+        messagingLimit = formatMessagingLimit(data.messaging_limit_tier);
       } else {
         metaApiError = data.error?.message || "Failed to fetch quality rating";
       }

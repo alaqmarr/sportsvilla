@@ -231,9 +231,14 @@ export default function DashboardClient({
 
       {/* 2. Messaging Funnel */}
       <section className="space-y-4">
-        <h2 className="text-2xl font-bold tracking-tight text-white font-['Outfit']">
-          The Messaging Funnel
-        </h2>
+        <div>
+          <h2 className="text-2xl font-bold tracking-tight text-white font-['Outfit']">
+            The Messaging Funnel
+          </h2>
+          <p className="text-xs text-gray-400 mt-1">
+            Real-time data from Meta Graph API v21.0 WABA Analytics (reports official Sent & Delivered counts; Read & Reply reflect WABA endpoint capabilities).
+          </p>
+        </div>
         <div className="grid grid-cols-1 md:grid-cols-4 gap-5">
           <div className="bg-[#161923] border border-[#2a2d3e] rounded-xl p-5 shadow-lg">
             <h3 className="text-sm font-medium text-gray-400 pb-2">1. Sent</h3>
@@ -259,9 +264,14 @@ export default function DashboardClient({
 
       {/* 3. Financial & Billing */}
       <section className="space-y-4">
-        <h2 className="text-2xl font-bold tracking-tight text-white font-['Outfit']">
-          Financial & Billing Metrics
-        </h2>
+        <div>
+          <h2 className="text-2xl font-bold tracking-tight text-white font-['Outfit']">
+            Financial & Billing Metrics
+          </h2>
+          <p className="text-xs text-gray-400 mt-1">
+            Official Meta Graph API v21.0 Conversation Analytics (reports billed category fees; shows ₹0.00 when conversations are within 1,000 free monthly tier or before invoice generation).
+          </p>
+        </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
           <div className="bg-[#161923] border border-[#2a2d3e] rounded-xl p-5 shadow-lg flex flex-col justify-between">
             <div>
@@ -316,7 +326,7 @@ export default function DashboardClient({
               {financials.categories.length === 0 ? (
                 <tr>
                   <td colSpan={3} className="px-6 py-8 text-center text-gray-400">
-                    No billing data available yet.
+                    0 paid conversation charges recorded by Meta Graph API for this period (within 1,000 free monthly tier or no billed invoice events yet).
                   </td>
                 </tr>
               ) : (

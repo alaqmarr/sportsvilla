@@ -4,7 +4,7 @@ import { jsonResponse, apiLog } from "@/lib/api-logger";
 export const dynamic = "force-dynamic";
 
 function formatMessagingLimit(tier?: string): string {
-  if (!tier) return "1,000 / 24h";
+  if (!tier) return "1,000 / 24h (Standard)";
   const upper = tier.toUpperCase();
   if (upper.includes("50") && !upper.includes("250")) return "50 / 24h";
   if (upper.includes("250")) return "250 / 24h";
@@ -30,7 +30,7 @@ export async function GET() {
 
     // 1. Fetch Real-time Number Quality & Limit from Meta Graph API
     let qualityRating = "UNKNOWN";
-    let messagingLimit = "UNKNOWN";
+    let messagingLimit = "1,000 / 24h (Standard)";
 
     const phoneRes = await fetch(
       `https://graph.facebook.com/v21.0/${phoneNumberId}?fields=display_phone_number,verified_name,quality_rating,name_status,messaging_limit_tier,status,account_mode`,
@@ -42,9 +42,7 @@ export async function GET() {
     const phoneData = await phoneRes.json();
     if (phoneRes.ok && !phoneData.error) {
       if (phoneData.quality_rating) qualityRating = phoneData.quality_rating;
-      if (phoneData.messaging_limit_tier) {
-        messagingLimit = formatMessagingLimit(phoneData.messaging_limit_tier);
-      }
+      messagingLimit = formatMessagingLimit(phoneData.messaging_limit_tier);
     } else {
       apiLog("Meta Phone Number API error in analytics", { error: phoneData.error });
     }
