@@ -10,7 +10,7 @@ datasource db {
 
 model Admin {
   id          String     @id @default(cuid())
-  email       String     @unique
+  email       String
   password    String
   name        String?
   role        String     @default("SUPERADMIN") // "SUPERADMIN" | "ADMIN"
@@ -31,7 +31,7 @@ model Member {
   id                      String                   @id @default(cuid())
   mobile                  String // Removed @unique to allow family accounts
   name                    String
-  email                   String?                  @unique
+  email                   String?
   dateOfBirth             DateTime?
   loyaltyPoints           Int                      @default(0)
   walletBalance           Float                    @default(0)
