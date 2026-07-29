@@ -2,6 +2,7 @@
 import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 import { bumpSyncTimestamp } from '@/lib/sync';
+import { sendWhatsAppCheckinTemplate } from '@/lib/whatsapp';
 import { getISTDateBounds } from "@/lib/dateUtils";
 
 export async function fetchMembers(identifier: string) {
@@ -145,6 +146,25 @@ export async function markAttendance(data: { memberId: string; sportId: string; 
         description: `Earned for membership attendance: ${plan.name}`
       }
     });
+  }
+
+  // Send WhatsApp confirmation
+  try {
+    const formattedTime = new Date().toLocaleTimeString('en-IN', {
+      hour: 'numeric',
+      minute: '2-digit',
+      hour12: true,
+      timeZone: 'Asia/Kolkata'
+    });
+    
+    await sendWhatsAppCheckinTemplate(
+      attendance.member.name,
+      attendance.sport?.name || "Sportsvilla",
+      formattedTime,
+      attendance.member.mobile
+    );
+  } catch (waError) {
+    console.error("Failed to send check-in WhatsApp message", waError);
   }
 
   await bumpSyncTimestamp('attendance');
