@@ -82,21 +82,22 @@ export default function TemplatesClient({ initialTemplates }: { initialTemplates
         body: formData,
       });
       const uploadData = await uploadRes.json();
+      const imageUrl = uploadData.publicUrl || uploadData.url;
 
-      if (uploadData.url) {
+      if (imageUrl) {
         // Save to template DB config
         const saveRes = await fetch(`/api/client/v1/whatsapp/templates/${testingTemplate.name}`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ headerImageUrl: uploadData.url })
+          body: JSON.stringify({ headerImageUrl: imageUrl })
         });
         const saveData = await saveRes.json();
 
         if (saveData.success) {
           toast.success("Default image configured successfully!");
           // Update local state
-          setTemplates(prev => prev.map(t => t.name === testingTemplate.name ? { ...t, headerImageUrl: uploadData.url } : t));
-          setTestingTemplate({ ...testingTemplate, headerImageUrl: uploadData.url });
+          setTemplates(prev => prev.map(t => t.name === testingTemplate.name ? { ...t, headerImageUrl: imageUrl } : t));
+          setTestingTemplate({ ...testingTemplate, headerImageUrl: imageUrl });
         } else {
           toast.error("Failed to save image config.");
         }
@@ -119,11 +120,11 @@ export default function TemplatesClient({ initialTemplates }: { initialTemplates
       const payload: any = {
         templateName: testingTemplate.name,
         languageCode: testingTemplate.language,
-        mobileNumber: testMobile,
+        mobile: testMobile,
       };
 
       if (testParam.trim()) {
-        payload.bodyParams = [testParam.trim()];
+        payload.parameters = [testParam.trim()];
       }
       if (testButtonUrlParam.trim()) {
         payload.buttonUrlParam = testButtonUrlParam.trim();

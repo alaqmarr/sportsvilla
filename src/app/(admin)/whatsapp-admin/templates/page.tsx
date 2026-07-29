@@ -2,6 +2,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
+import { whatsappDb } from "@/lib/whatsappDb";
 import { hasPermission } from "@/lib/rbac";
 import TemplatesClient from "./TemplatesClient";
 
@@ -37,7 +38,14 @@ export default async function WhatsAppTemplatesPage() {
 
       const data = await res.json();
       if (res.ok && data.data) {
-        initialTemplates = data.data;
+        // Fetch local configs to merge headerImageUrl
+        const localConfigs = await whatsappDb.whatsAppTemplate.findMany();
+        const configMap = new Map(localConfigs.map((c: any) => [c.name, c]));
+
+        initialTemplates = data.data.map((t: any) => ({
+          ...t,
+          headerImageUrl: configMap.get(t.name)?.headerImageUrl || null
+        }));
       } else {
         console.error("[META TEMPLATES PAGE ERROR]", data.error);
       }
