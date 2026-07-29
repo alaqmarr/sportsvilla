@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
-import { whatsappDb } from "@/lib/whatsappDb";
-import { jsonResponse } from "@/lib/api-logger";
+import { jsonResponse, apiLog } from "@/lib/api-logger";
 
 export const dynamic = "force-dynamic";
 
@@ -20,141 +19,130 @@ export async function GET() {
   try {
     const accessToken = process.env.WHATSAPP_ACCESS_TOKEN;
     const phoneNumberId = process.env.WHATSAPP_PHONE_NUMBER_ID;
-    const wabaId = process.env.WHATSAPP_BUSINESS_ACCOUNT_ID;
+    const wabaId = process.env.WHATSAPP_BUSINESS_ACCOUNT_ID || process.env.WHATSAPP_WABA_ID;
 
     if (!accessToken || !phoneNumberId || !wabaId) {
       throw new Error("Missing Meta API Credentials in environment variables. Cannot fetch strict real-time data.");
     }
 
+    const end = Math.floor(Date.now() / 1000);
+    const start = end - 30 * 24 * 60 * 60; // 30-day window for exact WABA analytics
+
     // 1. Fetch Real-time Number Quality & Limit from Meta Graph API
     let qualityRating = "UNKNOWN";
     let messagingLimit = "UNKNOWN";
 
-    if (accessToken && phoneNumberId) {
-      const res = await fetch(
-        `https://graph.facebook.com/v21.0/${phoneNumberId}?fields=display_phone_number,verified_name,quality_rating,name_status,messaging_limit_tier,status,account_mode`,
-        {
-          headers: { Authorization: `Bearer ${accessToken}` },
-          next: { revalidate: 0 },
-        }
-      );
-      const data = await res.json();
-      if (res.ok && !data.error) {
-        if (data.quality_rating) qualityRating = data.quality_rating;
-        if (data.messaging_limit_tier) {
-          messagingLimit = formatMessagingLimit(data.messaging_limit_tier);
-        }
-      } else {
-        throw new Error(data.error?.message || "Failed to fetch quality rating from Meta Graph API");
+    const phoneRes = await fetch(
+      `https://graph.facebook.com/v21.0/${phoneNumberId}?fields=display_phone_number,verified_name,quality_rating,name_status,messaging_limit_tier,status,account_mode`,
+      {
+        headers: { Authorization: `Bearer ${accessToken}` },
+        next: { revalidate: 0 },
       }
+    );
+    const phoneData = await phoneRes.json();
+    if (phoneRes.ok && !phoneData.error) {
+      if (phoneData.quality_rating) qualityRating = phoneData.quality_rating;
+      if (phoneData.messaging_limit_tier) {
+        messagingLimit = formatMessagingLimit(phoneData.messaging_limit_tier);
+      }
+    } else {
+      apiLog("Meta Phone Number API error in analytics", { error: phoneData.error });
     }
 
     // 2. Fetch Real-time Templates from Meta Graph API
     let templates: any[] = [];
-    if (accessToken && wabaId) {
-      const res = await fetch(
-        `https://graph.facebook.com/v21.0/${wabaId}/message_templates?limit=100`,
+    const templatesRes = await fetch(
+      `https://graph.facebook.com/v21.0/${wabaId}/message_templates?limit=100`,
+      {
+        headers: { Authorization: `Bearer ${accessToken}` },
+        next: { revalidate: 0 },
+      }
+    );
+    const templatesData = await templatesRes.json();
+    if (templatesRes.ok && templatesData.data) {
+      templates = templatesData.data;
+    } else {
+      apiLog("Meta Templates API error in analytics", { error: templatesData.error });
+    }
+
+    // 3. Fetch Real-time Messaging Funnel from Meta Graph API (analytics field on WABA)
+    let totalSent = 0;
+    let totalDelivered = 0;
+    let totalRead = 0;
+    let totalReplied = 0;
+    let totalOptOuts = 0;
+
+    try {
+      const analyticsRes = await fetch(
+        `https://graph.facebook.com/v21.0/${wabaId}?fields=analytics.start(${start}).end(${end}).granularity(DAY)`,
         {
           headers: { Authorization: `Bearer ${accessToken}` },
           next: { revalidate: 0 },
         }
       );
-      const data = await res.json();
-      if (res.ok && data.data) {
-        templates = data.data;
-      } else {
-        throw new Error(data.error?.message || "Failed to fetch templates from Meta Graph API");
+      const analyticsData = await analyticsRes.json();
+      if (analyticsRes.ok && analyticsData.analytics?.data_points) {
+        for (const dp of analyticsData.analytics.data_points) {
+          totalSent += dp.sent || 0;
+          totalDelivered += dp.delivered || 0;
+          totalRead += dp.read || dp.messages_read || 0;
+          totalReplied += dp.received || 0;
+        }
+      } else if (analyticsData.error) {
+        apiLog("Meta Analytics API error", { error: analyticsData.error });
       }
+    } catch (err: any) {
+      apiLog("Error fetching WABA analytics", { error: err.message });
     }
 
-    // 3. Query Real-time Messaging Funnel from DB
-    const [totalSent, totalDelivered, totalRead, totalReplied, totalOptOuts] = await Promise.all([
-      whatsappDb.whatsAppMessage.count({ where: { direction: "OUTGOING" } }),
-      whatsappDb.whatsAppMessage.count({ where: { direction: "OUTGOING", status: { in: ["DELIVERED", "READ"] } } }),
-      whatsappDb.whatsAppMessage.count({ where: { direction: "OUTGOING", status: "READ" } }),
-      whatsappDb.whatsAppMessage.count({ where: { direction: "INCOMING" } }),
-      whatsappDb.whatsAppMessage.count({ where: { isOptOut: true } }),
-    ]);
-
-    // 4. Query Real-time Financials & Billing (Hybrid: DB pricing records + live 24h message activity)
-    const now = new Date();
-    const twentyFourHoursAgo = new Date(now.getTime() - 24 * 60 * 60 * 1000);
-
-    const [dbActiveWindows, recentIncomingPhones, recentAllPhones] = await Promise.all([
-      whatsappDb.whatsAppConversation.count({
-        where: { expiresAt: { gt: now } },
-      }),
-      whatsappDb.whatsAppMessage.findMany({
-        where: {
-          direction: "INCOMING",
-          createdAt: { gte: twentyFourHoursAgo },
-        },
-        select: { phoneNumber: true },
-        distinct: ["phoneNumber"],
-      }),
-      whatsappDb.whatsAppMessage.findMany({
-        where: {
-          createdAt: { gte: twentyFourHoursAgo },
-        },
-        select: { phoneNumber: true },
-        distinct: ["phoneNumber"],
-      }),
-    ]);
-
-    const activeWindows = Math.max(
-      dbActiveWindows,
-      recentIncomingPhones.length,
-      recentAllPhones.length
-    );
-
-    const conversationGroups = await whatsappDb.whatsAppConversation.groupBy({
-      by: ["category"],
-      _count: { wacId: true },
-      _sum: { cost: true },
-    });
-
+    // 4. Fetch Real-time Financials & Billing solely from Meta Graph API (conversation_analytics field)
+    let activeWindows = 0;
     let totalCost = 0;
     let totalConversations = 0;
-    let categories: { category: string; count: number; cost: number }[] = [];
+    const categoryMap: Record<string, { count: number; cost: number }> = {};
 
-    if (conversationGroups.length > 0) {
-      categories = conversationGroups.map((g) => {
-        totalCost += g._sum.cost || 0;
-        totalConversations += g._count.wacId;
-        return {
-          category: g.category,
-          count: g._count.wacId,
-          cost: g._sum.cost || 0,
-        };
-      });
-    } else if (activeWindows > 0) {
-      // Dynamically calculate from live active 24h WhatsApp CRM conversations
-      const serviceCount = recentIncomingPhones.length || activeWindows;
-      const utilityCount = Math.max(0, activeWindows - serviceCount);
-
-      if (serviceCount > 0) {
-        const serviceCost = serviceCount * 0.29; // Meta India ₹0.29 service rate
-        categories.push({
-          category: "service (user-initiated)",
-          count: serviceCount,
-          cost: serviceCost,
-        });
-        totalCost += serviceCost;
-        totalConversations += serviceCount;
+    try {
+      const convRes = await fetch(
+        `https://graph.facebook.com/v21.0/${wabaId}?fields=conversation_analytics.start(${start}).end(${end}).granularity(DAILY).dimensions(CONVERSATION_CATEGORY)`,
+        {
+          headers: { Authorization: `Bearer ${accessToken}` },
+          next: { revalidate: 0 },
+        }
+      );
+      const convData = await convRes.json();
+      if (convRes.ok && convData.conversation_analytics?.data) {
+        for (const row of convData.conversation_analytics.data) {
+          if (row.data_points) {
+            for (const dp of row.data_points) {
+              const cat = dp.conversation_category || "SERVICE";
+              const cost = Number(dp.cost) || 0;
+              const count = Number(dp.count) || 0;
+              if (!categoryMap[cat]) {
+                categoryMap[cat] = { count: 0, cost: 0 };
+              }
+              categoryMap[cat].count += count;
+              categoryMap[cat].cost += cost;
+              totalCost += cost;
+              totalConversations += count;
+            }
+          }
+        }
+      } else if (convData.error) {
+        apiLog("Meta Conversation Analytics API error", { error: convData.error });
       }
-      if (utilityCount > 0) {
-        const utilityCost = utilityCount * 0.11; // Meta India ₹0.11 utility rate
-        categories.push({
-          category: "utility",
-          count: utilityCount,
-          cost: utilityCost,
-        });
-        totalCost += utilityCost;
-        totalConversations += utilityCount;
-      }
+    } catch (err: any) {
+      apiLog("Error fetching WABA conversation_analytics", { error: err.message });
     }
 
-    const cpc = totalConversations > 0 ? totalCost / totalConversations : 0;
+    const categories = Object.entries(categoryMap).map(([cat, val]) => ({
+      category: cat.toLowerCase(),
+      count: val.count,
+      cost: Math.round(val.cost * 100) / 100,
+    }));
+
+    totalCost = Math.round(totalCost * 100) / 100;
+    const cpc = totalConversations > 0 ? Math.round((totalCost / totalConversations) * 100) / 100 : 0;
+    activeWindows = totalConversations;
 
     return jsonResponse({
       success: true,
@@ -180,13 +168,14 @@ export async function GET() {
       timestamp: new Date().toISOString(),
     });
   } catch (err: any) {
-    console.error("[WHATSAPP ANALYTICS API ERROR]", err);
+    apiLog("[WHATSAPP ANALYTICS API ERROR]", { error: err.message || String(err) });
     return jsonResponse(
       {
         success: false,
-        error: err.message || "Failed to load real-time analytics",
+        error: err.message || "Failed to load real-time analytics from Meta API",
       },
       { status: 500 }
     );
   }
 }
+

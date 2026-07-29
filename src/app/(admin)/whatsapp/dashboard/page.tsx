@@ -1,7 +1,6 @@
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { redirect } from "next/navigation";
-import { whatsappDb } from "@/lib/whatsappDb";
 import { prisma } from "@/lib/prisma";
 import { hasPermission } from "@/lib/rbac";
 import DashboardClient from "./DashboardClient";
@@ -9,6 +8,18 @@ import DashboardClient from "./DashboardClient";
 export const metadata = {
   title: "WhatsApp Dashboard | SportsVilla Admin",
 };
+
+function formatMessagingLimit(tier?: string): string {
+  if (!tier) return "1,000 / 24h";
+  const upper = tier.toUpperCase();
+  if (upper.includes("50") && !upper.includes("250")) return "50 / 24h";
+  if (upper.includes("250")) return "250 / 24h";
+  if (upper.includes("1K")) return "1,000 / 24h";
+  if (upper.includes("10K")) return "10,000 / 24h";
+  if (upper.includes("100K")) return "100,000 / 24h";
+  if (upper.includes("UNLIMITED")) return "Unlimited";
+  return tier.replace("TIER_", "") + " / 24h";
+}
 
 export default async function WhatsAppDashboardPage() {
   const session = await getServerSession(authOptions);
@@ -19,15 +30,29 @@ export default async function WhatsAppDashboardPage() {
     redirect("/admin");
   }
 
-  // 1. Account Metrics & Templates strictly from Meta API
+  // Strictly fetch all account metrics, templates, funnel metrics, and financials from Meta Graph API v21.0
   let qualityRating = "UNKNOWN";
   let messagingLimit = "UNKNOWN";
   let templates: any[] = [];
   let metaApiError = null;
 
+  let totalSent = 0;
+  let totalDelivered = 0;
+  let totalRead = 0;
+  let totalReplied = 0;
+  let totalOptOuts = 0;
+
+  let activeWindows = 0;
+  let totalCost = 0;
+  let totalConversations = 0;
+  const categoryMap: Record<string, { count: number; cost: number }> = {};
+
   const accessToken = process.env.WHATSAPP_ACCESS_TOKEN;
   const phoneNumberId = process.env.WHATSAPP_PHONE_NUMBER_ID;
-  const wabaId = process.env.WHATSAPP_BUSINESS_ACCOUNT_ID;
+  const wabaId = process.env.WHATSAPP_BUSINESS_ACCOUNT_ID || process.env.WHATSAPP_WABA_ID;
+
+  const end = Math.floor(Date.now() / 1000);
+  const start = end - 30 * 24 * 60 * 60; // 30-day window for exact WABA analytics
 
   if (accessToken && phoneNumberId) {
     try {
@@ -39,14 +64,7 @@ export default async function WhatsAppDashboardPage() {
       if (res.ok && !data.error) {
         if (data.quality_rating) qualityRating = data.quality_rating;
         if (data.messaging_limit_tier) {
-          const tier = data.messaging_limit_tier.toUpperCase();
-          if (tier.includes("50") && !tier.includes("250")) messagingLimit = "50 / 24h";
-          else if (tier.includes("250")) messagingLimit = "250 / 24h";
-          else if (tier.includes("1K")) messagingLimit = "1,000 / 24h";
-          else if (tier.includes("10K")) messagingLimit = "10,000 / 24h";
-          else if (tier.includes("100K")) messagingLimit = "100,000 / 24h";
-          else if (tier.includes("UNLIMITED")) messagingLimit = "Unlimited";
-          else messagingLimit = tier.replace("TIER_", "") + " / 24h";
+          messagingLimit = formatMessagingLimit(data.messaging_limit_tier);
         }
       } else {
         metaApiError = data.error?.message || "Failed to fetch quality rating";
@@ -59,6 +77,7 @@ export default async function WhatsAppDashboardPage() {
   }
 
   if (accessToken && wabaId) {
+    // 1. Templates
     try {
       const res = await fetch(
         `https://graph.facebook.com/v21.0/${wabaId}/message_templates?limit=100`,
@@ -69,63 +88,72 @@ export default async function WhatsAppDashboardPage() {
         templates = data.data;
       }
     } catch (e) {
-      // Ignore template fetch error, let it be empty
+      // Ignore template fetch error
+    }
+
+    // 2. Funnel Metrics (Sent, Delivered, Read)
+    try {
+      const res = await fetch(
+        `https://graph.facebook.com/v21.0/${wabaId}?fields=analytics.start(${start}).end(${end}).granularity(DAY)`,
+        { headers: { Authorization: `Bearer ${accessToken}` }, cache: "no-store" }
+      );
+      const data = await res.json();
+      if (res.ok && data.analytics?.data_points) {
+        for (const dp of data.analytics.data_points) {
+          totalSent += dp.sent || 0;
+          totalDelivered += dp.delivered || 0;
+          totalRead += dp.read || dp.messages_read || 0;
+          totalReplied += dp.received || 0;
+        }
+      }
+    } catch (e) {
+      // Ignore funnel fetch error
+    }
+
+    // 3. WABA Conversation Analytics & Financials
+    try {
+      const res = await fetch(
+        `https://graph.facebook.com/v21.0/${wabaId}?fields=conversation_analytics.start(${start}).end(${end}).granularity(DAILY).dimensions(CONVERSATION_CATEGORY)`,
+        { headers: { Authorization: `Bearer ${accessToken}` }, cache: "no-store" }
+      );
+      const data = await res.json();
+      if (res.ok && data.conversation_analytics?.data) {
+        for (const row of data.conversation_analytics.data) {
+          if (row.data_points) {
+            for (const dp of row.data_points) {
+              const cat = dp.conversation_category || "SERVICE";
+              const cost = Number(dp.cost) || 0;
+              const count = Number(dp.count) || 0;
+              if (!categoryMap[cat]) {
+                categoryMap[cat] = { count: 0, cost: 0 };
+              }
+              categoryMap[cat].count += count;
+              categoryMap[cat].cost += cost;
+              totalCost += cost;
+              totalConversations += count;
+            }
+          }
+        }
+      }
+    } catch (e) {
+      // Ignore financial fetch error
     }
   }
 
   const accountMetrics = { qualityRating, messagingLimit };
 
-  // 3. Funnel Metrics
-  const totalSent = await whatsappDb.whatsAppMessage.count({
-    where: { direction: "OUTGOING" }
-  });
-  
-  const totalDelivered = await whatsappDb.whatsAppMessage.count({
-    where: { direction: "OUTGOING", status: { in: ["DELIVERED", "READ"] } }
-  });
-  
-  const totalRead = await whatsappDb.whatsAppMessage.count({
-    where: { direction: "OUTGOING", status: "READ" }
-  });
-  
-  const totalReplied = await whatsappDb.whatsAppMessage.count({
-    where: { direction: "INCOMING" }
-  });
+  const categories = Object.entries(categoryMap).map(([cat, val]) => ({
+    category: cat.toLowerCase(),
+    count: val.count,
+    cost: Math.round(val.cost * 100) / 100,
+  }));
 
-  const totalOptOuts = await whatsappDb.whatsAppMessage.count({
-    where: { isOptOut: true }
-  });
-
-  // 4. Financial & Billing
-  const now = new Date();
-  
-  const activeWindows = await whatsappDb.whatsAppConversation.count({
-    where: { expiresAt: { gt: now } }
-  });
-
-  // Aggregate cost by category
-  const conversationGroups = await whatsappDb.whatsAppConversation.groupBy({
-    by: ["category"],
-    _count: { wacId: true },
-    _sum: { cost: true }
-  });
-
-  let totalCost = 0;
-  let totalConversations = 0;
-  const categories = conversationGroups.map(g => {
-    totalCost += (g._sum.cost || 0);
-    totalConversations += g._count.wacId;
-    return {
-      category: g.category,
-      count: g._count.wacId,
-      cost: g._sum.cost || 0
-    };
-  });
-
-  const cpc = totalConversations > 0 ? (totalCost / totalConversations) : 0;
+  totalCost = Math.round(totalCost * 100) / 100;
+  const cpc = totalConversations > 0 ? Math.round((totalCost / totalConversations) * 100) / 100 : 0;
+  activeWindows = totalConversations;
 
   return (
-    <DashboardClient 
+    <DashboardClient
       accountMetrics={accountMetrics}
       templates={templates}
       funnel={{
@@ -133,16 +161,17 @@ export default async function WhatsAppDashboardPage() {
         delivered: totalDelivered,
         read: totalRead,
         replied: totalReplied,
-        optOuts: totalOptOuts
+        optOuts: totalOptOuts,
       }}
       financials={{
         activeWindows,
         categories,
         totalCost,
         totalConversations,
-        cpc
+        cpc,
       }}
       initialError={metaApiError}
     />
   );
 }
+
