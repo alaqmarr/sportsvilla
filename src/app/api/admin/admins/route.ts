@@ -12,7 +12,7 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const callingAdmin = await prisma.admin.findUnique({
+    const callingAdmin = await prisma.admin.findFirst({
       where: { email: session.user.email },
     });
 
@@ -46,7 +46,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const callingAdmin = await prisma.admin.findUnique({
+    const callingAdmin = await prisma.admin.findFirst({
       where: { email: session.user.email },
     });
 
@@ -68,7 +68,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const existing = await prisma.admin.findUnique({ where: { email } });
+    const existing = await prisma.admin.findFirst({ where: { email } });
     if (existing) {
       return NextResponse.json(
         { error: "An admin account with this email already exists" },
@@ -121,7 +121,7 @@ export async function PATCH(req: NextRequest) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const callingAdmin = await prisma.admin.findUnique({
+    const callingAdmin = await prisma.admin.findFirst({
       where: { email: session.user.email },
     });
 
@@ -190,7 +190,7 @@ export async function DELETE(req: NextRequest) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const callingAdmin = await prisma.admin.findUnique({
+    const callingAdmin = await prisma.admin.findFirst({
       where: { email: session.user.email },
     });
 
@@ -213,7 +213,7 @@ export async function DELETE(req: NextRequest) {
     }
 
     // We must fetch the admin being deleted to log their email/name before deleting
-    const adminToDelete = await prisma.admin.findUnique({ where: { id } });
+    const adminToDelete = await prisma.admin.findFirst({ where: { id } });
     
     await prisma.admin.delete({ where: { id } });
 

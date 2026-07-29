@@ -16,7 +16,7 @@ export const authOptions: NextAuthOptions = {
           throw new Error("Invalid credentials");
         }
 
-        const admin = await prisma.admin.findUnique({
+        const admin = await prisma.admin.findFirst({
           where: { email: credentials.email }
         });
 
@@ -47,7 +47,7 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     async jwt({ token }) {
       if (token?.email) {
-        const admin = await prisma.admin.findUnique({
+        const admin = await prisma.admin.findFirst({
           where: { email: token.email },
         });
         if (!admin || !admin.isActive) {

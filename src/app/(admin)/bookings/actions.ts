@@ -213,7 +213,7 @@ export async function createBooking(data: {
 
     const session = await getServerSession(authOptions);
     if (session?.user?.email) {
-      const admin = await tx.admin.findUnique({ where: { email: session.user.email } });
+      const admin = await tx.admin.findFirst({ where: { email: session.user.email } });
       if (admin) {
         for (const b of createdBookings) {
           await tx.auditLog.create({
@@ -330,7 +330,7 @@ export async function cancelBooking(id: string) {
     let adminId = undefined;
     let adminName = "System";
     if (session?.user?.email) {
-      const admin = await prisma.admin.findUnique({ where: { email: session.user.email } });
+      const admin = await prisma.admin.findFirst({ where: { email: session.user.email } });
       if (admin) {
         adminId = admin.id;
         adminName = admin.name || admin.email;
@@ -395,7 +395,7 @@ export async function updateBookingPayment(id: string, paymentStatus: "PAID" | "
   let adminId = undefined;
   let adminName = "System";
   if (session?.user?.email) {
-    const admin = await prisma.admin.findUnique({ where: { email: session.user.email } });
+    const admin = await prisma.admin.findFirst({ where: { email: session.user.email } });
     if (admin) {
       adminId = admin.id;
       adminName = admin.name || admin.email;

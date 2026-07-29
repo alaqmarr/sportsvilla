@@ -16,7 +16,7 @@ export default async function AdminLayout({
     redirect("/login");
   }
 
-  const currentAdmin = await prisma.admin.findUnique({
+  const currentAdmin = await prisma.admin.findFirst({
     where: { email: session.user.email },
     select: {
       id: true,

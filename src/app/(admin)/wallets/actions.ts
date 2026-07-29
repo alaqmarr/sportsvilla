@@ -44,7 +44,7 @@ export async function addWalletTransaction(data: { memberId: string; amount: num
     // 3. Create the audit log
     const session = await getServerSession(authOptions);
     if (session?.user?.email) {
-      const admin = await tx.admin.findUnique({ where: { email: session.user.email } });
+      const admin = await tx.admin.findFirst({ where: { email: session.user.email } });
       if (admin) {
         await tx.auditLog.create({
           data: {

@@ -16,7 +16,7 @@ export default async function WhatsAppHealthPage() {
   const session = await getServerSession(authOptions);
   if (!session?.user?.email) redirect("/login");
 
-  const admin = await prisma.admin.findUnique({ where: { email: session.user.email } });
+  const admin = await prisma.admin.findFirst({ where: { email: session.user.email } });
   if (!admin || (!hasPermission(admin, "view:whatsapp") && !hasPermission(admin, "manage:whatsapp"))) {
     redirect("/admin");
   }
