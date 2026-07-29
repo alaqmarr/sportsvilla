@@ -43,11 +43,36 @@ export async function sendWhatsAppMessage(options: SendWhatsAppOptions) {
 
   if (type === "text") {
     payload.text = { preview_url: false, body: text };
-  } else if (type === "template") {
+  } else if (type === "template" && templateName) {
+    let finalComponents = templateComponents || [];
+    
+    // Check if we have a locally configured header image for this template
+    try {
+      const tplConfig = await whatsappDb.whatsAppTemplate.findUnique({ where: { name: templateName }});
+      if (tplConfig?.headerImageUrl) {
+        const headerIdx = finalComponents.findIndex(c => c.type === 'header' || c.type === 'HEADER');
+        if (headerIdx !== -1) {
+          if (finalComponents[headerIdx].parameters?.[0]?.image) {
+            finalComponents[headerIdx].parameters[0].image.link = tplConfig.headerImageUrl;
+          }
+        } else {
+          finalComponents = [
+            {
+              type: "header",
+              parameters: [{ type: "image", image: { link: tplConfig.headerImageUrl } }]
+            },
+            ...finalComponents
+          ];
+        }
+      }
+    } catch (dbErr) {
+      console.warn("Failed to lookup template config", dbErr);
+    }
+
     payload.template = {
       name: templateName,
       language: { code: languageCode },
-      components: templateComponents || [],
+      components: finalComponents,
     };
   }
 
@@ -268,6 +293,15 @@ export async function sendWhatsAppBookingConfirmedTemplate(
     languageCode: "en",
     templateComponents: [
       {
+        type: "header",
+        parameters: [
+          {
+            type: "image",
+            image: { link: "https://sportsvilla.co.in/short-logo.png" }
+          }
+        ]
+      },
+      {
         type: "body",
         parameters: [
           { type: "text", text: customerName },
@@ -296,6 +330,15 @@ export async function sendWhatsAppMemberRegisteredTemplate(
     languageCode: "en",
     templateComponents: [
       {
+        type: "header",
+        parameters: [
+          {
+            type: "image",
+            image: { link: "https://sportsvilla.co.in/short-logo.png" }
+          }
+        ]
+      },
+      {
         type: "body",
         parameters: [
           { type: "text", text: customerName },
@@ -323,6 +366,15 @@ export async function sendWhatsAppMembershipPurchasedTemplate(
     templateName: "sportsvilla_membership_purchased_v1",
     languageCode: "en",
     templateComponents: [
+      {
+        type: "header",
+        parameters: [
+          {
+            type: "image",
+            image: { link: "https://sportsvilla.co.in/short-logo.png" }
+          }
+        ]
+      },
       {
         type: "body",
         parameters: [
@@ -358,6 +410,15 @@ export async function sendWhatsAppMembershipExpiringTemplate(
     templateName: "sportsvilla_membership_expiring_v1",
     languageCode: "en",
     templateComponents: [
+      {
+        type: "header",
+        parameters: [
+          {
+            type: "image",
+            image: { link: "https://sportsvilla.co.in/short-logo.png" }
+          }
+        ]
+      },
       {
         type: "body",
         parameters: [

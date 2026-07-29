@@ -7697,6 +7697,7 @@ export namespace Prisma {
     category: string | null
     language: string | null
     status: string | null
+    headerImageUrl: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -7707,6 +7708,7 @@ export namespace Prisma {
     category: string | null
     language: string | null
     status: string | null
+    headerImageUrl: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -7717,6 +7719,7 @@ export namespace Prisma {
     category: number
     language: number
     status: number
+    headerImageUrl: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -7729,6 +7732,7 @@ export namespace Prisma {
     category?: true
     language?: true
     status?: true
+    headerImageUrl?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -7739,6 +7743,7 @@ export namespace Prisma {
     category?: true
     language?: true
     status?: true
+    headerImageUrl?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -7749,6 +7754,7 @@ export namespace Prisma {
     category?: true
     language?: true
     status?: true
+    headerImageUrl?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -7832,6 +7838,7 @@ export namespace Prisma {
     category: string
     language: string
     status: string
+    headerImageUrl: string | null
     createdAt: Date
     updatedAt: Date
     _count: WhatsAppTemplateCountAggregateOutputType | null
@@ -7859,6 +7866,7 @@ export namespace Prisma {
     category?: boolean
     language?: boolean
     status?: boolean
+    headerImageUrl?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["whatsAppTemplate"]>
@@ -7869,6 +7877,7 @@ export namespace Prisma {
     category?: boolean
     language?: boolean
     status?: boolean
+    headerImageUrl?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["whatsAppTemplate"]>
@@ -7879,6 +7888,7 @@ export namespace Prisma {
     category?: boolean
     language?: boolean
     status?: boolean
+    headerImageUrl?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["whatsAppTemplate"]>
@@ -7889,11 +7899,12 @@ export namespace Prisma {
     category?: boolean
     language?: boolean
     status?: boolean
+    headerImageUrl?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type WhatsAppTemplateOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "category" | "language" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["whatsAppTemplate"]>
+  export type WhatsAppTemplateOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "category" | "language" | "status" | "headerImageUrl" | "createdAt" | "updatedAt", ExtArgs["result"]["whatsAppTemplate"]>
 
   export type $WhatsAppTemplatePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "WhatsAppTemplate"
@@ -7904,6 +7915,7 @@ export namespace Prisma {
       category: string
       language: string
       status: string
+      headerImageUrl: string | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["whatsAppTemplate"]>
@@ -8334,6 +8346,7 @@ export namespace Prisma {
     readonly category: FieldRef<"WhatsAppTemplate", 'String'>
     readonly language: FieldRef<"WhatsAppTemplate", 'String'>
     readonly status: FieldRef<"WhatsAppTemplate", 'String'>
+    readonly headerImageUrl: FieldRef<"WhatsAppTemplate", 'String'>
     readonly createdAt: FieldRef<"WhatsAppTemplate", 'DateTime'>
     readonly updatedAt: FieldRef<"WhatsAppTemplate", 'DateTime'>
   }
@@ -9811,6 +9824,7 @@ export namespace Prisma {
     category: 'category',
     language: 'language',
     status: 'status',
+    headerImageUrl: 'headerImageUrl',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -10272,6 +10286,7 @@ export namespace Prisma {
     category?: StringFilter<"WhatsAppTemplate"> | string
     language?: StringFilter<"WhatsAppTemplate"> | string
     status?: StringFilter<"WhatsAppTemplate"> | string
+    headerImageUrl?: StringNullableFilter<"WhatsAppTemplate"> | string | null
     createdAt?: DateTimeFilter<"WhatsAppTemplate"> | Date | string
     updatedAt?: DateTimeFilter<"WhatsAppTemplate"> | Date | string
   }
@@ -10282,6 +10297,7 @@ export namespace Prisma {
     category?: SortOrder
     language?: SortOrder
     status?: SortOrder
+    headerImageUrl?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -10295,6 +10311,7 @@ export namespace Prisma {
     category?: StringFilter<"WhatsAppTemplate"> | string
     language?: StringFilter<"WhatsAppTemplate"> | string
     status?: StringFilter<"WhatsAppTemplate"> | string
+    headerImageUrl?: StringNullableFilter<"WhatsAppTemplate"> | string | null
     createdAt?: DateTimeFilter<"WhatsAppTemplate"> | Date | string
     updatedAt?: DateTimeFilter<"WhatsAppTemplate"> | Date | string
   }, "id" | "name">
@@ -10305,6 +10322,7 @@ export namespace Prisma {
     category?: SortOrder
     language?: SortOrder
     status?: SortOrder
+    headerImageUrl?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: WhatsAppTemplateCountOrderByAggregateInput
@@ -10321,6 +10339,7 @@ export namespace Prisma {
     category?: StringWithAggregatesFilter<"WhatsAppTemplate"> | string
     language?: StringWithAggregatesFilter<"WhatsAppTemplate"> | string
     status?: StringWithAggregatesFilter<"WhatsAppTemplate"> | string
+    headerImageUrl?: StringNullableWithAggregatesFilter<"WhatsAppTemplate"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"WhatsAppTemplate"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"WhatsAppTemplate"> | Date | string
   }
@@ -10808,6 +10827,7 @@ export namespace Prisma {
     category?: string
     language?: string
     status: string
+    headerImageUrl?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -10818,6 +10838,7 @@ export namespace Prisma {
     category?: string
     language?: string
     status: string
+    headerImageUrl?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -10828,6 +10849,7 @@ export namespace Prisma {
     category?: StringFieldUpdateOperationsInput | string
     language?: StringFieldUpdateOperationsInput | string
     status?: StringFieldUpdateOperationsInput | string
+    headerImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -10838,6 +10860,7 @@ export namespace Prisma {
     category?: StringFieldUpdateOperationsInput | string
     language?: StringFieldUpdateOperationsInput | string
     status?: StringFieldUpdateOperationsInput | string
+    headerImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -10848,6 +10871,7 @@ export namespace Prisma {
     category?: string
     language?: string
     status: string
+    headerImageUrl?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -10858,6 +10882,7 @@ export namespace Prisma {
     category?: StringFieldUpdateOperationsInput | string
     language?: StringFieldUpdateOperationsInput | string
     status?: StringFieldUpdateOperationsInput | string
+    headerImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -10868,6 +10893,7 @@ export namespace Prisma {
     category?: StringFieldUpdateOperationsInput | string
     language?: StringFieldUpdateOperationsInput | string
     status?: StringFieldUpdateOperationsInput | string
+    headerImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -11261,6 +11287,7 @@ export namespace Prisma {
     category?: SortOrder
     language?: SortOrder
     status?: SortOrder
+    headerImageUrl?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -11271,6 +11298,7 @@ export namespace Prisma {
     category?: SortOrder
     language?: SortOrder
     status?: SortOrder
+    headerImageUrl?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -11281,6 +11309,7 @@ export namespace Prisma {
     category?: SortOrder
     language?: SortOrder
     status?: SortOrder
+    headerImageUrl?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }

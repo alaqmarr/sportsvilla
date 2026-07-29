@@ -183,6 +183,7 @@ exports.Prisma.WhatsAppTemplateScalarFieldEnum = {
   category: 'category',
   language: 'language',
   status: 'status',
+  headerImageUrl: 'headerImageUrl',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };

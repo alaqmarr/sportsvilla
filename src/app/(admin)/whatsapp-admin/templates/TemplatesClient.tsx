@@ -20,6 +20,7 @@ export default function TemplatesClient({ initialTemplates }: { initialTemplates
   const [testButtonUrlParam, setTestButtonUrlParam] = useState("sample_token_12345");
   const [sendingTest, setSendingTest] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [uploadingImage, setUploadingImage] = useState(false);
 
   const getStatusBadge = (status: string) => {
     switch (status?.toUpperCase()) {
@@ -66,6 +67,48 @@ export default function TemplatesClient({ initialTemplates }: { initialTemplates
       fetchTemplates();
     }
   }, [initialTemplates]);
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setUploadingImage(true);
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+
+      const uploadRes = await fetch("/api/client/v1/upload/direct", {
+        method: "POST",
+        body: formData,
+      });
+      const uploadData = await uploadRes.json();
+
+      if (uploadData.url) {
+        // Save to template DB config
+        const saveRes = await fetch(`/api/client/v1/whatsapp/templates/${testingTemplate.name}`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ headerImageUrl: uploadData.url })
+        });
+        const saveData = await saveRes.json();
+
+        if (saveData.success) {
+          toast.success("Default image configured successfully!");
+          // Update local state
+          setTemplates(prev => prev.map(t => t.name === testingTemplate.name ? { ...t, headerImageUrl: uploadData.url } : t));
+          setTestingTemplate({ ...testingTemplate, headerImageUrl: uploadData.url });
+        } else {
+          toast.error("Failed to save image config.");
+        }
+      } else {
+        toast.error(uploadData.error || "Upload failed");
+      }
+    } catch (err: any) {
+      toast.error("Error uploading image");
+    } finally {
+      setUploadingImage(false);
+    }
+  };
 
   const handleSendTestTemplate = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -214,6 +257,40 @@ export default function TemplatesClient({ initialTemplates }: { initialTemplates
                 <div className="p-3 bg-orange-500/10 border border-orange-500/20 rounded-xl text-xs text-orange-300">
                   Selected Template: <strong className="text-white font-mono">{testingTemplate.name}</strong> ({testingTemplate.language})
                 </div>
+
+                {testingTemplate?.components?.some((c: any) => c.type === 'HEADER' && c.format === 'IMAGE') && (
+                  <div className="p-4 bg-[#202433] border border-[#2a2d3e] rounded-xl space-y-3">
+                    <div className="flex items-center justify-between">
+                      <label className="block text-xs font-bold text-gray-300">
+                        Default Header Image
+                      </label>
+                      {testingTemplate.headerImageUrl && (
+                        <span className="text-[10px] text-emerald-400 bg-emerald-400/10 px-2 py-0.5 rounded border border-emerald-400/20">Configured</span>
+                      )}
+                    </div>
+                    
+                    {testingTemplate.headerImageUrl ? (
+                      <div className="relative group rounded-lg overflow-hidden border border-[#2a2d3e] bg-[#0f1117] flex items-center justify-center h-32">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img src={testingTemplate.headerImageUrl} alt="Header" className="max-h-full max-w-full object-contain" />
+                        <div className="absolute bottom-2 right-2 flex flex-col items-center justify-center">
+                          <label className="cursor-pointer bg-white/90 backdrop-blur text-black text-xs font-bold px-3 py-1.5 rounded shadow-lg hover:bg-white transition-all">
+                            {uploadingImage ? "Uploading..." : "Change Image"}
+                            <input type="file" accept="image/jpeg, image/png, image/webp" className="hidden" onChange={handleImageUpload} disabled={uploadingImage} />
+                          </label>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="border border-dashed border-[#2a2d3e] rounded-lg p-4 text-center">
+                        <label className="cursor-pointer inline-flex items-center gap-1.5 px-3 py-1.5 bg-orange-500 text-white text-xs font-bold rounded shadow hover:bg-orange-600 transition-colors">
+                          {uploadingImage ? "Uploading..." : "Upload Image"}
+                          <input type="file" accept="image/jpeg, image/png, image/webp" className="hidden" onChange={handleImageUpload} disabled={uploadingImage} />
+                        </label>
+                        <p className="text-[10px] text-gray-500 mt-2">This image will be used when sending this template.</p>
+                      </div>
+                    )}
+                  </div>
+                )}
 
                 <div>
                   <label className="block text-xs font-bold text-gray-300 mb-1.5">

@@ -87,6 +87,7 @@ model WhatsAppTemplate {
   category         String   @default("MARKETING")
   language         String   @default("en")
   status           String   // "APPROVED", "PAUSED", "REJECTED", "PENDING"
+  headerImageUrl   String?
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
   

@@ -1,4 +1,6 @@
 import { NextResponse } from 'next/server';
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
 import { PutObjectCommand } from '@aws-sdk/client-s3';
 import { s3Client } from '@/lib/s3';
 import { v4 as uuidv4 } from 'uuid';
@@ -10,8 +12,22 @@ const bucketName = process.env.R2_BUCKET_NAME || '';
 
 export async function POST(request: Request) {
   console.log(`[API] POST /api/client/v1/upload/direct called`);
-  const authRes = await authenticateClient(request);
-  if ('error' in authRes) return authRes.error;
+  let isAuthenticated = false;
+  
+  const session = await getServerSession(authOptions);
+  
+  if (session?.user?.email) {
+    isAuthenticated = true;
+  } else {
+    const authRes = await authenticateClient(request);
+    if (!('error' in authRes)) {
+      isAuthenticated = true;
+    }
+  }
+
+  if (!isAuthenticated) {
+    return jsonResponse({ error: "Unauthorized" }, { status: 401 });
+  }
 
   try {
     const formData = await request.formData();

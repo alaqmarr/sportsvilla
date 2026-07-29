@@ -51,7 +51,7 @@ const DoubleTick = ({ className = "" }: { className?: string }) => (
 );
 
 // WhatsApp-style message status ticks
-const MessageTicks = ({ status }: { status: string }) => {
+const MessageTicks = ({ status, errorMessage }: { status: string; errorMessage?: string }) => {
   switch (status?.toUpperCase()) {
     case "READ":
       return <DoubleTick className="text-[#53bdeb]" />;
@@ -61,9 +61,16 @@ const MessageTicks = ({ status }: { status: string }) => {
       return <SingleTick className="text-gray-400" />;
     case "FAILED":
       return (
-        <svg viewBox="0 0 16 15" width="14" height="14" className="text-red-400">
-          <path d="M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1zm0 12.5a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5zM8.75 10a.75.75 0 0 1-1.5 0V5a.75.75 0 0 1 1.5 0v5z" fill="currentColor" />
-        </svg>
+        <div className="relative group flex items-center justify-center cursor-help">
+          <svg viewBox="0 0 16 15" width="14" height="14" className="text-red-400">
+            <path d="M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1zm0 12.5a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5zM8.75 10a.75.75 0 0 1-1.5 0V5a.75.75 0 0 1 1.5 0v5z" fill="currentColor" />
+          </svg>
+          {errorMessage && (
+            <div className="absolute bottom-full right-0 mb-2 hidden group-hover:block w-56 p-2 text-xs bg-red-600 text-white rounded shadow-lg z-50 break-words font-medium">
+              {errorMessage}
+            </div>
+          )}
+        </div>
       );
     case "PENDING":
       return (
@@ -95,6 +102,7 @@ export default function WhatsAppClient({ initialConversations, initialMessages =
   const [webhookLogs, setWebhookLogs] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [showDebugModal, setShowDebugModal] = useState(false);
+  const [templates, setTemplates] = useState<any[]>([]);
 
   // CRM Chat state
   const [selectedPhone, setSelectedPhone] = useState<string | null>(
@@ -116,6 +124,7 @@ export default function WhatsAppClient({ initialConversations, initialMessages =
 
   // Auto-scroll ref for WhatsApp chat bottom
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const chatInputRef = useRef<HTMLTextAreaElement>(null);
 
   const fetchLogs = async () => {
     try {
@@ -196,6 +205,59 @@ export default function WhatsAppClient({ initialConversations, initialMessages =
   // WhatsApp Rich Text Helper (*bold*, _italics_, ~strikethrough~, URLs)
   const renderWhatsAppRichText = (text: string) => {
     if (!text) return null;
+
+    try {
+      if (text.startsWith('{') && text.includes('"name":')) {
+        const rawObj = JSON.parse(text);
+        const templateReq = rawObj.template || rawObj;
+        if (templateReq.name && templateReq.language) {
+          const matchedTemplate = templates.find(t => t.name === templateReq.name);
+          
+          if (!matchedTemplate) {
+            return (
+              <div className="flex flex-col gap-1 border-l-2 border-emerald-500 pl-2 opacity-90">
+                <span className="text-[10px] font-bold text-emerald-400 uppercase tracking-wider">Template Sent</span>
+                <span className="font-mono text-xs bg-black/20 p-2 rounded truncate max-w-[200px]">{templateReq.name}</span>
+              </div>
+            );
+          }
+
+          // Build the template body by injecting parameters
+          const bodyComp = matchedTemplate.components.find((c: any) => c.type === 'BODY');
+          let bodyText = bodyComp ? bodyComp.text : `Template: ${templateReq.name}`;
+          
+          const reqBodyComp = templateReq.components?.find((c: any) => c.type === 'body');
+          if (reqBodyComp && reqBodyComp.parameters) {
+            reqBodyComp.parameters.forEach((param: any, idx: number) => {
+              if (param.text) {
+                bodyText = bodyText.replace(`{{${idx + 1}}}`, `*${param.text}*`);
+              }
+            });
+          }
+
+          return (
+            <div className="flex flex-col gap-2 border-l-2 border-emerald-500 pl-3 opacity-90 mb-1">
+              <span className="text-[10px] font-bold text-emerald-400 uppercase tracking-wider">
+                Template Sent: {templateReq.name}
+              </span>
+              <div className="text-sm font-sans space-y-0.5">
+                {bodyText.split("\n").map((line: string, lIdx: number) => {
+                  let html = line
+                    .replace(/&/g, "&amp;")
+                    .replace(/</g, "&lt;")
+                    .replace(/>/g, "&gt;")
+                    .replace(/\*(.*?)\*/g, '<strong class="font-bold text-white">$1</strong>')
+                    .replace(/_(.*?)_/g, '<em class="italic text-gray-200">$1</em>')
+                    .replace(/~(.*?)~/g, '<del class="line-through text-gray-400">$1</del>');
+                  return <div key={lIdx} dangerouslySetInnerHTML={{ __html: html || "&nbsp;" }} className="min-h-[1em]" />;
+                })}
+              </div>
+            </div>
+          );
+        }
+      }
+    } catch(e) {}
+
     return text.split("\n").map((line, lIdx) => {
       let html = line
         .replace(/&/g, "&amp;")
@@ -245,6 +307,17 @@ export default function WhatsAppClient({ initialConversations, initialMessages =
     if (!initialConversations || initialConversations.length === 0) {
       fetchConversations();
     }
+    
+    // Fetch templates in the background for rendering
+    fetch("/api/client/v1/whatsapp/templates")
+      .then(res => res.json())
+      .then(data => {
+        if (data.success && data.templates) {
+          setTemplates(data.templates);
+        }
+      })
+      .catch(err => console.error("Error fetching templates", err));
+
     const interval = setInterval(fetchConversations, 5000);
     return () => clearInterval(interval);
   }, [initialConversations]);
@@ -307,10 +380,12 @@ export default function WhatsAppClient({ initialConversations, initialMessages =
       setChatInput(textToSend);
     } finally {
       setSendingChat(false);
+      setTimeout(() => chatInputRef.current?.focus(), 10);
     }
   };
 
-  const filteredConversations = conversations.filter((c) =>
+  const uniqueConversations = Array.from(new Map(conversations.map(c => [c.phoneNumber, c])).values());
+  const filteredConversations = uniqueConversations.filter((c: any) =>
     c.phoneNumber.includes(searchQuery.replace(/\D/g, "")) ||
     (c.lastMessage && c.lastMessage.toLowerCase().includes(searchQuery.toLowerCase()))
   );
@@ -375,20 +450,22 @@ export default function WhatsAppClient({ initialConversations, initialMessages =
             </div>
           </div>
 
-          <div className="overflow-y-auto flex-1 divide-y divide-[#222d34]">
+          <div className="overflow-y-auto flex-1">
             {filteredConversations.length === 0 ? (
               <div className="p-6 text-center text-gray-500 text-xs">
                 No matching WhatsApp conversations found.
               </div>
             ) : (
-              filteredConversations.map((conv: any, idx: number) => {
-                const isSelected = selectedPhone === conv.phoneNumber;
+              filteredConversations.map((conv: any) => {
+                const isSelected = String(selectedPhone) === String(conv.phoneNumber);
                 return (
                   <button
-                    key={idx}
+                    key={conv.phoneNumber}
                     onClick={() => setSelectedPhone(conv.phoneNumber)}
-                    className={`w-full text-left p-3.5 hover:bg-[#202c33] transition-all flex flex-col gap-1 ${
-                      isSelected ? "bg-[#2a3942] border-l-4 border-[#00a884]" : ""
+                    className={`w-full text-left p-3.5 transition-all flex flex-col gap-1 border-b border-b-[#222d34] border-l-4 ${
+                      isSelected 
+                        ? "bg-[#00a884]/20 border-l-[#00a884]" 
+                        : "border-l-transparent hover:bg-[#202c33]"
                     }`}
                   >
                     <div className="flex items-center justify-between gap-2">
@@ -474,10 +551,10 @@ export default function WhatsAppClient({ initialConversations, initialMessages =
                         ? `${conversations.find((c) => c.phoneNumber === selectedPhone)?.memberName} (${selectedPhone})` 
                         : `+91 ${selectedPhone}`}
                     </h3>
-                    <p className="text-[11px] text-gray-300 truncate">
+                    <p className="text-[11px] text-gray-300 truncate font-medium mt-0.5">
                       {conversations.find((c) => c.phoneNumber === selectedPhone)?.is24HourWindowOpen
-                        ? "🟢 Online • 24h Free Reply Window Open"
-                        : "🔴 Window Expired • Send template to start session"}
+                        ? "🟢 Active (24h Window Open)"
+                        : "🔴 Inactive (24h Window Closed)"}
                     </p>
                   </div>
                 </div>
@@ -557,7 +634,7 @@ export default function WhatsAppClient({ initialConversations, initialMessages =
                                   minute: "2-digit",
                                 })}
                               </span>
-                              {isOutgoing && <MessageTicks status={msg.status} />}
+                              {isOutgoing && <MessageTicks status={msg.status} errorMessage={msg.errorMessage} />}
                             </div>
                           </div>
 
@@ -627,34 +704,60 @@ export default function WhatsAppClient({ initialConversations, initialMessages =
                   </div>
                 )}
                 
-                <form
-                  onSubmit={handleSendChatMessage}
-                  className="p-3 flex items-center gap-2"
-                >
-                  <button
-                    type="button"
-                    onClick={() => setShowQuickReplies(!showQuickReplies)}
-                    className="text-gray-400 hover:text-white p-2 shrink-0 transition-colors"
-                    title="Quick Replies"
-                  >
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
-                  </button>
-                  <input
-                    type="text"
-                    value={chatInput}
-                    onChange={(e) => setChatInput(e.target.value)}
-                    placeholder={replyingTo ? "Type your reply..." : "Type a WhatsApp message..."}
-                    disabled={sendingChat}
-                    className="flex-1 bg-[#2a3942] border border-transparent rounded-xl px-4 py-2 text-white font-sans text-sm focus:border-[#00a884] outline-none transition-all placeholder-gray-400"
-                  />
-                  <button
-                    type="submit"
-                    disabled={sendingChat || !chatInput.trim()}
-                    className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#00a884] hover:bg-[#008f6f] disabled:opacity-50 text-white font-bold text-xs shadow transition-all shrink-0"
-                  >
-                    <FiSend /> {sendingChat ? "..." : "Send"}
-                  </button>
-                </form>
+                {(() => {
+                  const is24hOpen = conversations.find((c) => c.phoneNumber === selectedPhone)?.is24HourWindowOpen;
+                  if (!is24hOpen) {
+                    return (
+                      <div className="p-4 text-center bg-[#202c33]">
+                        <p className="text-xs text-rose-400 font-bold mb-1">24h Window is Closed</p>
+                        <p className="text-[11px] text-gray-400">You cannot send normal messages right now. Please use the <Link href="/whatsapp-admin/templates" className="text-emerald-400 underline">Templates Tester</Link> tab to send an approved template and restart the conversation.</p>
+                      </div>
+                    );
+                  }
+                  
+                  return (
+                    <form
+                      onSubmit={handleSendChatMessage}
+                      className="p-3 flex flex-row items-end gap-2 bg-[#202c33]"
+                    >
+                      <button
+                        type="button"
+                        onClick={() => setShowQuickReplies(!showQuickReplies)}
+                        className="text-gray-400 hover:text-white p-2 shrink-0 transition-colors mb-1"
+                        title="Quick Replies"
+                      >
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
+                      </button>
+                      <textarea
+                        ref={chatInputRef}
+                        value={chatInput}
+                        onChange={(e) => {
+                          setChatInput(e.target.value);
+                          e.target.style.height = 'auto';
+                          e.target.style.height = (e.target.scrollHeight) + 'px';
+                        }}
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter' && !e.shiftKey) {
+                            e.preventDefault();
+                            if (chatInput.trim() && !sendingChat) {
+                              handleSendChatMessage(e as any);
+                            }
+                          }
+                        }}
+                        placeholder={replyingTo ? "Type your reply..." : "Type a WhatsApp message..."}
+                        rows={1}
+                        className="flex-1 bg-[#2a3942] border border-transparent rounded-xl px-4 py-2.5 text-white font-sans text-sm focus:border-[#00a884] outline-none transition-all placeholder-gray-400 resize-none min-h-[42px] max-h-32 styled-scrollbar"
+                      />
+                      <button
+                        type="submit"
+                        disabled={sendingChat || !chatInput.trim()}
+                        className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-[#00a884] hover:bg-[#008f6f] disabled:opacity-50 text-white font-bold text-xs shadow transition-all shrink-0 mb-1"
+                      >
+                        <FiSend /> {sendingChat ? "..." : "Send"}
+                      </button>
+                    </form>
+                  );
+                })()}
               </div>
             </>
           ) : (

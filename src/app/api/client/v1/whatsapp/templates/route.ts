@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { jsonResponse } from '@/lib/api-logger';
+import { whatsappDb } from '@/lib/whatsappDb';
 
 export const dynamic = 'force-dynamic';
 
@@ -36,9 +37,20 @@ export async function GET() {
       }, { status: 200 });
     }
 
+    const metaTemplates = data.data || [];
+    
+    // Fetch local configs
+    const localConfigs = await whatsappDb.whatsAppTemplate.findMany();
+    const configMap = new Map(localConfigs.map(c => [c.name, c]));
+
+    const mergedTemplates = metaTemplates.map((t: any) => ({
+      ...t,
+      headerImageUrl: configMap.get(t.name)?.headerImageUrl || null
+    }));
+
     return jsonResponse({
       success: true,
-      templates: data.data || []
+      templates: mergedTemplates
     });
   } catch (err: any) {
     console.error("[TEMPLATES API ERROR]", err);

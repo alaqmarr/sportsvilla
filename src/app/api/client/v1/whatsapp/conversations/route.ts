@@ -16,12 +16,13 @@ export async function GET() {
 
     for (const msg of allMessages) {
       if (!msg.phoneNumber) continue;
-      const existing = conversationMap.get(msg.phoneNumber);
+      const normalizedPhone = msg.phoneNumber.replace(/^\+/, '');
+      const existing = conversationMap.get(normalizedPhone);
 
       // Track last message for the conversation
       if (!existing) {
-        conversationMap.set(msg.phoneNumber, {
-          phoneNumber: msg.phoneNumber,
+        conversationMap.set(normalizedPhone, {
+          phoneNumber: normalizedPhone,
           lastMessage: msg.content,
           lastDirection: msg.direction,
           lastStatus: msg.status,
