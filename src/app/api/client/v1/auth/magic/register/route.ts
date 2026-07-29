@@ -4,6 +4,7 @@ import { whatsappDb } from '@/lib/whatsappDb';
 import jwt from 'jsonwebtoken';
 import { jsonResponse } from '@/lib/api-logger';
 import { sendWhatsAppMemberRegisteredTemplate } from '@/lib/whatsapp';
+import { generateMemberId } from '@/lib/memberUtils';
 const JWT_SECRET = process.env.NEXTAUTH_SECRET;
 
 export async function POST(request: Request) {
@@ -50,8 +51,10 @@ export async function POST(request: Request) {
       return jsonResponse({ error: "User already exists" }, { status: 400 });
     }
 
+    const newMemberId = await generateMemberId(prismaMobile);
     member = await prisma.member.create({
       data: {
+        id: newMemberId,
         mobile: prismaMobile,
         name: name,
         email: email || null,

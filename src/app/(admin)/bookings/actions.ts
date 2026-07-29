@@ -297,35 +297,13 @@ export async function fetchAllBookingsByDate(date: string) {
 }
 
 export async function cancelBooking(id: string) {
-  const booking = await prisma.booking.findUnique({ where: { id } });
+  const booking = await prisma.booking.findUnique({
+    where: { id },
+    include: { member: true, turf: true }
+  });
   if (!booking) throw new Error("Booking not found");
 
   if (booking.status !== "CANCELLED") {
-    const queries: any[] = [
-      prisma.booking.update({
-        where: { id },
-        data: { status: "CANCELLED" }
-      })
-    ];
-
-    if (booking.pointsRedeemed > 0) {
-      queries.push(
-        prisma.member.update({
-          where: { id: booking.memberId },
-          data: { loyaltyPoints: { increment: booking.pointsRedeemed } }
-        }),
-        prisma.loyaltyHistory.create({
-          data: {
-            memberId: booking.memberId,
-            points: booking.pointsRedeemed,
-            type: "EARNED",
-            source: "MANUAL",
-            description: "Refund for cancelled booking"
-          }
-        })
-      );
-    }
-    
     const session = await getServerSession(authOptions);
     let adminId = undefined;
     let adminName = "System";
@@ -336,21 +314,114 @@ export async function cancelBooking(id: string) {
         adminName = admin.name || admin.email;
       }
     }
-    
-    queries.push(
-      prisma.auditLog.create({
+
+    // Find original payer from wallet transaction
+    const walletDebit = await prisma.walletTransaction.findFirst({
+      where: { description: `Payment for booking ${booking.id}`, type: 'DEBIT' }
+    });
+    const originalPayerId = walletDebit?.memberId || booking.memberId;
+    const refundAmountPaise = booking.advancePaid ? booking.advancePaid * 100 : 0;
+
+    // Find loyalty points to reverse
+    const loyaltyToReverse = await prisma.loyaltyHistory.findFirst({
+      where: { source: 'BOOKING', description: { contains: booking.id }, type: 'EARNED' }
+    });
+    const pointsToReverse = loyaltyToReverse?.points || 0;
+    const pointsEarnerId = loyaltyToReverse?.memberId;
+
+    await prisma.$transaction(async (tx) => {
+      await tx.booking.update({ where: { id }, data: { status: "CANCELLED" } });
+
+      // Refund wallet if advance was paid
+      if (refundAmountPaise > 0) {
+        await tx.member.update({
+          where: { id: originalPayerId },
+          data: { walletBalance: { increment: refundAmountPaise } }
+        });
+        await tx.walletTransaction.create({
+          data: {
+            memberId: originalPayerId,
+            amount: refundAmountPaise,
+            type: 'CREDIT',
+            description: `Refund for cancelled booking ${booking.id}`
+          }
+        });
+      }
+
+      // Restore redeemed loyalty points
+      if (booking.pointsRedeemed > 0) {
+        await tx.member.update({
+          where: { id: booking.memberId },
+          data: { loyaltyPoints: { increment: booking.pointsRedeemed } }
+        });
+        await tx.loyaltyHistory.create({
+          data: {
+            memberId: booking.memberId,
+            points: booking.pointsRedeemed,
+            type: "EARNED",
+            source: "MANUAL",
+            description: "Refund for cancelled booking"
+          }
+        });
+      }
+
+      // Reverse earned loyalty points
+      if (pointsToReverse > 0 && pointsEarnerId) {
+        await tx.member.update({
+          where: { id: pointsEarnerId },
+          data: { loyaltyPoints: { decrement: pointsToReverse } }
+        });
+        await tx.loyaltyHistory.create({
+          data: {
+            memberId: pointsEarnerId,
+            points: pointsToReverse,
+            type: 'REDEEMED',
+            source: 'MANUAL',
+            description: `Reversed for cancelled booking ${booking.id}`
+          }
+        });
+      }
+
+      // Free coupon usage slots
+      await tx.couponUsage.deleteMany({ where: { bookingId: booking.id } });
+
+      // Decrement user sport stat
+      await tx.userSportStat.updateMany({
+        where: { memberId: booking.memberId, sportId: booking.sportId, bookingCount: { gt: 0 } },
+        data: { bookingCount: { decrement: 1 } }
+      });
+
+      await tx.auditLog.create({
         data: {
           action: "CANCEL_BOOKING",
           entity: "Booking",
           entityId: id,
-          details: JSON.stringify({ previousStatus: booking.status }),
+          details: JSON.stringify({ previousStatus: booking.status, refundAmountPaise }),
           adminId,
           adminName
         }
-      })
-    );
+      });
+    });
 
-    await prisma.$transaction(queries);
+    // Send WhatsApp notification (non-critical)
+    if (booking.member?.mobile) {
+      try {
+        const { sendWhatsAppBookingCancelledTemplate } = require("@/lib/whatsapp");
+        const formattedTime = new Date(booking.startTime).toLocaleTimeString('en-IN', {
+          hour: 'numeric', minute: '2-digit', hour12: true, timeZone: 'Asia/Kolkata',
+          day: 'numeric', month: 'short'
+        });
+        sendWhatsAppBookingCancelledTemplate(
+          booking.member.name,
+          booking.turf?.name || "Sportsvilla",
+          formattedTime,
+          refundAmountPaise / 100,
+          booking.member.mobile
+        ).catch(console.error);
+      } catch (waErr) {
+        console.error("Failed to send admin cancel WhatsApp template:", waErr);
+      }
+    }
   }
   
   await bumpSyncTimestamp('admin_booking');
@@ -362,8 +433,11 @@ export async function rescheduleBooking(id: string, newTurfId: string, newStartT
   if (!booking) throw new Error("Booking not found");
   if (booking.status === "CANCELLED") throw new Error("Cannot reschedule a cancelled booking");
 
-  // Check for conflicts
-  const conflict = await prisma.booking.findFirst({
+  const newTurf = await prisma.turf.findUnique({ where: { id: newTurfId } });
+  if (!newTurf) throw new Error("Turf not found");
+
+  // Check capacity at the new slot (not just a single conflict)
+  const overlappingBookings = await prisma.booking.findMany({
     where: {
       id: { not: id },
       turfId: newTurfId,
@@ -373,8 +447,9 @@ export async function rescheduleBooking(id: string, newTurfId: string, newStartT
     }
   });
 
-  if (conflict) {
-    throw new Error("The selected slot is already booked.");
+  const usedCapacity = overlappingBookings.reduce((sum, b) => sum + b.participantCount, 0);
+  if (booking.participantCount > (newTurf.capacityPerSlot - usedCapacity)) {
+    throw new Error("The selected slot does not have enough capacity.");
   }
 
   await prisma.booking.update({
@@ -533,38 +608,50 @@ export async function confirmExtension(bookingId: string, allocations: any[]) {
   });
   if (!booking) throw new Error("Booking not found");
 
-  for (const alloc of allocations) {
-    if (alloc.isSameCourt && alloc.startTime === booking.endTime.toISOString()) {
-      // Update original booking
-      await prisma.booking.update({
-        where: { id: bookingId },
-        data: { 
-          endTime: new Date(alloc.endTime),
-          price: booking.price + alloc.price
-        }
-      });
-    } else {
-      // Create new booking
-      await prisma.booking.create({
-        data: {
+  await prisma.$transaction(async (tx) => {
+    for (const alloc of allocations) {
+      // Re-check availability inside transaction
+      const conflict = await tx.booking.findFirst({
+        where: {
           turfId: alloc.turfId,
-          memberId: booking.memberId,
-          sportId: booking.sportId,
-          startTime: new Date(alloc.startTime),
-          endTime: new Date(alloc.endTime),
-          price: alloc.price,
-          paymentStatus: "UNPAID",
-          status: "CONFIRMED",
-          participantCount: booking.participantCount,
-          tickets: {
-            create: Array.from({ length: booking.participantCount }).map(() => ({
-              qrCode: `TKT-${Math.random().toString(36).substring(2, 10).toUpperCase()}-SYKM`
-            }))
-          }
+          status: { not: "CANCELLED" },
+          startTime: { lt: new Date(alloc.endTime) },
+          endTime: { gt: new Date(alloc.startTime) },
+          id: { not: bookingId }
         }
       });
+      if (conflict) throw new Error(`Slot no longer available for ${alloc.turfName}`);
+
+      if (alloc.isSameCourt && alloc.startTime === booking.endTime.toISOString()) {
+        await tx.booking.update({
+          where: { id: bookingId },
+          data: { 
+            endTime: new Date(alloc.endTime),
+            price: booking.price + alloc.price
+          }
+        });
+      } else {
+        await tx.booking.create({
+          data: {
+            turfId: alloc.turfId,
+            memberId: booking.memberId,
+            sportId: booking.sportId,
+            startTime: new Date(alloc.startTime),
+            endTime: new Date(alloc.endTime),
+            price: alloc.price,
+            paymentStatus: "UNPAID",
+            status: "CONFIRMED",
+            participantCount: booking.participantCount,
+            tickets: {
+              create: Array.from({ length: booking.participantCount }).map(() => ({
+                qrCode: `TKT-${Math.random().toString(36).substring(2, 10).toUpperCase()}-SYKM`
+              }))
+            }
+          }
+        });
+      }
     }
-  }
+  });
 
   await bumpSyncTimestamp('admin_booking');
   revalidatePath("/", "layout");
@@ -578,26 +665,25 @@ export async function addPayment(bookingId: string, amount: number, method: "CAS
   });
   if (!booking) throw new Error("Booking not found");
 
-  await prisma.payment.create({
-    data: {
-      bookingId,
-      amount,
-      method
+  await prisma.$transaction(async (tx) => {
+    await tx.payment.create({
+      data: { bookingId, amount, method }
+    });
+
+    const totalPaid = booking.payments.reduce((sum, p) => sum + p.amount, 0) + amount;
+    const netPrice = booking.price - booking.discountAmount;
+    
+    let newStatus = "UNPAID";
+    if (totalPaid >= netPrice) {
+      newStatus = "PAID";
+    } else if (totalPaid > 0) {
+      newStatus = "PARTIAL";
     }
-  });
 
-  const totalPaid = booking.payments.reduce((sum, p) => sum + p.amount, 0) + amount;
-  
-  let newStatus = "UNPAID";
-  if (totalPaid >= booking.price) {
-    newStatus = "PAID";
-  } else if (totalPaid > 0) {
-    newStatus = "PARTIAL";
-  }
-
-  await prisma.booking.update({
-    where: { id: bookingId },
-    data: { paymentStatus: newStatus }
+    await tx.booking.update({
+      where: { id: bookingId },
+      data: { paymentStatus: newStatus }
+    });
   });
 
   await bumpSyncTimestamp('admin_booking');

@@ -2,12 +2,16 @@ import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { authenticateClient } from '@/lib/auth-middleware';
 import { jsonResponse } from '@/lib/api-logger';
+import { checkRateLimit } from '@/lib/rate-limit';
 
 export async function POST(request: Request) {
-  console.log(`[API] POST /api/client/v1/coupons/validate called`);
   const authRes = await authenticateClient(request);
   if ('error' in authRes) return authRes.error;
   const { member } = authRes;
+
+  if (!checkRateLimit(`coupon_validate_${member.id}`, 10, 60000)) {
+    return jsonResponse({ error: 'Too many coupon validation requests. Please wait a minute.' }, { status: 429 });
+  }
 
   try {
     const { code, bookingAmount } = await request.json();
@@ -56,7 +60,7 @@ export async function POST(request: Request) {
       }
     } else if (coupon.targetType === 'MILESTONE_ALL_TIME' || coupon.targetType === 'MILESTONE_FROM_CREATION') {
       const userBookings = await prisma.booking.count({
-        where: { memberId: member.id, status: 'COMPLETED' }
+        where: { memberId: member.id, status: { in: ['CONFIRMED', 'COMPLETED'] } }
       });
       if (userBookings < (coupon.milestoneBookingsCount || 0)) {
         return jsonResponse({ error: `Requires ${coupon.milestoneBookingsCount} completed bookings to unlock.` }, { status: 403 });

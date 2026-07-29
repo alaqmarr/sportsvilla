@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { logger } from '@/lib/logger';
-import { jsonResponse } from '@/lib/api-logger';
+import { jsonResponse, apiLog } from '@/lib/api-logger';
 import { randomInt } from 'crypto';
 import { sendWhatsAppOtp } from '@/lib/whatsapp';
 
@@ -9,7 +9,7 @@ const INFOBIP_API_KEY = process.env.INFOBIP_API_KEY || '';
 const INFOBIP_BASE_URL = process.env.INFOBIP_BASE_URL || '';
 
 export async function POST(request: Request) {
-  console.log(`[API] POST /api/client/v1/auth/otp/send called`);
+  apiLog(`[API] POST /api/client/v1/auth/otp/send called`);
   try {
     const { mobile } = await request.json();
     

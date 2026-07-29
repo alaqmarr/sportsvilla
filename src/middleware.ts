@@ -57,7 +57,7 @@ export async function middleware(req: any) {
   // Check token for all admin and protected routes
   const token = await getToken({ 
     req, 
-    secret: process.env.NEXTAUTH_SECRET || "fallback_secret_for_development",
+    secret: process.env.NEXTAUTH_SECRET,
   });
 
   if (!token) {

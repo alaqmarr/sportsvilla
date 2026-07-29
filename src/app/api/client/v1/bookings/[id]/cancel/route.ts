@@ -1,12 +1,12 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { authenticateClient } from '@/lib/auth-middleware';
-import { jsonResponse } from '@/lib/api-logger';
+import { jsonResponse, apiLog } from '@/lib/api-logger';
 import { bumpSyncTimestamp } from '@/lib/sync';
 import { sendWhatsAppBookingCancelledTemplate } from "@/lib/whatsapp";
 
 export async function POST(request: Request, context: { params: Promise<{ id: string }> }) {
-  console.log(`[API] POST /api/client/v1/bookings/[id]/cancel called`);
+  apiLog(`[API] POST /api/client/v1/bookings/[id]/cancel called`);
   const authRes = await authenticateClient(request);
   if ('error' in authRes) return authRes.error;
   
@@ -16,7 +16,7 @@ export async function POST(request: Request, context: { params: Promise<{ id: st
   try {
     const booking = await prisma.booking.findUnique({
       where: { id: params.id },
-      include: { payments: true }
+      include: { payments: true, member: true, turf: true }
     });
 
     if (!booking) {

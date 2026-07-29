@@ -2,10 +2,10 @@ import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { logger } from '@/lib/logger';
 import jwt from 'jsonwebtoken';
-import { jsonResponse } from '@/lib/api-logger';
+import { jsonResponse, apiLog } from '@/lib/api-logger';
 
 export async function POST(request: Request) {
-  console.log(`[API] POST /api/client/v1/tournaments/register called`);
+  apiLog(`[API] POST /api/client/v1/tournaments/register called`);
   try {
     const authHeader = request.headers.get('Authorization');
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
@@ -13,7 +13,7 @@ export async function POST(request: Request) {
     }
 
     const token = authHeader.split(' ')[1];
-    const decoded = jwt.verify(token, process.env.NEXTAUTH_SECRET || 'fallback_secret_for_dev') as any;
+    const decoded = jwt.verify(token, process.env.NEXTAUTH_SECRET!) as any;
     
     if (!decoded.memberId) {
       return jsonResponse({ error: "Invalid token" }, { status: 401 });
@@ -45,6 +45,17 @@ export async function POST(request: Request) {
       // Re-fetch tournament to ensure latest maxTeams data
       const currentTournament = await tx.tournament.findUnique({ where: { id: tournamentId } });
       if (!currentTournament) throw new Error("Tournament not found");
+
+      const existingMemberReg = await tx.tournamentRegistration.findFirst({
+        where: {
+          tournamentId,
+          registeredById: memberId,
+          status: { not: 'REJECTED' }
+        }
+      });
+      if (existingMemberReg) {
+        throw new Error("You have already registered a team for this tournament.");
+      }
 
       if (paymentUtr && paymentUtr !== 'MANUAL_CASH') {
         const existing = await tx.tournamentRegistration.findFirst({

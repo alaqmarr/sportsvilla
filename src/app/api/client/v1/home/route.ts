@@ -2,11 +2,11 @@ import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { authenticateClient } from '@/lib/auth-middleware';
 import { logger } from '@/lib/logger';
-import { jsonResponse } from '@/lib/api-logger';
+import { jsonResponse, apiLog } from '@/lib/api-logger';
 import { formatIST } from '@/lib/dateUtils';
 
 export async function GET(request: Request) {
-  console.log(`[API] GET /api/client/v1/home called`);
+  apiLog(`[API] GET /api/client/v1/home called`);
   const authRes = await authenticateClient(request);
   if ('error' in authRes) return authRes.error;
   
@@ -28,28 +28,65 @@ export async function GET(request: Request) {
       targetMemberId = primaryMember.id;
     }
 
-    // 3. Fetch upcoming/ongoing bookings for the selected member
+    // 3. Fetch independent home screen data concurrently
     const thirtyDaysAgo = new Date();
     thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+    const sixtyDaysAgo = new Date();
+    sixtyDaysAgo.setDate(sixtyDaysAgo.getDate() - 60);
 
-    const candidateBookings = await prisma.booking.findMany({
-      where: {
-        memberId: targetMemberId,
-        startTime: { gt: thirtyDaysAgo },
-        status: 'CONFIRMED'
-      },
-      include: {
-        turf: {
-          select: { name: true, location: true, bookingValidityDays: true }
+    const [
+      candidateBookings,
+      memberMemberships,
+      attendances,
+      registrations,
+      topSportStat,
+      globalSettings
+    ] = await Promise.all([
+      prisma.booking.findMany({
+        where: {
+          memberId: targetMemberId,
+          startTime: { gt: thirtyDaysAgo },
+          status: 'CONFIRMED'
         },
-        sport: {
-          select: { name: true }
+        include: {
+          turf: { select: { name: true, location: true, bookingValidityDays: true } },
+          sport: { select: { name: true } },
+          tickets: true
         },
-        tickets: true
-      },
-      orderBy: { startTime: 'asc' },
-      take: 50
-    });
+        orderBy: { startTime: 'asc' },
+        take: 50
+      }),
+      prisma.memberMembership.findMany({
+        where: { memberId: targetMemberId },
+        include: {
+          membershipPlan: { include: { sport: { select: { name: true } } } },
+          turf: { select: { name: true } }
+        },
+        orderBy: { endDate: 'desc' },
+        take: 20
+      }),
+      prisma.attendance.findMany({
+        where: { memberId: targetMemberId, date: { gte: sixtyDaysAgo } },
+        include: { sport: { select: { name: true } } },
+        orderBy: { date: 'desc' },
+        take: 100
+      }),
+      prisma.tournamentRegistration.findMany({
+        where: {
+          registeredById: targetMemberId,
+          status: { not: 'REJECTED' },
+          tournament: { status: { in: ['UPCOMING', 'ONGOING'] } }
+        },
+        include: { tournament: { include: { sport: true } } },
+        orderBy: { tournament: { startDate: 'asc' } },
+        take: 20
+      }),
+      prisma.userSportStat.findFirst({
+        where: { memberId: targetMemberId, bookingCount: { gt: 0 } },
+        orderBy: { bookingCount: 'desc' }
+      }),
+      prisma.setting.findMany()
+    ]);
 
     const now = new Date();
     
@@ -60,30 +97,6 @@ export async function GET(request: Request) {
 
     // 4. (Optional) Fetch basic Wallet or Loyalty details for the target member
     const targetMemberData = familyMembers.find(m => m.id === targetMemberId);
-
-    // 5. Fetch Memberships
-    const memberMemberships = await prisma.memberMembership.findMany({
-      where: { memberId: targetMemberId },
-      include: {
-        membershipPlan: {
-          include: { sport: { select: { name: true } } }
-        },
-        turf: { select: { name: true } }
-      },
-      orderBy: { endDate: 'desc' },
-      take: 20
-    });
-
-    // Limit attendance to last 60 days for performance (avoid loading years of history)
-    const sixtyDaysAgo = new Date();
-    sixtyDaysAgo.setDate(sixtyDaysAgo.getDate() - 60);
-
-    const attendances = await prisma.attendance.findMany({
-      where: { memberId: targetMemberId, date: { gte: sixtyDaysAgo } },
-      include: { sport: { select: { name: true } } },
-      orderBy: { date: 'desc' },
-      take: 100
-    });
 
     const activeMemberships = memberMemberships
       .filter(m => m.status === 'ACTIVE' && new Date(m.endDate) > now)
@@ -165,24 +178,7 @@ export async function GET(request: Request) {
       };
     });
 
-    // 8. Fetch Registered Tournaments (Upcoming/Ongoing)
-    const registrations = await prisma.tournamentRegistration.findMany({
-      where: {
-        registeredById: targetMemberId,
-        status: { not: 'REJECTED' },
-        tournament: {
-          status: { in: ['UPCOMING', 'ONGOING'] }
-        }
-      },
-      include: {
-        tournament: {
-          include: { sport: true }
-        }
-      },
-      orderBy: { tournament: { startDate: 'asc' } },
-      take: 20
-    });
-    
+    // 8. Format Registered Tournaments (Upcoming/Ongoing)
     const registeredTournaments = registrations.map(r => ({
       ...r.tournament,
       registrationStatus: r.status,
@@ -191,37 +187,31 @@ export async function GET(request: Request) {
 
     const registeredTournamentIds = registeredTournaments.map(t => t.id);
 
-    // 9. Fetch Upcoming Tournaments (Not registered, not completed)
-    const upcomingTournaments = await prisma.tournament.findMany({
-      where: {
-        status: 'UPCOMING',
-        id: { notIn: registeredTournamentIds }
-      },
-      include: { sport: true, _count: { select: { registrations: true } } },
-      orderBy: { startDate: 'asc' },
-      take: 5
-    });
+    // 9. Fetch Upcoming Tournaments and Banners concurrently
+    const [upcomingTournaments, banners] = await Promise.all([
+      prisma.tournament.findMany({
+        where: {
+          status: 'UPCOMING',
+          id: { notIn: registeredTournamentIds }
+        },
+        include: { sport: true, _count: { select: { registrations: true } } },
+        orderBy: { startDate: 'asc' },
+        take: 5
+      }),
+      prisma.banner.findMany({
+        where: {
+          isActive: true,
+          OR: [
+            { targetSportId: null },
+            ...(topSportStat ? [{ targetSportId: topSportStat.sportId }] : [])
+          ]
+        },
+        orderBy: { createdAt: 'desc' },
+        take: 5
+      })
+    ]);
 
-    // 10. Fetch Banners based on user's top sport
-    const topSportStat = await prisma.userSportStat.findFirst({
-      where: { memberId: targetMemberId, bookingCount: { gt: 0 } },
-      orderBy: { bookingCount: 'desc' }
-    });
-
-    const banners = await prisma.banner.findMany({
-      where: {
-        isActive: true,
-        OR: [
-          { targetSportId: null },
-          ...(topSportStat ? [{ targetSportId: topSportStat.sportId }] : [])
-        ]
-      },
-      orderBy: { createdAt: 'desc' },
-      take: 5
-    });
-
-    // Get global settings
-    const globalSettings = await prisma.setting.findMany();
+    // Get global settings (already fetched in parallel above)
     const settingsMap = globalSettings.reduce((acc, s) => {
       acc[s.key] = s.value;
       return acc;

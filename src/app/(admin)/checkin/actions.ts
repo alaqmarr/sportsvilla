@@ -72,31 +72,33 @@ export async function confirmTicketCheckin(ticketIdOrQrCode: string, deskSportId
     return { error: "Ticket has expired." };
   }
 
-  // Process checkin
-  await prisma.ticket.update({
-    where: { id: ticket.id },
-    data: {
-      status: "CHECKED_IN",
-      usedAt: new Date()
-    }
-  });
-
+  // Process checkin inside a transaction
   const sport = await prisma.sport.findUnique({ where: { id: ticket.booking.sportId } });
-  if (sport && sport.rewardPointsPerCheckin > 0) {
-    await prisma.member.update({
-      where: { id: ticket.booking.memberId },
-      data: { loyaltyPoints: { increment: sport.rewardPointsPerCheckin } }
-    });
-    await prisma.loyaltyHistory.create({
+  await prisma.$transaction(async (tx) => {
+    await tx.ticket.update({
+      where: { id: ticket.id },
       data: {
-        memberId: ticket.booking.memberId,
-        points: sport.rewardPointsPerCheckin,
-        type: "EARNED",
-        source: "CHECKIN",
-        description: `Earned for checking into booking: ${sport.name}`
+        status: "CHECKED_IN",
+        usedAt: new Date()
       }
     });
-  }
+
+    if (sport && sport.rewardPointsPerCheckin > 0) {
+      await tx.member.update({
+        where: { id: ticket.booking.memberId },
+        data: { loyaltyPoints: { increment: sport.rewardPointsPerCheckin } }
+      });
+      await tx.loyaltyHistory.create({
+        data: {
+          memberId: ticket.booking.memberId,
+          points: sport.rewardPointsPerCheckin,
+          type: "EARNED",
+          source: "CHECKIN",
+          description: `Earned for checking into booking: ${sport.name}`
+        }
+      });
+    }
+  });
 
   revalidatePath("/", "layout");
 

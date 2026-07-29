@@ -4,7 +4,7 @@ import { logger } from '@/lib/logger';
 import { jsonResponse } from '@/lib/api-logger';
 
 export async function GET(request: Request) {
-  console.log(`[API] GET /api/client/v1/tournaments called`);
+  logger.debug(`[API] GET /api/client/v1/tournaments called`);
   try {
     const url = new URL(request.url);
     const status = url.searchParams.get('status') || 'UPCOMING';

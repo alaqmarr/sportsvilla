@@ -2,10 +2,10 @@ import { NextResponse } from 'next/server';
 import { authenticateClient } from '@/lib/auth-middleware';
 import { GoogleGenAI } from '@google/genai';
 import { prisma } from '@/lib/prisma';
-import { jsonResponse } from '@/lib/api-logger';
+import { jsonResponse, apiLog } from '@/lib/api-logger';
 
 export async function POST(request: Request) {
-  console.log(`[API] POST /api/client/v1/upload/validate-utr called`);
+  apiLog(`[API] POST /api/client/v1/upload/validate-utr called`);
   const authRes = await authenticateClient(request);
   if ('error' in authRes) return authRes.error;
 

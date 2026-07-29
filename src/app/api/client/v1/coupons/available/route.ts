@@ -1,10 +1,10 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { authenticateClient } from '@/lib/auth-middleware';
-import { jsonResponse } from '@/lib/api-logger';
+import { jsonResponse, apiLog } from '@/lib/api-logger';
 
 export async function GET(request: Request) {
-  console.log(`[API] GET /api/client/v1/coupons/available called`);
+  apiLog(`[API] GET /api/client/v1/coupons/available called`);
   const authRes = await authenticateClient(request);
   if ('error' in authRes) return authRes.error;
   const { member } = authRes;

@@ -1,17 +1,17 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { authenticateClient } from '@/lib/auth-middleware';
-import { jsonResponse } from '@/lib/api-logger';
+import { jsonResponse, apiLog } from '@/lib/api-logger';
 
 export async function GET(request: Request, context: { params: Promise<{ id: string }> }) {
-  console.log(`[API] GET /api/client/v1/bookings/[id] called`);
+  apiLog(`[API] GET /api/client/v1/bookings/[id] called`);
   const authRes = await authenticateClient(request);
   if ('error' in authRes) return authRes.error;
   
   const { member } = authRes;
   const params = await context.params;
 
-  console.log("[GET /bookings/[id]] Hit with id:", params.id, "from member:", member.id);
+  apiLog("[GET /bookings/[id]] Hit", { bookingId: params.id, memberId: member.id });
 
   try {
     const booking = await prisma.booking.findUnique({
@@ -24,11 +24,11 @@ export async function GET(request: Request, context: { params: Promise<{ id: str
     });
 
     if (!booking) {
-      console.log("[GET /bookings/[id]] Booking not found in DB for ID:", params.id);
+      apiLog("[GET /bookings/[id]] Booking not found in DB for ID:", params.id);
       return jsonResponse({ error: "Booking not found" }, { status: 404 });
     }
     
-    console.log("[GET /bookings/[id]] Found booking:", booking.id);
+    apiLog("[GET /bookings/[id]] Found booking:", booking.id);
 
     const allCheckedIn = booking.tickets && booking.tickets.length > 0 && booking.tickets.every((t: any) => t.usedAt);
     const anyCheckedIn = booking.tickets && booking.tickets.some((t: any) => t.usedAt);

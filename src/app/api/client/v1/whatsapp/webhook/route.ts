@@ -1,3 +1,4 @@
+import { apiLog } from '@/lib/api-logger';
 import { NextRequest, NextResponse } from "next/server";
 import { whatsappDb } from "@/lib/whatsappDb";
 import { sendWhatsAppMessage } from "@/lib/whatsapp";
@@ -13,7 +14,7 @@ export async function GET(req: NextRequest) {
   const expectedToken = process.env.WHATSAPP_WEBHOOK_VERIFY_TOKEN || DEFAULT_VERIFY_TOKEN;
 
   if (mode === "subscribe" && token === expectedToken) {
-    console.log("WhatsApp Webhook verified successfully via Meta.");
+    apiLog("WhatsApp Webhook verified successfully via Meta.");
     // Meta expects plain text response containing ONLY the hub.challenge string
     return new NextResponse(challenge, {
       status: 200,

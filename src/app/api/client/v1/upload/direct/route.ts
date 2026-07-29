@@ -5,13 +5,13 @@ import { PutObjectCommand } from '@aws-sdk/client-s3';
 import { s3Client } from '@/lib/s3';
 import { v4 as uuidv4 } from 'uuid';
 import { logger } from '@/lib/logger';
-import { jsonResponse } from '@/lib/api-logger';
+import { jsonResponse, apiLog } from '@/lib/api-logger';
 import { authenticateClient } from '@/lib/auth-middleware';
 
 const bucketName = process.env.R2_BUCKET_NAME || '';
 
 export async function POST(request: Request) {
-  console.log(`[API] POST /api/client/v1/upload/direct called`);
+  apiLog(`[API] POST /api/client/v1/upload/direct called`);
   let isAuthenticated = false;
   
   const session = await getServerSession(authOptions);

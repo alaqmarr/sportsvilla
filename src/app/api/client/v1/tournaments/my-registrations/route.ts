@@ -2,10 +2,10 @@ import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { logger } from '@/lib/logger';
 import jwt from 'jsonwebtoken';
-import { jsonResponse } from '@/lib/api-logger';
+import { jsonResponse, apiLog } from '@/lib/api-logger';
 
 export async function GET(request: Request) {
-  console.log(`[API] GET /api/client/v1/tournaments/my-registrations called`);
+  apiLog(`[API] GET /api/client/v1/tournaments/my-registrations called`);
   try {
     const authHeader = request.headers.get('Authorization');
     if (!authHeader || !authHeader.startsWith('Bearer ')) {

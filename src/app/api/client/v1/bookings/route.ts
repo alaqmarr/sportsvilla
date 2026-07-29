@@ -1,12 +1,12 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { authenticateClient } from '@/lib/auth-middleware';
-import { jsonResponse } from '@/lib/api-logger';
+import { jsonResponse, apiLog } from '@/lib/api-logger';
 import { randomUUID } from 'crypto';
 import { bumpSyncTimestamp } from '@/lib/sync';
 import { sendWhatsAppBookingConfirmedTemplate } from '@/lib/whatsapp';
 export async function GET(request: Request) {
-  console.log(`[API] GET /api/client/v1/bookings called`);
+  apiLog(`[API] GET /api/client/v1/bookings called`);
   const authRes = await authenticateClient(request);
   if ('error' in authRes) return authRes.error;
   
@@ -56,7 +56,7 @@ export async function GET(request: Request) {
 }
 
 export async function POST(request: Request) {
-  console.log(`[API] POST /api/client/v1/bookings called`);
+  apiLog(`[API] POST /api/client/v1/bookings called`);
   const authRes = await authenticateClient(request);
   if ('error' in authRes) return authRes.error;
   
@@ -128,11 +128,10 @@ export async function POST(request: Request) {
       }, { status: 409 });
     }
 
-    // Bug #1: Server-side price calculation — do NOT trust client price
-    const durationMs = end.getTime() - start.getTime();
-    const slotDurationMs = (turf.bookingDurationMinutes || 60) * 60 * 1000;
-    const numberOfSlots = Math.max(1, Math.round(durationMs / slotDurationMs));
-    const price = (turf.bookingPrice || 0) * numberOfSlots * participantCount;
+    // Bug #1: Server-side price calculation — do NOT trust client price (prorated by duration to match admin pricing #22)
+    const durationMinutes = Math.max(1, Math.round((end.getTime() - start.getTime()) / (60 * 1000)));
+    const baseSlotMinutes = turf.bookingDurationMinutes || 60;
+    const price = Math.round(((turf.bookingPrice || 0) / baseSlotMinutes) * durationMinutes * participantCount);
 
     // Profile and Wallet Logic
     let targetMemberId = member.id;

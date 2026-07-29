@@ -2,7 +2,7 @@
 import fs from 'fs';
 import path from 'path';
 
-type LogLevel = 'INFO' | 'WARN' | 'ERROR';
+type LogLevel = 'INFO' | 'WARN' | 'ERROR' | 'DEBUG';
 
 const getLogFilePath = () => {
   const date = new Date().toISOString().split('T')[0];
@@ -70,6 +70,11 @@ const formatLogConsole = (level: LogLevel, message: string, meta?: any) => {
 };
 
 export const logger = {
+  debug: (message: string, meta?: any) => {
+    if (process.env.NODE_ENV !== 'production' || process.env.DEBUG === 'true') {
+      console.log(formatLogConsole('DEBUG', message, meta));
+    }
+  },
   info: (message: string, meta?: any) => {
     console.log(formatLogConsole('INFO', message, meta));
     writeToFile('INFO', message, meta);

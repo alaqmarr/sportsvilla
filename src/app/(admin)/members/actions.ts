@@ -5,10 +5,7 @@ import { addDays } from "date-fns";
 import { bumpSyncTimestamp } from '@/lib/sync';
 import { getISTDateBounds } from "@/lib/dateUtils";
 import { sendWhatsAppMemberRegisteredTemplate, sendWhatsAppMembershipPurchasedTemplate } from "@/lib/whatsapp";
-async function generateMemberId(mobile: string) {
-  const count = await prisma.member.count({ where: { mobile } });
-  return `${mobile}_${count + 1}`;
-}
+import { generateMemberId } from "@/lib/memberUtils";
 
 export async function createMember(data: { name: string; mobile: string; email?: string }) {
   const id = await generateMemberId(data.mobile);
@@ -48,15 +45,15 @@ export async function createFamily(data: { mobile: string; members: { name: stri
         email: m.email || null,
       }
     });
-    
-    try {
-      await sendWhatsAppMemberRegisteredTemplate(member.name, member.mobile);
-    } catch (waError) {
-      console.error('WhatsApp welcome message failed for family member', waError);
-    }
-
     createdMembers.push(member);
   }
+  
+  // Send WhatsApp messages in parallel without blocking DB operations
+  Promise.allSettled(
+    createdMembers.map(m => sendWhatsAppMemberRegisteredTemplate(m.name, m.mobile))
+  ).catch(waError => {
+    console.error('WhatsApp welcome message failed for family member', waError);
+  });
   
   await bumpSyncTimestamp('member');
   revalidatePath("/", "layout");
@@ -94,8 +91,11 @@ export async function assignPlan(data: { memberIds?: string[]; memberId?: string
   } else if (data.memberId) {
     targetMemberIds = [data.memberId];
   } else if (data.mobile) {
-    // If multiple members exist with this mobile, findFirst picks the oldest or we should require memberId
-    const member = await prisma.member.findFirst({ where: { mobile: data.mobile } });
+    // If multiple members exist with this mobile, findFirst picks the oldest (primary family member)
+    const member = await prisma.member.findFirst({ 
+      where: { mobile: data.mobile },
+      orderBy: { joinDate: 'asc' }
+    });
     if (!member) {
       if (!data.name) throw new Error("Member not found. Name is required to create.");
       const id = await generateMemberId(data.mobile);
@@ -298,7 +298,7 @@ export async function resetWallet(id: string) {
     await tx.walletTransaction.create({
       data: {
         memberId: id,
-        amount: -member.walletBalance,
+        amount: member.walletBalance,
         type: "DEBIT",
         description: "Wallet reset by admin",
       }

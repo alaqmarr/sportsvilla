@@ -4,13 +4,13 @@ import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { s3Client } from '@/lib/s3';
 import { v4 as uuidv4 } from 'uuid';
 import { logger } from '@/lib/logger';
-import { jsonResponse } from '@/lib/api-logger';
+import { jsonResponse, apiLog } from '@/lib/api-logger';
 import { authenticateClient } from '@/lib/auth-middleware';
 
 const bucketName = process.env.R2_BUCKET_NAME || '';
 
 export async function POST(request: Request) {
-  console.log(`[API] POST /api/client/v1/upload/presigned-url called`);
+  apiLog(`[API] POST /api/client/v1/upload/presigned-url called`);
   const authRes = await authenticateClient(request);
   if ('error' in authRes) return authRes.error;
 

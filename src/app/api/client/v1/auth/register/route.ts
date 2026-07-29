@@ -2,10 +2,11 @@ import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import jwt from 'jsonwebtoken';
 import { logger } from '@/lib/logger';
-import { jsonResponse } from '@/lib/api-logger';
+import { jsonResponse, apiLog } from '@/lib/api-logger';
 import { sendWhatsAppMemberRegisteredTemplate } from '@/lib/whatsapp';
+import { generateMemberId } from '@/lib/memberUtils';
 export async function POST(request: Request) {
-  console.log(`[API] POST /api/client/v1/auth/register called`);
+  apiLog(`[API] POST /api/client/v1/auth/register called`);
   try {
     const { mobile, code, name, email, dob } = await request.json();
     
@@ -46,8 +47,10 @@ export async function POST(request: Request) {
     }
 
     // Create the Member record
+    const newMemberId = await generateMemberId(cleanMobile);
     member = await prisma.member.create({
       data: {
+        id: newMemberId,
         mobile: cleanMobile,
         name: name,
         email: email || null,

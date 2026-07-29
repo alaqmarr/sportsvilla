@@ -1,11 +1,11 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { authenticateClient } from '@/lib/auth-middleware';
-import { jsonResponse } from '@/lib/api-logger';
+import { jsonResponse, apiLog } from '@/lib/api-logger';
 import { bumpSyncTimestamp } from '@/lib/sync';
 
 export async function POST(request: Request) {
-  console.log(`[API] POST /api/client/v1/wallet/redeem called`);
+  apiLog(`[API] POST /api/client/v1/wallet/redeem called`);
   const authRes = await authenticateClient(request);
   if ('error' in authRes) return authRes.error;
   
@@ -45,7 +45,8 @@ export async function POST(request: Request) {
         where: { key: 'sv_points_conversion_rate' }
       });
       const conversionRate = conversionSetting ? parseFloat(conversionSetting.value) : 1;
-      const amountToAdd = points * conversionRate;
+      // walletBalance is stored in paise
+      const amountToAdd = Math.round(points * conversionRate * 100);
 
       // Update member
       const updatedMember = await tx.member.update({

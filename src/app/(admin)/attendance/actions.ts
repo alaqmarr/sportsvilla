@@ -114,39 +114,42 @@ export async function markAttendance(data: { memberId: string; sportId: string; 
     throw new Error(`Limit reached! This plan allows ${plan.slotsPerDay} visit(s) per day.`);
   }
 
-  const attendance = await prisma.attendance.create({
-    data: {
-      memberId: data.memberId,
-      sportId: data.sportId,
-      membershipPlanId: data.membershipPlanId,
-      notes: data.notes || null,
-      status: "PRESENT",
-      date: new Date()
-    },
-    include: {
-      member: true,
-      sport: true,
-      membershipPlan: true
-    }
-  });
-
-  if (plan.rewardPointsPerCheckin > 0) {
-    // Increment loyalty points for check-in
-    await prisma.member.update({
-      where: { id: data.memberId },
-      data: { loyaltyPoints: { increment: plan.rewardPointsPerCheckin } }
-    });
-    
-    await prisma.loyaltyHistory.create({
+  const attendance = await prisma.$transaction(async (tx) => {
+    const att = await tx.attendance.create({
       data: {
         memberId: data.memberId,
-        points: plan.rewardPointsPerCheckin,
-        type: "EARNED",
-        source: "CHECKIN",
-        description: `Earned for membership attendance: ${plan.name}`
+        sportId: data.sportId,
+        membershipPlanId: data.membershipPlanId,
+        notes: data.notes || null,
+        status: "PRESENT",
+        date: new Date()
+      },
+      include: {
+        member: true,
+        sport: true,
+        membershipPlan: true
       }
     });
-  }
+
+    if (plan.rewardPointsPerCheckin > 0) {
+      // Increment loyalty points for check-in
+      await tx.member.update({
+        where: { id: data.memberId },
+        data: { loyaltyPoints: { increment: plan.rewardPointsPerCheckin } }
+      });
+      
+      await tx.loyaltyHistory.create({
+        data: {
+          memberId: data.memberId,
+          points: plan.rewardPointsPerCheckin,
+          type: "EARNED",
+          source: "CHECKIN",
+          description: `Earned for membership attendance: ${plan.name}`
+        }
+      });
+    }
+    return att;
+  });
 
   // Send WhatsApp confirmation
   try {
@@ -168,7 +171,6 @@ export async function markAttendance(data: { memberId: string; sportId: string; 
   }
 
   await bumpSyncTimestamp('attendance');
-  revalidatePath("/", "layout");
   revalidatePath("/", "layout");
   return attendance;
 }
