@@ -20,7 +20,12 @@ export async function GET(request: Request) {
     const familyIds = familyMembers.map(m => m.id);
 
     const bookings = await prisma.booking.findMany({
-      where: { memberId: { in: familyIds } },
+      where: {
+        OR: [
+          { memberId: { in: familyIds } },
+          { participants: { some: { memberId: { in: familyIds }, status: 'CONFIRMED' } } }
+        ]
+      },
       include: {
         turf: true,
         sport: true,

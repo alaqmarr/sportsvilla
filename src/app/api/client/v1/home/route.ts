@@ -44,14 +44,23 @@ export async function GET(request: Request) {
     ] = await Promise.all([
       prisma.booking.findMany({
         where: {
-          memberId: targetMemberId,
+          OR: [
+            { memberId: targetMemberId },
+            { participants: { some: { memberId: targetMemberId, status: 'CONFIRMED' } } }
+          ],
           startTime: { gt: thirtyDaysAgo },
           status: 'CONFIRMED'
         },
         include: {
           turf: { select: { name: true, location: true, bookingValidityDays: true } },
           sport: { select: { name: true } },
-          tickets: true
+          tickets: true,
+          member: { select: { id: true, name: true } },
+          participants: {
+            include: {
+              member: { select: { id: true, name: true } }
+            }
+          }
         },
         orderBy: { startTime: 'asc' },
         take: 50

@@ -33,7 +33,12 @@ export async function GET(request: Request) {
     // 4. Fetch Activity Summary
     const now = new Date();
     const allBookings = await prisma.booking.findMany({
-      where: { memberId: targetMemberId },
+      where: {
+        OR: [
+          { memberId: targetMemberId },
+          { participants: { some: { memberId: targetMemberId, status: 'CONFIRMED' } } }
+        ]
+      },
       select: { status: true, startTime: true, endTime: true }
     });
 
