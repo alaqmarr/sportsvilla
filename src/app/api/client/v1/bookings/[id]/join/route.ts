@@ -134,20 +134,31 @@ export async function DELETE(request: Request, context: { params: Promise<{ id: 
       return jsonResponse({ error: 'Game not found' }, { status: 404 });
     }
 
-    if (booking.memberId === member.id) {
+    const url = new URL(request.url);
+    const targetMemberId = url.searchParams.get('targetMemberId');
+    const memberToRemoveId = targetMemberId || member.id;
+
+    if (targetMemberId) {
+      if (booking.memberId !== member.id) {
+        return jsonResponse({ error: 'Only the host can remove players.' }, { status: 403 });
+      }
+      if (targetMemberId === booking.memberId) {
+        return jsonResponse({ error: 'Host cannot be removed from the game.' }, { status: 400 });
+      }
+    } else if (booking.memberId === member.id) {
       return jsonResponse({ error: 'Host cannot leave their own game. Please cancel the booking instead.' }, { status: 400 });
     }
 
-    const participant = booking.participants.find((p) => p.memberId === member.id);
+    const participant = booking.participants.find((p) => p.memberId === memberToRemoveId);
     if (!participant) {
-      return jsonResponse({ error: 'You are not a participant in this game.' }, { status: 400 });
+      return jsonResponse({ error: 'Player is not a participant in this game.' }, { status: 400 });
     }
 
     await prisma.$transaction(async (tx) => {
       await tx.bookingParticipant.deleteMany({
         where: {
           bookingId: booking.id,
-          memberId: member.id,
+          memberId: memberToRemoveId,
         },
       });
 
