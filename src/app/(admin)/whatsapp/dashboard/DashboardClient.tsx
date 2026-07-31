@@ -130,7 +130,7 @@ export default function DashboardClient({
             </span>
           </div>
           <p className="text-sm text-gray-400 mt-1">
-            Real-time monitoring of Meta Graph API health, messaging funnel performance, and conversation billing.
+            Real-time monitoring of Meta Graph API v25.0 health, messaging funnel, and per-message pricing.
             <span className="text-gray-500 ml-2">Last sync: {lastSync}</span>
           </p>
         </div>
@@ -236,7 +236,7 @@ export default function DashboardClient({
             The Messaging Funnel
           </h2>
           <p className="text-xs text-gray-400 mt-1">
-            Real-time data from Meta Graph API v21.0 WABA Analytics (reports official Sent & Delivered counts; Read & Reply reflect WABA endpoint capabilities).
+            Real-time data from Meta Graph API v25.0 WABA Analytics (30-day rolling window). Read & Reply counts are not available on this endpoint.
           </p>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-4 gap-5">
@@ -269,34 +269,34 @@ export default function DashboardClient({
             Financial & Billing Metrics
           </h2>
           <p className="text-xs text-gray-400 mt-1">
-            Official Meta Graph API v21.0 Conversation Analytics (reports billed category fees; shows ₹0.00 when conversations are within 1,000 free monthly tier or before invoice generation).
+            Meta Graph API v25.0 Pricing Analytics — per-message billing (effective July 1, 2025). Breaks down volume and cost by SERVICE, UTILITY, MARKETING categories.
           </p>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
           <div className="bg-[#161923] border border-[#2a2d3e] rounded-xl p-5 shadow-lg flex flex-col justify-between">
             <div>
               <div className="flex flex-row items-center justify-between pb-3">
-                <h3 className="text-sm font-medium text-gray-400">Active 24-Hour Windows</h3>
+                <h3 className="text-sm font-medium text-gray-400">Total Messages Billed</h3>
                 <FiSmartphone className="h-5 w-5 text-emerald-400" />
               </div>
               <div className="text-3xl font-bold font-['Outfit'] text-white">
                 {financials.activeWindows}
               </div>
             </div>
-            <p className="text-xs text-gray-400 mt-3">Users currently eligible for free-form replies.</p>
+            <p className="text-xs text-gray-400 mt-3">Messages processed by Meta in the last 30 days.</p>
           </div>
 
           <div className="bg-[#161923] border border-[#2a2d3e] rounded-xl p-5 shadow-lg flex flex-col justify-between">
             <div>
               <div className="flex flex-row items-center justify-between pb-3">
-                <h3 className="text-sm font-medium text-gray-400">Cost Per Conversation (CPC)</h3>
+                <h3 className="text-sm font-medium text-gray-400">Cost Per Message (CPM)</h3>
                 <FiDollarSign className="h-5 w-5 text-blue-400" />
               </div>
               <div className="text-3xl font-bold font-['Outfit'] text-white">
-                ₹{financials.cpc.toFixed(2)}
+                ₹{financials.cpc.toFixed(4)}
               </div>
             </div>
-            <p className="text-xs text-gray-400 mt-3">Average meta fee across all categories.</p>
+            <p className="text-xs text-gray-400 mt-3">Average Meta fee per message across all categories.</p>
           </div>
 
           <div className="bg-[#161923] border border-[#2a2d3e] rounded-xl p-5 shadow-lg flex flex-col justify-between">
@@ -309,7 +309,7 @@ export default function DashboardClient({
                 ₹{financials.totalCost.toFixed(2)}
               </div>
             </div>
-            <p className="text-xs text-gray-400 mt-3">Based on webhook pricing events.</p>
+            <p className="text-xs text-gray-400 mt-3">Total billed by Meta (pricing_analytics) for the last 30 days.</p>
           </div>
         </div>
 
@@ -317,8 +317,8 @@ export default function DashboardClient({
           <table className="w-full text-sm text-left">
             <thead className="bg-[#1f2330] text-gray-400 font-semibold border-b border-[#2a2d3e] text-xs uppercase tracking-wider">
               <tr>
-                <th className="px-6 py-4">Category</th>
-                <th className="px-6 py-4">Conversations</th>
+                <th className="px-6 py-4">Pricing Category</th>
+                <th className="px-6 py-4">Messages</th>
                 <th className="px-6 py-4 text-right">Cost (INR)</th>
               </tr>
             </thead>
@@ -326,7 +326,7 @@ export default function DashboardClient({
               {financials.categories.length === 0 ? (
                 <tr>
                   <td colSpan={3} className="px-6 py-8 text-center text-gray-400">
-                    0 paid conversation charges recorded by Meta Graph API for this period (within 1,000 free monthly tier or no billed invoice events yet).
+                    No pricing data returned by Meta Graph API for this 30-day period.
                   </td>
                 </tr>
               ) : (

@@ -21,6 +21,8 @@ function formatMessagingLimit(tier?: string): string {
   return tier.replace("TIER_", "") + " / 24h";
 }
 
+const META_API_VERSION = "v25.0";
+
 export default async function WhatsAppDashboardPage() {
   const session = await getServerSession(authOptions);
   if (!session?.user?.email) redirect("/login");
@@ -30,7 +32,6 @@ export default async function WhatsAppDashboardPage() {
     redirect("/admin");
   }
 
-  // Strictly fetch all account metrics, templates, funnel metrics, and financials from Meta Graph API v21.0
   let qualityRating = "UNKNOWN";
   let messagingLimit = "1,000 / 24h (Standard)";
   let templates: any[] = [];
@@ -42,22 +43,21 @@ export default async function WhatsAppDashboardPage() {
   let totalReplied = 0;
   let totalOptOuts = 0;
 
-  let activeWindows = 0;
+  let totalVolume = 0;
   let totalCost = 0;
-  let totalConversations = 0;
-  const categoryMap: Record<string, { count: number; cost: number }> = {};
+  const categoryMap: Record<string, { volume: number; cost: number }> = {};
 
   const accessToken = process.env.WHATSAPP_ACCESS_TOKEN;
   const phoneNumberId = process.env.WHATSAPP_PHONE_NUMBER_ID;
   const wabaId = process.env.WHATSAPP_BUSINESS_ACCOUNT_ID || process.env.WHATSAPP_WABA_ID;
 
   const end = Math.floor(Date.now() / 1000);
-  const start = end - 30 * 24 * 60 * 60; // 30-day window for exact WABA analytics
+  const start = end - 30 * 24 * 60 * 60;
 
   if (accessToken && phoneNumberId) {
     try {
       const res = await fetch(
-        `https://graph.facebook.com/v21.0/${phoneNumberId}?fields=display_phone_number,verified_name,quality_rating,name_status,messaging_limit_tier,status,account_mode`,
+        `https://graph.facebook.com/${META_API_VERSION}/${phoneNumberId}?fields=display_phone_number,verified_name,quality_rating,name_status,messaging_limit_tier,status,account_mode`,
         { headers: { Authorization: `Bearer ${accessToken}` }, cache: "no-store" }
       );
       const data = await res.json();
@@ -78,7 +78,7 @@ export default async function WhatsAppDashboardPage() {
     // 1. Templates
     try {
       const res = await fetch(
-        `https://graph.facebook.com/v21.0/${wabaId}/message_templates?limit=100`,
+        `https://graph.facebook.com/${META_API_VERSION}/${wabaId}/message_templates?limit=100`,
         { headers: { Authorization: `Bearer ${accessToken}` }, cache: "no-store" }
       );
       const data = await res.json();
@@ -89,10 +89,10 @@ export default async function WhatsAppDashboardPage() {
       // Ignore template fetch error
     }
 
-    // 2. Funnel Metrics (Sent, Delivered, Read)
+    // 2. Funnel Metrics (Sent, Delivered) from WABA analytics endpoint
     try {
       const res = await fetch(
-        `https://graph.facebook.com/v21.0/${wabaId}?fields=analytics.start(${start}).end(${end}).granularity(DAY)`,
+        `https://graph.facebook.com/${META_API_VERSION}/${wabaId}?fields=analytics.start(${start}).end(${end}).granularity(DAY)`,
         { headers: { Authorization: `Bearer ${accessToken}` }, cache: "no-store" }
       );
       const data = await res.json();
@@ -100,41 +100,41 @@ export default async function WhatsAppDashboardPage() {
         for (const dp of data.analytics.data_points) {
           totalSent += dp.sent || 0;
           totalDelivered += dp.delivered || 0;
-          totalRead += dp.read || dp.messages_read || 0;
-          totalReplied += dp.received || 0;
         }
       }
     } catch (e) {
       // Ignore funnel fetch error
     }
 
-    // 3. WABA Conversation Analytics & Financials
+    // 3. Pricing Analytics with PRICING_CATEGORY dimension (replaces deprecated conversation_analytics)
+    // Meta migrated to per-message pricing on July 1, 2025; conversation_analytics returns empty.
+    // pricing_analytics on v25.0 returns actual volume + cost broken down by PRICING_CATEGORY (SERVICE, UTILITY, MARKETING, AUTHENTICATION).
     try {
       const res = await fetch(
-        `https://graph.facebook.com/v21.0/${wabaId}?fields=conversation_analytics.start(${start}).end(${end}).granularity(DAILY).dimensions(CONVERSATION_CATEGORY)`,
+        `https://graph.facebook.com/${META_API_VERSION}/${wabaId}?fields=pricing_analytics.start(${start}).end(${end}).granularity(DAILY).dimensions(PRICING_CATEGORY)`,
         { headers: { Authorization: `Bearer ${accessToken}` }, cache: "no-store" }
       );
       const data = await res.json();
-      if (res.ok && data.conversation_analytics?.data) {
-        for (const row of data.conversation_analytics.data) {
+      if (res.ok && data.pricing_analytics?.data) {
+        for (const row of data.pricing_analytics.data) {
           if (row.data_points) {
             for (const dp of row.data_points) {
-              const cat = dp.conversation_category || "SERVICE";
+              const cat = dp.pricing_category || "SERVICE";
               const cost = Number(dp.cost) || 0;
-              const count = Number(dp.count) || 0;
+              const volume = Number(dp.volume) || 0;
               if (!categoryMap[cat]) {
-                categoryMap[cat] = { count: 0, cost: 0 };
+                categoryMap[cat] = { volume: 0, cost: 0 };
               }
-              categoryMap[cat].count += count;
+              categoryMap[cat].volume += volume;
               categoryMap[cat].cost += cost;
               totalCost += cost;
-              totalConversations += count;
+              totalVolume += volume;
             }
           }
         }
       }
     } catch (e) {
-      // Ignore financial fetch error
+      // Ignore pricing fetch error
     }
   }
 
@@ -142,13 +142,12 @@ export default async function WhatsAppDashboardPage() {
 
   const categories = Object.entries(categoryMap).map(([cat, val]) => ({
     category: cat.toLowerCase(),
-    count: val.count,
+    count: val.volume,
     cost: Math.round(val.cost * 100) / 100,
   }));
 
   totalCost = Math.round(totalCost * 100) / 100;
-  const cpc = totalConversations > 0 ? Math.round((totalCost / totalConversations) * 100) / 100 : 0;
-  activeWindows = totalConversations;
+  const cpm = totalVolume > 0 ? Math.round((totalCost / totalVolume) * 10000) / 10000 : 0;
 
   return (
     <DashboardClient
@@ -162,11 +161,11 @@ export default async function WhatsAppDashboardPage() {
         optOuts: totalOptOuts,
       }}
       financials={{
-        activeWindows,
+        activeWindows: totalVolume,
         categories,
         totalCost,
-        totalConversations,
-        cpc,
+        totalConversations: totalVolume,
+        cpc: cpm,
       }}
       initialError={metaApiError}
     />

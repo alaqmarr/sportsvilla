@@ -237,12 +237,23 @@ exports.Prisma.BookingScalarFieldEnum = {
   paymentStatus: 'paymentStatus',
   status: 'status',
   participantCount: 'participantCount',
+  visibility: 'visibility',
+  inviteMaxCount: 'inviteMaxCount',
+  inviteCode: 'inviteCode',
   pointsRedeemed: 'pointsRedeemed',
   discountAmount: 'discountAmount',
   advancePaid: 'advancePaid',
   amountDue: 'amountDue',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
+};
+
+exports.Prisma.BookingParticipantScalarFieldEnum = {
+  id: 'id',
+  bookingId: 'bookingId',
+  memberId: 'memberId',
+  status: 'status',
+  createdAt: 'createdAt'
 };
 
 exports.Prisma.PaymentScalarFieldEnum = {
@@ -472,6 +483,7 @@ exports.Prisma.ModelName = {
   MemberMembership: 'MemberMembership',
   Attendance: 'Attendance',
   Booking: 'Booking',
+  BookingParticipant: 'BookingParticipant',
   Payment: 'Payment',
   DisplaySession: 'DisplaySession',
   Ticket: 'Ticket',

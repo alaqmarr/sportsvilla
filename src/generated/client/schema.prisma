@@ -39,6 +39,7 @@ model Member {
   memberships             MemberMembership[]
   attendances             Attendance[]
   bookings                Booking[]
+  joinedBookings          BookingParticipant[]
   loyaltyHistory          LoyaltyHistory[]
   tournamentRegistrations TournamentRegistration[]
   walletTransactions      WalletTransaction[]
@@ -174,34 +175,55 @@ model Attendance {
 }
 
 model Booking {
-  id               String        @id @default(cuid())
+  id               String               @id @default(cuid())
   turfId           String
-  turf             Turf          @relation(fields: [turfId], references: [id], onDelete: Cascade)
+  turf             Turf                 @relation(fields: [turfId], references: [id], onDelete: Cascade)
   memberId         String
-  member           Member        @relation(fields: [memberId], references: [id], onDelete: Cascade)
+  member           Member               @relation(fields: [memberId], references: [id], onDelete: Cascade)
   sportId          String
-  sport            Sport         @relation(fields: [sportId], references: [id], onDelete: Cascade)
+  sport            Sport                @relation(fields: [sportId], references: [id], onDelete: Cascade)
   startTime        DateTime
   endTime          DateTime
   price            Float
-  paymentStatus    String        @default("PENDING") // UNPAID, PARTIAL, PAID
-  status           String        @default("CONFIRMED") // CONFIRMED, CANCELLED
-  participantCount Int           @default(1)
-  pointsRedeemed   Int           @default(0)
-  discountAmount   Float         @default(0)
-  advancePaid      Float         @default(0)
-  amountDue        Float         @default(0)
-  createdAt        DateTime      @default(now())
-  updatedAt        DateTime      @updatedAt
+  paymentStatus    String               @default("PENDING") // UNPAID, PARTIAL, PAID
+  status           String               @default("CONFIRMED") // CONFIRMED, CANCELLED
+  participantCount Int                  @default(1)
+  visibility       String               @default("PRIVATE") // PRIVATE, OPEN, INVITE_ONLY
+  inviteMaxCount   Int?
+  inviteCode       String?              @unique
+  pointsRedeemed   Int                  @default(0)
+  discountAmount   Float                @default(0)
+  advancePaid      Float                @default(0)
+  amountDue        Float                @default(0)
+  createdAt        DateTime             @default(now())
+  updatedAt        DateTime             @updatedAt
   payments         Payment[]
   tickets          Ticket[]
   couponUsages     CouponUsage[]
+  participants     BookingParticipant[]
 
   @@index([startTime])
   @@index([turfId])
   @@index([memberId])
   @@index([updatedAt])
   @@index([status])
+  @@index([visibility])
+  @@index([inviteCode])
+}
+
+model BookingParticipant {
+  id        String   @id @default(cuid())
+  bookingId String
+  booking   Booking  @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  memberId  String
+  member    Member   @relation(fields: [memberId], references: [id], onDelete: Cascade)
+  status    String   @default("CONFIRMED") // CONFIRMED, CANCELLED, INVITED
+  createdAt DateTime @default(now())
+
+  @@unique([bookingId, memberId])
+  @@index([bookingId])
+  @@index([memberId])
+  @@index([createdAt])
 }
 
 model Payment {

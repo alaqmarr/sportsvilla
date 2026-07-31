@@ -25,7 +25,12 @@ export async function GET(request: Request) {
         turf: true,
         sport: true,
         tickets: true,
-        member: { select: { name: true, id: true } }
+        member: { select: { name: true, id: true } },
+        participants: {
+          include: {
+            member: { select: { id: true, name: true, mobile: true } },
+          },
+        },
       },
       orderBy: { startTime: 'desc' }
     });
@@ -64,7 +69,7 @@ export async function POST(request: Request) {
 
   try {
     const body = await request.json();
-    const { turfId, sportId, startTime, endTime, participantCount, couponCode, walletAmountToUse = 0, memberId: requestedMemberId } = body;
+    const { turfId, sportId, startTime, endTime, participantCount, couponCode, walletAmountToUse = 0, memberId: requestedMemberId, visibility = "PRIVATE", inviteMaxCount } = body;
 
     const start = new Date(startTime);
     const end = new Date(endTime);
@@ -280,6 +285,10 @@ export async function POST(request: Request) {
       }
 
       // Create booking
+      const inviteCode = (visibility === 'OPEN' || visibility === 'INVITE_ONLY')
+        ? `SV-${randomUUID().slice(0, 6).toUpperCase()}`
+        : null;
+
       const newBooking = await tx.booking.create({
         data: {
           turfId,
@@ -293,7 +302,16 @@ export async function POST(request: Request) {
           paymentStatus,
           advancePaid,
           amountDue,
-          discountAmount // Bug Fix: actually save the discountAmount to the booking!
+          discountAmount, // Bug Fix: actually save the discountAmount to the booking!
+          visibility: visibility || "PRIVATE",
+          inviteMaxCount: inviteMaxCount ? parseInt(String(inviteMaxCount), 10) : null,
+          inviteCode,
+          participants: {
+            create: {
+              memberId: targetMemberId,
+              status: "CONFIRMED"
+            }
+          }
         }
       });
 

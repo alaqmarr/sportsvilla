@@ -3,6 +3,8 @@ import { jsonResponse, apiLog } from "@/lib/api-logger";
 
 export const dynamic = "force-dynamic";
 
+const META_API_VERSION = "v25.0";
+
 function formatMessagingLimit(tier?: string): string {
   if (!tier) return "1,000 / 24h (Standard)";
   const upper = tier.toUpperCase();
@@ -26,14 +28,14 @@ export async function GET() {
     }
 
     const end = Math.floor(Date.now() / 1000);
-    const start = end - 30 * 24 * 60 * 60; // 30-day window for exact WABA analytics
+    const start = end - 30 * 24 * 60 * 60;
 
     // 1. Fetch Real-time Number Quality & Limit from Meta Graph API
     let qualityRating = "UNKNOWN";
     let messagingLimit = "1,000 / 24h (Standard)";
 
     const phoneRes = await fetch(
-      `https://graph.facebook.com/v21.0/${phoneNumberId}?fields=display_phone_number,verified_name,quality_rating,name_status,messaging_limit_tier,status,account_mode`,
+      `https://graph.facebook.com/${META_API_VERSION}/${phoneNumberId}?fields=display_phone_number,verified_name,quality_rating,name_status,messaging_limit_tier,status,account_mode`,
       {
         headers: { Authorization: `Bearer ${accessToken}` },
         next: { revalidate: 0 },
@@ -50,7 +52,7 @@ export async function GET() {
     // 2. Fetch Real-time Templates from Meta Graph API
     let templates: any[] = [];
     const templatesRes = await fetch(
-      `https://graph.facebook.com/v21.0/${wabaId}/message_templates?limit=100`,
+      `https://graph.facebook.com/${META_API_VERSION}/${wabaId}/message_templates?limit=100`,
       {
         headers: { Authorization: `Bearer ${accessToken}` },
         next: { revalidate: 0 },
@@ -72,7 +74,7 @@ export async function GET() {
 
     try {
       const analyticsRes = await fetch(
-        `https://graph.facebook.com/v21.0/${wabaId}?fields=analytics.start(${start}).end(${end}).granularity(DAY)`,
+        `https://graph.facebook.com/${META_API_VERSION}/${wabaId}?fields=analytics.start(${start}).end(${end}).granularity(DAY)`,
         {
           headers: { Authorization: `Bearer ${accessToken}` },
           next: { revalidate: 0 },
@@ -83,8 +85,6 @@ export async function GET() {
         for (const dp of analyticsData.analytics.data_points) {
           totalSent += dp.sent || 0;
           totalDelivered += dp.delivered || 0;
-          totalRead += dp.read || dp.messages_read || 0;
-          totalReplied += dp.received || 0;
         }
       } else if (analyticsData.error) {
         apiLog("Meta Analytics API error", { error: analyticsData.error });
@@ -93,54 +93,55 @@ export async function GET() {
       apiLog("Error fetching WABA analytics", { error: err.message });
     }
 
-    // 4. Fetch Real-time Financials & Billing solely from Meta Graph API (conversation_analytics field)
-    let activeWindows = 0;
+    // 4. Fetch Real-time Pricing & Billing from Meta Graph API v25.0 (pricing_analytics)
+    // Meta migrated from conversation-based billing to per-message pricing on July 1, 2025.
+    // The old conversation_analytics endpoint returns empty; pricing_analytics returns actual data.
+    // PRICING_CATEGORY dimension breaks down by SERVICE, UTILITY, MARKETING, AUTHENTICATION.
+    let totalVolume = 0;
     let totalCost = 0;
-    let totalConversations = 0;
-    const categoryMap: Record<string, { count: number; cost: number }> = {};
+    const categoryMap: Record<string, { volume: number; cost: number }> = {};
 
     try {
-      const convRes = await fetch(
-        `https://graph.facebook.com/v21.0/${wabaId}?fields=conversation_analytics.start(${start}).end(${end}).granularity(DAILY).dimensions(CONVERSATION_CATEGORY)`,
+      const pricingRes = await fetch(
+        `https://graph.facebook.com/${META_API_VERSION}/${wabaId}?fields=pricing_analytics.start(${start}).end(${end}).granularity(DAILY).dimensions(PRICING_CATEGORY)`,
         {
           headers: { Authorization: `Bearer ${accessToken}` },
           next: { revalidate: 0 },
         }
       );
-      const convData = await convRes.json();
-      if (convRes.ok && convData.conversation_analytics?.data) {
-        for (const row of convData.conversation_analytics.data) {
+      const pricingData = await pricingRes.json();
+      if (pricingRes.ok && pricingData.pricing_analytics?.data) {
+        for (const row of pricingData.pricing_analytics.data) {
           if (row.data_points) {
             for (const dp of row.data_points) {
-              const cat = dp.conversation_category || "SERVICE";
+              const cat = dp.pricing_category || "SERVICE";
               const cost = Number(dp.cost) || 0;
-              const count = Number(dp.count) || 0;
+              const volume = Number(dp.volume) || 0;
               if (!categoryMap[cat]) {
-                categoryMap[cat] = { count: 0, cost: 0 };
+                categoryMap[cat] = { volume: 0, cost: 0 };
               }
-              categoryMap[cat].count += count;
+              categoryMap[cat].volume += volume;
               categoryMap[cat].cost += cost;
               totalCost += cost;
-              totalConversations += count;
+              totalVolume += volume;
             }
           }
         }
-      } else if (convData.error) {
-        apiLog("Meta Conversation Analytics API error", { error: convData.error });
+      } else if (pricingData.error) {
+        apiLog("Meta Pricing Analytics API error", { error: pricingData.error });
       }
     } catch (err: any) {
-      apiLog("Error fetching WABA conversation_analytics", { error: err.message });
+      apiLog("Error fetching WABA pricing_analytics", { error: err.message });
     }
 
     const categories = Object.entries(categoryMap).map(([cat, val]) => ({
       category: cat.toLowerCase(),
-      count: val.count,
+      count: val.volume,
       cost: Math.round(val.cost * 100) / 100,
     }));
 
     totalCost = Math.round(totalCost * 100) / 100;
-    const cpc = totalConversations > 0 ? Math.round((totalCost / totalConversations) * 100) / 100 : 0;
-    activeWindows = totalConversations;
+    const cpm = totalVolume > 0 ? Math.round((totalCost / totalVolume) * 10000) / 10000 : 0;
 
     return jsonResponse({
       success: true,
@@ -157,11 +158,11 @@ export async function GET() {
         optOuts: totalOptOuts,
       },
       financials: {
-        activeWindows,
+        activeWindows: totalVolume,
         categories,
         totalCost,
-        totalConversations,
-        cpc,
+        totalConversations: totalVolume,
+        cpc: cpm,
       },
       timestamp: new Date().toISOString(),
     });
@@ -176,4 +177,3 @@ export async function GET() {
     );
   }
 }
-
