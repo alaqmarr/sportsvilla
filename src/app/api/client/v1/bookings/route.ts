@@ -244,7 +244,10 @@ export async function POST(request: Request) {
       advancePaid = Math.min(requestedWallet, currentWallet / 100, subtotal);
     }
     
-    const amountDue = subtotal - advancePaid;
+    // Future-proofing: We will rename advancePaid to walletDeductionRupees for clarity
+    const walletDeductionRupees = advancePaid;
+    // If a payment gateway is added, gatewayAmount would add to advancePaid
+    const amountDue = subtotal - walletDeductionRupees;
 
     // Calculate SV Points Earned on subtotal (net amount), not gross price
     const pointsEarned = Math.floor(subtotal * 0.01);
@@ -333,15 +336,22 @@ export async function POST(request: Request) {
       }
 
       // Wallet deduction
-      if (advancePaid > 0) {
+      if (walletDeductionRupees > 0) {
+        const deductionPaise = Math.round(walletDeductionRupees * 100);
+        
+        const freshMember = await tx.member.findUnique({ where: { id: member.id } });
+        if (!freshMember || freshMember.walletBalance < deductionPaise) {
+          throw new Error('INSUFFICIENT_WALLET');
+        }
+
         await tx.member.update({
           where: { id: member.id },
-          data: { walletBalance: { decrement: advancePaid * 100 } }
+          data: { walletBalance: { decrement: deductionPaise } }
         });
         await tx.walletTransaction.create({
           data: {
             memberId: member.id,
-            amount: advancePaid * 100,
+            amount: deductionPaise,
             type: 'DEBIT',
             description: `Payment for booking ${newBooking.id}`
           }
@@ -349,7 +359,7 @@ export async function POST(request: Request) {
         await tx.payment.create({
           data: {
             bookingId: newBooking.id,
-            amount: advancePaid,
+            amount: walletDeductionRupees,
             method: 'WALLET'
           }
         });

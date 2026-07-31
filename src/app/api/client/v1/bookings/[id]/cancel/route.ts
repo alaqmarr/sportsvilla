@@ -65,9 +65,11 @@ export async function POST(request: Request, context: { params: Promise<{ id: st
       }
     }
 
-    // Bug #4: Use advancePaid directly for refund, not payments sum
-    // Convert to paise as walletBalance is in paise
-    const refundAmountPaise = booking.advancePaid ? booking.advancePaid * 100 : 0;
+    // Bug #4: Use total of wallet payments for refund, instead of advancePaid which might include gateway payments later.
+    // Refund amount must be in paise because walletBalance is in paise.
+    const walletPayments = booking.payments.filter((p: any) => p.method === 'WALLET');
+    const totalWalletPaidRupees = walletPayments.reduce((sum: number, p: any) => sum + p.amount, 0);
+    const refundAmountPaise = Math.round(totalWalletPaidRupees * 100);
 
     // Bug #3: Calculate loyalty points to reverse
     const loyaltyToReverse = await prisma.loyaltyHistory.findFirst({
