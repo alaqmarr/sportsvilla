@@ -25,6 +25,7 @@ export default function SportsClient({ initialSports }: { initialSports: any[] }
   const { showAlert } = useAlert();
   const [sports, setSports] = useState(initialSports);
   const [showModal, setShowModal] = useState(false);
+  const [showIconModal, setShowIconModal] = useState(false);
   
   const [editingId, setEditingId] = useState("");
   const [name, setName] = useState("");
@@ -133,14 +134,48 @@ export default function SportsClient({ initialSports }: { initialSports: any[] }
               </div>
               <div className="mb-5">
                 <label className="block text-xs uppercase tracking-wider font-semibold text-gray-500 mb-2">Icon</label>
-                <select className="w-full bg-[#0f1117] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white focus:border-orange-500/50 focus:ring-2 focus:ring-orange-500/20 focus:outline-none text-sm" value={iconPath} onChange={e => setIconPath(e.target.value)}>
-                  {AVAILABLE_ICONS.map(icon => (
-                    <option key={icon.value} value={icon.value}>{icon.label}</option>
-                  ))}
-                </select>
-                {iconPath && (
-                  <div className="mt-3 p-3 bg-[#0f1117] rounded-lg flex items-center justify-center border border-[#2a2d3e]">
-                    <img src={iconPath} alt="Icon Preview" className="w-12 h-12 object-contain" />
+                
+                <div 
+                  onClick={() => setShowIconModal(true)}
+                  className="w-full bg-[#0f1117] border border-[#2a2d3e] hover:border-orange-500/50 rounded-lg px-4 py-3 cursor-pointer flex items-center justify-between transition-colors"
+                >
+                  <div className="flex items-center gap-3">
+                    {iconPath ? (
+                      <img src={iconPath} alt="Selected Icon" className="w-6 h-6 object-contain" />
+                    ) : (
+                      <FiActivity className="w-6 h-6 text-gray-500" />
+                    )}
+                    <span className={iconPath ? "text-white text-sm" : "text-gray-500 text-sm"}>
+                      {iconPath ? AVAILABLE_ICONS.find(i => i.value === iconPath)?.label : "Select an Icon"}
+                    </span>
+                  </div>
+                  <span className="text-orange-500 text-xs font-semibold uppercase tracking-wider">Change</span>
+                </div>
+
+                {showIconModal && (
+                  <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-[110]" onClick={() => setShowIconModal(false)}>
+                    <div className="bg-[#161923] border border-[#2a2d3e] rounded-xl p-6 w-full max-w-lg shadow-2xl" onClick={e => e.stopPropagation()}>
+                      <div className="flex justify-between items-center mb-6">
+                        <h3 className="text-lg font-bold text-white">Select Icon</h3>
+                        <button type="button" className="text-gray-500 hover:text-white cursor-pointer bg-transparent border-none text-xl" onClick={() => setShowIconModal(false)}><FiX /></button>
+                      </div>
+                      <div className="grid grid-cols-3 sm:grid-cols-4 gap-4 max-h-[60vh] overflow-y-auto pr-2 custom-scrollbar">
+                        {AVAILABLE_ICONS.map(icon => (
+                          <div 
+                            key={icon.value}
+                            onClick={() => { setIconPath(icon.value); setShowIconModal(false); }}
+                            className={`flex flex-col items-center justify-center gap-3 p-4 rounded-xl cursor-pointer border transition-all ${iconPath === icon.value ? 'bg-orange-500/10 border-orange-500 text-orange-400' : 'bg-[#0f1117] border-[#2a2d3e] hover:border-orange-500/50 text-gray-400 hover:text-white'}`}
+                          >
+                            {icon.value ? (
+                              <img src={icon.value} alt={icon.label} className="w-8 h-8 object-contain" />
+                            ) : (
+                              <FiActivity className="w-8 h-8" />
+                            )}
+                            <span className="text-[10px] uppercase tracking-wider text-center font-semibold leading-tight">{icon.label}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
                   </div>
                 )}
               </div>
