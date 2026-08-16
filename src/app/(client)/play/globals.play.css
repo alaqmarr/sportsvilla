@@ -1,0 +1,165 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --play-bg: #FAF5F0;
+    --play-surface: #FFFFFF;
+    --play-surface-alt: #F5F0EB;
+    
+    --play-brand: #10b981;
+    --play-brand-dark: #059669;
+    --play-brand-light: #d1fae5;
+    
+    --play-text: #111827;
+    --play-text-muted: #6b7280;
+    --play-text-light: #9ca3af;
+    
+    --play-border: #e5e7eb;
+    
+    --play-error: #ef4444;
+    --play-warning: #f59e0b;
+    --play-success: #10b981;
+
+    --play-radius-sm: 8px;
+    --play-radius-md: 12px;
+    --play-radius-lg: 16px;
+    --play-radius-xl: 24px;
+    --play-radius-pill: 9999px;
+
+    --play-shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --play-shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    --play-shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    --play-shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+  }
+
+  /* 
+   Responsive Breakpoints Documentation (Tailwind defaults):
+   sm: 640px
+   md: 768px
+   lg: 1024px
+   xl: 1280px
+   2xl: 1536px
+  */
+
+  body {
+    background-color: var(--play-bg);
+    color: var(--play-text);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--play-border);
+    border-radius: var(--play-radius-pill);
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--play-text-light);
+  }
+}
+
+@layer components {
+  .play-card {
+    background-color: var(--play-surface);
+    border-radius: var(--play-radius-lg);
+    box-shadow: var(--play-shadow-sm);
+    border: 1px solid var(--play-border);
+    padding: 1.5rem;
+  }
+
+  .play-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--play-brand);
+    color: white;
+    font-weight: 500;
+    border-radius: var(--play-radius-md);
+    padding: 0.5rem 1rem;
+    transition: all 0.2s;
+  }
+  .play-btn:hover {
+    background-color: var(--play-brand-dark);
+  }
+  .play-btn:focus-visible {
+    outline: 2px solid var(--play-brand);
+    outline-offset: 2px;
+  }
+  .play-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .play-btn-outline {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: transparent;
+    color: var(--play-brand);
+    font-weight: 500;
+    border-radius: var(--play-radius-md);
+    border: 1px solid var(--play-brand);
+    padding: 0.5rem 1rem;
+    transition: all 0.2s;
+  }
+  .play-btn-outline:hover {
+    background-color: var(--play-brand-light);
+  }
+
+  .play-input {
+    width: 100%;
+    background-color: var(--play-surface);
+    border: 1px solid var(--play-border);
+    border-radius: var(--play-radius-md);
+    padding: 0.5rem 1rem;
+    color: var(--play-text);
+    transition: border-color 0.2s;
+  }
+  .play-input:focus {
+    outline: none;
+    border-color: var(--play-brand);
+    box-shadow: 0 0 0 1px var(--play-brand);
+  }
+  .play-input:disabled {
+    background-color: var(--play-surface-alt);
+    cursor: not-allowed;
+  }
+
+  .play-badge {
+    display: inline-flex;
+    align-items: center;
+    border-radius: var(--play-radius-pill);
+    padding: 0.25rem 0.75rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+  }
+
+  .play-skeleton {
+    animation: shimmer 2s infinite linear;
+    background: linear-gradient(
+      to right,
+      var(--play-surface-alt) 4%,
+      var(--play-border) 25%,
+      var(--play-surface-alt) 36%
+    );
+    background-size: 1000px 100%;
+  }
+
+  @keyframes shimmer {
+    0% {
+      background-position: -1000px 0;
+    }
+    100% {
+      background-position: 1000px 0;
+    }
+  }
+}

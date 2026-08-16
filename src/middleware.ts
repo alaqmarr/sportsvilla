@@ -7,14 +7,34 @@ export async function middleware(req: any) {
   
   // Subdomain detection
   const isMemberSubdomain = host === "m.sportsvilla.co.in" || host === "m.sv.thewebsensei.dev" || host.startsWith("m.");
+  const isPlaySubdomain =
+    host === "play.sportsvilla.com" ||
+    host === "play-beta.sportsvilla.com" ||
+    host.startsWith("play.") ||
+    host.startsWith("play-");
   
   // Ignore static assets (images, fonts, css, js) and APIs
   if (
-    pathname.startsWith("/api") ||
     pathname.startsWith("/_next") ||
     pathname.includes("favicon.ico") ||
     /\.(svg|png|jpg|jpeg|gif|webp|ico|css|js|woff|woff2|ttf|eot)$/i.test(pathname)
   ) {
+    return NextResponse.next();
+  }
+
+  // For API requests from play subdomain: inject sv_session cookie as Authorization header
+  if (isPlaySubdomain && pathname.startsWith("/api")) {
+    const sessionToken = req.cookies.get("sv_session")?.value;
+    if (sessionToken) {
+      const requestHeaders = new Headers(req.headers);
+      requestHeaders.set("Authorization", `Bearer ${sessionToken}`);
+      return NextResponse.next({ request: { headers: requestHeaders } });
+    }
+    return NextResponse.next();
+  }
+
+  // Skip API routes for non-play subdomains (original behavior)
+  if (pathname.startsWith("/api")) {
     return NextResponse.next();
   }
   
@@ -32,9 +52,20 @@ export async function middleware(req: any) {
     return NextResponse.next();
   }
 
+  // If on play subdomain, isolate to /play
+  if (isPlaySubdomain) {
+    if (!pathname.startsWith("/play")) {
+      const url = req.nextUrl.clone();
+      url.pathname = pathname === "/" ? "/play" : `/play${pathname}`;
+      return NextResponse.rewrite(url);
+    }
+    return NextResponse.next();
+  }
+
   // Auth logic - strict public routes whitelist
   const isPublicRoute = 
     pathname.startsWith("/m") ||
+    pathname.startsWith("/play") ||
     pathname.startsWith("/t/") ||
     pathname.startsWith("/android") ||
     pathname.startsWith("/ios") ||
