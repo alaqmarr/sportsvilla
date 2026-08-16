@@ -1,32 +1,12 @@
-import { NextResponse } from 'next/server';
-import { prisma } from '@/lib/prisma';
-import { logger } from '@/lib/logger';
-import { jsonResponse, apiLog } from '@/lib/api-logger';
+import { withApiHandler } from '@/lib/api-handler';
+import { AuthService } from '@/services/AuthService';
 
-export async function POST(request: Request) {
-  apiLog(`[API] POST /api/client/v1/auth/check called`);
-  try {
-    const { mobile } = await request.json();
-    
-    // Clean mobile number (remove +91 if present)
-    const cleanMobile = mobile ? mobile.replace('+91', '').replace(/[^0-9]/g, '') : '';
-    
-    if (!cleanMobile || cleanMobile.length < 10) {
-      return jsonResponse({ error: "Invalid mobile number" }, { status: 400 });
-    }
-
-    const member = await prisma.member.findFirst({
-      where: { mobile: cleanMobile }
-    });
-
-    return jsonResponse({ 
-      success: true, 
-      exists: !!member,
-      memberId: member?.id
-    });
-  } catch (error: any) {
-    console.error(`[API ERROR] POST /api/client/v1/auth/check ->`, error);
-    logger.error('Auth Check failed', { error: process.env.NODE_ENV === 'production' ? 'Internal server error' : error.message });
-    return jsonResponse({ error: process.env.NODE_ENV === 'production' ? 'Internal server error' : error.message }, { status: 500 });
-  }
-}
+export const POST = withApiHandler(async (request: Request) => {
+  const { mobile } = await request.json();
+  const result = await AuthService.checkUserExists(mobile);
+  return { 
+    success: true, 
+    exists: result.exists,
+    memberId: result.memberId
+  };
+});

@@ -1,11 +1,11 @@
 import { withApiHandler } from '@/lib/api-handler';
 import { authenticateClient } from '@/lib/auth-middleware';
-import { CouponService } from '@/services/CouponService';
+import { MemberService } from '@/services/MemberService';
 
-export const GET = withApiHandler(async (request: Request) => {
+export const POST = withApiHandler(async (request: Request) => {
   const authRes = await authenticateClient(request);
   if ('error' in authRes) return authRes.error;
   
-  const data = await CouponService.getAvailableCoupons(authRes.member.id);
+  const data = await MemberService.autoPopulateFamilyGroup(authRes.member.id);
   return { success: true, ...data };
 });
