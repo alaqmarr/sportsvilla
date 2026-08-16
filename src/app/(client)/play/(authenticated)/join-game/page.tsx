@@ -18,7 +18,10 @@ export default function JoinGamePage() {
   const [selectedGameId, setSelectedGameId] = useState<string | null>(null)
   const [isJoining, setIsJoining] = useState(false)
 
-  const { data: openGames, isLoading, mutate } = useSWR('/api/client/v1/bookings/open', fetcher)
+  const { data, isLoading, mutate } = useSWR('/api/client/v1/bookings/open', fetcher)
+  const { data: sportsData } = useSWR('/api/client/v1/sports', fetcher)
+  const openGames = data?.openGames || []
+  const sportOptions = sportsData?.sports?.map((s: any) => ({ id: s.id, label: s.name })) || []
 
   const handleJoinViaCode = (e: React.FormEvent) => {
     e.preventDefault()
@@ -47,11 +50,11 @@ export default function JoinGamePage() {
     }
   }
 
-  const filteredGames = selectedSport && openGames
-    ? openGames.filter((game: any) => game.sport.id === selectedSport)
+  const filteredGames = selectedSport && openGames.length > 0
+    ? openGames.filter((game: any) => game.sportId === selectedSport || game.sport?.id === selectedSport)
     : openGames
 
-  const selectedGame = openGames?.find((g: any) => g.id === selectedGameId)
+  const selectedGame = openGames.find((g: any) => g.id === selectedGameId)
 
   return (
     <div className="min-h-screen bg-[var(--play-bg)] text-[var(--play-text)] pb-24">
@@ -66,11 +69,13 @@ export default function JoinGamePage() {
       </header>
 
       <div className="px-4 py-4">
-        <FilterChips 
-          options={[{id: '1', label: 'Football'}, {id: '2', label: 'Basketball'}, {id: '3', label: 'Tennis'}]} 
-          selectedId={selectedSport || ''} 
-          onSelect={setSelectedSport} 
-        />
+        {sportOptions.length > 0 && (
+          <FilterChips 
+            options={sportOptions} 
+            selectedId={selectedSport || ''} 
+            onSelect={setSelectedSport} 
+          />
+        )}
       </div>
 
       <main className="px-4 space-y-4">
@@ -137,10 +142,10 @@ export default function JoinGamePage() {
             
             <div className="p-4 overflow-y-auto">
               <div className="mb-6">
-                <h3 className="text-xl font-bold mb-1">{selectedGame.sport.name}</h3>
+                <h3 className="text-xl font-bold mb-1">{selectedGame.sport?.name}</h3>
                 <div className="flex items-center text-[var(--play-text-muted)] mb-3 gap-1">
                   <MapPin className="w-4 h-4" />
-                  <span className="text-sm">{selectedGame.venue.name}</span>
+                  <span className="text-sm">{selectedGame.turf?.name}</span>
                 </div>
                 
                 <div className="grid grid-cols-2 gap-3 mb-4">
@@ -148,13 +153,19 @@ export default function JoinGamePage() {
                     <div className="flex items-center gap-2 text-[var(--play-text-muted)] mb-1 text-xs uppercase tracking-wider font-semibold">
                       <Calendar className="w-3.5 h-3.5" /> Date
                     </div>
-                    <div className="font-medium">{new Date(selectedGame.date).toLocaleDateString()}</div>
+                    <div className="font-medium">
+                      {selectedGame.startTime ? new Date(selectedGame.startTime).toLocaleDateString() : 'N/A'}
+                    </div>
                   </div>
                   <div className="bg-[var(--play-bg)] p-3 rounded-[var(--play-radius-md)] border border-[var(--play-border)]">
                     <div className="flex items-center gap-2 text-[var(--play-text-muted)] mb-1 text-xs uppercase tracking-wider font-semibold">
                       <Clock className="w-3.5 h-3.5" /> Time
                     </div>
-                    <div className="font-medium text-sm">{selectedGame.slots.join(', ')}</div>
+                    <div className="font-medium text-sm">
+                      {selectedGame.startTime && selectedGame.endTime 
+                        ? `${new Date(selectedGame.startTime).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: true })} - ${new Date(selectedGame.endTime).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: true })}` 
+                        : 'N/A'}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -164,23 +175,23 @@ export default function JoinGamePage() {
                   <h4 className="font-semibold text-sm uppercase tracking-wider text-[var(--play-text-muted)]">Squad Roster</h4>
                   <div className="flex items-center gap-1 text-sm bg-[var(--play-brand-light)] text-[var(--play-brand-dark)] px-2 py-0.5 rounded-[var(--play-radius-pill)] font-medium">
                     <Users className="w-3.5 h-3.5" />
-                    <span>{selectedGame.squad?.length || 0} / {selectedGame.capacity || 10}</span>
+                    <span>{selectedGame.participantCount || selectedGame.participants?.length || 0} / {selectedGame.inviteMaxCount || 10}</span>
                   </div>
                 </div>
                 
                 <ul className="space-y-3 bg-[var(--play-surface-alt)] p-3 rounded-[var(--play-radius-md)] border border-[var(--play-border)]">
-                  {selectedGame.squad?.map((member: any) => (
-                    <li key={member.id} className="flex items-center gap-3">
+                  {selectedGame.participants?.map((p: any) => (
+                    <li key={p.id} className="flex items-center gap-3">
                       <div className="w-8 h-8 bg-white border border-[var(--play-border)] text-[var(--play-text-muted)] rounded-full flex items-center justify-center font-bold text-sm shadow-sm">
-                        {member.name.charAt(0)}
+                        {p.member?.name?.charAt(0) || '?'}
                       </div>
-                      <span className="text-sm font-medium">{member.name}</span>
-                      {member.id === selectedGame.hostId && (
+                      <span className="text-sm font-medium">{p.member?.name || 'Unknown'}</span>
+                      {p.member?.id === selectedGame.memberId && (
                         <span className="ml-auto text-[10px] uppercase font-bold tracking-wider text-[var(--play-brand)]">Host</span>
                       )}
                     </li>
                   ))}
-                  {(!selectedGame.squad || selectedGame.squad.length === 0) && (
+                  {(!selectedGame.participants || selectedGame.participants.length === 0) && (
                     <li className="text-sm text-[var(--play-text-muted)] text-center py-2">Be the first to join!</li>
                   )}
                 </ul>
@@ -190,10 +201,10 @@ export default function JoinGamePage() {
             <div className="p-4 border-t border-[var(--play-border)] bg-[var(--play-surface)] mt-auto">
               <button 
                 onClick={() => handleJoinSquad(selectedGame.id)}
-                disabled={isJoining || (selectedGame.squad?.length >= (selectedGame.capacity || 10))}
+                disabled={isJoining || ((selectedGame.participantCount || selectedGame.participants?.length || 0) >= (selectedGame.inviteMaxCount || 10))}
                 className="w-full bg-[var(--play-brand)] text-white font-medium py-3 rounded-[var(--play-radius-md)] disabled:opacity-50 disabled:cursor-not-allowed hover:bg-[var(--play-brand-dark)] transition-colors shadow-sm"
               >
-                {isJoining ? 'Joining...' : (selectedGame.squad?.length >= (selectedGame.capacity || 10) ? 'Squad Full' : 'Join Squad')}
+                {isJoining ? 'Joining...' : ((selectedGame.participantCount || selectedGame.participants?.length || 0) >= (selectedGame.inviteMaxCount || 10) ? 'Squad Full' : 'Join Squad')}
               </button>
             </div>
           </div>

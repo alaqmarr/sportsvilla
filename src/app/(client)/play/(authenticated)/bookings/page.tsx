@@ -23,7 +23,15 @@ export default function BookingsPage() {
 
   const filteredBookings = data?.bookings?.filter((booking: any) => {
     if (filter === 'All') return true;
-    return booking.status.toLowerCase() === filter.toLowerCase();
+    
+    const now = new Date();
+    const endTime = new Date(booking.endTime);
+    
+    if (filter === 'Upcoming') return endTime > now && booking.status !== 'CANCELLED';
+    if (filter === 'Completed') return endTime <= now && booking.status !== 'CANCELLED';
+    if (filter === 'Cancelled') return booking.status === 'CANCELLED';
+    
+    return true;
   }) || [];
 
   return (
@@ -53,7 +61,17 @@ export default function BookingsPage() {
           <div className="text-red-500 text-center py-10">Failed to load bookings.</div>
         ) : filteredBookings.length > 0 ? (
           filteredBookings.map((booking: any) => (
-            <BookingCard key={booking.id} booking={booking} />
+            <BookingCard 
+              key={booking.id} 
+              booking={booking} 
+              onActionClick={(action, id) => {
+                if (action === 'reschedule') {
+                  window.location.href = `/play/bookings/${id}/reschedule`;
+                } else {
+                  console.log('Action:', action, id);
+                }
+              }}
+            />
           ))
         ) : (
           <EmptyState 

@@ -10,24 +10,24 @@ const fetcher = (url: string) => fetch(url).then((res) => res.json());
 interface Tournament {
   id: string;
   name: string;
-  format: string;
-  entryFee: number;
-  venue: string;
+  teamSize: number;
+  participationFee: number;
+  venue: string | null;
   startDate: string;
-  registrationDeadline: string;
-  status: 'upcoming' | 'ongoing' | 'completed';
-  thumbnailUrl?: string;
+  registrationDeadline: string | null;
+  status: 'UPCOMING' | 'ONGOING' | 'COMPLETED';
+  thumbnail?: string;
 }
 
 export default function TournamentsPage() {
   const [searchQuery, setSearchQuery] = useState('');
-  const { data, error, isLoading } = useSWR<{ data: Tournament[] }>('/api/client/v1/tournaments', fetcher);
+  const { data, error, isLoading } = useSWR<{ tournaments: Tournament[] }>('/api/client/v1/tournaments?status=all', fetcher);
 
-  const tournaments = data?.data || [];
+  const tournaments = data?.tournaments || [];
 
   const filteredTournaments = tournaments.filter(t => 
     t.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    t.venue.toLowerCase().includes(searchQuery.toLowerCase())
+    (t.venue && t.venue.toLowerCase().includes(searchQuery.toLowerCase()))
   );
 
   return (
@@ -82,8 +82,8 @@ export default function TournamentsPage() {
           <Link key={tournament.id} href={`/play/tournaments/${tournament.id}`}>
             <div className="bg-[var(--play-surface)] border border-[var(--play-border)] rounded-[var(--play-radius-lg)] overflow-hidden hover:shadow-md transition-shadow">
               <div className="h-32 bg-[var(--play-surface-alt)] relative">
-                {tournament.thumbnailUrl ? (
-                  <img src={tournament.thumbnailUrl} alt={tournament.name} className="w-full h-full object-cover" />
+                {tournament.thumbnail ? (
+                  <img src={tournament.thumbnail} alt={tournament.name} className="w-full h-full object-cover" />
                 ) : (
                   <div className="w-full h-full flex items-center justify-center text-[var(--play-brand)]">
                     <Trophy size={48} className="opacity-20" />
@@ -91,11 +91,11 @@ export default function TournamentsPage() {
                 )}
                 <div className="absolute top-2 right-2">
                   <span className={`px-2 py-1 text-xs font-semibold rounded-full ${
-                    tournament.status === 'upcoming' ? 'bg-blue-100 text-blue-800' :
-                    tournament.status === 'ongoing' ? 'bg-green-100 text-green-800' :
+                    tournament.status === 'UPCOMING' ? 'bg-blue-100 text-blue-800' :
+                    tournament.status === 'ONGOING' ? 'bg-green-100 text-green-800' :
                     'bg-gray-100 text-gray-800'
                   }`}>
-                    {tournament.status.charAt(0).toUpperCase() + tournament.status.slice(1)}
+                    {tournament.status.charAt(0) + tournament.status.slice(1).toLowerCase()}
                   </span>
                 </div>
               </div>
@@ -103,17 +103,17 @@ export default function TournamentsPage() {
               <div className="p-4">
                 <div className="flex justify-between items-start mb-2">
                   <h3 className="text-lg font-bold font-outfit text-[var(--play-text)] line-clamp-1">{tournament.name}</h3>
-                  <span className="text-lg font-bold text-[var(--play-brand)]">₹{tournament.entryFee}</span>
+                  <span className="text-lg font-bold text-[var(--play-brand)]">₹{tournament.participationFee}</span>
                 </div>
                 
                 <div className="grid grid-cols-2 gap-y-2 text-sm text-[var(--play-text-muted)] mb-4">
                   <div className="flex items-center gap-1.5">
                     <Users size={16} />
-                    <span>{tournament.format}</span>
+                    <span>{tournament.teamSize}v{tournament.teamSize}</span>
                   </div>
                   <div className="flex items-center gap-1.5">
                     <MapPin size={16} />
-                    <span className="truncate">{tournament.venue}</span>
+                    <span className="truncate">{tournament.venue || 'TBA'}</span>
                   </div>
                   <div className="flex items-center gap-1.5">
                     <Calendar size={16} />
@@ -123,7 +123,7 @@ export default function TournamentsPage() {
                 
                 <div className="flex items-center justify-between pt-3 border-t border-[var(--play-border)]">
                   <span className="text-xs text-[var(--play-warning)] font-medium">
-                    Deadline: {new Date(tournament.registrationDeadline).toLocaleDateString()}
+                    Deadline: {tournament.registrationDeadline ? new Date(tournament.registrationDeadline).toLocaleDateString() : 'N/A'}
                   </span>
                   <div className="flex items-center text-[var(--play-brand)] text-sm font-medium">
                     View Details

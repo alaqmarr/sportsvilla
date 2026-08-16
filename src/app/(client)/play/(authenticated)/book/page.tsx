@@ -20,6 +20,7 @@ export default function BookCourtPage() {
   const [selectedTurf, setSelectedTurf] = useState<string | null>(null);
   const [selectedSlots, setSelectedSlots] = useState<string[]>([]);
   const [isBooking, setIsBooking] = useState(false);
+  const [isMobileDrawerOpen, setIsMobileDrawerOpen] = useState(false);
 
   // Fetch sports
   const { data: sportsData } = useSWR('/api/client/v1/sports', fetcher);
@@ -140,9 +141,9 @@ export default function BookCourtPage() {
         </div>
       </div>
 
-      {/* Right Sidebar / Bottom Drawer */}
+      {/* Right Sidebar (Desktop) */}
       {(selectedTurf && selectedSlots.length > 0) && (
-        <div className="fixed bottom-0 left-0 right-0 md:static md:w-96 bg-[var(--play-surface)] border-t md:border-t-0 md:border-l border-[var(--play-border)] shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)] md:shadow-none z-20">
+        <div className="hidden md:block md:w-96 bg-[var(--play-surface)] border-l border-[var(--play-border)] z-20">
           <ReviewPanel 
             selectedSlots={selectedSlots}
             selectedTurf={selectedTurfDetails?.name || selectedTurf}
@@ -153,6 +154,48 @@ export default function BookCourtPage() {
             onRedeemPoints={() => console.log('Redeem')}
             onConfirm={handleConfirmBooking}
           />
+        </div>
+      )}
+
+      {/* Mobile Sticky Button */}
+      {(selectedTurf && selectedSlots.length > 0) && (
+        <div className="md:hidden fixed bottom-0 left-0 right-0 p-4 bg-[var(--play-surface)] border-t border-[var(--play-border)] shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)] z-20">
+          <button
+            onClick={() => setIsMobileDrawerOpen(true)}
+            className="w-full bg-[var(--play-brand)] text-white font-bold py-3.5 rounded-[var(--play-radius-md)] flex items-center justify-between px-6 shadow-md"
+          >
+            <span>Review Booking</span>
+            <span>₹{totalPrice}</span>
+          </button>
+        </div>
+      )}
+
+      {/* Mobile Drawer Overlay */}
+      {isMobileDrawerOpen && (
+        <div className="md:hidden fixed inset-0 z-[100] bg-black/60 backdrop-blur-sm flex items-end justify-center">
+          <div className="w-full max-h-[90vh] bg-[var(--play-surface)] rounded-t-2xl shadow-2xl flex flex-col overflow-hidden animate-in slide-in-from-bottom-full duration-300">
+            <div className="p-4 border-b border-[var(--play-border)] flex justify-between items-center bg-gray-50">
+              <h3 className="font-bold text-lg font-outfit">Booking Details</h3>
+              <button 
+                onClick={() => setIsMobileDrawerOpen(false)}
+                className="p-1 text-[var(--play-text-muted)] hover:bg-gray-200 rounded-full"
+              >
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+              </button>
+            </div>
+            <div className="flex-1 overflow-y-auto">
+              <ReviewPanel 
+                selectedSlots={selectedSlots}
+                selectedTurf={selectedTurfDetails?.name || selectedTurf}
+                price={totalPrice}
+                walletBalance={member?.walletBalance || 0}
+                pointsBalance={member?.loyaltyPoints || 0}
+                onApplyCoupon={(code) => console.log('Coupon:', code)}
+                onRedeemPoints={() => console.log('Redeem')}
+                onConfirm={handleConfirmBooking}
+              />
+            </div>
+          </div>
         </div>
       )}
     </main>

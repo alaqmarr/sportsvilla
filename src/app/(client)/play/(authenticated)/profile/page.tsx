@@ -20,11 +20,11 @@ export default function ProfilePage() {
   );
 
   const profile = data?.profile || member || {};
-  const metrics = data?.metrics || { total: 0, completed: 0, upcoming: 0, cancelled: 0 };
+  const activity = data?.activity || { total: 0, completed: 0, upcoming: 0, cancelled: 0 };
 
   const handleEditClick = () => {
     setEditEmail(profile.email || '');
-    setEditDob(profile.dob ? new Date(profile.dob).toISOString().split('T')[0] : '');
+    setEditDob(profile.dateOfBirth ? new Date(profile.dateOfBirth).toISOString().split('T')[0] : '');
     setIsEditing(true);
   };
 
@@ -34,7 +34,7 @@ export default function ProfilePage() {
       const res = await fetch('/api/client/v1/profile', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ memberId: member?.id, email: editEmail, dob: editDob }),
+        body: JSON.stringify({ memberId: member?.id, email: editEmail, dateOfBirth: editDob }),
       });
       if (res.ok) {
         setIsEditing(false);
@@ -87,7 +87,7 @@ export default function ProfilePage() {
               </div>
               <div className="flex items-center justify-center sm:justify-start gap-2 text-sm text-[var(--play-text-muted)]">
                 <Calendar className="w-4 h-4" />
-                <span>{profile.dob ? new Date(profile.dob).toLocaleDateString() : 'DOB not set'}</span>
+                <span>{profile.dateOfBirth ? new Date(profile.dateOfBirth).toLocaleDateString() : 'DOB not set'}</span>
               </div>
             </div>
           </div>
@@ -102,19 +102,19 @@ export default function ProfilePage() {
         </h3>
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
           <div className="bg-[var(--play-surface)] p-4 rounded-[var(--play-radius-md)] border border-[var(--play-border)] shadow-sm text-center">
-            <p className="text-2xl font-bold font-outfit text-[var(--play-brand)]">{metrics.total}</p>
+            <p className="text-2xl font-bold font-outfit text-[var(--play-brand)]">{activity.total}</p>
             <p className="text-xs text-[var(--play-text-muted)] font-medium uppercase mt-1">Total</p>
           </div>
           <div className="bg-[var(--play-surface)] p-4 rounded-[var(--play-radius-md)] border border-[var(--play-border)] shadow-sm text-center">
-            <p className="text-2xl font-bold font-outfit text-blue-500">{metrics.completed}</p>
+            <p className="text-2xl font-bold font-outfit text-blue-500">{activity.completed}</p>
             <p className="text-xs text-[var(--play-text-muted)] font-medium uppercase mt-1">Completed</p>
           </div>
           <div className="bg-[var(--play-surface)] p-4 rounded-[var(--play-radius-md)] border border-[var(--play-border)] shadow-sm text-center">
-            <p className="text-2xl font-bold font-outfit text-orange-500">{metrics.upcoming}</p>
+            <p className="text-2xl font-bold font-outfit text-orange-500">{activity.upcoming}</p>
             <p className="text-xs text-[var(--play-text-muted)] font-medium uppercase mt-1">Upcoming</p>
           </div>
           <div className="bg-[var(--play-surface)] p-4 rounded-[var(--play-radius-md)] border border-[var(--play-border)] shadow-sm text-center">
-            <p className="text-2xl font-bold font-outfit text-red-500">{metrics.cancelled}</p>
+            <p className="text-2xl font-bold font-outfit text-red-500">{activity.cancelled}</p>
             <p className="text-xs text-[var(--play-text-muted)] font-medium uppercase mt-1">Cancelled</p>
           </div>
         </div>

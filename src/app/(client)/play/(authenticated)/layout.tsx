@@ -5,7 +5,6 @@ import { useRouter } from 'next/navigation';
 import { usePlayAuth } from '@/components/play/PlayAuthProvider';
 import { Navbar } from '@/components/play/Navbar';
 import { Sidebar } from '@/components/play/Sidebar';
-import { BottomNav } from '@/components/play/BottomNav';
 import { Footer } from '@/components/play/Footer';
 
 export default function AuthenticatedLayout({
@@ -49,7 +48,6 @@ export default function AuthenticatedLayout({
           <Footer />
         </div>
       </div>
-      <BottomNav />
     </div>
   );
 }

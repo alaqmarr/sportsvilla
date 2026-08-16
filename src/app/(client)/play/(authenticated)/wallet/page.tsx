@@ -38,14 +38,15 @@ export default function WalletPage() {
     }
   };
 
-  const points = data?.pointsBalance || 0;
-  const inr = data?.inrBalance || 0;
+  const points = data?.profile?.loyaltyPoints || 0;
+  const inr = (data?.profile?.walletBalance || 0) / 100;
   const transactions = data?.transactions || [];
+  const conversionRate = data?.conversionRate || 10;
 
   const filteredTransactions = transactions.filter((t: any) => {
     if (filter === 'All') return true;
-    if (filter === 'Wallet') return t.type === 'inr';
-    if (filter === 'Points') return t.type === 'points';
+    if (filter === 'Wallet') return t.isWallet === true;
+    if (filter === 'Points') return t.isWallet === false;
     return true;
   });
 
@@ -88,7 +89,7 @@ export default function WalletPage() {
           </div>
           <div className="flex justify-between items-center text-sm">
             <span className="text-[var(--play-text-muted)]">Equivalent INR</span>
-            <span className="font-semibold text-[var(--play-text)]">₹{redeemPoints ? Math.floor(redeemPoints / 10) : 0}</span>
+            <span className="font-semibold text-[var(--play-text)]">₹{redeemPoints ? Math.floor(redeemPoints / conversionRate) : 0}</span>
           </div>
           <button 
             className="w-full bg-[var(--play-brand)] hover:bg-[var(--play-brand-dark)] text-white font-medium py-3 rounded-[var(--play-radius-md)] transition-colors disabled:opacity-50"
@@ -123,22 +124,26 @@ export default function WalletPage() {
       </div>
 
       <div className="space-y-3">
-        {filteredTransactions.length > 0 ? filteredTransactions.map((t: any, i: number) => (
-          <div key={i} className="flex items-center justify-between bg-[var(--play-surface)] p-4 rounded-[var(--play-radius-md)] border border-[var(--play-border)]">
-            <div className="flex items-center gap-3">
-              <div className={`p-2 rounded-full ${t.amount > 0 ? 'bg-[var(--play-brand-light)] text-[var(--play-brand-dark)]' : 'bg-red-100 text-red-600'}`}>
-                {t.amount > 0 ? <ArrowUpRight className="w-4 h-4" /> : <ArrowDownRight className="w-4 h-4" />}
+        {filteredTransactions.length > 0 ? filteredTransactions.map((t: any, i: number) => {
+          const isPositive = t.type === 'EARNED' || t.type === 'CREDIT';
+          const displayAmount = t.isWallet ? t.amount / 100 : t.points;
+          return (
+            <div key={i} className="flex items-center justify-between bg-[var(--play-surface)] p-4 rounded-[var(--play-radius-md)] border border-[var(--play-border)]">
+              <div className="flex items-center gap-3">
+                <div className={`p-2 rounded-full ${isPositive ? 'bg-[var(--play-brand-light)] text-[var(--play-brand-dark)]' : 'bg-red-100 text-red-600'}`}>
+                  {isPositive ? <ArrowUpRight className="w-4 h-4" /> : <ArrowDownRight className="w-4 h-4" />}
+                </div>
+                <div>
+                  <p className="font-medium text-sm text-[var(--play-text)]">{t.title}</p>
+                  <p className="text-xs text-[var(--play-text-muted)]">{t.dateStr || new Date(t.createdAt).toLocaleDateString()}</p>
+                </div>
               </div>
-              <div>
-                <p className="font-medium text-sm text-[var(--play-text)]">{t.title}</p>
-                <p className="text-xs text-[var(--play-text-muted)]">{new Date(t.date).toLocaleDateString()}</p>
+              <div className={`font-bold font-outfit ${isPositive ? 'text-[var(--play-brand-dark)]' : 'text-red-600'}`}>
+                {isPositive ? '+' : '-'}{displayAmount} {t.isWallet ? 'INR' : 'Pts'}
               </div>
             </div>
-            <div className={`font-bold font-outfit ${t.amount > 0 ? 'text-[var(--play-brand-dark)]' : 'text-red-600'}`}>
-              {t.amount > 0 ? '+' : ''}{t.amount} {t.type === 'inr' ? 'INR' : 'Pts'}
-            </div>
-          </div>
-        )) : (
+          );
+        }) : (
           <div className="text-center py-8 text-[var(--play-text-muted)] text-sm">
             No transactions found.
           </div>
