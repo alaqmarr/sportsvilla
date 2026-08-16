@@ -48,14 +48,19 @@ export async function POST(request: Request) {
       // walletBalance is stored in paise
       const amountToAdd = Math.round(points * conversionRate * 100);
 
-      // Update member
-      const updatedMember = await tx.member.update({
-        where: { id: targetMemberId },
-        data: {
-          loyaltyPoints: { decrement: points },
-          walletBalance: { increment: amountToAdd }
-        }
-      });
+      // Update member using raw SQL to prevent race conditions on loyalty points
+      const updatedCount = await tx.$executeRaw`
+        UPDATE "Member" 
+        SET "loyaltyPoints" = "loyaltyPoints" - ${points},
+            "walletBalance" = "walletBalance" + ${amountToAdd}
+        WHERE id = ${targetMemberId} AND "loyaltyPoints" >= ${points}
+      `;
+
+      if (updatedCount === 0) {
+        throw new Error('Insufficient SV Points or member not found');
+      }
+
+      const updatedMember = await tx.member.findUnique({ where: { id: targetMemberId } });
 
       // Create history
       await tx.loyaltyHistory.create({
@@ -86,6 +91,6 @@ export async function POST(request: Request) {
   } catch (error: any) {
     console.error(`[API ERROR] POST /api/client/v1/wallet/redeem ->`, error);
     console.error("Wallet Redeem error:", error);
-    return jsonResponse({ error: error.message }, { status: 500 });
+    return jsonResponse({ error: process.env.NODE_ENV === 'production' ? 'Internal server error' : error.message }, { status: 500 });
   }
 }

@@ -57,8 +57,8 @@ export async function GET(
     return jsonResponse({ success: true, tournament, upiId, existingRegistration });
   } catch (error: any) {
     logger.error("Failed to fetch tournament details", {
-      error: error.message,
+      error: process.env.NODE_ENV === 'production' ? 'Internal server error' : error.message,
     });
-    return jsonResponse({ error: error.message }, { status: 500 });
+    return jsonResponse({ error: process.env.NODE_ENV === 'production' ? 'Internal server error' : error.message }, { status: 500 });
   }
 }

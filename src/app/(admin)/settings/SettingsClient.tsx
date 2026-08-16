@@ -228,6 +228,44 @@ export default function SettingsClient({ initialSettings }: { initialSettings: R
           </form>
         </div>
       </div>
+
+      <div className="bg-[#161923] border border-[#2a2d3e] rounded-xl overflow-hidden mt-8">
+        <div className="p-6 border-b border-[#2a2d3e] bg-[#1c1f2e] flex items-center gap-3">
+          <FiSettings className="text-red-500 text-xl" />
+          <h2 className="text-lg font-bold font-['Outfit'] text-white">Database Maintenance</h2>
+        </div>
+        <div className="p-6">
+          <div className="space-y-4">
+            <div>
+              <h3 className="text-sm font-semibold text-white">Populate Family Groups</h3>
+              <p className="text-xs text-gray-500 mt-1 mb-3">Creates `FamilyGroup` records and assigns `familyId` to existing members based on their mobile numbers (no data loss).</p>
+              <button 
+                type="button" 
+                disabled={loading}
+                onClick={async () => {
+                  if (!confirm("Are you sure you want to run this data migration?")) return;
+                  setLoading(true);
+                  try {
+                    const res = await fetch('/api/admin/family-groups/populate', { method: 'POST' });
+                    const data = await res.json();
+                    if (data.success) {
+                      showAlert("Success", data.message, "success");
+                    } else {
+                      showAlert("Error", data.error || "Failed to populate", "error");
+                    }
+                  } catch (err) {
+                    showAlert("Error", "Failed to run migration", "error");
+                  }
+                  setLoading(false);
+                }}
+                className="bg-red-500/10 text-red-500 hover:bg-red-500/20 border border-red-500/20 rounded-lg px-4 py-2 text-sm font-semibold inline-flex items-center gap-2 transition-colors cursor-pointer disabled:opacity-50"
+              >
+                {loading ? "Running..." : "Run Migration"}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

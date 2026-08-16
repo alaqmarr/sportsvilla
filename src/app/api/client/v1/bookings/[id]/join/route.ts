@@ -271,7 +271,7 @@ export async function POST(request: Request, context: { params: Promise<{ id: st
     });
   } catch (error: any) {
     console.error(`[API ERROR] POST /api/client/v1/bookings/[id]/join ->`, error);
-    return jsonResponse({ error: error.message }, { status: 500 });
+    return jsonResponse({ error: process.env.NODE_ENV === 'production' ? 'Internal server error' : error.message }, { status: 500 });
   }
 }
 
@@ -344,6 +344,6 @@ export async function DELETE(request: Request, context: { params: Promise<{ id: 
     });
   } catch (error: any) {
     console.error(`[API ERROR] DELETE /api/client/v1/bookings/[id]/join ->`, error);
-    return jsonResponse({ error: error.message }, { status: 500 });
+    return jsonResponse({ error: process.env.NODE_ENV === 'production' ? 'Internal server error' : error.message }, { status: 500 });
   }
 }

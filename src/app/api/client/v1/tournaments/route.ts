@@ -44,7 +44,7 @@ export async function GET(request: Request) {
     return jsonResponse({ success: true, tournaments });
   } catch (error: any) {
     console.error(`[API ERROR] GET /api/client/v1/tournaments ->`, error);
-    logger.error('Failed to fetch tournaments', { error: error.message });
-    return jsonResponse({ error: error.message }, { status: 500 });
+    logger.error('Failed to fetch tournaments', { error: process.env.NODE_ENV === 'production' ? 'Internal server error' : error.message });
+    return jsonResponse({ error: process.env.NODE_ENV === 'production' ? 'Internal server error' : error.message }, { status: 500 });
   }
 }

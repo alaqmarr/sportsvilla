@@ -84,7 +84,7 @@ export async function POST(request: Request) {
     return setSessionCookie(response, token);
   } catch (error: any) {
     console.error(`[API ERROR] POST /api/client/v1/auth/web/login ->`, error);
-    logger.error('Web login failed internally', { error: error.message });
-    return jsonResponse({ error: error.message }, { status: 500 });
+    logger.error('Web login failed internally', { error: process.env.NODE_ENV === 'production' ? 'Internal server error' : error.message });
+    return jsonResponse({ error: process.env.NODE_ENV === 'production' ? 'Internal server error' : error.message }, { status: 500 });
   }
 }

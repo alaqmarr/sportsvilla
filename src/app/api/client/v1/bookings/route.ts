@@ -6,6 +6,8 @@ import { randomUUID } from 'crypto';
 import { bumpSyncTimestamp } from '@/lib/sync';
 import { whatsappDb } from '@/lib/whatsappDb';
 import { sendWhatsAppBookingConfirmedTemplate } from '@/lib/whatsapp';
+import { createBookingSchema } from '@/lib/validations/booking';
+import { Mutex } from '@/lib/mutex';
 export async function GET(request: Request) {
   apiLog(`[API] GET /api/client/v1/bookings called`);
   const authRes = await authenticateClient(request);
@@ -75,7 +77,13 @@ export async function POST(request: Request) {
 
   try {
     const body = await request.json();
-    const { turfId, sportId, startTime, endTime, participantCount, couponCode, walletAmountToUse = 0, walletOtp, pointsAmountToUse = 0, memberId: requestedMemberId, visibility = "PRIVATE", inviteMaxCount } = body;
+    const parseResult = createBookingSchema.safeParse(body);
+    
+    if (!parseResult.success) {
+      return jsonResponse({ error: parseResult.error.errors[0].message }, { status: 400 });
+    }
+
+    const { turfId, sportId, startTime, endTime, participantCount, couponCode, walletAmountToUse = 0, walletOtp, pointsAmountToUse = 0, memberId: requestedMemberId, visibility, inviteMaxCount } = parseResult.data;
 
     const start = new Date(startTime);
     const end = new Date(endTime);
@@ -156,6 +164,14 @@ export async function POST(request: Request) {
         return jsonResponse({ error: 'Invalid profile selection.' }, { status: 403 });
       }
     }
+
+    const lockKey = `booking:${turfId}:${start.getTime()}:${end.getTime()}`;
+    const acquired = await Mutex.acquire(lockKey, 3000);
+    if (!acquired) {
+      return jsonResponse({ error: 'Server busy processing another booking for this slot. Please try again.' }, { status: 409 });
+    }
+
+    try {
 
     // Fetch latest member wallet balance for logged-in member (they are the one paying)
     const memberData = await prisma.member.findUnique({ where: { id: member.id } });
@@ -570,5 +586,7 @@ export async function POST(request: Request) {
     }
     console.error(`[API ERROR] POST /api/client/v1/bookings ->`, error);
     return jsonResponse({ error: error.message }, { status: 500 });
+  } finally {
+    Mutex.release(lockKey);
   }
 }

@@ -34,7 +34,7 @@ export async function POST(
     console.error("[TEMPLATE UPDATE ERROR]", error);
     return jsonResponse({
       success: false,
-      error: error.message || "Failed to update template config"
+      error: process.env.NODE_ENV === 'production' ? 'Internal server error' : error.message || "Failed to update template config"
     }, { status: 500 });
   }
 }

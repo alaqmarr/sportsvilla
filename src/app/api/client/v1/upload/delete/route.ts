@@ -43,7 +43,7 @@ export async function POST(request: Request) {
     return jsonResponse({ success: true, message: "File deleted successfully" });
   } catch (error: any) {
     console.error(`[API ERROR] POST /api/client/v1/upload/delete ->`, error);
-    logger.error('Failed to delete file', { error: error.message });
-    return jsonResponse({ error: error.message }, { status: 500 });
+    logger.error('Failed to delete file', { error: process.env.NODE_ENV === 'production' ? 'Internal server error' : error.message });
+    return jsonResponse({ error: process.env.NODE_ENV === 'production' ? 'Internal server error' : error.message }, { status: 500 });
   }
 }

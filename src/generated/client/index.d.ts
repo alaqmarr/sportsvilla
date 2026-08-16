@@ -24,6 +24,11 @@ export type Admin = $Result.DefaultSelection<Prisma.$AdminPayload>
  */
 export type Setting = $Result.DefaultSelection<Prisma.$SettingPayload>
 /**
+ * Model FamilyGroup
+ * 
+ */
+export type FamilyGroup = $Result.DefaultSelection<Prisma.$FamilyGroupPayload>
+/**
  * Model Member
  * 
  */
@@ -309,6 +314,16 @@ export class PrismaClient<
     * ```
     */
   get setting(): Prisma.SettingDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.familyGroup`: Exposes CRUD operations for the **FamilyGroup** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more FamilyGroups
+    * const familyGroups = await prisma.familyGroup.findMany()
+    * ```
+    */
+  get familyGroup(): Prisma.FamilyGroupDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.member`: Exposes CRUD operations for the **Member** model.
@@ -1035,6 +1050,7 @@ export namespace Prisma {
   export const ModelName: {
     Admin: 'Admin',
     Setting: 'Setting',
+    FamilyGroup: 'FamilyGroup',
     Member: 'Member',
     LoyaltyHistory: 'LoyaltyHistory',
     Sport: 'Sport',
@@ -1079,7 +1095,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "admin" | "setting" | "member" | "loyaltyHistory" | "sport" | "turf" | "turfSport" | "membershipPlan" | "memberMembership" | "attendance" | "booking" | "bookingParticipant" | "payment" | "displaySession" | "ticket" | "otp" | "tournament" | "tournamentRegistration" | "tournamentPlayer" | "walletTransaction" | "coupon" | "couponAssignment" | "couponUsage" | "loyaltyTrigger" | "loyaltyAchievement" | "appAnnouncement" | "appVersion" | "lastUpdate" | "auditLog" | "banner" | "userSportStat"
+      modelProps: "admin" | "setting" | "familyGroup" | "member" | "loyaltyHistory" | "sport" | "turf" | "turfSport" | "membershipPlan" | "memberMembership" | "attendance" | "booking" | "bookingParticipant" | "payment" | "displaySession" | "ticket" | "otp" | "tournament" | "tournamentRegistration" | "tournamentPlayer" | "walletTransaction" | "coupon" | "couponAssignment" | "couponUsage" | "loyaltyTrigger" | "loyaltyAchievement" | "appAnnouncement" | "appVersion" | "lastUpdate" | "auditLog" | "banner" | "userSportStat"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1228,6 +1244,80 @@ export namespace Prisma {
           count: {
             args: Prisma.SettingCountArgs<ExtArgs>
             result: $Utils.Optional<SettingCountAggregateOutputType> | number
+          }
+        }
+      }
+      FamilyGroup: {
+        payload: Prisma.$FamilyGroupPayload<ExtArgs>
+        fields: Prisma.FamilyGroupFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.FamilyGroupFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FamilyGroupPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.FamilyGroupFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FamilyGroupPayload>
+          }
+          findFirst: {
+            args: Prisma.FamilyGroupFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FamilyGroupPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.FamilyGroupFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FamilyGroupPayload>
+          }
+          findMany: {
+            args: Prisma.FamilyGroupFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FamilyGroupPayload>[]
+          }
+          create: {
+            args: Prisma.FamilyGroupCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FamilyGroupPayload>
+          }
+          createMany: {
+            args: Prisma.FamilyGroupCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.FamilyGroupCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FamilyGroupPayload>[]
+          }
+          delete: {
+            args: Prisma.FamilyGroupDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FamilyGroupPayload>
+          }
+          update: {
+            args: Prisma.FamilyGroupUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FamilyGroupPayload>
+          }
+          deleteMany: {
+            args: Prisma.FamilyGroupDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.FamilyGroupUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.FamilyGroupUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FamilyGroupPayload>[]
+          }
+          upsert: {
+            args: Prisma.FamilyGroupUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FamilyGroupPayload>
+          }
+          aggregate: {
+            args: Prisma.FamilyGroupAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateFamilyGroup>
+          }
+          groupBy: {
+            args: Prisma.FamilyGroupGroupByArgs<ExtArgs>
+            result: $Utils.Optional<FamilyGroupGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.FamilyGroupCountArgs<ExtArgs>
+            result: $Utils.Optional<FamilyGroupCountAggregateOutputType> | number
           }
         }
       }
@@ -3487,6 +3577,7 @@ export namespace Prisma {
   export type GlobalOmitConfig = {
     admin?: AdminOmit
     setting?: SettingOmit
+    familyGroup?: FamilyGroupOmit
     member?: MemberOmit
     loyaltyHistory?: LoyaltyHistoryOmit
     sport?: SportOmit
@@ -3619,6 +3710,37 @@ export namespace Prisma {
    */
   export type AdminCountOutputTypeCountAuditLogsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: AuditLogWhereInput
+  }
+
+
+  /**
+   * Count Type FamilyGroupCountOutputType
+   */
+
+  export type FamilyGroupCountOutputType = {
+    members: number
+  }
+
+  export type FamilyGroupCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    members?: boolean | FamilyGroupCountOutputTypeCountMembersArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * FamilyGroupCountOutputType without action
+   */
+  export type FamilyGroupCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FamilyGroupCountOutputType
+     */
+    select?: FamilyGroupCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * FamilyGroupCountOutputType without action
+   */
+  export type FamilyGroupCountOutputTypeCountMembersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: MemberWhereInput
   }
 
 
@@ -6219,6 +6341,1066 @@ export namespace Prisma {
 
 
   /**
+   * Model FamilyGroup
+   */
+
+  export type AggregateFamilyGroup = {
+    _count: FamilyGroupCountAggregateOutputType | null
+    _min: FamilyGroupMinAggregateOutputType | null
+    _max: FamilyGroupMaxAggregateOutputType | null
+  }
+
+  export type FamilyGroupMinAggregateOutputType = {
+    id: string | null
+    mobile: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type FamilyGroupMaxAggregateOutputType = {
+    id: string | null
+    mobile: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type FamilyGroupCountAggregateOutputType = {
+    id: number
+    mobile: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type FamilyGroupMinAggregateInputType = {
+    id?: true
+    mobile?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type FamilyGroupMaxAggregateInputType = {
+    id?: true
+    mobile?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type FamilyGroupCountAggregateInputType = {
+    id?: true
+    mobile?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type FamilyGroupAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which FamilyGroup to aggregate.
+     */
+    where?: FamilyGroupWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FamilyGroups to fetch.
+     */
+    orderBy?: FamilyGroupOrderByWithRelationInput | FamilyGroupOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: FamilyGroupWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FamilyGroups from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FamilyGroups.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned FamilyGroups
+    **/
+    _count?: true | FamilyGroupCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: FamilyGroupMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: FamilyGroupMaxAggregateInputType
+  }
+
+  export type GetFamilyGroupAggregateType<T extends FamilyGroupAggregateArgs> = {
+        [P in keyof T & keyof AggregateFamilyGroup]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateFamilyGroup[P]>
+      : GetScalarType<T[P], AggregateFamilyGroup[P]>
+  }
+
+
+
+
+  export type FamilyGroupGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: FamilyGroupWhereInput
+    orderBy?: FamilyGroupOrderByWithAggregationInput | FamilyGroupOrderByWithAggregationInput[]
+    by: FamilyGroupScalarFieldEnum[] | FamilyGroupScalarFieldEnum
+    having?: FamilyGroupScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: FamilyGroupCountAggregateInputType | true
+    _min?: FamilyGroupMinAggregateInputType
+    _max?: FamilyGroupMaxAggregateInputType
+  }
+
+  export type FamilyGroupGroupByOutputType = {
+    id: string
+    mobile: string
+    createdAt: Date
+    updatedAt: Date
+    _count: FamilyGroupCountAggregateOutputType | null
+    _min: FamilyGroupMinAggregateOutputType | null
+    _max: FamilyGroupMaxAggregateOutputType | null
+  }
+
+  type GetFamilyGroupGroupByPayload<T extends FamilyGroupGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<FamilyGroupGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof FamilyGroupGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], FamilyGroupGroupByOutputType[P]>
+            : GetScalarType<T[P], FamilyGroupGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type FamilyGroupSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    mobile?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    members?: boolean | FamilyGroup$membersArgs<ExtArgs>
+    _count?: boolean | FamilyGroupCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["familyGroup"]>
+
+  export type FamilyGroupSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    mobile?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["familyGroup"]>
+
+  export type FamilyGroupSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    mobile?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["familyGroup"]>
+
+  export type FamilyGroupSelectScalar = {
+    id?: boolean
+    mobile?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type FamilyGroupOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "mobile" | "createdAt" | "updatedAt", ExtArgs["result"]["familyGroup"]>
+  export type FamilyGroupInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    members?: boolean | FamilyGroup$membersArgs<ExtArgs>
+    _count?: boolean | FamilyGroupCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type FamilyGroupIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type FamilyGroupIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+
+  export type $FamilyGroupPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "FamilyGroup"
+    objects: {
+      members: Prisma.$MemberPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      mobile: string
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["familyGroup"]>
+    composites: {}
+  }
+
+  type FamilyGroupGetPayload<S extends boolean | null | undefined | FamilyGroupDefaultArgs> = $Result.GetResult<Prisma.$FamilyGroupPayload, S>
+
+  type FamilyGroupCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<FamilyGroupFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: FamilyGroupCountAggregateInputType | true
+    }
+
+  export interface FamilyGroupDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['FamilyGroup'], meta: { name: 'FamilyGroup' } }
+    /**
+     * Find zero or one FamilyGroup that matches the filter.
+     * @param {FamilyGroupFindUniqueArgs} args - Arguments to find a FamilyGroup
+     * @example
+     * // Get one FamilyGroup
+     * const familyGroup = await prisma.familyGroup.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends FamilyGroupFindUniqueArgs>(args: SelectSubset<T, FamilyGroupFindUniqueArgs<ExtArgs>>): Prisma__FamilyGroupClient<$Result.GetResult<Prisma.$FamilyGroupPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one FamilyGroup that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {FamilyGroupFindUniqueOrThrowArgs} args - Arguments to find a FamilyGroup
+     * @example
+     * // Get one FamilyGroup
+     * const familyGroup = await prisma.familyGroup.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends FamilyGroupFindUniqueOrThrowArgs>(args: SelectSubset<T, FamilyGroupFindUniqueOrThrowArgs<ExtArgs>>): Prisma__FamilyGroupClient<$Result.GetResult<Prisma.$FamilyGroupPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first FamilyGroup that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FamilyGroupFindFirstArgs} args - Arguments to find a FamilyGroup
+     * @example
+     * // Get one FamilyGroup
+     * const familyGroup = await prisma.familyGroup.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends FamilyGroupFindFirstArgs>(args?: SelectSubset<T, FamilyGroupFindFirstArgs<ExtArgs>>): Prisma__FamilyGroupClient<$Result.GetResult<Prisma.$FamilyGroupPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first FamilyGroup that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FamilyGroupFindFirstOrThrowArgs} args - Arguments to find a FamilyGroup
+     * @example
+     * // Get one FamilyGroup
+     * const familyGroup = await prisma.familyGroup.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends FamilyGroupFindFirstOrThrowArgs>(args?: SelectSubset<T, FamilyGroupFindFirstOrThrowArgs<ExtArgs>>): Prisma__FamilyGroupClient<$Result.GetResult<Prisma.$FamilyGroupPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more FamilyGroups that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FamilyGroupFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all FamilyGroups
+     * const familyGroups = await prisma.familyGroup.findMany()
+     * 
+     * // Get first 10 FamilyGroups
+     * const familyGroups = await prisma.familyGroup.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const familyGroupWithIdOnly = await prisma.familyGroup.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends FamilyGroupFindManyArgs>(args?: SelectSubset<T, FamilyGroupFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FamilyGroupPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a FamilyGroup.
+     * @param {FamilyGroupCreateArgs} args - Arguments to create a FamilyGroup.
+     * @example
+     * // Create one FamilyGroup
+     * const FamilyGroup = await prisma.familyGroup.create({
+     *   data: {
+     *     // ... data to create a FamilyGroup
+     *   }
+     * })
+     * 
+     */
+    create<T extends FamilyGroupCreateArgs>(args: SelectSubset<T, FamilyGroupCreateArgs<ExtArgs>>): Prisma__FamilyGroupClient<$Result.GetResult<Prisma.$FamilyGroupPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many FamilyGroups.
+     * @param {FamilyGroupCreateManyArgs} args - Arguments to create many FamilyGroups.
+     * @example
+     * // Create many FamilyGroups
+     * const familyGroup = await prisma.familyGroup.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends FamilyGroupCreateManyArgs>(args?: SelectSubset<T, FamilyGroupCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many FamilyGroups and returns the data saved in the database.
+     * @param {FamilyGroupCreateManyAndReturnArgs} args - Arguments to create many FamilyGroups.
+     * @example
+     * // Create many FamilyGroups
+     * const familyGroup = await prisma.familyGroup.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many FamilyGroups and only return the `id`
+     * const familyGroupWithIdOnly = await prisma.familyGroup.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends FamilyGroupCreateManyAndReturnArgs>(args?: SelectSubset<T, FamilyGroupCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FamilyGroupPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a FamilyGroup.
+     * @param {FamilyGroupDeleteArgs} args - Arguments to delete one FamilyGroup.
+     * @example
+     * // Delete one FamilyGroup
+     * const FamilyGroup = await prisma.familyGroup.delete({
+     *   where: {
+     *     // ... filter to delete one FamilyGroup
+     *   }
+     * })
+     * 
+     */
+    delete<T extends FamilyGroupDeleteArgs>(args: SelectSubset<T, FamilyGroupDeleteArgs<ExtArgs>>): Prisma__FamilyGroupClient<$Result.GetResult<Prisma.$FamilyGroupPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one FamilyGroup.
+     * @param {FamilyGroupUpdateArgs} args - Arguments to update one FamilyGroup.
+     * @example
+     * // Update one FamilyGroup
+     * const familyGroup = await prisma.familyGroup.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends FamilyGroupUpdateArgs>(args: SelectSubset<T, FamilyGroupUpdateArgs<ExtArgs>>): Prisma__FamilyGroupClient<$Result.GetResult<Prisma.$FamilyGroupPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more FamilyGroups.
+     * @param {FamilyGroupDeleteManyArgs} args - Arguments to filter FamilyGroups to delete.
+     * @example
+     * // Delete a few FamilyGroups
+     * const { count } = await prisma.familyGroup.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends FamilyGroupDeleteManyArgs>(args?: SelectSubset<T, FamilyGroupDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more FamilyGroups.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FamilyGroupUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many FamilyGroups
+     * const familyGroup = await prisma.familyGroup.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends FamilyGroupUpdateManyArgs>(args: SelectSubset<T, FamilyGroupUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more FamilyGroups and returns the data updated in the database.
+     * @param {FamilyGroupUpdateManyAndReturnArgs} args - Arguments to update many FamilyGroups.
+     * @example
+     * // Update many FamilyGroups
+     * const familyGroup = await prisma.familyGroup.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more FamilyGroups and only return the `id`
+     * const familyGroupWithIdOnly = await prisma.familyGroup.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends FamilyGroupUpdateManyAndReturnArgs>(args: SelectSubset<T, FamilyGroupUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FamilyGroupPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one FamilyGroup.
+     * @param {FamilyGroupUpsertArgs} args - Arguments to update or create a FamilyGroup.
+     * @example
+     * // Update or create a FamilyGroup
+     * const familyGroup = await prisma.familyGroup.upsert({
+     *   create: {
+     *     // ... data to create a FamilyGroup
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the FamilyGroup we want to update
+     *   }
+     * })
+     */
+    upsert<T extends FamilyGroupUpsertArgs>(args: SelectSubset<T, FamilyGroupUpsertArgs<ExtArgs>>): Prisma__FamilyGroupClient<$Result.GetResult<Prisma.$FamilyGroupPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of FamilyGroups.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FamilyGroupCountArgs} args - Arguments to filter FamilyGroups to count.
+     * @example
+     * // Count the number of FamilyGroups
+     * const count = await prisma.familyGroup.count({
+     *   where: {
+     *     // ... the filter for the FamilyGroups we want to count
+     *   }
+     * })
+    **/
+    count<T extends FamilyGroupCountArgs>(
+      args?: Subset<T, FamilyGroupCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], FamilyGroupCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a FamilyGroup.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FamilyGroupAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends FamilyGroupAggregateArgs>(args: Subset<T, FamilyGroupAggregateArgs>): Prisma.PrismaPromise<GetFamilyGroupAggregateType<T>>
+
+    /**
+     * Group by FamilyGroup.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FamilyGroupGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends FamilyGroupGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: FamilyGroupGroupByArgs['orderBy'] }
+        : { orderBy?: FamilyGroupGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, FamilyGroupGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetFamilyGroupGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the FamilyGroup model
+   */
+  readonly fields: FamilyGroupFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for FamilyGroup.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__FamilyGroupClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    members<T extends FamilyGroup$membersArgs<ExtArgs> = {}>(args?: Subset<T, FamilyGroup$membersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MemberPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the FamilyGroup model
+   */
+  interface FamilyGroupFieldRefs {
+    readonly id: FieldRef<"FamilyGroup", 'String'>
+    readonly mobile: FieldRef<"FamilyGroup", 'String'>
+    readonly createdAt: FieldRef<"FamilyGroup", 'DateTime'>
+    readonly updatedAt: FieldRef<"FamilyGroup", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * FamilyGroup findUnique
+   */
+  export type FamilyGroupFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FamilyGroup
+     */
+    select?: FamilyGroupSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FamilyGroup
+     */
+    omit?: FamilyGroupOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FamilyGroupInclude<ExtArgs> | null
+    /**
+     * Filter, which FamilyGroup to fetch.
+     */
+    where: FamilyGroupWhereUniqueInput
+  }
+
+  /**
+   * FamilyGroup findUniqueOrThrow
+   */
+  export type FamilyGroupFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FamilyGroup
+     */
+    select?: FamilyGroupSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FamilyGroup
+     */
+    omit?: FamilyGroupOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FamilyGroupInclude<ExtArgs> | null
+    /**
+     * Filter, which FamilyGroup to fetch.
+     */
+    where: FamilyGroupWhereUniqueInput
+  }
+
+  /**
+   * FamilyGroup findFirst
+   */
+  export type FamilyGroupFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FamilyGroup
+     */
+    select?: FamilyGroupSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FamilyGroup
+     */
+    omit?: FamilyGroupOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FamilyGroupInclude<ExtArgs> | null
+    /**
+     * Filter, which FamilyGroup to fetch.
+     */
+    where?: FamilyGroupWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FamilyGroups to fetch.
+     */
+    orderBy?: FamilyGroupOrderByWithRelationInput | FamilyGroupOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for FamilyGroups.
+     */
+    cursor?: FamilyGroupWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FamilyGroups from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FamilyGroups.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of FamilyGroups.
+     */
+    distinct?: FamilyGroupScalarFieldEnum | FamilyGroupScalarFieldEnum[]
+  }
+
+  /**
+   * FamilyGroup findFirstOrThrow
+   */
+  export type FamilyGroupFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FamilyGroup
+     */
+    select?: FamilyGroupSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FamilyGroup
+     */
+    omit?: FamilyGroupOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FamilyGroupInclude<ExtArgs> | null
+    /**
+     * Filter, which FamilyGroup to fetch.
+     */
+    where?: FamilyGroupWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FamilyGroups to fetch.
+     */
+    orderBy?: FamilyGroupOrderByWithRelationInput | FamilyGroupOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for FamilyGroups.
+     */
+    cursor?: FamilyGroupWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FamilyGroups from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FamilyGroups.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of FamilyGroups.
+     */
+    distinct?: FamilyGroupScalarFieldEnum | FamilyGroupScalarFieldEnum[]
+  }
+
+  /**
+   * FamilyGroup findMany
+   */
+  export type FamilyGroupFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FamilyGroup
+     */
+    select?: FamilyGroupSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FamilyGroup
+     */
+    omit?: FamilyGroupOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FamilyGroupInclude<ExtArgs> | null
+    /**
+     * Filter, which FamilyGroups to fetch.
+     */
+    where?: FamilyGroupWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FamilyGroups to fetch.
+     */
+    orderBy?: FamilyGroupOrderByWithRelationInput | FamilyGroupOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing FamilyGroups.
+     */
+    cursor?: FamilyGroupWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FamilyGroups from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FamilyGroups.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of FamilyGroups.
+     */
+    distinct?: FamilyGroupScalarFieldEnum | FamilyGroupScalarFieldEnum[]
+  }
+
+  /**
+   * FamilyGroup create
+   */
+  export type FamilyGroupCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FamilyGroup
+     */
+    select?: FamilyGroupSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FamilyGroup
+     */
+    omit?: FamilyGroupOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FamilyGroupInclude<ExtArgs> | null
+    /**
+     * The data needed to create a FamilyGroup.
+     */
+    data: XOR<FamilyGroupCreateInput, FamilyGroupUncheckedCreateInput>
+  }
+
+  /**
+   * FamilyGroup createMany
+   */
+  export type FamilyGroupCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many FamilyGroups.
+     */
+    data: FamilyGroupCreateManyInput | FamilyGroupCreateManyInput[]
+  }
+
+  /**
+   * FamilyGroup createManyAndReturn
+   */
+  export type FamilyGroupCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FamilyGroup
+     */
+    select?: FamilyGroupSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the FamilyGroup
+     */
+    omit?: FamilyGroupOmit<ExtArgs> | null
+    /**
+     * The data used to create many FamilyGroups.
+     */
+    data: FamilyGroupCreateManyInput | FamilyGroupCreateManyInput[]
+  }
+
+  /**
+   * FamilyGroup update
+   */
+  export type FamilyGroupUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FamilyGroup
+     */
+    select?: FamilyGroupSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FamilyGroup
+     */
+    omit?: FamilyGroupOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FamilyGroupInclude<ExtArgs> | null
+    /**
+     * The data needed to update a FamilyGroup.
+     */
+    data: XOR<FamilyGroupUpdateInput, FamilyGroupUncheckedUpdateInput>
+    /**
+     * Choose, which FamilyGroup to update.
+     */
+    where: FamilyGroupWhereUniqueInput
+  }
+
+  /**
+   * FamilyGroup updateMany
+   */
+  export type FamilyGroupUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update FamilyGroups.
+     */
+    data: XOR<FamilyGroupUpdateManyMutationInput, FamilyGroupUncheckedUpdateManyInput>
+    /**
+     * Filter which FamilyGroups to update
+     */
+    where?: FamilyGroupWhereInput
+    /**
+     * Limit how many FamilyGroups to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * FamilyGroup updateManyAndReturn
+   */
+  export type FamilyGroupUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FamilyGroup
+     */
+    select?: FamilyGroupSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the FamilyGroup
+     */
+    omit?: FamilyGroupOmit<ExtArgs> | null
+    /**
+     * The data used to update FamilyGroups.
+     */
+    data: XOR<FamilyGroupUpdateManyMutationInput, FamilyGroupUncheckedUpdateManyInput>
+    /**
+     * Filter which FamilyGroups to update
+     */
+    where?: FamilyGroupWhereInput
+    /**
+     * Limit how many FamilyGroups to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * FamilyGroup upsert
+   */
+  export type FamilyGroupUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FamilyGroup
+     */
+    select?: FamilyGroupSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FamilyGroup
+     */
+    omit?: FamilyGroupOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FamilyGroupInclude<ExtArgs> | null
+    /**
+     * The filter to search for the FamilyGroup to update in case it exists.
+     */
+    where: FamilyGroupWhereUniqueInput
+    /**
+     * In case the FamilyGroup found by the `where` argument doesn't exist, create a new FamilyGroup with this data.
+     */
+    create: XOR<FamilyGroupCreateInput, FamilyGroupUncheckedCreateInput>
+    /**
+     * In case the FamilyGroup was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<FamilyGroupUpdateInput, FamilyGroupUncheckedUpdateInput>
+  }
+
+  /**
+   * FamilyGroup delete
+   */
+  export type FamilyGroupDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FamilyGroup
+     */
+    select?: FamilyGroupSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FamilyGroup
+     */
+    omit?: FamilyGroupOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FamilyGroupInclude<ExtArgs> | null
+    /**
+     * Filter which FamilyGroup to delete.
+     */
+    where: FamilyGroupWhereUniqueInput
+  }
+
+  /**
+   * FamilyGroup deleteMany
+   */
+  export type FamilyGroupDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which FamilyGroups to delete
+     */
+    where?: FamilyGroupWhereInput
+    /**
+     * Limit how many FamilyGroups to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * FamilyGroup.members
+   */
+  export type FamilyGroup$membersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Member
+     */
+    select?: MemberSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Member
+     */
+    omit?: MemberOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MemberInclude<ExtArgs> | null
+    where?: MemberWhereInput
+    orderBy?: MemberOrderByWithRelationInput | MemberOrderByWithRelationInput[]
+    cursor?: MemberWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: MemberScalarFieldEnum | MemberScalarFieldEnum[]
+  }
+
+  /**
+   * FamilyGroup without action
+   */
+  export type FamilyGroupDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FamilyGroup
+     */
+    select?: FamilyGroupSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FamilyGroup
+     */
+    omit?: FamilyGroupOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FamilyGroupInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Model Member
    */
 
@@ -6243,6 +7425,7 @@ export namespace Prisma {
   export type MemberMinAggregateOutputType = {
     id: string | null
     mobile: string | null
+    familyId: string | null
     name: string | null
     email: string | null
     dateOfBirth: Date | null
@@ -6256,6 +7439,7 @@ export namespace Prisma {
   export type MemberMaxAggregateOutputType = {
     id: string | null
     mobile: string | null
+    familyId: string | null
     name: string | null
     email: string | null
     dateOfBirth: Date | null
@@ -6269,6 +7453,7 @@ export namespace Prisma {
   export type MemberCountAggregateOutputType = {
     id: number
     mobile: number
+    familyId: number
     name: number
     email: number
     dateOfBirth: number
@@ -6294,6 +7479,7 @@ export namespace Prisma {
   export type MemberMinAggregateInputType = {
     id?: true
     mobile?: true
+    familyId?: true
     name?: true
     email?: true
     dateOfBirth?: true
@@ -6307,6 +7493,7 @@ export namespace Prisma {
   export type MemberMaxAggregateInputType = {
     id?: true
     mobile?: true
+    familyId?: true
     name?: true
     email?: true
     dateOfBirth?: true
@@ -6320,6 +7507,7 @@ export namespace Prisma {
   export type MemberCountAggregateInputType = {
     id?: true
     mobile?: true
+    familyId?: true
     name?: true
     email?: true
     dateOfBirth?: true
@@ -6420,6 +7608,7 @@ export namespace Prisma {
   export type MemberGroupByOutputType = {
     id: string
     mobile: string
+    familyId: string | null
     name: string
     email: string | null
     dateOfBirth: Date | null
@@ -6452,6 +7641,7 @@ export namespace Prisma {
   export type MemberSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     mobile?: boolean
+    familyId?: boolean
     name?: boolean
     email?: boolean
     dateOfBirth?: boolean
@@ -6460,6 +7650,7 @@ export namespace Prisma {
     joinDate?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    family?: boolean | Member$familyArgs<ExtArgs>
     memberships?: boolean | Member$membershipsArgs<ExtArgs>
     attendances?: boolean | Member$attendancesArgs<ExtArgs>
     bookings?: boolean | Member$bookingsArgs<ExtArgs>
@@ -6477,6 +7668,7 @@ export namespace Prisma {
   export type MemberSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     mobile?: boolean
+    familyId?: boolean
     name?: boolean
     email?: boolean
     dateOfBirth?: boolean
@@ -6485,11 +7677,13 @@ export namespace Prisma {
     joinDate?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    family?: boolean | Member$familyArgs<ExtArgs>
   }, ExtArgs["result"]["member"]>
 
   export type MemberSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     mobile?: boolean
+    familyId?: boolean
     name?: boolean
     email?: boolean
     dateOfBirth?: boolean
@@ -6498,11 +7692,13 @@ export namespace Prisma {
     joinDate?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    family?: boolean | Member$familyArgs<ExtArgs>
   }, ExtArgs["result"]["member"]>
 
   export type MemberSelectScalar = {
     id?: boolean
     mobile?: boolean
+    familyId?: boolean
     name?: boolean
     email?: boolean
     dateOfBirth?: boolean
@@ -6513,8 +7709,9 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type MemberOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "mobile" | "name" | "email" | "dateOfBirth" | "loyaltyPoints" | "walletBalance" | "joinDate" | "createdAt" | "updatedAt", ExtArgs["result"]["member"]>
+  export type MemberOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "mobile" | "familyId" | "name" | "email" | "dateOfBirth" | "loyaltyPoints" | "walletBalance" | "joinDate" | "createdAt" | "updatedAt", ExtArgs["result"]["member"]>
   export type MemberInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    family?: boolean | Member$familyArgs<ExtArgs>
     memberships?: boolean | Member$membershipsArgs<ExtArgs>
     attendances?: boolean | Member$attendancesArgs<ExtArgs>
     bookings?: boolean | Member$bookingsArgs<ExtArgs>
@@ -6528,12 +7725,17 @@ export namespace Prisma {
     sportStats?: boolean | Member$sportStatsArgs<ExtArgs>
     _count?: boolean | MemberCountOutputTypeDefaultArgs<ExtArgs>
   }
-  export type MemberIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
-  export type MemberIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type MemberIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    family?: boolean | Member$familyArgs<ExtArgs>
+  }
+  export type MemberIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    family?: boolean | Member$familyArgs<ExtArgs>
+  }
 
   export type $MemberPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Member"
     objects: {
+      family: Prisma.$FamilyGroupPayload<ExtArgs> | null
       memberships: Prisma.$MemberMembershipPayload<ExtArgs>[]
       attendances: Prisma.$AttendancePayload<ExtArgs>[]
       bookings: Prisma.$BookingPayload<ExtArgs>[]
@@ -6549,6 +7751,7 @@ export namespace Prisma {
     scalars: $Extensions.GetPayloadResult<{
       id: string
       mobile: string
+      familyId: string | null
       name: string
       email: string | null
       dateOfBirth: Date | null
@@ -6951,6 +8154,7 @@ export namespace Prisma {
    */
   export interface Prisma__MemberClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    family<T extends Member$familyArgs<ExtArgs> = {}>(args?: Subset<T, Member$familyArgs<ExtArgs>>): Prisma__FamilyGroupClient<$Result.GetResult<Prisma.$FamilyGroupPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     memberships<T extends Member$membershipsArgs<ExtArgs> = {}>(args?: Subset<T, Member$membershipsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MemberMembershipPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     attendances<T extends Member$attendancesArgs<ExtArgs> = {}>(args?: Subset<T, Member$attendancesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AttendancePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     bookings<T extends Member$bookingsArgs<ExtArgs> = {}>(args?: Subset<T, Member$bookingsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BookingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -6993,6 +8197,7 @@ export namespace Prisma {
   interface MemberFieldRefs {
     readonly id: FieldRef<"Member", 'String'>
     readonly mobile: FieldRef<"Member", 'String'>
+    readonly familyId: FieldRef<"Member", 'String'>
     readonly name: FieldRef<"Member", 'String'>
     readonly email: FieldRef<"Member", 'String'>
     readonly dateOfBirth: FieldRef<"Member", 'DateTime'>
@@ -7253,6 +8458,10 @@ export namespace Prisma {
      * The data used to create many Members.
      */
     data: MemberCreateManyInput | MemberCreateManyInput[]
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MemberIncludeCreateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -7323,6 +8532,10 @@ export namespace Prisma {
      * Limit how many Members to update.
      */
     limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MemberIncludeUpdateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -7389,6 +8602,25 @@ export namespace Prisma {
      * Limit how many Members to delete.
      */
     limit?: number
+  }
+
+  /**
+   * Member.family
+   */
+  export type Member$familyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FamilyGroup
+     */
+    select?: FamilyGroupSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FamilyGroup
+     */
+    omit?: FamilyGroupOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FamilyGroupInclude<ExtArgs> | null
+    where?: FamilyGroupWhereInput
   }
 
   /**
@@ -39663,9 +40895,20 @@ export namespace Prisma {
   export type SettingScalarFieldEnum = (typeof SettingScalarFieldEnum)[keyof typeof SettingScalarFieldEnum]
 
 
+  export const FamilyGroupScalarFieldEnum: {
+    id: 'id',
+    mobile: 'mobile',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type FamilyGroupScalarFieldEnum = (typeof FamilyGroupScalarFieldEnum)[keyof typeof FamilyGroupScalarFieldEnum]
+
+
   export const MemberScalarFieldEnum: {
     id: 'id',
     mobile: 'mobile',
+    familyId: 'familyId',
     name: 'name',
     email: 'email',
     dateOfBirth: 'dateOfBirth',
@@ -40253,12 +41496,63 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"Setting"> | Date | string
   }
 
+  export type FamilyGroupWhereInput = {
+    AND?: FamilyGroupWhereInput | FamilyGroupWhereInput[]
+    OR?: FamilyGroupWhereInput[]
+    NOT?: FamilyGroupWhereInput | FamilyGroupWhereInput[]
+    id?: StringFilter<"FamilyGroup"> | string
+    mobile?: StringFilter<"FamilyGroup"> | string
+    createdAt?: DateTimeFilter<"FamilyGroup"> | Date | string
+    updatedAt?: DateTimeFilter<"FamilyGroup"> | Date | string
+    members?: MemberListRelationFilter
+  }
+
+  export type FamilyGroupOrderByWithRelationInput = {
+    id?: SortOrder
+    mobile?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    members?: MemberOrderByRelationAggregateInput
+  }
+
+  export type FamilyGroupWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    mobile?: string
+    AND?: FamilyGroupWhereInput | FamilyGroupWhereInput[]
+    OR?: FamilyGroupWhereInput[]
+    NOT?: FamilyGroupWhereInput | FamilyGroupWhereInput[]
+    createdAt?: DateTimeFilter<"FamilyGroup"> | Date | string
+    updatedAt?: DateTimeFilter<"FamilyGroup"> | Date | string
+    members?: MemberListRelationFilter
+  }, "id" | "mobile">
+
+  export type FamilyGroupOrderByWithAggregationInput = {
+    id?: SortOrder
+    mobile?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: FamilyGroupCountOrderByAggregateInput
+    _max?: FamilyGroupMaxOrderByAggregateInput
+    _min?: FamilyGroupMinOrderByAggregateInput
+  }
+
+  export type FamilyGroupScalarWhereWithAggregatesInput = {
+    AND?: FamilyGroupScalarWhereWithAggregatesInput | FamilyGroupScalarWhereWithAggregatesInput[]
+    OR?: FamilyGroupScalarWhereWithAggregatesInput[]
+    NOT?: FamilyGroupScalarWhereWithAggregatesInput | FamilyGroupScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"FamilyGroup"> | string
+    mobile?: StringWithAggregatesFilter<"FamilyGroup"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"FamilyGroup"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"FamilyGroup"> | Date | string
+  }
+
   export type MemberWhereInput = {
     AND?: MemberWhereInput | MemberWhereInput[]
     OR?: MemberWhereInput[]
     NOT?: MemberWhereInput | MemberWhereInput[]
     id?: StringFilter<"Member"> | string
     mobile?: StringFilter<"Member"> | string
+    familyId?: StringNullableFilter<"Member"> | string | null
     name?: StringFilter<"Member"> | string
     email?: StringNullableFilter<"Member"> | string | null
     dateOfBirth?: DateTimeNullableFilter<"Member"> | Date | string | null
@@ -40267,6 +41561,7 @@ export namespace Prisma {
     joinDate?: DateTimeFilter<"Member"> | Date | string
     createdAt?: DateTimeFilter<"Member"> | Date | string
     updatedAt?: DateTimeFilter<"Member"> | Date | string
+    family?: XOR<FamilyGroupNullableScalarRelationFilter, FamilyGroupWhereInput> | null
     memberships?: MemberMembershipListRelationFilter
     attendances?: AttendanceListRelationFilter
     bookings?: BookingListRelationFilter
@@ -40283,6 +41578,7 @@ export namespace Prisma {
   export type MemberOrderByWithRelationInput = {
     id?: SortOrder
     mobile?: SortOrder
+    familyId?: SortOrderInput | SortOrder
     name?: SortOrder
     email?: SortOrderInput | SortOrder
     dateOfBirth?: SortOrderInput | SortOrder
@@ -40291,6 +41587,7 @@ export namespace Prisma {
     joinDate?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    family?: FamilyGroupOrderByWithRelationInput
     memberships?: MemberMembershipOrderByRelationAggregateInput
     attendances?: AttendanceOrderByRelationAggregateInput
     bookings?: BookingOrderByRelationAggregateInput
@@ -40310,6 +41607,7 @@ export namespace Prisma {
     OR?: MemberWhereInput[]
     NOT?: MemberWhereInput | MemberWhereInput[]
     mobile?: StringFilter<"Member"> | string
+    familyId?: StringNullableFilter<"Member"> | string | null
     name?: StringFilter<"Member"> | string
     email?: StringNullableFilter<"Member"> | string | null
     dateOfBirth?: DateTimeNullableFilter<"Member"> | Date | string | null
@@ -40318,6 +41616,7 @@ export namespace Prisma {
     joinDate?: DateTimeFilter<"Member"> | Date | string
     createdAt?: DateTimeFilter<"Member"> | Date | string
     updatedAt?: DateTimeFilter<"Member"> | Date | string
+    family?: XOR<FamilyGroupNullableScalarRelationFilter, FamilyGroupWhereInput> | null
     memberships?: MemberMembershipListRelationFilter
     attendances?: AttendanceListRelationFilter
     bookings?: BookingListRelationFilter
@@ -40334,6 +41633,7 @@ export namespace Prisma {
   export type MemberOrderByWithAggregationInput = {
     id?: SortOrder
     mobile?: SortOrder
+    familyId?: SortOrderInput | SortOrder
     name?: SortOrder
     email?: SortOrderInput | SortOrder
     dateOfBirth?: SortOrderInput | SortOrder
@@ -40355,6 +41655,7 @@ export namespace Prisma {
     NOT?: MemberScalarWhereWithAggregatesInput | MemberScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"Member"> | string
     mobile?: StringWithAggregatesFilter<"Member"> | string
+    familyId?: StringNullableWithAggregatesFilter<"Member"> | string | null
     name?: StringWithAggregatesFilter<"Member"> | string
     email?: StringNullableWithAggregatesFilter<"Member"> | string | null
     dateOfBirth?: DateTimeNullableWithAggregatesFilter<"Member"> | Date | string | null
@@ -42602,6 +43903,59 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type FamilyGroupCreateInput = {
+    id?: string
+    mobile: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    members?: MemberCreateNestedManyWithoutFamilyInput
+  }
+
+  export type FamilyGroupUncheckedCreateInput = {
+    id?: string
+    mobile: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    members?: MemberUncheckedCreateNestedManyWithoutFamilyInput
+  }
+
+  export type FamilyGroupUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    mobile?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    members?: MemberUpdateManyWithoutFamilyNestedInput
+  }
+
+  export type FamilyGroupUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    mobile?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    members?: MemberUncheckedUpdateManyWithoutFamilyNestedInput
+  }
+
+  export type FamilyGroupCreateManyInput = {
+    id?: string
+    mobile: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type FamilyGroupUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    mobile?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FamilyGroupUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    mobile?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type MemberCreateInput = {
     id?: string
     mobile: string
@@ -42613,6 +43967,7 @@ export namespace Prisma {
     joinDate?: Date | string
     createdAt?: Date | string
     updatedAt?: Date | string
+    family?: FamilyGroupCreateNestedOneWithoutMembersInput
     memberships?: MemberMembershipCreateNestedManyWithoutMemberInput
     attendances?: AttendanceCreateNestedManyWithoutMemberInput
     bookings?: BookingCreateNestedManyWithoutMemberInput
@@ -42629,6 +43984,7 @@ export namespace Prisma {
   export type MemberUncheckedCreateInput = {
     id?: string
     mobile: string
+    familyId?: string | null
     name: string
     email?: string | null
     dateOfBirth?: Date | string | null
@@ -42661,6 +44017,7 @@ export namespace Prisma {
     joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    family?: FamilyGroupUpdateOneWithoutMembersNestedInput
     memberships?: MemberMembershipUpdateManyWithoutMemberNestedInput
     attendances?: AttendanceUpdateManyWithoutMemberNestedInput
     bookings?: BookingUpdateManyWithoutMemberNestedInput
@@ -42677,6 +44034,7 @@ export namespace Prisma {
   export type MemberUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     mobile?: StringFieldUpdateOperationsInput | string
+    familyId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -42701,6 +44059,7 @@ export namespace Prisma {
   export type MemberCreateManyInput = {
     id?: string
     mobile: string
+    familyId?: string | null
     name: string
     email?: string | null
     dateOfBirth?: Date | string | null
@@ -42727,6 +44086,7 @@ export namespace Prisma {
   export type MemberUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     mobile?: StringFieldUpdateOperationsInput | string
+    familyId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -45159,6 +46519,37 @@ export namespace Prisma {
     updatedAt?: SortOrder
   }
 
+  export type MemberListRelationFilter = {
+    every?: MemberWhereInput
+    some?: MemberWhereInput
+    none?: MemberWhereInput
+  }
+
+  export type MemberOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type FamilyGroupCountOrderByAggregateInput = {
+    id?: SortOrder
+    mobile?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type FamilyGroupMaxOrderByAggregateInput = {
+    id?: SortOrder
+    mobile?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type FamilyGroupMinOrderByAggregateInput = {
+    id?: SortOrder
+    mobile?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
   export type DateTimeNullableFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
     in?: Date[] | string[] | null
@@ -45190,6 +46581,11 @@ export namespace Prisma {
     gt?: number | FloatFieldRefInput<$PrismaModel>
     gte?: number | FloatFieldRefInput<$PrismaModel>
     not?: NestedFloatFilter<$PrismaModel> | number
+  }
+
+  export type FamilyGroupNullableScalarRelationFilter = {
+    is?: FamilyGroupWhereInput | null
+    isNot?: FamilyGroupWhereInput | null
   }
 
   export type MemberMembershipListRelationFilter = {
@@ -45305,6 +46701,7 @@ export namespace Prisma {
   export type MemberCountOrderByAggregateInput = {
     id?: SortOrder
     mobile?: SortOrder
+    familyId?: SortOrder
     name?: SortOrder
     email?: SortOrder
     dateOfBirth?: SortOrder
@@ -45323,6 +46720,7 @@ export namespace Prisma {
   export type MemberMaxOrderByAggregateInput = {
     id?: SortOrder
     mobile?: SortOrder
+    familyId?: SortOrder
     name?: SortOrder
     email?: SortOrder
     dateOfBirth?: SortOrder
@@ -45336,6 +46734,7 @@ export namespace Prisma {
   export type MemberMinOrderByAggregateInput = {
     id?: SortOrder
     mobile?: SortOrder
+    familyId?: SortOrder
     name?: SortOrder
     email?: SortOrder
     dateOfBirth?: SortOrder
@@ -46779,6 +48178,54 @@ export namespace Prisma {
     deleteMany?: AuditLogScalarWhereInput | AuditLogScalarWhereInput[]
   }
 
+  export type MemberCreateNestedManyWithoutFamilyInput = {
+    create?: XOR<MemberCreateWithoutFamilyInput, MemberUncheckedCreateWithoutFamilyInput> | MemberCreateWithoutFamilyInput[] | MemberUncheckedCreateWithoutFamilyInput[]
+    connectOrCreate?: MemberCreateOrConnectWithoutFamilyInput | MemberCreateOrConnectWithoutFamilyInput[]
+    createMany?: MemberCreateManyFamilyInputEnvelope
+    connect?: MemberWhereUniqueInput | MemberWhereUniqueInput[]
+  }
+
+  export type MemberUncheckedCreateNestedManyWithoutFamilyInput = {
+    create?: XOR<MemberCreateWithoutFamilyInput, MemberUncheckedCreateWithoutFamilyInput> | MemberCreateWithoutFamilyInput[] | MemberUncheckedCreateWithoutFamilyInput[]
+    connectOrCreate?: MemberCreateOrConnectWithoutFamilyInput | MemberCreateOrConnectWithoutFamilyInput[]
+    createMany?: MemberCreateManyFamilyInputEnvelope
+    connect?: MemberWhereUniqueInput | MemberWhereUniqueInput[]
+  }
+
+  export type MemberUpdateManyWithoutFamilyNestedInput = {
+    create?: XOR<MemberCreateWithoutFamilyInput, MemberUncheckedCreateWithoutFamilyInput> | MemberCreateWithoutFamilyInput[] | MemberUncheckedCreateWithoutFamilyInput[]
+    connectOrCreate?: MemberCreateOrConnectWithoutFamilyInput | MemberCreateOrConnectWithoutFamilyInput[]
+    upsert?: MemberUpsertWithWhereUniqueWithoutFamilyInput | MemberUpsertWithWhereUniqueWithoutFamilyInput[]
+    createMany?: MemberCreateManyFamilyInputEnvelope
+    set?: MemberWhereUniqueInput | MemberWhereUniqueInput[]
+    disconnect?: MemberWhereUniqueInput | MemberWhereUniqueInput[]
+    delete?: MemberWhereUniqueInput | MemberWhereUniqueInput[]
+    connect?: MemberWhereUniqueInput | MemberWhereUniqueInput[]
+    update?: MemberUpdateWithWhereUniqueWithoutFamilyInput | MemberUpdateWithWhereUniqueWithoutFamilyInput[]
+    updateMany?: MemberUpdateManyWithWhereWithoutFamilyInput | MemberUpdateManyWithWhereWithoutFamilyInput[]
+    deleteMany?: MemberScalarWhereInput | MemberScalarWhereInput[]
+  }
+
+  export type MemberUncheckedUpdateManyWithoutFamilyNestedInput = {
+    create?: XOR<MemberCreateWithoutFamilyInput, MemberUncheckedCreateWithoutFamilyInput> | MemberCreateWithoutFamilyInput[] | MemberUncheckedCreateWithoutFamilyInput[]
+    connectOrCreate?: MemberCreateOrConnectWithoutFamilyInput | MemberCreateOrConnectWithoutFamilyInput[]
+    upsert?: MemberUpsertWithWhereUniqueWithoutFamilyInput | MemberUpsertWithWhereUniqueWithoutFamilyInput[]
+    createMany?: MemberCreateManyFamilyInputEnvelope
+    set?: MemberWhereUniqueInput | MemberWhereUniqueInput[]
+    disconnect?: MemberWhereUniqueInput | MemberWhereUniqueInput[]
+    delete?: MemberWhereUniqueInput | MemberWhereUniqueInput[]
+    connect?: MemberWhereUniqueInput | MemberWhereUniqueInput[]
+    update?: MemberUpdateWithWhereUniqueWithoutFamilyInput | MemberUpdateWithWhereUniqueWithoutFamilyInput[]
+    updateMany?: MemberUpdateManyWithWhereWithoutFamilyInput | MemberUpdateManyWithWhereWithoutFamilyInput[]
+    deleteMany?: MemberScalarWhereInput | MemberScalarWhereInput[]
+  }
+
+  export type FamilyGroupCreateNestedOneWithoutMembersInput = {
+    create?: XOR<FamilyGroupCreateWithoutMembersInput, FamilyGroupUncheckedCreateWithoutMembersInput>
+    connectOrCreate?: FamilyGroupCreateOrConnectWithoutMembersInput
+    connect?: FamilyGroupWhereUniqueInput
+  }
+
   export type MemberMembershipCreateNestedManyWithoutMemberInput = {
     create?: XOR<MemberMembershipCreateWithoutMemberInput, MemberMembershipUncheckedCreateWithoutMemberInput> | MemberMembershipCreateWithoutMemberInput[] | MemberMembershipUncheckedCreateWithoutMemberInput[]
     connectOrCreate?: MemberMembershipCreateOrConnectWithoutMemberInput | MemberMembershipCreateOrConnectWithoutMemberInput[]
@@ -46951,6 +48398,16 @@ export namespace Prisma {
     decrement?: number
     multiply?: number
     divide?: number
+  }
+
+  export type FamilyGroupUpdateOneWithoutMembersNestedInput = {
+    create?: XOR<FamilyGroupCreateWithoutMembersInput, FamilyGroupUncheckedCreateWithoutMembersInput>
+    connectOrCreate?: FamilyGroupCreateOrConnectWithoutMembersInput
+    upsert?: FamilyGroupUpsertWithoutMembersInput
+    disconnect?: FamilyGroupWhereInput | boolean
+    delete?: FamilyGroupWhereInput | boolean
+    connect?: FamilyGroupWhereUniqueInput
+    update?: XOR<XOR<FamilyGroupUpdateToOneWithWhereWithoutMembersInput, FamilyGroupUpdateWithoutMembersInput>, FamilyGroupUncheckedUpdateWithoutMembersInput>
   }
 
   export type MemberMembershipUpdateManyWithoutMemberNestedInput = {
@@ -48983,6 +50440,115 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"AuditLog"> | Date | string
   }
 
+  export type MemberCreateWithoutFamilyInput = {
+    id?: string
+    mobile: string
+    name: string
+    email?: string | null
+    dateOfBirth?: Date | string | null
+    loyaltyPoints?: number
+    walletBalance?: number
+    joinDate?: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    memberships?: MemberMembershipCreateNestedManyWithoutMemberInput
+    attendances?: AttendanceCreateNestedManyWithoutMemberInput
+    bookings?: BookingCreateNestedManyWithoutMemberInput
+    joinedBookings?: BookingParticipantCreateNestedManyWithoutMemberInput
+    loyaltyHistory?: LoyaltyHistoryCreateNestedManyWithoutMemberInput
+    tournamentRegistrations?: TournamentRegistrationCreateNestedManyWithoutRegisteredByInput
+    walletTransactions?: WalletTransactionCreateNestedManyWithoutMemberInput
+    couponAssignments?: CouponAssignmentCreateNestedManyWithoutMemberInput
+    couponUsages?: CouponUsageCreateNestedManyWithoutMemberInput
+    loyaltyAchievements?: LoyaltyAchievementCreateNestedManyWithoutMemberInput
+    sportStats?: UserSportStatCreateNestedManyWithoutMemberInput
+  }
+
+  export type MemberUncheckedCreateWithoutFamilyInput = {
+    id?: string
+    mobile: string
+    name: string
+    email?: string | null
+    dateOfBirth?: Date | string | null
+    loyaltyPoints?: number
+    walletBalance?: number
+    joinDate?: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    memberships?: MemberMembershipUncheckedCreateNestedManyWithoutMemberInput
+    attendances?: AttendanceUncheckedCreateNestedManyWithoutMemberInput
+    bookings?: BookingUncheckedCreateNestedManyWithoutMemberInput
+    joinedBookings?: BookingParticipantUncheckedCreateNestedManyWithoutMemberInput
+    loyaltyHistory?: LoyaltyHistoryUncheckedCreateNestedManyWithoutMemberInput
+    tournamentRegistrations?: TournamentRegistrationUncheckedCreateNestedManyWithoutRegisteredByInput
+    walletTransactions?: WalletTransactionUncheckedCreateNestedManyWithoutMemberInput
+    couponAssignments?: CouponAssignmentUncheckedCreateNestedManyWithoutMemberInput
+    couponUsages?: CouponUsageUncheckedCreateNestedManyWithoutMemberInput
+    loyaltyAchievements?: LoyaltyAchievementUncheckedCreateNestedManyWithoutMemberInput
+    sportStats?: UserSportStatUncheckedCreateNestedManyWithoutMemberInput
+  }
+
+  export type MemberCreateOrConnectWithoutFamilyInput = {
+    where: MemberWhereUniqueInput
+    create: XOR<MemberCreateWithoutFamilyInput, MemberUncheckedCreateWithoutFamilyInput>
+  }
+
+  export type MemberCreateManyFamilyInputEnvelope = {
+    data: MemberCreateManyFamilyInput | MemberCreateManyFamilyInput[]
+  }
+
+  export type MemberUpsertWithWhereUniqueWithoutFamilyInput = {
+    where: MemberWhereUniqueInput
+    update: XOR<MemberUpdateWithoutFamilyInput, MemberUncheckedUpdateWithoutFamilyInput>
+    create: XOR<MemberCreateWithoutFamilyInput, MemberUncheckedCreateWithoutFamilyInput>
+  }
+
+  export type MemberUpdateWithWhereUniqueWithoutFamilyInput = {
+    where: MemberWhereUniqueInput
+    data: XOR<MemberUpdateWithoutFamilyInput, MemberUncheckedUpdateWithoutFamilyInput>
+  }
+
+  export type MemberUpdateManyWithWhereWithoutFamilyInput = {
+    where: MemberScalarWhereInput
+    data: XOR<MemberUpdateManyMutationInput, MemberUncheckedUpdateManyWithoutFamilyInput>
+  }
+
+  export type MemberScalarWhereInput = {
+    AND?: MemberScalarWhereInput | MemberScalarWhereInput[]
+    OR?: MemberScalarWhereInput[]
+    NOT?: MemberScalarWhereInput | MemberScalarWhereInput[]
+    id?: StringFilter<"Member"> | string
+    mobile?: StringFilter<"Member"> | string
+    familyId?: StringNullableFilter<"Member"> | string | null
+    name?: StringFilter<"Member"> | string
+    email?: StringNullableFilter<"Member"> | string | null
+    dateOfBirth?: DateTimeNullableFilter<"Member"> | Date | string | null
+    loyaltyPoints?: IntFilter<"Member"> | number
+    walletBalance?: FloatFilter<"Member"> | number
+    joinDate?: DateTimeFilter<"Member"> | Date | string
+    createdAt?: DateTimeFilter<"Member"> | Date | string
+    updatedAt?: DateTimeFilter<"Member"> | Date | string
+  }
+
+  export type FamilyGroupCreateWithoutMembersInput = {
+    id?: string
+    mobile: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type FamilyGroupUncheckedCreateWithoutMembersInput = {
+    id?: string
+    mobile: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type FamilyGroupCreateOrConnectWithoutMembersInput = {
+    where: FamilyGroupWhereUniqueInput
+    create: XOR<FamilyGroupCreateWithoutMembersInput, FamilyGroupUncheckedCreateWithoutMembersInput>
+  }
+
   export type MemberMembershipCreateWithoutMemberInput = {
     id?: string
     startDate: Date | string
@@ -49306,6 +50872,31 @@ export namespace Prisma {
 
   export type UserSportStatCreateManyMemberInputEnvelope = {
     data: UserSportStatCreateManyMemberInput | UserSportStatCreateManyMemberInput[]
+  }
+
+  export type FamilyGroupUpsertWithoutMembersInput = {
+    update: XOR<FamilyGroupUpdateWithoutMembersInput, FamilyGroupUncheckedUpdateWithoutMembersInput>
+    create: XOR<FamilyGroupCreateWithoutMembersInput, FamilyGroupUncheckedCreateWithoutMembersInput>
+    where?: FamilyGroupWhereInput
+  }
+
+  export type FamilyGroupUpdateToOneWithWhereWithoutMembersInput = {
+    where?: FamilyGroupWhereInput
+    data: XOR<FamilyGroupUpdateWithoutMembersInput, FamilyGroupUncheckedUpdateWithoutMembersInput>
+  }
+
+  export type FamilyGroupUpdateWithoutMembersInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    mobile?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FamilyGroupUncheckedUpdateWithoutMembersInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    mobile?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type MemberMembershipUpsertWithWhereUniqueWithoutMemberInput = {
@@ -49647,6 +51238,7 @@ export namespace Prisma {
     joinDate?: Date | string
     createdAt?: Date | string
     updatedAt?: Date | string
+    family?: FamilyGroupCreateNestedOneWithoutMembersInput
     memberships?: MemberMembershipCreateNestedManyWithoutMemberInput
     attendances?: AttendanceCreateNestedManyWithoutMemberInput
     bookings?: BookingCreateNestedManyWithoutMemberInput
@@ -49662,6 +51254,7 @@ export namespace Prisma {
   export type MemberUncheckedCreateWithoutLoyaltyHistoryInput = {
     id?: string
     mobile: string
+    familyId?: string | null
     name: string
     email?: string | null
     dateOfBirth?: Date | string | null
@@ -49709,6 +51302,7 @@ export namespace Prisma {
     joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    family?: FamilyGroupUpdateOneWithoutMembersNestedInput
     memberships?: MemberMembershipUpdateManyWithoutMemberNestedInput
     attendances?: AttendanceUpdateManyWithoutMemberNestedInput
     bookings?: BookingUpdateManyWithoutMemberNestedInput
@@ -49724,6 +51318,7 @@ export namespace Prisma {
   export type MemberUncheckedUpdateWithoutLoyaltyHistoryInput = {
     id?: StringFieldUpdateOperationsInput | string
     mobile?: StringFieldUpdateOperationsInput | string
+    familyId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -50855,6 +52450,7 @@ export namespace Prisma {
     joinDate?: Date | string
     createdAt?: Date | string
     updatedAt?: Date | string
+    family?: FamilyGroupCreateNestedOneWithoutMembersInput
     attendances?: AttendanceCreateNestedManyWithoutMemberInput
     bookings?: BookingCreateNestedManyWithoutMemberInput
     joinedBookings?: BookingParticipantCreateNestedManyWithoutMemberInput
@@ -50870,6 +52466,7 @@ export namespace Prisma {
   export type MemberUncheckedCreateWithoutMembershipsInput = {
     id?: string
     mobile: string
+    familyId?: string | null
     name: string
     email?: string | null
     dateOfBirth?: Date | string | null
@@ -50995,6 +52592,7 @@ export namespace Prisma {
     joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    family?: FamilyGroupUpdateOneWithoutMembersNestedInput
     attendances?: AttendanceUpdateManyWithoutMemberNestedInput
     bookings?: BookingUpdateManyWithoutMemberNestedInput
     joinedBookings?: BookingParticipantUpdateManyWithoutMemberNestedInput
@@ -51010,6 +52608,7 @@ export namespace Prisma {
   export type MemberUncheckedUpdateWithoutMembershipsInput = {
     id?: StringFieldUpdateOperationsInput | string
     mobile?: StringFieldUpdateOperationsInput | string
+    familyId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -51131,6 +52730,7 @@ export namespace Prisma {
     joinDate?: Date | string
     createdAt?: Date | string
     updatedAt?: Date | string
+    family?: FamilyGroupCreateNestedOneWithoutMembersInput
     memberships?: MemberMembershipCreateNestedManyWithoutMemberInput
     bookings?: BookingCreateNestedManyWithoutMemberInput
     joinedBookings?: BookingParticipantCreateNestedManyWithoutMemberInput
@@ -51146,6 +52746,7 @@ export namespace Prisma {
   export type MemberUncheckedCreateWithoutAttendancesInput = {
     id?: string
     mobile: string
+    familyId?: string | null
     name: string
     email?: string | null
     dateOfBirth?: Date | string | null
@@ -51267,6 +52868,7 @@ export namespace Prisma {
     joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    family?: FamilyGroupUpdateOneWithoutMembersNestedInput
     memberships?: MemberMembershipUpdateManyWithoutMemberNestedInput
     bookings?: BookingUpdateManyWithoutMemberNestedInput
     joinedBookings?: BookingParticipantUpdateManyWithoutMemberNestedInput
@@ -51282,6 +52884,7 @@ export namespace Prisma {
   export type MemberUncheckedUpdateWithoutAttendancesInput = {
     id?: StringFieldUpdateOperationsInput | string
     mobile?: StringFieldUpdateOperationsInput | string
+    familyId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -51440,6 +53043,7 @@ export namespace Prisma {
     joinDate?: Date | string
     createdAt?: Date | string
     updatedAt?: Date | string
+    family?: FamilyGroupCreateNestedOneWithoutMembersInput
     memberships?: MemberMembershipCreateNestedManyWithoutMemberInput
     attendances?: AttendanceCreateNestedManyWithoutMemberInput
     joinedBookings?: BookingParticipantCreateNestedManyWithoutMemberInput
@@ -51455,6 +53059,7 @@ export namespace Prisma {
   export type MemberUncheckedCreateWithoutBookingsInput = {
     id?: string
     mobile: string
+    familyId?: string | null
     name: string
     email?: string | null
     dateOfBirth?: Date | string | null
@@ -51684,6 +53289,7 @@ export namespace Prisma {
     joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    family?: FamilyGroupUpdateOneWithoutMembersNestedInput
     memberships?: MemberMembershipUpdateManyWithoutMemberNestedInput
     attendances?: AttendanceUpdateManyWithoutMemberNestedInput
     joinedBookings?: BookingParticipantUpdateManyWithoutMemberNestedInput
@@ -51699,6 +53305,7 @@ export namespace Prisma {
   export type MemberUncheckedUpdateWithoutBookingsInput = {
     id?: StringFieldUpdateOperationsInput | string
     mobile?: StringFieldUpdateOperationsInput | string
+    familyId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -51916,6 +53523,7 @@ export namespace Prisma {
     joinDate?: Date | string
     createdAt?: Date | string
     updatedAt?: Date | string
+    family?: FamilyGroupCreateNestedOneWithoutMembersInput
     memberships?: MemberMembershipCreateNestedManyWithoutMemberInput
     attendances?: AttendanceCreateNestedManyWithoutMemberInput
     bookings?: BookingCreateNestedManyWithoutMemberInput
@@ -51931,6 +53539,7 @@ export namespace Prisma {
   export type MemberUncheckedCreateWithoutJoinedBookingsInput = {
     id?: string
     mobile: string
+    familyId?: string | null
     name: string
     email?: string | null
     dateOfBirth?: Date | string | null
@@ -52039,6 +53648,7 @@ export namespace Prisma {
     joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    family?: FamilyGroupUpdateOneWithoutMembersNestedInput
     memberships?: MemberMembershipUpdateManyWithoutMemberNestedInput
     attendances?: AttendanceUpdateManyWithoutMemberNestedInput
     bookings?: BookingUpdateManyWithoutMemberNestedInput
@@ -52054,6 +53664,7 @@ export namespace Prisma {
   export type MemberUncheckedUpdateWithoutJoinedBookingsInput = {
     id?: StringFieldUpdateOperationsInput | string
     mobile?: StringFieldUpdateOperationsInput | string
+    familyId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -52501,6 +54112,7 @@ export namespace Prisma {
     joinDate?: Date | string
     createdAt?: Date | string
     updatedAt?: Date | string
+    family?: FamilyGroupCreateNestedOneWithoutMembersInput
     memberships?: MemberMembershipCreateNestedManyWithoutMemberInput
     attendances?: AttendanceCreateNestedManyWithoutMemberInput
     bookings?: BookingCreateNestedManyWithoutMemberInput
@@ -52516,6 +54128,7 @@ export namespace Prisma {
   export type MemberUncheckedCreateWithoutTournamentRegistrationsInput = {
     id?: string
     mobile: string
+    familyId?: string | null
     name: string
     email?: string | null
     dateOfBirth?: Date | string | null
@@ -52649,6 +54262,7 @@ export namespace Prisma {
     joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    family?: FamilyGroupUpdateOneWithoutMembersNestedInput
     memberships?: MemberMembershipUpdateManyWithoutMemberNestedInput
     attendances?: AttendanceUpdateManyWithoutMemberNestedInput
     bookings?: BookingUpdateManyWithoutMemberNestedInput
@@ -52664,6 +54278,7 @@ export namespace Prisma {
   export type MemberUncheckedUpdateWithoutTournamentRegistrationsInput = {
     id?: StringFieldUpdateOperationsInput | string
     mobile?: StringFieldUpdateOperationsInput | string
+    familyId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -52792,6 +54407,7 @@ export namespace Prisma {
     joinDate?: Date | string
     createdAt?: Date | string
     updatedAt?: Date | string
+    family?: FamilyGroupCreateNestedOneWithoutMembersInput
     memberships?: MemberMembershipCreateNestedManyWithoutMemberInput
     attendances?: AttendanceCreateNestedManyWithoutMemberInput
     bookings?: BookingCreateNestedManyWithoutMemberInput
@@ -52807,6 +54423,7 @@ export namespace Prisma {
   export type MemberUncheckedCreateWithoutWalletTransactionsInput = {
     id?: string
     mobile: string
+    familyId?: string | null
     name: string
     email?: string | null
     dateOfBirth?: Date | string | null
@@ -52854,6 +54471,7 @@ export namespace Prisma {
     joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    family?: FamilyGroupUpdateOneWithoutMembersNestedInput
     memberships?: MemberMembershipUpdateManyWithoutMemberNestedInput
     attendances?: AttendanceUpdateManyWithoutMemberNestedInput
     bookings?: BookingUpdateManyWithoutMemberNestedInput
@@ -52869,6 +54487,7 @@ export namespace Prisma {
   export type MemberUncheckedUpdateWithoutWalletTransactionsInput = {
     id?: StringFieldUpdateOperationsInput | string
     mobile?: StringFieldUpdateOperationsInput | string
+    familyId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -53021,6 +54640,7 @@ export namespace Prisma {
     joinDate?: Date | string
     createdAt?: Date | string
     updatedAt?: Date | string
+    family?: FamilyGroupCreateNestedOneWithoutMembersInput
     memberships?: MemberMembershipCreateNestedManyWithoutMemberInput
     attendances?: AttendanceCreateNestedManyWithoutMemberInput
     bookings?: BookingCreateNestedManyWithoutMemberInput
@@ -53036,6 +54656,7 @@ export namespace Prisma {
   export type MemberUncheckedCreateWithoutCouponAssignmentsInput = {
     id?: string
     mobile: string
+    familyId?: string | null
     name: string
     email?: string | null
     dateOfBirth?: Date | string | null
@@ -53132,6 +54753,7 @@ export namespace Prisma {
     joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    family?: FamilyGroupUpdateOneWithoutMembersNestedInput
     memberships?: MemberMembershipUpdateManyWithoutMemberNestedInput
     attendances?: AttendanceUpdateManyWithoutMemberNestedInput
     bookings?: BookingUpdateManyWithoutMemberNestedInput
@@ -53147,6 +54769,7 @@ export namespace Prisma {
   export type MemberUncheckedUpdateWithoutCouponAssignmentsInput = {
     id?: StringFieldUpdateOperationsInput | string
     mobile?: StringFieldUpdateOperationsInput | string
+    familyId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -53221,6 +54844,7 @@ export namespace Prisma {
     joinDate?: Date | string
     createdAt?: Date | string
     updatedAt?: Date | string
+    family?: FamilyGroupCreateNestedOneWithoutMembersInput
     memberships?: MemberMembershipCreateNestedManyWithoutMemberInput
     attendances?: AttendanceCreateNestedManyWithoutMemberInput
     bookings?: BookingCreateNestedManyWithoutMemberInput
@@ -53236,6 +54860,7 @@ export namespace Prisma {
   export type MemberUncheckedCreateWithoutCouponUsagesInput = {
     id?: string
     mobile: string
+    familyId?: string | null
     name: string
     email?: string | null
     dateOfBirth?: Date | string | null
@@ -53387,6 +55012,7 @@ export namespace Prisma {
     joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    family?: FamilyGroupUpdateOneWithoutMembersNestedInput
     memberships?: MemberMembershipUpdateManyWithoutMemberNestedInput
     attendances?: AttendanceUpdateManyWithoutMemberNestedInput
     bookings?: BookingUpdateManyWithoutMemberNestedInput
@@ -53402,6 +55028,7 @@ export namespace Prisma {
   export type MemberUncheckedUpdateWithoutCouponUsagesInput = {
     id?: StringFieldUpdateOperationsInput | string
     mobile?: StringFieldUpdateOperationsInput | string
+    familyId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -53560,6 +55187,7 @@ export namespace Prisma {
     joinDate?: Date | string
     createdAt?: Date | string
     updatedAt?: Date | string
+    family?: FamilyGroupCreateNestedOneWithoutMembersInput
     memberships?: MemberMembershipCreateNestedManyWithoutMemberInput
     attendances?: AttendanceCreateNestedManyWithoutMemberInput
     bookings?: BookingCreateNestedManyWithoutMemberInput
@@ -53575,6 +55203,7 @@ export namespace Prisma {
   export type MemberUncheckedCreateWithoutLoyaltyAchievementsInput = {
     id?: string
     mobile: string
+    familyId?: string | null
     name: string
     email?: string | null
     dateOfBirth?: Date | string | null
@@ -53657,6 +55286,7 @@ export namespace Prisma {
     joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    family?: FamilyGroupUpdateOneWithoutMembersNestedInput
     memberships?: MemberMembershipUpdateManyWithoutMemberNestedInput
     attendances?: AttendanceUpdateManyWithoutMemberNestedInput
     bookings?: BookingUpdateManyWithoutMemberNestedInput
@@ -53672,6 +55302,7 @@ export namespace Prisma {
   export type MemberUncheckedUpdateWithoutLoyaltyAchievementsInput = {
     id?: StringFieldUpdateOperationsInput | string
     mobile?: StringFieldUpdateOperationsInput | string
+    familyId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -53847,6 +55478,7 @@ export namespace Prisma {
     joinDate?: Date | string
     createdAt?: Date | string
     updatedAt?: Date | string
+    family?: FamilyGroupCreateNestedOneWithoutMembersInput
     memberships?: MemberMembershipCreateNestedManyWithoutMemberInput
     attendances?: AttendanceCreateNestedManyWithoutMemberInput
     bookings?: BookingCreateNestedManyWithoutMemberInput
@@ -53862,6 +55494,7 @@ export namespace Prisma {
   export type MemberUncheckedCreateWithoutSportStatsInput = {
     id?: string
     mobile: string
+    familyId?: string | null
     name: string
     email?: string | null
     dateOfBirth?: Date | string | null
@@ -53946,6 +55579,7 @@ export namespace Prisma {
     joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    family?: FamilyGroupUpdateOneWithoutMembersNestedInput
     memberships?: MemberMembershipUpdateManyWithoutMemberNestedInput
     attendances?: AttendanceUpdateManyWithoutMemberNestedInput
     bookings?: BookingUpdateManyWithoutMemberNestedInput
@@ -53961,6 +55595,7 @@ export namespace Prisma {
   export type MemberUncheckedUpdateWithoutSportStatsInput = {
     id?: StringFieldUpdateOperationsInput | string
     mobile?: StringFieldUpdateOperationsInput | string
+    familyId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -54062,6 +55697,80 @@ export namespace Prisma {
     details?: NullableStringFieldUpdateOperationsInput | string | null
     adminName?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MemberCreateManyFamilyInput = {
+    id?: string
+    mobile: string
+    name: string
+    email?: string | null
+    dateOfBirth?: Date | string | null
+    loyaltyPoints?: number
+    walletBalance?: number
+    joinDate?: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type MemberUpdateWithoutFamilyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    mobile?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    loyaltyPoints?: IntFieldUpdateOperationsInput | number
+    walletBalance?: FloatFieldUpdateOperationsInput | number
+    joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    memberships?: MemberMembershipUpdateManyWithoutMemberNestedInput
+    attendances?: AttendanceUpdateManyWithoutMemberNestedInput
+    bookings?: BookingUpdateManyWithoutMemberNestedInput
+    joinedBookings?: BookingParticipantUpdateManyWithoutMemberNestedInput
+    loyaltyHistory?: LoyaltyHistoryUpdateManyWithoutMemberNestedInput
+    tournamentRegistrations?: TournamentRegistrationUpdateManyWithoutRegisteredByNestedInput
+    walletTransactions?: WalletTransactionUpdateManyWithoutMemberNestedInput
+    couponAssignments?: CouponAssignmentUpdateManyWithoutMemberNestedInput
+    couponUsages?: CouponUsageUpdateManyWithoutMemberNestedInput
+    loyaltyAchievements?: LoyaltyAchievementUpdateManyWithoutMemberNestedInput
+    sportStats?: UserSportStatUpdateManyWithoutMemberNestedInput
+  }
+
+  export type MemberUncheckedUpdateWithoutFamilyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    mobile?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    loyaltyPoints?: IntFieldUpdateOperationsInput | number
+    walletBalance?: FloatFieldUpdateOperationsInput | number
+    joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    memberships?: MemberMembershipUncheckedUpdateManyWithoutMemberNestedInput
+    attendances?: AttendanceUncheckedUpdateManyWithoutMemberNestedInput
+    bookings?: BookingUncheckedUpdateManyWithoutMemberNestedInput
+    joinedBookings?: BookingParticipantUncheckedUpdateManyWithoutMemberNestedInput
+    loyaltyHistory?: LoyaltyHistoryUncheckedUpdateManyWithoutMemberNestedInput
+    tournamentRegistrations?: TournamentRegistrationUncheckedUpdateManyWithoutRegisteredByNestedInput
+    walletTransactions?: WalletTransactionUncheckedUpdateManyWithoutMemberNestedInput
+    couponAssignments?: CouponAssignmentUncheckedUpdateManyWithoutMemberNestedInput
+    couponUsages?: CouponUsageUncheckedUpdateManyWithoutMemberNestedInput
+    loyaltyAchievements?: LoyaltyAchievementUncheckedUpdateManyWithoutMemberNestedInput
+    sportStats?: UserSportStatUncheckedUpdateManyWithoutMemberNestedInput
+  }
+
+  export type MemberUncheckedUpdateManyWithoutFamilyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    mobile?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    loyaltyPoints?: IntFieldUpdateOperationsInput | number
+    walletBalance?: FloatFieldUpdateOperationsInput | number
+    joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type MemberMembershipCreateManyMemberInput = {

@@ -119,31 +119,20 @@ export function BookingDetailClient({ initialBooking, cancellationLimitHours, al
   const endDate = new Date(booking.endTime);
   const isPast = startDate < new Date();
 
-  const getCancellationInfo = () => {
-    if (!booking) return { penalty: 0, refund: 0, isFree: true, totalPaid: 0 };
-    
-    const walletPayments = booking.payments?.filter((p: any) => p.method === 'WALLET') || [];
-    const totalPaid = walletPayments.reduce((sum: number, p: any) => sum + p.amount, 0);
+  const [cancelInfo, setCancelInfo] = useState({ penalty: 0, refund: 0, isFree: true, totalPaid: 0 });
 
-    const now = new Date();
-    const diffMs = startDate.getTime() - now.getTime();
-    const diffHours = diffMs / (1000 * 60 * 60);
-
-    let penalty = 0;
-    let isFree = true;
-
-    if (diffHours < cancellationLimitHours && diffHours >= 0) {
-      const hourIndex = Math.ceil(cancellationLimitHours - diffHours);
-      const penaltyPercentage = hourIndex / cancellationLimitHours;
-      penalty = booking.price * penaltyPercentage;
-      isFree = false;
+  useEffect(() => {
+    if (isCancelModalOpen && booking.id) {
+      fetch(`/api/client/v1/bookings/${booking.id}/refund-preview`)
+        .then(res => res.json())
+        .then(data => {
+          if (!data.error) {
+            setCancelInfo(data);
+          }
+        })
+        .catch(console.error);
     }
-
-    const refund = Math.max(0, totalPaid - penalty);
-    return { penalty, refund, isFree, totalPaid };
-  };
-
-  const cancelInfo = getCancellationInfo();
+  }, [isCancelModalOpen, booking.id]);
 
   return (
     <div className="min-h-screen bg-[var(--play-bg)] pb-24">

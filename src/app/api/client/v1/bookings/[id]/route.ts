@@ -48,7 +48,7 @@ export async function GET(request: Request, context: { params: Promise<{ id: str
   } catch (error: any) {
     console.error(`[API ERROR] GET /api/client/v1/bookings/[id] ->`, error);
     console.error("[GET /bookings/[id]] Prisma/Internal error:", error);
-    return jsonResponse({ error: error.message }, { status: 500 });
+    return jsonResponse({ error: process.env.NODE_ENV === 'production' ? 'Internal server error' : error.message }, { status: 500 });
   }
 }
 
@@ -104,6 +104,6 @@ export async function PATCH(request: Request, context: { params: Promise<{ id: s
     return jsonResponse({ success: true, booking: updated });
   } catch (error: any) {
     console.error(`[API ERROR] PATCH /api/client/v1/bookings/[id] ->`, error);
-    return jsonResponse({ error: error.message }, { status: 500 });
+    return jsonResponse({ error: process.env.NODE_ENV === 'production' ? 'Internal server error' : error.message }, { status: 500 });
   }
 }

@@ -57,6 +57,6 @@ export async function POST(request: Request) {
     });
   } catch (error: any) {
     console.error('Wallet OTP send failed internally', error);
-    return jsonResponse({ error: error.message }, { status: 500 });
+    return jsonResponse({ error: process.env.NODE_ENV === 'production' ? 'Internal server error' : error.message }, { status: 500 });
   }
 }

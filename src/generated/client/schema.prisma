@@ -27,9 +27,19 @@ model Setting {
   updatedAt DateTime @updatedAt
 }
 
+model FamilyGroup {
+  id        String   @id @default(cuid())
+  mobile    String   @unique
+  members   Member[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
 model Member {
   id                      String                   @id @default(cuid())
   mobile                  String // Removed @unique to allow family accounts
+  familyId                String?
+  family                  FamilyGroup?             @relation(fields: [familyId], references: [id])
   name                    String
   email                   String?
   dateOfBirth             DateTime?
@@ -211,6 +221,7 @@ model Booking {
   @@index([status])
   @@index([visibility])
   @@index([inviteCode])
+  @@index([turfId, startTime, endTime])
 }
 
 model BookingParticipant {

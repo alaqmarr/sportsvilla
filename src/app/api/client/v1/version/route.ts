@@ -55,6 +55,6 @@ export async function GET(request: Request) {
     });
   } catch (error: any) {
     console.error(`[API ERROR] GET /api/client/v1/version ->`, error);
-    return jsonResponse({ error: error.message }, { status: 500 });
+    return jsonResponse({ error: process.env.NODE_ENV === 'production' ? 'Internal server error' : error.message }, { status: 500 });
   }
 }

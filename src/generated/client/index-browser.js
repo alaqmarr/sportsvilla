@@ -135,9 +135,17 @@ exports.Prisma.SettingScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.FamilyGroupScalarFieldEnum = {
+  id: 'id',
+  mobile: 'mobile',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.MemberScalarFieldEnum = {
   id: 'id',
   mobile: 'mobile',
+  familyId: 'familyId',
   name: 'name',
   email: 'email',
   dateOfBirth: 'dateOfBirth',
@@ -476,6 +484,7 @@ exports.Prisma.NullsOrder = {
 exports.Prisma.ModelName = {
   Admin: 'Admin',
   Setting: 'Setting',
+  FamilyGroup: 'FamilyGroup',
   Member: 'Member',
   LoyaltyHistory: 'LoyaltyHistory',
   Sport: 'Sport',

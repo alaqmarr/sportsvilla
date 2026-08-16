@@ -4,6 +4,7 @@ import { authenticateClient } from '@/lib/auth-middleware';
 import { jsonResponse, apiLog } from '@/lib/api-logger';
 import { bumpSyncTimestamp } from '@/lib/sync';
 import { sendWhatsAppBookingCancelledTemplate } from "@/lib/whatsapp";
+import { BookingService } from '@/services/BookingService';
 
 export async function POST(request: Request, context: { params: Promise<{ id: string }> }) {
   apiLog(`[API] POST /api/client/v1/bookings/[id]/cancel called`);
@@ -57,30 +58,9 @@ export async function POST(request: Request, context: { params: Promise<{ id: st
     
     const limitHours = parseInt(settingsMap.CLIENT_CANCELLATION_LIMIT_HOURS || "3", 10);
     
-    let penaltyRupees = 0;
-    if (limitHours > 0) {
-      const diffMs = booking.startTime.getTime() - now.getTime();
-      const diffHours = diffMs / (1000 * 60 * 60);
-      
-      if (diffHours < limitHours) {
-        // Calculate proportional penalty
-        // e.g. limitHours = 3.
-        // If diffHours is between 2 and 3 (last third hour), hourIndex = 1
-        // If diffHours is between 1 and 2 (second hour), hourIndex = 2
-        // If diffHours is between 0 and 1 (last hour), hourIndex = 3
-        const hourIndex = Math.ceil(limitHours - diffHours);
-        const penaltyPercentage = hourIndex / limitHours;
-        
-        penaltyRupees = booking.price * penaltyPercentage;
-      }
-    }
-
-    // Bug #4: Use total of wallet payments for refund, instead of advancePaid which might include gateway payments later.
-    // Refund amount must be in paise because walletBalance is in paise.
-    const walletPayments = booking.payments.filter((p: any) => p.method === 'WALLET');
-    const totalWalletPaidRupees = walletPayments.reduce((sum: number, p: any) => sum + p.amount, 0);
-    
-    const actualRefundRupees = Math.max(0, totalWalletPaidRupees - penaltyRupees);
+    const preview = BookingService.getRefundPreview(booking as any, limitHours);
+    const penaltyRupees = preview.penalty;
+    const actualRefundRupees = preview.refund;
     const refundAmountPaise = Math.round(actualRefundRupees * 100);
 
     // Bug #3: Calculate loyalty points to reverse
@@ -105,6 +85,12 @@ export async function POST(request: Request, context: { params: Promise<{ id: st
 
     // Execute everything in a single transaction
     await prisma.$transaction(async (tx) => {
+      // FIX #5: Check if it's already cancelled inside the transaction
+      const txBooking = await tx.booking.findUnique({ where: { id: params.id } });
+      if (!txBooking || txBooking.status === 'CANCELLED') {
+        throw new Error("Booking is already cancelled or doesn't exist");
+      }
+
       // Cancel the booking
       await tx.booking.update({
         where: { id: params.id },
@@ -190,6 +176,6 @@ export async function POST(request: Request, context: { params: Promise<{ id: st
     return jsonResponse({ success: true, message: "Booking cancelled successfully and amount refunded to wallet." });
   } catch (error: any) {
     console.error(`[API ERROR] POST /api/client/v1/bookings/[id]/cancel ->`, error);
-    return jsonResponse({ success: false, error: error.message }, { status: 500 });
+    return jsonResponse({ success: false, error: process.env.NODE_ENV === 'production' ? 'Internal server error' : error.message }, { status: 500 });
   }
 }
