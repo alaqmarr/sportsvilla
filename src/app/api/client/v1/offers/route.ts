@@ -23,15 +23,18 @@ export async function GET(request: Request) {
   }
 
   try {
-    // 1. Fetch public coupons
+    // 1. Fetch public coupons and include usages for this member
     const coupons = await prisma.coupon.findMany({
       where: {
         isActive: true,
-        isPublic: true,
-        OR: [
-          { expiryDate: null },
-          { expiryDate: { gt: new Date() } }
-        ]
+        isPublic: true
+      },
+      include: {
+        usages: {
+          where: {
+            memberId: targetMemberId
+          }
+        }
       },
       orderBy: { createdAt: 'desc' }
     });

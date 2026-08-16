@@ -4,15 +4,37 @@ import { revalidatePath } from "next/cache";
 import { bumpSyncTimestamp } from '@/lib/sync';
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
+import { whatsappDb } from '@/lib/whatsappDb';
 import { sendWhatsAppWalletCreditTemplate } from '@/lib/whatsapp';
 
-export async function addWalletTransaction(data: { memberId: string; amount: number; type: "CREDIT" | "DEBIT"; description?: string }) {
-  if (!data.memberId || !data.amount || data.amount <= 0) {
-    throw new Error("Invalid input data");
+export async function addWalletTransaction(data: { memberId: string; amount: number; type: "CREDIT" | "DEBIT"; description?: string; otp?: string }) {
+  if (!data.memberId || !data.amount || data.amount <= 0 || !data.otp) {
+    throw new Error("Invalid input data or missing OTP");
   }
 
   const member = await prisma.member.findUnique({ where: { id: data.memberId } });
   if (!member) throw new Error("Member not found");
+
+  const cleanMobile = member.mobile?.replace('+91', '').replace(/[^0-9]/g, '');
+  if (!cleanMobile) throw new Error("Member has no phone number");
+
+  const otpRecord = await whatsappDb.whatsAppOtp.findFirst({
+    where: {
+      phoneNumber: { contains: cleanMobile },
+      otp: data.otp,
+      purpose: 'WALLET_TXN',
+    },
+    orderBy: { createdAt: 'desc' }
+  });
+
+  if (!otpRecord) throw new Error("Invalid or missing OTP for wallet transaction");
+  if (otpRecord.verified) throw new Error("This OTP has already been used");
+  if (new Date() > new Date(otpRecord.expiresAt)) throw new Error("This OTP has expired");
+
+  await whatsappDb.whatsAppOtp.update({
+    where: { id: otpRecord.id },
+    data: { verified: true }
+  });
 
   const amountInPaise = Math.round(data.amount * 100);
 

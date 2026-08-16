@@ -4,6 +4,7 @@ import { authenticateClient } from '@/lib/auth-middleware';
 import { jsonResponse, apiLog } from '@/lib/api-logger';
 import { randomUUID } from 'crypto';
 import { bumpSyncTimestamp } from '@/lib/sync';
+import { whatsappDb } from '@/lib/whatsappDb';
 import { sendWhatsAppBookingConfirmedTemplate } from '@/lib/whatsapp';
 export async function GET(request: Request) {
   apiLog(`[API] GET /api/client/v1/bookings called`);
@@ -74,7 +75,7 @@ export async function POST(request: Request) {
 
   try {
     const body = await request.json();
-    const { turfId, sportId, startTime, endTime, participantCount, couponCode, walletAmountToUse = 0, memberId: requestedMemberId, visibility = "PRIVATE", inviteMaxCount } = body;
+    const { turfId, sportId, startTime, endTime, participantCount, couponCode, walletAmountToUse = 0, walletOtp, pointsAmountToUse = 0, memberId: requestedMemberId, visibility = "PRIVATE", inviteMaxCount } = body;
 
     const start = new Date(startTime);
     const end = new Date(endTime);
@@ -159,6 +160,7 @@ export async function POST(request: Request) {
     // Fetch latest member wallet balance for logged-in member (they are the one paying)
     const memberData = await prisma.member.findUnique({ where: { id: member.id } });
     const currentWallet = memberData?.walletBalance || 0;
+    const currentPoints = memberData?.loyaltyPoints || 0;
     
     // Validate Coupon if provided
     let discountAmount = 0;
@@ -246,8 +248,50 @@ export async function POST(request: Request) {
     
     // Future-proofing: We will rename advancePaid to walletDeductionRupees for clarity
     const walletDeductionRupees = advancePaid;
+
+    if (walletDeductionRupees > 0) {
+      if (!walletOtp) {
+        return jsonResponse({ error: 'Wallet OTP is required to use wallet balance.' }, { status: 400 });
+      }
+
+      const cleanMobile = member.mobile.replace('+91', '').replace(/[^0-9]/g, '');
+      const otpRecord = await whatsappDb.whatsAppOtp.findFirst({
+        where: {
+          phoneNumber: { contains: cleanMobile },
+          otp: walletOtp,
+          purpose: 'WALLET_TXN',
+        },
+        orderBy: { createdAt: 'desc' }
+      });
+
+      if (!otpRecord) {
+        return jsonResponse({ error: 'Invalid or missing OTP for wallet transaction.' }, { status: 400 });
+      }
+
+      if (otpRecord.verified) {
+        return jsonResponse({ error: 'This OTP has already been used.' }, { status: 400 });
+      }
+
+      if (new Date() > new Date(otpRecord.expiresAt)) {
+        return jsonResponse({ error: 'This OTP has expired.' }, { status: 400 });
+      }
+
+      // Mark OTP as verified
+      await whatsappDb.whatsAppOtp.update({
+        where: { id: otpRecord.id },
+        data: { verified: true }
+      });
+    }
+    
+    // Points deduction
+    let pointsDeduction = 0;
+    const requestedPoints = Number(pointsAmountToUse) || 0;
+    if (requestedPoints > 0) {
+      pointsDeduction = Math.min(requestedPoints, currentPoints, subtotal - walletDeductionRupees);
+    }
+    
     // If a payment gateway is added, gatewayAmount would add to advancePaid
-    const amountDue = subtotal - walletDeductionRupees;
+    const amountDue = subtotal - walletDeductionRupees - pointsDeduction;
 
     // Calculate SV Points Earned on subtotal (net amount), not gross price
     const pointsEarned = Math.floor(subtotal * 0.01);
@@ -361,6 +405,24 @@ export async function POST(request: Request) {
             bookingId: newBooking.id,
             amount: walletDeductionRupees,
             method: 'WALLET'
+          }
+        });
+      }
+
+      // Deduct points
+      if (pointsDeduction > 0) {
+        await tx.member.update({
+          where: { id: member.id }, // Logged-in user pays
+          data: { loyaltyPoints: { decrement: pointsDeduction } }
+        });
+        
+        await tx.loyaltyHistory.create({
+          data: {
+            memberId: member.id,
+            points: pointsDeduction,
+            type: 'REDEEMED',
+            source: 'BOOKING',
+            description: `Redeemed for booking ${newBooking.id}`
           }
         });
       }

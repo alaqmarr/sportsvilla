@@ -32,12 +32,7 @@ export default function UnauthenticatedLayout({
     <div className="flex min-h-screen flex-col">
       <header className="flex h-16 items-center justify-center border-b border-[var(--play-border)] bg-[var(--play-surface)] px-4 sm:justify-start sm:px-6 lg:px-8">
         <Link href="/play" className="flex items-center gap-2">
-          <div className="flex h-8 w-8 items-center justify-center rounded-md bg-[var(--play-brand)] text-white font-bold font-heading">
-            SV
-          </div>
-          <span className="text-xl font-bold tracking-tight font-heading text-[var(--play-brand-dark)]">
-            Sportsvilla
-          </span>
+          <img src="/long-logo.png" alt="Sportsvilla" className="h-6 w-auto object-contain" />
         </Link>
       </header>
       <main className="flex-1 flex flex-col justify-center items-center p-4 sm:p-6 lg:p-8">

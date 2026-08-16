@@ -36,8 +36,8 @@ export function Navbar() {
           >
             <Menu className="w-6 h-6" />
           </button>
-          <Link href="/play/dashboard" className="text-xl font-bold tracking-tight text-[var(--play-brand)]">
-            Sportsvilla
+          <Link href="/play/dashboard" className="flex items-center">
+            <img src="/long-logo.png" alt="Sportsvilla" className="h-6 w-auto object-contain" />
           </Link>
           <div className="hidden md:flex relative">
             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--play-text-muted)]" />

@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import useSWR from 'swr';
 import Link from 'next/link';
 import { Search, MapPin, Calendar, Users, Trophy, ChevronRight } from 'lucide-react';
+import { TournamentCard } from '@/components/play/TournamentCard';
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
@@ -79,60 +80,7 @@ export default function TournamentsPage() {
         )}
 
         {filteredTournaments.map((tournament) => (
-          <Link key={tournament.id} href={`/play/tournaments/${tournament.id}`}>
-            <div className="bg-[var(--play-surface)] border border-[var(--play-border)] rounded-[var(--play-radius-lg)] overflow-hidden hover:shadow-md transition-shadow">
-              <div className="h-32 bg-[var(--play-surface-alt)] relative">
-                {tournament.thumbnail ? (
-                  <img src={tournament.thumbnail} alt={tournament.name} className="w-full h-full object-cover" />
-                ) : (
-                  <div className="w-full h-full flex items-center justify-center text-[var(--play-brand)]">
-                    <Trophy size={48} className="opacity-20" />
-                  </div>
-                )}
-                <div className="absolute top-2 right-2">
-                  <span className={`px-2 py-1 text-xs font-semibold rounded-full ${
-                    tournament.status === 'UPCOMING' ? 'bg-blue-100 text-blue-800' :
-                    tournament.status === 'ONGOING' ? 'bg-green-100 text-green-800' :
-                    'bg-gray-100 text-gray-800'
-                  }`}>
-                    {tournament.status.charAt(0) + tournament.status.slice(1).toLowerCase()}
-                  </span>
-                </div>
-              </div>
-              
-              <div className="p-4">
-                <div className="flex justify-between items-start mb-2">
-                  <h3 className="text-lg font-bold font-outfit text-[var(--play-text)] line-clamp-1">{tournament.name}</h3>
-                  <span className="text-lg font-bold text-[var(--play-brand)]">₹{tournament.participationFee}</span>
-                </div>
-                
-                <div className="grid grid-cols-2 gap-y-2 text-sm text-[var(--play-text-muted)] mb-4">
-                  <div className="flex items-center gap-1.5">
-                    <Users size={16} />
-                    <span>{tournament.teamSize}v{tournament.teamSize}</span>
-                  </div>
-                  <div className="flex items-center gap-1.5">
-                    <MapPin size={16} />
-                    <span className="truncate">{tournament.venue || 'TBA'}</span>
-                  </div>
-                  <div className="flex items-center gap-1.5">
-                    <Calendar size={16} />
-                    <span>{new Date(tournament.startDate).toLocaleDateString()}</span>
-                  </div>
-                </div>
-                
-                <div className="flex items-center justify-between pt-3 border-t border-[var(--play-border)]">
-                  <span className="text-xs text-[var(--play-warning)] font-medium">
-                    Deadline: {tournament.registrationDeadline ? new Date(tournament.registrationDeadline).toLocaleDateString() : 'N/A'}
-                  </span>
-                  <div className="flex items-center text-[var(--play-brand)] text-sm font-medium">
-                    View Details
-                    <ChevronRight size={16} className="ml-1" />
-                  </div>
-                </div>
-              </div>
-            </div>
-          </Link>
+          <TournamentCard key={tournament.id} tournament={tournament as any} />
         ))}
       </div>
     </div>

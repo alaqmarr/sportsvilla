@@ -72,6 +72,7 @@ model Sport {
   id                     String           @id @default(cuid())
   name                   String
   description            String?
+  iconPath               String?
   rewardPointsPerCheckin Int              @default(0)
   turfs                  TurfSport[]
   membershipPlans        MembershipPlan[]
@@ -90,6 +91,7 @@ model Turf {
   id                       String             @id @default(cuid())
   name                     String
   location                 String?
+  iconPath                 String?
   parentTurfId             String?
   parentTurf               Turf?              @relation("TurfHierarchy", fields: [parentTurfId], references: [id])
   childTurfs               Turf[]             @relation("TurfHierarchy")

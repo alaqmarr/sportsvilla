@@ -97,6 +97,7 @@ export async function GET(request: Request) {
       return {
         id: turf.id,
         name: turf.name,
+        iconPath: turf.iconPath,
         capacityPerSlot: capacity,
         slots
       };

@@ -16,6 +16,10 @@ export default function WalletsClient({ initialMembers }: { initialMembers: any[
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState("");
 
+  const [isOtpMode, setIsOtpMode] = useState(false);
+  const [otp, setOtp] = useState("");
+  const [isSendingOtp, setIsSendingOtp] = useState(false);
+
   const filteredMembers = members.filter(m => 
     m.name.toLowerCase().includes(search.toLowerCase()) || 
     m.mobile.includes(search)
@@ -30,13 +34,37 @@ export default function WalletsClient({ initialMembers }: { initialMembers: any[
       return;
     }
 
+    if (!isOtpMode) {
+      // First step: send OTP
+      setIsSendingOtp(true);
+      try {
+        const res = await fetch(`/api/admin/members/${selectedMember.id}/wallet/send-otp`, {
+          method: 'POST'
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'Failed to send OTP');
+        setIsOtpMode(true);
+      } catch (err: any) {
+        setError(err.message || 'Failed to send OTP');
+      } finally {
+        setIsSendingOtp(false);
+      }
+      return;
+    }
+
+    if (otp.length < 6) {
+      setError("Please enter a valid 6-digit OTP.");
+      return;
+    }
+
     setIsSubmitting(true);
     try {
       await addWalletTransaction({
         memberId: selectedMember.id,
         amount: Number(amount),
         type,
-        description
+        description,
+        otp
       });
       
       // Update local state for immediate feedback
@@ -71,6 +99,8 @@ export default function WalletsClient({ initialMembers }: { initialMembers: any[
       setAmount("");
       setDescription("");
       setType("CREDIT");
+      setIsOtpMode(false);
+      setOtp("");
     } catch (err: any) {
       setError(err.message || "Failed to process transaction.");
     } finally {
@@ -151,7 +181,7 @@ export default function WalletsClient({ initialMembers }: { initialMembers: any[
                 
                 {/* Transaction Form */}
                 <div className="w-full lg:w-1/2 flex flex-col gap-4">
-                  <h3 className="text-lg font-bold text-white mb-2">New Transaction</h3>
+                  <h3 className="text-lg font-bold text-white mb-2">{isOtpMode ? "Verification Required" : "New Transaction"}</h3>
                   <form onSubmit={handleTransaction} className="bg-[#1c1f2e] p-5 rounded-xl border border-[#2a2d3e] flex flex-col gap-4">
                     {error && (
                       <div className="bg-red-500/10 border border-red-500/20 text-red-400 p-3 rounded-lg text-sm">
@@ -159,55 +189,95 @@ export default function WalletsClient({ initialMembers }: { initialMembers: any[
                       </div>
                     )}
                     
-                    <div className="flex gap-2 p-1 bg-[#0f1117] rounded-lg border border-[#2a2d3e]">
-                      <button 
-                        type="button" 
-                        onClick={() => setType("CREDIT")}
-                        className={`flex-1 py-2 text-sm font-bold rounded-md flex items-center justify-center gap-2 transition-colors ${type === "CREDIT" ? "bg-green-500/20 text-green-400" : "text-gray-400 hover:text-white"}`}
-                      >
-                        <FiArrowUpCircle /> Add Credit
-                      </button>
-                      <button 
-                        type="button" 
-                        onClick={() => setType("DEBIT")}
-                        className={`flex-1 py-2 text-sm font-bold rounded-md flex items-center justify-center gap-2 transition-colors ${type === "DEBIT" ? "bg-red-500/20 text-red-400" : "text-gray-400 hover:text-white"}`}
-                      >
-                        <FiArrowDownCircle /> Deduct Balance
-                      </button>
-                    </div>
+                    {!isOtpMode ? (
+                      <>
+                        <div className="flex gap-2 p-1 bg-[#0f1117] rounded-lg border border-[#2a2d3e]">
+                          <button 
+                            type="button" 
+                            onClick={() => setType("CREDIT")}
+                            className={`flex-1 py-2 text-sm font-bold rounded-md flex items-center justify-center gap-2 transition-colors ${type === "CREDIT" ? "bg-green-500/20 text-green-400" : "text-gray-400 hover:text-white"}`}
+                          >
+                            <FiArrowUpCircle /> Add Credit
+                          </button>
+                          <button 
+                            type="button" 
+                            onClick={() => setType("DEBIT")}
+                            className={`flex-1 py-2 text-sm font-bold rounded-md flex items-center justify-center gap-2 transition-colors ${type === "DEBIT" ? "bg-red-500/20 text-red-400" : "text-gray-400 hover:text-white"}`}
+                          >
+                            <FiArrowDownCircle /> Deduct Balance
+                          </button>
+                        </div>
 
-                    <div>
-                      <label className="block text-sm font-medium text-gray-400 mb-1">Amount (₹)</label>
-                      <input 
-                        type="number"
-                        required
-                        min="1"
-                        value={amount}
-                        onChange={(e) => setAmount(e.target.value)}
-                        className="w-full bg-[#0f1117] border border-[#2a2d3e] rounded-lg px-4 py-2 text-white placeholder-gray-600 focus:outline-none focus:border-orange-500"
-                        placeholder="Enter amount"
-                      />
-                    </div>
+                        <div>
+                          <label className="block text-sm font-medium text-gray-400 mb-1">Amount (₹)</label>
+                          <input 
+                            type="number"
+                            required
+                            min="1"
+                            value={amount}
+                            onChange={(e) => setAmount(e.target.value)}
+                            className="w-full bg-[#0f1117] border border-[#2a2d3e] rounded-lg px-4 py-2 text-white placeholder-gray-600 focus:outline-none focus:border-orange-500"
+                            placeholder="Enter amount"
+                          />
+                        </div>
 
-                    <div>
-                      <label className="block text-sm font-medium text-gray-400 mb-1">Description / Reason</label>
-                      <input 
-                        type="text"
-                        required
-                        value={description}
-                        onChange={(e) => setDescription(e.target.value)}
-                        className="w-full bg-[#0f1117] border border-[#2a2d3e] rounded-lg px-4 py-2 text-white placeholder-gray-600 focus:outline-none focus:border-orange-500"
-                        placeholder="e.g. Cash deposit, Refund, etc."
-                      />
-                    </div>
+                        <div>
+                          <label className="block text-sm font-medium text-gray-400 mb-1">Description / Reason</label>
+                          <input 
+                            type="text"
+                            required
+                            value={description}
+                            onChange={(e) => setDescription(e.target.value)}
+                            className="w-full bg-[#0f1117] border border-[#2a2d3e] rounded-lg px-4 py-2 text-white placeholder-gray-600 focus:outline-none focus:border-orange-500"
+                            placeholder="e.g. Cash deposit, Refund, etc."
+                          />
+                        </div>
 
-                    <button 
-                      type="submit" 
-                      disabled={isSubmitting}
-                      className={`w-full py-3 rounded-lg font-bold text-white flex justify-center items-center gap-2 mt-2 transition-colors ${type === "CREDIT" ? "bg-green-600 hover:bg-green-500" : "bg-red-600 hover:bg-red-500"} ${isSubmitting ? "opacity-50 cursor-not-allowed" : ""}`}
-                    >
-                      {isSubmitting ? "Processing..." : type === "CREDIT" ? "Confirm Add Credit" : "Confirm Deduction"}
-                    </button>
+                        <button 
+                          type="submit" 
+                          disabled={isSendingOtp}
+                          className={`w-full py-3 rounded-lg font-bold text-white flex justify-center items-center gap-2 mt-2 transition-colors ${type === "CREDIT" ? "bg-green-600 hover:bg-green-500" : "bg-red-600 hover:bg-red-500"} ${isSendingOtp ? "opacity-50 cursor-not-allowed" : ""}`}
+                        >
+                          {isSendingOtp ? "Sending OTP..." : type === "CREDIT" ? "Confirm Add Credit" : "Confirm Deduction"}
+                        </button>
+                      </>
+                    ) : (
+                      <>
+                        <div className="text-sm text-gray-400 mb-4">
+                          We've sent a 6-digit OTP to the user's WhatsApp number ({selectedMember.mobile}). Please ask them for the code to authorize this transaction of ₹{amount} ({type}).
+                        </div>
+                        
+                        <div>
+                          <label className="block text-sm font-medium text-gray-400 mb-1">Enter OTP</label>
+                          <input 
+                            type="text"
+                            required
+                            maxLength={6}
+                            value={otp}
+                            onChange={(e) => setOtp(e.target.value.replace(/\D/g, ''))}
+                            className="w-full bg-[#0f1117] border border-[#2a2d3e] rounded-lg px-4 py-3 text-center text-xl tracking-[0.5em] font-bold text-white placeholder-gray-600 focus:outline-none focus:border-orange-500"
+                            placeholder="------"
+                          />
+                        </div>
+
+                        <div className="flex gap-2 mt-2">
+                           <button 
+                            type="button" 
+                            onClick={() => { setIsOtpMode(false); setOtp(""); }}
+                            className="flex-1 py-3 rounded-lg font-bold text-gray-300 bg-[#2a2d3e] hover:bg-[#35394e] transition-colors"
+                          >
+                            Cancel
+                          </button>
+                          <button 
+                            type="submit" 
+                            disabled={isSubmitting || otp.length < 6}
+                            className={`flex-1 py-3 rounded-lg font-bold text-white flex justify-center items-center gap-2 transition-colors bg-orange-600 hover:bg-orange-500 disabled:opacity-50 disabled:cursor-not-allowed`}
+                          >
+                            {isSubmitting ? "Verifying..." : "Verify & Submit"}
+                          </button>
+                        </div>
+                      </>
+                    )}
                   </form>
                 </div>
 

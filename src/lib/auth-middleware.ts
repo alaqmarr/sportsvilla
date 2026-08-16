@@ -3,14 +3,31 @@ import { NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
 
 export async function authenticateClient(request: Request) {
+  let token = null;
+
+  // 1. Check Authorization header (used by mobile app)
   const authHeader = request.headers.get("authorization");
-  if (!authHeader?.startsWith("Bearer ")) {
+  if (authHeader?.startsWith("Bearer ")) {
+    token = authHeader.split("Bearer ")[1];
+  }
+
+  // 2. Fallback to HttpOnly cookie (used by web app)
+  if (!token) {
+    const cookieHeader = request.headers.get("cookie");
+    if (cookieHeader) {
+      const match = cookieHeader.match(/sv_session=([^;]+)/);
+      if (match) {
+        token = match[1];
+      }
+    }
+  }
+
+  if (!token) {
     return {
       error: NextResponse.json({ error: "Unauthorized" }, { status: 401 }),
     };
   }
 
-  const token = authHeader.split("Bearer ")[1];
   try {
     if (!process.env.NEXTAUTH_SECRET) {
       console.error('FATAL: NEXTAUTH_SECRET environment variable is not set!');

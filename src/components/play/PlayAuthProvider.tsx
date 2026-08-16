@@ -51,7 +51,7 @@ export function PlayAuthProvider({ children }: { children: React.ReactNode }) {
   const logout = async () => {
     try {
       await fetch('/api/client/v1/auth/web/logout', { method: 'POST' });
-      router.push('/login');
+      router.push('/play/login');
     } catch (err) {
       console.error('Logout failed', err);
     }

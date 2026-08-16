@@ -1,23 +1,48 @@
-'use client';
-
-import useSWR from 'swr';
-import { usePlayAuth } from '@/components/play/PlayAuthProvider';
+import { prisma } from '@/lib/prisma';
+import { requireServerMember } from '@/lib/serverAuth';
 import { Calendar, CheckCircle2, XCircle, Activity, CreditCard, Clock } from 'lucide-react';
 
-const fetcher = (url: string) => fetch(url).then(r => r.json());
+export default async function MembershipsPage() {
+  const member = await requireServerMember();
 
-export default function MembershipsPage() {
-  const { member } = usePlayAuth();
+  // Fetch Member Profile with Memberships and Attendance
+  const profile = await prisma.member.findUnique({
+    where: { id: member.id },
+    include: {
+      memberships: {
+        where: { status: 'ACTIVE' },
+        include: {
+          membershipPlan: {
+            include: { sport: true }
+          }
+        },
+        orderBy: { endDate: 'asc' }
+      },
+      attendances: {
+        orderBy: { date: 'desc' },
+        take: 10,
+        include: {
+          membershipPlan: true,
+          sport: true
+        }
+      }
+    }
+  }) as any;
 
-  const { data, error } = useSWR(
-    member?.id ? `/api/client/v1/profile?memberId=${member.id}` : null,
-    fetcher
-  );
+  const memberships = profile?.memberships.map((m: any) => ({
+    title: m.membershipPlan?.name || 'Membership',
+    sport: m.membershipPlan?.sport?.name || 'General',
+    daysRemaining: m.endDate ? Math.max(0, Math.ceil((new Date(m.endDate).getTime() - new Date().getTime()) / (1000 * 3600 * 24))) : 0,
+    usedSessions: 0, // No usedSessions on MemberMembership
+    totalSessions: m.membershipPlan?.sessionsCount || null,
+    expiresAt: m.endDate
+  })) || [];
 
-  const memberships = data?.memberships || [];
-  const attendance = data?.attendanceLog || [];
-
-  if (!member) return null;
+  const attendance = profile?.attendances.map((a: any) => ({
+    date: a.date,
+    sessionName: a.membershipPlan?.name || a.sport?.name || 'Training Session',
+    status: a.status
+  })) || [];
 
   return (
     <div className="min-h-screen bg-[var(--play-bg)] text-[var(--play-text)] p-4 sm:p-6 pb-24">
@@ -31,7 +56,7 @@ export default function MembershipsPage() {
         <h2 className="text-lg font-bold font-outfit mb-4">Active Passes</h2>
         <div className="space-y-4">
           {memberships.length > 0 ? memberships.map((pass: any, idx: number) => {
-            const usagePercent = Math.min(100, (pass.usedSessions / pass.totalSessions) * 100);
+            const usagePercent = pass.totalSessions ? Math.min(100, (pass.usedSessions / pass.totalSessions) * 100) : 0;
             
             return (
               <div key={idx} className="relative bg-[var(--play-surface)] p-5 rounded-[var(--play-radius-lg)] border border-[var(--play-border)] shadow-sm overflow-hidden">
@@ -54,15 +79,17 @@ export default function MembershipsPage() {
 
                   <div className="mb-2 flex justify-between text-sm">
                     <span className="text-[var(--play-text-muted)] font-medium">Sessions Used</span>
-                    <span className="font-semibold">{pass.usedSessions} / {pass.totalSessions}</span>
+                    <span className="font-semibold">{pass.usedSessions} / {pass.totalSessions || '∞'}</span>
                   </div>
                   
-                  <div className="w-full bg-[var(--play-bg)] rounded-full h-2.5 border border-[var(--play-border)] overflow-hidden">
-                    <div 
-                      className={`h-2.5 rounded-full ${usagePercent >= 90 ? 'bg-red-500' : 'bg-[var(--play-brand)]'}`} 
-                      style={{ width: `${usagePercent}%` }}
-                    ></div>
-                  </div>
+                  {pass.totalSessions > 0 && (
+                    <div className="w-full bg-[var(--play-bg)] rounded-full h-2.5 border border-[var(--play-border)] overflow-hidden">
+                      <div 
+                        className={`h-2.5 rounded-full ${usagePercent >= 90 ? 'bg-red-500' : 'bg-[var(--play-brand)]'}`} 
+                        style={{ width: `${usagePercent}%` }}
+                      ></div>
+                    </div>
+                  )}
                   {pass.expiresAt && (
                     <p className="text-xs text-[var(--play-text-muted)] mt-4">
                       Expires on {new Date(pass.expiresAt).toLocaleDateString()}
@@ -95,13 +122,17 @@ export default function MembershipsPage() {
                     <p className="text-xs text-[var(--play-text-muted)]">{record.sessionName}</p>
                   </div>
                   <div className="flex items-center gap-2">
-                    {record.status === 'Present' ? (
+                    {record.status === 'PRESENT' ? (
                       <span className="flex items-center gap-1 text-sm font-medium text-[var(--play-brand-dark)] bg-[var(--play-brand-light)] px-2 py-1 rounded-md">
                         <CheckCircle2 className="w-4 h-4" /> Present
                       </span>
-                    ) : (
-                      <span className="flex items-center gap-1 text-sm font-medium text-red-700 bg-red-100 px-2 py-1 rounded-md">
+                    ) : record.status === 'ABSENT' ? (
+                      <span className="flex items-center gap-1 text-sm font-medium text-red-600 bg-red-100 px-2 py-1 rounded-md">
                         <XCircle className="w-4 h-4" /> Absent
+                      </span>
+                    ) : (
+                      <span className="flex items-center gap-1 text-sm font-medium text-[var(--play-text-muted)] bg-[var(--play-surface-alt)] px-2 py-1 rounded-md">
+                        <Clock className="w-4 h-4" /> {record.status}
                       </span>
                     )}
                   </div>
@@ -109,8 +140,8 @@ export default function MembershipsPage() {
               ))}
             </div>
           ) : (
-            <div className="p-8 text-center text-[var(--play-text-muted)] text-sm">
-              No recent attendance records.
+            <div className="text-center py-8 text-[var(--play-text-muted)]">
+              No attendance records found.
             </div>
           )}
         </div>

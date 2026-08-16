@@ -50,20 +50,16 @@
     -moz-osx-font-smoothing: grayscale;
   }
 
-  /* Scrollbar */
+  /* Hide all scrollbars for a cleaner UI per user request */
   ::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
+    display: none;
+    width: 0;
+    height: 0;
   }
-  ::-webkit-scrollbar-track {
-    background: transparent;
-  }
-  ::-webkit-scrollbar-thumb {
-    background: var(--play-border);
-    border-radius: var(--play-radius-pill);
-  }
-  ::-webkit-scrollbar-thumb:hover {
-    background: var(--play-text-light);
+  
+  * {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
   }
 }
 

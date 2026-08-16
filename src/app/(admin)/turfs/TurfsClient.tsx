@@ -4,6 +4,23 @@ import { createTurf, updateTurf, deleteTurf } from "./actions";
 import { useAlert } from "@/components/AlertProvider";
 import { FiTrash2, FiEdit2, FiPlus, FiX, FiMapPin, FiMap, FiActivity } from "react-icons/fi";
 
+const AVAILABLE_ICONS = [
+  { value: "", label: "No Icon (Use Default)" },
+  { value: "/icons/badminton-court.png", label: "Badminton Court" },
+  { value: "/icons/badminton.png", label: "Badminton" },
+  { value: "/icons/bowling-machine.png", label: "Bowling Machine" },
+  { value: "/icons/cricket.png", label: "Cricket" },
+  { value: "/icons/football.png", label: "Football" },
+  { value: "/icons/pickleball-court.png", label: "Pickleball Court" },
+  { value: "/icons/pickleball.png", label: "Pickleball" },
+  { value: "/icons/ping-pong.png", label: "Ping Pong" },
+  { value: "/icons/practice.png", label: "Practice" },
+  { value: "/icons/swimming-pool.png", label: "Swimming Pool" },
+  { value: "/icons/swimming.png", label: "Swimming" },
+  { value: "/icons/tt-table.png", label: "Table Tennis Table" },
+  { value: "/icons/turf.png", label: "Turf" }
+];
+
 export default function TurfsClient({ initialTurfs, sports }: { initialTurfs: any[], sports: any[] }) {
   const { showAlert } = useAlert();
   const [turfs, setTurfs] = useState(initialTurfs);
@@ -13,6 +30,7 @@ export default function TurfsClient({ initialTurfs, sports }: { initialTurfs: an
   const [name, setName] = useState("");
   const [location, setLocation] = useState("");
   const [parentTurfId, setParentTurfId] = useState("");
+  const [iconPath, setIconPath] = useState("");
   const [bookingPrice, setBookingPrice] = useState<number | "">("");
   const [bookingDurationMinutes, setBookingDurationMinutes] = useState<number | "">(60);
   const [capacityPerSlot, setCapacityPerSlot] = useState<number | "">(1);
@@ -21,7 +39,7 @@ export default function TurfsClient({ initialTurfs, sports }: { initialTurfs: an
   const [loading, setLoading] = useState(false);
 
   function resetForm() {
-    setEditingId(""); setName(""); setLocation(""); setParentTurfId("");
+    setEditingId(""); setName(""); setLocation(""); setParentTurfId(""); setIconPath("");
     setBookingPrice(""); setBookingDurationMinutes(60); setCapacityPerSlot(1); setBookingValidityDays(0); setSelectedSportIds([]);
   }
 
@@ -35,6 +53,7 @@ export default function TurfsClient({ initialTurfs, sports }: { initialTurfs: an
     setName(turf.name); 
     setLocation(turf.location || ""); 
     setParentTurfId(turf.parentTurfId || "");
+    setIconPath(turf.iconPath || "");
     setBookingPrice(turf.bookingPrice || "");
     setBookingDurationMinutes(turf.bookingDurationMinutes || 60);
     setCapacityPerSlot(turf.capacityPerSlot || 1);
@@ -62,6 +81,7 @@ export default function TurfsClient({ initialTurfs, sports }: { initialTurfs: an
         name, 
         location, 
         parentTurfId: parentTurfId || null,
+        iconPath: iconPath || undefined,
         bookingPrice: bookingPrice === "" ? null : Number(bookingPrice),
         bookingDurationMinutes: bookingDurationMinutes === "" ? null : Number(bookingDurationMinutes),
         capacityPerSlot: capacityPerSlot === "" ? 1 : Number(capacityPerSlot),
@@ -113,8 +133,12 @@ export default function TurfsClient({ initialTurfs, sports }: { initialTurfs: an
         {turfs.map(turf => (
           <div key={turf.id} className="bg-[#161923] border border-[#2a2d3e] rounded-xl p-6">
             <div className="flex justify-between items-start">
-              <div className="w-11 h-11 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center text-xl">
-                <FiMapPin />
+              <div className="w-11 h-11 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center text-xl overflow-hidden">
+                {turf.iconPath ? (
+                  <img src={turf.iconPath} alt={turf.name} className="w-7 h-7 object-contain" />
+                ) : (
+                  <FiMapPin />
+                )}
               </div>
               <div className="flex gap-2">
                 <button
@@ -189,6 +213,23 @@ export default function TurfsClient({ initialTurfs, sports }: { initialTurfs: an
                     required
                     placeholder="e.g. Main Badminton Hall"
                   />
+                </div>
+                <div>
+                  <label className="block text-xs font-semibold uppercase tracking-wider text-gray-500 mb-2">Icon</label>
+                  <select
+                    className="w-full bg-[#0f1117] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white focus:border-orange-500/50 focus:ring-2 focus:ring-orange-500/20 focus:outline-none text-sm appearance-none cursor-pointer"
+                    value={iconPath}
+                    onChange={e => setIconPath(e.target.value)}
+                  >
+                    {AVAILABLE_ICONS.map(icon => (
+                      <option key={icon.value} value={icon.value}>{icon.label}</option>
+                    ))}
+                  </select>
+                  {iconPath && (
+                    <div className="mt-3 p-3 bg-[#0f1117] rounded-lg flex items-center justify-center border border-[#2a2d3e]">
+                      <img src={iconPath} alt="Icon Preview" className="w-12 h-12 object-contain" />
+                    </div>
+                  )}
                 </div>
                 <div>
                   <label className="block text-xs font-semibold uppercase tracking-wider text-gray-500 mb-2">Physical Address</label>

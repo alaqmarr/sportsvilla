@@ -8819,6 +8819,7 @@ export namespace Prisma {
     id: string | null
     name: string | null
     description: string | null
+    iconPath: string | null
     rewardPointsPerCheckin: number | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -8828,6 +8829,7 @@ export namespace Prisma {
     id: string | null
     name: string | null
     description: string | null
+    iconPath: string | null
     rewardPointsPerCheckin: number | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -8837,6 +8839,7 @@ export namespace Prisma {
     id: number
     name: number
     description: number
+    iconPath: number
     rewardPointsPerCheckin: number
     createdAt: number
     updatedAt: number
@@ -8856,6 +8859,7 @@ export namespace Prisma {
     id?: true
     name?: true
     description?: true
+    iconPath?: true
     rewardPointsPerCheckin?: true
     createdAt?: true
     updatedAt?: true
@@ -8865,6 +8869,7 @@ export namespace Prisma {
     id?: true
     name?: true
     description?: true
+    iconPath?: true
     rewardPointsPerCheckin?: true
     createdAt?: true
     updatedAt?: true
@@ -8874,6 +8879,7 @@ export namespace Prisma {
     id?: true
     name?: true
     description?: true
+    iconPath?: true
     rewardPointsPerCheckin?: true
     createdAt?: true
     updatedAt?: true
@@ -8970,6 +8976,7 @@ export namespace Prisma {
     id: string
     name: string
     description: string | null
+    iconPath: string | null
     rewardPointsPerCheckin: number
     createdAt: Date
     updatedAt: Date
@@ -8998,6 +9005,7 @@ export namespace Prisma {
     id?: boolean
     name?: boolean
     description?: boolean
+    iconPath?: boolean
     rewardPointsPerCheckin?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -9015,6 +9023,7 @@ export namespace Prisma {
     id?: boolean
     name?: boolean
     description?: boolean
+    iconPath?: boolean
     rewardPointsPerCheckin?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -9024,6 +9033,7 @@ export namespace Prisma {
     id?: boolean
     name?: boolean
     description?: boolean
+    iconPath?: boolean
     rewardPointsPerCheckin?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -9033,12 +9043,13 @@ export namespace Prisma {
     id?: boolean
     name?: boolean
     description?: boolean
+    iconPath?: boolean
     rewardPointsPerCheckin?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type SportOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "description" | "rewardPointsPerCheckin" | "createdAt" | "updatedAt", ExtArgs["result"]["sport"]>
+  export type SportOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "description" | "iconPath" | "rewardPointsPerCheckin" | "createdAt" | "updatedAt", ExtArgs["result"]["sport"]>
   export type SportInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     turfs?: boolean | Sport$turfsArgs<ExtArgs>
     membershipPlans?: boolean | Sport$membershipPlansArgs<ExtArgs>
@@ -9067,6 +9078,7 @@ export namespace Prisma {
       id: string
       name: string
       description: string | null
+      iconPath: string | null
       rewardPointsPerCheckin: number
       createdAt: Date
       updatedAt: Date
@@ -9503,6 +9515,7 @@ export namespace Prisma {
     readonly id: FieldRef<"Sport", 'String'>
     readonly name: FieldRef<"Sport", 'String'>
     readonly description: FieldRef<"Sport", 'String'>
+    readonly iconPath: FieldRef<"Sport", 'String'>
     readonly rewardPointsPerCheckin: FieldRef<"Sport", 'Int'>
     readonly createdAt: FieldRef<"Sport", 'DateTime'>
     readonly updatedAt: FieldRef<"Sport", 'DateTime'>
@@ -10113,6 +10126,7 @@ export namespace Prisma {
     id: string | null
     name: string | null
     location: string | null
+    iconPath: string | null
     parentTurfId: string | null
     bookingPrice: number | null
     bookingDurationMinutes: number | null
@@ -10127,6 +10141,7 @@ export namespace Prisma {
     id: string | null
     name: string | null
     location: string | null
+    iconPath: string | null
     parentTurfId: string | null
     bookingPrice: number | null
     bookingDurationMinutes: number | null
@@ -10141,6 +10156,7 @@ export namespace Prisma {
     id: number
     name: number
     location: number
+    iconPath: number
     parentTurfId: number
     bookingPrice: number
     bookingDurationMinutes: number
@@ -10171,6 +10187,7 @@ export namespace Prisma {
     id?: true
     name?: true
     location?: true
+    iconPath?: true
     parentTurfId?: true
     bookingPrice?: true
     bookingDurationMinutes?: true
@@ -10185,6 +10202,7 @@ export namespace Prisma {
     id?: true
     name?: true
     location?: true
+    iconPath?: true
     parentTurfId?: true
     bookingPrice?: true
     bookingDurationMinutes?: true
@@ -10199,6 +10217,7 @@ export namespace Prisma {
     id?: true
     name?: true
     location?: true
+    iconPath?: true
     parentTurfId?: true
     bookingPrice?: true
     bookingDurationMinutes?: true
@@ -10300,6 +10319,7 @@ export namespace Prisma {
     id: string
     name: string
     location: string | null
+    iconPath: string | null
     parentTurfId: string | null
     bookingPrice: number | null
     bookingDurationMinutes: number | null
@@ -10333,6 +10353,7 @@ export namespace Prisma {
     id?: boolean
     name?: boolean
     location?: boolean
+    iconPath?: boolean
     parentTurfId?: boolean
     bookingPrice?: boolean
     bookingDurationMinutes?: boolean
@@ -10353,6 +10374,7 @@ export namespace Prisma {
     id?: boolean
     name?: boolean
     location?: boolean
+    iconPath?: boolean
     parentTurfId?: boolean
     bookingPrice?: boolean
     bookingDurationMinutes?: boolean
@@ -10368,6 +10390,7 @@ export namespace Prisma {
     id?: boolean
     name?: boolean
     location?: boolean
+    iconPath?: boolean
     parentTurfId?: boolean
     bookingPrice?: boolean
     bookingDurationMinutes?: boolean
@@ -10383,6 +10406,7 @@ export namespace Prisma {
     id?: boolean
     name?: boolean
     location?: boolean
+    iconPath?: boolean
     parentTurfId?: boolean
     bookingPrice?: boolean
     bookingDurationMinutes?: boolean
@@ -10393,7 +10417,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type TurfOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "location" | "parentTurfId" | "bookingPrice" | "bookingDurationMinutes" | "capacityPerSlot" | "requireEntryVerification" | "bookingValidityDays" | "createdAt" | "updatedAt", ExtArgs["result"]["turf"]>
+  export type TurfOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "location" | "iconPath" | "parentTurfId" | "bookingPrice" | "bookingDurationMinutes" | "capacityPerSlot" | "requireEntryVerification" | "bookingValidityDays" | "createdAt" | "updatedAt", ExtArgs["result"]["turf"]>
   export type TurfInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     parentTurf?: boolean | Turf$parentTurfArgs<ExtArgs>
     childTurfs?: boolean | Turf$childTurfsArgs<ExtArgs>
@@ -10422,6 +10446,7 @@ export namespace Prisma {
       id: string
       name: string
       location: string | null
+      iconPath: string | null
       parentTurfId: string | null
       bookingPrice: number | null
       bookingDurationMinutes: number | null
@@ -10861,6 +10886,7 @@ export namespace Prisma {
     readonly id: FieldRef<"Turf", 'String'>
     readonly name: FieldRef<"Turf", 'String'>
     readonly location: FieldRef<"Turf", 'String'>
+    readonly iconPath: FieldRef<"Turf", 'String'>
     readonly parentTurfId: FieldRef<"Turf", 'String'>
     readonly bookingPrice: FieldRef<"Turf", 'Float'>
     readonly bookingDurationMinutes: FieldRef<"Turf", 'Int'>
@@ -39670,6 +39696,7 @@ export namespace Prisma {
     id: 'id',
     name: 'name',
     description: 'description',
+    iconPath: 'iconPath',
     rewardPointsPerCheckin: 'rewardPointsPerCheckin',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
@@ -39682,6 +39709,7 @@ export namespace Prisma {
     id: 'id',
     name: 'name',
     location: 'location',
+    iconPath: 'iconPath',
     parentTurfId: 'parentTurfId',
     bookingPrice: 'bookingPrice',
     bookingDurationMinutes: 'bookingDurationMinutes',
@@ -40411,6 +40439,7 @@ export namespace Prisma {
     id?: StringFilter<"Sport"> | string
     name?: StringFilter<"Sport"> | string
     description?: StringNullableFilter<"Sport"> | string | null
+    iconPath?: StringNullableFilter<"Sport"> | string | null
     rewardPointsPerCheckin?: IntFilter<"Sport"> | number
     createdAt?: DateTimeFilter<"Sport"> | Date | string
     updatedAt?: DateTimeFilter<"Sport"> | Date | string
@@ -40427,6 +40456,7 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     description?: SortOrderInput | SortOrder
+    iconPath?: SortOrderInput | SortOrder
     rewardPointsPerCheckin?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -40446,6 +40476,7 @@ export namespace Prisma {
     NOT?: SportWhereInput | SportWhereInput[]
     name?: StringFilter<"Sport"> | string
     description?: StringNullableFilter<"Sport"> | string | null
+    iconPath?: StringNullableFilter<"Sport"> | string | null
     rewardPointsPerCheckin?: IntFilter<"Sport"> | number
     createdAt?: DateTimeFilter<"Sport"> | Date | string
     updatedAt?: DateTimeFilter<"Sport"> | Date | string
@@ -40462,6 +40493,7 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     description?: SortOrderInput | SortOrder
+    iconPath?: SortOrderInput | SortOrder
     rewardPointsPerCheckin?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -40479,6 +40511,7 @@ export namespace Prisma {
     id?: StringWithAggregatesFilter<"Sport"> | string
     name?: StringWithAggregatesFilter<"Sport"> | string
     description?: StringNullableWithAggregatesFilter<"Sport"> | string | null
+    iconPath?: StringNullableWithAggregatesFilter<"Sport"> | string | null
     rewardPointsPerCheckin?: IntWithAggregatesFilter<"Sport"> | number
     createdAt?: DateTimeWithAggregatesFilter<"Sport"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Sport"> | Date | string
@@ -40491,6 +40524,7 @@ export namespace Prisma {
     id?: StringFilter<"Turf"> | string
     name?: StringFilter<"Turf"> | string
     location?: StringNullableFilter<"Turf"> | string | null
+    iconPath?: StringNullableFilter<"Turf"> | string | null
     parentTurfId?: StringNullableFilter<"Turf"> | string | null
     bookingPrice?: FloatNullableFilter<"Turf"> | number | null
     bookingDurationMinutes?: IntNullableFilter<"Turf"> | number | null
@@ -40510,6 +40544,7 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     location?: SortOrderInput | SortOrder
+    iconPath?: SortOrderInput | SortOrder
     parentTurfId?: SortOrderInput | SortOrder
     bookingPrice?: SortOrderInput | SortOrder
     bookingDurationMinutes?: SortOrderInput | SortOrder
@@ -40532,6 +40567,7 @@ export namespace Prisma {
     NOT?: TurfWhereInput | TurfWhereInput[]
     name?: StringFilter<"Turf"> | string
     location?: StringNullableFilter<"Turf"> | string | null
+    iconPath?: StringNullableFilter<"Turf"> | string | null
     parentTurfId?: StringNullableFilter<"Turf"> | string | null
     bookingPrice?: FloatNullableFilter<"Turf"> | number | null
     bookingDurationMinutes?: IntNullableFilter<"Turf"> | number | null
@@ -40551,6 +40587,7 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     location?: SortOrderInput | SortOrder
+    iconPath?: SortOrderInput | SortOrder
     parentTurfId?: SortOrderInput | SortOrder
     bookingPrice?: SortOrderInput | SortOrder
     bookingDurationMinutes?: SortOrderInput | SortOrder
@@ -40573,6 +40610,7 @@ export namespace Prisma {
     id?: StringWithAggregatesFilter<"Turf"> | string
     name?: StringWithAggregatesFilter<"Turf"> | string
     location?: StringNullableWithAggregatesFilter<"Turf"> | string | null
+    iconPath?: StringNullableWithAggregatesFilter<"Turf"> | string | null
     parentTurfId?: StringNullableWithAggregatesFilter<"Turf"> | string | null
     bookingPrice?: FloatNullableWithAggregatesFilter<"Turf"> | number | null
     bookingDurationMinutes?: IntNullableWithAggregatesFilter<"Turf"> | number | null
@@ -42772,6 +42810,7 @@ export namespace Prisma {
     id?: string
     name: string
     description?: string | null
+    iconPath?: string | null
     rewardPointsPerCheckin?: number
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -42788,6 +42827,7 @@ export namespace Prisma {
     id?: string
     name: string
     description?: string | null
+    iconPath?: string | null
     rewardPointsPerCheckin?: number
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -42804,6 +42844,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    iconPath?: NullableStringFieldUpdateOperationsInput | string | null
     rewardPointsPerCheckin?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -42820,6 +42861,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    iconPath?: NullableStringFieldUpdateOperationsInput | string | null
     rewardPointsPerCheckin?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -42836,6 +42878,7 @@ export namespace Prisma {
     id?: string
     name: string
     description?: string | null
+    iconPath?: string | null
     rewardPointsPerCheckin?: number
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -42845,6 +42888,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    iconPath?: NullableStringFieldUpdateOperationsInput | string | null
     rewardPointsPerCheckin?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -42854,6 +42898,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    iconPath?: NullableStringFieldUpdateOperationsInput | string | null
     rewardPointsPerCheckin?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -42863,6 +42908,7 @@ export namespace Prisma {
     id?: string
     name: string
     location?: string | null
+    iconPath?: string | null
     bookingPrice?: number | null
     bookingDurationMinutes?: number | null
     capacityPerSlot?: number
@@ -42881,6 +42927,7 @@ export namespace Prisma {
     id?: string
     name: string
     location?: string | null
+    iconPath?: string | null
     parentTurfId?: string | null
     bookingPrice?: number | null
     bookingDurationMinutes?: number | null
@@ -42899,6 +42946,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     location?: NullableStringFieldUpdateOperationsInput | string | null
+    iconPath?: NullableStringFieldUpdateOperationsInput | string | null
     bookingPrice?: NullableFloatFieldUpdateOperationsInput | number | null
     bookingDurationMinutes?: NullableIntFieldUpdateOperationsInput | number | null
     capacityPerSlot?: IntFieldUpdateOperationsInput | number
@@ -42917,6 +42965,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     location?: NullableStringFieldUpdateOperationsInput | string | null
+    iconPath?: NullableStringFieldUpdateOperationsInput | string | null
     parentTurfId?: NullableStringFieldUpdateOperationsInput | string | null
     bookingPrice?: NullableFloatFieldUpdateOperationsInput | number | null
     bookingDurationMinutes?: NullableIntFieldUpdateOperationsInput | number | null
@@ -42935,6 +42984,7 @@ export namespace Prisma {
     id?: string
     name: string
     location?: string | null
+    iconPath?: string | null
     parentTurfId?: string | null
     bookingPrice?: number | null
     bookingDurationMinutes?: number | null
@@ -42949,6 +42999,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     location?: NullableStringFieldUpdateOperationsInput | string | null
+    iconPath?: NullableStringFieldUpdateOperationsInput | string | null
     bookingPrice?: NullableFloatFieldUpdateOperationsInput | number | null
     bookingDurationMinutes?: NullableIntFieldUpdateOperationsInput | number | null
     capacityPerSlot?: IntFieldUpdateOperationsInput | number
@@ -42962,6 +43013,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     location?: NullableStringFieldUpdateOperationsInput | string | null
+    iconPath?: NullableStringFieldUpdateOperationsInput | string | null
     parentTurfId?: NullableStringFieldUpdateOperationsInput | string | null
     bookingPrice?: NullableFloatFieldUpdateOperationsInput | number | null
     bookingDurationMinutes?: NullableIntFieldUpdateOperationsInput | number | null
@@ -45432,6 +45484,7 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     description?: SortOrder
+    iconPath?: SortOrder
     rewardPointsPerCheckin?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -45445,6 +45498,7 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     description?: SortOrder
+    iconPath?: SortOrder
     rewardPointsPerCheckin?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -45454,6 +45508,7 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     description?: SortOrder
+    iconPath?: SortOrder
     rewardPointsPerCheckin?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -45504,6 +45559,7 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     location?: SortOrder
+    iconPath?: SortOrder
     parentTurfId?: SortOrder
     bookingPrice?: SortOrder
     bookingDurationMinutes?: SortOrder
@@ -45525,6 +45581,7 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     location?: SortOrder
+    iconPath?: SortOrder
     parentTurfId?: SortOrder
     bookingPrice?: SortOrder
     bookingDurationMinutes?: SortOrder
@@ -45539,6 +45596,7 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     location?: SortOrder
+    iconPath?: SortOrder
     parentTurfId?: SortOrder
     bookingPrice?: SortOrder
     bookingDurationMinutes?: SortOrder
@@ -50120,6 +50178,7 @@ export namespace Prisma {
     id?: string
     name: string
     location?: string | null
+    iconPath?: string | null
     bookingPrice?: number | null
     bookingDurationMinutes?: number | null
     capacityPerSlot?: number
@@ -50137,6 +50196,7 @@ export namespace Prisma {
     id?: string
     name: string
     location?: string | null
+    iconPath?: string | null
     parentTurfId?: string | null
     bookingPrice?: number | null
     bookingDurationMinutes?: number | null
@@ -50159,6 +50219,7 @@ export namespace Prisma {
     id?: string
     name: string
     location?: string | null
+    iconPath?: string | null
     bookingPrice?: number | null
     bookingDurationMinutes?: number | null
     capacityPerSlot?: number
@@ -50176,6 +50237,7 @@ export namespace Prisma {
     id?: string
     name: string
     location?: string | null
+    iconPath?: string | null
     bookingPrice?: number | null
     bookingDurationMinutes?: number | null
     capacityPerSlot?: number
@@ -50324,6 +50386,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     location?: NullableStringFieldUpdateOperationsInput | string | null
+    iconPath?: NullableStringFieldUpdateOperationsInput | string | null
     bookingPrice?: NullableFloatFieldUpdateOperationsInput | number | null
     bookingDurationMinutes?: NullableIntFieldUpdateOperationsInput | number | null
     capacityPerSlot?: IntFieldUpdateOperationsInput | number
@@ -50341,6 +50404,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     location?: NullableStringFieldUpdateOperationsInput | string | null
+    iconPath?: NullableStringFieldUpdateOperationsInput | string | null
     parentTurfId?: NullableStringFieldUpdateOperationsInput | string | null
     bookingPrice?: NullableFloatFieldUpdateOperationsInput | number | null
     bookingDurationMinutes?: NullableIntFieldUpdateOperationsInput | number | null
@@ -50377,6 +50441,7 @@ export namespace Prisma {
     id?: StringFilter<"Turf"> | string
     name?: StringFilter<"Turf"> | string
     location?: StringNullableFilter<"Turf"> | string | null
+    iconPath?: StringNullableFilter<"Turf"> | string | null
     parentTurfId?: StringNullableFilter<"Turf"> | string | null
     bookingPrice?: FloatNullableFilter<"Turf"> | number | null
     bookingDurationMinutes?: IntNullableFilter<"Turf"> | number | null
@@ -50439,6 +50504,7 @@ export namespace Prisma {
     id?: string
     name: string
     location?: string | null
+    iconPath?: string | null
     bookingPrice?: number | null
     bookingDurationMinutes?: number | null
     capacityPerSlot?: number
@@ -50456,6 +50522,7 @@ export namespace Prisma {
     id?: string
     name: string
     location?: string | null
+    iconPath?: string | null
     parentTurfId?: string | null
     bookingPrice?: number | null
     bookingDurationMinutes?: number | null
@@ -50478,6 +50545,7 @@ export namespace Prisma {
     id?: string
     name: string
     description?: string | null
+    iconPath?: string | null
     rewardPointsPerCheckin?: number
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -50493,6 +50561,7 @@ export namespace Prisma {
     id?: string
     name: string
     description?: string | null
+    iconPath?: string | null
     rewardPointsPerCheckin?: number
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -50524,6 +50593,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     location?: NullableStringFieldUpdateOperationsInput | string | null
+    iconPath?: NullableStringFieldUpdateOperationsInput | string | null
     bookingPrice?: NullableFloatFieldUpdateOperationsInput | number | null
     bookingDurationMinutes?: NullableIntFieldUpdateOperationsInput | number | null
     capacityPerSlot?: IntFieldUpdateOperationsInput | number
@@ -50541,6 +50611,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     location?: NullableStringFieldUpdateOperationsInput | string | null
+    iconPath?: NullableStringFieldUpdateOperationsInput | string | null
     parentTurfId?: NullableStringFieldUpdateOperationsInput | string | null
     bookingPrice?: NullableFloatFieldUpdateOperationsInput | number | null
     bookingDurationMinutes?: NullableIntFieldUpdateOperationsInput | number | null
@@ -50569,6 +50640,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    iconPath?: NullableStringFieldUpdateOperationsInput | string | null
     rewardPointsPerCheckin?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -50584,6 +50656,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    iconPath?: NullableStringFieldUpdateOperationsInput | string | null
     rewardPointsPerCheckin?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -50599,6 +50672,7 @@ export namespace Prisma {
     id?: string
     name: string
     description?: string | null
+    iconPath?: string | null
     rewardPointsPerCheckin?: number
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -50614,6 +50688,7 @@ export namespace Prisma {
     id?: string
     name: string
     description?: string | null
+    iconPath?: string | null
     rewardPointsPerCheckin?: number
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -50709,6 +50784,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    iconPath?: NullableStringFieldUpdateOperationsInput | string | null
     rewardPointsPerCheckin?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -50724,6 +50800,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    iconPath?: NullableStringFieldUpdateOperationsInput | string | null
     rewardPointsPerCheckin?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -50859,6 +50936,7 @@ export namespace Prisma {
     id?: string
     name: string
     location?: string | null
+    iconPath?: string | null
     bookingPrice?: number | null
     bookingDurationMinutes?: number | null
     capacityPerSlot?: number
@@ -50876,6 +50954,7 @@ export namespace Prisma {
     id?: string
     name: string
     location?: string | null
+    iconPath?: string | null
     parentTurfId?: string | null
     bookingPrice?: number | null
     bookingDurationMinutes?: number | null
@@ -51009,6 +51088,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     location?: NullableStringFieldUpdateOperationsInput | string | null
+    iconPath?: NullableStringFieldUpdateOperationsInput | string | null
     bookingPrice?: NullableFloatFieldUpdateOperationsInput | number | null
     bookingDurationMinutes?: NullableIntFieldUpdateOperationsInput | number | null
     capacityPerSlot?: IntFieldUpdateOperationsInput | number
@@ -51026,6 +51106,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     location?: NullableStringFieldUpdateOperationsInput | string | null
+    iconPath?: NullableStringFieldUpdateOperationsInput | string | null
     parentTurfId?: NullableStringFieldUpdateOperationsInput | string | null
     bookingPrice?: NullableFloatFieldUpdateOperationsInput | number | null
     bookingDurationMinutes?: NullableIntFieldUpdateOperationsInput | number | null
@@ -51094,6 +51175,7 @@ export namespace Prisma {
     id?: string
     name: string
     description?: string | null
+    iconPath?: string | null
     rewardPointsPerCheckin?: number
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -51109,6 +51191,7 @@ export namespace Prisma {
     id?: string
     name: string
     description?: string | null
+    iconPath?: string | null
     rewardPointsPerCheckin?: number
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -51234,6 +51317,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    iconPath?: NullableStringFieldUpdateOperationsInput | string | null
     rewardPointsPerCheckin?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -51249,6 +51333,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    iconPath?: NullableStringFieldUpdateOperationsInput | string | null
     rewardPointsPerCheckin?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -51307,6 +51392,7 @@ export namespace Prisma {
     id?: string
     name: string
     location?: string | null
+    iconPath?: string | null
     bookingPrice?: number | null
     bookingDurationMinutes?: number | null
     capacityPerSlot?: number
@@ -51324,6 +51410,7 @@ export namespace Prisma {
     id?: string
     name: string
     location?: string | null
+    iconPath?: string | null
     parentTurfId?: string | null
     bookingPrice?: number | null
     bookingDurationMinutes?: number | null
@@ -51397,6 +51484,7 @@ export namespace Prisma {
     id?: string
     name: string
     description?: string | null
+    iconPath?: string | null
     rewardPointsPerCheckin?: number
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -51412,6 +51500,7 @@ export namespace Prisma {
     id?: string
     name: string
     description?: string | null
+    iconPath?: string | null
     rewardPointsPerCheckin?: number
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -51541,6 +51630,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     location?: NullableStringFieldUpdateOperationsInput | string | null
+    iconPath?: NullableStringFieldUpdateOperationsInput | string | null
     bookingPrice?: NullableFloatFieldUpdateOperationsInput | number | null
     bookingDurationMinutes?: NullableIntFieldUpdateOperationsInput | number | null
     capacityPerSlot?: IntFieldUpdateOperationsInput | number
@@ -51558,6 +51648,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     location?: NullableStringFieldUpdateOperationsInput | string | null
+    iconPath?: NullableStringFieldUpdateOperationsInput | string | null
     parentTurfId?: NullableStringFieldUpdateOperationsInput | string | null
     bookingPrice?: NullableFloatFieldUpdateOperationsInput | number | null
     bookingDurationMinutes?: NullableIntFieldUpdateOperationsInput | number | null
@@ -51643,6 +51734,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    iconPath?: NullableStringFieldUpdateOperationsInput | string | null
     rewardPointsPerCheckin?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -51658,6 +51750,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    iconPath?: NullableStringFieldUpdateOperationsInput | string | null
     rewardPointsPerCheckin?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -52217,6 +52310,7 @@ export namespace Prisma {
     id?: string
     name: string
     description?: string | null
+    iconPath?: string | null
     rewardPointsPerCheckin?: number
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -52232,6 +52326,7 @@ export namespace Prisma {
     id?: string
     name: string
     description?: string | null
+    iconPath?: string | null
     rewardPointsPerCheckin?: number
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -52298,6 +52393,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    iconPath?: NullableStringFieldUpdateOperationsInput | string | null
     rewardPointsPerCheckin?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -52313,6 +52409,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    iconPath?: NullableStringFieldUpdateOperationsInput | string | null
     rewardPointsPerCheckin?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -53663,6 +53760,7 @@ export namespace Prisma {
     id?: string
     name: string
     description?: string | null
+    iconPath?: string | null
     rewardPointsPerCheckin?: number
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -53678,6 +53776,7 @@ export namespace Prisma {
     id?: string
     name: string
     description?: string | null
+    iconPath?: string | null
     rewardPointsPerCheckin?: number
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -53709,6 +53808,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    iconPath?: NullableStringFieldUpdateOperationsInput | string | null
     rewardPointsPerCheckin?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -53724,6 +53824,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    iconPath?: NullableStringFieldUpdateOperationsInput | string | null
     rewardPointsPerCheckin?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -53790,6 +53891,7 @@ export namespace Prisma {
     id?: string
     name: string
     description?: string | null
+    iconPath?: string | null
     rewardPointsPerCheckin?: number
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -53805,6 +53907,7 @@ export namespace Prisma {
     id?: string
     name: string
     description?: string | null
+    iconPath?: string | null
     rewardPointsPerCheckin?: number
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -53893,6 +53996,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    iconPath?: NullableStringFieldUpdateOperationsInput | string | null
     rewardPointsPerCheckin?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -53908,6 +54012,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    iconPath?: NullableStringFieldUpdateOperationsInput | string | null
     rewardPointsPerCheckin?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -54771,6 +54876,7 @@ export namespace Prisma {
     id?: string
     name: string
     location?: string | null
+    iconPath?: string | null
     bookingPrice?: number | null
     bookingDurationMinutes?: number | null
     capacityPerSlot?: number
@@ -54822,6 +54928,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     location?: NullableStringFieldUpdateOperationsInput | string | null
+    iconPath?: NullableStringFieldUpdateOperationsInput | string | null
     bookingPrice?: NullableFloatFieldUpdateOperationsInput | number | null
     bookingDurationMinutes?: NullableIntFieldUpdateOperationsInput | number | null
     capacityPerSlot?: IntFieldUpdateOperationsInput | number
@@ -54839,6 +54946,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     location?: NullableStringFieldUpdateOperationsInput | string | null
+    iconPath?: NullableStringFieldUpdateOperationsInput | string | null
     bookingPrice?: NullableFloatFieldUpdateOperationsInput | number | null
     bookingDurationMinutes?: NullableIntFieldUpdateOperationsInput | number | null
     capacityPerSlot?: IntFieldUpdateOperationsInput | number
@@ -54856,6 +54964,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     location?: NullableStringFieldUpdateOperationsInput | string | null
+    iconPath?: NullableStringFieldUpdateOperationsInput | string | null
     bookingPrice?: NullableFloatFieldUpdateOperationsInput | number | null
     bookingDurationMinutes?: NullableIntFieldUpdateOperationsInput | number | null
     capacityPerSlot?: IntFieldUpdateOperationsInput | number

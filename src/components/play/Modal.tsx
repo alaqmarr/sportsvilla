@@ -10,6 +10,7 @@ interface ModalProps {
   title?: string;
   children: React.ReactNode;
   size?: 'sm' | 'md' | 'lg' | 'xl';
+  noPadding?: boolean;
 }
 
 const sizeClasses = {
@@ -19,7 +20,7 @@ const sizeClasses = {
   xl: 'max-w-4xl',
 };
 
-export function Modal({ isOpen, onClose, title, children, size = 'md' }: ModalProps) {
+export function Modal({ isOpen, onClose, title, children, size = 'md', noPadding = false }: ModalProps) {
   const modalRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -88,7 +89,7 @@ export function Modal({ isOpen, onClose, title, children, size = 'md' }: ModalPr
               </button>
             )}
 
-            <div className="flex-1 overflow-y-auto p-6">
+            <div className={`flex-1 ${noPadding ? 'flex flex-col overflow-hidden min-h-0' : 'overflow-y-auto p-6'}`}>
               {children}
             </div>
           </motion.div>

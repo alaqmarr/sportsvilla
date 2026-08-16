@@ -162,6 +162,7 @@ exports.Prisma.SportScalarFieldEnum = {
   id: 'id',
   name: 'name',
   description: 'description',
+  iconPath: 'iconPath',
   rewardPointsPerCheckin: 'rewardPointsPerCheckin',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -171,6 +172,7 @@ exports.Prisma.TurfScalarFieldEnum = {
   id: 'id',
   name: 'name',
   location: 'location',
+  iconPath: 'iconPath',
   parentTurfId: 'parentTurfId',
   bookingPrice: 'bookingPrice',
   bookingDurationMinutes: 'bookingDurationMinutes',

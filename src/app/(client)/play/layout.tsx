@@ -18,23 +18,21 @@ export default function PlayRootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${inter.variable} ${outfit.variable}`}>
-      <body className="font-sans antialiased bg-[var(--play-bg)] text-[var(--play-text)] min-h-screen">
-        <PlayAuthProvider>
-          {children}
-          <Toaster 
-            position="top-center"
-            toastOptions={{
-              style: {
-                background: 'var(--play-surface)',
-                color: 'var(--play-text)',
-                borderRadius: 'var(--play-radius-md)',
-                border: '1px solid var(--play-border)',
-              },
-            }}
-          />
-        </PlayAuthProvider>
-      </body>
-    </html>
+    <div className={`${inter.variable} ${outfit.variable} font-sans antialiased bg-[var(--play-bg)] text-[var(--play-text)] min-h-screen`}>
+      <PlayAuthProvider>
+        {children}
+        <Toaster 
+          position="top-center"
+          toastOptions={{
+            style: {
+              background: 'var(--play-surface)',
+              color: 'var(--play-text)',
+              borderRadius: 'var(--play-radius-md)',
+              border: '1px solid var(--play-border)',
+            },
+          }}
+        />
+      </PlayAuthProvider>
+    </div>
   );
 }

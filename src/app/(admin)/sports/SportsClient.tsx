@@ -4,6 +4,23 @@ import { createSport, updateSport, deleteSport } from "./actions";
 import { useAlert } from "@/components/AlertProvider";
 import { FiTrash2, FiEdit2, FiPlus, FiX, FiActivity } from "react-icons/fi";
 
+const AVAILABLE_ICONS = [
+  { value: "", label: "No Icon (Use Default)" },
+  { value: "/icons/badminton-court.png", label: "Badminton Court" },
+  { value: "/icons/badminton.png", label: "Badminton" },
+  { value: "/icons/bowling-machine.png", label: "Bowling Machine" },
+  { value: "/icons/cricket.png", label: "Cricket" },
+  { value: "/icons/football.png", label: "Football" },
+  { value: "/icons/pickleball-court.png", label: "Pickleball Court" },
+  { value: "/icons/pickleball.png", label: "Pickleball" },
+  { value: "/icons/ping-pong.png", label: "Ping Pong" },
+  { value: "/icons/practice.png", label: "Practice" },
+  { value: "/icons/swimming-pool.png", label: "Swimming Pool" },
+  { value: "/icons/swimming.png", label: "Swimming" },
+  { value: "/icons/tt-table.png", label: "Table Tennis Table" },
+  { value: "/icons/turf.png", label: "Turf" }
+];
+
 export default function SportsClient({ initialSports }: { initialSports: any[] }) {
   const { showAlert } = useAlert();
   const [sports, setSports] = useState(initialSports);
@@ -13,15 +30,16 @@ export default function SportsClient({ initialSports }: { initialSports: any[] }
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [rewardPointsPerCheckin, setRewardPointsPerCheckin] = useState<number>(0);
+  const [iconPath, setIconPath] = useState("");
   const [loading, setLoading] = useState(false);
 
   function openCreateModal() {
-    setEditingId(""); setName(""); setDescription(""); setRewardPointsPerCheckin(0);
+    setEditingId(""); setName(""); setDescription(""); setRewardPointsPerCheckin(0); setIconPath("");
     setShowModal(true);
   }
 
   function openEditModal(sport: any) {
-    setEditingId(sport.id); setName(sport.name); setDescription(sport.description || ""); setRewardPointsPerCheckin(sport.rewardPointsPerCheckin || 0);
+    setEditingId(sport.id); setName(sport.name); setDescription(sport.description || ""); setRewardPointsPerCheckin(sport.rewardPointsPerCheckin || 0); setIconPath(sport.iconPath || "");
     setShowModal(true);
   }
 
@@ -29,10 +47,10 @@ export default function SportsClient({ initialSports }: { initialSports: any[] }
     e.preventDefault(); setLoading(true);
     try {
       if (editingId) {
-        await updateSport(editingId, { name, description, rewardPointsPerCheckin: Number(rewardPointsPerCheckin) });
+        await updateSport(editingId, { name, description, rewardPointsPerCheckin: Number(rewardPointsPerCheckin), iconPath: iconPath || undefined });
         showAlert("Sport Updated", `The details for '${name}' have been successfully updated.`, "success");
       } else {
-        await createSport({ name, description, rewardPointsPerCheckin: Number(rewardPointsPerCheckin) });
+        await createSport({ name, description, rewardPointsPerCheckin: Number(rewardPointsPerCheckin), iconPath: iconPath || undefined });
         showAlert("Sport Added", `The sport '${name}' has been successfully added to your catalog.`, "success");
       }
       setShowModal(false); window.location.reload();
@@ -60,7 +78,7 @@ export default function SportsClient({ initialSports }: { initialSports: any[] }
           <h1 className="text-2xl font-bold font-['Outfit'] text-white">Sports Config</h1>
           <p className="text-gray-500 mt-1 text-sm">Manage the different activities available at your facility.</p>
         </div>
-        <button onClick={() => { setEditingId(""); setName(""); setDescription(""); setShowModal(true); }} className="bg-orange-500 hover:bg-orange-600 text-white rounded-lg px-5 py-2.5 text-sm font-semibold inline-flex items-center gap-2 transition-colors cursor-pointer border-none">
+        <button onClick={openCreateModal} className="bg-orange-500 hover:bg-orange-600 text-white rounded-lg px-5 py-2.5 text-sm font-semibold inline-flex items-center gap-2 transition-colors cursor-pointer border-none">
           <FiPlus size={16} /> Add New Sport
         </button>
       </div>
@@ -69,17 +87,15 @@ export default function SportsClient({ initialSports }: { initialSports: any[] }
         {sports.map(sport => (
           <div key={sport.id} className="bg-[#161923] border border-[#2a2d3e] rounded-xl p-6">
             <div className="flex justify-between items-start">
-              <div className="w-11 h-11 rounded-lg bg-orange-500/10 text-orange-400 flex items-center justify-center text-xl">
-                <FiActivity />
+              <div className="w-11 h-11 rounded-lg bg-orange-500/10 text-orange-400 flex items-center justify-center text-xl overflow-hidden">
+                {sport.iconPath ? (
+                  <img src={sport.iconPath} alt={sport.name} className="w-7 h-7 object-contain" />
+                ) : (
+                  <FiActivity />
+                )}
               </div>
               <div className="flex gap-2">
-                <button onClick={() => {
-                  setEditingId(sport.id);
-                  setName(sport.name);
-                  setDescription(sport.description || "");
-                  setRewardPointsPerCheckin(sport.rewardPointsPerCheckin || 0);
-                  setShowModal(true);
-                }} className="border border-[#2a2d3e] hover:bg-[#1c1f2e] text-gray-400 rounded-lg p-2 transition-colors cursor-pointer bg-transparent" title="Edit">
+                <button onClick={() => openEditModal(sport)} className="border border-[#2a2d3e] hover:bg-[#1c1f2e] text-gray-400 rounded-lg p-2 transition-colors cursor-pointer bg-transparent" title="Edit">
                   <FiEdit2 size={14} />
                 </button>
                 <button onClick={() => handleDelete(sport.id)} className="border border-[#2a2d3e] hover:bg-red-500/10 text-red-400 rounded-lg p-2 transition-colors cursor-pointer bg-transparent" title="Delete">
@@ -116,13 +132,25 @@ export default function SportsClient({ initialSports }: { initialSports: any[] }
                 <input type="text" className="w-full bg-[#0f1117] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white placeholder-gray-600 focus:border-orange-500/50 focus:ring-2 focus:ring-orange-500/20 focus:outline-none text-sm" value={name} onChange={e => setName(e.target.value)} required placeholder="e.g. Badminton" />
               </div>
               <div className="mb-5">
+                <label className="block text-xs uppercase tracking-wider font-semibold text-gray-500 mb-2">Icon</label>
+                <select className="w-full bg-[#0f1117] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white focus:border-orange-500/50 focus:ring-2 focus:ring-orange-500/20 focus:outline-none text-sm" value={iconPath} onChange={e => setIconPath(e.target.value)}>
+                  {AVAILABLE_ICONS.map(icon => (
+                    <option key={icon.value} value={icon.value}>{icon.label}</option>
+                  ))}
+                </select>
+                {iconPath && (
+                  <div className="mt-3 p-3 bg-[#0f1117] rounded-lg flex items-center justify-center border border-[#2a2d3e]">
+                    <img src={iconPath} alt="Icon Preview" className="w-12 h-12 object-contain" />
+                  </div>
+                )}
+              </div>
+              <div className="mb-5">
                 <label className="block text-xs uppercase tracking-wider font-semibold text-gray-500 mb-2">Description</label>
-                <textarea className="w-full bg-[#0f1117] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white placeholder-gray-600 focus:border-orange-500/50 focus:ring-2 focus:ring-orange-500/20 focus:outline-none text-sm" value={description} onChange={e => setDescription(e.target.value)} rows={4} placeholder="Optional details about this sport..." />
+                <textarea className="w-full bg-[#0f1117] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white placeholder-gray-600 focus:border-orange-500/50 focus:ring-2 focus:ring-orange-500/20 focus:outline-none text-sm" value={description} onChange={e => setDescription(e.target.value)} rows={3} placeholder="Optional details about this sport..." />
               </div>
               <div className="mb-5">
                 <label className="block text-xs uppercase tracking-wider font-semibold text-gray-500 mb-2">Reward Points Per Check-in</label>
                 <input type="number" min="0" className="w-full bg-[#0f1117] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white focus:border-orange-500/50 focus:ring-2 focus:ring-orange-500/20 focus:outline-none text-sm" value={rewardPointsPerCheckin} onChange={e => setRewardPointsPerCheckin(Number(e.target.value))} placeholder="0" />
-                <p className="text-[10px] text-gray-500 mt-1">Points awarded to a member when they check into this sport.</p>
               </div>
               <button type="submit" className="w-full bg-orange-500 hover:bg-orange-600 text-white rounded-lg px-5 py-3 text-sm font-semibold transition-colors cursor-pointer border-none" disabled={loading}>
                 {loading ? "Saving..." : "Save Sport Configuration"}

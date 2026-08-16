@@ -1,106 +1,58 @@
-'use client';
+import { prisma } from "@/lib/prisma";
+import { notFound } from "next/navigation";
+import { requireServerMember } from "@/lib/serverAuth";
+import { BookingDetailClient } from "./BookingDetailClient";
 
-import { useParams, useRouter } from 'next/navigation';
-import useSWR from 'swr';
-import { ArrowLeft } from 'lucide-react';
-import { DigitalPass } from '@/components/play/DigitalPass';
+export default async function BookingDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const member = await requireServerMember();
+  const { id } = await params;
 
-const fetcher = (url: string) => fetch(url).then((res) => res.json());
+  const familyMembers = await prisma.member.findMany({
+    where: { mobile: member.mobile },
+    select: { id: true }
+  });
+  const familyIds = familyMembers.map(m => m.id);
 
-export default function BookingDetailPage() {
-  const params = useParams();
-  const router = useRouter();
-  const id = params.id as string;
-  
-  // Poll every 3 seconds for status change if booking is confirmed
-  const { data, error, isLoading, mutate } = useSWR(
-    id ? `/api/client/v1/bookings/${id}` : null,
-    fetcher,
-    {
-      refreshInterval: (data) => (data?.booking?.status === 'CONFIRMED' ? 3000 : 0)
-    }
-  );
+  const booking = await prisma.booking.findUnique({
+    where: { id },
+    include: {
+      turf: true,
+      sport: true,
+      tickets: true,
+      member: { select: { id: true, name: true } },
+      participants: {
+        include: {
+          member: { select: { id: true, name: true, mobile: true } },
+        },
+      },
+    },
+  });
 
-  const booking = data?.booking;
-
-  const handleCancel = async () => {
-    if (!confirm('Are you sure you want to cancel this booking?')) return;
-    
-    try {
-      const res = await fetch(`/api/client/v1/bookings/${id}/cancel`, {
-        method: 'POST'
-      });
-      if (res.ok) {
-        mutate();
-      } else {
-        const result = await res.json();
-        alert(result.error || 'Failed to cancel booking');
-      }
-    } catch (e) {
-      alert('An error occurred');
-    }
-  };
-
-  if (isLoading) {
-    return (
-      <div className="min-h-screen bg-[var(--play-bg)] p-4 flex flex-col items-center justify-center">
-        <div className="w-full max-w-md h-96 bg-gray-200 animate-pulse rounded-[var(--play-radius-lg)]"></div>
-      </div>
-    );
+  if (!booking) {
+    notFound();
   }
 
-  if (error || !booking) {
-    return (
-      <div className="min-h-screen bg-[var(--play-bg)] p-4 flex flex-col items-center justify-center">
-        <p className="text-red-500 mb-4">Failed to load booking details.</p>
-        <button onClick={() => router.back()} className="text-[var(--play-brand)] font-bold">Go Back</button>
-      </div>
-    );
+  // Security check: Must be owner or a participant
+  const isOwner = familyIds.includes(booking.memberId);
+  const isParticipant = booking.participants.some(p => familyIds.includes(p.memberId));
+
+  if (!isOwner && !isParticipant) {
+    notFound();
   }
 
-  return (
-    <main className="min-h-screen bg-[var(--play-bg)] text-[var(--play-text)] pb-24">
-      {/* Header */}
-      <div className="p-4 flex items-center gap-3">
-        <button onClick={() => router.back()} className="p-2 bg-[var(--play-surface)] rounded-full shadow-sm">
-          <ArrowLeft size={20} />
-        </button>
-        <h1 className="text-xl font-bold font-outfit">Digital Pass</h1>
-      </div>
+  // Get global settings
+  const globalSettings = await prisma.setting.findMany();
+  const settingsMap = globalSettings.reduce((acc, s) => {
+    acc[s.key] = s.value;
+    return acc;
+  }, {} as Record<string, string>);
 
-      <div className="px-4 py-2 max-w-md mx-auto">
-        {/* Pass Card Prominently Rendered */}
-        <DigitalPass booking={booking} qrData={booking.id} />
+  const cancellationLimitHours = parseInt(settingsMap.CLIENT_CANCELLATION_LIMIT_HOURS || "3", 10);
+  const allowCancellation = settingsMap.ALLOW_CANCELLATION !== "false";
 
-        {/* Action Buttons */}
-        <div className="mt-8 space-y-3">
-          {booking.status === 'CONFIRMED' && (
-            <>
-              <button className="w-full bg-[var(--play-brand)] text-white font-bold py-3.5 rounded-[var(--play-radius-md)] shadow-sm hover:bg-[var(--play-brand-dark)] transition-colors">
-                Manage Game / Add Squad
-              </button>
-              <div className="grid grid-cols-2 gap-3">
-                <button className="bg-[var(--play-surface)] border border-[var(--play-border)] font-semibold py-3 rounded-[var(--play-radius-md)] text-[var(--play-text)]">
-                  Reschedule
-                </button>
-                <button 
-                  onClick={handleCancel}
-                  className="bg-[var(--play-surface)] border border-[var(--play-error)] font-semibold py-3 rounded-[var(--play-radius-md)] text-[var(--play-error)]">
-                  Cancel
-                </button>
-              </div>
-            </>
-          )}
-          
-          {booking.status === 'COMPLETED' && (
-            <button 
-              onClick={() => router.push('/play/book')}
-              className="w-full bg-[var(--play-surface)] border border-[var(--play-border)] font-semibold py-3.5 rounded-[var(--play-radius-md)] text-[var(--play-text)]">
-              Book Again
-            </button>
-          )}
-        </div>
-      </div>
-    </main>
-  );
+  return <BookingDetailClient
+    initialBooking={booking}
+    cancellationLimitHours={cancellationLimitHours}
+    allowCancellation={allowCancellation}
+  />;
 }

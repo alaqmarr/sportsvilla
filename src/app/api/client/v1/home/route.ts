@@ -201,7 +201,10 @@ export async function GET(request: Request) {
       prisma.tournament.findMany({
         where: {
           status: 'UPCOMING',
-          id: { notIn: registeredTournamentIds }
+          id: { notIn: registeredTournamentIds },
+          startDate: {
+            gte: new Date(new Date().setHours(0, 0, 0, 0))
+          }
         },
         include: { sport: true, _count: { select: { registrations: true } } },
         orderBy: { startDate: 'asc' },

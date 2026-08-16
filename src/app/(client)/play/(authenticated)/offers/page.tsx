@@ -18,7 +18,11 @@ export default function OffersPage() {
 
   const announcements = data?.announcements || [];
   const loyalty = data?.loyalty || { currentRank: 'Bronze', nextRank: 'Silver', points: 0, nextRankPoints: 1000 };
-  const coupons = data?.coupons || [];
+  const allCoupons = data?.coupons || [];
+  const activeCoupons = allCoupons.filter((c: any) => !c.expiryDate || new Date(c.expiryDate) > new Date());
+  const expiredCoupons = allCoupons.filter((c: any) => c.expiryDate && new Date(c.expiryDate) <= new Date());
+  
+  const [showExpired, setShowExpired] = useState(false);
 
   const handleCopy = (code: string) => {
     navigator.clipboard.writeText(code);
@@ -75,7 +79,7 @@ export default function OffersPage() {
 
         <div className="w-full bg-[var(--play-bg)] rounded-full h-3 mb-2 border border-[var(--play-border)] overflow-hidden">
           <div 
-            className="bg-[var(--play-brand)] h-3 rounded-full transition-all duration-1000 ease-out" 
+            className="bg-[var(--play-brand)] h-3 rounded-full transition-all duration-1000 ease-out text-white" 
             style={{ width: `${progressPercent}%` }}
           ></div>
         </div>
@@ -89,37 +93,84 @@ export default function OffersPage() {
       <section>
         <h2 className="text-lg font-bold font-outfit mb-4">Available Coupons</h2>
         <div className="space-y-4">
-          {coupons.length > 0 ? coupons.map((coupon: any, idx: number) => (
-            <div key={idx} className="bg-[var(--play-surface)] rounded-[var(--play-radius-lg)] border border-[var(--play-border)] shadow-sm overflow-hidden flex flex-col sm:flex-row">
-              <div className="p-4 flex-1">
-                <h3 className="font-bold text-lg mb-1">{coupon.title}</h3>
-                <p className="text-sm text-[var(--play-text-muted)]">{coupon.description}</p>
-                {coupon.validUntil && (
-                  <p className="text-xs text-red-500 mt-2 font-medium">Valid until: {new Date(coupon.validUntil).toLocaleDateString()}</p>
-                )}
-              </div>
-              <div className="bg-[var(--play-surface-alt)] p-4 border-t sm:border-t-0 sm:border-l border-dashed border-[var(--play-border)] flex flex-row sm:flex-col items-center justify-between sm:justify-center gap-3 w-full sm:w-40 shrink-0">
-                <div className="font-mono font-bold text-[var(--play-brand-dark)] bg-[var(--play-brand-light)] px-3 py-1 rounded border border-[var(--play-brand)]">
-                  {coupon.code}
-                </div>
-                <button 
-                  onClick={() => handleCopy(coupon.code)}
-                  className="flex items-center justify-center gap-1 text-sm bg-white border border-[var(--play-border)] hover:bg-[var(--play-bg)] px-3 py-1.5 rounded-[var(--play-radius-md)] transition-colors w-full sm:w-auto"
-                >
-                  {copiedCode === coupon.code ? (
-                    <><CheckCircle className="w-4 h-4 text-[var(--play-brand)]" /> Copied</>
-                  ) : (
-                    <><Copy className="w-4 h-4 text-[var(--play-text-muted)]" /> Copy</>
+          {activeCoupons.length > 0 ? activeCoupons.map((coupon: any, idx: number) => {
+            const isUsed = coupon.usages && coupon.usages.length > 0;
+            return (
+              <div key={idx} className={`bg-[var(--play-surface)] rounded-[var(--play-radius-lg)] border border-[var(--play-border)] shadow-sm overflow-hidden flex flex-col sm:flex-row ${isUsed ? 'opacity-70' : ''}`}>
+                <div className="p-4 flex-1 relative">
+                  {isUsed && (
+                    <div className="absolute top-2 right-2 bg-green-500/20 text-green-500 text-xs px-2 py-1 rounded font-bold uppercase">
+                      Used
+                    </div>
                   )}
-                </button>
+                  <h3 className="font-bold text-lg mb-1">{coupon.title}</h3>
+                  <p className="text-sm text-[var(--play-text-muted)]">{coupon.description}</p>
+                  {coupon.validUntil && (
+                    <p className="text-xs text-red-500 mt-2 font-medium">Valid until: {new Date(coupon.validUntil).toLocaleDateString()}</p>
+                  )}
+                </div>
+                <div className="bg-[var(--play-surface-alt)] p-4 border-t sm:border-t-0 sm:border-l border-dashed border-[var(--play-border)] flex flex-row sm:flex-col items-center justify-between sm:justify-center gap-3 w-full sm:w-40 shrink-0">
+                  <div className="font-mono font-bold text-[var(--play-brand-dark)] bg-[var(--play-brand-light)] px-3 py-1 rounded border border-[var(--play-brand)]">
+                    {coupon.code}
+                  </div>
+                  <button 
+                    onClick={() => handleCopy(coupon.code)}
+                    disabled={isUsed}
+                    className="flex items-center justify-center gap-1 text-sm bg-white border border-[var(--play-border)] hover:bg-[var(--play-bg)] px-3 py-1.5 rounded-[var(--play-radius-md)] transition-colors w-full sm:w-auto disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    {copiedCode === coupon.code ? (
+                      <><CheckCircle className="w-4 h-4 text-[var(--play-brand)]" /> Copied</>
+                    ) : (
+                      <><Copy className="w-4 h-4 text-[var(--play-text-muted)]" /> Copy</>
+                    )}
+                  </button>
+                </div>
               </div>
-            </div>
-          )) : (
+            );
+          }) : (
             <div className="text-center py-8 text-[var(--play-text-muted)] bg-[var(--play-surface)] rounded-[var(--play-radius-lg)] border border-[var(--play-border)]">
-              No coupons available right now. Check back later!
+              No active coupons available right now. Check back later!
             </div>
           )}
         </div>
+
+        {expiredCoupons.length > 0 && (
+          <div className="mt-8">
+            <button 
+              onClick={() => setShowExpired(!showExpired)}
+              className="w-full py-3 flex items-center justify-center gap-2 text-[var(--play-text-muted)] hover:text-[var(--play-text)] bg-[var(--play-surface)] border border-[var(--play-border)] rounded-[var(--play-radius-lg)] transition-colors font-medium"
+            >
+              {showExpired ? 'Hide Expired Coupons' : `View Expired Coupons (${expiredCoupons.length})`}
+            </button>
+            
+            {showExpired && (
+              <div className="space-y-4 mt-4">
+                {expiredCoupons.map((coupon: any, idx: number) => {
+                  const isUsed = coupon.usages && coupon.usages.length > 0;
+                  return (
+                    <div key={idx} className="bg-[var(--play-bg)] rounded-[var(--play-radius-lg)] border border-[var(--play-border)] shadow-sm overflow-hidden flex flex-col sm:flex-row opacity-60 grayscale">
+                      <div className="p-4 flex-1 relative">
+                        {isUsed && (
+                          <div className="absolute top-2 right-2 bg-green-500/20 text-green-500 text-xs px-2 py-1 rounded font-bold uppercase">
+                            Used
+                          </div>
+                        )}
+                        <h3 className="font-bold text-lg mb-1">{coupon.title}</h3>
+                        <p className="text-sm text-[var(--play-text-muted)]">{coupon.description}</p>
+                        <p className="text-xs text-red-500/70 mt-2 font-medium">Expired on {new Date(coupon.expiryDate).toLocaleDateString()}</p>
+                      </div>
+                      <div className="bg-[var(--play-surface-alt)] p-4 border-t sm:border-t-0 sm:border-l border-dashed border-[var(--play-border)] flex flex-row sm:flex-col items-center justify-between sm:justify-center gap-3 w-full sm:w-40 shrink-0">
+                        <div className="font-mono font-bold text-[var(--play-text-muted)] bg-[var(--play-bg)] px-3 py-1 rounded border border-[var(--play-border)]">
+                          {coupon.code}
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+        )}
       </section>
     </div>
   );

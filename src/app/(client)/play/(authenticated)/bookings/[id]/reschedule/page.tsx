@@ -18,11 +18,12 @@ export default function ReschedulePage() {
   const [selectedSlots, setSelectedSlots] = useState<string[]>([])
   const [isSubmitting, setIsSubmitting] = useState(false)
 
-  const { data: booking, isLoading: isLoadingBooking } = useSWR(`/api/client/v1/bookings/${id}`, fetcher)
+  const { data: bookingResponse, isLoading: isLoadingBooking } = useSWR(`/api/client/v1/bookings/${id}`, fetcher)
+  const booking = bookingResponse?.booking
   
   const dateStr = selectedDate.toISOString().split('T')[0]
   const { data: availability, isLoading: isLoadingSlots } = useSWR(
-    booking ? `/api/client/v1/availability?sportId=${booking.sport.id}&venueId=${booking.venue.id}&date=${dateStr}` : null,
+    booking ? `/api/client/v1/availability?sportId=${booking.sport.id}&turfId=${booking.turf.id}&date=${dateStr}` : null,
     fetcher
   )
 
@@ -30,10 +31,16 @@ export default function ReschedulePage() {
     if (selectedSlots.length === 0) return
     setIsSubmitting(true)
     try {
+      const selectedSlotObjects = availability?.turfs?.[0]?.slots?.filter((s: any) => selectedSlots.includes(s.time)) || []
+      if (selectedSlotObjects.length === 0) return
+      
+      const newStartTime = selectedSlotObjects[0].startTime
+      const newEndTime = selectedSlotObjects[selectedSlotObjects.length - 1].endTime
+
       const res = await fetch(`/api/client/v1/bookings/${id}/reschedule`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ slots: selectedSlots, date: dateStr })
+        body: JSON.stringify({ newStartTime, newEndTime })
       })
       if (res.ok) {
         router.push(`/play/bookings/${id}`)
@@ -51,7 +58,7 @@ export default function ReschedulePage() {
   if (!booking) return <div className="p-4 text-center text-[var(--play-error)]">Booking not found</div>
 
   return (
-    <div className="min-h-screen bg-[var(--play-bg)] text-[var(--play-text)] pb-24">
+    <div className="flex flex-col h-full bg-[var(--play-bg)] text-[var(--play-text)] pb-8 relative">
       <header className="sticky top-0 z-10 bg-[var(--play-surface)] border-b border-[var(--play-border)] px-4 py-3 flex items-center gap-3">
         <Link href={`/play/bookings/${id}`} className="text-[var(--play-text)] hover:text-[var(--play-text-muted)]">
           <ChevronLeft className="w-6 h-6" />
@@ -62,11 +69,11 @@ export default function ReschedulePage() {
       <div className="p-4 bg-[var(--play-surface-alt)] border-b border-[var(--play-border)] mb-4">
         <h2 className="text-sm font-semibold text-[var(--play-text-muted)] mb-2 uppercase tracking-wider">Original Booking</h2>
         <div className="bg-[var(--play-surface)] p-3 rounded-[var(--play-radius-md)] border border-[var(--play-border)] shadow-sm">
-          <div className="font-semibold">{booking.venue.name}</div>
+          <div className="font-semibold">{booking.turf.name}</div>
           <div className="text-sm text-[var(--play-text-muted)]">{booking.sport.name}</div>
           <div className="mt-2 flex items-center gap-2 text-sm">
             <Calendar className="w-4 h-4 text-[var(--play-brand)]" />
-            <span>{new Date(booking.date).toLocaleDateString()} • {booking.slots.join(', ')}</span>
+            <span>{new Date(booking.startTime).toLocaleDateString()} • {new Date(booking.startTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit'})}</span>
           </div>
         </div>
       </div>
@@ -92,7 +99,7 @@ export default function ReschedulePage() {
             <div className="text-center py-4 text-sm text-[var(--play-text-muted)]">Loading slots...</div>
           ) : (
             <SlotGrid 
-              slots={availability?.slots || []} 
+              slots={availability?.turfs?.[0]?.slots || []} 
               selectedSlots={selectedSlots} 
               onChange={setSelectedSlots} 
             />
@@ -100,14 +107,17 @@ export default function ReschedulePage() {
         </section>
       </main>
 
-      <div className="fixed bottom-0 left-0 right-0 p-4 bg-[var(--play-surface)] border-t border-[var(--play-border)] shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
-        <button 
-          onClick={handleConfirm}
-          disabled={selectedSlots.length === 0 || isSubmitting}
-          className="w-full bg-[var(--play-brand)] text-white font-medium py-3 rounded-[var(--play-radius-md)] disabled:opacity-50 disabled:cursor-not-allowed hover:bg-[var(--play-brand-dark)] transition-colors"
-        >
-          {isSubmitting ? 'Rescheduling...' : 'Confirm Reschedule'}
-        </button>
+      {/* Bottom Action */}
+      <div className="sticky bottom-0 w-full bg-[var(--play-surface)] border-t border-[var(--play-border)] shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] mt-auto z-20">
+        <div className="max-w-md mx-auto p-4 w-full">
+          <button 
+            onClick={handleConfirm}
+            disabled={selectedSlots.length === 0 || isSubmitting}
+            className="w-full bg-[var(--play-brand)] text-white font-medium py-3 rounded-[var(--play-radius-md)] disabled:opacity-50 disabled:cursor-not-allowed hover:bg-[var(--play-brand-dark)] transition-colors"
+          >
+            {isSubmitting ? 'Rescheduling...' : 'Confirm Reschedule'}
+          </button>
+        </div>
       </div>
     </div>
   )

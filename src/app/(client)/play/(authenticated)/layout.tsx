@@ -17,7 +17,7 @@ export default function AuthenticatedLayout({
 
   useEffect(() => {
     if (!isLoading && !member) {
-      router.push('/play/login'); // Changed to /play/login as it's the right path based on structure
+      router.push('/play/login'); 
     }
   }, [member, isLoading, router]);
 
@@ -37,12 +37,12 @@ export default function AuthenticatedLayout({
   }
 
   return (
-    <div className="flex min-h-screen flex-col bg-[var(--play-bg)]">
+    <div className="flex h-screen flex-col bg-[var(--play-bg)] overflow-hidden">
       <Navbar />
       <div className="flex flex-1 overflow-hidden">
         <Sidebar />
         <div className="flex flex-1 flex-col overflow-y-auto pb-16 md:pb-0">
-          <main className="flex-1 p-4 sm:p-6 lg:p-8">
+          <main className="flex-1 w-full flex flex-col relative">
             {children}
           </main>
           <Footer />

@@ -11,9 +11,19 @@ export async function GET(request: Request) {
     const sportId = url.searchParams.get('sportId');
     
     const whereClause: any = {
-      status,
       isPublic: true
     };
+
+    if (status !== 'all') {
+      whereClause.status = status;
+    }
+
+    // Hide expired upcoming tournaments (where start date is in the past)
+    if (status === 'UPCOMING') {
+      whereClause.startDate = {
+        gte: new Date(new Date().setHours(0, 0, 0, 0))
+      };
+    }
 
     if (sportId) {
       whereClause.sportId = sportId;

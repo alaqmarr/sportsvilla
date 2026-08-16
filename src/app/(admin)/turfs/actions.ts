@@ -10,12 +10,14 @@ export async function createTurf(data: {
   bookingDurationMinutes?: number | null;
   capacityPerSlot?: number;
   bookingValidityDays?: number;
+  iconPath?: string;
   sportIds: string[];
 }) {
   const turf = await prisma.turf.create({
     data: {
       name: data.name,
       location: data.location,
+      iconPath: data.iconPath,
       parentTurfId: data.parentTurfId || null,
       bookingPrice: data.bookingPrice || null,
       bookingDurationMinutes: data.bookingDurationMinutes || null,
@@ -45,6 +47,7 @@ export async function updateTurf(id: string, data: {
   bookingDurationMinutes?: number | null;
   capacityPerSlot?: number;
   bookingValidityDays?: number;
+  iconPath?: string;
   sportIds: string[];
 }) {
   // First, delete existing TurfSport links
@@ -57,6 +60,7 @@ export async function updateTurf(id: string, data: {
     data: {
       name: data.name,
       location: data.location,
+      iconPath: data.iconPath,
       parentTurfId: data.parentTurfId || null,
       bookingPrice: data.bookingPrice || null,
       bookingDurationMinutes: data.bookingDurationMinutes || null,

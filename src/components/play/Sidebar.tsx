@@ -17,16 +17,16 @@ import {
 } from 'lucide-react';
 
 const navItems = [
-  { label: 'Home', href: '/dashboard', icon: Home },
-  { label: 'Book Court', href: '/book', icon: CalendarDays },
-  { label: 'My Bookings', href: '/bookings', icon: Ticket },
-  { label: 'Join Game', href: '/join-game', icon: Users },
-  { label: 'Tournaments', href: '/tournaments', icon: Trophy },
-  { label: 'Wallet', href: '/wallet', icon: Wallet },
-  { label: 'Leaderboard', href: '/leaderboard', icon: Award },
-  { label: 'Offers', href: '/offers', icon: Tag },
-  { label: 'Passes', href: '/memberships', icon: CreditCard },
-  { label: 'Profile', href: '/profile', icon: UserCircle },
+  { label: 'Home', href: '/play/dashboard', icon: Home },
+  { label: 'Book Court', href: '/play/book', icon: CalendarDays },
+  { label: 'My Bookings', href: '/play/bookings', icon: Ticket },
+  { label: 'Join Game', href: '/play/join-game', icon: Users },
+  { label: 'Tournaments', href: '/play/tournaments', icon: Trophy },
+  { label: 'Wallet', href: '/play/wallet', icon: Wallet },
+  { label: 'Leaderboard', href: '/play/leaderboard', icon: Award },
+  { label: 'Offers', href: '/play/offers', icon: Tag },
+  { label: 'Passes', href: '/play/memberships', icon: CreditCard },
+  { label: 'Profile', href: '/play/profile', icon: UserCircle },
 ];
 
 export function Sidebar() {
