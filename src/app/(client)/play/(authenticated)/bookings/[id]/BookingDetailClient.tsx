@@ -28,7 +28,8 @@ export function BookingDetailClient({ initialBooking, cancellationLimitHours, al
   const isCancellable = isConfirmed && allowCancellation;
 
   const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
-  const [deviceModal, setDeviceModal] = useState<{isOpen: boolean; type: 'android' | 'ios' | null}>({ isOpen: false, type: null });
+  const [isAppPromptOpen, setIsAppPromptOpen] = useState(false);
+  const [appPromptAction, setAppPromptAction] = useState<'cancel' | 'reschedule' | null>(null);
   const [isCancelling, setIsCancelling] = useState(false);
   const [isTogglingHost, setIsTogglingHost] = useState(false);
   const [qrSrc, setQrSrc] = useState("");
@@ -50,18 +51,17 @@ export function BookingDetailClient({ initialBooking, cancellationLimitHours, al
 
   const handleActionClick = (actionType: 'cancel' | 'reschedule') => {
     if (actionType === 'reschedule') {
-      router.push(`/play/bookings/${booking.id}/reschedule`);
+      setAppPromptAction('reschedule');
+      setIsAppPromptOpen(true);
       return;
     }
 
     const ua = navigator.userAgent;
-    const isAndroid = /android/i.test(ua);
-    const isIOS = /iPad|iPhone|iPod/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+    const isMobile = /android|iPad|iPhone|iPod/i.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
 
-    if (isAndroid) {
-      setDeviceModal({ isOpen: true, type: 'android' });
-    } else if (isIOS) {
-      setDeviceModal({ isOpen: true, type: 'ios' });
+    if (isMobile) {
+      setAppPromptAction('cancel');
+      setIsAppPromptOpen(true);
     } else {
       setIsCancelModalOpen(true);
     }
@@ -118,6 +118,32 @@ export function BookingDetailClient({ initialBooking, cancellationLimitHours, al
   const startDate = new Date(booking.startTime);
   const endDate = new Date(booking.endTime);
   const isPast = startDate < new Date();
+
+  const getCancellationInfo = () => {
+    if (!booking) return { penalty: 0, refund: 0, isFree: true, totalPaid: 0 };
+    
+    const walletPayments = booking.payments?.filter((p: any) => p.method === 'WALLET') || [];
+    const totalPaid = walletPayments.reduce((sum: number, p: any) => sum + p.amount, 0);
+
+    const now = new Date();
+    const diffMs = startDate.getTime() - now.getTime();
+    const diffHours = diffMs / (1000 * 60 * 60);
+
+    let penalty = 0;
+    let isFree = true;
+
+    if (diffHours < cancellationLimitHours && diffHours >= 0) {
+      const hourIndex = Math.ceil(cancellationLimitHours - diffHours);
+      const penaltyPercentage = hourIndex / cancellationLimitHours;
+      penalty = booking.price * penaltyPercentage;
+      isFree = false;
+    }
+
+    const refund = Math.max(0, totalPaid - penalty);
+    return { penalty, refund, isFree, totalPaid };
+  };
+
+  const cancelInfo = getCancellationInfo();
 
   return (
     <div className="min-h-screen bg-[var(--play-bg)] pb-24">
@@ -353,9 +379,31 @@ export function BookingDetailClient({ initialBooking, cancellationLimitHours, al
           </div>
 
           <h2 className="text-2xl font-bold font-outfit text-[var(--play-text)] mb-2">Cancel Booking?</h2>
-          <p className="text-[var(--play-text-muted)] text-sm mb-6 leading-relaxed text-center">
-            Are you sure you want to cancel? Cancellations made {cancellationLimitHours}+ hours prior will be instantly refunded to your Wallet.
-          </p>
+          <div className="text-[var(--play-text-muted)] text-sm mb-6 leading-relaxed w-full space-y-2">
+            <p className="text-center">Are you sure you want to cancel?</p>
+            {cancelInfo.isFree ? (
+              <p className="text-[var(--play-brand)] font-semibold text-center">
+                You are cancelling {cancellationLimitHours}+ hours prior. You will receive a full refund of ₹{cancelInfo.refund} to your Wallet.
+              </p>
+            ) : (
+              <div className="bg-red-50 text-red-700 p-3 rounded-xl border border-red-100 text-left w-full mt-2">
+                <p className="font-semibold mb-1 text-center">Late Cancellation Penalty</p>
+                <div className="flex justify-between text-xs mb-1">
+                  <span>Total Paid:</span>
+                  <span>₹{cancelInfo.totalPaid}</span>
+                </div>
+                <div className="flex justify-between text-xs mb-1">
+                  <span>Cancellation Fee:</span>
+                  <span className="font-semibold">-₹{Math.round(cancelInfo.penalty)}</span>
+                </div>
+                <div className="flex justify-between text-sm font-bold border-t border-red-200 pt-1 mt-1">
+                  <span>Wallet Refund:</span>
+                  <span>₹{Math.round(cancelInfo.refund)}</span>
+                </div>
+              </div>
+            )}
+            <p className="text-xs text-center mt-2 text-gray-500">Call support for discrepancies.</p>
+          </div>
           
           <div className="flex gap-3 w-full">
             <button 
@@ -375,39 +423,47 @@ export function BookingDetailClient({ initialBooking, cancellationLimitHours, al
         </div>
       </Modal>
 
-      {/* Device OS Modal */}
-      <Modal isOpen={deviceModal.isOpen} onClose={() => setDeviceModal({ isOpen: false, type: null })} size="sm">
+      {/* App Prompt Modal */}
+      <Modal isOpen={isAppPromptOpen} onClose={() => setIsAppPromptOpen(false)} size="sm">
         <div className="flex flex-col items-center">
-          <div className="w-14 h-14 bg-[var(--play-surface-alt)] text-[var(--play-text)] rounded-2xl flex items-center justify-center mb-5">
-            <MessageCircle className="w-7 h-7" />
+          <div className="w-16 h-16 bg-[var(--play-surface-alt)] rounded-2xl flex items-center justify-center mb-5 overflow-hidden">
+            <img src="/icon.png" alt="Sportsvilla" className="w-12 h-12 object-contain rounded-xl" />
           </div>
           
-          <h2 className="text-2xl font-bold font-outfit text-[var(--play-text)] mb-2">Request Process</h2>
-          {deviceModal.type === 'android' ? (
-            <>
-              <p className="text-[var(--play-text-muted)] text-sm mb-6 leading-relaxed text-center">
-                Please install our Android app to cancel and reschedule bookings easily.
-              </p>
-              <button 
-                onClick={() => router.push('/android/download')}
-                className="w-full py-4 bg-[var(--play-brand)] text-white font-bold rounded-xl shadow-md hover:brightness-110 transition-all"
-              >
-                Install App
-              </button>
-            </>
-          ) : (
-            <>
-              <p className="text-[var(--play-text-muted)] text-sm mb-6 leading-relaxed text-center">
-                To process your request, please give us a call.
-              </p>
-              <a 
-                href="tel:8187865353"
-                className="block text-center w-full py-4 bg-[var(--play-brand)] text-white font-bold rounded-xl shadow-md hover:brightness-110 transition-all"
-              >
-                Call 8187865353
-              </a>
-            </>
-          )}
+          <h2 className="text-2xl font-bold font-outfit text-[var(--play-text)] mb-2 text-center">Get the App</h2>
+          <p className="text-[var(--play-text-muted)] text-sm mb-6 leading-relaxed text-center">
+            {appPromptAction === 'reschedule' 
+              ? "To reschedule your booking, please download our mobile app." 
+              : "To cancel your booking from your mobile device, please download our app."}
+          </p>
+          
+          <div className="flex flex-col gap-3 w-full">
+            <a 
+              href="https://play.google.com/store/apps/details?id=com.sportsvilla"
+              target="_blank"
+              rel="noreferrer"
+              className="flex items-center justify-center gap-3 w-full py-3 bg-black text-white rounded-xl shadow-md hover:brightness-110 transition-all border border-gray-800"
+            >
+              <svg viewBox="0 0 24 24" className="w-6 h-6 fill-current"><path d="M3.609 1.814L13.792 12 3.61 22.186c-.165-.136-.25-.333-.25-.561V2.375c0-.228.085-.425.25-.561zM14.542 12.75l2.457 2.457-11.83 6.828 9.373-9.285zM15.292 12l4.896-2.825c.531-.307.531-.806 0-1.112l-4.896-2.825-3.143 3.143L15.292 12zM5.169 1.966l11.83 6.828-2.457 2.457-9.373-9.285z"/></svg>
+              <div className="flex flex-col items-start">
+                <span className="text-[10px] uppercase leading-none text-gray-300">GET IT ON</span>
+                <span className="font-semibold leading-none mt-0.5">Google Play</span>
+              </div>
+            </a>
+            
+            <a 
+              href="https://apps.apple.com/app/sportsvilla/id123456789"
+              target="_blank"
+              rel="noreferrer"
+              className="flex items-center justify-center gap-3 w-full py-3 bg-black text-white rounded-xl shadow-md hover:brightness-110 transition-all border border-gray-800"
+            >
+              <svg viewBox="0 0 24 24" className="w-6 h-6 fill-current"><path d="M12.152 6.896c-.948 0-2.415-1.078-3.96-1.04-2.04.027-3.91 1.183-4.961 3.014-2.117 3.675-.546 9.103 1.519 12.09 1.013 1.454 2.208 3.09 3.792 3.039 1.52-.065 2.09-.987 3.935-.987 1.831 0 2.43.987 3.96.948 1.56-.027 2.614-1.493 3.594-2.923 1.135-1.666 1.6-3.284 1.622-3.375-.035-.017-3.155-1.21-3.196-4.834-.035-3.037 2.47-4.496 2.585-4.566-1.428-2.088-3.626-2.37-4.432-2.404-1.748-.168-3.535 1.04-4.458 1.04zm2.148-3.05c.813-.984 1.36-2.355 1.211-3.714-1.168.047-2.614.776-3.454 1.748-.75.819-1.391 2.224-1.211 3.551 1.306.1 2.641-.599 3.454-1.585z"/></svg>
+              <div className="flex flex-col items-start">
+                <span className="text-[10px] leading-none text-gray-300">Download on the</span>
+                <span className="font-semibold leading-none mt-0.5">App Store</span>
+              </div>
+            </a>
+          </div>
         </div>
       </Modal>
     </div>

@@ -21,6 +21,7 @@ export async function GET(request: Request, context: { params: Promise<{ id: str
         turf: true,
         sport: true,
         member: true,
+        payments: true,
         participants: {
           include: { member: true }
         }

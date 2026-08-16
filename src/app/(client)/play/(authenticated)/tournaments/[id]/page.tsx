@@ -299,7 +299,7 @@ export default function TournamentDetailPage() {
               <div className="bg-[var(--play-surface)] p-4 sm:p-6 rounded-[var(--play-radius-lg)] border border-[var(--play-border)]">
                 <div className="flex justify-between items-center mb-6 pb-6 border-b border-[var(--play-border)]">
                   <span className="text-[var(--play-text-muted)] font-medium">Participation Fee</span>
-                  <span className="text-2xl font-bold text-[var(--play-text)]">₹{(tournament.participationFee / 100).toFixed(0)}</span>
+                  <span className="text-2xl font-bold text-[var(--play-text)]">₹{tournament.participationFee}</span>
                 </div>
 
                 <div className="space-y-3 mb-6">
@@ -324,7 +324,7 @@ export default function TournamentDetailPage() {
                 {paymentMethod === 'upi' && (
                   <div className="bg-white p-6 rounded-[var(--play-radius-md)] border border-dashed border-[var(--play-border)] flex flex-col items-center">
                     <p className="text-sm text-[var(--play-text-muted)] text-center mb-3">Scan QR or transfer to <br/><span className="font-bold text-[var(--play-text)]">{upiId}</span></p>
-                    <img src={`https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=upi://pay?pa=${upiId}&pn=Sportsvilla&am=${tournament.participationFee / 100}`} alt="UPI QR" className="w-36 h-36 mb-6 border border-[var(--play-border)] p-1 rounded-md" />
+                    <img src={`https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=upi://pay?pa=${upiId}&pn=Sportsvilla&am=${tournament.participationFee}`} alt="UPI QR" className="w-36 h-36 mb-6 border border-[var(--play-border)] p-1 rounded-md" />
                     
                     <div className="w-full">
                       <label className="block text-sm font-medium text-[var(--play-text)] mb-2">Upload Payment Screenshot <span className="text-[var(--play-error)]">*</span></label>

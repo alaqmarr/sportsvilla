@@ -44,8 +44,21 @@ export function PlayAuthProvider({ children }: { children: React.ReactNode }) {
     }
   }, [member, activeMemberId]);
 
-  const switchMember = (memberId: string) => {
-    setActiveMemberId(memberId);
+  const switchMember = async (memberId: string) => {
+    try {
+      const res = await fetch('/api/client/v1/auth/web/switch-profile', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ memberId })
+      });
+      if (res.ok) {
+        window.location.reload();
+      } else {
+        console.error('Failed to switch profile');
+      }
+    } catch (err) {
+      console.error('Switch profile error', err);
+    }
   };
 
   const logout = async () => {

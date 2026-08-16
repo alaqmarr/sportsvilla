@@ -125,6 +125,30 @@ export async function POST(request: Request, context: { params: Promise<{ id: st
     const pointsEarned = Math.floor(subtotal * 0.01);
 
     await prisma.$transaction(async (tx) => {
+      // Re-fetch booking inside tx to prevent race conditions
+      const txBooking = await tx.booking.findUnique({
+        where: { id: booking.id },
+        select: { participantCount: true, inviteMaxCount: true, turf: { select: { capacityPerSlot: true } } }
+      });
+      if (!txBooking) throw new Error('Game not found');
+
+      const txMaxPlayers = txBooking.inviteMaxCount || (txBooking.turf?.capacityPerSlot || 1) * 2;
+      if (txBooking.participantCount >= txMaxPlayers) {
+        throw new Error('Game is full. Maximum player limit reached.');
+      }
+
+      // Re-fetch member to prevent double spending
+      const txMember = await tx.member.findUnique({ where: { id: member.id } });
+      if (!txMember) throw new Error('Member not found');
+      
+      if (walletDeductionRupees > 0 && txMember.walletBalance < Math.floor(walletDeductionRupees * 100)) {
+        throw new Error('Insufficient wallet balance');
+      }
+      
+      if (pointsDeduction > 0 && txMember.loyaltyPoints < pointsDeduction) {
+        throw new Error('Insufficient points balance');
+      }
+
       // Create participant
       await tx.bookingParticipant.create({
         data: {
@@ -275,7 +299,13 @@ export async function DELETE(request: Request, context: { params: Promise<{ id: 
     const memberToRemoveId = targetMemberId || member.id;
 
     if (targetMemberId) {
-      if (booking.memberId !== member.id) {
+      const familyMembers = await prisma.member.findMany({
+        where: { mobile: member.mobile },
+        select: { id: true }
+      });
+      const familyIds = familyMembers.map(m => m.id);
+
+      if (!familyIds.includes(booking.memberId)) {
         return jsonResponse({ error: 'Only the host can remove players.' }, { status: 403 });
       }
       if (targetMemberId === booking.memberId) {

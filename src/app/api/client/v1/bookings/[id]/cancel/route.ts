@@ -57,11 +57,21 @@ export async function POST(request: Request, context: { params: Promise<{ id: st
     
     const limitHours = parseInt(settingsMap.CLIENT_CANCELLATION_LIMIT_HOURS || "3", 10);
     
+    let penaltyRupees = 0;
     if (limitHours > 0) {
       const diffMs = booking.startTime.getTime() - now.getTime();
       const diffHours = diffMs / (1000 * 60 * 60);
+      
       if (diffHours < limitHours) {
-        return jsonResponse({ success: false, error: `You can only cancel bookings at least ${limitHours} hours before the start time.` }, { status: 400 });
+        // Calculate proportional penalty
+        // e.g. limitHours = 3.
+        // If diffHours is between 2 and 3 (last third hour), hourIndex = 1
+        // If diffHours is between 1 and 2 (second hour), hourIndex = 2
+        // If diffHours is between 0 and 1 (last hour), hourIndex = 3
+        const hourIndex = Math.ceil(limitHours - diffHours);
+        const penaltyPercentage = hourIndex / limitHours;
+        
+        penaltyRupees = booking.price * penaltyPercentage;
       }
     }
 
@@ -69,7 +79,9 @@ export async function POST(request: Request, context: { params: Promise<{ id: st
     // Refund amount must be in paise because walletBalance is in paise.
     const walletPayments = booking.payments.filter((p: any) => p.method === 'WALLET');
     const totalWalletPaidRupees = walletPayments.reduce((sum: number, p: any) => sum + p.amount, 0);
-    const refundAmountPaise = Math.round(totalWalletPaidRupees * 100);
+    
+    const actualRefundRupees = Math.max(0, totalWalletPaidRupees - penaltyRupees);
+    const refundAmountPaise = Math.round(actualRefundRupees * 100);
 
     // Bug #3: Calculate loyalty points to reverse
     const loyaltyToReverse = await prisma.loyaltyHistory.findFirst({
@@ -117,19 +129,23 @@ export async function POST(request: Request, context: { params: Promise<{ id: st
 
       // Reverse loyalty points from whoever earned them
       if (pointsToReverse > 0 && pointsEarnerId) {
-        await tx.member.update({
-          where: { id: pointsEarnerId },
-          data: { loyaltyPoints: { decrement: pointsToReverse } }
-        });
-        await tx.loyaltyHistory.create({
-          data: {
-            memberId: pointsEarnerId,
-            points: pointsToReverse,
-            type: 'REDEEMED', // used as reversal
-            source: 'MANUAL',
-            description: `Reversed for cancelled booking ${booking.id}`
-          }
-        });
+        const earner = await tx.member.findUnique({ where: { id: pointsEarnerId } });
+        const actualPointsToReverse = Math.min(pointsToReverse, earner?.loyaltyPoints || 0);
+        if (actualPointsToReverse > 0) {
+          await tx.member.update({
+            where: { id: pointsEarnerId },
+            data: { loyaltyPoints: { decrement: actualPointsToReverse } }
+          });
+          await tx.loyaltyHistory.create({
+            data: {
+              memberId: pointsEarnerId,
+              points: actualPointsToReverse,
+              type: 'REDEEMED', // used as reversal
+              source: 'MANUAL',
+              description: `Reversed for cancelled booking ${booking.id}`
+            }
+          });
+        }
       }
 
       // We don't currently support redeeming points in booking, 

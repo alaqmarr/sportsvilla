@@ -53,7 +53,7 @@ export async function GET(request: Request) {
     const result = turfs.map(turf => {
       const duration = turf.bookingDurationMinutes || 60;
       const price = turf.bookingPrice || 600;
-      const capacity = turf.capacityPerSlot;
+      const capacity = turf.capacityPerSlot || 1;
       
       const slots = [];
       let currentHour = OPEN_HOUR;
@@ -71,7 +71,7 @@ export async function GET(request: Request) {
           b.endTime.getTime() > slotStart.getTime()
         );
 
-        const usedCapacity = overlappingBookings.reduce((sum, b) => sum + b.participantCount, 0);
+        const usedCapacity = overlappingBookings.reduce((sum, b) => sum + (b.participantCount || 1), 0);
         const availableCourts = Math.max(0, capacity - usedCapacity);
         const isAvailable = availableCourts > 0;
 
