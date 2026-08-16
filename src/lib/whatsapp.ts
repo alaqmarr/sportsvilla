@@ -181,14 +181,36 @@ export async function sendWhatsAppOtp(phoneNumber: string, otp: string, purpose:
     },
   });
 
-  // Send message
-  const textBody = `Your Sportsvilla verification code is: *${otp}*\n\nDo not share this code with anyone. Valid for 10 minutes.`;
-  return await sendWhatsAppMessage({
+  // Try sending the authwebsite template first
+  const templateRes = await sendWhatsAppMessage({
     to: formattedPhone,
-    type: "text",
-    text: textBody,
+    type: "template",
+    templateName: "authwebsite",
+    languageCode: "en",
+    templateComponents: [
+      {
+        type: "body",
+        parameters: [
+          { type: "text", text: otp }
+        ]
+      }
+    ],
     metadata: { purpose, otpSent: true },
   });
+
+  if (!templateRes.success) {
+    console.log("Template authwebsite failed, fallback to text for phone:", formattedPhone);
+    // Send fallback text message
+    const textBody = `Your Sportsvilla verification code is: *${otp}*\n\nDo not share this code with anyone. Valid for 10 minutes.`;
+    return await sendWhatsAppMessage({
+      to: formattedPhone,
+      type: "text",
+      text: textBody,
+      metadata: { purpose, otpSent: true, fallback: true },
+    });
+  }
+
+  return templateRes;
 }
 
 export async function sendWhatsAppMagicLogin(phoneNumber: string, magicToken: string, purpose: string = "MAGIC_LOGIN") {
