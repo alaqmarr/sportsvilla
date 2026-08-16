@@ -74,13 +74,15 @@ export async function POST(request: Request) {
   if ('error' in authRes) return authRes.error;
   
   const { member } = authRes;
+  
+  let lockKey: string | null = null;
 
   try {
     const body = await request.json();
     const parseResult = createBookingSchema.safeParse(body);
     
     if (!parseResult.success) {
-      return jsonResponse({ error: parseResult.error.errors[0].message }, { status: 400 });
+      return jsonResponse({ error: parseResult.error.issues[0].message }, { status: 400 });
     }
 
     const { turfId, sportId, startTime, endTime, participantCount, couponCode, walletAmountToUse = 0, walletOtp, pointsAmountToUse = 0, memberId: requestedMemberId, visibility, inviteMaxCount } = parseResult.data;
@@ -165,13 +167,11 @@ export async function POST(request: Request) {
       }
     }
 
-    const lockKey = `booking:${turfId}:${start.getTime()}:${end.getTime()}`;
+    lockKey = `booking:${turfId}:${start.getTime()}:${end.getTime()}`;
     const acquired = await Mutex.acquire(lockKey, 3000);
     if (!acquired) {
       return jsonResponse({ error: 'Server busy processing another booking for this slot. Please try again.' }, { status: 409 });
     }
-
-    try {
 
     // Fetch latest member wallet balance for logged-in member (they are the one paying)
     const memberData = await prisma.member.findUnique({ where: { id: member.id } });
@@ -587,6 +587,8 @@ export async function POST(request: Request) {
     console.error(`[API ERROR] POST /api/client/v1/bookings ->`, error);
     return jsonResponse({ error: error.message }, { status: 500 });
   } finally {
-    Mutex.release(lockKey);
+    if (lockKey) {
+      Mutex.release(lockKey);
+    }
   }
 }

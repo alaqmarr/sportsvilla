@@ -4,8 +4,9 @@ import { authenticateClient } from '@/lib/auth-middleware';
 import { jsonResponse, apiLog } from '@/lib/api-logger';
 import { BookingService } from '@/services/BookingService';
 
-export async function GET(request: Request, context: { params: { id: string } }) {
-  apiLog(`[API] GET /api/client/v1/bookings/${context.params.id}/refund-preview called`);
+export async function GET(request: Request, context: { params: Promise<{ id: string }> }) {
+  const params = await context.params;
+  apiLog(`[API] GET /api/client/v1/bookings/${params.id}/refund-preview called`);
   const authRes = await authenticateClient(request);
   if ('error' in authRes) return authRes.error;
   
@@ -13,9 +14,10 @@ export async function GET(request: Request, context: { params: { id: string } })
 
   try {
     const booking = await prisma.booking.findUnique({
-      where: { id: context.params.id },
+      where: { id: params.id },
       include: {
-        payments: true
+        payments: true,
+        participants: true
       }
     });
 
@@ -48,7 +50,7 @@ export async function GET(request: Request, context: { params: { id: string } })
       totalPaid: preview.totalPaid
     });
   } catch (error: any) {
-    console.error(`[API ERROR] GET /api/client/v1/bookings/${context.params.id}/refund-preview ->`, error);
+    console.error(`[API ERROR] GET /api/client/v1/bookings/${params.id}/refund-preview ->`, error);
     return jsonResponse({ error: process.env.NODE_ENV === 'production' ? 'Internal server error' : error.message }, { status: 500 });
   }
 }

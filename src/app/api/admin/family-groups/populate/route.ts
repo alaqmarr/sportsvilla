@@ -1,11 +1,12 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
-import { authenticateAdmin } from '@/lib/auth';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/lib/auth';
 
 export async function POST(request: Request) {
   try {
-    const admin = await authenticateAdmin(request);
-    if (!admin) {
+    const session = await getServerSession(authOptions);
+    if (!session) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
@@ -31,7 +32,9 @@ export async function POST(request: Request) {
     await prisma.$transaction(async (tx) => {
       for (const [mobile, groupedMembers] of mobileMap.entries()) {
         const family = await tx.familyGroup.create({
-          data: {} // Empty data as there are no other required fields
+          data: {
+            mobile
+          }
         });
         familiesCreated++;
 

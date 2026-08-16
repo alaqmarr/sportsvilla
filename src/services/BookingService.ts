@@ -1,5 +1,5 @@
 import { prisma } from '@/lib/prisma';
-import { Booking, Payment } from '@prisma/client';
+import { Booking, Payment } from '@/generated/client';
 
 export class BookingService {
   /**
