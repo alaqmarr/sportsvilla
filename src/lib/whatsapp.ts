@@ -193,6 +193,14 @@ export async function sendWhatsAppOtp(phoneNumber: string, otp: string, purpose:
         parameters: [
           { type: "text", text: otp }
         ]
+      },
+      {
+        type: "button",
+        sub_type: "url",
+        index: "0",
+        parameters: [
+          { type: "text", text: otp }
+        ]
       }
     ],
     metadata: { purpose, otpSent: true },
