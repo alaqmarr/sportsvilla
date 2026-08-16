@@ -1,6 +1,7 @@
 export const dynamic = 'force-dynamic';
 import { prisma } from "@/lib/prisma";
 import TurfsClient from "./TurfsClient";
+import { getAvailableIcons } from "@/lib/icons";
 
 export default async function TurfsPage() {
   const turfs = await prisma.turf.findMany({
@@ -16,5 +17,7 @@ export default async function TurfsPage() {
     orderBy: { name: "asc" }
   });
 
-  return <TurfsClient initialTurfs={turfs} sports={sports} />;
+  const icons = getAvailableIcons();
+
+  return <TurfsClient initialTurfs={turfs} sports={sports} availableIcons={icons} />;
 }

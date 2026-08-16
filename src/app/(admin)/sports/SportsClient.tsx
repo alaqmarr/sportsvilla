@@ -4,24 +4,7 @@ import { createSport, updateSport, deleteSport } from "./actions";
 import { useAlert } from "@/components/AlertProvider";
 import { FiTrash2, FiEdit2, FiPlus, FiX, FiActivity } from "react-icons/fi";
 
-const AVAILABLE_ICONS = [
-  { value: "", label: "No Icon (Use Default)" },
-  { value: "/icons/badminton-court.png", label: "Badminton Court" },
-  { value: "/icons/badminton.png", label: "Badminton" },
-  { value: "/icons/bowling-machine.png", label: "Bowling Machine" },
-  { value: "/icons/cricket.png", label: "Cricket" },
-  { value: "/icons/football.png", label: "Football" },
-  { value: "/icons/pickleball-court.png", label: "Pickleball Court" },
-  { value: "/icons/pickleball.png", label: "Pickleball" },
-  { value: "/icons/ping-pong.png", label: "Ping Pong" },
-  { value: "/icons/practice.png", label: "Practice" },
-  { value: "/icons/swimming-pool.png", label: "Swimming Pool" },
-  { value: "/icons/swimming.png", label: "Swimming" },
-  { value: "/icons/tt-table.png", label: "Table Tennis Table" },
-  { value: "/icons/turf.png", label: "Turf" }
-];
-
-export default function SportsClient({ initialSports }: { initialSports: any[] }) {
+export default function SportsClient({ initialSports, availableIcons }: { initialSports: any[], availableIcons: {value: string, label: string}[] }) {
   const { showAlert } = useAlert();
   const [sports, setSports] = useState(initialSports);
   const [showModal, setShowModal] = useState(false);
@@ -146,7 +129,7 @@ export default function SportsClient({ initialSports }: { initialSports: any[] }
                       <FiActivity className="w-6 h-6 text-gray-500" />
                     )}
                     <span className={iconPath ? "text-white text-sm" : "text-gray-500 text-sm"}>
-                      {iconPath ? AVAILABLE_ICONS.find(i => i.value === iconPath)?.label : "Select an Icon"}
+                      {iconPath ? availableIcons.find(i => i.value === iconPath)?.label : "Select an Icon"}
                     </span>
                   </div>
                   <span className="text-orange-500 text-xs font-semibold uppercase tracking-wider">Change</span>
@@ -160,7 +143,7 @@ export default function SportsClient({ initialSports }: { initialSports: any[] }
                         <button type="button" className="text-gray-500 hover:text-white cursor-pointer bg-transparent border-none text-xl" onClick={() => setShowIconModal(false)}><FiX /></button>
                       </div>
                       <div className="grid grid-cols-3 sm:grid-cols-4 gap-4 max-h-[60vh] overflow-y-auto pr-2 custom-scrollbar">
-                        {AVAILABLE_ICONS.map(icon => (
+                        {availableIcons.map(icon => (
                           <div 
                             key={icon.value}
                             onClick={() => { setIconPath(icon.value); setShowIconModal(false); }}
