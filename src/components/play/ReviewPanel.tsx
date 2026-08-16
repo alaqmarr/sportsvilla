@@ -29,7 +29,7 @@ export const ReviewPanel: React.FC<ReviewPanelProps> = ({
   
   // For demonstration, let's say we have a fixed discount or it's passed as a prop
   const discount = 0; // Normally calculated based on applied coupon
-  const subtotal = price * selectedSlots.length;
+  const subtotal = price;
   
   const walletDeduction = useWallet ? Math.min(walletBalance, subtotal - discount) : 0;
   const finalPayable = Math.max(0, subtotal - discount - walletDeduction);

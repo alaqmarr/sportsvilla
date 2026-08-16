@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { authenticateClient } from '@/lib/auth-middleware';
 import { jsonResponse, apiLog } from '@/lib/api-logger';
+import { formatIST } from '@/lib/dateUtils';
 
 export async function GET(request: Request) {
   apiLog(`[API] GET /api/client/v1/availability called`);
@@ -76,11 +77,12 @@ export async function GET(request: Request) {
 
         if (slotStart.getTime() > Date.now()) {
           slots.push({
+            time: formatIST(slotStart, 'hh:mm a'),
             startTime: slotStart.toISOString(),
             endTime: slotEnd.toISOString(),
             price,
             availableCourts,
-            isAvailable
+            available: isAvailable
           });
         }
 

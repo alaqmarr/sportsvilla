@@ -79,7 +79,11 @@ export default function ReschedulePage() {
 
         <section>
           <h2 className="text-sm font-semibold text-[var(--play-text-muted)] mb-3">Sport</h2>
-          <SportChips sports={[booking.sport.name || booking.sport]} selectedSport={booking.sport.name || booking.sport} onChange={() => {}} />
+          <SportChips 
+            sports={[{ id: booking.sport.id || '1', name: booking.sport.name || booking.sport }]} 
+            selectedSportId={booking.sport.id || '1'} 
+            onChange={() => {}} 
+          />
         </section>
 
         <section>

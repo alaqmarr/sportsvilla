@@ -52,15 +52,15 @@ export default function DashboardPage() {
 
   if (isLoading || !member) {
     return (
-      <div className="p-4 space-y-6 animate-pulse">
-        <div className="h-8 bg-gray-200 rounded w-1/2"></div>
+      <div className="p-4 space-y-6">
+        <div className="h-8 bg-[var(--play-surface-alt)] animate-pulse rounded w-1/2"></div>
         <div className="grid grid-cols-2 gap-4">
-          <div className="h-24 bg-gray-200 rounded-[var(--play-radius-md)]"></div>
-          <div className="h-24 bg-gray-200 rounded-[var(--play-radius-md)]"></div>
-          <div className="h-24 bg-gray-200 rounded-[var(--play-radius-md)]"></div>
-          <div className="h-24 bg-gray-200 rounded-[var(--play-radius-md)]"></div>
+          <div className="h-28 bg-[var(--play-surface)] border border-[var(--play-border)] animate-pulse rounded-[var(--play-radius-md)]"></div>
+          <div className="h-28 bg-[var(--play-surface)] border border-[var(--play-border)] animate-pulse rounded-[var(--play-radius-md)]"></div>
+          <div className="h-28 bg-[var(--play-surface)] border border-[var(--play-border)] animate-pulse rounded-[var(--play-radius-md)]"></div>
+          <div className="h-28 bg-[var(--play-surface)] border border-[var(--play-border)] animate-pulse rounded-[var(--play-radius-md)]"></div>
         </div>
-        <div className="h-40 bg-gray-200 rounded-[var(--play-radius-lg)]"></div>
+        <div className="h-48 bg-[var(--play-surface)] border border-[var(--play-border)] animate-pulse rounded-[var(--play-radius-lg)]"></div>
       </div>
     );
   }
@@ -91,7 +91,7 @@ export default function DashboardPage() {
       </div>
 
       {/* Next Game Spotlight */}
-      {data?.upcomingBooking && (
+      {data?.upcomingBookings && data.upcomingBookings.length > 0 && (
         <div className="px-4 py-4">
           <h2 className="text-lg font-bold font-outfit mb-3">Next Game Spotlight</h2>
           <div className="bg-[var(--play-brand-dark)] text-white rounded-[var(--play-radius-lg)] p-5 shadow-md relative overflow-hidden">
@@ -100,41 +100,41 @@ export default function DashboardPage() {
             </div>
             <div className="relative z-10 flex justify-between items-start mb-4">
               <div>
-                <h3 className="font-bold text-xl">{data.upcomingBooking.sport}</h3>
-                <p className="text-emerald-100 text-sm mt-1">{data.upcomingBooking.turfName}</p>
+                <h3 className="font-bold text-xl">{data.upcomingBookings[0].sport?.name}</h3>
+                <p className="text-emerald-100 text-sm mt-1">{data.upcomingBookings[0].turf?.name}</p>
               </div>
               <div className="bg-white rounded-[var(--play-radius-pill)] px-3 py-1 text-sm text-[var(--play-brand-dark)] font-bold flex items-center gap-1">
                 <Clock size={14} />
-                <CountdownTimer targetDate={data.upcomingBooking.startTime} />
+                <CountdownTimer targetDate={data.upcomingBookings[0].startTime} />
               </div>
             </div>
-            <Link href={`/play/bookings/${data.upcomingBooking.id}`} className="block w-full bg-white text-[var(--play-brand-dark)] text-center font-bold py-3 rounded-[var(--play-radius-md)] mt-2">
+            <Link href={`/play/bookings/${data.upcomingBookings[0].id}`} className="block w-full bg-white text-[var(--play-brand-dark)] text-center font-bold py-3 rounded-[var(--play-radius-md)] mt-2">
               View Pass
             </Link>
           </div>
         </div>
       )}
 
-      {/* Community Squads */}
-      {data?.openMatches && data.openMatches.length > 0 && (
+      {/* Community Squads (Mapped to Upcoming Tournaments) */}
+      {data?.upcomingTournaments && data.upcomingTournaments.length > 0 && (
         <div className="py-4">
           <div className="px-4 flex justify-between items-center mb-3">
-            <h2 className="text-lg font-bold font-outfit">Community Squads</h2>
-            <Link href="/play/join-game" className="text-[var(--play-brand)] text-sm font-medium flex items-center">
+            <h2 className="text-lg font-bold font-outfit">Upcoming Tournaments</h2>
+            <Link href="/play/tournaments" className="text-[var(--play-brand)] text-sm font-medium flex items-center hover:underline">
               See All <ChevronRight size={16} />
             </Link>
           </div>
           <div className="flex overflow-x-auto px-4 gap-4 pb-4 snap-x hide-scrollbar">
-            {data.openMatches.map((match: any) => (
-              <div key={match.id} className="min-w-[280px] snap-center">
+            {data.upcomingTournaments.map((tournament: any) => (
+              <div key={tournament.id} className="min-w-[280px] snap-center">
                 <GameCard game={{
-                  id: match.id,
-                  sport: match.sport?.name || match.sport,
-                  venue: match.venue?.name || match.venue,
-                  time: match.time || (match.slots ? match.slots.join(', ') : ''),
-                  joinedCount: match.squad?.length || match.joinedCount || 0,
-                  maxPlayers: match.capacity || match.maxPlayers || 10,
-                  hostName: match.hostName || (match.squad?.find((s:any) => s.id === match.hostId)?.name) || 'Host'
+                  id: tournament.id,
+                  sport: tournament.sport?.name || 'Tournament',
+                  venue: tournament.location || 'Sportsvilla Arena',
+                  time: tournament.startDate?.split('T')[0] || '',
+                  joinedCount: tournament._count?.registrations || 0,
+                  maxPlayers: tournament.maxTeams || 16,
+                  hostName: 'Sportsvilla'
                 }} />
               </div>
             ))}
@@ -143,14 +143,16 @@ export default function DashboardPage() {
       )}
 
       {/* Offers Carousel */}
-      {data?.offers && data.offers.length > 0 && (
+      {data?.banners && data.banners.length > 0 && (
         <div className="py-2">
           <h2 className="px-4 text-lg font-bold font-outfit mb-3">Exclusive Offers</h2>
           <div className="flex overflow-x-auto px-4 gap-4 pb-4 snap-x hide-scrollbar">
-            {data.offers.map((offer: any) => (
-              <div key={offer.id} className="min-w-[300px] h-32 bg-gradient-to-r from-emerald-500 to-teal-400 rounded-[var(--play-radius-lg)] p-4 text-white shadow-sm flex flex-col justify-center snap-center">
-                <h3 className="font-bold text-lg">{offer.title}</h3>
-                <p className="text-emerald-50 text-sm mt-1">{offer.description}</p>
+            {data.banners.map((banner: any) => (
+              <div key={banner.id} className="min-w-[300px] h-32 bg-gradient-to-r from-emerald-500 to-teal-400 rounded-[var(--play-radius-lg)] p-4 text-white shadow-sm flex flex-col justify-center snap-center bg-cover bg-center" style={{ backgroundImage: banner.imageUrl ? `url(${banner.imageUrl})` : undefined }}>
+                <div className="z-10 bg-black/30 p-2 rounded-lg backdrop-blur-sm inline-block">
+                  <h3 className="font-bold text-lg">{banner.title}</h3>
+                  {banner.subtitle && <p className="text-emerald-50 text-sm mt-1">{banner.subtitle}</p>}
+                </div>
               </div>
             ))}
           </div>

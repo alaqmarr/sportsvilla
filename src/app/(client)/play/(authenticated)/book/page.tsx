@@ -16,18 +16,29 @@ export default function BookCourtPage() {
   const { member } = usePlayAuth();
   
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
-  const [selectedSport, setSelectedSport] = useState<string>('Football');
+  const [selectedSportId, setSelectedSportId] = useState<string | null>(null);
   const [selectedTurf, setSelectedTurf] = useState<string | null>(null);
   const [selectedSlots, setSelectedSlots] = useState<string[]>([]);
   const [isBooking, setIsBooking] = useState(false);
 
+  // Fetch sports
+  const { data: sportsData } = useSWR('/api/client/v1/sports', fetcher);
+  const sports = sportsData?.sports || [];
+
+  // Automatically select the first sport if none is selected
+  if (sports.length > 0 && !selectedSportId) {
+    setSelectedSportId(sports[0].id);
+  }
+
   // Format date to YYYY-MM-DD for API
   const dateStr = selectedDate.toISOString().split('T')[0];
   
-  const { data: availability, isLoading } = useSWR(
-    `/api/client/v1/availability?date=${dateStr}&sport=${selectedSport}`,
+  const { data: availability, isLoading: isAvailabilityLoading } = useSWR(
+    selectedSportId ? `/api/client/v1/availability?date=${dateStr}&sportId=${selectedSportId}` : null,
     fetcher
   );
+
+  const isLoading = isAvailabilityLoading || (!sportsData && !sportsData?.error);
 
   const handleConfirmBooking = async () => {
     if (!selectedTurf || selectedSlots.length === 0 || !member) return;
@@ -44,7 +55,7 @@ export default function BookCourtPage() {
           turfId: selectedTurf,
           date: dateStr,
           slots: selectedSlots,
-          sport: selectedSport
+          sportId: selectedSportId
         }),
       });
       
@@ -63,6 +74,11 @@ export default function BookCourtPage() {
   };
 
   const selectedTurfDetails = availability?.turfs?.find((t: any) => t.id === selectedTurf);
+  
+  // Calculate total price based on selected slots
+  const totalPrice = selectedTurfDetails?.slots
+    ?.filter((s: any) => selectedSlots.includes(s.time))
+    .reduce((sum: number, s: any) => sum + (s.price || 0), 0) || 0;
 
   return (
     <main className="min-h-screen bg-[var(--play-bg)] text-[var(--play-text)] flex flex-col md:flex-row pb-24 md:pb-0">
@@ -72,11 +88,15 @@ export default function BookCourtPage() {
           <h1 className="text-2xl font-bold font-outfit mb-4">Book a Court</h1>
           <DatePicker selectedDate={selectedDate} onChange={setSelectedDate} />
           <div className="mt-4">
-            <SportChips sports={['Football', 'Cricket', 'Badminton', 'Tennis', 'Basketball']} selectedSport={selectedSport} onChange={(sport: string) => {
-              setSelectedSport(sport);
-              setSelectedTurf(null);
-              setSelectedSlots([]);
-            }} />
+            <SportChips 
+              sports={sports} 
+              selectedSportId={selectedSportId || ''} 
+              onChange={(sportId: string) => {
+                setSelectedSportId(sportId);
+                setSelectedTurf(null);
+                setSelectedSlots([]);
+              }} 
+            />
           </div>
         </div>
 
@@ -95,7 +115,7 @@ export default function BookCourtPage() {
                     <p className="text-sm text-[var(--play-text-muted)]">{turf.location}</p>
                   </div>
                   <div className="text-right">
-                    <span className="font-bold text-[var(--play-brand)]">₹{turf.pricePerHour}/hr</span>
+                    <span className="font-bold text-[var(--play-brand)]">₹{turf.slots?.[0]?.price || 0}/hr</span>
                   </div>
                 </div>
                 
@@ -126,7 +146,7 @@ export default function BookCourtPage() {
           <ReviewPanel 
             selectedSlots={selectedSlots}
             selectedTurf={selectedTurfDetails?.name || selectedTurf}
-            price={selectedTurfDetails?.pricePerHour || 0}
+            price={totalPrice}
             walletBalance={member?.walletBalance || 0}
             pointsBalance={member?.loyaltyPoints || 0}
             onApplyCoupon={(code) => console.log('Coupon:', code)}
