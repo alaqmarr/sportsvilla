@@ -596,7 +596,8 @@ export async function sendWhatsAppGameInviteTemplate(
   sportName: string,
   courtName: string,
   dateStr: string,
-  inviteLinkOrCode: string
+  inviteLinkOrCode: string,
+  inviteeName?: string
 ) {
   const formattedPhone = formatWhatsAppNumber(toPhone);
   const inviteCode = inviteLinkOrCode.includes("/")
@@ -638,10 +639,11 @@ export async function sendWhatsAppGameInviteTemplate(
 
   if (!templateRes.success) {
     console.log("Template sportsvilla_game_invite_v1 fallback to text for phone:", formattedPhone);
+    const greeting = inviteeName ? `Hi ${inviteeName},\n\n` : "";
     return await sendWhatsAppMessage({
       to: formattedPhone,
       type: "text",
-      text: `🎉 *Game Invitation from ${hostName}*\n\nYou have been invited to play *${sportName}* at *${courtName}* on *${dateStr}*.\n\nTap below to join the game:\n${inviteLink}\n\nSee you on the court! 🏆`,
+      text: `${greeting}🎉 *Game Invitation from ${hostName}*\n\nYou have been invited to play *${sportName}* at *${courtName}* on *${dateStr}*.\n\nTap below to join the game:\n${inviteLink}\n\nSee you on the court! 🏆`,
       metadata: { purpose: "GAME_INVITATION_FALLBACK" },
     });
   }
