@@ -54,7 +54,7 @@ export default async function BookCourtPage(props: {
     availability.turfs = turfs.map((turf) => {
       const duration = turf.bookingDurationMinutes || 60;
       const price = turf.bookingPrice || 600;
-      const capacity = turf.capacityPerSlot;
+      const capacity = turf.capacityPerSlot || 1;
 
       const slots = [];
       let currentHour = OPEN_HOUR;
@@ -76,7 +76,7 @@ export default async function BookCourtPage(props: {
         );
 
         const usedCapacity = overlappingBookings.reduce(
-          (sum, b) => sum + b.participantCount,
+          (sum, b) => sum + (b.participantCount || 1),
           0
         );
         const availableCourts = Math.max(0, capacity - usedCapacity);

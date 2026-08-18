@@ -16,7 +16,8 @@ export function BookCourtClient({ member, sports, availability, initialDateStr, 
   const router = useRouter();
   const searchParams = useSearchParams();
   
-  const [selectedDate, setSelectedDate] = useState<Date>(new Date(initialDateStr));
+  const [year, month, day] = initialDateStr.split('-');
+  const [selectedDate, setSelectedDate] = useState<Date>(new Date(parseInt(year), parseInt(month) - 1, parseInt(day)));
   const [selectedSportId, setSelectedSportId] = useState<string | null>(initialSportId || (sports.length > 0 ? sports[0].id : null));
   const [selectedTurf, setSelectedTurf] = useState<string | null>(null);
   const [selectedSlots, setSelectedSlots] = useState<string[]>([]);
