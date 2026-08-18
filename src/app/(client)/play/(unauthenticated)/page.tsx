@@ -1,8 +1,9 @@
 import React from 'react';
+import { prisma } from '@/lib/prisma';
 import Link from 'next/link';
 import { Calendar, Users, Wallet, ClipboardList, Medal, ChevronRight, Smartphone, Zap } from 'lucide-react';
 
-export default function LandingPage() {
+export default async function LandingPage() {
   const features = [
     {
       icon: <Calendar className="h-6 w-6 text-emerald-500" />,
@@ -36,17 +37,23 @@ export default function LandingPage() {
     },
   ];
 
-  const sports = [
-    { name: 'Badminton', emoji: '🏸' },
-    { name: 'Cricket', emoji: '🏏' },
-    { name: 'Football', emoji: '⚽' },
-    { name: 'Tennis', emoji: '🎾' },
-    { name: 'Basketball', emoji: '🏀' },
-    { name: 'Swimming', emoji: '🏊‍♂️' },
-    { name: 'Volleyball', emoji: '🏐' },
-    { name: 'Table Tennis', emoji: '🏓' },
-    { name: 'Gym', emoji: '🏋️‍♂️' },
-  ];
+  const dbSports = await prisma.sport.findMany({
+    select: { name: true, iconPath: true }
+  });
+
+  const sports = dbSports.length > 0 
+    ? dbSports.map(s => ({ name: s.name, emoji: s.iconPath || '🏅' }))
+    : [
+        { name: 'Badminton', emoji: '🏸' },
+        { name: 'Cricket', emoji: '🏏' },
+        { name: 'Football', emoji: '⚽' },
+        { name: 'Tennis', emoji: '🎾' },
+        { name: 'Basketball', emoji: '🏀' },
+        { name: 'Swimming', emoji: '🏊‍♂️' },
+        { name: 'Volleyball', emoji: '🏐' },
+        { name: 'Table Tennis', emoji: '🏓' },
+        { name: 'Gym', emoji: '🏋️‍♂️' },
+      ];
 
   return (
     <div className="w-full flex flex-col min-h-screen bg-slate-50 overflow-hidden">
