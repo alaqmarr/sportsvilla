@@ -1,7 +1,7 @@
 export const dynamic = 'force-dynamic';
 import { formatIST } from "@/lib/dateUtils";
 import { prisma } from "@/lib/prisma";
-import { FiUsers, FiActivity, FiCheckCircle, FiPlus, FiMessageCircle, FiCalendar } from "react-icons/fi";
+import { FiUsers, FiActivity, FiCheckCircle, FiPlus, FiCalendar } from "react-icons/fi";
 import { FaWhatsapp } from "react-icons/fa";
 import CheckinScanner from "@/components/CheckinScanner";
 import Link from "next/link";

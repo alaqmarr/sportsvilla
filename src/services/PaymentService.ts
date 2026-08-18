@@ -143,11 +143,15 @@ export class PaymentService {
     const booking = await prisma.booking.findUnique({ where: { id: bookingId } });
     if (!booking) throw new ApiError('Booking not found', 404);
 
-    // Mark as paid
+    // Mark as paid and settle balance fields atomically
     await prisma.$transaction([
       prisma.booking.update({
         where: { id: booking.id },
-        data: { paymentStatus: 'PAID' }
+        data: {
+          paymentStatus: 'PAID',
+          amountDue: 0,
+          advancePaid: { increment: booking.amountDue }
+        }
       }),
       prisma.payment.create({
         data: {

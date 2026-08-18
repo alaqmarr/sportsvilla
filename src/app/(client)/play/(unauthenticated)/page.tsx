@@ -1,6 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
-import { Calendar, Users, Trophy, Wallet, ClipboardList, Medal, ChevronRight, Smartphone, MapPin, Zap } from 'lucide-react';
+import { Calendar, Users, Wallet, ClipboardList, Medal, ChevronRight, Smartphone, Zap } from 'lucide-react';
 
 export default function LandingPage() {
   const features = [
