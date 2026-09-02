@@ -92,30 +92,48 @@ export default function CalendarClient() {
                     </div>
 
                     {/* Bookings */}
-                    {data.bookings.filter(b => b.turfId === turf.id).map(booking => {
-                      const start = new Date(booking.startTime);
-                      const end = new Date(booking.endTime);
-                      const startHourFloat = start.getHours() + (start.getMinutes() / 60);
-                      const endHourFloat = end.getHours() + (end.getMinutes() / 60);
-                      
-                      const leftPos = (startHourFloat - START_HOUR) * HOUR_WIDTH;
-                      const blockWidth = (endHourFloat - startHourFloat) * HOUR_WIDTH;
+                    {(() => {
+                      const turfBookings = data.bookings.filter(b => b.turfId === turf.id);
+                      const groups: Record<string, any[]> = {};
+                      turfBookings.forEach(b => {
+                        const key = `${new Date(b.startTime).getTime()}-${new Date(b.endTime).getTime()}`;
+                        if (!groups[key]) groups[key] = [];
+                        groups[key].push(b);
+                      });
 
-                      // Don't render if it starts before our timeline
-                      if (startHourFloat < START_HOUR) return null;
+                      return Object.values(groups).map((groupBookings, index) => {
+                        const booking = groupBookings[0];
+                        const start = new Date(booking.startTime);
+                        const end = new Date(booking.endTime);
+                        const startHourFloat = start.getHours() + (start.getMinutes() / 60);
+                        const endHourFloat = end.getHours() + (end.getMinutes() / 60);
+                        
+                        const leftPos = (startHourFloat - START_HOUR) * HOUR_WIDTH;
+                        const blockWidth = (endHourFloat - startHourFloat) * HOUR_WIDTH;
 
-                      return (
-                        <div 
-                          key={booking.id}
-                          className="absolute top-2 bottom-2 bg-emerald-500/20 border border-emerald-500/50 rounded-md p-2 overflow-hidden flex flex-col justify-center"
-                          style={{ left: `${leftPos}px`, width: `${blockWidth - 4}px` }}
-                          title={`${booking.member.name} (${formatIST(start, 'hh:mm a')} - ${formatIST(end, 'hh:mm a')})`}
-                        >
-                          <div className="text-xs font-bold text-emerald-400 truncate">{booking.member.name}</div>
-                          <div className="text-[10px] text-emerald-500/80 truncate">{booking.member.mobile}</div>
-                        </div>
-                      );
-                    })}
+                        // Don't render if it starts before our timeline
+                        if (startHourFloat < START_HOUR) return null;
+
+                        const totalParticipants = groupBookings.reduce((sum, b) => sum + (b.participantCount || 1), 0);
+                        const names = groupBookings.map(b => b.member?.name || 'Guest').join(', ');
+
+                        return (
+                          <div 
+                            key={`group-${index}`}
+                            className="absolute top-2 bottom-2 bg-emerald-500/20 border border-emerald-500/50 rounded-md p-2 overflow-hidden flex flex-col justify-center"
+                            style={{ left: `${leftPos}px`, width: `${blockWidth - 4}px` }}
+                            title={`${names} (${formatIST(start, 'hh:mm a')} - ${formatIST(end, 'hh:mm a')}) - Total: ${totalParticipants} Participants`}
+                          >
+                            <div className="text-xs font-bold text-emerald-400 truncate">
+                              {groupBookings.length > 1 ? `${booking.member?.name || 'Guest'} +${groupBookings.length - 1}` : booking.member?.name || 'Guest'}
+                            </div>
+                            <div className="text-[10px] text-emerald-500/80 truncate">
+                              {groupBookings.length > 1 ? `${totalParticipants} Participants` : booking.member?.mobile || ''}
+                            </div>
+                          </div>
+                        );
+                      });
+                    })()}
                   </div>
                 </div>
               ))}

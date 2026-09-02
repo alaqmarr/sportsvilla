@@ -237,32 +237,32 @@ export async function createBooking(data: {
   revalidatePath("/", "layout");
 
   // Dispatch WhatsApp Event for Manual Bookings
-  const targetMobile = data.mobile || member?.mobile;
-  if (targetMobile && member) {
-    try {
-      const sportRecord = await prisma.sport.findUnique({ where: { id: data.sportId } });
-      const sportName = sportRecord?.name || "Sports";
-      for (const b of bookings) {
-        const turfName = bookingItems.find(i => i.turf.id === b.turfId)?.turf.name || "";
-        const formattedDate = new Date(b.startTime).toLocaleDateString('en-IN', { timeZone: 'Asia/Kolkata', weekday: 'short', month: 'short', day: 'numeric' });
-        const formattedTime = new Date(b.startTime).toLocaleTimeString('en-IN', { timeZone: 'Asia/Kolkata', hour: '2-digit', minute: '2-digit', hour12: true });
-        const endFormatted = new Date(b.endTime).toLocaleTimeString('en-IN', { timeZone: 'Asia/Kolkata', hour: '2-digit', minute: '2-digit', hour12: true });
-        const timeString = `${formattedDate}, ${formattedTime} - ${endFormatted}`;
-        const priceStr = `₹${b.price - b.discountAmount}`;
-        const paymentStr = b.paymentStatus === "UNPAID" ? `${priceStr} (DUE)` : `${priceStr} (${b.paymentStatus})`;
-        
-        sendWhatsAppBookingConfirmedTemplate(
-          member.name,
-          turfName,
-          sportName,
-          timeString,
-          paymentStr,
-          targetMobile
-        ).catch(console.error);
-      }
-    } catch(e) {
-      console.error("Error triggering WhatsApp booking confirmation", e);
+  try {
+    const sportRecord = await prisma.sport.findUnique({ where: { id: data.sportId } });
+    const sportName = sportRecord?.name || "Sports";
+    for (const b of bookings) {
+      const bMember = await prisma.member.findUnique({ where: { id: b.memberId } });
+      if (!bMember || !bMember.mobile) continue;
+
+      const turfName = bookingItems.find(i => i.turf.id === b.turfId)?.turf.name || "";
+      const formattedDate = new Date(b.startTime).toLocaleDateString('en-IN', { timeZone: 'Asia/Kolkata', weekday: 'short', month: 'short', day: 'numeric' });
+      const formattedTime = new Date(b.startTime).toLocaleTimeString('en-IN', { timeZone: 'Asia/Kolkata', hour: '2-digit', minute: '2-digit', hour12: true });
+      const endFormatted = new Date(b.endTime).toLocaleTimeString('en-IN', { timeZone: 'Asia/Kolkata', hour: '2-digit', minute: '2-digit', hour12: true });
+      const timeString = `${formattedDate}, ${formattedTime} - ${endFormatted}`;
+      const priceStr = `₹${Math.round(b.price - b.discountAmount)}`;
+      const paymentStr = b.paymentStatus === "UNPAID" ? `${priceStr} (DUE)` : `${priceStr} (${b.paymentStatus})`;
+      
+      sendWhatsAppBookingConfirmedTemplate(
+        bMember.name,
+        turfName,
+        sportName,
+        timeString,
+        paymentStr,
+        bMember.mobile
+      ).catch(console.error);
     }
+  } catch(e) {
+    console.error("Error triggering WhatsApp booking confirmation", e);
   }
 
   return bookings;

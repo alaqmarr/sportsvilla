@@ -123,23 +123,7 @@ export async function assignPlan(data: { memberIds?: string[]; memberId?: string
   }
 
   const start = new Date(data.startDate);
-  let end = new Date(start);
-
-  if (data.allowedDays && data.allowedDays.length > 0 && data.allowedDays.length < 7) {
-    let activeDaysCount = 0;
-    let current = new Date(start);
-    while (activeDaysCount < plan.durationInDays) {
-      if (data.allowedDays.includes(current.getDay())) {
-        activeDaysCount++;
-      }
-      if (activeDaysCount < plan.durationInDays) {
-        current = addDays(current, 1);
-      }
-    }
-    end = current;
-  } else {
-    end = addDays(start, plan.durationInDays);
-  }
+  const end = addDays(start, plan.durationInDays);
   
   const createdMemberships = [];
 
