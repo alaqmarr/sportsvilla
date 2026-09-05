@@ -113,7 +113,8 @@ export function Navigation({
       links: [
         { href: "/audit", label: "Audit Logs", icon: <FiShield /> },
         { href: "/admin", label: "Role & Admin Users", icon: <FiShield /> },
-        { href: "/settings", label: "Settings", icon: <FiSettings /> },
+        { href: "/settings", label: "General Settings", icon: <FiSettings /> },
+        { href: "/settings/phonepe", label: "PhonePe Config", icon: <FiCreditCard /> },
         { href: "/app-versions", label: "App Versions", icon: <FiSmartphone /> },
         { href: "/server", label: "Server Health", icon: <FiServer /> },
         { href: "/app-logs", label: "System Logs", icon: <FiFileText /> },
