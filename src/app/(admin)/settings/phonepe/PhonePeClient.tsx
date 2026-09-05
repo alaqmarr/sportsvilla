@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import { updatePhonePeSettings } from "./actions";
-import { useAlert } from @/components/AlertProvider;
+import { useAlert } from "@/components/AlertProvider";
 import { FiSave, FiCreditCard } from "react-icons/fi";
 
 export default function PhonePeClient({ initialSettings }: { initialSettings: Record<string, string> }) {
