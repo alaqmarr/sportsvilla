@@ -1,4 +1,4 @@
-import { prisma } from @/lib/prisma;
+import { prisma } from "@/lib/prisma";
 import PhonePeClient from "./PhonePeClient";
 import { Metadata } from "next";
 
