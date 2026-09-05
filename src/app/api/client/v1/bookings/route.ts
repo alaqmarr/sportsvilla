@@ -310,10 +310,12 @@ export async function POST(request: Request) {
     const pointsEarned = Math.floor(subtotal * 0.01);
 
     let paymentStatus = "Due";
+    let bookingStatus = "CONFIRMED";
     if (amountDue === 0) {
       paymentStatus = advancePaid > 0 ? "Paid using Wallet" : "Paid";
-    } else if (advancePaid > 0) {
-      paymentStatus = "Advance Paid";
+    } else {
+      paymentStatus = advancePaid > 0 ? "Advance Paid" : "Due";
+      bookingStatus = "PAYMENT_PENDING";
     }
 
     // Generate ticket data ahead of time

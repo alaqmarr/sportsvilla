@@ -103,9 +103,9 @@ export class PaymentService {
         merchantTransactionId: transactionId,
         merchantUserId: booking.memberId,
         amount: Math.round(amountDue * 100),
-        redirectUrl: `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/api/client/v1/payments/phonepe-redirect?bookingId=${booking.id}`,
+        redirectUrl: `${process.env.NEXT_PUBLIC_APP_URL || process.env.NEXTAUTH_URL || 'http://localhost:3000'}/api/client/v1/payments/phonepe-redirect?bookingId=${booking.id}`,
         redirectMode: "POST",
-        callbackUrl: `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/api/client/v1/payments/webhook?gateway=PHONEPE&bookingId=${booking.id}`,
+        callbackUrl: `${process.env.NEXT_PUBLIC_APP_URL || process.env.NEXTAUTH_URL || 'http://localhost:3000'}/api/client/v1/payments/webhook?gateway=PHONEPE&bookingId=${booking.id}`,
         mobileNumber: booking.member.mobile,
         paymentInstrument: {
           type: "PAY_PAGE"
@@ -205,6 +205,7 @@ export class PaymentService {
           prisma.booking.update({
             where: { id: booking.id },
             data: {
+              status: 'CONFIRMED',
               paymentStatus: 'PAID',
               amountDue: 0,
               advancePaid: { increment: booking.amountDue }
@@ -249,6 +250,7 @@ export class PaymentService {
       prisma.booking.update({
         where: { id: booking.id },
         data: {
+          status: 'CONFIRMED',
           paymentStatus: 'PAID',
           amountDue: 0,
           advancePaid: { increment: booking.amountDue }

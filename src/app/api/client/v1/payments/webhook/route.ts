@@ -26,6 +26,7 @@ export const POST = withApiHandler(async (request: Request) => {
           prisma.booking.update({
             where: { id: booking.id },
             data: { 
+              status: 'CONFIRMED',
               paymentStatus: 'PAID',
               amountDue: 0,
               advancePaid: { increment: booking.amountDue }

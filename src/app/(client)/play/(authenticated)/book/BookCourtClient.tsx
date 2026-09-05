@@ -115,10 +115,15 @@ export function BookCourtClient({ member, sports, availability, initialDateStr, 
               if (paymentData.success && paymentData.redirectUrl) {
                 window.location.href = paymentData.redirectUrl;
                 return;
+              } else {
+                throw new Error(paymentData.error || 'Failed to initiate payment');
               }
             }
           } catch (e) {
             console.error('Payment initiation failed', e);
+            setIsCheckoutOpen(false);
+            setProcessStatus('error');
+            return; // Stop here, don't redirect to success!
           }
         }
         

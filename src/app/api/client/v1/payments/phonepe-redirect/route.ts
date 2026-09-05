@@ -11,7 +11,7 @@ export const POST = async (request: Request) => {
     const transactionId = formData.get('transactionId') as string;
     const code = formData.get('code') as string;
 
-    const frontendUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+    const frontendUrl = process.env.NEXT_PUBLIC_APP_URL || process.env.NEXTAUTH_URL || 'http://localhost:3000';
 
     if (!bookingId || !transactionId) {
       logger.error('Invalid PhonePe Redirect Payload', { bookingId, transactionId });
@@ -29,7 +29,7 @@ export const POST = async (request: Request) => {
     return NextResponse.redirect(`${frontendUrl}/play/bookings/${bookingId}?error=${code || 'failed'}`);
   } catch (error: unknown) {
     logger.error('PhonePe Redirect Error', error);
-    const frontendUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+    const frontendUrl = process.env.NEXT_PUBLIC_APP_URL || process.env.NEXTAUTH_URL || 'http://localhost:3000';
     return NextResponse.redirect(`${frontendUrl}/play/dashboard?error=server_error`);
   }
 };
