@@ -94,6 +94,34 @@ export function BookCourtClient({ member, sports, availability, initialDateStr, 
       
       const result = await res.json();
       if (res.ok && result.booking) {
+        if (result.booking.amountDue > 0) {
+          try {
+            const configRes = await fetch('/api/client/v1/payments/config');
+            const configData = await configRes.json();
+            const gateway = configData?.config?.activeGateway;
+            
+            if (gateway === 'PHONEPE' || gateway === 'BOTH') {
+              const paymentRes = await fetch('/api/client/v1/payments/create', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  bookingId: result.booking.id,
+                  gateway: 'PHONEPE',
+                  platform: 'WEB'
+                })
+              });
+              
+              const paymentData = await paymentRes.json();
+              if (paymentData.success && paymentData.redirectUrl) {
+                window.location.href = paymentData.redirectUrl;
+                return;
+              }
+            }
+          } catch (e) {
+            console.error('Payment initiation failed', e);
+          }
+        }
+        
         setIsCheckoutOpen(false);
         setProcessStatus('success');
         setTimeout(() => {

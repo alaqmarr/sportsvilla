@@ -112,33 +112,30 @@ export async function POST(request: Request) {
       return jsonResponse({ error: 'Online booking is currently disabled by the administrator.' }, { status: 403 });
     }
     
-    // 1. Get turf and validate
-    const turf = await prisma.turf.findUnique({ where: { id: turfId } });
+    // 1. Fetch related data concurrently
+    const [turf, sport, turfSport, overlappingBookings] = await Promise.all([
+      prisma.turf.findUnique({ where: { id: turfId } }),
+      prisma.sport.findUnique({ where: { id: sportId } }),
+      prisma.turfSport.findUnique({ where: { turfId_sportId: { turfId, sportId } } }),
+      prisma.booking.findMany({
+        where: {
+          turfId,
+          status: { not: 'CANCELLED' },
+          startTime: { lt: end },
+          endTime: { gt: start }
+        }
+      })
+    ]);
+
     if (!turf) {
       return jsonResponse({ error: 'Turf not found' }, { status: 404 });
     }
-
-    // Bug #16: Validate sportId exists and belongs to turf
-    const sport = await prisma.sport.findUnique({ where: { id: sportId } });
     if (!sport) {
       return jsonResponse({ error: 'Sport not found' }, { status: 404 });
     }
-    const turfSport = await prisma.turfSport.findUnique({ 
-      where: { turfId_sportId: { turfId, sportId } } 
-    });
     if (!turfSport) {
       return jsonResponse({ error: 'This sport is not available at the selected turf.' }, { status: 400 });
     }
-
-    // 2. Count overlapping bookings for this exact slot
-    const overlappingBookings = await prisma.booking.findMany({
-      where: {
-        turfId,
-        status: { not: 'CANCELLED' },
-        startTime: { lt: end },
-        endTime: { gt: start }
-      }
-    });
 
     const usedCapacity = overlappingBookings.reduce((sum, b) => sum + b.participantCount, 0);
     const availableCourts = turf.capacityPerSlot - usedCapacity;
