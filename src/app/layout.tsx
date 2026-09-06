@@ -4,7 +4,12 @@ import { AlertProvider } from "@/components/AlertProvider";
 export const metadata = {
   title: "Sportsvilla Management",
   description: "Management portal for Sportsvilla",
-  viewport: "width=device-width, initial-scale=1, maximum-scale=1",
+};
+
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
 };
 
 export default function RootLayout({

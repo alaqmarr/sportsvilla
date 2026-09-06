@@ -99,6 +99,7 @@ export const ReviewPanel: React.FC<ReviewPanelProps> = ({
               onChange={(e) => setSelectedCouponCode(e.target.value.toUpperCase())}
             />
             <button 
+              type="button"
               onClick={() => setIsOffersOpen(false)}
               className="px-6 bg-[var(--play-brand)] text-white font-bold rounded-xl"
             >
@@ -212,6 +213,7 @@ export const ReviewPanel: React.FC<ReviewPanelProps> = ({
           
           <div className="flex justify-center w-full">
              <button 
+                type="button"
                 onClick={() => onConfirm(selectedCouponCode, walletDeduction, pointsDeduction, otp.join(''))}
                 disabled={otp.join('').length < 6}
                 className="w-full max-w-[280px] bg-[var(--play-brand)] hover:bg-[var(--play-brand-dark)] text-white py-4 rounded-xl font-bold text-base transition-colors shadow-sm disabled:opacity-50 disabled:cursor-not-allowed shrink-0"
@@ -345,6 +347,7 @@ export const ReviewPanel: React.FC<ReviewPanelProps> = ({
             <p className="text-2xl font-bold font-outfit text-[var(--play-text)]">₹{finalAmount.toFixed(2)}</p>
           </div>
           <button 
+            type="button"
             onClick={handleProceedClick}
             disabled={isSendingOtp}
             className="flex-1 shrink-0 whitespace-nowrap bg-[var(--play-brand)] hover:bg-[var(--play-brand-dark)] text-white py-4 px-6 rounded-xl font-bold text-base transition-colors shadow-sm flex items-center justify-center disabled:opacity-70"

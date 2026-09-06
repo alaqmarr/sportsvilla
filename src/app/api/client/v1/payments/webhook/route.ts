@@ -20,7 +20,10 @@ export const POST = withApiHandler(async (request: Request) => {
     const urlBookingId = searchParams.get('bookingId');
 
     if (urlBookingId) {
-      const booking = await prisma.booking.findUnique({ where: { id: urlBookingId } });
+      const booking = await prisma.booking.findUnique({ 
+        where: { id: urlBookingId },
+        include: { turf: true, sport: true, member: true }
+      });
       if (booking && booking.paymentStatus !== 'PAID') {
         await prisma.$transaction([
           prisma.booking.update({
@@ -41,6 +44,41 @@ export const POST = withApiHandler(async (request: Request) => {
           })
         ]);
         logger.info(`PhonePe Webhook Payment Verified & Settled`, { bookingId: booking.id });
+        
+        try {
+          const { sendWhatsAppBookingConfirmedTemplate } = require('@/lib/whatsapp');
+          const start = new Date(booking.startTime);
+          const end = new Date(booking.endTime);
+          
+          const formattedDate = start.toLocaleDateString('en-IN', { timeZone: 'Asia/Kolkata', weekday: 'short', month: 'short', day: 'numeric' });
+          const formattedTime = start.toLocaleTimeString('en-IN', { timeZone: 'Asia/Kolkata', hour: '2-digit', minute: '2-digit', hour12: true });
+          const endFormatted = end.toLocaleTimeString('en-IN', { timeZone: 'Asia/Kolkata', hour: '2-digit', minute: '2-digit', hour12: true });
+          const timeString = `${formattedDate}, ${formattedTime} - ${endFormatted}`;
+          const priceStr = `₹${booking.price - booking.discountAmount}`;
+          const paymentStr = `${priceStr} (PAID)`;
+          
+          // Generate tickets since booking is now CONFIRMED
+          const { randomUUID } = require('crypto');
+          const ticketsData = [];
+          for (let i = 0; i < booking.participantCount; i++) {
+            ticketsData.push({
+              bookingId: booking.id,
+              qrCode: `TICKET-${randomUUID()}`,
+            });
+          }
+          await prisma.ticket.createMany({ data: ticketsData });
+
+          await sendWhatsAppBookingConfirmedTemplate(
+            booking.member.name, 
+            booking.turf.name,
+            booking.sport.name,
+            timeString,
+            paymentStr,
+            booking.member.mobile
+          );
+        } catch (waError) {
+          logger.error('WhatsApp booking confirmed message / ticket gen failed after webhook', waError);
+        }
       }
     }
   }

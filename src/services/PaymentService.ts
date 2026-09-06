@@ -13,10 +13,10 @@ export class PaymentService {
     });
     const map = settings.reduce((acc, s) => ({ ...acc, [s.key]: s.value }), {} as Record<string, string>);
     return {
-      merchantId: map['PHONEPE_MERCHANT_ID'] || process.env.PHONEPE_MERCHANT_ID,
-      saltKey: map['PHONEPE_SALT_KEY'] || process.env.PHONEPE_SALT_KEY,
-      saltIndex: map['PHONEPE_SALT_INDEX'] || process.env.PHONEPE_SALT_INDEX || '1',
-      env: map['PHONEPE_ENV'] || process.env.PHONEPE_ENV || 'UAT'
+      merchantId: map['PHONEPE_MERCHANT_ID'],
+      saltKey: map['PHONEPE_SALT_KEY'],
+      saltIndex: map['PHONEPE_SALT_INDEX'] || '1',
+      env: map['PHONEPE_ENV'] || 'UAT'
     };
   }
 
@@ -93,7 +93,7 @@ export class PaymentService {
       const { merchantId, saltKey, saltIndex, env } = await PaymentService.getPhonePeConfig();
 
       if (!merchantId || !saltKey || !saltIndex) {
-        throw new ApiError('PhonePe is not configured in database or environment variables', 500);
+        throw new ApiError('PhonePe is not configured in database', 500);
       }
 
       const transactionId = `T${Date.now()}${booking.id.substring(0, 5)}`;
@@ -121,21 +121,8 @@ export class PaymentService {
 
       const phonePeHost = env === 'PROD' 
         ? 'https://api.phonepe.com/apis/hermes'
-        : 'https://api-preprod.phonepe.com/apis/pg-sandbox';
+        : 'https://api-preprod.phonepe.com/apis/hermes';
 
-      if (platform === 'APP') {
-        // Return SDK Payload instead of calling API directly for Mobile App Native SDK
-        return {
-          gateway: 'PHONEPE',
-          transactionId: transactionId,
-          amount: amountDue,
-          base64Body: base64Payload,
-          checksum: xVerify,
-          apiEndPoint: endpoint,
-          environment: env === 'PROD' ? 'PRODUCTION' : 'SANDBOX',
-          appId: "" 
-        };
-      }
 
       // Web Flow: Make Server-to-Server call to get redirect URL
       try {
@@ -185,7 +172,7 @@ export class PaymentService {
 
     const phonePeHost = env === 'PROD' 
       ? 'https://api.phonepe.com/apis/hermes'
-      : 'https://api-preprod.phonepe.com/apis/pg-sandbox';
+      : 'https://api-preprod.phonepe.com/apis/hermes';
 
     const response = await fetch(`${phonePeHost}${endpoint}`, {
       method: 'GET',
@@ -199,7 +186,11 @@ export class PaymentService {
     const data = await response.json();
 
     if (data.success && data.code === 'PAYMENT_SUCCESS') {
-      const booking = await prisma.booking.findUnique({ where: { id: bookingId } });
+      const booking = await prisma.booking.findUnique({ 
+        where: { id: bookingId },
+        include: { turf: true, sport: true, member: true }
+      });
+      
       if (booking && booking.paymentStatus !== 'PAID') {
         await prisma.$transaction([
           prisma.booking.update({
@@ -220,6 +211,44 @@ export class PaymentService {
           })
         ]);
         logger.info(`PhonePe Payment Verified & Settled`, { bookingId, transactionId });
+
+        // Send Booking Confirmation via WhatsApp
+        try {
+          const { sendWhatsAppBookingConfirmedTemplate } = require('@/lib/whatsapp');
+          const start = new Date(booking.startTime);
+          const end = new Date(booking.endTime);
+          
+          const formattedDate = start.toLocaleDateString('en-IN', { timeZone: 'Asia/Kolkata', weekday: 'short', month: 'short', day: 'numeric' });
+          const formattedTime = start.toLocaleTimeString('en-IN', { timeZone: 'Asia/Kolkata', hour: '2-digit', minute: '2-digit', hour12: true });
+          const endFormatted = end.toLocaleTimeString('en-IN', { timeZone: 'Asia/Kolkata', hour: '2-digit', minute: '2-digit', hour12: true });
+          const timeString = `${formattedDate}, ${formattedTime} - ${endFormatted}`;
+          
+          // amountDue was fully paid, so payment is 'PAID'
+          const priceStr = `₹${booking.price - booking.discountAmount}`;
+          const paymentStr = `${priceStr} (PAID)`;
+          
+          // Generate tickets since booking is now CONFIRMED
+          const { randomUUID } = require('crypto');
+          const ticketsData = [];
+          for (let i = 0; i < booking.participantCount; i++) {
+            ticketsData.push({
+              bookingId: booking.id,
+              qrCode: `TICKET-${randomUUID()}`,
+            });
+          }
+          await prisma.ticket.createMany({ data: ticketsData });
+
+          await sendWhatsAppBookingConfirmedTemplate(
+            booking.member.name, 
+            booking.turf.name,
+            booking.sport.name,
+            timeString,
+            paymentStr,
+            booking.member.mobile
+          );
+        } catch (waError) {
+          logger.error('WhatsApp booking confirmed message / ticket gen failed after payment', waError);
+        }
       }
       return { success: true, status: 'PAID' };
     }
@@ -243,29 +272,69 @@ export class PaymentService {
       throw new ApiError('Invalid payment signature', 400);
     }
 
-    const booking = await prisma.booking.findUnique({ where: { id: bookingId } });
+    const booking = await prisma.booking.findUnique({ 
+      where: { id: bookingId },
+      include: { turf: true, sport: true, member: true }
+    });
     if (!booking) throw new ApiError('Booking not found', 404);
 
-    await prisma.$transaction([
-      prisma.booking.update({
-        where: { id: booking.id },
-        data: {
-          status: 'CONFIRMED',
-          paymentStatus: 'PAID',
-          amountDue: 0,
-          advancePaid: { increment: booking.amountDue }
-        }
-      }),
-      prisma.payment.create({
-        data: {
-          bookingId: booking.id,
-          amount: booking.amountDue,
-          method: 'ONLINE'
-        }
-      })
-    ]);
+    if (booking.paymentStatus !== 'PAID') {
+      await prisma.$transaction([
+        prisma.booking.update({
+          where: { id: booking.id },
+          data: {
+            status: 'CONFIRMED',
+            paymentStatus: 'PAID',
+            amountDue: 0,
+            advancePaid: { increment: booking.amountDue }
+          }
+        }),
+        prisma.payment.create({
+          data: {
+            bookingId: booking.id,
+            amount: booking.amountDue,
+            method: 'ONLINE'
+          }
+        })
+      ]);
 
-    logger.info(`Razorpay Payment Verified`, { bookingId, paymentId });
+      logger.info(`Razorpay Payment Verified`, { bookingId, paymentId });
+
+      try {
+        const { sendWhatsAppBookingConfirmedTemplate } = require('@/lib/whatsapp');
+        const start = new Date(booking.startTime);
+        const end = new Date(booking.endTime);
+        
+        const formattedDate = start.toLocaleDateString('en-IN', { timeZone: 'Asia/Kolkata', weekday: 'short', month: 'short', day: 'numeric' });
+        const formattedTime = start.toLocaleTimeString('en-IN', { timeZone: 'Asia/Kolkata', hour: '2-digit', minute: '2-digit', hour12: true });
+        const endFormatted = end.toLocaleTimeString('en-IN', { timeZone: 'Asia/Kolkata', hour: '2-digit', minute: '2-digit', hour12: true });
+        const timeString = `${formattedDate}, ${formattedTime} - ${endFormatted}`;
+        const priceStr = `₹${booking.price - booking.discountAmount}`;
+        const paymentStr = `${priceStr} (PAID)`;
+        
+        // Generate tickets since booking is now CONFIRMED
+        const { randomUUID } = require('crypto');
+        const ticketsData = [];
+        for (let i = 0; i < booking.participantCount; i++) {
+          ticketsData.push({
+            bookingId: booking.id,
+            qrCode: `TICKET-${randomUUID()}`,
+          });
+        }
+        await prisma.ticket.createMany({ data: ticketsData });
+
+        await sendWhatsAppBookingConfirmedTemplate(
+          booking.member.name, 
+          booking.turf.name,
+          booking.sport.name,
+          timeString,
+          paymentStr,
+          booking.member.mobile
+        );
+      } catch (waError) {
+        logger.error('WhatsApp booking confirmed message / ticket gen failed after Razorpay payment', waError);
+      }
+    }
 
     return { success: true };
   }

@@ -239,6 +239,7 @@ export function BookCourtClient({ member, sports, availability, initialDateStr, 
         <div className="sticky bottom-0 w-full bg-[var(--play-surface)] border-t border-[var(--play-border)] shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] pb-8 z-20 mt-auto">
           <div className="p-4 max-w-3xl mx-auto w-full">
             <button 
+              type="button"
               onClick={() => setIsCheckoutOpen(true)}
               className="w-full bg-[var(--play-brand)] text-white font-bold py-4 rounded-[var(--play-radius-md)] shadow-lg active:scale-95 transition-transform flex justify-between px-6"
             >

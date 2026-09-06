@@ -1,1 +1,0 @@
-fetch('http://localhost:3000/api/client/v1/payments/create', { method: 'POST', body: JSON.stringify({ bookingId: '123', gateway: 'PHONEPE' }) }).then(res => res.json()).then(console.log).catch(console.error);

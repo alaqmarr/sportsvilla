@@ -21,10 +21,30 @@ export default async function PhonePeSettingsPage() {
     }
   });
 
+  const defaultSettings: Record<string, string> = {
+    PHONEPE_ENV: "UAT",
+    PHONEPE_MERCHANT_ID: "",
+    PHONEPE_SALT_KEY: "",
+    PHONEPE_SALT_INDEX: "1",
+    PAYMENT_GATEWAY_ACTIVE: "NONE"
+  };
+
   const initialSettings = settings.reduce((acc, curr) => ({
     ...acc,
     [curr.key]: curr.value
   }), {} as Record<string, string>);
+
+  // Seed missing settings
+  for (const [key, defaultValue] of Object.entries(defaultSettings)) {
+    if (initialSettings[key] === undefined) {
+      await prisma.setting.upsert({
+        where: { key },
+        update: {},
+        create: { key, value: defaultValue }
+      });
+      initialSettings[key] = defaultValue;
+    }
+  }
 
   return (
     <div className="space-y-6">

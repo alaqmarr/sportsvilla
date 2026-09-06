@@ -122,7 +122,14 @@ export async function POST(request: Request) {
           turfId,
           status: { not: 'CANCELLED' },
           startTime: { lt: end },
-          endTime: { gt: start }
+          endTime: { gt: start },
+          OR: [
+            { status: { in: ['CONFIRMED', 'COMPLETED'] } },
+            { 
+              status: 'PAYMENT_PENDING', 
+              createdAt: { gt: new Date(Date.now() - 15 * 60 * 1000) } 
+            }
+          ]
         }
       })
     ]);
@@ -335,7 +342,14 @@ export async function POST(request: Request) {
           turfId,
           status: { not: 'CANCELLED' },
           startTime: { lt: end },
-          endTime: { gt: start }
+          endTime: { gt: start },
+          OR: [
+            { status: { in: ['CONFIRMED', 'COMPLETED'] } },
+            { 
+              status: 'PAYMENT_PENDING', 
+              createdAt: { gt: new Date(Date.now() - 15 * 60 * 1000) } 
+            }
+          ]
         }
       });
       const txUsed = txOverlapping.reduce((sum, b) => sum + b.participantCount, 0);
@@ -365,7 +379,7 @@ export async function POST(request: Request) {
           endTime: end,
           price,
           participantCount,
-          status: "CONFIRMED",
+          status: bookingStatus,
           paymentStatus,
           advancePaid,
           amountDue,
@@ -467,12 +481,14 @@ export async function POST(request: Request) {
         create: { memberId: targetMemberId, sportId: sportId, bookingCount: 1 }
       });
 
-      // Generate Tickets
-      const tickets = ticketData.map(t => ({
-        bookingId: newBooking.id,
-        ...t
-      }));
-      await tx.ticket.createMany({ data: tickets });
+      // Generate Tickets only if CONFIRMED
+      if (bookingStatus === 'CONFIRMED') {
+        const tickets = ticketData.map(t => ({
+          bookingId: newBooking.id,
+          ...t
+        }));
+        await tx.ticket.createMany({ data: tickets });
+      }
 
       return newBooking;
     });
@@ -553,7 +569,7 @@ export async function POST(request: Request) {
     // Send Booking Confirmation via WhatsApp
     try {
       const targetMemberData = await prisma.member.findUnique({ where: { id: targetMemberId } });
-      if (targetMemberData) {
+      if (targetMemberData && bookingStatus === 'CONFIRMED') {
         const formattedDate = start.toLocaleDateString('en-IN', { timeZone: 'Asia/Kolkata', weekday: 'short', month: 'short', day: 'numeric' });
         const formattedTime = start.toLocaleTimeString('en-IN', { timeZone: 'Asia/Kolkata', hour: '2-digit', minute: '2-digit', hour12: true });
         const endFormatted = end.toLocaleTimeString('en-IN', { timeZone: 'Asia/Kolkata', hour: '2-digit', minute: '2-digit', hour12: true });
