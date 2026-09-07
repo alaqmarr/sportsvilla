@@ -23,13 +23,21 @@ export class AvailabilityService {
     const startOfDay = new Date(`${dateStr}T00:00:00.000+05:30`);
     const endOfDay = new Date(`${dateStr}T23:59:59.999+05:30`);
 
-    // 3. Fetch all active bookings for these turfs on this date
+    // 3. Fetch all active bookings for these turfs on this date (including cross-midnight overlaps)
     const turfIds = turfs.map(t => t.id);
     const activeBookings = await prisma.booking.findMany({
       where: {
         turfId: { in: turfIds },
         status: { not: 'CANCELLED' },
-        startTime: { gte: startOfDay, lte: endOfDay }
+        startTime: { lt: endOfDay },
+        endTime: { gt: startOfDay },
+        OR: [
+          { status: { in: ['CONFIRMED', 'COMPLETED'] } },
+          { 
+            status: 'PAYMENT_PENDING', 
+            createdAt: { gt: new Date(Date.now() - 15 * 60 * 1000) } 
+          }
+        ]
       }
     });
 

@@ -1,85 +1,174 @@
-import { withApiHandler } from '@/lib/api-handler';
+import { withApiHandler, ApiError } from '@/lib/api-handler';
 import { PaymentService } from '@/services/PaymentService';
 import { prisma } from '@/lib/prisma';
 import { logger } from '@/lib/logger';
+import crypto from 'crypto';
 
 export const POST = withApiHandler(async (request: Request) => {
   const body = await request.text();
-  
-  const payload = JSON.parse(body);
-  const xVerify = request.headers.get('x-verify') || '';
+  const { searchParams } = new URL(request.url);
+  const gatewayParam = searchParams.get('gateway');
+  const urlBookingId = searchParams.get('bookingId');
+  const xVerify = request.headers.get('x-verify');
+  const xRazorpaySignature = request.headers.get('x-razorpay-signature');
 
-  if (!payload.response || !xVerify) {
+  // ==========================================================================
+  // 1. RAZORPAY WEBHOOK HANDLER
+  // ==========================================================================
+  if (gatewayParam === 'RAZORPAY' || xRazorpaySignature) {
+    if (!xRazorpaySignature) {
+      throw new ApiError('Missing Razorpay signature', 401);
+    }
+
+    const rzpWebhookSecret = await prisma.setting.findUnique({
+      where: { key: 'RAZORPAY_WEBHOOK_SECRET' }
+    });
+    const fallbackSecret = await prisma.setting.findUnique({
+      where: { key: 'RAZORPAY_KEY_SECRET' }
+    });
+    const secret = rzpWebhookSecret?.value || fallbackSecret?.value;
+
+    if (!secret) {
+      logger.error('Razorpay webhook secret not configured');
+      throw new ApiError('Webhook secret not configured', 500);
+    }
+
+    const expectedSignature = crypto
+      .createHmac('sha256', secret)
+      .update(body)
+      .digest('hex');
+
+    const expectedBuf = Buffer.from(expectedSignature, 'utf-8');
+    const sigBuf = Buffer.from(xRazorpaySignature, 'utf-8');
+    const isValid = expectedBuf.length === sigBuf.length && crypto.timingSafeEqual(expectedBuf, sigBuf);
+
+    if (!isValid) {
+      logger.warn('Invalid Razorpay webhook signature');
+      throw new ApiError('Invalid webhook signature', 401);
+    }
+
+    try {
+      const eventData = JSON.parse(body);
+      const event = eventData.event;
+      const paymentEntity = eventData.payload?.payment?.entity;
+      const orderId = paymentEntity?.order_id;
+      const paymentId = paymentEntity?.id;
+      const amountPaise = paymentEntity?.amount || 0;
+      const paidAmountRupees = amountPaise / 100;
+
+      if (event === 'order.paid' || event === 'payment.captured') {
+        let booking = null;
+        if (urlBookingId) {
+          booking = await prisma.booking.findUnique({ where: { id: urlBookingId } });
+        }
+        if (!booking && orderId) {
+          const tx = await prisma.transaction.findFirst({
+            where: { gatewayOrderId: orderId, gateway: 'RAZORPAY' }
+          });
+          if (tx?.bookingId) {
+            booking = await prisma.booking.findUnique({ where: { id: tx.bookingId } });
+          }
+        }
+
+        if (booking) {
+          const settleResult = await PaymentService.settleSuccessfulPayment({
+            bookingId: booking.id,
+            gateway: 'RAZORPAY',
+            gatewayOrderId: orderId,
+            gatewayPaymentId: paymentId,
+            paidAmountRupees: paidAmountRupees || booking.amountDue,
+            metadata: { webhook: true, event }
+          });
+
+          if (settleResult.success && settleResult.status === 'PAID') {
+            await PaymentService.sendConfirmationAndTickets(settleResult.booking);
+          }
+        }
+      } else if (event === 'payment.failed' && orderId) {
+        await prisma.transaction.updateMany({
+          where: { gatewayOrderId: orderId, gateway: 'RAZORPAY', status: 'PENDING' },
+          data: {
+            status: 'FAILED',
+            gatewayPaymentId: paymentId,
+            errorMessage: paymentEntity?.error_description || 'Payment failed on gateway',
+            metadata: JSON.stringify({ webhook: true, error: paymentEntity?.error_description })
+          }
+        });
+      }
+
+      return { success: true };
+    } catch (parseErr) {
+      if (parseErr instanceof ApiError) {
+        throw parseErr;
+      }
+      logger.error('Failed to parse Razorpay webhook payload', parseErr);
+      throw new ApiError('Invalid payload', 400);
+    }
+  }
+
+  // ==========================================================================
+  // 2. PHONEPE WEBHOOK HANDLER
+  // ==========================================================================
+  let payload: any = null;
+  try {
+    payload = JSON.parse(body);
+  } catch {
+    return { success: false, error: 'Invalid JSON payload' };
+  }
+
+  if (!payload?.response || !xVerify) {
     return { success: false, error: 'Invalid webhook payload' };
   }
 
   const data = await PaymentService.verifyPhonePeWebhook(payload.response, xVerify);
 
   if (data.code === 'PAYMENT_SUCCESS') {
-    const { searchParams } = new URL(request.url);
-    const urlBookingId = searchParams.get('bookingId');
+    let bookingId = urlBookingId;
+    const merchantTxId = data.data?.merchantTransactionId;
 
-    if (urlBookingId) {
-      const booking = await prisma.booking.findUnique({ 
-        where: { id: urlBookingId },
-        include: { turf: true, sport: true, member: true }
+    if (!bookingId && merchantTxId) {
+      const existingTx = await prisma.transaction.findFirst({
+        where: { gatewayOrderId: merchantTxId, gateway: 'PHONEPE' }
       });
-      if (booking && booking.paymentStatus !== 'PAID') {
-        await prisma.$transaction([
-          prisma.booking.update({
-            where: { id: booking.id },
-            data: { 
-              status: 'CONFIRMED',
-              paymentStatus: 'PAID',
-              amountDue: 0,
-              advancePaid: { increment: booking.amountDue }
-            }
-          }),
-          prisma.payment.create({
-            data: {
-              bookingId: booking.id,
-              amount: booking.amountDue,
-              method: 'ONLINE'
-            }
-          })
-        ]);
-        logger.info(`PhonePe Webhook Payment Verified & Settled`, { bookingId: booking.id });
-        
-        try {
-          const { sendWhatsAppBookingConfirmedTemplate } = require('@/lib/whatsapp');
-          const start = new Date(booking.startTime);
-          const end = new Date(booking.endTime);
-          
-          const formattedDate = start.toLocaleDateString('en-IN', { timeZone: 'Asia/Kolkata', weekday: 'short', month: 'short', day: 'numeric' });
-          const formattedTime = start.toLocaleTimeString('en-IN', { timeZone: 'Asia/Kolkata', hour: '2-digit', minute: '2-digit', hour12: true });
-          const endFormatted = end.toLocaleTimeString('en-IN', { timeZone: 'Asia/Kolkata', hour: '2-digit', minute: '2-digit', hour12: true });
-          const timeString = `${formattedDate}, ${formattedTime} - ${endFormatted}`;
-          const priceStr = `₹${booking.price - booking.discountAmount}`;
-          const paymentStr = `${priceStr} (PAID)`;
-          
-          // Generate tickets since booking is now CONFIRMED
-          const { randomUUID } = require('crypto');
-          const ticketsData = [];
-          for (let i = 0; i < booking.participantCount; i++) {
-            ticketsData.push({
-              bookingId: booking.id,
-              qrCode: `TICKET-${randomUUID()}`,
-            });
-          }
-          await prisma.ticket.createMany({ data: ticketsData });
+      if (existingTx?.bookingId) {
+        bookingId = existingTx.bookingId;
+      }
+    }
 
-          await sendWhatsAppBookingConfirmedTemplate(
-            booking.member.name, 
-            booking.turf.name,
-            booking.sport.name,
-            timeString,
-            paymentStr,
-            booking.member.mobile
-          );
-        } catch (waError) {
-          logger.error('WhatsApp booking confirmed message / ticket gen failed after webhook', waError);
+    if (bookingId) {
+      const booking = await prisma.booking.findUnique({
+        where: { id: bookingId }
+      });
+
+      if (booking) {
+        const paidAmount = data.data?.amount ? data.data.amount / 100 : booking.amountDue;
+        const providerRef = data.data?.transactionId || data.data?.providerReferenceId || null;
+
+        const settleResult = await PaymentService.settleSuccessfulPayment({
+          bookingId: booking.id,
+          gateway: 'PHONEPE',
+          gatewayOrderId: merchantTxId,
+          gatewayPaymentId: providerRef,
+          paidAmountRupees: paidAmount,
+          metadata: { webhook: true, phonePeResponse: data }
+        });
+
+        if (settleResult.success && settleResult.status === 'PAID') {
+          await PaymentService.sendConfirmationAndTickets(settleResult.booking);
         }
       }
+    }
+  } else if (data.code && !['PAYMENT_SUCCESS', 'PAYMENT_PENDING', 'PAYMENT_INITIATED'].includes(data.code)) {
+    const merchantTxId = data.data?.merchantTransactionId;
+    if (merchantTxId) {
+      await prisma.transaction.updateMany({
+        where: { gatewayOrderId: merchantTxId, gateway: 'PHONEPE', status: 'PENDING' },
+        data: {
+          status: 'FAILED',
+          errorMessage: data.message || `PhonePe returned ${data.code}`,
+          metadata: JSON.stringify({ webhook: true, phonePeResponse: data })
+        }
+      });
     }
   }
 

@@ -255,6 +255,8 @@ export function canViewPage(
     "/whatsapp/dashboard": "view:whatsapp",
     "/whatsapp": "view:whatsapp",
     "/reports": "view:reports",
+    "/razorpay": "view:reports",
+    "/phonepe": "view:reports",
     "/settings": "view:settings",
     "/app-logs": "view:logs",
     "/app-versions": "view:versions",

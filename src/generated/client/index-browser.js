@@ -274,6 +274,23 @@ exports.Prisma.PaymentScalarFieldEnum = {
   createdAt: 'createdAt'
 };
 
+exports.Prisma.TransactionScalarFieldEnum = {
+  id: 'id',
+  bookingId: 'bookingId',
+  memberId: 'memberId',
+  gateway: 'gateway',
+  gatewayOrderId: 'gatewayOrderId',
+  gatewayPaymentId: 'gatewayPaymentId',
+  gatewaySignature: 'gatewaySignature',
+  amount: 'amount',
+  currency: 'currency',
+  status: 'status',
+  errorMessage: 'errorMessage',
+  metadata: 'metadata',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.DisplaySessionScalarFieldEnum = {
   id: 'id',
   bookingId: 'bookingId',
@@ -496,6 +513,7 @@ exports.Prisma.ModelName = {
   Booking: 'Booking',
   BookingParticipant: 'BookingParticipant',
   Payment: 'Payment',
+  Transaction: 'Transaction',
   DisplaySession: 'DisplaySession',
   Ticket: 'Ticket',
   Otp: 'Otp',

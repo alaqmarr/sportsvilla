@@ -21,7 +21,7 @@ export async function POST(request: Request) {
 
     const memberId = decoded.memberId;
     
-    const { tournamentId, teamName, paymentScreenshotUrl, paymentUtr, players, aiVerified, paymentMethod } = await request.json();
+    const { tournamentId, teamName, paymentScreenshotUrl, paymentUtr, players, paymentMethod } = await request.json();
 
     if (!tournamentId) {
       return jsonResponse({ error: "tournamentId is required" }, { status: 400 });
@@ -91,7 +91,7 @@ export async function POST(request: Request) {
           paymentScreenshotUrl,
           paymentUtr,
           paymentMethod: paymentMethod || 'UPI',
-          status: (paymentMethod === 'CASH') ? 'PENDING' : (aiVerified ? 'VERIFIED' : 'PENDING'),
+          status: 'PENDING',
           players: {
             create: players.map((p: any) => ({
               name: p.name,

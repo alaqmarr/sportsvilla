@@ -1,8 +1,15 @@
 import { NextResponse } from 'next/server';
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
 import { getApiLogs, jsonResponse } from '@/lib/api-logger';
 
 export async function GET() {
   try {
+    const session = await getServerSession(authOptions);
+    if (!session?.user?.email) {
+      return jsonResponse({ success: false, error: "Unauthorized" }, { status: 401 });
+    }
+
     const logs = getApiLogs();
     return jsonResponse({ success: true, count: logs.length, retention: '24h', logs });
   } catch (error) {

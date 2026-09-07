@@ -159,7 +159,7 @@ export default function ManageBookings() {
     let qrUrl = "";
     
     const totalPaid = booking.payments?.reduce((sum: number, p: any) => sum + p.amount, 0) || 0;
-    const balance = Math.max(0, booking.price - totalPaid);
+    const balance = Math.max(0, booking.price - (booking.discountAmount || 0) - totalPaid);
 
     if (upiSettings.upiId && balance > 0) {
       const transactionNote = `Booking: ${booking.turf?.name}`;
@@ -179,7 +179,7 @@ export default function ManageBookings() {
 
     const generateDynamicQR = async () => {
       const totalPaid = payModal.booking.payments?.reduce((sum: number, p: any) => sum + p.amount, 0) || 0;
-      const initialBalance = Math.max(0, payModal.booking.price - totalPaid);
+      const initialBalance = Math.max(0, payModal.booking.price - (payModal.booking.discountAmount || 0) - totalPaid);
       
       const amountForQR = (Number(onlineAmount) || 0) > 0 
         ? (Number(onlineAmount) || 0) 
@@ -208,7 +208,7 @@ export default function ManageBookings() {
       if ((Number(onlineAmount) || 0) > 0) await addPayment(payModal.booking.id, Number(onlineAmount), "ONLINE");
 
       const totalPaid = payModal.booking.payments?.reduce((sum: number, p: any) => sum + p.amount, 0) || 0;
-      const initialBalance = Math.max(0, payModal.booking.price - totalPaid);
+      const initialBalance = Math.max(0, payModal.booking.price - (payModal.booking.discountAmount || 0) - totalPaid);
       
       if ((Number(cashAmount) || 0) + (Number(onlineAmount) || 0) >= initialBalance) {
         await updateDisplaySession({
@@ -231,7 +231,7 @@ export default function ManageBookings() {
   async function handleCastToDisplay() {
     if (!payModal.booking) return;
     const totalPaid = payModal.booking.payments?.reduce((sum: number, p: any) => sum + p.amount, 0) || 0;
-    const balance = Math.max(0, payModal.booking.price - totalPaid);
+    const balance = Math.max(0, payModal.booking.price - (payModal.booking.discountAmount || 0) - totalPaid);
     
     await updateDisplaySession({
       status: "AWAITING_PAYMENT",

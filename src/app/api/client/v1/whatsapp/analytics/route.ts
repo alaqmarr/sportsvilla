@@ -1,4 +1,6 @@
 import { NextResponse } from "next/server";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
 import { jsonResponse, apiLog } from "@/lib/api-logger";
 
 export const dynamic = "force-dynamic";
@@ -19,6 +21,11 @@ function formatMessagingLimit(tier?: string): string {
 
 export async function GET() {
   try {
+    const session = await getServerSession(authOptions);
+    if (!session?.user?.email) {
+      return jsonResponse({ success: false, error: "Unauthorized" }, { status: 401 });
+    }
+
     const accessToken = process.env.WHATSAPP_ACCESS_TOKEN;
     const phoneNumberId = process.env.WHATSAPP_PHONE_NUMBER_ID;
     const wabaId = process.env.WHATSAPP_BUSINESS_ACCOUNT_ID || process.env.WHATSAPP_WABA_ID;

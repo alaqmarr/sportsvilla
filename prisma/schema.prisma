@@ -53,6 +53,7 @@ model Member {
   loyaltyHistory          LoyaltyHistory[]
   tournamentRegistrations TournamentRegistration[]
   walletTransactions      WalletTransaction[]
+  transactions            Transaction[]
   couponAssignments       CouponAssignment[]
   couponUsages            CouponUsage[]
   loyaltyAchievements     LoyaltyAchievement[]
@@ -210,6 +211,7 @@ model Booking {
   createdAt        DateTime             @default(now())
   updatedAt        DateTime             @updatedAt
   payments         Payment[]
+  transactions     Transaction[]
   tickets          Ticket[]
   couponUsages     CouponUsage[]
   participants     BookingParticipant[]
@@ -249,6 +251,35 @@ model Payment {
 
   @@index([bookingId])
   @@index([createdAt])
+}
+
+model Transaction {
+  id               String    @id @default(cuid())
+  bookingId        String?
+  booking          Booking?  @relation(fields: [bookingId], references: [id], onDelete: SetNull)
+  memberId         String?
+  member           Member?   @relation(fields: [memberId], references: [id], onDelete: SetNull)
+  gateway          String    // "RAZORPAY" | "PHONEPE" | "WALLET" | "MANUAL"
+  gatewayOrderId   String?   // Razorpay order_id or PhonePe merchantTransactionId
+  gatewayPaymentId String?   // Razorpay payment_id or PhonePe providerReferenceId
+  gatewaySignature String?   // Razorpay HMAC signature or PhonePe X-VERIFY hash
+  amount           Float     // Transaction amount in Rupees
+  currency         String    @default("INR")
+  status           String    @default("PENDING") // "PENDING" | "SUCCESS" | "FAILED" | "ABANDONED"
+  errorMessage     String?
+  metadata         String?   // JSON string storing raw gateway response, platform, IP, user-agent
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+
+  @@index([bookingId])
+  @@index([memberId])
+  @@index([gateway])
+  @@index([status])
+  @@index([gatewayOrderId])
+  @@index([gatewayPaymentId])
+  @@index([createdAt])
+  @@index([gateway, status])
+  @@index([gateway, createdAt])
 }
 
 model DisplaySession {

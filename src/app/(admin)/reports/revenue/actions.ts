@@ -13,6 +13,9 @@ export async function fetchRevenueData() {
       createdAt: {
         gte: startDate,
         lte: endDate,
+      },
+      booking: {
+        status: { not: "CANCELLED" }
       }
     }
   });
@@ -27,6 +30,8 @@ export async function fetchRevenueData() {
     }
   });
 
+  const rechargeCredits = walletTx.filter(w => !/refund|cancelled/i.test(w.description || ''));
+
   // Aggregate by day
   const dailyData: Record<string, { date: string; cash: number; online: number; wallet: number }> = {};
   
@@ -40,11 +45,11 @@ export async function fetchRevenueData() {
     const dateStr = formatInTimeZone(new Date(p.createdAt), 'Asia/Kolkata', 'MMM dd');
     if (dailyData[dateStr]) {
       if (p.method === 'CASH') dailyData[dateStr].cash += p.amount;
-      else dailyData[dateStr].online += p.amount;
+      else if (p.method === 'ONLINE') dailyData[dateStr].online += p.amount;
     }
   });
 
-  walletTx.forEach(w => {
+  rechargeCredits.forEach(w => {
     const dateStr = formatInTimeZone(new Date(w.createdAt), 'Asia/Kolkata', 'MMM dd');
     if (dailyData[dateStr]) {
       dailyData[dateStr].wallet += w.amount / 100;

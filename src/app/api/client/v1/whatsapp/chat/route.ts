@@ -1,4 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
 import { whatsappDb } from '@/lib/whatsappDb';
 import { sendWhatsAppMessage } from '@/lib/whatsapp';
 import { jsonResponse } from '@/lib/api-logger';
@@ -7,6 +9,11 @@ export const dynamic = 'force-dynamic';
 
 export async function GET(req: NextRequest) {
   try {
+    const session = await getServerSession(authOptions);
+    if (!session?.user?.email) {
+      return jsonResponse({ success: false, error: "Unauthorized" }, { status: 401 });
+    }
+
     const { searchParams } = new URL(req.url);
     const phoneNumber = searchParams.get("phoneNumber");
 
@@ -37,6 +44,11 @@ export async function GET(req: NextRequest) {
 
 export async function POST(req: NextRequest) {
   try {
+    const session = await getServerSession(authOptions);
+    if (!session?.user?.email) {
+      return jsonResponse({ success: false, error: "Unauthorized" }, { status: 401 });
+    }
+
     const { phoneNumber, message, contextMessageId } = await req.json();
 
     if (!phoneNumber || !message?.trim()) {

@@ -1,11 +1,22 @@
 import { NextResponse } from 'next/server';
 import { whatsappDb } from '@/lib/whatsappDb';
 import { jsonResponse } from '@/lib/api-logger';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/lib/auth';
 
 export const dynamic = 'force-dynamic';
 
 export async function GET() {
   try {
+    let session = null;
+    try {
+      session = await getServerSession(authOptions);
+    } catch {
+      // No active session or missing request context
+    }
+    if (!session?.user?.email) {
+      return jsonResponse({ success: false, error: 'Unauthorized' }, { status: 401 });
+    }
     const messages = await whatsappDb.whatsAppMessage.findMany({
       orderBy: { createdAt: 'desc' },
       take: 100,

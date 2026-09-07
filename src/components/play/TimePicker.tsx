@@ -39,6 +39,12 @@ export const TimePicker: React.FC<TimePickerProps> = ({ slots, selectedSlots, on
   const [duration, setDuration] = useState(baseInterval);
 
   const handleSlotSelect = (time: string) => {
+    // If clicking the currently selected first slot, deselect it
+    if (selectedSlots.length > 0 && selectedSlots[0] === time) {
+      onChange([]);
+      return;
+    }
+
     const slotIndex = slots.findIndex(s => s.time === time);
     if (slotIndex === -1) return;
 

@@ -12,6 +12,10 @@ export default function PhonePeClient({ initialSettings }: { initialSettings: Re
   const [saltKey, setSaltKey] = useState(initialSettings.PHONEPE_SALT_KEY || "");
   const [saltIndex, setSaltIndex] = useState(initialSettings.PHONEPE_SALT_INDEX || "1");
   const [gateway, setGateway] = useState(initialSettings.PAYMENT_GATEWAY_ACTIVE || "NONE");
+  
+  const [razorpayKeyId, setRazorpayKeyId] = useState(initialSettings.RAZORPAY_KEY_ID || "");
+  const [razorpayKeySecret, setRazorpayKeySecret] = useState(initialSettings.RAZORPAY_KEY_SECRET || "");
+
   const [loading, setLoading] = useState(false);
 
   async function handleSave(e: React.FormEvent) {
@@ -23,9 +27,11 @@ export default function PhonePeClient({ initialSettings }: { initialSettings: Re
         PHONEPE_MERCHANT_ID: merchantId, 
         PHONEPE_SALT_KEY: saltKey, 
         PHONEPE_SALT_INDEX: saltIndex,
-        PAYMENT_GATEWAY_ACTIVE: gateway
+        PAYMENT_GATEWAY_ACTIVE: gateway,
+        RAZORPAY_KEY_ID: razorpayKeyId,
+        RAZORPAY_KEY_SECRET: razorpayKeySecret
       });
-      showAlert("success", "PhonePe configurations saved successfully!");
+      showAlert("success", "Payment configurations saved successfully!");
     } catch (err: any) {
       showAlert("error", err.message || "Failed to save settings");
     } finally {
@@ -40,15 +46,15 @@ export default function PhonePeClient({ initialSettings }: { initialSettings: Re
           <FiCreditCard className="w-5 h-5" />
         </div>
         <div>
-          <h2 className="text-lg font-semibold text-gray-800">PhonePe Configuration</h2>
-          <p className="text-sm text-gray-500">Manage your payment gateway secrets and environment</p>
+          <h2 className="text-lg font-semibold text-gray-800">Payment Gateways Configuration</h2>
+          <p className="text-sm text-gray-500">Manage your PhonePe and Razorpay configurations</p>
         </div>
       </div>
 
       <form onSubmit={handleSave} className="space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           
-          <div>
+          <div className="md:col-span-2">
             <label className="block text-sm font-medium text-gray-700 mb-2">Active Payment Gateway</label>
             <select
               value={gateway}
@@ -60,6 +66,10 @@ export default function PhonePeClient({ initialSettings }: { initialSettings: Re
               <option value="RAZORPAY">Razorpay</option>
               <option value="BOTH">Both (PhonePe & Razorpay)</option>
             </select>
+          </div>
+
+          <div className="md:col-span-2 mt-4 pt-4 border-t border-gray-100">
+            <h3 className="text-md font-semibold text-gray-800">PhonePe Settings</h3>
           </div>
 
           <div>
@@ -104,6 +114,32 @@ export default function PhonePeClient({ initialSettings }: { initialSettings: Re
               onChange={(e) => setSaltIndex(e.target.value)}
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition-all"
               placeholder="1"
+            />
+          </div>
+
+          <div className="md:col-span-2 mt-4 pt-4 border-t border-gray-100">
+            <h3 className="text-md font-semibold text-gray-800">Razorpay Settings</h3>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Razorpay Key ID</label>
+            <input
+              type="text"
+              value={razorpayKeyId}
+              onChange={(e) => setRazorpayKeyId(e.target.value)}
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition-all"
+              placeholder="e.g. rzp_test_..."
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Razorpay Key Secret</label>
+            <input
+              type="password"
+              value={razorpayKeySecret}
+              onChange={(e) => setRazorpayKeySecret(e.target.value)}
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition-all"
+              placeholder="e.g. A23B..."
             />
           </div>
         </div>

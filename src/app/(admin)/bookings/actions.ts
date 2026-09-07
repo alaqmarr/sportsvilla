@@ -332,6 +332,9 @@ export async function cancelBooking(id: string) {
     await prisma.$transaction(async (tx) => {
       await tx.booking.update({ where: { id }, data: { status: "CANCELLED" } });
 
+      await tx.ticket.updateMany({ where: { bookingId: id }, data: { status: 'CANCELLED' } });
+      await tx.bookingParticipant.updateMany({ where: { bookingId: id }, data: { status: 'CANCELLED' } });
+
       // Refund wallet if advance was paid
       if (refundAmountPaise > 0) {
         await tx.member.update({
@@ -429,36 +432,88 @@ export async function cancelBooking(id: string) {
 }
 
 export async function rescheduleBooking(id: string, newTurfId: string, newStartTime: Date, newEndTime: Date) {
-  const booking = await prisma.booking.findUnique({ where: { id } });
-  if (!booking) throw new Error("Booking not found");
-  if (booking.status === "CANCELLED") throw new Error("Cannot reschedule a cancelled booking");
-
-  const newTurf = await prisma.turf.findUnique({ where: { id: newTurfId } });
-  if (!newTurf) throw new Error("Turf not found");
-
-  // Check capacity at the new slot (not just a single conflict)
-  const overlappingBookings = await prisma.booking.findMany({
-    where: {
-      id: { not: id },
-      turfId: newTurfId,
-      status: { not: "CANCELLED" },
-      startTime: { lt: newEndTime },
-      endTime: { gt: newStartTime }
+  const session = await getServerSession(authOptions);
+  let adminId: string | undefined = undefined;
+  let adminName = "System";
+  if (session?.user?.email) {
+    const admin = await prisma.admin.findFirst({ where: { email: session.user.email } });
+    if (admin) {
+      adminId = admin.id;
+      adminName = admin.name || admin.email;
     }
-  });
-
-  const usedCapacity = overlappingBookings.reduce((sum, b) => sum + b.participantCount, 0);
-  if (booking.participantCount > (newTurf.capacityPerSlot - usedCapacity)) {
-    throw new Error("The selected slot does not have enough capacity.");
   }
 
-  await prisma.booking.update({
-    where: { id },
-    data: {
-      turfId: newTurfId,
-      startTime: newStartTime,
-      endTime: newEndTime
+  await prisma.$transaction(async (tx) => {
+    const booking = await tx.booking.findUnique({
+      where: { id },
+      include: { payments: true }
+    });
+    if (!booking) throw new Error("Booking not found");
+    if (booking.status === "CANCELLED") throw new Error("Cannot reschedule a cancelled booking");
+
+    const newTurf = await tx.turf.findUnique({ where: { id: newTurfId } });
+    if (!newTurf) throw new Error("Turf not found");
+
+    // Check capacity at the new slot (not just a single conflict)
+    const overlappingBookings = await tx.booking.findMany({
+      where: {
+        id: { not: id },
+        turfId: newTurfId,
+        status: { not: "CANCELLED" },
+        startTime: { lt: newEndTime },
+        endTime: { gt: newStartTime }
+      }
+    });
+
+    const usedCapacity = overlappingBookings.reduce((sum, b) => sum + b.participantCount, 0);
+    if (booking.participantCount > (newTurf.capacityPerSlot - usedCapacity)) {
+      throw new Error("The selected slot does not have enough capacity.");
     }
+
+    // Recalculate price if turf or duration changed
+    const durationMinutes = (new Date(newEndTime).getTime() - new Date(newStartTime).getTime()) / 60000;
+    const baseSlotMinutes = newTurf.bookingDurationMinutes || 60;
+    const pricePerMinute = (newTurf.bookingPrice != null ? newTurf.bookingPrice : (booking.price / (durationMinutes || 60))) / baseSlotMinutes;
+    const calculatedPrice = newTurf.bookingPrice != null 
+      ? Math.round(pricePerMinute * durationMinutes * (booking.participantCount || 1))
+      : booking.price;
+
+    const totalPaid = booking.payments.reduce((sum, p) => sum + p.amount, 0);
+    const netPrice = Math.max(0, calculatedPrice - (booking.discountAmount || 0));
+    const newStatus = totalPaid >= netPrice ? "PAID" : totalPaid > 0 ? "PARTIAL" : "UNPAID";
+    const newAmountDue = Math.max(0, netPrice - totalPaid);
+
+    await tx.booking.update({
+      where: { id },
+      data: {
+        turfId: newTurfId,
+        startTime: new Date(newStartTime),
+        endTime: new Date(newEndTime),
+        price: calculatedPrice,
+        amountDue: newAmountDue,
+        paymentStatus: newStatus
+      }
+    });
+
+    await tx.auditLog.create({
+      data: {
+        action: "RESCHEDULE_BOOKING",
+        entity: "Booking",
+        entityId: id,
+        details: JSON.stringify({
+          oldTurfId: booking.turfId,
+          newTurfId,
+          oldStartTime: booking.startTime,
+          newStartTime,
+          oldEndTime: booking.endTime,
+          newEndTime,
+          oldPrice: booking.price,
+          newPrice: calculatedPrice
+        }),
+        adminId,
+        adminName
+      }
+    });
   });
 
   await bumpSyncTimestamp('admin_booking');
@@ -623,13 +678,25 @@ export async function confirmExtension(bookingId: string, allocations: any[]) {
       if (conflict) throw new Error(`Slot no longer available for ${alloc.turfName}`);
 
       if (alloc.isSameCourt && alloc.startTime === booking.endTime.toISOString()) {
+        const totalPaid = (await tx.payment.findMany({ where: { bookingId } })).reduce((s, p) => s + p.amount, 0);
+        const newPrice = booking.price + alloc.price;
+        const netPayable = newPrice - (booking.discountAmount || 0);
+        const newStatus: "PAID" | "PARTIAL" | "UNPAID" = totalPaid >= netPayable ? 'PAID' : totalPaid > 0 ? 'PARTIAL' : 'UNPAID';
+        const amountDue = Math.max(0, netPayable - totalPaid);
+
         await tx.booking.update({
           where: { id: bookingId },
           data: { 
             endTime: new Date(alloc.endTime),
-            price: booking.price + alloc.price
+            price: newPrice,
+            paymentStatus: newStatus,
+            amountDue
           }
         });
+
+        // Keep local in-memory booking updated for subsequent iterations
+        booking.price = newPrice;
+        booking.endTime = new Date(alloc.endTime);
       } else {
         await tx.booking.create({
           data: {
@@ -664,10 +731,22 @@ export async function addPayment(bookingId: string, amount: number, method: "CAS
     include: { payments: true }
   });
   if (!booking) throw new Error("Booking not found");
+  if (booking.status === "CANCELLED") throw new Error("Cannot record payment for a cancelled booking");
 
   await prisma.$transaction(async (tx) => {
     await tx.payment.create({
       data: { bookingId, amount, method }
+    });
+
+    await tx.transaction.create({
+      data: {
+        bookingId,
+        memberId: booking.memberId,
+        gateway: method === "CASH" ? "MANUAL" : "MANUAL",
+        amount,
+        status: "SUCCESS",
+        metadata: JSON.stringify({ method })
+      }
     });
 
     const totalPaid = booking.payments.reduce((sum, p) => sum + p.amount, 0) + amount;
@@ -682,7 +761,11 @@ export async function addPayment(bookingId: string, amount: number, method: "CAS
 
     await tx.booking.update({
       where: { id: bookingId },
-      data: { paymentStatus: newStatus }
+      data: { 
+        paymentStatus: newStatus,
+        advancePaid: { increment: amount },
+        amountDue: Math.max(0, netPrice - totalPaid)
+      }
     });
   });
 

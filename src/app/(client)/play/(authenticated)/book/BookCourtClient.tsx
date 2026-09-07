@@ -50,7 +50,7 @@ export function BookCourtClient({ member, sports, availability, initialDateStr, 
   const dateStr = `${selectedDate.getFullYear()}-${String(selectedDate.getMonth() + 1).padStart(2, '0')}-${String(selectedDate.getDate()).padStart(2, '0')}`;
   const selectedTurfDetails = availability?.turfs?.find((t: any) => t.id === selectedTurf);
 
-  const handleConfirmBooking = async (promoCode: string, walletDeduction: number, pointsDeduction: number, walletOtp?: string) => {
+  const handleConfirmBooking = async (promoCode: string, walletDeduction: number, pointsDeduction: number, walletOtp?: string, preferredGateway?: string) => {
     if (!selectedTurf) return;
     
     // Create Date objects from selected slots
@@ -73,6 +73,20 @@ export function BookCourtClient({ member, sports, availability, initialDateStr, 
 
     setProcessStatus('processing');
     try {
+      const configRes = await fetch('/api/client/v1/payments/config');
+      const configData = await configRes.json();
+      const gateway = configData?.config?.activeGateway || 'NONE';
+      
+      let finalGateway = gateway;
+      if (gateway === 'BOTH') {
+        if (!preferredGateway) {
+          setProcessStatus('error');
+          setProcessMessage('Please select a payment method.');
+          return;
+        }
+        finalGateway = preferredGateway;
+      }
+
       const res = await fetch('/api/client/v1/bookings', {
         method: 'POST',
         headers: {
@@ -96,11 +110,89 @@ export function BookCourtClient({ member, sports, availability, initialDateStr, 
       if (res.ok && result.booking) {
         if (result.booking.amountDue > 0) {
           try {
-            const configRes = await fetch('/api/client/v1/payments/config');
-            const configData = await configRes.json();
-            const gateway = configData?.config?.activeGateway;
-            
-            if (gateway === 'PHONEPE' || gateway === 'BOTH') {
+            if (finalGateway === 'RAZORPAY') {
+              const paymentRes = await fetch('/api/client/v1/payments/create', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  bookingId: result.booking.id,
+                  gateway: 'RAZORPAY',
+                  platform: 'WEB'
+                })
+              });
+              
+              const paymentData = await paymentRes.json();
+              if (paymentData.success && paymentData.orderId) {
+                const loadRazorpayScript = () => {
+                  return new Promise((resolve) => {
+                    if ((window as any).Razorpay) return resolve(true);
+                    const script = document.createElement('script');
+                    script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+                    script.onload = () => resolve(true);
+                    script.onerror = () => resolve(false);
+                    document.body.appendChild(script);
+                  });
+                };
+                
+                const loaded = await loadRazorpayScript();
+                if (!loaded) throw new Error('Razorpay SDK failed to load');
+
+                const options = {
+                  key: paymentData.keyId,
+                  amount: paymentData.amount * 100,
+                  currency: 'INR',
+                  name: 'Sportsvilla',
+                  description: 'Court Booking',
+                  order_id: paymentData.orderId,
+                  handler: async function (response: any) {
+                    setProcessStatus('processing');
+                    const verifyRes = await fetch('/api/client/v1/payments/verify', {
+                      method: 'POST',
+                      headers: { 'Content-Type': 'application/json' },
+                      body: JSON.stringify({
+                        bookingId: result.booking.id,
+                        gateway: 'RAZORPAY',
+                        orderId: response.razorpay_order_id,
+                        paymentId: response.razorpay_payment_id,
+                        signature: response.razorpay_signature
+                      })
+                    });
+                    const verifyData = await verifyRes.json();
+                    if (verifyData.success) {
+                      setProcessStatus('success');
+                      setTimeout(() => {
+                        router.push(`/play/bookings/${result.booking.id}`);
+                      }, 1500);
+                    } else {
+                      setProcessStatus('error');
+                      setProcessMessage(verifyData.error || 'Payment verification failed');
+                    }
+                  },
+                  modal: {
+                    ondismiss: () => {
+                      setProcessStatus('idle');
+                      setIsCheckoutOpen(false);
+                    }
+                  },
+                  prefill: {
+                    name: member.name,
+                    contact: member.mobile
+                  },
+                  theme: { color: '#22c55e' }
+                };
+                
+                const rzp = new (window as any).Razorpay(options);
+                rzp.on('payment.failed', function () {
+                  setProcessStatus('error');
+                  setProcessMessage('Payment failed or was cancelled.');
+                });
+                setIsCheckoutOpen(false);
+                rzp.open();
+                return;
+              } else {
+                throw new Error(paymentData.error || 'Failed to initiate Razorpay payment');
+              }
+            } else if (finalGateway === 'PHONEPE') {
               const paymentRes = await fetch('/api/client/v1/payments/create', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -116,13 +208,16 @@ export function BookCourtClient({ member, sports, availability, initialDateStr, 
                 window.location.href = paymentData.redirectUrl;
                 return;
               } else {
-                throw new Error(paymentData.error || 'Failed to initiate payment');
+                throw new Error(paymentData.error || 'Failed to initiate PhonePe payment');
               }
+            } else {
+              throw new Error('No active payment gateway configured');
             }
-          } catch (e) {
+          } catch (e: any) {
             console.error('Payment initiation failed', e);
             setIsCheckoutOpen(false);
             setProcessStatus('error');
+            setProcessMessage(e.message || 'Payment initiation failed');
             return; // Stop here, don't redirect to success!
           }
         }
@@ -217,7 +312,7 @@ export function BookCourtClient({ member, sports, availability, initialDateStr, 
                     name={turf.name}
                     price={turf.slots?.[0]?.price || 0}
                     isSelected={selectedTurf === turf.id}
-                    onSelect={(id) => setSelectedTurf(id)}
+                    onSelect={(id) => setSelectedTurf(selectedTurf === id ? null : id)}
                     icon={turf.iconPath ? <img src={turf.iconPath} alt={turf.name} className="w-8 h-8 object-contain" /> : undefined}
                     disabled={!isTurfAvailableForSelectedSlots(turf)}
                   />

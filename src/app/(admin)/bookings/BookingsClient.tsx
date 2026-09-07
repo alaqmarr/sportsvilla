@@ -96,13 +96,19 @@ export default function BookingsClient({ turfs, facilityHours = { openTime: '06:
 
   async function loadBookings() {
     setLoading(true);
-    const data = await fetchBookingsByDate(selectedDate);
-    setBookings(data);
-    setSelectedSlots([]);
-    setSelectedTurfs([]);
-    setCashAmount(0);
-    setOnlineAmount(0);
-    setLoading(false);
+    try {
+      const data = await fetchBookingsByDate(selectedDate);
+      setBookings(data);
+      setSelectedSlots([]);
+      setSelectedTurfs([]);
+      setCashAmount(0);
+      setOnlineAmount(0);
+    } catch (error: any) {
+      console.error("Failed to load bookings:", error);
+      showAlert("Error", error.message || "Failed to load bookings. Please try again.", "error");
+    } finally {
+      setLoading(false);
+    }
   }
 
   async function handleMobileSearch(val: string) {
@@ -284,10 +290,31 @@ export default function BookingsClient({ turfs, facilityHours = { openTime: '06:
       });
       
       if (createdBookings && createdBookings.length > 0) {
-        // Apply payments to the first booking for simplicity if split across multiple
-        const primaryBookingId = createdBookings[0].id;
-        if ((Number(cashAmount) || 0) > 0) await addPayment(primaryBookingId, Number(cashAmount) || 0, "CASH");
-        if ((Number(onlineAmount) || 0) > 0) await addPayment(primaryBookingId, Number(onlineAmount) || 0, "ONLINE");
+        const totalCash = Number(cashAmount) || 0;
+        const totalOnline = Number(onlineAmount) || 0;
+        const totalBookingsPrice = createdBookings.reduce((sum: number, b: any) => sum + (b.price || 0), 0) || totalPrice || 1;
+
+        let allocatedCash = 0;
+        let allocatedOnline = 0;
+
+        for (let i = 0; i < createdBookings.length; i++) {
+          const b = createdBookings[i];
+          const isLast = i === createdBookings.length - 1;
+          const ratio = (b.price || 0) / totalBookingsPrice;
+
+          const bCash = isLast ? (totalCash - allocatedCash) : Math.round(totalCash * ratio);
+          allocatedCash += bCash;
+
+          const bOnline = isLast ? (totalOnline - allocatedOnline) : Math.round(totalOnline * ratio);
+          allocatedOnline += bOnline;
+
+          if (bCash > 0) {
+            await addPayment(b.id, bCash, "CASH");
+          }
+          if (bOnline > 0) {
+            await addPayment(b.id, bOnline, "ONLINE");
+          }
+        }
 
         // If cast to screen was active and we're fully paid, trigger success
         if ((Number(cashAmount) || 0) + (Number(onlineAmount) || 0) >= finalPrice) {
@@ -740,8 +767,8 @@ export default function BookingsClient({ turfs, facilityHours = { openTime: '06:
                         }
                         const val = parseInt(valStr, 10);
                         setCashAmount(val);
-                        if (val + (Number(onlineAmount) || 0) > totalPrice) {
-                          setOnlineAmount(Math.max(0, totalPrice - val));
+                        if (val + (Number(onlineAmount) || 0) > finalPrice) {
+                          setOnlineAmount(Math.max(0, finalPrice - val));
                         }
                       }}
                       placeholder="0"
@@ -763,8 +790,8 @@ export default function BookingsClient({ turfs, facilityHours = { openTime: '06:
                         }
                         const val = parseInt(valStr, 10);
                         setOnlineAmount(val);
-                        if (val + (Number(cashAmount) || 0) > totalPrice) {
-                          setCashAmount(Math.max(0, totalPrice - val));
+                        if (val + (Number(cashAmount) || 0) > finalPrice) {
+                          setCashAmount(Math.max(0, finalPrice - val));
                         }
                       }}
                       placeholder="0"
@@ -772,9 +799,9 @@ export default function BookingsClient({ turfs, facilityHours = { openTime: '06:
                   </div>
                 </div>
                 <div className="flex justify-between items-center pt-2 border-t border-[#2a2d3e]">
-                  <span className="text-sm text-gray-400">Balance Due</span>
-                  <span className={`text-lg font-bold ${totalPrice - (Number(cashAmount)||0) - (Number(onlineAmount)||0) > 0 ? 'text-orange-400' : 'text-emerald-400'}`}>
-                    ₹{Number(Math.max(0, totalPrice - (Number(cashAmount)||0) - (Number(onlineAmount)||0)).toFixed(2))}
+                  <span className="text-sm text-gray-400">Pay at Counter (PAC)</span>
+                  <span className={`text-lg font-bold ${finalPrice - (Number(cashAmount)||0) - (Number(onlineAmount)||0) > 0 ? 'text-orange-400' : 'text-emerald-400'}`}>
+                    ₹{Number(Math.max(0, finalPrice - (Number(cashAmount)||0) - (Number(onlineAmount)||0)).toFixed(2))}
                   </span>
                 </div>
               </div>

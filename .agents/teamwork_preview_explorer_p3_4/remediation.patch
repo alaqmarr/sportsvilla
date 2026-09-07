@@ -1,0 +1,69 @@
+diff --git a/tests/adversarial_m5_suite.ts b/tests/adversarial_m5_suite.ts
+--- a/tests/adversarial_m5_suite.ts
++++ b/tests/adversarial_m5_suite.ts
+@@ -176,7 +176,7 @@
+     { name: 'GET whatsapp/conversations', call: () => convGet() },
+     { name: 'GET whatsapp/analytics', call: () => analyticsGet() },
+     { name: 'GET whatsapp/config', call: () => configGet() },
+-    { name: 'POST whatsapp/config', call: () => configPost(new Request('http://localhost/api/client/v1/whatsapp/config', { method: 'POST', body: JSON.stringify({}) })) },
++    { name: 'POST whatsapp/config', call: () => configPost(new Request('http://localhost/api/client/v1/whatsapp/config', { method: 'POST', body: JSON.stringify({}) }) as any) },
+     { name: 'POST whatsapp/test-template', call: () => testTemplatePost(new Request('http://localhost/api/client/v1/whatsapp/test-template', { method: 'POST', body: JSON.stringify({}) }) as any) },
+     { name: 'GET whatsapp/member-context', call: () => memberContextGet({ url: 'http://localhost/api/client/v1/whatsapp/member-context?phone=9876543210' } as any) },
+     { name: 'GET whatsapp/events', call: () => eventsGet() },
+@@ -382,7 +382,7 @@
+       })
+     });
+ 
+-    const res = await joinGamePost(req, { params: Promise.resolve({ id: bookingId }) });
++    const res = (await joinGamePost(req, { params: Promise.resolve({ id: bookingId }) }))!;
+     assert(res.status === 400, `Expected HTTP 400 for unpaid join, got ${res.status}`);
+ 
+     const body = await res.json();
+@@ -435,7 +435,7 @@
+       })
+     });
+ 
+-    const res = await joinGamePost(req, { params: Promise.resolve({ id: bookingId }) });
++    const res = (await joinGamePost(req, { params: Promise.resolve({ id: bookingId }) }))!;
+     assert(res.status === 400, `Expected HTTP 400, got ${res.status}`);
+     const body = await res.json();
+     assert(body.status === 'PAYMENT_PENDING', `Expected status PAYMENT_PENDING, got ${body.status}`);
+@@ -465,7 +465,7 @@
+       })
+     });
+ 
+-    const res = await joinGamePost(req, { params: Promise.resolve({ id: bookingId }) });
++    const res = (await joinGamePost(req, { params: Promise.resolve({ id: bookingId }) }))!;
+     assert(res.status === 400, `Expected HTTP 400, got ${res.status}`);
+     const body = await res.json();
+     assert(body.status === 'PAYMENT_PENDING', `Expected status PAYMENT_PENDING, got ${body.status}`);
+@@ -641,7 +641,7 @@
+       body: JSON.stringify(bookingPayload)
+     });
+ 
+-    const res = await bookingCreatePost(req);
++    const res = (await bookingCreatePost(req))!;
+     const data = await res.json();
+     if (res.status !== 200) {
+       console.log('PAY-04 booking creation failed response:', res.status, data);
+@@ -679,7 +679,7 @@
+       body: JSON.stringify(bookingPayload)
+     });
+ 
+-    const res = await bookingCreatePost(req);
++    const res = (await bookingCreatePost(req))!;
+     const data = await res.json();
+     assert(res.status === 200, `Booking creation failed: ${JSON.stringify(data)}`);
+     const dbBooking = await prisma.booking.findUnique({ where: { id: data.booking.id } });
+diff --git a/tests/empirical_challenge_m5.ts b/tests/empirical_challenge_m5.ts
+--- a/tests/empirical_challenge_m5.ts
++++ b/tests/empirical_challenge_m5.ts
+@@ -619,7 +619,7 @@
+   const source = fs.readFileSync(bookClientPath, 'utf8');
+ 
+   // Verify presence of modal: { ondismiss: ... }
+-  const hasOndismiss = /modal\s*:\s*\{\s*ondismiss\s*:\s*\(\s*\)\s*=>\s*\{[^}]*setProcessStatus\('idle'\)[^}]*setIsCheckoutOpen\(false\)/s.test(source);
++  const hasOndismiss = /modal\s*:\s*\{\s*ondismiss\s*:\s*\(\s*\)\s*=>\s*\{[^}]*setProcessStatus\('idle'\)[^}]*setIsCheckoutOpen\(false\)/.test(source);
+   assert(hasOndismiss, 'BookCourtClient.tsx includes modal.ondismiss callback that resets processStatus to idle and closes checkout', 'Pattern matched in source');
+ 
+   // State machine simulation

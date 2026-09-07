@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import useSWR from "swr";
-import { ArrowLeft, MessageCircle, X, MapPin, Calendar, Clock, Share2, CheckCircle, ShieldAlert, Navigation, Users, UserPlus } from "lucide-react";
+import { ArrowLeft, MessageCircle, X, MapPin, Calendar, Clock, Share2, CheckCircle, ShieldAlert, Navigation, Users, UserPlus, CreditCard } from "lucide-react";
 import { useState, useEffect } from "react";
 import QRCode from "qrcode";
 import { Modal } from "@/components/play/Modal";
@@ -17,7 +17,7 @@ export function BookingDetailClient({ initialBooking, cancellationLimitHours, al
     fetcher,
     {
       fallbackData: { booking: initialBooking, cancellationLimitHours, allowCancellation },
-      refreshInterval: (data) => data?.booking?.status === "CONFIRMED" ? 3000 : 0,
+      refreshInterval: (data) => (data?.booking?.status === "CONFIRMED" || data?.booking?.status === "PAYMENT_PENDING") ? 3000 : 0,
     }
   );
 
@@ -31,6 +31,7 @@ export function BookingDetailClient({ initialBooking, cancellationLimitHours, al
   const [isAppPromptOpen, setIsAppPromptOpen] = useState(false);
   const [appPromptAction, setAppPromptAction] = useState<'cancel' | 'reschedule' | null>(null);
   const [isCancelling, setIsCancelling] = useState(false);
+  const [isPaying, setIsPaying] = useState(false);
   const [isTogglingHost, setIsTogglingHost] = useState(false);
   const [qrSrc, setQrSrc] = useState("");
 
@@ -113,11 +114,125 @@ export function BookingDetailClient({ initialBooking, cancellationLimitHours, al
     CANCELLED: "bg-rose-500 text-white",
     COMPLETED: "bg-gray-500 text-white",
     PENDING: "bg-amber-500 text-white",
+    PAYMENT_PENDING: "bg-amber-500 text-white",
   };
 
   const startDate = new Date(booking.startTime);
   const endDate = new Date(booking.endTime);
   const isPast = startDate < new Date();
+
+  const amountDue = booking.amountDue > 0
+    ? booking.amountDue
+    : Math.max(0, (booking.price || 0) - (booking.discountAmount || 0) - (booking.advancePaid || 0));
+
+  const isPendingPayment = (booking.status === "PAYMENT_PENDING" || booking.paymentStatus === "UNPAID" || booking.paymentStatus === "PARTIAL")
+    && !isCancelled
+    && !isPast
+    && (amountDue > 0 || booking.status === "PAYMENT_PENDING");
+
+  const handleCompletePayment = async () => {
+    setIsPaying(true);
+    try {
+      const configRes = await fetch('/api/client/v1/payments/config');
+      const configData = await configRes.json();
+      const activeGateway = configData?.config?.activeGateway;
+      if (activeGateway === 'NONE') {
+        throw new Error('Payment gateway is currently unavailable. Please try again later.');
+      }
+      const gateway = activeGateway === 'PHONEPE' ? 'PHONEPE' : 'RAZORPAY';
+
+      const orderRes = await fetch('/api/client/v1/payments/create', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          bookingId: booking.id,
+          gateway,
+          platform: 'WEB'
+        })
+      });
+
+      const orderData = await orderRes.json();
+      if (!orderData.success) {
+        throw new Error(orderData.error || 'Failed to create payment order');
+      }
+
+      if (gateway === 'PHONEPE') {
+        if (orderData.redirectUrl) {
+          window.location.href = orderData.redirectUrl;
+          return;
+        } else {
+          throw new Error('PhonePe redirect URL missing');
+        }
+      }
+
+      // Razorpay payment flow
+      const loadScript = () => new Promise<boolean>((resolve) => {
+        if ((window as any).Razorpay) return resolve(true);
+        const script = document.createElement('script');
+        script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+        script.onload = () => resolve(true);
+        script.onerror = () => resolve(false);
+        document.body.appendChild(script);
+      });
+
+      const loaded = await loadScript();
+      if (!loaded) throw new Error('Razorpay SDK failed to load');
+
+      const options = {
+        key: orderData.keyId,
+        amount: Math.round(orderData.amount * 100),
+        currency: 'INR',
+        name: 'Sportsvilla',
+        description: 'Complete Booking Payment',
+        order_id: orderData.orderId,
+        handler: async (response: any) => {
+          try {
+            const verifyRes = await fetch('/api/client/v1/payments/verify', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                bookingId: booking.id,
+                gateway: 'RAZORPAY',
+                orderId: response.razorpay_order_id,
+                paymentId: response.razorpay_payment_id,
+                signature: response.razorpay_signature
+              })
+            });
+            const verifyData = await verifyRes.json();
+            if (verifyData.success) {
+              await mutate();
+            } else {
+              alert(verifyData.error || 'Payment verification failed');
+            }
+          } catch (err: any) {
+            alert(err.message || 'Payment verification error');
+          } finally {
+            setIsPaying(false);
+          }
+        },
+        modal: {
+          ondismiss: () => {
+            setIsPaying(false);
+          }
+        },
+        prefill: {
+          name: booking.member?.name || '',
+          contact: booking.member?.mobile || ''
+        },
+        theme: { color: '#22c55e' }
+      };
+
+      const rzp = new (window as any).Razorpay(options);
+      rzp.on('payment.failed', function (resp: any) {
+        setIsPaying(false);
+        alert(resp?.error?.description || 'Payment failed or was cancelled.');
+      });
+      rzp.open();
+    } catch (err: any) {
+      alert(err.message || 'Payment initiation failed');
+      setIsPaying(false);
+    }
+  };
 
   const [cancelInfo, setCancelInfo] = useState({ penalty: 0, refund: 0, isFree: true, totalPaid: 0 });
 
@@ -157,6 +272,7 @@ export function BookingDetailClient({ initialBooking, cancellationLimitHours, al
               <h2 className="text-3xl font-bold font-outfit flex items-center gap-2">
                 {isConfirmed && <CheckCircle className="w-8 h-8" />}
                 {isCancelled && <ShieldAlert className="w-8 h-8" />}
+                {(booking.status === "PAYMENT_PENDING" || booking.status === "PENDING") && <Clock className="w-8 h-8" />}
                 {booking.status}
               </h2>
             </div>
@@ -169,6 +285,35 @@ export function BookingDetailClient({ initialBooking, cancellationLimitHours, al
       </div>
 
       <div className="px-4 sm:px-6 mt-6 relative z-10 w-full max-w-6xl mx-auto pb-24">
+        {/* Prominent Complete Payment Card for Pending Payment */}
+        {isPendingPayment && (
+          <div className="bg-amber-50 border-2 border-amber-400 rounded-2xl p-5 mb-6 shadow-sm">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+              <div className="flex items-center gap-3">
+                <div className="w-12 h-12 bg-amber-500 text-white rounded-xl flex items-center justify-center shrink-0 shadow-sm">
+                  <CreditCard className="w-6 h-6" />
+                </div>
+                <div>
+                  <h3 className="font-bold text-amber-950 text-lg">Payment Pending</h3>
+                  <p className="text-sm text-amber-800">
+                    Amount Due: <span className="font-bold text-amber-950 text-base">₹{amountDue}</span>
+                    {booking.advancePaid > 0 && (
+                      <span className="text-xs text-amber-700 ml-2">(Advance Paid: ₹{booking.advancePaid})</span>
+                    )}
+                  </p>
+                </div>
+              </div>
+              <button
+                onClick={handleCompletePayment}
+                disabled={isPaying}
+                className="w-full sm:w-auto px-6 py-3.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl shadow-md transition-all flex items-center justify-center gap-2 disabled:opacity-50 text-base shrink-0 cursor-pointer"
+              >
+                <CreditCard className="w-5 h-5" />
+                {isPaying ? 'Processing...' : 'Complete Payment'}
+              </button>
+            </div>
+          </div>
+        )}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8">
           
           {/* LEFT COLUMN: Ticket & Location */}
@@ -314,9 +459,32 @@ export function BookingDetailClient({ initialBooking, cancellationLimitHours, al
               </div>
             )}
 
-            {/* Actions & Hosting (Only if confirmed and not past) */}
+            {/* Actions & Hosting */}
+            {isPendingPayment && !isConfirmed && (
+              <div className="space-y-3">
+                <button
+                  onClick={handleCompletePayment}
+                  disabled={isPaying}
+                  className="w-full py-4 px-4 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-2xl transition-all shadow-md flex items-center justify-center gap-2 disabled:opacity-50 text-base cursor-pointer"
+                >
+                  <CreditCard className="w-5 h-5" />
+                  {isPaying ? 'Processing Payment...' : `Complete Payment (₹${amountDue})`}
+                </button>
+              </div>
+            )}
+
             {isConfirmed && !isPast && (
               <div className="space-y-3">
+                {isPendingPayment && (
+                  <button
+                    onClick={handleCompletePayment}
+                    disabled={isPaying}
+                    className="w-full py-4 px-4 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-2xl transition-all shadow-md flex items-center justify-center gap-2 disabled:opacity-50 text-base cursor-pointer"
+                  >
+                    <CreditCard className="w-5 h-5" />
+                    {isPaying ? 'Processing Payment...' : `Pay Remaining ₹${amountDue}`}
+                  </button>
+                )}
                 <button
                   onClick={handleToggleHost}
                   disabled={isTogglingHost}

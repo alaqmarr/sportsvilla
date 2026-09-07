@@ -76,6 +76,7 @@ export async function POST(request: Request) {
   const { member } = authRes;
   
   let lockKey: string | null = null;
+  let verifiedOtpId: string | null = null;
 
   try {
     const body = await request.json();
@@ -256,72 +257,89 @@ export async function POST(request: Request) {
       discountAmount = Math.floor(discountAmount);
     }
 
-    const subtotal = price - discountAmount;
-    
-    // Wallet deduction - allow any amount up to balance and subtotal
-    // Note: currentWallet is in Paise. requestedWallet and subtotal are in Rupees.
+    // 1. Calculate Discounts: Coupon + SV Points Redeemed
+    const couponDiscount = discountAmount;
+
+    let pointsDeduction = 0;
+    const requestedPoints = Number(pointsAmountToUse) || 0;
+    if (requestedPoints > 0) {
+      pointsDeduction = Math.min(requestedPoints, currentPoints, Math.max(0, price - couponDiscount));
+    }
+
+    const totalDiscount = couponDiscount + pointsDeduction;
+    const subtotal = Math.max(0, price - totalDiscount);
+
+    // 2. Wallet Deduction (currentWallet is in Paise, subtotal in Rupees)
     let advancePaid = 0;
     const requestedWallet = Number(walletAmountToUse) || 0;
     if (requestedWallet > 0) {
-      advancePaid = Math.min(requestedWallet, currentWallet / 100, subtotal);
+      advancePaid = Math.min(requestedWallet, Math.floor(currentWallet / 100), subtotal);
     }
-    
-    // Future-proofing: We will rename advancePaid to walletDeductionRupees for clarity
     const walletDeductionRupees = advancePaid;
 
     if (walletDeductionRupees > 0) {
-      if (!walletOtp) {
+      if (!walletOtp || String(walletOtp).trim().length === 0) {
         return jsonResponse({ error: 'Wallet OTP is required to use wallet balance.' }, { status: 400 });
       }
 
       const cleanMobile = member.mobile.replace('+91', '').replace(/[^0-9]/g, '');
-      const otpRecord = await whatsappDb.whatsAppOtp.findFirst({
+      const standardPhone = cleanMobile.length === 10 ? `91${cleanMobile}` : cleanMobile;
+
+      const latestOtp = await whatsappDb.whatsAppOtp.findFirst({
         where: {
-          phoneNumber: { contains: cleanMobile },
-          otp: walletOtp,
+          phoneNumber: { in: [cleanMobile, standardPhone, `+${standardPhone}`] },
           purpose: 'WALLET_TXN',
         },
         orderBy: { createdAt: 'desc' }
       });
 
-      if (!otpRecord) {
-        return jsonResponse({ error: 'Invalid or missing OTP for wallet transaction.' }, { status: 400 });
+      if (!latestOtp) {
+        return jsonResponse({
+          error: 'No OTP request found for wallet transaction. Please request an OTP first.'
+        }, { status: 400 });
       }
 
-      if (otpRecord.verified) {
-        return jsonResponse({ error: 'This OTP has already been used.' }, { status: 400 });
+      if (latestOtp.verified) {
+        return jsonResponse({
+          error: 'This OTP has already been used. Please request a new OTP.'
+        }, { status: 400 });
       }
 
-      if (new Date() > new Date(otpRecord.expiresAt)) {
-        return jsonResponse({ error: 'This OTP has expired.' }, { status: 400 });
+      if (new Date() > new Date(latestOtp.expiresAt)) {
+        return jsonResponse({
+          error: 'This OTP has expired. Please request a new OTP.'
+        }, { status: 400 });
       }
 
-      // Mark OTP as verified
+      if (latestOtp.otp !== String(walletOtp).trim()) {
+        return jsonResponse({
+          error: 'Invalid OTP entered. Please check the code sent to your WhatsApp.'
+        }, { status: 400 });
+      }
+
+      // Mark OTP as verified ahead of transaction to prevent concurrent reuse
       await whatsappDb.whatsAppOtp.update({
-        where: { id: otpRecord.id },
+        where: { id: latestOtp.id },
         data: { verified: true }
       });
+      verifiedOtpId = latestOtp.id;
     }
-    
-    // Points deduction
-    let pointsDeduction = 0;
-    const requestedPoints = Number(pointsAmountToUse) || 0;
-    if (requestedPoints > 0) {
-      pointsDeduction = Math.min(requestedPoints, currentPoints, subtotal - walletDeductionRupees);
-    }
-    
-    // If a payment gateway is added, gatewayAmount would add to advancePaid
-    const amountDue = subtotal - walletDeductionRupees - pointsDeduction;
 
-    // Calculate SV Points Earned on subtotal (net amount), not gross price
+    // 3. Amount Due after all upfront deductions
+    const amountDue = Math.max(0, subtotal - walletDeductionRupees);
+
+    // 4. Calculate SV Points Earned on subtotal (net payable), not gross price
     const pointsEarned = Math.floor(subtotal * 0.01);
 
-    let paymentStatus = "Due";
-    let bookingStatus = "CONFIRMED";
+    // 5. Canonical Payment and Booking Status
+    let paymentStatus: "UNPAID" | "PARTIAL" | "PAID" = "UNPAID";
+    let bookingStatus: "CONFIRMED" | "PAYMENT_PENDING" = "CONFIRMED";
+
     if (amountDue === 0) {
-      paymentStatus = advancePaid > 0 ? "Paid using Wallet" : "Paid";
+      paymentStatus = "PAID";
+      bookingStatus = "CONFIRMED";
     } else {
-      paymentStatus = advancePaid > 0 ? "Advance Paid" : "Due";
+      paymentStatus = advancePaid > 0 ? "PARTIAL" : "UNPAID";
       bookingStatus = "PAYMENT_PENDING";
     }
 
@@ -383,6 +401,7 @@ export async function POST(request: Request) {
           paymentStatus,
           advancePaid,
           amountDue,
+          pointsRedeemed: pointsDeduction,
           discountAmount, // Bug Fix: actually save the discountAmount to the booking!
           visibility: visibility || "PRIVATE",
           inviteMaxCount: inviteMaxCount ? parseInt(String(inviteMaxCount), 10) : null,
@@ -456,8 +475,8 @@ export async function POST(request: Request) {
         });
       }
 
-      // Add loyalty points to the logged-in user who paid
-      if (pointsEarned > 0) {
+      // Add loyalty points to the logged-in user who paid ONLY if booking is immediately CONFIRMED & PAID
+      if (bookingStatus === 'CONFIRMED' && paymentStatus === 'PAID' && pointsEarned > 0) {
         await tx.member.update({
           where: { id: member.id },
           data: { loyaltyPoints: { increment: pointsEarned } }

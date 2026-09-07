@@ -9,6 +9,8 @@ export async function updatePhonePeSettings(data: {
   PHONEPE_SALT_KEY: string;
   PHONEPE_SALT_INDEX: string;
   PAYMENT_GATEWAY_ACTIVE: string;
+  RAZORPAY_KEY_ID?: string;
+  RAZORPAY_KEY_SECRET?: string;
 }) {
   try {
     for (const [key, value] of Object.entries(data)) {

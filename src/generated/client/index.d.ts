@@ -84,6 +84,11 @@ export type BookingParticipant = $Result.DefaultSelection<Prisma.$BookingPartici
  */
 export type Payment = $Result.DefaultSelection<Prisma.$PaymentPayload>
 /**
+ * Model Transaction
+ * 
+ */
+export type Transaction = $Result.DefaultSelection<Prisma.$TransactionPayload>
+/**
  * Model DisplaySession
  * 
  */
@@ -434,6 +439,16 @@ export class PrismaClient<
     * ```
     */
   get payment(): Prisma.PaymentDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.transaction`: Exposes CRUD operations for the **Transaction** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Transactions
+    * const transactions = await prisma.transaction.findMany()
+    * ```
+    */
+  get transaction(): Prisma.TransactionDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.displaySession`: Exposes CRUD operations for the **DisplaySession** model.
@@ -1062,6 +1077,7 @@ export namespace Prisma {
     Booking: 'Booking',
     BookingParticipant: 'BookingParticipant',
     Payment: 'Payment',
+    Transaction: 'Transaction',
     DisplaySession: 'DisplaySession',
     Ticket: 'Ticket',
     Otp: 'Otp',
@@ -1095,7 +1111,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "admin" | "setting" | "familyGroup" | "member" | "loyaltyHistory" | "sport" | "turf" | "turfSport" | "membershipPlan" | "memberMembership" | "attendance" | "booking" | "bookingParticipant" | "payment" | "displaySession" | "ticket" | "otp" | "tournament" | "tournamentRegistration" | "tournamentPlayer" | "walletTransaction" | "coupon" | "couponAssignment" | "couponUsage" | "loyaltyTrigger" | "loyaltyAchievement" | "appAnnouncement" | "appVersion" | "lastUpdate" | "auditLog" | "banner" | "userSportStat"
+      modelProps: "admin" | "setting" | "familyGroup" | "member" | "loyaltyHistory" | "sport" | "turf" | "turfSport" | "membershipPlan" | "memberMembership" | "attendance" | "booking" | "bookingParticipant" | "payment" | "transaction" | "displaySession" | "ticket" | "otp" | "tournament" | "tournamentRegistration" | "tournamentPlayer" | "walletTransaction" | "coupon" | "couponAssignment" | "couponUsage" | "loyaltyTrigger" | "loyaltyAchievement" | "appAnnouncement" | "appVersion" | "lastUpdate" | "auditLog" | "banner" | "userSportStat"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -2132,6 +2148,80 @@ export namespace Prisma {
           count: {
             args: Prisma.PaymentCountArgs<ExtArgs>
             result: $Utils.Optional<PaymentCountAggregateOutputType> | number
+          }
+        }
+      }
+      Transaction: {
+        payload: Prisma.$TransactionPayload<ExtArgs>
+        fields: Prisma.TransactionFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.TransactionFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TransactionPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.TransactionFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TransactionPayload>
+          }
+          findFirst: {
+            args: Prisma.TransactionFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TransactionPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.TransactionFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TransactionPayload>
+          }
+          findMany: {
+            args: Prisma.TransactionFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TransactionPayload>[]
+          }
+          create: {
+            args: Prisma.TransactionCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TransactionPayload>
+          }
+          createMany: {
+            args: Prisma.TransactionCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.TransactionCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TransactionPayload>[]
+          }
+          delete: {
+            args: Prisma.TransactionDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TransactionPayload>
+          }
+          update: {
+            args: Prisma.TransactionUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TransactionPayload>
+          }
+          deleteMany: {
+            args: Prisma.TransactionDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.TransactionUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.TransactionUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TransactionPayload>[]
+          }
+          upsert: {
+            args: Prisma.TransactionUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TransactionPayload>
+          }
+          aggregate: {
+            args: Prisma.TransactionAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateTransaction>
+          }
+          groupBy: {
+            args: Prisma.TransactionGroupByArgs<ExtArgs>
+            result: $Utils.Optional<TransactionGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.TransactionCountArgs<ExtArgs>
+            result: $Utils.Optional<TransactionCountAggregateOutputType> | number
           }
         }
       }
@@ -3589,6 +3679,7 @@ export namespace Prisma {
     booking?: BookingOmit
     bookingParticipant?: BookingParticipantOmit
     payment?: PaymentOmit
+    transaction?: TransactionOmit
     displaySession?: DisplaySessionOmit
     ticket?: TicketOmit
     otp?: OtpOmit
@@ -3756,6 +3847,7 @@ export namespace Prisma {
     loyaltyHistory: number
     tournamentRegistrations: number
     walletTransactions: number
+    transactions: number
     couponAssignments: number
     couponUsages: number
     loyaltyAchievements: number
@@ -3770,6 +3862,7 @@ export namespace Prisma {
     loyaltyHistory?: boolean | MemberCountOutputTypeCountLoyaltyHistoryArgs
     tournamentRegistrations?: boolean | MemberCountOutputTypeCountTournamentRegistrationsArgs
     walletTransactions?: boolean | MemberCountOutputTypeCountWalletTransactionsArgs
+    transactions?: boolean | MemberCountOutputTypeCountTransactionsArgs
     couponAssignments?: boolean | MemberCountOutputTypeCountCouponAssignmentsArgs
     couponUsages?: boolean | MemberCountOutputTypeCountCouponUsagesArgs
     loyaltyAchievements?: boolean | MemberCountOutputTypeCountLoyaltyAchievementsArgs
@@ -3834,6 +3927,13 @@ export namespace Prisma {
    */
   export type MemberCountOutputTypeCountWalletTransactionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: WalletTransactionWhereInput
+  }
+
+  /**
+   * MemberCountOutputType without action
+   */
+  export type MemberCountOutputTypeCountTransactionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: TransactionWhereInput
   }
 
   /**
@@ -4054,6 +4154,7 @@ export namespace Prisma {
 
   export type BookingCountOutputType = {
     payments: number
+    transactions: number
     tickets: number
     couponUsages: number
     participants: number
@@ -4061,6 +4162,7 @@ export namespace Prisma {
 
   export type BookingCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     payments?: boolean | BookingCountOutputTypeCountPaymentsArgs
+    transactions?: boolean | BookingCountOutputTypeCountTransactionsArgs
     tickets?: boolean | BookingCountOutputTypeCountTicketsArgs
     couponUsages?: boolean | BookingCountOutputTypeCountCouponUsagesArgs
     participants?: boolean | BookingCountOutputTypeCountParticipantsArgs
@@ -4082,6 +4184,13 @@ export namespace Prisma {
    */
   export type BookingCountOutputTypeCountPaymentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: PaymentWhereInput
+  }
+
+  /**
+   * BookingCountOutputType without action
+   */
+  export type BookingCountOutputTypeCountTransactionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: TransactionWhereInput
   }
 
   /**
@@ -7658,6 +7767,7 @@ export namespace Prisma {
     loyaltyHistory?: boolean | Member$loyaltyHistoryArgs<ExtArgs>
     tournamentRegistrations?: boolean | Member$tournamentRegistrationsArgs<ExtArgs>
     walletTransactions?: boolean | Member$walletTransactionsArgs<ExtArgs>
+    transactions?: boolean | Member$transactionsArgs<ExtArgs>
     couponAssignments?: boolean | Member$couponAssignmentsArgs<ExtArgs>
     couponUsages?: boolean | Member$couponUsagesArgs<ExtArgs>
     loyaltyAchievements?: boolean | Member$loyaltyAchievementsArgs<ExtArgs>
@@ -7719,6 +7829,7 @@ export namespace Prisma {
     loyaltyHistory?: boolean | Member$loyaltyHistoryArgs<ExtArgs>
     tournamentRegistrations?: boolean | Member$tournamentRegistrationsArgs<ExtArgs>
     walletTransactions?: boolean | Member$walletTransactionsArgs<ExtArgs>
+    transactions?: boolean | Member$transactionsArgs<ExtArgs>
     couponAssignments?: boolean | Member$couponAssignmentsArgs<ExtArgs>
     couponUsages?: boolean | Member$couponUsagesArgs<ExtArgs>
     loyaltyAchievements?: boolean | Member$loyaltyAchievementsArgs<ExtArgs>
@@ -7743,6 +7854,7 @@ export namespace Prisma {
       loyaltyHistory: Prisma.$LoyaltyHistoryPayload<ExtArgs>[]
       tournamentRegistrations: Prisma.$TournamentRegistrationPayload<ExtArgs>[]
       walletTransactions: Prisma.$WalletTransactionPayload<ExtArgs>[]
+      transactions: Prisma.$TransactionPayload<ExtArgs>[]
       couponAssignments: Prisma.$CouponAssignmentPayload<ExtArgs>[]
       couponUsages: Prisma.$CouponUsagePayload<ExtArgs>[]
       loyaltyAchievements: Prisma.$LoyaltyAchievementPayload<ExtArgs>[]
@@ -8162,6 +8274,7 @@ export namespace Prisma {
     loyaltyHistory<T extends Member$loyaltyHistoryArgs<ExtArgs> = {}>(args?: Subset<T, Member$loyaltyHistoryArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LoyaltyHistoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     tournamentRegistrations<T extends Member$tournamentRegistrationsArgs<ExtArgs> = {}>(args?: Subset<T, Member$tournamentRegistrationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TournamentRegistrationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     walletTransactions<T extends Member$walletTransactionsArgs<ExtArgs> = {}>(args?: Subset<T, Member$walletTransactionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WalletTransactionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    transactions<T extends Member$transactionsArgs<ExtArgs> = {}>(args?: Subset<T, Member$transactionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TransactionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     couponAssignments<T extends Member$couponAssignmentsArgs<ExtArgs> = {}>(args?: Subset<T, Member$couponAssignmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CouponAssignmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     couponUsages<T extends Member$couponUsagesArgs<ExtArgs> = {}>(args?: Subset<T, Member$couponUsagesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CouponUsagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     loyaltyAchievements<T extends Member$loyaltyAchievementsArgs<ExtArgs> = {}>(args?: Subset<T, Member$loyaltyAchievementsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LoyaltyAchievementPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -8789,6 +8902,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: WalletTransactionScalarFieldEnum | WalletTransactionScalarFieldEnum[]
+  }
+
+  /**
+   * Member.transactions
+   */
+  export type Member$transactionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Transaction
+     */
+    select?: TransactionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Transaction
+     */
+    omit?: TransactionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TransactionInclude<ExtArgs> | null
+    where?: TransactionWhereInput
+    orderBy?: TransactionOrderByWithRelationInput | TransactionOrderByWithRelationInput[]
+    cursor?: TransactionWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: TransactionScalarFieldEnum | TransactionScalarFieldEnum[]
   }
 
   /**
@@ -17619,6 +17756,7 @@ export namespace Prisma {
     member?: boolean | MemberDefaultArgs<ExtArgs>
     sport?: boolean | SportDefaultArgs<ExtArgs>
     payments?: boolean | Booking$paymentsArgs<ExtArgs>
+    transactions?: boolean | Booking$transactionsArgs<ExtArgs>
     tickets?: boolean | Booking$ticketsArgs<ExtArgs>
     couponUsages?: boolean | Booking$couponUsagesArgs<ExtArgs>
     participants?: boolean | Booking$participantsArgs<ExtArgs>
@@ -17703,6 +17841,7 @@ export namespace Prisma {
     member?: boolean | MemberDefaultArgs<ExtArgs>
     sport?: boolean | SportDefaultArgs<ExtArgs>
     payments?: boolean | Booking$paymentsArgs<ExtArgs>
+    transactions?: boolean | Booking$transactionsArgs<ExtArgs>
     tickets?: boolean | Booking$ticketsArgs<ExtArgs>
     couponUsages?: boolean | Booking$couponUsagesArgs<ExtArgs>
     participants?: boolean | Booking$participantsArgs<ExtArgs>
@@ -17726,6 +17865,7 @@ export namespace Prisma {
       member: Prisma.$MemberPayload<ExtArgs>
       sport: Prisma.$SportPayload<ExtArgs>
       payments: Prisma.$PaymentPayload<ExtArgs>[]
+      transactions: Prisma.$TransactionPayload<ExtArgs>[]
       tickets: Prisma.$TicketPayload<ExtArgs>[]
       couponUsages: Prisma.$CouponUsagePayload<ExtArgs>[]
       participants: Prisma.$BookingParticipantPayload<ExtArgs>[]
@@ -18148,6 +18288,7 @@ export namespace Prisma {
     member<T extends MemberDefaultArgs<ExtArgs> = {}>(args?: Subset<T, MemberDefaultArgs<ExtArgs>>): Prisma__MemberClient<$Result.GetResult<Prisma.$MemberPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     sport<T extends SportDefaultArgs<ExtArgs> = {}>(args?: Subset<T, SportDefaultArgs<ExtArgs>>): Prisma__SportClient<$Result.GetResult<Prisma.$SportPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     payments<T extends Booking$paymentsArgs<ExtArgs> = {}>(args?: Subset<T, Booking$paymentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PaymentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    transactions<T extends Booking$transactionsArgs<ExtArgs> = {}>(args?: Subset<T, Booking$transactionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TransactionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     tickets<T extends Booking$ticketsArgs<ExtArgs> = {}>(args?: Subset<T, Booking$ticketsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TicketPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     couponUsages<T extends Booking$couponUsagesArgs<ExtArgs> = {}>(args?: Subset<T, Booking$couponUsagesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CouponUsagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     participants<T extends Booking$participantsArgs<ExtArgs> = {}>(args?: Subset<T, Booking$participantsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BookingParticipantPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -18619,6 +18760,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: PaymentScalarFieldEnum | PaymentScalarFieldEnum[]
+  }
+
+  /**
+   * Booking.transactions
+   */
+  export type Booking$transactionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Transaction
+     */
+    select?: TransactionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Transaction
+     */
+    omit?: TransactionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TransactionInclude<ExtArgs> | null
+    where?: TransactionWhereInput
+    orderBy?: TransactionOrderByWithRelationInput | TransactionOrderByWithRelationInput[]
+    cursor?: TransactionWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: TransactionScalarFieldEnum | TransactionScalarFieldEnum[]
   }
 
   /**
@@ -20873,6 +21038,1264 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: PaymentInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model Transaction
+   */
+
+  export type AggregateTransaction = {
+    _count: TransactionCountAggregateOutputType | null
+    _avg: TransactionAvgAggregateOutputType | null
+    _sum: TransactionSumAggregateOutputType | null
+    _min: TransactionMinAggregateOutputType | null
+    _max: TransactionMaxAggregateOutputType | null
+  }
+
+  export type TransactionAvgAggregateOutputType = {
+    amount: number | null
+  }
+
+  export type TransactionSumAggregateOutputType = {
+    amount: number | null
+  }
+
+  export type TransactionMinAggregateOutputType = {
+    id: string | null
+    bookingId: string | null
+    memberId: string | null
+    gateway: string | null
+    gatewayOrderId: string | null
+    gatewayPaymentId: string | null
+    gatewaySignature: string | null
+    amount: number | null
+    currency: string | null
+    status: string | null
+    errorMessage: string | null
+    metadata: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type TransactionMaxAggregateOutputType = {
+    id: string | null
+    bookingId: string | null
+    memberId: string | null
+    gateway: string | null
+    gatewayOrderId: string | null
+    gatewayPaymentId: string | null
+    gatewaySignature: string | null
+    amount: number | null
+    currency: string | null
+    status: string | null
+    errorMessage: string | null
+    metadata: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type TransactionCountAggregateOutputType = {
+    id: number
+    bookingId: number
+    memberId: number
+    gateway: number
+    gatewayOrderId: number
+    gatewayPaymentId: number
+    gatewaySignature: number
+    amount: number
+    currency: number
+    status: number
+    errorMessage: number
+    metadata: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type TransactionAvgAggregateInputType = {
+    amount?: true
+  }
+
+  export type TransactionSumAggregateInputType = {
+    amount?: true
+  }
+
+  export type TransactionMinAggregateInputType = {
+    id?: true
+    bookingId?: true
+    memberId?: true
+    gateway?: true
+    gatewayOrderId?: true
+    gatewayPaymentId?: true
+    gatewaySignature?: true
+    amount?: true
+    currency?: true
+    status?: true
+    errorMessage?: true
+    metadata?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type TransactionMaxAggregateInputType = {
+    id?: true
+    bookingId?: true
+    memberId?: true
+    gateway?: true
+    gatewayOrderId?: true
+    gatewayPaymentId?: true
+    gatewaySignature?: true
+    amount?: true
+    currency?: true
+    status?: true
+    errorMessage?: true
+    metadata?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type TransactionCountAggregateInputType = {
+    id?: true
+    bookingId?: true
+    memberId?: true
+    gateway?: true
+    gatewayOrderId?: true
+    gatewayPaymentId?: true
+    gatewaySignature?: true
+    amount?: true
+    currency?: true
+    status?: true
+    errorMessage?: true
+    metadata?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type TransactionAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Transaction to aggregate.
+     */
+    where?: TransactionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Transactions to fetch.
+     */
+    orderBy?: TransactionOrderByWithRelationInput | TransactionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: TransactionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Transactions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Transactions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Transactions
+    **/
+    _count?: true | TransactionCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: TransactionAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: TransactionSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: TransactionMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: TransactionMaxAggregateInputType
+  }
+
+  export type GetTransactionAggregateType<T extends TransactionAggregateArgs> = {
+        [P in keyof T & keyof AggregateTransaction]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateTransaction[P]>
+      : GetScalarType<T[P], AggregateTransaction[P]>
+  }
+
+
+
+
+  export type TransactionGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: TransactionWhereInput
+    orderBy?: TransactionOrderByWithAggregationInput | TransactionOrderByWithAggregationInput[]
+    by: TransactionScalarFieldEnum[] | TransactionScalarFieldEnum
+    having?: TransactionScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: TransactionCountAggregateInputType | true
+    _avg?: TransactionAvgAggregateInputType
+    _sum?: TransactionSumAggregateInputType
+    _min?: TransactionMinAggregateInputType
+    _max?: TransactionMaxAggregateInputType
+  }
+
+  export type TransactionGroupByOutputType = {
+    id: string
+    bookingId: string | null
+    memberId: string | null
+    gateway: string
+    gatewayOrderId: string | null
+    gatewayPaymentId: string | null
+    gatewaySignature: string | null
+    amount: number
+    currency: string
+    status: string
+    errorMessage: string | null
+    metadata: string | null
+    createdAt: Date
+    updatedAt: Date
+    _count: TransactionCountAggregateOutputType | null
+    _avg: TransactionAvgAggregateOutputType | null
+    _sum: TransactionSumAggregateOutputType | null
+    _min: TransactionMinAggregateOutputType | null
+    _max: TransactionMaxAggregateOutputType | null
+  }
+
+  type GetTransactionGroupByPayload<T extends TransactionGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<TransactionGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof TransactionGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], TransactionGroupByOutputType[P]>
+            : GetScalarType<T[P], TransactionGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type TransactionSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    bookingId?: boolean
+    memberId?: boolean
+    gateway?: boolean
+    gatewayOrderId?: boolean
+    gatewayPaymentId?: boolean
+    gatewaySignature?: boolean
+    amount?: boolean
+    currency?: boolean
+    status?: boolean
+    errorMessage?: boolean
+    metadata?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    booking?: boolean | Transaction$bookingArgs<ExtArgs>
+    member?: boolean | Transaction$memberArgs<ExtArgs>
+  }, ExtArgs["result"]["transaction"]>
+
+  export type TransactionSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    bookingId?: boolean
+    memberId?: boolean
+    gateway?: boolean
+    gatewayOrderId?: boolean
+    gatewayPaymentId?: boolean
+    gatewaySignature?: boolean
+    amount?: boolean
+    currency?: boolean
+    status?: boolean
+    errorMessage?: boolean
+    metadata?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    booking?: boolean | Transaction$bookingArgs<ExtArgs>
+    member?: boolean | Transaction$memberArgs<ExtArgs>
+  }, ExtArgs["result"]["transaction"]>
+
+  export type TransactionSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    bookingId?: boolean
+    memberId?: boolean
+    gateway?: boolean
+    gatewayOrderId?: boolean
+    gatewayPaymentId?: boolean
+    gatewaySignature?: boolean
+    amount?: boolean
+    currency?: boolean
+    status?: boolean
+    errorMessage?: boolean
+    metadata?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    booking?: boolean | Transaction$bookingArgs<ExtArgs>
+    member?: boolean | Transaction$memberArgs<ExtArgs>
+  }, ExtArgs["result"]["transaction"]>
+
+  export type TransactionSelectScalar = {
+    id?: boolean
+    bookingId?: boolean
+    memberId?: boolean
+    gateway?: boolean
+    gatewayOrderId?: boolean
+    gatewayPaymentId?: boolean
+    gatewaySignature?: boolean
+    amount?: boolean
+    currency?: boolean
+    status?: boolean
+    errorMessage?: boolean
+    metadata?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type TransactionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "bookingId" | "memberId" | "gateway" | "gatewayOrderId" | "gatewayPaymentId" | "gatewaySignature" | "amount" | "currency" | "status" | "errorMessage" | "metadata" | "createdAt" | "updatedAt", ExtArgs["result"]["transaction"]>
+  export type TransactionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    booking?: boolean | Transaction$bookingArgs<ExtArgs>
+    member?: boolean | Transaction$memberArgs<ExtArgs>
+  }
+  export type TransactionIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    booking?: boolean | Transaction$bookingArgs<ExtArgs>
+    member?: boolean | Transaction$memberArgs<ExtArgs>
+  }
+  export type TransactionIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    booking?: boolean | Transaction$bookingArgs<ExtArgs>
+    member?: boolean | Transaction$memberArgs<ExtArgs>
+  }
+
+  export type $TransactionPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Transaction"
+    objects: {
+      booking: Prisma.$BookingPayload<ExtArgs> | null
+      member: Prisma.$MemberPayload<ExtArgs> | null
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      bookingId: string | null
+      memberId: string | null
+      gateway: string
+      gatewayOrderId: string | null
+      gatewayPaymentId: string | null
+      gatewaySignature: string | null
+      amount: number
+      currency: string
+      status: string
+      errorMessage: string | null
+      metadata: string | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["transaction"]>
+    composites: {}
+  }
+
+  type TransactionGetPayload<S extends boolean | null | undefined | TransactionDefaultArgs> = $Result.GetResult<Prisma.$TransactionPayload, S>
+
+  type TransactionCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<TransactionFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: TransactionCountAggregateInputType | true
+    }
+
+  export interface TransactionDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Transaction'], meta: { name: 'Transaction' } }
+    /**
+     * Find zero or one Transaction that matches the filter.
+     * @param {TransactionFindUniqueArgs} args - Arguments to find a Transaction
+     * @example
+     * // Get one Transaction
+     * const transaction = await prisma.transaction.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends TransactionFindUniqueArgs>(args: SelectSubset<T, TransactionFindUniqueArgs<ExtArgs>>): Prisma__TransactionClient<$Result.GetResult<Prisma.$TransactionPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Transaction that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {TransactionFindUniqueOrThrowArgs} args - Arguments to find a Transaction
+     * @example
+     * // Get one Transaction
+     * const transaction = await prisma.transaction.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends TransactionFindUniqueOrThrowArgs>(args: SelectSubset<T, TransactionFindUniqueOrThrowArgs<ExtArgs>>): Prisma__TransactionClient<$Result.GetResult<Prisma.$TransactionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Transaction that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TransactionFindFirstArgs} args - Arguments to find a Transaction
+     * @example
+     * // Get one Transaction
+     * const transaction = await prisma.transaction.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends TransactionFindFirstArgs>(args?: SelectSubset<T, TransactionFindFirstArgs<ExtArgs>>): Prisma__TransactionClient<$Result.GetResult<Prisma.$TransactionPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Transaction that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TransactionFindFirstOrThrowArgs} args - Arguments to find a Transaction
+     * @example
+     * // Get one Transaction
+     * const transaction = await prisma.transaction.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends TransactionFindFirstOrThrowArgs>(args?: SelectSubset<T, TransactionFindFirstOrThrowArgs<ExtArgs>>): Prisma__TransactionClient<$Result.GetResult<Prisma.$TransactionPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Transactions that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TransactionFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Transactions
+     * const transactions = await prisma.transaction.findMany()
+     * 
+     * // Get first 10 Transactions
+     * const transactions = await prisma.transaction.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const transactionWithIdOnly = await prisma.transaction.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends TransactionFindManyArgs>(args?: SelectSubset<T, TransactionFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TransactionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Transaction.
+     * @param {TransactionCreateArgs} args - Arguments to create a Transaction.
+     * @example
+     * // Create one Transaction
+     * const Transaction = await prisma.transaction.create({
+     *   data: {
+     *     // ... data to create a Transaction
+     *   }
+     * })
+     * 
+     */
+    create<T extends TransactionCreateArgs>(args: SelectSubset<T, TransactionCreateArgs<ExtArgs>>): Prisma__TransactionClient<$Result.GetResult<Prisma.$TransactionPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Transactions.
+     * @param {TransactionCreateManyArgs} args - Arguments to create many Transactions.
+     * @example
+     * // Create many Transactions
+     * const transaction = await prisma.transaction.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends TransactionCreateManyArgs>(args?: SelectSubset<T, TransactionCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Transactions and returns the data saved in the database.
+     * @param {TransactionCreateManyAndReturnArgs} args - Arguments to create many Transactions.
+     * @example
+     * // Create many Transactions
+     * const transaction = await prisma.transaction.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Transactions and only return the `id`
+     * const transactionWithIdOnly = await prisma.transaction.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends TransactionCreateManyAndReturnArgs>(args?: SelectSubset<T, TransactionCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TransactionPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Transaction.
+     * @param {TransactionDeleteArgs} args - Arguments to delete one Transaction.
+     * @example
+     * // Delete one Transaction
+     * const Transaction = await prisma.transaction.delete({
+     *   where: {
+     *     // ... filter to delete one Transaction
+     *   }
+     * })
+     * 
+     */
+    delete<T extends TransactionDeleteArgs>(args: SelectSubset<T, TransactionDeleteArgs<ExtArgs>>): Prisma__TransactionClient<$Result.GetResult<Prisma.$TransactionPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Transaction.
+     * @param {TransactionUpdateArgs} args - Arguments to update one Transaction.
+     * @example
+     * // Update one Transaction
+     * const transaction = await prisma.transaction.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends TransactionUpdateArgs>(args: SelectSubset<T, TransactionUpdateArgs<ExtArgs>>): Prisma__TransactionClient<$Result.GetResult<Prisma.$TransactionPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Transactions.
+     * @param {TransactionDeleteManyArgs} args - Arguments to filter Transactions to delete.
+     * @example
+     * // Delete a few Transactions
+     * const { count } = await prisma.transaction.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends TransactionDeleteManyArgs>(args?: SelectSubset<T, TransactionDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Transactions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TransactionUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Transactions
+     * const transaction = await prisma.transaction.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends TransactionUpdateManyArgs>(args: SelectSubset<T, TransactionUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Transactions and returns the data updated in the database.
+     * @param {TransactionUpdateManyAndReturnArgs} args - Arguments to update many Transactions.
+     * @example
+     * // Update many Transactions
+     * const transaction = await prisma.transaction.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Transactions and only return the `id`
+     * const transactionWithIdOnly = await prisma.transaction.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends TransactionUpdateManyAndReturnArgs>(args: SelectSubset<T, TransactionUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TransactionPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Transaction.
+     * @param {TransactionUpsertArgs} args - Arguments to update or create a Transaction.
+     * @example
+     * // Update or create a Transaction
+     * const transaction = await prisma.transaction.upsert({
+     *   create: {
+     *     // ... data to create a Transaction
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Transaction we want to update
+     *   }
+     * })
+     */
+    upsert<T extends TransactionUpsertArgs>(args: SelectSubset<T, TransactionUpsertArgs<ExtArgs>>): Prisma__TransactionClient<$Result.GetResult<Prisma.$TransactionPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Transactions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TransactionCountArgs} args - Arguments to filter Transactions to count.
+     * @example
+     * // Count the number of Transactions
+     * const count = await prisma.transaction.count({
+     *   where: {
+     *     // ... the filter for the Transactions we want to count
+     *   }
+     * })
+    **/
+    count<T extends TransactionCountArgs>(
+      args?: Subset<T, TransactionCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], TransactionCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Transaction.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TransactionAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends TransactionAggregateArgs>(args: Subset<T, TransactionAggregateArgs>): Prisma.PrismaPromise<GetTransactionAggregateType<T>>
+
+    /**
+     * Group by Transaction.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TransactionGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends TransactionGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: TransactionGroupByArgs['orderBy'] }
+        : { orderBy?: TransactionGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, TransactionGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetTransactionGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Transaction model
+   */
+  readonly fields: TransactionFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Transaction.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__TransactionClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    booking<T extends Transaction$bookingArgs<ExtArgs> = {}>(args?: Subset<T, Transaction$bookingArgs<ExtArgs>>): Prisma__BookingClient<$Result.GetResult<Prisma.$BookingPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    member<T extends Transaction$memberArgs<ExtArgs> = {}>(args?: Subset<T, Transaction$memberArgs<ExtArgs>>): Prisma__MemberClient<$Result.GetResult<Prisma.$MemberPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Transaction model
+   */
+  interface TransactionFieldRefs {
+    readonly id: FieldRef<"Transaction", 'String'>
+    readonly bookingId: FieldRef<"Transaction", 'String'>
+    readonly memberId: FieldRef<"Transaction", 'String'>
+    readonly gateway: FieldRef<"Transaction", 'String'>
+    readonly gatewayOrderId: FieldRef<"Transaction", 'String'>
+    readonly gatewayPaymentId: FieldRef<"Transaction", 'String'>
+    readonly gatewaySignature: FieldRef<"Transaction", 'String'>
+    readonly amount: FieldRef<"Transaction", 'Float'>
+    readonly currency: FieldRef<"Transaction", 'String'>
+    readonly status: FieldRef<"Transaction", 'String'>
+    readonly errorMessage: FieldRef<"Transaction", 'String'>
+    readonly metadata: FieldRef<"Transaction", 'String'>
+    readonly createdAt: FieldRef<"Transaction", 'DateTime'>
+    readonly updatedAt: FieldRef<"Transaction", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Transaction findUnique
+   */
+  export type TransactionFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Transaction
+     */
+    select?: TransactionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Transaction
+     */
+    omit?: TransactionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TransactionInclude<ExtArgs> | null
+    /**
+     * Filter, which Transaction to fetch.
+     */
+    where: TransactionWhereUniqueInput
+  }
+
+  /**
+   * Transaction findUniqueOrThrow
+   */
+  export type TransactionFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Transaction
+     */
+    select?: TransactionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Transaction
+     */
+    omit?: TransactionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TransactionInclude<ExtArgs> | null
+    /**
+     * Filter, which Transaction to fetch.
+     */
+    where: TransactionWhereUniqueInput
+  }
+
+  /**
+   * Transaction findFirst
+   */
+  export type TransactionFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Transaction
+     */
+    select?: TransactionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Transaction
+     */
+    omit?: TransactionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TransactionInclude<ExtArgs> | null
+    /**
+     * Filter, which Transaction to fetch.
+     */
+    where?: TransactionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Transactions to fetch.
+     */
+    orderBy?: TransactionOrderByWithRelationInput | TransactionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Transactions.
+     */
+    cursor?: TransactionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Transactions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Transactions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Transactions.
+     */
+    distinct?: TransactionScalarFieldEnum | TransactionScalarFieldEnum[]
+  }
+
+  /**
+   * Transaction findFirstOrThrow
+   */
+  export type TransactionFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Transaction
+     */
+    select?: TransactionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Transaction
+     */
+    omit?: TransactionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TransactionInclude<ExtArgs> | null
+    /**
+     * Filter, which Transaction to fetch.
+     */
+    where?: TransactionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Transactions to fetch.
+     */
+    orderBy?: TransactionOrderByWithRelationInput | TransactionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Transactions.
+     */
+    cursor?: TransactionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Transactions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Transactions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Transactions.
+     */
+    distinct?: TransactionScalarFieldEnum | TransactionScalarFieldEnum[]
+  }
+
+  /**
+   * Transaction findMany
+   */
+  export type TransactionFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Transaction
+     */
+    select?: TransactionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Transaction
+     */
+    omit?: TransactionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TransactionInclude<ExtArgs> | null
+    /**
+     * Filter, which Transactions to fetch.
+     */
+    where?: TransactionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Transactions to fetch.
+     */
+    orderBy?: TransactionOrderByWithRelationInput | TransactionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Transactions.
+     */
+    cursor?: TransactionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Transactions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Transactions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Transactions.
+     */
+    distinct?: TransactionScalarFieldEnum | TransactionScalarFieldEnum[]
+  }
+
+  /**
+   * Transaction create
+   */
+  export type TransactionCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Transaction
+     */
+    select?: TransactionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Transaction
+     */
+    omit?: TransactionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TransactionInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Transaction.
+     */
+    data: XOR<TransactionCreateInput, TransactionUncheckedCreateInput>
+  }
+
+  /**
+   * Transaction createMany
+   */
+  export type TransactionCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Transactions.
+     */
+    data: TransactionCreateManyInput | TransactionCreateManyInput[]
+  }
+
+  /**
+   * Transaction createManyAndReturn
+   */
+  export type TransactionCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Transaction
+     */
+    select?: TransactionSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Transaction
+     */
+    omit?: TransactionOmit<ExtArgs> | null
+    /**
+     * The data used to create many Transactions.
+     */
+    data: TransactionCreateManyInput | TransactionCreateManyInput[]
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TransactionIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Transaction update
+   */
+  export type TransactionUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Transaction
+     */
+    select?: TransactionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Transaction
+     */
+    omit?: TransactionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TransactionInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Transaction.
+     */
+    data: XOR<TransactionUpdateInput, TransactionUncheckedUpdateInput>
+    /**
+     * Choose, which Transaction to update.
+     */
+    where: TransactionWhereUniqueInput
+  }
+
+  /**
+   * Transaction updateMany
+   */
+  export type TransactionUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Transactions.
+     */
+    data: XOR<TransactionUpdateManyMutationInput, TransactionUncheckedUpdateManyInput>
+    /**
+     * Filter which Transactions to update
+     */
+    where?: TransactionWhereInput
+    /**
+     * Limit how many Transactions to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Transaction updateManyAndReturn
+   */
+  export type TransactionUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Transaction
+     */
+    select?: TransactionSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Transaction
+     */
+    omit?: TransactionOmit<ExtArgs> | null
+    /**
+     * The data used to update Transactions.
+     */
+    data: XOR<TransactionUpdateManyMutationInput, TransactionUncheckedUpdateManyInput>
+    /**
+     * Filter which Transactions to update
+     */
+    where?: TransactionWhereInput
+    /**
+     * Limit how many Transactions to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TransactionIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Transaction upsert
+   */
+  export type TransactionUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Transaction
+     */
+    select?: TransactionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Transaction
+     */
+    omit?: TransactionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TransactionInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Transaction to update in case it exists.
+     */
+    where: TransactionWhereUniqueInput
+    /**
+     * In case the Transaction found by the `where` argument doesn't exist, create a new Transaction with this data.
+     */
+    create: XOR<TransactionCreateInput, TransactionUncheckedCreateInput>
+    /**
+     * In case the Transaction was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<TransactionUpdateInput, TransactionUncheckedUpdateInput>
+  }
+
+  /**
+   * Transaction delete
+   */
+  export type TransactionDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Transaction
+     */
+    select?: TransactionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Transaction
+     */
+    omit?: TransactionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TransactionInclude<ExtArgs> | null
+    /**
+     * Filter which Transaction to delete.
+     */
+    where: TransactionWhereUniqueInput
+  }
+
+  /**
+   * Transaction deleteMany
+   */
+  export type TransactionDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Transactions to delete
+     */
+    where?: TransactionWhereInput
+    /**
+     * Limit how many Transactions to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Transaction.booking
+   */
+  export type Transaction$bookingArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Booking
+     */
+    select?: BookingSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Booking
+     */
+    omit?: BookingOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BookingInclude<ExtArgs> | null
+    where?: BookingWhereInput
+  }
+
+  /**
+   * Transaction.member
+   */
+  export type Transaction$memberArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Member
+     */
+    select?: MemberSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Member
+     */
+    omit?: MemberOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MemberInclude<ExtArgs> | null
+    where?: MemberWhereInput
+  }
+
+  /**
+   * Transaction without action
+   */
+  export type TransactionDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Transaction
+     */
+    select?: TransactionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Transaction
+     */
+    omit?: TransactionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TransactionInclude<ExtArgs> | null
   }
 
 
@@ -41070,6 +42493,26 @@ export namespace Prisma {
   export type PaymentScalarFieldEnum = (typeof PaymentScalarFieldEnum)[keyof typeof PaymentScalarFieldEnum]
 
 
+  export const TransactionScalarFieldEnum: {
+    id: 'id',
+    bookingId: 'bookingId',
+    memberId: 'memberId',
+    gateway: 'gateway',
+    gatewayOrderId: 'gatewayOrderId',
+    gatewayPaymentId: 'gatewayPaymentId',
+    gatewaySignature: 'gatewaySignature',
+    amount: 'amount',
+    currency: 'currency',
+    status: 'status',
+    errorMessage: 'errorMessage',
+    metadata: 'metadata',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type TransactionScalarFieldEnum = (typeof TransactionScalarFieldEnum)[keyof typeof TransactionScalarFieldEnum]
+
+
   export const DisplaySessionScalarFieldEnum: {
     id: 'id',
     bookingId: 'bookingId',
@@ -41569,6 +43012,7 @@ export namespace Prisma {
     loyaltyHistory?: LoyaltyHistoryListRelationFilter
     tournamentRegistrations?: TournamentRegistrationListRelationFilter
     walletTransactions?: WalletTransactionListRelationFilter
+    transactions?: TransactionListRelationFilter
     couponAssignments?: CouponAssignmentListRelationFilter
     couponUsages?: CouponUsageListRelationFilter
     loyaltyAchievements?: LoyaltyAchievementListRelationFilter
@@ -41595,6 +43039,7 @@ export namespace Prisma {
     loyaltyHistory?: LoyaltyHistoryOrderByRelationAggregateInput
     tournamentRegistrations?: TournamentRegistrationOrderByRelationAggregateInput
     walletTransactions?: WalletTransactionOrderByRelationAggregateInput
+    transactions?: TransactionOrderByRelationAggregateInput
     couponAssignments?: CouponAssignmentOrderByRelationAggregateInput
     couponUsages?: CouponUsageOrderByRelationAggregateInput
     loyaltyAchievements?: LoyaltyAchievementOrderByRelationAggregateInput
@@ -41624,6 +43069,7 @@ export namespace Prisma {
     loyaltyHistory?: LoyaltyHistoryListRelationFilter
     tournamentRegistrations?: TournamentRegistrationListRelationFilter
     walletTransactions?: WalletTransactionListRelationFilter
+    transactions?: TransactionListRelationFilter
     couponAssignments?: CouponAssignmentListRelationFilter
     couponUsages?: CouponUsageListRelationFilter
     loyaltyAchievements?: LoyaltyAchievementListRelationFilter
@@ -42258,6 +43704,7 @@ export namespace Prisma {
     member?: XOR<MemberScalarRelationFilter, MemberWhereInput>
     sport?: XOR<SportScalarRelationFilter, SportWhereInput>
     payments?: PaymentListRelationFilter
+    transactions?: TransactionListRelationFilter
     tickets?: TicketListRelationFilter
     couponUsages?: CouponUsageListRelationFilter
     participants?: BookingParticipantListRelationFilter
@@ -42287,6 +43734,7 @@ export namespace Prisma {
     member?: MemberOrderByWithRelationInput
     sport?: SportOrderByWithRelationInput
     payments?: PaymentOrderByRelationAggregateInput
+    transactions?: TransactionOrderByRelationAggregateInput
     tickets?: TicketOrderByRelationAggregateInput
     couponUsages?: CouponUsageOrderByRelationAggregateInput
     participants?: BookingParticipantOrderByRelationAggregateInput
@@ -42319,6 +43767,7 @@ export namespace Prisma {
     member?: XOR<MemberScalarRelationFilter, MemberWhereInput>
     sport?: XOR<SportScalarRelationFilter, SportWhereInput>
     payments?: PaymentListRelationFilter
+    transactions?: TransactionListRelationFilter
     tickets?: TicketListRelationFilter
     couponUsages?: CouponUsageListRelationFilter
     participants?: BookingParticipantListRelationFilter
@@ -42490,6 +43939,111 @@ export namespace Prisma {
     amount?: FloatWithAggregatesFilter<"Payment"> | number
     method?: StringWithAggregatesFilter<"Payment"> | string
     createdAt?: DateTimeWithAggregatesFilter<"Payment"> | Date | string
+  }
+
+  export type TransactionWhereInput = {
+    AND?: TransactionWhereInput | TransactionWhereInput[]
+    OR?: TransactionWhereInput[]
+    NOT?: TransactionWhereInput | TransactionWhereInput[]
+    id?: StringFilter<"Transaction"> | string
+    bookingId?: StringNullableFilter<"Transaction"> | string | null
+    memberId?: StringNullableFilter<"Transaction"> | string | null
+    gateway?: StringFilter<"Transaction"> | string
+    gatewayOrderId?: StringNullableFilter<"Transaction"> | string | null
+    gatewayPaymentId?: StringNullableFilter<"Transaction"> | string | null
+    gatewaySignature?: StringNullableFilter<"Transaction"> | string | null
+    amount?: FloatFilter<"Transaction"> | number
+    currency?: StringFilter<"Transaction"> | string
+    status?: StringFilter<"Transaction"> | string
+    errorMessage?: StringNullableFilter<"Transaction"> | string | null
+    metadata?: StringNullableFilter<"Transaction"> | string | null
+    createdAt?: DateTimeFilter<"Transaction"> | Date | string
+    updatedAt?: DateTimeFilter<"Transaction"> | Date | string
+    booking?: XOR<BookingNullableScalarRelationFilter, BookingWhereInput> | null
+    member?: XOR<MemberNullableScalarRelationFilter, MemberWhereInput> | null
+  }
+
+  export type TransactionOrderByWithRelationInput = {
+    id?: SortOrder
+    bookingId?: SortOrderInput | SortOrder
+    memberId?: SortOrderInput | SortOrder
+    gateway?: SortOrder
+    gatewayOrderId?: SortOrderInput | SortOrder
+    gatewayPaymentId?: SortOrderInput | SortOrder
+    gatewaySignature?: SortOrderInput | SortOrder
+    amount?: SortOrder
+    currency?: SortOrder
+    status?: SortOrder
+    errorMessage?: SortOrderInput | SortOrder
+    metadata?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    booking?: BookingOrderByWithRelationInput
+    member?: MemberOrderByWithRelationInput
+  }
+
+  export type TransactionWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: TransactionWhereInput | TransactionWhereInput[]
+    OR?: TransactionWhereInput[]
+    NOT?: TransactionWhereInput | TransactionWhereInput[]
+    bookingId?: StringNullableFilter<"Transaction"> | string | null
+    memberId?: StringNullableFilter<"Transaction"> | string | null
+    gateway?: StringFilter<"Transaction"> | string
+    gatewayOrderId?: StringNullableFilter<"Transaction"> | string | null
+    gatewayPaymentId?: StringNullableFilter<"Transaction"> | string | null
+    gatewaySignature?: StringNullableFilter<"Transaction"> | string | null
+    amount?: FloatFilter<"Transaction"> | number
+    currency?: StringFilter<"Transaction"> | string
+    status?: StringFilter<"Transaction"> | string
+    errorMessage?: StringNullableFilter<"Transaction"> | string | null
+    metadata?: StringNullableFilter<"Transaction"> | string | null
+    createdAt?: DateTimeFilter<"Transaction"> | Date | string
+    updatedAt?: DateTimeFilter<"Transaction"> | Date | string
+    booking?: XOR<BookingNullableScalarRelationFilter, BookingWhereInput> | null
+    member?: XOR<MemberNullableScalarRelationFilter, MemberWhereInput> | null
+  }, "id">
+
+  export type TransactionOrderByWithAggregationInput = {
+    id?: SortOrder
+    bookingId?: SortOrderInput | SortOrder
+    memberId?: SortOrderInput | SortOrder
+    gateway?: SortOrder
+    gatewayOrderId?: SortOrderInput | SortOrder
+    gatewayPaymentId?: SortOrderInput | SortOrder
+    gatewaySignature?: SortOrderInput | SortOrder
+    amount?: SortOrder
+    currency?: SortOrder
+    status?: SortOrder
+    errorMessage?: SortOrderInput | SortOrder
+    metadata?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: TransactionCountOrderByAggregateInput
+    _avg?: TransactionAvgOrderByAggregateInput
+    _max?: TransactionMaxOrderByAggregateInput
+    _min?: TransactionMinOrderByAggregateInput
+    _sum?: TransactionSumOrderByAggregateInput
+  }
+
+  export type TransactionScalarWhereWithAggregatesInput = {
+    AND?: TransactionScalarWhereWithAggregatesInput | TransactionScalarWhereWithAggregatesInput[]
+    OR?: TransactionScalarWhereWithAggregatesInput[]
+    NOT?: TransactionScalarWhereWithAggregatesInput | TransactionScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"Transaction"> | string
+    bookingId?: StringNullableWithAggregatesFilter<"Transaction"> | string | null
+    memberId?: StringNullableWithAggregatesFilter<"Transaction"> | string | null
+    gateway?: StringWithAggregatesFilter<"Transaction"> | string
+    gatewayOrderId?: StringNullableWithAggregatesFilter<"Transaction"> | string | null
+    gatewayPaymentId?: StringNullableWithAggregatesFilter<"Transaction"> | string | null
+    gatewaySignature?: StringNullableWithAggregatesFilter<"Transaction"> | string | null
+    amount?: FloatWithAggregatesFilter<"Transaction"> | number
+    currency?: StringWithAggregatesFilter<"Transaction"> | string
+    status?: StringWithAggregatesFilter<"Transaction"> | string
+    errorMessage?: StringNullableWithAggregatesFilter<"Transaction"> | string | null
+    metadata?: StringNullableWithAggregatesFilter<"Transaction"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"Transaction"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Transaction"> | Date | string
   }
 
   export type DisplaySessionWhereInput = {
@@ -43975,6 +45529,7 @@ export namespace Prisma {
     loyaltyHistory?: LoyaltyHistoryCreateNestedManyWithoutMemberInput
     tournamentRegistrations?: TournamentRegistrationCreateNestedManyWithoutRegisteredByInput
     walletTransactions?: WalletTransactionCreateNestedManyWithoutMemberInput
+    transactions?: TransactionCreateNestedManyWithoutMemberInput
     couponAssignments?: CouponAssignmentCreateNestedManyWithoutMemberInput
     couponUsages?: CouponUsageCreateNestedManyWithoutMemberInput
     loyaltyAchievements?: LoyaltyAchievementCreateNestedManyWithoutMemberInput
@@ -44000,6 +45555,7 @@ export namespace Prisma {
     loyaltyHistory?: LoyaltyHistoryUncheckedCreateNestedManyWithoutMemberInput
     tournamentRegistrations?: TournamentRegistrationUncheckedCreateNestedManyWithoutRegisteredByInput
     walletTransactions?: WalletTransactionUncheckedCreateNestedManyWithoutMemberInput
+    transactions?: TransactionUncheckedCreateNestedManyWithoutMemberInput
     couponAssignments?: CouponAssignmentUncheckedCreateNestedManyWithoutMemberInput
     couponUsages?: CouponUsageUncheckedCreateNestedManyWithoutMemberInput
     loyaltyAchievements?: LoyaltyAchievementUncheckedCreateNestedManyWithoutMemberInput
@@ -44025,6 +45581,7 @@ export namespace Prisma {
     loyaltyHistory?: LoyaltyHistoryUpdateManyWithoutMemberNestedInput
     tournamentRegistrations?: TournamentRegistrationUpdateManyWithoutRegisteredByNestedInput
     walletTransactions?: WalletTransactionUpdateManyWithoutMemberNestedInput
+    transactions?: TransactionUpdateManyWithoutMemberNestedInput
     couponAssignments?: CouponAssignmentUpdateManyWithoutMemberNestedInput
     couponUsages?: CouponUsageUpdateManyWithoutMemberNestedInput
     loyaltyAchievements?: LoyaltyAchievementUpdateManyWithoutMemberNestedInput
@@ -44050,6 +45607,7 @@ export namespace Prisma {
     loyaltyHistory?: LoyaltyHistoryUncheckedUpdateManyWithoutMemberNestedInput
     tournamentRegistrations?: TournamentRegistrationUncheckedUpdateManyWithoutRegisteredByNestedInput
     walletTransactions?: WalletTransactionUncheckedUpdateManyWithoutMemberNestedInput
+    transactions?: TransactionUncheckedUpdateManyWithoutMemberNestedInput
     couponAssignments?: CouponAssignmentUncheckedUpdateManyWithoutMemberNestedInput
     couponUsages?: CouponUsageUncheckedUpdateManyWithoutMemberNestedInput
     loyaltyAchievements?: LoyaltyAchievementUncheckedUpdateManyWithoutMemberNestedInput
@@ -44720,6 +46278,7 @@ export namespace Prisma {
     member: MemberCreateNestedOneWithoutBookingsInput
     sport: SportCreateNestedOneWithoutBookingsInput
     payments?: PaymentCreateNestedManyWithoutBookingInput
+    transactions?: TransactionCreateNestedManyWithoutBookingInput
     tickets?: TicketCreateNestedManyWithoutBookingInput
     couponUsages?: CouponUsageCreateNestedManyWithoutBookingInput
     participants?: BookingParticipantCreateNestedManyWithoutBookingInput
@@ -44746,6 +46305,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     payments?: PaymentUncheckedCreateNestedManyWithoutBookingInput
+    transactions?: TransactionUncheckedCreateNestedManyWithoutBookingInput
     tickets?: TicketUncheckedCreateNestedManyWithoutBookingInput
     couponUsages?: CouponUsageUncheckedCreateNestedManyWithoutBookingInput
     participants?: BookingParticipantUncheckedCreateNestedManyWithoutBookingInput
@@ -44772,6 +46332,7 @@ export namespace Prisma {
     member?: MemberUpdateOneRequiredWithoutBookingsNestedInput
     sport?: SportUpdateOneRequiredWithoutBookingsNestedInput
     payments?: PaymentUpdateManyWithoutBookingNestedInput
+    transactions?: TransactionUpdateManyWithoutBookingNestedInput
     tickets?: TicketUpdateManyWithoutBookingNestedInput
     couponUsages?: CouponUsageUpdateManyWithoutBookingNestedInput
     participants?: BookingParticipantUpdateManyWithoutBookingNestedInput
@@ -44798,6 +46359,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     payments?: PaymentUncheckedUpdateManyWithoutBookingNestedInput
+    transactions?: TransactionUncheckedUpdateManyWithoutBookingNestedInput
     tickets?: TicketUncheckedUpdateManyWithoutBookingNestedInput
     couponUsages?: CouponUsageUncheckedUpdateManyWithoutBookingNestedInput
     participants?: BookingParticipantUncheckedUpdateManyWithoutBookingNestedInput
@@ -44973,6 +46535,123 @@ export namespace Prisma {
     amount?: FloatFieldUpdateOperationsInput | number
     method?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TransactionCreateInput = {
+    id?: string
+    gateway: string
+    gatewayOrderId?: string | null
+    gatewayPaymentId?: string | null
+    gatewaySignature?: string | null
+    amount: number
+    currency?: string
+    status?: string
+    errorMessage?: string | null
+    metadata?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    booking?: BookingCreateNestedOneWithoutTransactionsInput
+    member?: MemberCreateNestedOneWithoutTransactionsInput
+  }
+
+  export type TransactionUncheckedCreateInput = {
+    id?: string
+    bookingId?: string | null
+    memberId?: string | null
+    gateway: string
+    gatewayOrderId?: string | null
+    gatewayPaymentId?: string | null
+    gatewaySignature?: string | null
+    amount: number
+    currency?: string
+    status?: string
+    errorMessage?: string | null
+    metadata?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type TransactionUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    gateway?: StringFieldUpdateOperationsInput | string
+    gatewayOrderId?: NullableStringFieldUpdateOperationsInput | string | null
+    gatewayPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+    gatewaySignature?: NullableStringFieldUpdateOperationsInput | string | null
+    amount?: FloatFieldUpdateOperationsInput | number
+    currency?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    booking?: BookingUpdateOneWithoutTransactionsNestedInput
+    member?: MemberUpdateOneWithoutTransactionsNestedInput
+  }
+
+  export type TransactionUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    bookingId?: NullableStringFieldUpdateOperationsInput | string | null
+    memberId?: NullableStringFieldUpdateOperationsInput | string | null
+    gateway?: StringFieldUpdateOperationsInput | string
+    gatewayOrderId?: NullableStringFieldUpdateOperationsInput | string | null
+    gatewayPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+    gatewaySignature?: NullableStringFieldUpdateOperationsInput | string | null
+    amount?: FloatFieldUpdateOperationsInput | number
+    currency?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TransactionCreateManyInput = {
+    id?: string
+    bookingId?: string | null
+    memberId?: string | null
+    gateway: string
+    gatewayOrderId?: string | null
+    gatewayPaymentId?: string | null
+    gatewaySignature?: string | null
+    amount: number
+    currency?: string
+    status?: string
+    errorMessage?: string | null
+    metadata?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type TransactionUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    gateway?: StringFieldUpdateOperationsInput | string
+    gatewayOrderId?: NullableStringFieldUpdateOperationsInput | string | null
+    gatewayPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+    gatewaySignature?: NullableStringFieldUpdateOperationsInput | string | null
+    amount?: FloatFieldUpdateOperationsInput | number
+    currency?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TransactionUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    bookingId?: NullableStringFieldUpdateOperationsInput | string | null
+    memberId?: NullableStringFieldUpdateOperationsInput | string | null
+    gateway?: StringFieldUpdateOperationsInput | string
+    gatewayOrderId?: NullableStringFieldUpdateOperationsInput | string | null
+    gatewayPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+    gatewaySignature?: NullableStringFieldUpdateOperationsInput | string | null
+    amount?: FloatFieldUpdateOperationsInput | number
+    currency?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type DisplaySessionCreateInput = {
@@ -46630,6 +48309,12 @@ export namespace Prisma {
     none?: WalletTransactionWhereInput
   }
 
+  export type TransactionListRelationFilter = {
+    every?: TransactionWhereInput
+    some?: TransactionWhereInput
+    none?: TransactionWhereInput
+  }
+
   export type CouponAssignmentListRelationFilter = {
     every?: CouponAssignmentWhereInput
     some?: CouponAssignmentWhereInput
@@ -46679,6 +48364,10 @@ export namespace Prisma {
   }
 
   export type WalletTransactionOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type TransactionOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -47397,6 +49086,75 @@ export namespace Prisma {
   }
 
   export type PaymentSumOrderByAggregateInput = {
+    amount?: SortOrder
+  }
+
+  export type BookingNullableScalarRelationFilter = {
+    is?: BookingWhereInput | null
+    isNot?: BookingWhereInput | null
+  }
+
+  export type MemberNullableScalarRelationFilter = {
+    is?: MemberWhereInput | null
+    isNot?: MemberWhereInput | null
+  }
+
+  export type TransactionCountOrderByAggregateInput = {
+    id?: SortOrder
+    bookingId?: SortOrder
+    memberId?: SortOrder
+    gateway?: SortOrder
+    gatewayOrderId?: SortOrder
+    gatewayPaymentId?: SortOrder
+    gatewaySignature?: SortOrder
+    amount?: SortOrder
+    currency?: SortOrder
+    status?: SortOrder
+    errorMessage?: SortOrder
+    metadata?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type TransactionAvgOrderByAggregateInput = {
+    amount?: SortOrder
+  }
+
+  export type TransactionMaxOrderByAggregateInput = {
+    id?: SortOrder
+    bookingId?: SortOrder
+    memberId?: SortOrder
+    gateway?: SortOrder
+    gatewayOrderId?: SortOrder
+    gatewayPaymentId?: SortOrder
+    gatewaySignature?: SortOrder
+    amount?: SortOrder
+    currency?: SortOrder
+    status?: SortOrder
+    errorMessage?: SortOrder
+    metadata?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type TransactionMinOrderByAggregateInput = {
+    id?: SortOrder
+    bookingId?: SortOrder
+    memberId?: SortOrder
+    gateway?: SortOrder
+    gatewayOrderId?: SortOrder
+    gatewayPaymentId?: SortOrder
+    gatewaySignature?: SortOrder
+    amount?: SortOrder
+    currency?: SortOrder
+    status?: SortOrder
+    errorMessage?: SortOrder
+    metadata?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type TransactionSumOrderByAggregateInput = {
     amount?: SortOrder
   }
 
@@ -48275,6 +50033,13 @@ export namespace Prisma {
     connect?: WalletTransactionWhereUniqueInput | WalletTransactionWhereUniqueInput[]
   }
 
+  export type TransactionCreateNestedManyWithoutMemberInput = {
+    create?: XOR<TransactionCreateWithoutMemberInput, TransactionUncheckedCreateWithoutMemberInput> | TransactionCreateWithoutMemberInput[] | TransactionUncheckedCreateWithoutMemberInput[]
+    connectOrCreate?: TransactionCreateOrConnectWithoutMemberInput | TransactionCreateOrConnectWithoutMemberInput[]
+    createMany?: TransactionCreateManyMemberInputEnvelope
+    connect?: TransactionWhereUniqueInput | TransactionWhereUniqueInput[]
+  }
+
   export type CouponAssignmentCreateNestedManyWithoutMemberInput = {
     create?: XOR<CouponAssignmentCreateWithoutMemberInput, CouponAssignmentUncheckedCreateWithoutMemberInput> | CouponAssignmentCreateWithoutMemberInput[] | CouponAssignmentUncheckedCreateWithoutMemberInput[]
     connectOrCreate?: CouponAssignmentCreateOrConnectWithoutMemberInput | CouponAssignmentCreateOrConnectWithoutMemberInput[]
@@ -48350,6 +50115,13 @@ export namespace Prisma {
     connectOrCreate?: WalletTransactionCreateOrConnectWithoutMemberInput | WalletTransactionCreateOrConnectWithoutMemberInput[]
     createMany?: WalletTransactionCreateManyMemberInputEnvelope
     connect?: WalletTransactionWhereUniqueInput | WalletTransactionWhereUniqueInput[]
+  }
+
+  export type TransactionUncheckedCreateNestedManyWithoutMemberInput = {
+    create?: XOR<TransactionCreateWithoutMemberInput, TransactionUncheckedCreateWithoutMemberInput> | TransactionCreateWithoutMemberInput[] | TransactionUncheckedCreateWithoutMemberInput[]
+    connectOrCreate?: TransactionCreateOrConnectWithoutMemberInput | TransactionCreateOrConnectWithoutMemberInput[]
+    createMany?: TransactionCreateManyMemberInputEnvelope
+    connect?: TransactionWhereUniqueInput | TransactionWhereUniqueInput[]
   }
 
   export type CouponAssignmentUncheckedCreateNestedManyWithoutMemberInput = {
@@ -48508,6 +50280,20 @@ export namespace Prisma {
     deleteMany?: WalletTransactionScalarWhereInput | WalletTransactionScalarWhereInput[]
   }
 
+  export type TransactionUpdateManyWithoutMemberNestedInput = {
+    create?: XOR<TransactionCreateWithoutMemberInput, TransactionUncheckedCreateWithoutMemberInput> | TransactionCreateWithoutMemberInput[] | TransactionUncheckedCreateWithoutMemberInput[]
+    connectOrCreate?: TransactionCreateOrConnectWithoutMemberInput | TransactionCreateOrConnectWithoutMemberInput[]
+    upsert?: TransactionUpsertWithWhereUniqueWithoutMemberInput | TransactionUpsertWithWhereUniqueWithoutMemberInput[]
+    createMany?: TransactionCreateManyMemberInputEnvelope
+    set?: TransactionWhereUniqueInput | TransactionWhereUniqueInput[]
+    disconnect?: TransactionWhereUniqueInput | TransactionWhereUniqueInput[]
+    delete?: TransactionWhereUniqueInput | TransactionWhereUniqueInput[]
+    connect?: TransactionWhereUniqueInput | TransactionWhereUniqueInput[]
+    update?: TransactionUpdateWithWhereUniqueWithoutMemberInput | TransactionUpdateWithWhereUniqueWithoutMemberInput[]
+    updateMany?: TransactionUpdateManyWithWhereWithoutMemberInput | TransactionUpdateManyWithWhereWithoutMemberInput[]
+    deleteMany?: TransactionScalarWhereInput | TransactionScalarWhereInput[]
+  }
+
   export type CouponAssignmentUpdateManyWithoutMemberNestedInput = {
     create?: XOR<CouponAssignmentCreateWithoutMemberInput, CouponAssignmentUncheckedCreateWithoutMemberInput> | CouponAssignmentCreateWithoutMemberInput[] | CouponAssignmentUncheckedCreateWithoutMemberInput[]
     connectOrCreate?: CouponAssignmentCreateOrConnectWithoutMemberInput | CouponAssignmentCreateOrConnectWithoutMemberInput[]
@@ -48660,6 +50446,20 @@ export namespace Prisma {
     update?: WalletTransactionUpdateWithWhereUniqueWithoutMemberInput | WalletTransactionUpdateWithWhereUniqueWithoutMemberInput[]
     updateMany?: WalletTransactionUpdateManyWithWhereWithoutMemberInput | WalletTransactionUpdateManyWithWhereWithoutMemberInput[]
     deleteMany?: WalletTransactionScalarWhereInput | WalletTransactionScalarWhereInput[]
+  }
+
+  export type TransactionUncheckedUpdateManyWithoutMemberNestedInput = {
+    create?: XOR<TransactionCreateWithoutMemberInput, TransactionUncheckedCreateWithoutMemberInput> | TransactionCreateWithoutMemberInput[] | TransactionUncheckedCreateWithoutMemberInput[]
+    connectOrCreate?: TransactionCreateOrConnectWithoutMemberInput | TransactionCreateOrConnectWithoutMemberInput[]
+    upsert?: TransactionUpsertWithWhereUniqueWithoutMemberInput | TransactionUpsertWithWhereUniqueWithoutMemberInput[]
+    createMany?: TransactionCreateManyMemberInputEnvelope
+    set?: TransactionWhereUniqueInput | TransactionWhereUniqueInput[]
+    disconnect?: TransactionWhereUniqueInput | TransactionWhereUniqueInput[]
+    delete?: TransactionWhereUniqueInput | TransactionWhereUniqueInput[]
+    connect?: TransactionWhereUniqueInput | TransactionWhereUniqueInput[]
+    update?: TransactionUpdateWithWhereUniqueWithoutMemberInput | TransactionUpdateWithWhereUniqueWithoutMemberInput[]
+    updateMany?: TransactionUpdateManyWithWhereWithoutMemberInput | TransactionUpdateManyWithWhereWithoutMemberInput[]
+    deleteMany?: TransactionScalarWhereInput | TransactionScalarWhereInput[]
   }
 
   export type CouponAssignmentUncheckedUpdateManyWithoutMemberNestedInput = {
@@ -49467,6 +51267,13 @@ export namespace Prisma {
     connect?: PaymentWhereUniqueInput | PaymentWhereUniqueInput[]
   }
 
+  export type TransactionCreateNestedManyWithoutBookingInput = {
+    create?: XOR<TransactionCreateWithoutBookingInput, TransactionUncheckedCreateWithoutBookingInput> | TransactionCreateWithoutBookingInput[] | TransactionUncheckedCreateWithoutBookingInput[]
+    connectOrCreate?: TransactionCreateOrConnectWithoutBookingInput | TransactionCreateOrConnectWithoutBookingInput[]
+    createMany?: TransactionCreateManyBookingInputEnvelope
+    connect?: TransactionWhereUniqueInput | TransactionWhereUniqueInput[]
+  }
+
   export type TicketCreateNestedManyWithoutBookingInput = {
     create?: XOR<TicketCreateWithoutBookingInput, TicketUncheckedCreateWithoutBookingInput> | TicketCreateWithoutBookingInput[] | TicketUncheckedCreateWithoutBookingInput[]
     connectOrCreate?: TicketCreateOrConnectWithoutBookingInput | TicketCreateOrConnectWithoutBookingInput[]
@@ -49493,6 +51300,13 @@ export namespace Prisma {
     connectOrCreate?: PaymentCreateOrConnectWithoutBookingInput | PaymentCreateOrConnectWithoutBookingInput[]
     createMany?: PaymentCreateManyBookingInputEnvelope
     connect?: PaymentWhereUniqueInput | PaymentWhereUniqueInput[]
+  }
+
+  export type TransactionUncheckedCreateNestedManyWithoutBookingInput = {
+    create?: XOR<TransactionCreateWithoutBookingInput, TransactionUncheckedCreateWithoutBookingInput> | TransactionCreateWithoutBookingInput[] | TransactionUncheckedCreateWithoutBookingInput[]
+    connectOrCreate?: TransactionCreateOrConnectWithoutBookingInput | TransactionCreateOrConnectWithoutBookingInput[]
+    createMany?: TransactionCreateManyBookingInputEnvelope
+    connect?: TransactionWhereUniqueInput | TransactionWhereUniqueInput[]
   }
 
   export type TicketUncheckedCreateNestedManyWithoutBookingInput = {
@@ -49554,6 +51368,20 @@ export namespace Prisma {
     deleteMany?: PaymentScalarWhereInput | PaymentScalarWhereInput[]
   }
 
+  export type TransactionUpdateManyWithoutBookingNestedInput = {
+    create?: XOR<TransactionCreateWithoutBookingInput, TransactionUncheckedCreateWithoutBookingInput> | TransactionCreateWithoutBookingInput[] | TransactionUncheckedCreateWithoutBookingInput[]
+    connectOrCreate?: TransactionCreateOrConnectWithoutBookingInput | TransactionCreateOrConnectWithoutBookingInput[]
+    upsert?: TransactionUpsertWithWhereUniqueWithoutBookingInput | TransactionUpsertWithWhereUniqueWithoutBookingInput[]
+    createMany?: TransactionCreateManyBookingInputEnvelope
+    set?: TransactionWhereUniqueInput | TransactionWhereUniqueInput[]
+    disconnect?: TransactionWhereUniqueInput | TransactionWhereUniqueInput[]
+    delete?: TransactionWhereUniqueInput | TransactionWhereUniqueInput[]
+    connect?: TransactionWhereUniqueInput | TransactionWhereUniqueInput[]
+    update?: TransactionUpdateWithWhereUniqueWithoutBookingInput | TransactionUpdateWithWhereUniqueWithoutBookingInput[]
+    updateMany?: TransactionUpdateManyWithWhereWithoutBookingInput | TransactionUpdateManyWithWhereWithoutBookingInput[]
+    deleteMany?: TransactionScalarWhereInput | TransactionScalarWhereInput[]
+  }
+
   export type TicketUpdateManyWithoutBookingNestedInput = {
     create?: XOR<TicketCreateWithoutBookingInput, TicketUncheckedCreateWithoutBookingInput> | TicketCreateWithoutBookingInput[] | TicketUncheckedCreateWithoutBookingInput[]
     connectOrCreate?: TicketCreateOrConnectWithoutBookingInput | TicketCreateOrConnectWithoutBookingInput[]
@@ -49608,6 +51436,20 @@ export namespace Prisma {
     update?: PaymentUpdateWithWhereUniqueWithoutBookingInput | PaymentUpdateWithWhereUniqueWithoutBookingInput[]
     updateMany?: PaymentUpdateManyWithWhereWithoutBookingInput | PaymentUpdateManyWithWhereWithoutBookingInput[]
     deleteMany?: PaymentScalarWhereInput | PaymentScalarWhereInput[]
+  }
+
+  export type TransactionUncheckedUpdateManyWithoutBookingNestedInput = {
+    create?: XOR<TransactionCreateWithoutBookingInput, TransactionUncheckedCreateWithoutBookingInput> | TransactionCreateWithoutBookingInput[] | TransactionUncheckedCreateWithoutBookingInput[]
+    connectOrCreate?: TransactionCreateOrConnectWithoutBookingInput | TransactionCreateOrConnectWithoutBookingInput[]
+    upsert?: TransactionUpsertWithWhereUniqueWithoutBookingInput | TransactionUpsertWithWhereUniqueWithoutBookingInput[]
+    createMany?: TransactionCreateManyBookingInputEnvelope
+    set?: TransactionWhereUniqueInput | TransactionWhereUniqueInput[]
+    disconnect?: TransactionWhereUniqueInput | TransactionWhereUniqueInput[]
+    delete?: TransactionWhereUniqueInput | TransactionWhereUniqueInput[]
+    connect?: TransactionWhereUniqueInput | TransactionWhereUniqueInput[]
+    update?: TransactionUpdateWithWhereUniqueWithoutBookingInput | TransactionUpdateWithWhereUniqueWithoutBookingInput[]
+    updateMany?: TransactionUpdateManyWithWhereWithoutBookingInput | TransactionUpdateManyWithWhereWithoutBookingInput[]
+    deleteMany?: TransactionScalarWhereInput | TransactionScalarWhereInput[]
   }
 
   export type TicketUncheckedUpdateManyWithoutBookingNestedInput = {
@@ -49692,6 +51534,38 @@ export namespace Prisma {
     upsert?: BookingUpsertWithoutPaymentsInput
     connect?: BookingWhereUniqueInput
     update?: XOR<XOR<BookingUpdateToOneWithWhereWithoutPaymentsInput, BookingUpdateWithoutPaymentsInput>, BookingUncheckedUpdateWithoutPaymentsInput>
+  }
+
+  export type BookingCreateNestedOneWithoutTransactionsInput = {
+    create?: XOR<BookingCreateWithoutTransactionsInput, BookingUncheckedCreateWithoutTransactionsInput>
+    connectOrCreate?: BookingCreateOrConnectWithoutTransactionsInput
+    connect?: BookingWhereUniqueInput
+  }
+
+  export type MemberCreateNestedOneWithoutTransactionsInput = {
+    create?: XOR<MemberCreateWithoutTransactionsInput, MemberUncheckedCreateWithoutTransactionsInput>
+    connectOrCreate?: MemberCreateOrConnectWithoutTransactionsInput
+    connect?: MemberWhereUniqueInput
+  }
+
+  export type BookingUpdateOneWithoutTransactionsNestedInput = {
+    create?: XOR<BookingCreateWithoutTransactionsInput, BookingUncheckedCreateWithoutTransactionsInput>
+    connectOrCreate?: BookingCreateOrConnectWithoutTransactionsInput
+    upsert?: BookingUpsertWithoutTransactionsInput
+    disconnect?: BookingWhereInput | boolean
+    delete?: BookingWhereInput | boolean
+    connect?: BookingWhereUniqueInput
+    update?: XOR<XOR<BookingUpdateToOneWithWhereWithoutTransactionsInput, BookingUpdateWithoutTransactionsInput>, BookingUncheckedUpdateWithoutTransactionsInput>
+  }
+
+  export type MemberUpdateOneWithoutTransactionsNestedInput = {
+    create?: XOR<MemberCreateWithoutTransactionsInput, MemberUncheckedCreateWithoutTransactionsInput>
+    connectOrCreate?: MemberCreateOrConnectWithoutTransactionsInput
+    upsert?: MemberUpsertWithoutTransactionsInput
+    disconnect?: MemberWhereInput | boolean
+    delete?: MemberWhereInput | boolean
+    connect?: MemberWhereUniqueInput
+    update?: XOR<XOR<MemberUpdateToOneWithWhereWithoutTransactionsInput, MemberUpdateWithoutTransactionsInput>, MemberUncheckedUpdateWithoutTransactionsInput>
   }
 
   export type BookingCreateNestedOneWithoutTicketsInput = {
@@ -50458,6 +52332,7 @@ export namespace Prisma {
     loyaltyHistory?: LoyaltyHistoryCreateNestedManyWithoutMemberInput
     tournamentRegistrations?: TournamentRegistrationCreateNestedManyWithoutRegisteredByInput
     walletTransactions?: WalletTransactionCreateNestedManyWithoutMemberInput
+    transactions?: TransactionCreateNestedManyWithoutMemberInput
     couponAssignments?: CouponAssignmentCreateNestedManyWithoutMemberInput
     couponUsages?: CouponUsageCreateNestedManyWithoutMemberInput
     loyaltyAchievements?: LoyaltyAchievementCreateNestedManyWithoutMemberInput
@@ -50482,6 +52357,7 @@ export namespace Prisma {
     loyaltyHistory?: LoyaltyHistoryUncheckedCreateNestedManyWithoutMemberInput
     tournamentRegistrations?: TournamentRegistrationUncheckedCreateNestedManyWithoutRegisteredByInput
     walletTransactions?: WalletTransactionUncheckedCreateNestedManyWithoutMemberInput
+    transactions?: TransactionUncheckedCreateNestedManyWithoutMemberInput
     couponAssignments?: CouponAssignmentUncheckedCreateNestedManyWithoutMemberInput
     couponUsages?: CouponUsageUncheckedCreateNestedManyWithoutMemberInput
     loyaltyAchievements?: LoyaltyAchievementUncheckedCreateNestedManyWithoutMemberInput
@@ -50633,6 +52509,7 @@ export namespace Prisma {
     turf: TurfCreateNestedOneWithoutBookingsInput
     sport: SportCreateNestedOneWithoutBookingsInput
     payments?: PaymentCreateNestedManyWithoutBookingInput
+    transactions?: TransactionCreateNestedManyWithoutBookingInput
     tickets?: TicketCreateNestedManyWithoutBookingInput
     couponUsages?: CouponUsageCreateNestedManyWithoutBookingInput
     participants?: BookingParticipantCreateNestedManyWithoutBookingInput
@@ -50658,6 +52535,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     payments?: PaymentUncheckedCreateNestedManyWithoutBookingInput
+    transactions?: TransactionUncheckedCreateNestedManyWithoutBookingInput
     tickets?: TicketUncheckedCreateNestedManyWithoutBookingInput
     couponUsages?: CouponUsageUncheckedCreateNestedManyWithoutBookingInput
     participants?: BookingParticipantUncheckedCreateNestedManyWithoutBookingInput
@@ -50780,6 +52658,47 @@ export namespace Prisma {
 
   export type WalletTransactionCreateManyMemberInputEnvelope = {
     data: WalletTransactionCreateManyMemberInput | WalletTransactionCreateManyMemberInput[]
+  }
+
+  export type TransactionCreateWithoutMemberInput = {
+    id?: string
+    gateway: string
+    gatewayOrderId?: string | null
+    gatewayPaymentId?: string | null
+    gatewaySignature?: string | null
+    amount: number
+    currency?: string
+    status?: string
+    errorMessage?: string | null
+    metadata?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    booking?: BookingCreateNestedOneWithoutTransactionsInput
+  }
+
+  export type TransactionUncheckedCreateWithoutMemberInput = {
+    id?: string
+    bookingId?: string | null
+    gateway: string
+    gatewayOrderId?: string | null
+    gatewayPaymentId?: string | null
+    gatewaySignature?: string | null
+    amount: number
+    currency?: string
+    status?: string
+    errorMessage?: string | null
+    metadata?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type TransactionCreateOrConnectWithoutMemberInput = {
+    where: TransactionWhereUniqueInput
+    create: XOR<TransactionCreateWithoutMemberInput, TransactionUncheckedCreateWithoutMemberInput>
+  }
+
+  export type TransactionCreateManyMemberInputEnvelope = {
+    data: TransactionCreateManyMemberInput | TransactionCreateManyMemberInput[]
   }
 
   export type CouponAssignmentCreateWithoutMemberInput = {
@@ -51119,6 +53038,42 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"WalletTransaction"> | Date | string
   }
 
+  export type TransactionUpsertWithWhereUniqueWithoutMemberInput = {
+    where: TransactionWhereUniqueInput
+    update: XOR<TransactionUpdateWithoutMemberInput, TransactionUncheckedUpdateWithoutMemberInput>
+    create: XOR<TransactionCreateWithoutMemberInput, TransactionUncheckedCreateWithoutMemberInput>
+  }
+
+  export type TransactionUpdateWithWhereUniqueWithoutMemberInput = {
+    where: TransactionWhereUniqueInput
+    data: XOR<TransactionUpdateWithoutMemberInput, TransactionUncheckedUpdateWithoutMemberInput>
+  }
+
+  export type TransactionUpdateManyWithWhereWithoutMemberInput = {
+    where: TransactionScalarWhereInput
+    data: XOR<TransactionUpdateManyMutationInput, TransactionUncheckedUpdateManyWithoutMemberInput>
+  }
+
+  export type TransactionScalarWhereInput = {
+    AND?: TransactionScalarWhereInput | TransactionScalarWhereInput[]
+    OR?: TransactionScalarWhereInput[]
+    NOT?: TransactionScalarWhereInput | TransactionScalarWhereInput[]
+    id?: StringFilter<"Transaction"> | string
+    bookingId?: StringNullableFilter<"Transaction"> | string | null
+    memberId?: StringNullableFilter<"Transaction"> | string | null
+    gateway?: StringFilter<"Transaction"> | string
+    gatewayOrderId?: StringNullableFilter<"Transaction"> | string | null
+    gatewayPaymentId?: StringNullableFilter<"Transaction"> | string | null
+    gatewaySignature?: StringNullableFilter<"Transaction"> | string | null
+    amount?: FloatFilter<"Transaction"> | number
+    currency?: StringFilter<"Transaction"> | string
+    status?: StringFilter<"Transaction"> | string
+    errorMessage?: StringNullableFilter<"Transaction"> | string | null
+    metadata?: StringNullableFilter<"Transaction"> | string | null
+    createdAt?: DateTimeFilter<"Transaction"> | Date | string
+    updatedAt?: DateTimeFilter<"Transaction"> | Date | string
+  }
+
   export type CouponAssignmentUpsertWithWhereUniqueWithoutMemberInput = {
     where: CouponAssignmentWhereUniqueInput
     update: XOR<CouponAssignmentUpdateWithoutMemberInput, CouponAssignmentUncheckedUpdateWithoutMemberInput>
@@ -51245,6 +53200,7 @@ export namespace Prisma {
     joinedBookings?: BookingParticipantCreateNestedManyWithoutMemberInput
     tournamentRegistrations?: TournamentRegistrationCreateNestedManyWithoutRegisteredByInput
     walletTransactions?: WalletTransactionCreateNestedManyWithoutMemberInput
+    transactions?: TransactionCreateNestedManyWithoutMemberInput
     couponAssignments?: CouponAssignmentCreateNestedManyWithoutMemberInput
     couponUsages?: CouponUsageCreateNestedManyWithoutMemberInput
     loyaltyAchievements?: LoyaltyAchievementCreateNestedManyWithoutMemberInput
@@ -51269,6 +53225,7 @@ export namespace Prisma {
     joinedBookings?: BookingParticipantUncheckedCreateNestedManyWithoutMemberInput
     tournamentRegistrations?: TournamentRegistrationUncheckedCreateNestedManyWithoutRegisteredByInput
     walletTransactions?: WalletTransactionUncheckedCreateNestedManyWithoutMemberInput
+    transactions?: TransactionUncheckedCreateNestedManyWithoutMemberInput
     couponAssignments?: CouponAssignmentUncheckedCreateNestedManyWithoutMemberInput
     couponUsages?: CouponUsageUncheckedCreateNestedManyWithoutMemberInput
     loyaltyAchievements?: LoyaltyAchievementUncheckedCreateNestedManyWithoutMemberInput
@@ -51309,6 +53266,7 @@ export namespace Prisma {
     joinedBookings?: BookingParticipantUpdateManyWithoutMemberNestedInput
     tournamentRegistrations?: TournamentRegistrationUpdateManyWithoutRegisteredByNestedInput
     walletTransactions?: WalletTransactionUpdateManyWithoutMemberNestedInput
+    transactions?: TransactionUpdateManyWithoutMemberNestedInput
     couponAssignments?: CouponAssignmentUpdateManyWithoutMemberNestedInput
     couponUsages?: CouponUsageUpdateManyWithoutMemberNestedInput
     loyaltyAchievements?: LoyaltyAchievementUpdateManyWithoutMemberNestedInput
@@ -51333,6 +53291,7 @@ export namespace Prisma {
     joinedBookings?: BookingParticipantUncheckedUpdateManyWithoutMemberNestedInput
     tournamentRegistrations?: TournamentRegistrationUncheckedUpdateManyWithoutRegisteredByNestedInput
     walletTransactions?: WalletTransactionUncheckedUpdateManyWithoutMemberNestedInput
+    transactions?: TransactionUncheckedUpdateManyWithoutMemberNestedInput
     couponAssignments?: CouponAssignmentUncheckedUpdateManyWithoutMemberNestedInput
     couponUsages?: CouponUsageUncheckedUpdateManyWithoutMemberNestedInput
     loyaltyAchievements?: LoyaltyAchievementUncheckedUpdateManyWithoutMemberNestedInput
@@ -51446,6 +53405,7 @@ export namespace Prisma {
     turf: TurfCreateNestedOneWithoutBookingsInput
     member: MemberCreateNestedOneWithoutBookingsInput
     payments?: PaymentCreateNestedManyWithoutBookingInput
+    transactions?: TransactionCreateNestedManyWithoutBookingInput
     tickets?: TicketCreateNestedManyWithoutBookingInput
     couponUsages?: CouponUsageCreateNestedManyWithoutBookingInput
     participants?: BookingParticipantCreateNestedManyWithoutBookingInput
@@ -51471,6 +53431,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     payments?: PaymentUncheckedCreateNestedManyWithoutBookingInput
+    transactions?: TransactionUncheckedCreateNestedManyWithoutBookingInput
     tickets?: TicketUncheckedCreateNestedManyWithoutBookingInput
     couponUsages?: CouponUsageUncheckedCreateNestedManyWithoutBookingInput
     participants?: BookingParticipantUncheckedCreateNestedManyWithoutBookingInput
@@ -51892,6 +53853,7 @@ export namespace Prisma {
     member: MemberCreateNestedOneWithoutBookingsInput
     sport: SportCreateNestedOneWithoutBookingsInput
     payments?: PaymentCreateNestedManyWithoutBookingInput
+    transactions?: TransactionCreateNestedManyWithoutBookingInput
     tickets?: TicketCreateNestedManyWithoutBookingInput
     couponUsages?: CouponUsageCreateNestedManyWithoutBookingInput
     participants?: BookingParticipantCreateNestedManyWithoutBookingInput
@@ -51917,6 +53879,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     payments?: PaymentUncheckedCreateNestedManyWithoutBookingInput
+    transactions?: TransactionUncheckedCreateNestedManyWithoutBookingInput
     tickets?: TicketUncheckedCreateNestedManyWithoutBookingInput
     couponUsages?: CouponUsageUncheckedCreateNestedManyWithoutBookingInput
     participants?: BookingParticipantUncheckedCreateNestedManyWithoutBookingInput
@@ -52457,6 +54420,7 @@ export namespace Prisma {
     loyaltyHistory?: LoyaltyHistoryCreateNestedManyWithoutMemberInput
     tournamentRegistrations?: TournamentRegistrationCreateNestedManyWithoutRegisteredByInput
     walletTransactions?: WalletTransactionCreateNestedManyWithoutMemberInput
+    transactions?: TransactionCreateNestedManyWithoutMemberInput
     couponAssignments?: CouponAssignmentCreateNestedManyWithoutMemberInput
     couponUsages?: CouponUsageCreateNestedManyWithoutMemberInput
     loyaltyAchievements?: LoyaltyAchievementCreateNestedManyWithoutMemberInput
@@ -52481,6 +54445,7 @@ export namespace Prisma {
     loyaltyHistory?: LoyaltyHistoryUncheckedCreateNestedManyWithoutMemberInput
     tournamentRegistrations?: TournamentRegistrationUncheckedCreateNestedManyWithoutRegisteredByInput
     walletTransactions?: WalletTransactionUncheckedCreateNestedManyWithoutMemberInput
+    transactions?: TransactionUncheckedCreateNestedManyWithoutMemberInput
     couponAssignments?: CouponAssignmentUncheckedCreateNestedManyWithoutMemberInput
     couponUsages?: CouponUsageUncheckedCreateNestedManyWithoutMemberInput
     loyaltyAchievements?: LoyaltyAchievementUncheckedCreateNestedManyWithoutMemberInput
@@ -52599,6 +54564,7 @@ export namespace Prisma {
     loyaltyHistory?: LoyaltyHistoryUpdateManyWithoutMemberNestedInput
     tournamentRegistrations?: TournamentRegistrationUpdateManyWithoutRegisteredByNestedInput
     walletTransactions?: WalletTransactionUpdateManyWithoutMemberNestedInput
+    transactions?: TransactionUpdateManyWithoutMemberNestedInput
     couponAssignments?: CouponAssignmentUpdateManyWithoutMemberNestedInput
     couponUsages?: CouponUsageUpdateManyWithoutMemberNestedInput
     loyaltyAchievements?: LoyaltyAchievementUpdateManyWithoutMemberNestedInput
@@ -52623,6 +54589,7 @@ export namespace Prisma {
     loyaltyHistory?: LoyaltyHistoryUncheckedUpdateManyWithoutMemberNestedInput
     tournamentRegistrations?: TournamentRegistrationUncheckedUpdateManyWithoutRegisteredByNestedInput
     walletTransactions?: WalletTransactionUncheckedUpdateManyWithoutMemberNestedInput
+    transactions?: TransactionUncheckedUpdateManyWithoutMemberNestedInput
     couponAssignments?: CouponAssignmentUncheckedUpdateManyWithoutMemberNestedInput
     couponUsages?: CouponUsageUncheckedUpdateManyWithoutMemberNestedInput
     loyaltyAchievements?: LoyaltyAchievementUncheckedUpdateManyWithoutMemberNestedInput
@@ -52737,6 +54704,7 @@ export namespace Prisma {
     loyaltyHistory?: LoyaltyHistoryCreateNestedManyWithoutMemberInput
     tournamentRegistrations?: TournamentRegistrationCreateNestedManyWithoutRegisteredByInput
     walletTransactions?: WalletTransactionCreateNestedManyWithoutMemberInput
+    transactions?: TransactionCreateNestedManyWithoutMemberInput
     couponAssignments?: CouponAssignmentCreateNestedManyWithoutMemberInput
     couponUsages?: CouponUsageCreateNestedManyWithoutMemberInput
     loyaltyAchievements?: LoyaltyAchievementCreateNestedManyWithoutMemberInput
@@ -52761,6 +54729,7 @@ export namespace Prisma {
     loyaltyHistory?: LoyaltyHistoryUncheckedCreateNestedManyWithoutMemberInput
     tournamentRegistrations?: TournamentRegistrationUncheckedCreateNestedManyWithoutRegisteredByInput
     walletTransactions?: WalletTransactionUncheckedCreateNestedManyWithoutMemberInput
+    transactions?: TransactionUncheckedCreateNestedManyWithoutMemberInput
     couponAssignments?: CouponAssignmentUncheckedCreateNestedManyWithoutMemberInput
     couponUsages?: CouponUsageUncheckedCreateNestedManyWithoutMemberInput
     loyaltyAchievements?: LoyaltyAchievementUncheckedCreateNestedManyWithoutMemberInput
@@ -52875,6 +54844,7 @@ export namespace Prisma {
     loyaltyHistory?: LoyaltyHistoryUpdateManyWithoutMemberNestedInput
     tournamentRegistrations?: TournamentRegistrationUpdateManyWithoutRegisteredByNestedInput
     walletTransactions?: WalletTransactionUpdateManyWithoutMemberNestedInput
+    transactions?: TransactionUpdateManyWithoutMemberNestedInput
     couponAssignments?: CouponAssignmentUpdateManyWithoutMemberNestedInput
     couponUsages?: CouponUsageUpdateManyWithoutMemberNestedInput
     loyaltyAchievements?: LoyaltyAchievementUpdateManyWithoutMemberNestedInput
@@ -52899,6 +54869,7 @@ export namespace Prisma {
     loyaltyHistory?: LoyaltyHistoryUncheckedUpdateManyWithoutMemberNestedInput
     tournamentRegistrations?: TournamentRegistrationUncheckedUpdateManyWithoutRegisteredByNestedInput
     walletTransactions?: WalletTransactionUncheckedUpdateManyWithoutMemberNestedInput
+    transactions?: TransactionUncheckedUpdateManyWithoutMemberNestedInput
     couponAssignments?: CouponAssignmentUncheckedUpdateManyWithoutMemberNestedInput
     couponUsages?: CouponUsageUncheckedUpdateManyWithoutMemberNestedInput
     loyaltyAchievements?: LoyaltyAchievementUncheckedUpdateManyWithoutMemberNestedInput
@@ -53050,6 +55021,7 @@ export namespace Prisma {
     loyaltyHistory?: LoyaltyHistoryCreateNestedManyWithoutMemberInput
     tournamentRegistrations?: TournamentRegistrationCreateNestedManyWithoutRegisteredByInput
     walletTransactions?: WalletTransactionCreateNestedManyWithoutMemberInput
+    transactions?: TransactionCreateNestedManyWithoutMemberInput
     couponAssignments?: CouponAssignmentCreateNestedManyWithoutMemberInput
     couponUsages?: CouponUsageCreateNestedManyWithoutMemberInput
     loyaltyAchievements?: LoyaltyAchievementCreateNestedManyWithoutMemberInput
@@ -53074,6 +55046,7 @@ export namespace Prisma {
     loyaltyHistory?: LoyaltyHistoryUncheckedCreateNestedManyWithoutMemberInput
     tournamentRegistrations?: TournamentRegistrationUncheckedCreateNestedManyWithoutRegisteredByInput
     walletTransactions?: WalletTransactionUncheckedCreateNestedManyWithoutMemberInput
+    transactions?: TransactionUncheckedCreateNestedManyWithoutMemberInput
     couponAssignments?: CouponAssignmentUncheckedCreateNestedManyWithoutMemberInput
     couponUsages?: CouponUsageUncheckedCreateNestedManyWithoutMemberInput
     loyaltyAchievements?: LoyaltyAchievementUncheckedCreateNestedManyWithoutMemberInput
@@ -53143,6 +55116,47 @@ export namespace Prisma {
 
   export type PaymentCreateManyBookingInputEnvelope = {
     data: PaymentCreateManyBookingInput | PaymentCreateManyBookingInput[]
+  }
+
+  export type TransactionCreateWithoutBookingInput = {
+    id?: string
+    gateway: string
+    gatewayOrderId?: string | null
+    gatewayPaymentId?: string | null
+    gatewaySignature?: string | null
+    amount: number
+    currency?: string
+    status?: string
+    errorMessage?: string | null
+    metadata?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    member?: MemberCreateNestedOneWithoutTransactionsInput
+  }
+
+  export type TransactionUncheckedCreateWithoutBookingInput = {
+    id?: string
+    memberId?: string | null
+    gateway: string
+    gatewayOrderId?: string | null
+    gatewayPaymentId?: string | null
+    gatewaySignature?: string | null
+    amount: number
+    currency?: string
+    status?: string
+    errorMessage?: string | null
+    metadata?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type TransactionCreateOrConnectWithoutBookingInput = {
+    where: TransactionWhereUniqueInput
+    create: XOR<TransactionCreateWithoutBookingInput, TransactionUncheckedCreateWithoutBookingInput>
+  }
+
+  export type TransactionCreateManyBookingInputEnvelope = {
+    data: TransactionCreateManyBookingInput | TransactionCreateManyBookingInput[]
   }
 
   export type TicketCreateWithoutBookingInput = {
@@ -53296,6 +55310,7 @@ export namespace Prisma {
     loyaltyHistory?: LoyaltyHistoryUpdateManyWithoutMemberNestedInput
     tournamentRegistrations?: TournamentRegistrationUpdateManyWithoutRegisteredByNestedInput
     walletTransactions?: WalletTransactionUpdateManyWithoutMemberNestedInput
+    transactions?: TransactionUpdateManyWithoutMemberNestedInput
     couponAssignments?: CouponAssignmentUpdateManyWithoutMemberNestedInput
     couponUsages?: CouponUsageUpdateManyWithoutMemberNestedInput
     loyaltyAchievements?: LoyaltyAchievementUpdateManyWithoutMemberNestedInput
@@ -53320,6 +55335,7 @@ export namespace Prisma {
     loyaltyHistory?: LoyaltyHistoryUncheckedUpdateManyWithoutMemberNestedInput
     tournamentRegistrations?: TournamentRegistrationUncheckedUpdateManyWithoutRegisteredByNestedInput
     walletTransactions?: WalletTransactionUncheckedUpdateManyWithoutMemberNestedInput
+    transactions?: TransactionUncheckedUpdateManyWithoutMemberNestedInput
     couponAssignments?: CouponAssignmentUncheckedUpdateManyWithoutMemberNestedInput
     couponUsages?: CouponUsageUncheckedUpdateManyWithoutMemberNestedInput
     loyaltyAchievements?: LoyaltyAchievementUncheckedUpdateManyWithoutMemberNestedInput
@@ -53394,6 +55410,22 @@ export namespace Prisma {
     amount?: FloatFilter<"Payment"> | number
     method?: StringFilter<"Payment"> | string
     createdAt?: DateTimeFilter<"Payment"> | Date | string
+  }
+
+  export type TransactionUpsertWithWhereUniqueWithoutBookingInput = {
+    where: TransactionWhereUniqueInput
+    update: XOR<TransactionUpdateWithoutBookingInput, TransactionUncheckedUpdateWithoutBookingInput>
+    create: XOR<TransactionCreateWithoutBookingInput, TransactionUncheckedCreateWithoutBookingInput>
+  }
+
+  export type TransactionUpdateWithWhereUniqueWithoutBookingInput = {
+    where: TransactionWhereUniqueInput
+    data: XOR<TransactionUpdateWithoutBookingInput, TransactionUncheckedUpdateWithoutBookingInput>
+  }
+
+  export type TransactionUpdateManyWithWhereWithoutBookingInput = {
+    where: TransactionScalarWhereInput
+    data: XOR<TransactionUpdateManyMutationInput, TransactionUncheckedUpdateManyWithoutBookingInput>
   }
 
   export type TicketUpsertWithWhereUniqueWithoutBookingInput = {
@@ -53478,6 +55510,7 @@ export namespace Prisma {
     member: MemberCreateNestedOneWithoutBookingsInput
     sport: SportCreateNestedOneWithoutBookingsInput
     payments?: PaymentCreateNestedManyWithoutBookingInput
+    transactions?: TransactionCreateNestedManyWithoutBookingInput
     tickets?: TicketCreateNestedManyWithoutBookingInput
     couponUsages?: CouponUsageCreateNestedManyWithoutBookingInput
   }
@@ -53503,6 +55536,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     payments?: PaymentUncheckedCreateNestedManyWithoutBookingInput
+    transactions?: TransactionUncheckedCreateNestedManyWithoutBookingInput
     tickets?: TicketUncheckedCreateNestedManyWithoutBookingInput
     couponUsages?: CouponUsageUncheckedCreateNestedManyWithoutBookingInput
   }
@@ -53530,6 +55564,7 @@ export namespace Prisma {
     loyaltyHistory?: LoyaltyHistoryCreateNestedManyWithoutMemberInput
     tournamentRegistrations?: TournamentRegistrationCreateNestedManyWithoutRegisteredByInput
     walletTransactions?: WalletTransactionCreateNestedManyWithoutMemberInput
+    transactions?: TransactionCreateNestedManyWithoutMemberInput
     couponAssignments?: CouponAssignmentCreateNestedManyWithoutMemberInput
     couponUsages?: CouponUsageCreateNestedManyWithoutMemberInput
     loyaltyAchievements?: LoyaltyAchievementCreateNestedManyWithoutMemberInput
@@ -53554,6 +55589,7 @@ export namespace Prisma {
     loyaltyHistory?: LoyaltyHistoryUncheckedCreateNestedManyWithoutMemberInput
     tournamentRegistrations?: TournamentRegistrationUncheckedCreateNestedManyWithoutRegisteredByInput
     walletTransactions?: WalletTransactionUncheckedCreateNestedManyWithoutMemberInput
+    transactions?: TransactionUncheckedCreateNestedManyWithoutMemberInput
     couponAssignments?: CouponAssignmentUncheckedCreateNestedManyWithoutMemberInput
     couponUsages?: CouponUsageUncheckedCreateNestedManyWithoutMemberInput
     loyaltyAchievements?: LoyaltyAchievementUncheckedCreateNestedManyWithoutMemberInput
@@ -53597,6 +55633,7 @@ export namespace Prisma {
     member?: MemberUpdateOneRequiredWithoutBookingsNestedInput
     sport?: SportUpdateOneRequiredWithoutBookingsNestedInput
     payments?: PaymentUpdateManyWithoutBookingNestedInput
+    transactions?: TransactionUpdateManyWithoutBookingNestedInput
     tickets?: TicketUpdateManyWithoutBookingNestedInput
     couponUsages?: CouponUsageUpdateManyWithoutBookingNestedInput
   }
@@ -53622,6 +55659,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     payments?: PaymentUncheckedUpdateManyWithoutBookingNestedInput
+    transactions?: TransactionUncheckedUpdateManyWithoutBookingNestedInput
     tickets?: TicketUncheckedUpdateManyWithoutBookingNestedInput
     couponUsages?: CouponUsageUncheckedUpdateManyWithoutBookingNestedInput
   }
@@ -53655,6 +55693,7 @@ export namespace Prisma {
     loyaltyHistory?: LoyaltyHistoryUpdateManyWithoutMemberNestedInput
     tournamentRegistrations?: TournamentRegistrationUpdateManyWithoutRegisteredByNestedInput
     walletTransactions?: WalletTransactionUpdateManyWithoutMemberNestedInput
+    transactions?: TransactionUpdateManyWithoutMemberNestedInput
     couponAssignments?: CouponAssignmentUpdateManyWithoutMemberNestedInput
     couponUsages?: CouponUsageUpdateManyWithoutMemberNestedInput
     loyaltyAchievements?: LoyaltyAchievementUpdateManyWithoutMemberNestedInput
@@ -53679,6 +55718,7 @@ export namespace Prisma {
     loyaltyHistory?: LoyaltyHistoryUncheckedUpdateManyWithoutMemberNestedInput
     tournamentRegistrations?: TournamentRegistrationUncheckedUpdateManyWithoutRegisteredByNestedInput
     walletTransactions?: WalletTransactionUncheckedUpdateManyWithoutMemberNestedInput
+    transactions?: TransactionUncheckedUpdateManyWithoutMemberNestedInput
     couponAssignments?: CouponAssignmentUncheckedUpdateManyWithoutMemberNestedInput
     couponUsages?: CouponUsageUncheckedUpdateManyWithoutMemberNestedInput
     loyaltyAchievements?: LoyaltyAchievementUncheckedUpdateManyWithoutMemberNestedInput
@@ -53705,6 +55745,7 @@ export namespace Prisma {
     turf: TurfCreateNestedOneWithoutBookingsInput
     member: MemberCreateNestedOneWithoutBookingsInput
     sport: SportCreateNestedOneWithoutBookingsInput
+    transactions?: TransactionCreateNestedManyWithoutBookingInput
     tickets?: TicketCreateNestedManyWithoutBookingInput
     couponUsages?: CouponUsageCreateNestedManyWithoutBookingInput
     participants?: BookingParticipantCreateNestedManyWithoutBookingInput
@@ -53730,6 +55771,7 @@ export namespace Prisma {
     amountDue?: number
     createdAt?: Date | string
     updatedAt?: Date | string
+    transactions?: TransactionUncheckedCreateNestedManyWithoutBookingInput
     tickets?: TicketUncheckedCreateNestedManyWithoutBookingInput
     couponUsages?: CouponUsageUncheckedCreateNestedManyWithoutBookingInput
     participants?: BookingParticipantUncheckedCreateNestedManyWithoutBookingInput
@@ -53771,6 +55813,7 @@ export namespace Prisma {
     turf?: TurfUpdateOneRequiredWithoutBookingsNestedInput
     member?: MemberUpdateOneRequiredWithoutBookingsNestedInput
     sport?: SportUpdateOneRequiredWithoutBookingsNestedInput
+    transactions?: TransactionUpdateManyWithoutBookingNestedInput
     tickets?: TicketUpdateManyWithoutBookingNestedInput
     couponUsages?: CouponUsageUpdateManyWithoutBookingNestedInput
     participants?: BookingParticipantUpdateManyWithoutBookingNestedInput
@@ -53796,9 +55839,246 @@ export namespace Prisma {
     amountDue?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    transactions?: TransactionUncheckedUpdateManyWithoutBookingNestedInput
     tickets?: TicketUncheckedUpdateManyWithoutBookingNestedInput
     couponUsages?: CouponUsageUncheckedUpdateManyWithoutBookingNestedInput
     participants?: BookingParticipantUncheckedUpdateManyWithoutBookingNestedInput
+  }
+
+  export type BookingCreateWithoutTransactionsInput = {
+    id?: string
+    startTime: Date | string
+    endTime: Date | string
+    price: number
+    paymentStatus?: string
+    status?: string
+    participantCount?: number
+    visibility?: string
+    inviteMaxCount?: number | null
+    inviteCode?: string | null
+    pointsRedeemed?: number
+    discountAmount?: number
+    advancePaid?: number
+    amountDue?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    turf: TurfCreateNestedOneWithoutBookingsInput
+    member: MemberCreateNestedOneWithoutBookingsInput
+    sport: SportCreateNestedOneWithoutBookingsInput
+    payments?: PaymentCreateNestedManyWithoutBookingInput
+    tickets?: TicketCreateNestedManyWithoutBookingInput
+    couponUsages?: CouponUsageCreateNestedManyWithoutBookingInput
+    participants?: BookingParticipantCreateNestedManyWithoutBookingInput
+  }
+
+  export type BookingUncheckedCreateWithoutTransactionsInput = {
+    id?: string
+    turfId: string
+    memberId: string
+    sportId: string
+    startTime: Date | string
+    endTime: Date | string
+    price: number
+    paymentStatus?: string
+    status?: string
+    participantCount?: number
+    visibility?: string
+    inviteMaxCount?: number | null
+    inviteCode?: string | null
+    pointsRedeemed?: number
+    discountAmount?: number
+    advancePaid?: number
+    amountDue?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    payments?: PaymentUncheckedCreateNestedManyWithoutBookingInput
+    tickets?: TicketUncheckedCreateNestedManyWithoutBookingInput
+    couponUsages?: CouponUsageUncheckedCreateNestedManyWithoutBookingInput
+    participants?: BookingParticipantUncheckedCreateNestedManyWithoutBookingInput
+  }
+
+  export type BookingCreateOrConnectWithoutTransactionsInput = {
+    where: BookingWhereUniqueInput
+    create: XOR<BookingCreateWithoutTransactionsInput, BookingUncheckedCreateWithoutTransactionsInput>
+  }
+
+  export type MemberCreateWithoutTransactionsInput = {
+    id?: string
+    mobile: string
+    name: string
+    email?: string | null
+    dateOfBirth?: Date | string | null
+    loyaltyPoints?: number
+    walletBalance?: number
+    joinDate?: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    family?: FamilyGroupCreateNestedOneWithoutMembersInput
+    memberships?: MemberMembershipCreateNestedManyWithoutMemberInput
+    attendances?: AttendanceCreateNestedManyWithoutMemberInput
+    bookings?: BookingCreateNestedManyWithoutMemberInput
+    joinedBookings?: BookingParticipantCreateNestedManyWithoutMemberInput
+    loyaltyHistory?: LoyaltyHistoryCreateNestedManyWithoutMemberInput
+    tournamentRegistrations?: TournamentRegistrationCreateNestedManyWithoutRegisteredByInput
+    walletTransactions?: WalletTransactionCreateNestedManyWithoutMemberInput
+    couponAssignments?: CouponAssignmentCreateNestedManyWithoutMemberInput
+    couponUsages?: CouponUsageCreateNestedManyWithoutMemberInput
+    loyaltyAchievements?: LoyaltyAchievementCreateNestedManyWithoutMemberInput
+    sportStats?: UserSportStatCreateNestedManyWithoutMemberInput
+  }
+
+  export type MemberUncheckedCreateWithoutTransactionsInput = {
+    id?: string
+    mobile: string
+    familyId?: string | null
+    name: string
+    email?: string | null
+    dateOfBirth?: Date | string | null
+    loyaltyPoints?: number
+    walletBalance?: number
+    joinDate?: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    memberships?: MemberMembershipUncheckedCreateNestedManyWithoutMemberInput
+    attendances?: AttendanceUncheckedCreateNestedManyWithoutMemberInput
+    bookings?: BookingUncheckedCreateNestedManyWithoutMemberInput
+    joinedBookings?: BookingParticipantUncheckedCreateNestedManyWithoutMemberInput
+    loyaltyHistory?: LoyaltyHistoryUncheckedCreateNestedManyWithoutMemberInput
+    tournamentRegistrations?: TournamentRegistrationUncheckedCreateNestedManyWithoutRegisteredByInput
+    walletTransactions?: WalletTransactionUncheckedCreateNestedManyWithoutMemberInput
+    couponAssignments?: CouponAssignmentUncheckedCreateNestedManyWithoutMemberInput
+    couponUsages?: CouponUsageUncheckedCreateNestedManyWithoutMemberInput
+    loyaltyAchievements?: LoyaltyAchievementUncheckedCreateNestedManyWithoutMemberInput
+    sportStats?: UserSportStatUncheckedCreateNestedManyWithoutMemberInput
+  }
+
+  export type MemberCreateOrConnectWithoutTransactionsInput = {
+    where: MemberWhereUniqueInput
+    create: XOR<MemberCreateWithoutTransactionsInput, MemberUncheckedCreateWithoutTransactionsInput>
+  }
+
+  export type BookingUpsertWithoutTransactionsInput = {
+    update: XOR<BookingUpdateWithoutTransactionsInput, BookingUncheckedUpdateWithoutTransactionsInput>
+    create: XOR<BookingCreateWithoutTransactionsInput, BookingUncheckedCreateWithoutTransactionsInput>
+    where?: BookingWhereInput
+  }
+
+  export type BookingUpdateToOneWithWhereWithoutTransactionsInput = {
+    where?: BookingWhereInput
+    data: XOR<BookingUpdateWithoutTransactionsInput, BookingUncheckedUpdateWithoutTransactionsInput>
+  }
+
+  export type BookingUpdateWithoutTransactionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    startTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    endTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    price?: FloatFieldUpdateOperationsInput | number
+    paymentStatus?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    participantCount?: IntFieldUpdateOperationsInput | number
+    visibility?: StringFieldUpdateOperationsInput | string
+    inviteMaxCount?: NullableIntFieldUpdateOperationsInput | number | null
+    inviteCode?: NullableStringFieldUpdateOperationsInput | string | null
+    pointsRedeemed?: IntFieldUpdateOperationsInput | number
+    discountAmount?: FloatFieldUpdateOperationsInput | number
+    advancePaid?: FloatFieldUpdateOperationsInput | number
+    amountDue?: FloatFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    turf?: TurfUpdateOneRequiredWithoutBookingsNestedInput
+    member?: MemberUpdateOneRequiredWithoutBookingsNestedInput
+    sport?: SportUpdateOneRequiredWithoutBookingsNestedInput
+    payments?: PaymentUpdateManyWithoutBookingNestedInput
+    tickets?: TicketUpdateManyWithoutBookingNestedInput
+    couponUsages?: CouponUsageUpdateManyWithoutBookingNestedInput
+    participants?: BookingParticipantUpdateManyWithoutBookingNestedInput
+  }
+
+  export type BookingUncheckedUpdateWithoutTransactionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    turfId?: StringFieldUpdateOperationsInput | string
+    memberId?: StringFieldUpdateOperationsInput | string
+    sportId?: StringFieldUpdateOperationsInput | string
+    startTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    endTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    price?: FloatFieldUpdateOperationsInput | number
+    paymentStatus?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    participantCount?: IntFieldUpdateOperationsInput | number
+    visibility?: StringFieldUpdateOperationsInput | string
+    inviteMaxCount?: NullableIntFieldUpdateOperationsInput | number | null
+    inviteCode?: NullableStringFieldUpdateOperationsInput | string | null
+    pointsRedeemed?: IntFieldUpdateOperationsInput | number
+    discountAmount?: FloatFieldUpdateOperationsInput | number
+    advancePaid?: FloatFieldUpdateOperationsInput | number
+    amountDue?: FloatFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    payments?: PaymentUncheckedUpdateManyWithoutBookingNestedInput
+    tickets?: TicketUncheckedUpdateManyWithoutBookingNestedInput
+    couponUsages?: CouponUsageUncheckedUpdateManyWithoutBookingNestedInput
+    participants?: BookingParticipantUncheckedUpdateManyWithoutBookingNestedInput
+  }
+
+  export type MemberUpsertWithoutTransactionsInput = {
+    update: XOR<MemberUpdateWithoutTransactionsInput, MemberUncheckedUpdateWithoutTransactionsInput>
+    create: XOR<MemberCreateWithoutTransactionsInput, MemberUncheckedCreateWithoutTransactionsInput>
+    where?: MemberWhereInput
+  }
+
+  export type MemberUpdateToOneWithWhereWithoutTransactionsInput = {
+    where?: MemberWhereInput
+    data: XOR<MemberUpdateWithoutTransactionsInput, MemberUncheckedUpdateWithoutTransactionsInput>
+  }
+
+  export type MemberUpdateWithoutTransactionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    mobile?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    loyaltyPoints?: IntFieldUpdateOperationsInput | number
+    walletBalance?: FloatFieldUpdateOperationsInput | number
+    joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    family?: FamilyGroupUpdateOneWithoutMembersNestedInput
+    memberships?: MemberMembershipUpdateManyWithoutMemberNestedInput
+    attendances?: AttendanceUpdateManyWithoutMemberNestedInput
+    bookings?: BookingUpdateManyWithoutMemberNestedInput
+    joinedBookings?: BookingParticipantUpdateManyWithoutMemberNestedInput
+    loyaltyHistory?: LoyaltyHistoryUpdateManyWithoutMemberNestedInput
+    tournamentRegistrations?: TournamentRegistrationUpdateManyWithoutRegisteredByNestedInput
+    walletTransactions?: WalletTransactionUpdateManyWithoutMemberNestedInput
+    couponAssignments?: CouponAssignmentUpdateManyWithoutMemberNestedInput
+    couponUsages?: CouponUsageUpdateManyWithoutMemberNestedInput
+    loyaltyAchievements?: LoyaltyAchievementUpdateManyWithoutMemberNestedInput
+    sportStats?: UserSportStatUpdateManyWithoutMemberNestedInput
+  }
+
+  export type MemberUncheckedUpdateWithoutTransactionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    mobile?: StringFieldUpdateOperationsInput | string
+    familyId?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    loyaltyPoints?: IntFieldUpdateOperationsInput | number
+    walletBalance?: FloatFieldUpdateOperationsInput | number
+    joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    memberships?: MemberMembershipUncheckedUpdateManyWithoutMemberNestedInput
+    attendances?: AttendanceUncheckedUpdateManyWithoutMemberNestedInput
+    bookings?: BookingUncheckedUpdateManyWithoutMemberNestedInput
+    joinedBookings?: BookingParticipantUncheckedUpdateManyWithoutMemberNestedInput
+    loyaltyHistory?: LoyaltyHistoryUncheckedUpdateManyWithoutMemberNestedInput
+    tournamentRegistrations?: TournamentRegistrationUncheckedUpdateManyWithoutRegisteredByNestedInput
+    walletTransactions?: WalletTransactionUncheckedUpdateManyWithoutMemberNestedInput
+    couponAssignments?: CouponAssignmentUncheckedUpdateManyWithoutMemberNestedInput
+    couponUsages?: CouponUsageUncheckedUpdateManyWithoutMemberNestedInput
+    loyaltyAchievements?: LoyaltyAchievementUncheckedUpdateManyWithoutMemberNestedInput
+    sportStats?: UserSportStatUncheckedUpdateManyWithoutMemberNestedInput
   }
 
   export type BookingCreateWithoutTicketsInput = {
@@ -53822,6 +56102,7 @@ export namespace Prisma {
     member: MemberCreateNestedOneWithoutBookingsInput
     sport: SportCreateNestedOneWithoutBookingsInput
     payments?: PaymentCreateNestedManyWithoutBookingInput
+    transactions?: TransactionCreateNestedManyWithoutBookingInput
     couponUsages?: CouponUsageCreateNestedManyWithoutBookingInput
     participants?: BookingParticipantCreateNestedManyWithoutBookingInput
   }
@@ -53847,6 +56128,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     payments?: PaymentUncheckedCreateNestedManyWithoutBookingInput
+    transactions?: TransactionUncheckedCreateNestedManyWithoutBookingInput
     couponUsages?: CouponUsageUncheckedCreateNestedManyWithoutBookingInput
     participants?: BookingParticipantUncheckedCreateNestedManyWithoutBookingInput
   }
@@ -53888,6 +56170,7 @@ export namespace Prisma {
     member?: MemberUpdateOneRequiredWithoutBookingsNestedInput
     sport?: SportUpdateOneRequiredWithoutBookingsNestedInput
     payments?: PaymentUpdateManyWithoutBookingNestedInput
+    transactions?: TransactionUpdateManyWithoutBookingNestedInput
     couponUsages?: CouponUsageUpdateManyWithoutBookingNestedInput
     participants?: BookingParticipantUpdateManyWithoutBookingNestedInput
   }
@@ -53913,6 +56196,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     payments?: PaymentUncheckedUpdateManyWithoutBookingNestedInput
+    transactions?: TransactionUncheckedUpdateManyWithoutBookingNestedInput
     couponUsages?: CouponUsageUncheckedUpdateManyWithoutBookingNestedInput
     participants?: BookingParticipantUncheckedUpdateManyWithoutBookingNestedInput
   }
@@ -54119,6 +56403,7 @@ export namespace Prisma {
     joinedBookings?: BookingParticipantCreateNestedManyWithoutMemberInput
     loyaltyHistory?: LoyaltyHistoryCreateNestedManyWithoutMemberInput
     walletTransactions?: WalletTransactionCreateNestedManyWithoutMemberInput
+    transactions?: TransactionCreateNestedManyWithoutMemberInput
     couponAssignments?: CouponAssignmentCreateNestedManyWithoutMemberInput
     couponUsages?: CouponUsageCreateNestedManyWithoutMemberInput
     loyaltyAchievements?: LoyaltyAchievementCreateNestedManyWithoutMemberInput
@@ -54143,6 +56428,7 @@ export namespace Prisma {
     joinedBookings?: BookingParticipantUncheckedCreateNestedManyWithoutMemberInput
     loyaltyHistory?: LoyaltyHistoryUncheckedCreateNestedManyWithoutMemberInput
     walletTransactions?: WalletTransactionUncheckedCreateNestedManyWithoutMemberInput
+    transactions?: TransactionUncheckedCreateNestedManyWithoutMemberInput
     couponAssignments?: CouponAssignmentUncheckedCreateNestedManyWithoutMemberInput
     couponUsages?: CouponUsageUncheckedCreateNestedManyWithoutMemberInput
     loyaltyAchievements?: LoyaltyAchievementUncheckedCreateNestedManyWithoutMemberInput
@@ -54269,6 +56555,7 @@ export namespace Prisma {
     joinedBookings?: BookingParticipantUpdateManyWithoutMemberNestedInput
     loyaltyHistory?: LoyaltyHistoryUpdateManyWithoutMemberNestedInput
     walletTransactions?: WalletTransactionUpdateManyWithoutMemberNestedInput
+    transactions?: TransactionUpdateManyWithoutMemberNestedInput
     couponAssignments?: CouponAssignmentUpdateManyWithoutMemberNestedInput
     couponUsages?: CouponUsageUpdateManyWithoutMemberNestedInput
     loyaltyAchievements?: LoyaltyAchievementUpdateManyWithoutMemberNestedInput
@@ -54293,6 +56580,7 @@ export namespace Prisma {
     joinedBookings?: BookingParticipantUncheckedUpdateManyWithoutMemberNestedInput
     loyaltyHistory?: LoyaltyHistoryUncheckedUpdateManyWithoutMemberNestedInput
     walletTransactions?: WalletTransactionUncheckedUpdateManyWithoutMemberNestedInput
+    transactions?: TransactionUncheckedUpdateManyWithoutMemberNestedInput
     couponAssignments?: CouponAssignmentUncheckedUpdateManyWithoutMemberNestedInput
     couponUsages?: CouponUsageUncheckedUpdateManyWithoutMemberNestedInput
     loyaltyAchievements?: LoyaltyAchievementUncheckedUpdateManyWithoutMemberNestedInput
@@ -54414,6 +56702,7 @@ export namespace Prisma {
     joinedBookings?: BookingParticipantCreateNestedManyWithoutMemberInput
     loyaltyHistory?: LoyaltyHistoryCreateNestedManyWithoutMemberInput
     tournamentRegistrations?: TournamentRegistrationCreateNestedManyWithoutRegisteredByInput
+    transactions?: TransactionCreateNestedManyWithoutMemberInput
     couponAssignments?: CouponAssignmentCreateNestedManyWithoutMemberInput
     couponUsages?: CouponUsageCreateNestedManyWithoutMemberInput
     loyaltyAchievements?: LoyaltyAchievementCreateNestedManyWithoutMemberInput
@@ -54438,6 +56727,7 @@ export namespace Prisma {
     joinedBookings?: BookingParticipantUncheckedCreateNestedManyWithoutMemberInput
     loyaltyHistory?: LoyaltyHistoryUncheckedCreateNestedManyWithoutMemberInput
     tournamentRegistrations?: TournamentRegistrationUncheckedCreateNestedManyWithoutRegisteredByInput
+    transactions?: TransactionUncheckedCreateNestedManyWithoutMemberInput
     couponAssignments?: CouponAssignmentUncheckedCreateNestedManyWithoutMemberInput
     couponUsages?: CouponUsageUncheckedCreateNestedManyWithoutMemberInput
     loyaltyAchievements?: LoyaltyAchievementUncheckedCreateNestedManyWithoutMemberInput
@@ -54478,6 +56768,7 @@ export namespace Prisma {
     joinedBookings?: BookingParticipantUpdateManyWithoutMemberNestedInput
     loyaltyHistory?: LoyaltyHistoryUpdateManyWithoutMemberNestedInput
     tournamentRegistrations?: TournamentRegistrationUpdateManyWithoutRegisteredByNestedInput
+    transactions?: TransactionUpdateManyWithoutMemberNestedInput
     couponAssignments?: CouponAssignmentUpdateManyWithoutMemberNestedInput
     couponUsages?: CouponUsageUpdateManyWithoutMemberNestedInput
     loyaltyAchievements?: LoyaltyAchievementUpdateManyWithoutMemberNestedInput
@@ -54502,6 +56793,7 @@ export namespace Prisma {
     joinedBookings?: BookingParticipantUncheckedUpdateManyWithoutMemberNestedInput
     loyaltyHistory?: LoyaltyHistoryUncheckedUpdateManyWithoutMemberNestedInput
     tournamentRegistrations?: TournamentRegistrationUncheckedUpdateManyWithoutRegisteredByNestedInput
+    transactions?: TransactionUncheckedUpdateManyWithoutMemberNestedInput
     couponAssignments?: CouponAssignmentUncheckedUpdateManyWithoutMemberNestedInput
     couponUsages?: CouponUsageUncheckedUpdateManyWithoutMemberNestedInput
     loyaltyAchievements?: LoyaltyAchievementUncheckedUpdateManyWithoutMemberNestedInput
@@ -54648,6 +56940,7 @@ export namespace Prisma {
     loyaltyHistory?: LoyaltyHistoryCreateNestedManyWithoutMemberInput
     tournamentRegistrations?: TournamentRegistrationCreateNestedManyWithoutRegisteredByInput
     walletTransactions?: WalletTransactionCreateNestedManyWithoutMemberInput
+    transactions?: TransactionCreateNestedManyWithoutMemberInput
     couponUsages?: CouponUsageCreateNestedManyWithoutMemberInput
     loyaltyAchievements?: LoyaltyAchievementCreateNestedManyWithoutMemberInput
     sportStats?: UserSportStatCreateNestedManyWithoutMemberInput
@@ -54672,6 +56965,7 @@ export namespace Prisma {
     loyaltyHistory?: LoyaltyHistoryUncheckedCreateNestedManyWithoutMemberInput
     tournamentRegistrations?: TournamentRegistrationUncheckedCreateNestedManyWithoutRegisteredByInput
     walletTransactions?: WalletTransactionUncheckedCreateNestedManyWithoutMemberInput
+    transactions?: TransactionUncheckedCreateNestedManyWithoutMemberInput
     couponUsages?: CouponUsageUncheckedCreateNestedManyWithoutMemberInput
     loyaltyAchievements?: LoyaltyAchievementUncheckedCreateNestedManyWithoutMemberInput
     sportStats?: UserSportStatUncheckedCreateNestedManyWithoutMemberInput
@@ -54761,6 +57055,7 @@ export namespace Prisma {
     loyaltyHistory?: LoyaltyHistoryUpdateManyWithoutMemberNestedInput
     tournamentRegistrations?: TournamentRegistrationUpdateManyWithoutRegisteredByNestedInput
     walletTransactions?: WalletTransactionUpdateManyWithoutMemberNestedInput
+    transactions?: TransactionUpdateManyWithoutMemberNestedInput
     couponUsages?: CouponUsageUpdateManyWithoutMemberNestedInput
     loyaltyAchievements?: LoyaltyAchievementUpdateManyWithoutMemberNestedInput
     sportStats?: UserSportStatUpdateManyWithoutMemberNestedInput
@@ -54785,6 +57080,7 @@ export namespace Prisma {
     loyaltyHistory?: LoyaltyHistoryUncheckedUpdateManyWithoutMemberNestedInput
     tournamentRegistrations?: TournamentRegistrationUncheckedUpdateManyWithoutRegisteredByNestedInput
     walletTransactions?: WalletTransactionUncheckedUpdateManyWithoutMemberNestedInput
+    transactions?: TransactionUncheckedUpdateManyWithoutMemberNestedInput
     couponUsages?: CouponUsageUncheckedUpdateManyWithoutMemberNestedInput
     loyaltyAchievements?: LoyaltyAchievementUncheckedUpdateManyWithoutMemberNestedInput
     sportStats?: UserSportStatUncheckedUpdateManyWithoutMemberNestedInput
@@ -54852,6 +57148,7 @@ export namespace Prisma {
     loyaltyHistory?: LoyaltyHistoryCreateNestedManyWithoutMemberInput
     tournamentRegistrations?: TournamentRegistrationCreateNestedManyWithoutRegisteredByInput
     walletTransactions?: WalletTransactionCreateNestedManyWithoutMemberInput
+    transactions?: TransactionCreateNestedManyWithoutMemberInput
     couponAssignments?: CouponAssignmentCreateNestedManyWithoutMemberInput
     loyaltyAchievements?: LoyaltyAchievementCreateNestedManyWithoutMemberInput
     sportStats?: UserSportStatCreateNestedManyWithoutMemberInput
@@ -54876,6 +57173,7 @@ export namespace Prisma {
     loyaltyHistory?: LoyaltyHistoryUncheckedCreateNestedManyWithoutMemberInput
     tournamentRegistrations?: TournamentRegistrationUncheckedCreateNestedManyWithoutRegisteredByInput
     walletTransactions?: WalletTransactionUncheckedCreateNestedManyWithoutMemberInput
+    transactions?: TransactionUncheckedCreateNestedManyWithoutMemberInput
     couponAssignments?: CouponAssignmentUncheckedCreateNestedManyWithoutMemberInput
     loyaltyAchievements?: LoyaltyAchievementUncheckedCreateNestedManyWithoutMemberInput
     sportStats?: UserSportStatUncheckedCreateNestedManyWithoutMemberInput
@@ -54907,6 +57205,7 @@ export namespace Prisma {
     member: MemberCreateNestedOneWithoutBookingsInput
     sport: SportCreateNestedOneWithoutBookingsInput
     payments?: PaymentCreateNestedManyWithoutBookingInput
+    transactions?: TransactionCreateNestedManyWithoutBookingInput
     tickets?: TicketCreateNestedManyWithoutBookingInput
     participants?: BookingParticipantCreateNestedManyWithoutBookingInput
   }
@@ -54932,6 +57231,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     payments?: PaymentUncheckedCreateNestedManyWithoutBookingInput
+    transactions?: TransactionUncheckedCreateNestedManyWithoutBookingInput
     tickets?: TicketUncheckedCreateNestedManyWithoutBookingInput
     participants?: BookingParticipantUncheckedCreateNestedManyWithoutBookingInput
   }
@@ -55020,6 +57320,7 @@ export namespace Prisma {
     loyaltyHistory?: LoyaltyHistoryUpdateManyWithoutMemberNestedInput
     tournamentRegistrations?: TournamentRegistrationUpdateManyWithoutRegisteredByNestedInput
     walletTransactions?: WalletTransactionUpdateManyWithoutMemberNestedInput
+    transactions?: TransactionUpdateManyWithoutMemberNestedInput
     couponAssignments?: CouponAssignmentUpdateManyWithoutMemberNestedInput
     loyaltyAchievements?: LoyaltyAchievementUpdateManyWithoutMemberNestedInput
     sportStats?: UserSportStatUpdateManyWithoutMemberNestedInput
@@ -55044,6 +57345,7 @@ export namespace Prisma {
     loyaltyHistory?: LoyaltyHistoryUncheckedUpdateManyWithoutMemberNestedInput
     tournamentRegistrations?: TournamentRegistrationUncheckedUpdateManyWithoutRegisteredByNestedInput
     walletTransactions?: WalletTransactionUncheckedUpdateManyWithoutMemberNestedInput
+    transactions?: TransactionUncheckedUpdateManyWithoutMemberNestedInput
     couponAssignments?: CouponAssignmentUncheckedUpdateManyWithoutMemberNestedInput
     loyaltyAchievements?: LoyaltyAchievementUncheckedUpdateManyWithoutMemberNestedInput
     sportStats?: UserSportStatUncheckedUpdateManyWithoutMemberNestedInput
@@ -55081,6 +57383,7 @@ export namespace Prisma {
     member?: MemberUpdateOneRequiredWithoutBookingsNestedInput
     sport?: SportUpdateOneRequiredWithoutBookingsNestedInput
     payments?: PaymentUpdateManyWithoutBookingNestedInput
+    transactions?: TransactionUpdateManyWithoutBookingNestedInput
     tickets?: TicketUpdateManyWithoutBookingNestedInput
     participants?: BookingParticipantUpdateManyWithoutBookingNestedInput
   }
@@ -55106,6 +57409,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     payments?: PaymentUncheckedUpdateManyWithoutBookingNestedInput
+    transactions?: TransactionUncheckedUpdateManyWithoutBookingNestedInput
     tickets?: TicketUncheckedUpdateManyWithoutBookingNestedInput
     participants?: BookingParticipantUncheckedUpdateManyWithoutBookingNestedInput
   }
@@ -55195,6 +57499,7 @@ export namespace Prisma {
     loyaltyHistory?: LoyaltyHistoryCreateNestedManyWithoutMemberInput
     tournamentRegistrations?: TournamentRegistrationCreateNestedManyWithoutRegisteredByInput
     walletTransactions?: WalletTransactionCreateNestedManyWithoutMemberInput
+    transactions?: TransactionCreateNestedManyWithoutMemberInput
     couponAssignments?: CouponAssignmentCreateNestedManyWithoutMemberInput
     couponUsages?: CouponUsageCreateNestedManyWithoutMemberInput
     sportStats?: UserSportStatCreateNestedManyWithoutMemberInput
@@ -55219,6 +57524,7 @@ export namespace Prisma {
     loyaltyHistory?: LoyaltyHistoryUncheckedCreateNestedManyWithoutMemberInput
     tournamentRegistrations?: TournamentRegistrationUncheckedCreateNestedManyWithoutRegisteredByInput
     walletTransactions?: WalletTransactionUncheckedCreateNestedManyWithoutMemberInput
+    transactions?: TransactionUncheckedCreateNestedManyWithoutMemberInput
     couponAssignments?: CouponAssignmentUncheckedCreateNestedManyWithoutMemberInput
     couponUsages?: CouponUsageUncheckedCreateNestedManyWithoutMemberInput
     sportStats?: UserSportStatUncheckedCreateNestedManyWithoutMemberInput
@@ -55294,6 +57600,7 @@ export namespace Prisma {
     loyaltyHistory?: LoyaltyHistoryUpdateManyWithoutMemberNestedInput
     tournamentRegistrations?: TournamentRegistrationUpdateManyWithoutRegisteredByNestedInput
     walletTransactions?: WalletTransactionUpdateManyWithoutMemberNestedInput
+    transactions?: TransactionUpdateManyWithoutMemberNestedInput
     couponAssignments?: CouponAssignmentUpdateManyWithoutMemberNestedInput
     couponUsages?: CouponUsageUpdateManyWithoutMemberNestedInput
     sportStats?: UserSportStatUpdateManyWithoutMemberNestedInput
@@ -55318,6 +57625,7 @@ export namespace Prisma {
     loyaltyHistory?: LoyaltyHistoryUncheckedUpdateManyWithoutMemberNestedInput
     tournamentRegistrations?: TournamentRegistrationUncheckedUpdateManyWithoutRegisteredByNestedInput
     walletTransactions?: WalletTransactionUncheckedUpdateManyWithoutMemberNestedInput
+    transactions?: TransactionUncheckedUpdateManyWithoutMemberNestedInput
     couponAssignments?: CouponAssignmentUncheckedUpdateManyWithoutMemberNestedInput
     couponUsages?: CouponUsageUncheckedUpdateManyWithoutMemberNestedInput
     sportStats?: UserSportStatUncheckedUpdateManyWithoutMemberNestedInput
@@ -55486,6 +57794,7 @@ export namespace Prisma {
     loyaltyHistory?: LoyaltyHistoryCreateNestedManyWithoutMemberInput
     tournamentRegistrations?: TournamentRegistrationCreateNestedManyWithoutRegisteredByInput
     walletTransactions?: WalletTransactionCreateNestedManyWithoutMemberInput
+    transactions?: TransactionCreateNestedManyWithoutMemberInput
     couponAssignments?: CouponAssignmentCreateNestedManyWithoutMemberInput
     couponUsages?: CouponUsageCreateNestedManyWithoutMemberInput
     loyaltyAchievements?: LoyaltyAchievementCreateNestedManyWithoutMemberInput
@@ -55510,6 +57819,7 @@ export namespace Prisma {
     loyaltyHistory?: LoyaltyHistoryUncheckedCreateNestedManyWithoutMemberInput
     tournamentRegistrations?: TournamentRegistrationUncheckedCreateNestedManyWithoutRegisteredByInput
     walletTransactions?: WalletTransactionUncheckedCreateNestedManyWithoutMemberInput
+    transactions?: TransactionUncheckedCreateNestedManyWithoutMemberInput
     couponAssignments?: CouponAssignmentUncheckedCreateNestedManyWithoutMemberInput
     couponUsages?: CouponUsageUncheckedCreateNestedManyWithoutMemberInput
     loyaltyAchievements?: LoyaltyAchievementUncheckedCreateNestedManyWithoutMemberInput
@@ -55587,6 +57897,7 @@ export namespace Prisma {
     loyaltyHistory?: LoyaltyHistoryUpdateManyWithoutMemberNestedInput
     tournamentRegistrations?: TournamentRegistrationUpdateManyWithoutRegisteredByNestedInput
     walletTransactions?: WalletTransactionUpdateManyWithoutMemberNestedInput
+    transactions?: TransactionUpdateManyWithoutMemberNestedInput
     couponAssignments?: CouponAssignmentUpdateManyWithoutMemberNestedInput
     couponUsages?: CouponUsageUpdateManyWithoutMemberNestedInput
     loyaltyAchievements?: LoyaltyAchievementUpdateManyWithoutMemberNestedInput
@@ -55611,6 +57922,7 @@ export namespace Prisma {
     loyaltyHistory?: LoyaltyHistoryUncheckedUpdateManyWithoutMemberNestedInput
     tournamentRegistrations?: TournamentRegistrationUncheckedUpdateManyWithoutRegisteredByNestedInput
     walletTransactions?: WalletTransactionUncheckedUpdateManyWithoutMemberNestedInput
+    transactions?: TransactionUncheckedUpdateManyWithoutMemberNestedInput
     couponAssignments?: CouponAssignmentUncheckedUpdateManyWithoutMemberNestedInput
     couponUsages?: CouponUsageUncheckedUpdateManyWithoutMemberNestedInput
     loyaltyAchievements?: LoyaltyAchievementUncheckedUpdateManyWithoutMemberNestedInput
@@ -55730,6 +58042,7 @@ export namespace Prisma {
     loyaltyHistory?: LoyaltyHistoryUpdateManyWithoutMemberNestedInput
     tournamentRegistrations?: TournamentRegistrationUpdateManyWithoutRegisteredByNestedInput
     walletTransactions?: WalletTransactionUpdateManyWithoutMemberNestedInput
+    transactions?: TransactionUpdateManyWithoutMemberNestedInput
     couponAssignments?: CouponAssignmentUpdateManyWithoutMemberNestedInput
     couponUsages?: CouponUsageUpdateManyWithoutMemberNestedInput
     loyaltyAchievements?: LoyaltyAchievementUpdateManyWithoutMemberNestedInput
@@ -55754,6 +58067,7 @@ export namespace Prisma {
     loyaltyHistory?: LoyaltyHistoryUncheckedUpdateManyWithoutMemberNestedInput
     tournamentRegistrations?: TournamentRegistrationUncheckedUpdateManyWithoutRegisteredByNestedInput
     walletTransactions?: WalletTransactionUncheckedUpdateManyWithoutMemberNestedInput
+    transactions?: TransactionUncheckedUpdateManyWithoutMemberNestedInput
     couponAssignments?: CouponAssignmentUncheckedUpdateManyWithoutMemberNestedInput
     couponUsages?: CouponUsageUncheckedUpdateManyWithoutMemberNestedInput
     loyaltyAchievements?: LoyaltyAchievementUncheckedUpdateManyWithoutMemberNestedInput
@@ -55851,6 +58165,22 @@ export namespace Prisma {
     type: string
     description?: string | null
     createdAt?: Date | string
+  }
+
+  export type TransactionCreateManyMemberInput = {
+    id?: string
+    bookingId?: string | null
+    gateway: string
+    gatewayOrderId?: string | null
+    gatewayPaymentId?: string | null
+    gatewaySignature?: string | null
+    amount: number
+    currency?: string
+    status?: string
+    errorMessage?: string | null
+    metadata?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type CouponAssignmentCreateManyMemberInput = {
@@ -55970,6 +58300,7 @@ export namespace Prisma {
     turf?: TurfUpdateOneRequiredWithoutBookingsNestedInput
     sport?: SportUpdateOneRequiredWithoutBookingsNestedInput
     payments?: PaymentUpdateManyWithoutBookingNestedInput
+    transactions?: TransactionUpdateManyWithoutBookingNestedInput
     tickets?: TicketUpdateManyWithoutBookingNestedInput
     couponUsages?: CouponUsageUpdateManyWithoutBookingNestedInput
     participants?: BookingParticipantUpdateManyWithoutBookingNestedInput
@@ -55995,6 +58326,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     payments?: PaymentUncheckedUpdateManyWithoutBookingNestedInput
+    transactions?: TransactionUncheckedUpdateManyWithoutBookingNestedInput
     tickets?: TicketUncheckedUpdateManyWithoutBookingNestedInput
     couponUsages?: CouponUsageUncheckedUpdateManyWithoutBookingNestedInput
     participants?: BookingParticipantUncheckedUpdateManyWithoutBookingNestedInput
@@ -56129,6 +58461,54 @@ export namespace Prisma {
     type?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TransactionUpdateWithoutMemberInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    gateway?: StringFieldUpdateOperationsInput | string
+    gatewayOrderId?: NullableStringFieldUpdateOperationsInput | string | null
+    gatewayPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+    gatewaySignature?: NullableStringFieldUpdateOperationsInput | string | null
+    amount?: FloatFieldUpdateOperationsInput | number
+    currency?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    booking?: BookingUpdateOneWithoutTransactionsNestedInput
+  }
+
+  export type TransactionUncheckedUpdateWithoutMemberInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    bookingId?: NullableStringFieldUpdateOperationsInput | string | null
+    gateway?: StringFieldUpdateOperationsInput | string
+    gatewayOrderId?: NullableStringFieldUpdateOperationsInput | string | null
+    gatewayPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+    gatewaySignature?: NullableStringFieldUpdateOperationsInput | string | null
+    amount?: FloatFieldUpdateOperationsInput | number
+    currency?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TransactionUncheckedUpdateManyWithoutMemberInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    bookingId?: NullableStringFieldUpdateOperationsInput | string | null
+    gateway?: StringFieldUpdateOperationsInput | string
+    gatewayOrderId?: NullableStringFieldUpdateOperationsInput | string | null
+    gatewayPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+    gatewaySignature?: NullableStringFieldUpdateOperationsInput | string | null
+    amount?: FloatFieldUpdateOperationsInput | number
+    currency?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type CouponAssignmentUpdateWithoutMemberInput = {
@@ -56411,6 +58791,7 @@ export namespace Prisma {
     turf?: TurfUpdateOneRequiredWithoutBookingsNestedInput
     member?: MemberUpdateOneRequiredWithoutBookingsNestedInput
     payments?: PaymentUpdateManyWithoutBookingNestedInput
+    transactions?: TransactionUpdateManyWithoutBookingNestedInput
     tickets?: TicketUpdateManyWithoutBookingNestedInput
     couponUsages?: CouponUsageUpdateManyWithoutBookingNestedInput
     participants?: BookingParticipantUpdateManyWithoutBookingNestedInput
@@ -56436,6 +58817,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     payments?: PaymentUncheckedUpdateManyWithoutBookingNestedInput
+    transactions?: TransactionUncheckedUpdateManyWithoutBookingNestedInput
     tickets?: TicketUncheckedUpdateManyWithoutBookingNestedInput
     couponUsages?: CouponUsageUncheckedUpdateManyWithoutBookingNestedInput
     participants?: BookingParticipantUncheckedUpdateManyWithoutBookingNestedInput
@@ -56715,6 +59097,7 @@ export namespace Prisma {
     member?: MemberUpdateOneRequiredWithoutBookingsNestedInput
     sport?: SportUpdateOneRequiredWithoutBookingsNestedInput
     payments?: PaymentUpdateManyWithoutBookingNestedInput
+    transactions?: TransactionUpdateManyWithoutBookingNestedInput
     tickets?: TicketUpdateManyWithoutBookingNestedInput
     couponUsages?: CouponUsageUpdateManyWithoutBookingNestedInput
     participants?: BookingParticipantUpdateManyWithoutBookingNestedInput
@@ -56740,6 +59123,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     payments?: PaymentUncheckedUpdateManyWithoutBookingNestedInput
+    transactions?: TransactionUncheckedUpdateManyWithoutBookingNestedInput
     tickets?: TicketUncheckedUpdateManyWithoutBookingNestedInput
     couponUsages?: CouponUsageUncheckedUpdateManyWithoutBookingNestedInput
     participants?: BookingParticipantUncheckedUpdateManyWithoutBookingNestedInput
@@ -56904,6 +59288,22 @@ export namespace Prisma {
     createdAt?: Date | string
   }
 
+  export type TransactionCreateManyBookingInput = {
+    id?: string
+    memberId?: string | null
+    gateway: string
+    gatewayOrderId?: string | null
+    gatewayPaymentId?: string | null
+    gatewaySignature?: string | null
+    amount: number
+    currency?: string
+    status?: string
+    errorMessage?: string | null
+    metadata?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
   export type TicketCreateManyBookingInput = {
     id?: string
     qrCode: string
@@ -56947,6 +59347,54 @@ export namespace Prisma {
     amount?: FloatFieldUpdateOperationsInput | number
     method?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TransactionUpdateWithoutBookingInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    gateway?: StringFieldUpdateOperationsInput | string
+    gatewayOrderId?: NullableStringFieldUpdateOperationsInput | string | null
+    gatewayPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+    gatewaySignature?: NullableStringFieldUpdateOperationsInput | string | null
+    amount?: FloatFieldUpdateOperationsInput | number
+    currency?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    member?: MemberUpdateOneWithoutTransactionsNestedInput
+  }
+
+  export type TransactionUncheckedUpdateWithoutBookingInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    memberId?: NullableStringFieldUpdateOperationsInput | string | null
+    gateway?: StringFieldUpdateOperationsInput | string
+    gatewayOrderId?: NullableStringFieldUpdateOperationsInput | string | null
+    gatewayPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+    gatewaySignature?: NullableStringFieldUpdateOperationsInput | string | null
+    amount?: FloatFieldUpdateOperationsInput | number
+    currency?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TransactionUncheckedUpdateManyWithoutBookingInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    memberId?: NullableStringFieldUpdateOperationsInput | string | null
+    gateway?: StringFieldUpdateOperationsInput | string
+    gatewayOrderId?: NullableStringFieldUpdateOperationsInput | string | null
+    gatewayPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+    gatewaySignature?: NullableStringFieldUpdateOperationsInput | string | null
+    amount?: FloatFieldUpdateOperationsInput | number
+    currency?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type TicketUpdateWithoutBookingInput = {

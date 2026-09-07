@@ -10,8 +10,7 @@ export class BookingService {
     booking: Booking & { payments: Payment[] },
     cancellationLimitHours: number
   ): { penalty: number; refund: number; isFree: boolean; totalPaid: number } {
-    const walletPayments = booking.payments?.filter(p => p.method === 'WALLET') || [];
-    const totalPaid = walletPayments.reduce((sum, p) => sum + p.amount, 0);
+    const totalPaid = booking.payments?.reduce((sum, p) => sum + p.amount, 0) || 0;
 
     const startDate = new Date(booking.startTime);
     const now = new Date();

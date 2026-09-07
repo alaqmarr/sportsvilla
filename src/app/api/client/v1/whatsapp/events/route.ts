@@ -1,8 +1,16 @@
 import { NextResponse } from "next/server";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
 import { whatsappDb } from "@/lib/whatsappDb";
+import { jsonResponse } from "@/lib/api-logger";
 
 export async function GET() {
   try {
+    const session = await getServerSession(authOptions);
+    if (!session?.user?.email) {
+      return jsonResponse({ success: false, error: "Unauthorized" }, { status: 401 });
+    }
+
     const events = await whatsappDb.whatsAppEventTrigger.findMany({
       orderBy: { eventName: "asc" }
     });
@@ -14,6 +22,11 @@ export async function GET() {
 
 export async function POST(req: Request) {
   try {
+    const session = await getServerSession(authOptions);
+    if (!session?.user?.email) {
+      return jsonResponse({ success: false, error: "Unauthorized" }, { status: 401 });
+    }
+
     const { eventName, templateName, isActive } = await req.json();
 
     if (!eventName) {

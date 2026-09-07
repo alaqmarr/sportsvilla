@@ -15,7 +15,9 @@ export default async function PhonePeSettingsPage() {
           "PHONEPE_MERCHANT_ID",
           "PHONEPE_SALT_KEY",
           "PHONEPE_SALT_INDEX",
-          "PAYMENT_GATEWAY_ACTIVE"
+          "PAYMENT_GATEWAY_ACTIVE",
+          "RAZORPAY_KEY_ID",
+          "RAZORPAY_KEY_SECRET"
         ]
       }
     }
@@ -26,7 +28,9 @@ export default async function PhonePeSettingsPage() {
     PHONEPE_MERCHANT_ID: "",
     PHONEPE_SALT_KEY: "",
     PHONEPE_SALT_INDEX: "1",
-    PAYMENT_GATEWAY_ACTIVE: "NONE"
+    PAYMENT_GATEWAY_ACTIVE: "NONE",
+    RAZORPAY_KEY_ID: "",
+    RAZORPAY_KEY_SECRET: ""
   };
 
   const initialSettings = settings.reduce((acc, curr) => ({

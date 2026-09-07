@@ -121,8 +121,26 @@ export async function POST(request: Request, context: { params: Promise<{ id: st
       pointsDeduction = Math.min(requestedPoints, currentPoints, subtotal - walletDeductionRupees);
     }
 
-    // Calculate SV Points Earned on subtotal (net amount)
-    const pointsEarned = Math.floor(subtotal * 0.01);
+    const amountDue = Math.max(0, Math.round((subtotal - walletDeductionRupees - pointsDeduction) * 100) / 100);
+
+    // SEC-09: Require online payment if subtotal > 0 and amountDue > 0.
+    // Do NOT create confirmed participant, do NOT decrement slot count, and do NOT award loyalty points.
+    if (subtotal > 0 && amountDue > 0) {
+      return jsonResponse({
+        success: false,
+        error: `Payment of ₹${amountDue} required to join this game. Online payment is required.`,
+        status: 'PAYMENT_PENDING',
+        amountDue,
+        booking: {
+          id: booking.id,
+          status: 'PAYMENT_PENDING',
+          amountDue,
+        },
+      }, { status: 400 });
+    }
+
+    // Calculate SV Points Earned on subtotal (net amount) - only awarded when payment is fully covered/settled
+    const pointsEarned = amountDue === 0 ? Math.floor(subtotal * 0.01) : 0;
 
     await prisma.$transaction(async (tx) => {
       // Re-fetch booking inside tx to prevent race conditions

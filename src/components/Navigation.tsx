@@ -92,6 +92,8 @@ export function Navigation({
       title: "Reports",
       links: [
         { href: "/reports/revenue", label: "Revenue Dashboard", icon: <FiFileText /> },
+        { href: "/razorpay", label: "Razorpay Transactions", icon: <FiCreditCard /> },
+        { href: "/phonepe", label: "PhonePe Transactions", icon: <FiCreditCard /> },
         { href: "/whatsapp/dashboard", label: "WhatsApp Analytics", icon: <FaWhatsapp className="text-[#25D366] text-base" /> },
         { href: "/reports/member", label: "Member Reports", icon: <FiUser /> },
         { href: "/reports/attendance", label: "Attendance Reports", icon: <FiCalendar /> },

@@ -1,4 +1,6 @@
 import { NextResponse, NextRequest } from 'next/server';
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
 import { whatsappDb } from '@/lib/whatsappDb';
 import { jsonResponse } from '@/lib/api-logger';
 
@@ -7,6 +9,11 @@ export async function POST(
   { params }: { params: Promise<{ name: string }> }
 ) {
   try {
+    const session = await getServerSession(authOptions);
+    if (!session?.user?.email) {
+      return jsonResponse({ success: false, error: "Unauthorized" }, { status: 401 });
+    }
+
     const { name: templateName } = await params;
     const { headerImageUrl } = await req.json();
 

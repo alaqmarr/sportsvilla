@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import useSWR from 'swr';
 import { Tag, Shield, FileText, CalendarDays, X, ChevronRight, Check, Coins, Loader2 } from 'lucide-react';
 
@@ -12,7 +12,7 @@ interface ReviewPanelProps {
   pointsBalance: number;
   onApplyCoupon: (code: string) => void;
   onRedeemPoints: () => void;
-  onConfirm: (promoCode: string, walletDeduction: number, pointsDeduction: number, walletOtp?: string) => void;
+  onConfirm: (promoCode: string, walletDeduction: number, pointsDeduction: number, walletOtp?: string, preferredGateway?: string) => void;
   onClose?: () => void;
   timeDisplayOverride?: string;
 }
@@ -38,7 +38,20 @@ export const ReviewPanel: React.FC<ReviewPanelProps> = ({
   const [isOtpMode, setIsOtpMode] = useState(false);
   const [otp, setOtp] = useState(['', '', '', '', '', '']);
   const [isSendingOtp, setIsSendingOtp] = useState(false);
+  const [otpTimer, setOtpTimer] = useState(60);
   const otpInputRefs = useRef<(HTMLInputElement | null)[]>([]);
+
+  useEffect(() => {
+    let interval: NodeJS.Timeout;
+    if (isOtpMode && otpTimer > 0) {
+      interval = setInterval(() => setOtpTimer((prev) => prev - 1), 1000);
+    }
+    return () => clearInterval(interval);
+  }, [isOtpMode, otpTimer]);
+
+  const { data: configData } = useSWR('/api/client/v1/payments/config', fetcher);
+  const activeGateway = configData?.config?.activeGateway || 'NONE';
+  const [selectedGateway, setSelectedGateway] = useState<string>('PHONEPE');
 
   const { data, isLoading } = useSWR('/api/client/v1/coupons', fetcher);
   const coupons = data?.coupons || [];
@@ -140,6 +153,8 @@ export const ReviewPanel: React.FC<ReviewPanelProps> = ({
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'Failed to send OTP');
       setIsOtpMode(true);
+      setOtpTimer(60);
+      setOtp(['', '', '', '', '', '']);
     } catch (err: any) {
       alert(err.message || 'Failed to send OTP');
     } finally {
@@ -151,7 +166,7 @@ export const ReviewPanel: React.FC<ReviewPanelProps> = ({
     if (walletDeduction > 0) {
       handleSendOtp();
     } else {
-      onConfirm(selectedCouponCode, walletDeduction, pointsDeduction);
+      onConfirm(selectedCouponCode, walletDeduction, pointsDeduction, undefined, activeGateway === 'BOTH' ? selectedGateway : undefined);
     }
   };
 
@@ -214,12 +229,28 @@ export const ReviewPanel: React.FC<ReviewPanelProps> = ({
           <div className="flex justify-center w-full">
              <button 
                 type="button"
-                onClick={() => onConfirm(selectedCouponCode, walletDeduction, pointsDeduction, otp.join(''))}
+                onClick={() => onConfirm(selectedCouponCode, walletDeduction, pointsDeduction, otp.join(''), activeGateway === 'BOTH' ? selectedGateway : undefined)}
                 disabled={otp.join('').length < 6}
                 className="w-full max-w-[280px] bg-[var(--play-brand)] hover:bg-[var(--play-brand-dark)] text-white py-4 rounded-xl font-bold text-base transition-colors shadow-sm disabled:opacity-50 disabled:cursor-not-allowed shrink-0"
               >
                 {finalAmount === 0 ? 'Verify & Confirm' : `Verify & Pay ₹${finalAmount.toFixed(2)}`}
              </button>
+          </div>
+
+          <div className="text-center text-sm mt-2">
+            <span className="text-[var(--play-text-muted)]">Didn't receive code? </span>
+            {otpTimer > 0 ? (
+              <span className="text-[var(--play-text-muted)] font-medium">Resend in {otpTimer}s</span>
+            ) : (
+              <button
+                type="button"
+                onClick={handleSendOtp}
+                disabled={isSendingOtp}
+                className="text-[var(--play-brand)] font-medium hover:text-[var(--play-brand-dark)] transition-colors disabled:opacity-50"
+              >
+                {isSendingOtp ? 'Sending...' : 'Resend OTP'}
+              </button>
+            )}
           </div>
         </div>
       </div>
@@ -315,6 +346,25 @@ export const ReviewPanel: React.FC<ReviewPanelProps> = ({
             <span className="font-bold text-xl text-[var(--play-text)]">₹ {finalAmount.toFixed(2)}</span>
           </div>
         </div>
+
+        {/* Payment Method Selector */}
+        {finalAmount > 0 && activeGateway === 'BOTH' && (
+          <div className="bg-[var(--play-surface)] rounded-2xl p-5 shadow-sm border border-[var(--play-border)] space-y-3">
+            <h3 className="font-bold text-[var(--play-text)] mb-4 border-b border-[var(--play-border)] pb-2">Select Payment Method</h3>
+            
+            <div className="space-y-2">
+              <label className={`flex items-center gap-3 p-3 rounded-xl border cursor-pointer transition-colors ${selectedGateway === 'PHONEPE' ? 'border-[var(--play-brand)] bg-[var(--play-brand-light)]/20' : 'border-[var(--play-border)] hover:bg-[var(--play-surface-alt)]'}`}>
+                <input type="radio" name="gateway" value="PHONEPE" checked={selectedGateway === 'PHONEPE'} onChange={() => setSelectedGateway('PHONEPE')} className="w-4 h-4 text-[var(--play-brand)] focus:ring-[var(--play-brand)]" />
+                <span className="font-medium text-[var(--play-text)]">PhonePe</span>
+              </label>
+              
+              <label className={`flex items-center gap-3 p-3 rounded-xl border cursor-pointer transition-colors ${selectedGateway === 'RAZORPAY' ? 'border-[var(--play-brand)] bg-[var(--play-brand-light)]/20' : 'border-[var(--play-border)] hover:bg-[var(--play-surface-alt)]'}`}>
+                <input type="radio" name="gateway" value="RAZORPAY" checked={selectedGateway === 'RAZORPAY'} onChange={() => setSelectedGateway('RAZORPAY')} className="w-4 h-4 text-[var(--play-brand)] focus:ring-[var(--play-brand)]" />
+                <span className="font-medium text-[var(--play-text)]">Razorpay</span>
+              </label>
+            </div>
+          </div>
+        )}
 
         {/* Policies */}
         <div className="space-y-3">
