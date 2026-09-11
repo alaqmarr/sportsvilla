@@ -386,15 +386,12 @@ export class NfcCheckinService {
       }
 
       // =========================================================================
-      // RESOLUTION PRIORITY 3: Drop-in Fee Deduction
+      // RESOLUTION PRIORITY 3: Require Booking
       // =========================================================================
-      const dropInSetting = await prisma.setting.findUnique({
-        where: { key: "DROP_IN_FEE" },
-      });
-      const dropInFeeRupees = dropInSetting ? parseFloat(dropInSetting.value) || 200 : 200;
-      const dropInFeePaise = Math.round(dropInFeeRupees * 100);
-
-      // Refresh current member wallet balance
+      // The user has no active bookings or memberships right now.
+      // We no longer automatically deduct a "drop-in" fee. Instead, we instruct
+      // the UI to offer a Self-Service Booking Flow.
+      
       const currentMember = await prisma.member.findUnique({
         where: { id: member.id },
         select: { id: true, name: true, mobile: true, walletBalance: true },
@@ -402,105 +399,33 @@ export class NfcCheckinService {
 
       const currentBalancePaise = currentMember?.walletBalance || 0;
 
-      if (currentBalancePaise >= dropInFeePaise) {
-        // Sufficient funds: deduct atomically
-        let newBalancePaise = currentBalancePaise - dropInFeePaise;
+      await prisma.nfcTransaction.create({
+        data: {
+          cardId: card.id,
+          cardUid,
+          memberId: member.id,
+          type: "CHECKIN",
+          status: "FAILED",
+          amount: 0,
+          deviceType,
+          readerLocation: location,
+          failureReason: "NO_ACTIVE_PASS",
+          metadata: JSON.stringify({ reason: "Card tapped but no active booking/membership found" }),
+        },
+      });
 
-        await prisma.$transaction(async (tx) => {
-          const updated = await tx.member.update({
-            where: { id: member.id },
-            data: {
-              walletBalance: { decrement: dropInFeePaise },
-            },
-          });
-          newBalancePaise = updated.walletBalance;
-
-          await tx.walletTransaction.create({
-            data: {
-              memberId: member.id,
-              amount: dropInFeePaise,
-              type: "DEBIT",
-              description: "Drop-in facility entry fee",
-            },
-          });
-
-          await tx.nfcCard.update({
-            where: { id: card.id },
-            data: { lastUsedAt: now },
-          });
-
-          await tx.nfcTransaction.create({
-            data: {
-              cardId: card.id,
-              cardUid,
-              memberId: member.id,
-              type: "DROPIN",
-              status: "SUCCESS",
-              amount: dropInFeeRupees,
-              deviceType,
-              readerLocation: location,
-              metadata: JSON.stringify({
-                action: "DROPIN_DEDUCTED",
-                feeRupees: dropInFeeRupees,
-                feePaise: dropInFeePaise,
-                remainingBalancePaise: newBalancePaise,
-              }),
-            },
-          });
-        });
-
-        await bumpSyncTimestamp("wallet");
-
-        return {
-          success: true,
-          action: "DROPIN_DEDUCTED",
-          message: `Drop-in entry granted. ₹${dropInFeeRupees} deducted from wallet.`,
-          member: {
-            id: member.id,
-            name: member.name,
-            mobile: member.mobile,
-            walletBalanceRupees: Number((newBalancePaise / 100).toFixed(2)),
-          },
-          details: {
-            dropInFeeRupees,
-          },
-        };
-      } else {
-        // Insufficient funds
-        await prisma.nfcTransaction.create({
-          data: {
-            cardId: card.id,
-            cardUid,
-            memberId: member.id,
-            type: "DROPIN",
-            status: "FAILED",
-            amount: dropInFeeRupees,
-            deviceType,
-            readerLocation: location,
-            failureReason: "INSUFFICIENT_FUNDS",
-            metadata: JSON.stringify({
-              requiredPaise: dropInFeePaise,
-              availablePaise: currentBalancePaise,
-            }),
-          },
-        });
-
-        return {
-          success: false,
-          action: "REJECTED",
-          message: `No active booking or membership. Insufficient wallet balance for drop-in fee (₹${dropInFeeRupees} required, ₹${(currentBalancePaise / 100).toFixed(2)} available).`,
-          error: "INSUFFICIENT_FUNDS",
-          member: {
-            id: member.id,
-            name: member.name,
-            mobile: member.mobile,
-            walletBalanceRupees: Number((currentBalancePaise / 100).toFixed(2)),
-          },
-          details: {
-            dropInFeeRupees,
-          },
-        };
-      }
+      return {
+        success: false,
+        action: "REQUIRE_BOOKING",
+        message: "No active pass found. Would you like to book a court?",
+        error: "NO_ACTIVE_PASS",
+        member: {
+          id: member.id,
+          name: member.name,
+          mobile: member.mobile,
+          walletBalanceRupees: Number((currentBalancePaise / 100).toFixed(2)),
+        },
+      };
     } finally {
       // Always release mutex lock
       Mutex.release(`nfc:checkin:${cardUid}`);

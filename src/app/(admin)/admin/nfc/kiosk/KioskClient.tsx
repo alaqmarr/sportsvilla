@@ -1,30 +1,33 @@
 "use client";
 
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
+import Script from "next/script";
+import { formatIST, todayIST } from "@/lib/dateUtils";
+import { NfcCheckinResponse, NfcDeviceType } from "@/types/nfc";
 import {
-  FiShield,
   FiZap,
-  FiVolume2,
-  FiVolumeX,
-  FiMaximize,
-  FiMinimize,
-  FiClock,
-  FiCheckCircle,
-  FiAlertTriangle,
   FiXCircle,
-  FiUser,
   FiCalendar,
   FiAward,
   FiDollarSign,
-  FiActivity,
-  FiArrowRight,
+  FiClock,
+  FiMaximize,
+  FiMinimize,
   FiRadio,
+  FiTerminal,
+  FiVolumeX,
+  FiVolume2,
+  FiShield,
+  FiArrowRight,
+  FiCheckCircle,
+  FiAlertTriangle,
+  FiUser,
+  FiActivity,
   FiHardDrive,
 } from "react-icons/fi";
-import { playNfcSound } from "@/lib/soundUtils";
 import { useNfc } from "@/components/nfc/NfcProvider";
-import { NfcCheckinResponse, NfcDeviceType } from "@/types/nfc";
-import { formatIST } from "@/lib/dateUtils";
+import { playNfcSound } from "@/lib/soundUtils";
+import KioskBookingFlow from "./KioskBookingFlow";
 import { useAlert } from "@/components/AlertProvider";
 
 interface KioskClientProps {
@@ -37,6 +40,7 @@ export default function KioskClient({ initialTransactions = [] }: KioskClientPro
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
   const [activeResult, setActiveResult] = useState<NfcCheckinResponse | null>(null);
   const [lastScannedCardUid, setLastScannedCardUid] = useState<string | null>(null);
+  const [isBookingMode, setIsBookingMode] = useState<boolean>(false);
 
   // Kiosk settings & status
   const [soundEnabled, setSoundEnabled] = useState<boolean>(true);
@@ -186,7 +190,10 @@ export default function KioskClient({ initialTransactions = [] }: KioskClientPro
         };
 
         setActivityFeed((prev) => [newFeedItem, ...prev.slice(0, 24)]);
-        triggerAutoDismiss();
+        
+        if (data.action !== "REQUIRE_BOOKING") {
+          triggerAutoDismiss();
+        }
       } catch (err: any) {
         console.error("Kiosk scan resolution error:", err);
         if (soundEnabled) playNfcSound("error");
@@ -223,6 +230,7 @@ export default function KioskClient({ initialTransactions = [] }: KioskClientPro
 
   return (
     <div className="h-full w-full bg-[#0f1117] text-white flex flex-col font-sans select-none overflow-hidden">
+      <Script src="https://checkout.razorpay.com/v1/checkout.js" strategy="lazyOnload" />
       {/* ========================================================================= */}
       {/* TOP STATUS BAR                                                            */}
       {/* ========================================================================= */}
@@ -301,63 +309,70 @@ export default function KioskClient({ initialTransactions = [] }: KioskClientPro
       <main className="flex-1 grid grid-cols-1 lg:grid-cols-12 gap-6 p-4 lg:p-6 w-full overflow-hidden">
         {/* LEFT COLUMN: HERO TAP ZONE & QUICK TEST CONTROLS (8 COLS) */}
         <div className="lg:col-span-8 flex flex-col justify-between space-y-6">
-          {/* Hero Tap Container */}
-          <div className="flex-1 bg-gradient-to-b from-[#1c1f2e] to-[#141724] border-2 border-[#2a2d3e] rounded-3xl p-8 lg:p-12 flex flex-col items-center justify-center text-center relative overflow-hidden shadow-2xl">
-            {/* Ambient Background Glows */}
-            <div className="absolute -top-32 -left-32 w-80 h-80 bg-orange-500/10 rounded-full blur-3xl pointer-events-none" />
-            <div className="absolute -bottom-32 -right-32 w-80 h-80 bg-blue-500/10 rounded-full blur-3xl pointer-events-none" />
+          {/* Hero Tap Container / Booking Flow */}
+          {isBookingMode ? (
+            <KioskBookingFlow
+              member={activeResult?.member || { id: "unknown", name: "Guest", walletBalanceRupees: 0 }}
+              onComplete={() => {
+                setIsBookingMode(false);
+                // The booking flow will show a success message via useAlert
+              }}
+              onCancel={() => setIsBookingMode(false)}
+            />
+          ) : (
+            <div className="flex-1 bg-gradient-to-b from-[#1c1f2e] to-[#141724] border-2 border-[#2a2d3e] rounded-3xl p-8 lg:p-12 flex flex-col items-center justify-center text-center relative overflow-hidden shadow-2xl">
+              {/* Ambient Background Glows */}
+              <div className="absolute -top-32 -left-32 w-80 h-80 bg-orange-500/10 rounded-full blur-3xl pointer-events-none" />
+              <div className="absolute -bottom-32 -right-32 w-80 h-80 bg-blue-500/10 rounded-full blur-3xl pointer-events-none" />
 
-            {/* Radar / Concentric Pulse Animation */}
-            <div className="relative mb-10 flex items-center justify-center">
-              {/* Outer pulsing ring */}
-              <div className="absolute w-72 h-72 rounded-full border border-orange-500/20 animate-ping duration-1000 pointer-events-none" />
-              {/* Secondary expanding wave */}
-              <div className="absolute w-60 h-60 rounded-full border border-orange-500/30 animate-pulse pointer-events-none" />
-              {/* Inner glowing zone */}
-              <div className="w-48 h-48 rounded-full bg-gradient-to-tr from-orange-600 via-amber-500 to-orange-400 p-[3px] shadow-[0_0_60px_rgba(249,115,22,0.35)] flex items-center justify-center">
-                <div className="w-full h-full rounded-full bg-[#161824] flex flex-col items-center justify-center space-y-2 cursor-pointer hover:bg-[#1c1f2e] transition group">
-                  <FiZap className="text-5xl text-orange-400 group-hover:scale-110 transition duration-300" />
-                  <span className="text-[11px] font-bold uppercase tracking-wider text-orange-400/80">
-                    {isProcessing ? "Processing..." : "Tap Card"}
-                  </span>
+              {/* Radar / Concentric Pulse Animation */}
+              <div className="relative mb-10 flex items-center justify-center">
+                {/* Outer pulsing ring */}
+                <div className="absolute w-72 h-72 rounded-full border border-orange-500/20 animate-ping duration-1000 pointer-events-none" />
+                {/* Secondary expanding wave */}
+                <div className="absolute w-60 h-60 rounded-full border border-orange-500/30 animate-pulse pointer-events-none" />
+                {/* Inner glowing zone */}
+                <div className="w-48 h-48 rounded-full bg-gradient-to-tr from-orange-600 via-amber-500 to-orange-400 p-[3px] shadow-[0_0_60px_rgba(249,115,22,0.35)] flex items-center justify-center">
+                  <div className="w-full h-full rounded-full bg-[#161824] flex flex-col items-center justify-center space-y-2 cursor-pointer hover:bg-[#1c1f2e] transition group">
+                    <FiZap className="text-5xl text-orange-400 group-hover:scale-110 transition duration-300" />
+                    <span className="text-[11px] font-bold uppercase tracking-wider text-orange-400/80">
+                      {isProcessing ? "Processing..." : "Tap Card"}
+                    </span>
+                  </div>
                 </div>
               </div>
-            </div>
 
-            {/* Tap Instructions */}
-            <h2 className="text-3xl lg:text-4xl font-black text-white tracking-tight mb-3">
-              TAP SPORTSVILLA CARD TO ENTER
-            </h2>
-            <p className="text-slate-400 max-w-lg text-base lg:text-lg mb-6 leading-relaxed">
-              Hold your physical NFC card or bracelet near the reader. The kiosk will instantly verify your
-              active court booking, membership pass, or drop-in admission.
-            </p>
+              {/* Tap Instructions */}
+              <h2 className="text-3xl lg:text-4xl font-black text-white tracking-tight mb-3">
+                TAP SPORTSVILLA CARD TO ENTER
+              </h2>
+              <p className="text-slate-400 max-w-lg text-base lg:text-lg mb-6 leading-relaxed">
+                Hold your physical NFC card or bracelet near the reader. The kiosk will instantly verify your
+                active court booking or membership pass.
+              </p>
 
-            {/* Supported Card Types Indicator Badges */}
-            <div className="flex flex-wrap items-center justify-center gap-3 text-xs font-semibold text-slate-300">
-              <span className="px-3 py-1.5 rounded-full bg-[#25293d] border border-[#34384e] flex items-center gap-1.5">
-                <span className="w-2 h-2 rounded-full bg-emerald-400" />
-                Priority 1: Confirmed Bookings
-              </span>
-              <span className="px-3 py-1.5 rounded-full bg-[#25293d] border border-[#34384e] flex items-center gap-1.5">
-                <span className="w-2 h-2 rounded-full bg-blue-400" />
-                Priority 2: Membership Attendance
-              </span>
-              <span className="px-3 py-1.5 rounded-full bg-[#25293d] border border-[#34384e] flex items-center gap-1.5">
-                <span className="w-2 h-2 rounded-full bg-amber-400" />
-                Priority 3: Drop-in Wallet (₹200)
-              </span>
-            </div>
-
-            {/* Processing Spinner Overlay */}
-            {isProcessing && (
-              <div className="absolute inset-0 bg-[#0f1117]/80 backdrop-blur-sm flex flex-col items-center justify-center z-10">
-                <div className="w-16 h-16 border-4 border-orange-500 border-t-transparent rounded-full animate-spin mb-4" />
-                <p className="text-lg font-bold text-white tracking-wide">Verifying Card Access...</p>
-                <p className="text-sm font-mono text-orange-400 mt-1">UID: {lastScannedCardUid}</p>
+              {/* Supported Card Types Indicator Badges */}
+              <div className="flex flex-wrap items-center justify-center gap-3 text-xs font-semibold text-slate-300">
+                <span className="px-3 py-1.5 rounded-full bg-[#25293d] border border-[#34384e] flex items-center gap-1.5">
+                  <span className="w-2 h-2 rounded-full bg-emerald-400" />
+                  Priority 1: Confirmed Bookings
+                </span>
+                <span className="px-3 py-1.5 rounded-full bg-[#25293d] border border-[#34384e] flex items-center gap-1.5">
+                  <span className="w-2 h-2 rounded-full bg-blue-400" />
+                  Priority 2: Membership Attendance
+                </span>
               </div>
-            )}
-          </div>
+
+              {/* Processing Spinner Overlay */}
+              {isProcessing && (
+                <div className="absolute inset-0 bg-[#0f1117]/80 backdrop-blur-sm flex flex-col items-center justify-center z-10">
+                  <div className="w-16 h-16 border-4 border-orange-500 border-t-transparent rounded-full animate-spin mb-4" />
+                  <p className="text-lg font-bold text-white tracking-wide">Verifying Card Access...</p>
+                  <p className="text-sm font-mono text-orange-400 mt-1">UID: {lastScannedCardUid}</p>
+                </div>
+              )}
+            </div>
+          )}
 
           {/* Quick Testing & Simulator Fallback Panel (Hidden by default, Ctrl+Shift+N to toggle) */}
           {showSimulator && (
@@ -594,47 +609,65 @@ export default function KioskClient({ initialTransactions = [] }: KioskClientPro
               {activeResult.message}
             </p>
 
+            {/* Action Button for Booking Mode */}
+            {activeResult.action === "REQUIRE_BOOKING" && activeResult.member && (
+              <div className="mt-8">
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setIsBookingMode(true);
+                    setActiveResult(null); // Close the modal and show booking flow inline
+                  }}
+                  className="px-8 py-4 bg-orange-600 hover:bg-orange-500 text-white font-bold rounded-xl text-lg shadow-lg hover:shadow-orange-500/25 transition-all w-full"
+                >
+                  Book Court Now
+                </button>
+              </div>
+            )}
+
             {/* Structured Details Box */}
-            <div className="my-6 p-4 rounded-2xl bg-black/40 border border-white/10 grid grid-cols-2 gap-4 text-left">
-              {activeResult.details?.courtName && (
-                <div>
-                  <span className="text-xs text-slate-400 uppercase font-semibold">Court / Turf</span>
-                  <p className="text-sm font-bold text-white">{activeResult.details.courtName}</p>
-                </div>
-              )}
-              {activeResult.details?.sportName && (
-                <div>
-                  <span className="text-xs text-slate-400 uppercase font-semibold">Sport</span>
-                  <p className="text-sm font-bold text-white">{activeResult.details.sportName}</p>
-                </div>
-              )}
-              {activeResult.details?.timeSlot && (
-                <div>
-                  <span className="text-xs text-slate-400 uppercase font-semibold">Slot Time</span>
-                  <p className="text-sm font-bold text-white">{activeResult.details.timeSlot}</p>
-                </div>
-              )}
-              {activeResult.details?.membershipPlanName && (
-                <div>
-                  <span className="text-xs text-slate-400 uppercase font-semibold">Membership Plan</span>
-                  <p className="text-sm font-bold text-white">{activeResult.details.membershipPlanName}</p>
-                </div>
-              )}
-              {activeResult.details?.dropInFeeRupees !== undefined && (
-                <div>
-                  <span className="text-xs text-slate-400 uppercase font-semibold">Drop-in Fee</span>
-                  <p className="text-sm font-bold text-amber-400">₹{activeResult.details.dropInFeeRupees}.00</p>
-                </div>
-              )}
-              {activeResult.member && (
-                <div>
-                  <span className="text-xs text-slate-400 uppercase font-semibold">Wallet Balance</span>
-                  <p className="text-sm font-bold text-emerald-400">
-                    ₹{activeResult.member.walletBalanceRupees.toFixed(2)}
-                  </p>
-                </div>
-              )}
-            </div>
+            {activeResult.action !== "REQUIRE_BOOKING" && (
+              <div className="my-6 p-4 rounded-2xl bg-black/40 border border-white/10 grid grid-cols-2 gap-4 text-left">
+                {activeResult.details?.courtName && (
+                  <div>
+                    <span className="text-xs text-slate-400 uppercase font-semibold">Court / Turf</span>
+                    <p className="text-sm font-bold text-white">{activeResult.details.courtName}</p>
+                  </div>
+                )}
+                {activeResult.details?.sportName && (
+                  <div>
+                    <span className="text-xs text-slate-400 uppercase font-semibold">Sport</span>
+                    <p className="text-sm font-bold text-white">{activeResult.details.sportName}</p>
+                  </div>
+                )}
+                {activeResult.details?.timeSlot && (
+                  <div>
+                    <span className="text-xs text-slate-400 uppercase font-semibold">Slot Time</span>
+                    <p className="text-sm font-bold text-white">{activeResult.details.timeSlot}</p>
+                  </div>
+                )}
+                {activeResult.details?.membershipPlanName && (
+                  <div>
+                    <span className="text-xs text-slate-400 uppercase font-semibold">Membership Plan</span>
+                    <p className="text-sm font-bold text-white">{activeResult.details.membershipPlanName}</p>
+                  </div>
+                )}
+                {activeResult.details?.dropInFeeRupees !== undefined && (
+                  <div>
+                    <span className="text-xs text-slate-400 uppercase font-semibold">Drop-in Fee</span>
+                    <p className="text-sm font-bold text-amber-400">₹{activeResult.details.dropInFeeRupees}.00</p>
+                  </div>
+                )}
+                {activeResult.member && (
+                  <div>
+                    <span className="text-xs text-slate-400 uppercase font-semibold">Wallet Balance</span>
+                    <p className="text-sm font-bold text-emerald-400">
+                      ₹{activeResult.member.walletBalanceRupees.toFixed(2)}
+                    </p>
+                  </div>
+                )}
+              </div>
+            )}
 
             {/* Action / Dismiss Button */}
             <button
