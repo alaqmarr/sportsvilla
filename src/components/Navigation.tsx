@@ -78,9 +78,11 @@ export function Navigation({
     {
       title: "NFC & Cards",
       links: [
-        { href: "/admin/nfc/assign", label: "Card Assignment", icon: <FiCreditCard /> },
-        { href: "/admin/nfc/transactions", label: "NFC Ledger", icon: <FiFileText /> },
         { href: "/admin/nfc/kiosk", label: "Check-in Kiosk", icon: <FiShield /> },
+        { href: "/admin/nfc/assign", label: "Card Assignment", icon: <FiCreditCard /> },
+        { href: "/admin/nfc/lookup", label: "Member Lookup", icon: <FiUser /> },
+        { href: "/admin/nfc/wallet", label: "Wallet POS", icon: <FiZap /> },
+        { href: "/admin/nfc/transactions", label: "NFC Ledger", icon: <FiFileText /> },
       ]
     },
     {

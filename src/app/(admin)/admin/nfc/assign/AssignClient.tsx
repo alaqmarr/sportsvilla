@@ -27,7 +27,7 @@ import {
 } from "./actions";
 import { playNfcSound } from "@/lib/soundUtils";
 import { useAlert } from "@/components/AlertProvider";
-import { useNfcReader } from "@/hooks/useNfcReader";
+import { useNfc } from "@/components/nfc/NfcProvider";
 import { formatIST } from "@/lib/dateUtils";
 
 interface MemberResult {
@@ -97,20 +97,14 @@ export default function AssignClient({ initialCards }: { initialCards: any[] }) 
     setCardUid(cleaned);
   };
 
-  const { isWebNfcSupported, isWebNfcActive, enableWebNfc, scanError } = useNfcReader({
-    enabled: true,
-    debounceMs: 1000,
-    playBeepOnScan: true,
-    onScan: (scannedUid) => {
-      setCardUid(scannedUid);
-    }
-  });
+  const { subscribe } = useNfc();
 
   useEffect(() => {
-    if (scanError) {
-      showAlert("NFC Reader Error", scanError, "error");
-    }
-  }, [scanError, showAlert]);
+    const unsubscribe = subscribe((scannedUid) => {
+      setCardUid(scannedUid);
+    });
+    return () => unsubscribe();
+  }, [subscribe]);
 
   // Refresh inventory
   const refreshInventory = async () => {
@@ -429,20 +423,6 @@ export default function AssignClient({ initialCards }: { initialCards: any[] }) 
                     2. Card UID (Tap or Scan) *
                   </label>
                   <div className="flex items-center gap-3">
-                    {isWebNfcSupported && !isWebNfcActive && (
-                      <button
-                        type="button"
-                        onClick={enableWebNfc}
-                        className="text-[11px] px-2 py-0.5 rounded bg-amber-500/20 text-amber-400 hover:bg-amber-500/30 flex items-center gap-1 border border-amber-500/40"
-                      >
-                        <FiRadio /> Enable Web NFC
-                      </button>
-                    )}
-                    {isWebNfcActive && (
-                      <span className="text-[11px] flex items-center gap-1 text-emerald-400">
-                        <FiRadio className="animate-pulse" /> Web NFC Active
-                      </span>
-                    )}
                     <button
                       type="button"
                       onClick={() => {

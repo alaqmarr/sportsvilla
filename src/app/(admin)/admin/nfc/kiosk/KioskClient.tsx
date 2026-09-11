@@ -21,8 +21,8 @@ import {
   FiRadio,
   FiHardDrive,
 } from "react-icons/fi";
-import { useNfcReader } from "@/hooks/useNfcReader";
 import { playNfcSound } from "@/lib/soundUtils";
+import { useNfc } from "@/components/nfc/NfcProvider";
 import { NfcCheckinResponse, NfcDeviceType } from "@/types/nfc";
 import { formatIST } from "@/lib/dateUtils";
 import { useAlert } from "@/components/AlertProvider";
@@ -206,28 +206,13 @@ export default function KioskClient({ initialTransactions = [] }: KioskClientPro
     [soundEnabled, triggerAutoDismiss]
   );
 
-  // Hook up unified hardware NFC reader
-  const {
-    isListening,
-    isWebNfcSupported,
-    isWebNfcActive,
-    enableWebNfc,
-    triggerSimulatedScan,
-    scanError,
-  } = useNfcReader({
-    enabled: true,
-    debounceMs: 3000,
-    playBeepOnScan: soundEnabled,
-    onScan: handleCardScan,
-  });
-
-  const { showAlert } = useAlert();
+  // Hook up unified hardware NFC reader from Context
+  const { isListening, subscribe, triggerSimulatedScan } = useNfc();
 
   useEffect(() => {
-    if (scanError) {
-      showAlert("NFC Reader Error", scanError, "error");
-    }
-  }, [scanError, showAlert]);
+    const unsubscribe = subscribe(handleCardScan);
+    return () => unsubscribe();
+  }, [handleCardScan, subscribe]);
 
   const handleManualSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -237,11 +222,11 @@ export default function KioskClient({ initialTransactions = [] }: KioskClientPro
   };
 
   return (
-    <div className="h-[calc(100vh-64px)] lg:h-screen w-full bg-[#0f1117] text-white flex flex-col font-sans select-none overflow-hidden">
+    <div className="h-full w-full bg-[#0f1117] text-white flex flex-col font-sans select-none overflow-hidden">
       {/* ========================================================================= */}
       {/* TOP STATUS BAR                                                            */}
       {/* ========================================================================= */}
-      <header className="h-20 bg-[#161824] border-b border-[#2a2d3e] px-6 lg:px-10 flex items-center justify-between shadow-lg z-20">
+      <header className="h-20 bg-[#161824] border-b border-[#2a2d3e] px-6 lg:px-10 flex items-center justify-between shadow-lg z-20 shrink-0">
         {/* Brand & Kiosk Title */}
         <div className="flex items-center gap-4">
           <div className="w-12 h-12 rounded-xl bg-gradient-to-tr from-orange-600 to-amber-500 flex items-center justify-center shadow-lg shadow-orange-500/20">
@@ -268,34 +253,6 @@ export default function KioskClient({ initialTransactions = [] }: KioskClientPro
             </span>
             <span className="text-slate-300 font-medium">USB Wedge:</span>
             <span className="text-emerald-400 font-semibold">{isListening ? "Active" : "Offline"}</span>
-          </div>
-
-          <div className="h-4 w-[1px] bg-[#2a2d3e]" />
-
-          {/* Web NFC Indicator */}
-          <div className="flex items-center gap-2 text-xs">
-            {isWebNfcSupported ? (
-              isWebNfcActive ? (
-                <div className="flex items-center gap-1.5 text-emerald-400">
-                  <FiRadio className="text-sm animate-pulse" />
-                  <span className="font-semibold">Web NFC Active</span>
-                </div>
-              ) : (
-                <button
-                  type="button"
-                  onClick={enableWebNfc}
-                  className="flex items-center gap-1.5 px-2 py-1 rounded bg-amber-500/20 text-amber-300 hover:bg-amber-500/30 transition border border-amber-500/40 text-xs font-semibold"
-                >
-                  <FiRadio className="text-sm" />
-                  <span>Tap to Enable Web NFC</span>
-                </button>
-              )
-            ) : (
-              <div className="flex items-center gap-1 text-slate-500" title="Supported on Android Chrome tablets">
-                <FiHardDrive className="text-sm" />
-                <span>Web NFC: Tablet only</span>
-              </div>
-            )}
           </div>
 
           <div className="h-4 w-[1px] bg-[#2a2d3e]" />
