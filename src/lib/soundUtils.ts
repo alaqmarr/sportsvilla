@@ -22,30 +22,29 @@ export function playNfcSound(type: NfcSoundType = "beep"): void {
 
     if (type === "beep") {
       osc.type = "sine";
-      osc.frequency.setValueAtTime(1000, context.currentTime);
-      gainNode.gain.setValueAtTime(0.1, context.currentTime);
-      gainNode.gain.exponentialRampToValueAtTime(0.01, context.currentTime + 0.1);
+      osc.frequency.setValueAtTime(800, context.currentTime); // Soft tap
+      gainNode.gain.setValueAtTime(0.02, context.currentTime); // Very quiet
+      gainNode.gain.exponentialRampToValueAtTime(0.001, context.currentTime + 0.1);
       osc.start(context.currentTime);
       osc.stop(context.currentTime + 0.1);
     } else if (type === "success") {
       osc.type = "sine";
-      osc.frequency.setValueAtTime(880, context.currentTime); // A5
-      osc.frequency.setValueAtTime(1108.73, context.currentTime + 0.1); // C#6
-      osc.frequency.setValueAtTime(1318.51, context.currentTime + 0.2); // E6
-
+      osc.frequency.setValueAtTime(523.25, context.currentTime); // C5
+      osc.frequency.setValueAtTime(659.25, context.currentTime + 0.1); // E5
+      
       gainNode.gain.setValueAtTime(0, context.currentTime);
-      gainNode.gain.linearRampToValueAtTime(0.2, context.currentTime + 0.05);
-      gainNode.gain.exponentialRampToValueAtTime(0.01, context.currentTime + 0.4);
+      gainNode.gain.linearRampToValueAtTime(0.04, context.currentTime + 0.05);
+      gainNode.gain.exponentialRampToValueAtTime(0.001, context.currentTime + 0.3);
       osc.start(context.currentTime);
-      osc.stop(context.currentTime + 0.4);
+      osc.stop(context.currentTime + 0.3);
     } else if (type === "error") {
-      osc.type = "sawtooth";
-      osc.frequency.setValueAtTime(200, context.currentTime);
-      osc.frequency.linearRampToValueAtTime(150, context.currentTime + 0.2);
+      osc.type = "triangle"; // Softer than sawtooth
+      osc.frequency.setValueAtTime(300, context.currentTime);
+      osc.frequency.linearRampToValueAtTime(250, context.currentTime + 0.2);
 
       gainNode.gain.setValueAtTime(0, context.currentTime);
-      gainNode.gain.linearRampToValueAtTime(0.2, context.currentTime + 0.05);
-      gainNode.gain.exponentialRampToValueAtTime(0.01, context.currentTime + 0.3);
+      gainNode.gain.linearRampToValueAtTime(0.03, context.currentTime + 0.05);
+      gainNode.gain.exponentialRampToValueAtTime(0.001, context.currentTime + 0.3);
       osc.start(context.currentTime);
       osc.stop(context.currentTime + 0.3);
     }

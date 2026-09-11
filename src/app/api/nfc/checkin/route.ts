@@ -42,8 +42,8 @@ export async function POST(req: NextRequest): Promise<NextResponse<NfcCheckinRes
       {
         success: false,
         action: "REJECTED",
-        message: "Server error occurred during check-in resolution.",
-        error: error?.message || "INTERNAL_SERVER_ERROR",
+        message: `Server Error: ${error?.message || "Unknown internal error"}`,
+        error: "INTERNAL_SERVER_ERROR",
       },
       { status: 500 }
     );

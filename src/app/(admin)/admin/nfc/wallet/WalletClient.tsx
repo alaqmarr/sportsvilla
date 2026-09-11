@@ -39,7 +39,6 @@ export default function WalletClient() {
             setCardUid(res.cardUid);
             setAmount("");
             setDescription("");
-            showAlert("Card Scanned", `Found member: ${res.member.name}`, "success");
           } else {
             showAlert("Scan Failed", res.error || "Unknown error", "error");
             resetState();

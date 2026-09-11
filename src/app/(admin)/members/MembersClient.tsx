@@ -22,6 +22,9 @@ export default function MembersClient({ initialMembers, plans, turfs = [] }: { i
   const [page, setPage] = useState(1);
   const itemsPerPage = 20;
 
+  const [isMounted, setIsMounted] = useState(false);
+  useEffect(() => { setIsMounted(true); }, []);
+
   const filteredMembers = useMemo(() => {
     if (!searchQuery) return members;
     const lowerQuery = searchQuery.toLowerCase();
@@ -410,8 +413,20 @@ export default function MembersClient({ initialMembers, plans, turfs = [] }: { i
         </div>
       </div>
 
+      <div className="mb-6">
+        <input 
+          type="text" 
+          placeholder="Search members by name, mobile, or ID..." 
+          className="w-full sm:max-w-md bg-[#0f1117] border border-[#2a2d3e] rounded-lg px-4 py-2.5 text-white placeholder-gray-600 focus:border-orange-500 focus:ring-2 focus:ring-orange-500 focus:outline-none text-sm transition-all"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+        />
+      </div>
+
       {activeTab === 'MEMBERS' && (
-        members.length === 0 ? (
+        !isMounted ? (
+          <TableSkeleton rows={5} cols={5} />
+        ) : filteredMembers.length === 0 ? (
           <div className="bg-[#161923] border border-[#2a2d3e] rounded-xl p-16 text-center flex flex-col items-center">
             <div className="w-16 h-16 rounded-full bg-orange-500/10 text-orange-400 flex items-center justify-center text-3xl mb-6"><FiUserCheck /></div>
             <h3 className="text-2xl font-bold text-white mb-2">No Members Found</h3>
@@ -421,18 +436,18 @@ export default function MembersClient({ initialMembers, plans, turfs = [] }: { i
           </div>
         ) : (
           <div className="bg-[#161923] border border-[#2a2d3e] rounded-xl overflow-hidden">
-            <div className="overflow-x-auto">
-              <table className="w-full min-w-[800px]">
-                <thead>
+            <div className="overflow-x-auto max-h-[60vh] overflow-y-auto">
+              <table className="w-full min-w-[800px] relative">
+                <thead className="sticky top-0 bg-[#161923] z-10">
                   <tr>
-                    <th className="bg-[#0f1117] text-gray-500 text-xs uppercase tracking-wider font-semibold px-6 py-4 text-left border-b border-[#2a2d3e] w-[30%]">Member Profile</th>
-                    <th className="bg-[#0f1117] text-gray-500 text-xs uppercase tracking-wider font-semibold px-6 py-4 text-left border-b border-[#2a2d3e] w-[25%]">Contact details</th>
-                    <th className="bg-[#0f1117] text-gray-500 text-xs uppercase tracking-wider font-semibold px-6 py-4 text-left border-b border-[#2a2d3e] w-[30%]">Active Plans</th>
-                    <th className="bg-[#0f1117] text-gray-500 text-xs uppercase tracking-wider font-semibold px-6 py-4 text-right border-b border-[#2a2d3e] w-[15%]">Actions</th>
+                    <th className="bg-[#0f1117] text-gray-500 text-xs uppercase tracking-wider font-semibold px-6 py-4 text-left border-b border-[#2a2d3e] w-[30%] shadow-[0_1px_0_0_#2a2d3e]">Member Profile</th>
+                    <th className="bg-[#0f1117] text-gray-500 text-xs uppercase tracking-wider font-semibold px-6 py-4 text-left border-b border-[#2a2d3e] w-[25%] shadow-[0_1px_0_0_#2a2d3e]">Contact details</th>
+                    <th className="bg-[#0f1117] text-gray-500 text-xs uppercase tracking-wider font-semibold px-6 py-4 text-left border-b border-[#2a2d3e] w-[30%] shadow-[0_1px_0_0_#2a2d3e]">Active Plans</th>
+                    <th className="bg-[#0f1117] text-gray-500 text-xs uppercase tracking-wider font-semibold px-6 py-4 text-right border-b border-[#2a2d3e] w-[15%] shadow-[0_1px_0_0_#2a2d3e]">Actions</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {members.slice((page - 1) * itemsPerPage, page * itemsPerPage).map(member => (
+                  {filteredMembers.slice((page - 1) * itemsPerPage, page * itemsPerPage).map(member => (
                     <tr key={member.id} className="hover:bg-[#1c1f2e]/50 transition-colors">
                       <td className="px-6 py-5 text-sm border-b border-[#2a2d3e]">
                         <div className="flex items-center gap-4">
@@ -489,10 +504,10 @@ export default function MembersClient({ initialMembers, plans, turfs = [] }: { i
                 </tbody>
               </table>
             </div>
-            {members.length > itemsPerPage && (
+            {filteredMembers.length > itemsPerPage && (
               <div className="flex justify-between items-center p-4 border-t border-[#2a2d3e]">
                 <div className="text-sm text-gray-500">
-                  Showing {(page - 1) * itemsPerPage + 1} to {Math.min(page * itemsPerPage, members.length)} of {members.length}
+                  Showing {(page - 1) * itemsPerPage + 1} to {Math.min(page * itemsPerPage, filteredMembers.length)} of {filteredMembers.length}
                 </div>
                 <div className="flex gap-2">
                   <button 
@@ -503,7 +518,7 @@ export default function MembersClient({ initialMembers, plans, turfs = [] }: { i
                     Previous
                   </button>
                   <button 
-                    disabled={page * itemsPerPage >= members.length}
+                    disabled={page * itemsPerPage >= filteredMembers.length}
                     onClick={() => setPage(p => p + 1)}
                     className="px-3 py-1 bg-[#1a1d27] border border-[#2a2d3e] text-white rounded disabled:opacity-50"
                   >
@@ -517,7 +532,9 @@ export default function MembersClient({ initialMembers, plans, turfs = [] }: { i
       )}
 
       {activeTab === 'FAMILIES' && (
-        families.length === 0 ? (
+        !isMounted ? (
+          <TableSkeleton rows={5} cols={5} />
+        ) : families.length === 0 ? (
           <div className="bg-[#161923] border border-[#2a2d3e] rounded-xl p-16 text-center flex flex-col items-center">
             <div className="w-16 h-16 rounded-full bg-orange-500/10 text-orange-400 flex items-center justify-center text-3xl mb-6"><FiUsers /></div>
             <h3 className="text-2xl font-bold text-white mb-2">No Families Setup</h3>
@@ -554,8 +571,12 @@ export default function MembersClient({ initialMembers, plans, turfs = [] }: { i
       )}
 
       {/* Edit/Create Member Modal */}
+      <AnimatePresence>
       {showMemberModal && (
-        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-[100] p-4">
+        <motion.div 
+          initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+          className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-[100] p-4"
+        >
           <div className="bg-[#161923] border border-[#2a2d3e] rounded-xl p-5 sm:p-8 w-full max-w-md shadow-2xl max-h-[95vh] overflow-y-auto">
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-xl font-bold font-['Outfit'] text-white">{editingId ? 'Edit Member' : 'Register Member'}</h2>
@@ -564,27 +585,32 @@ export default function MembersClient({ initialMembers, plans, turfs = [] }: { i
             <form onSubmit={handleMemberSubmit}>
               <div className="mb-5">
                 <label className="block text-xs uppercase tracking-wider font-semibold text-gray-500 mb-2">Full Name</label>
-                <input type="text" className="w-full bg-[#0f1117] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white placeholder-gray-600 focus:border-orange-500/50 focus:ring-2 focus:ring-orange-500/20 focus:outline-none text-sm" value={name} onChange={e => setName(e.target.value)} required placeholder="e.g. John Doe" />
+                <input type="text" className="w-full bg-[#0f1117] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white placeholder-gray-600 focus:border-orange-500 focus:ring-2 focus:ring-orange-500 focus:outline-none text-sm" value={name} onChange={e => setName(e.target.value)} required placeholder="e.g. John Doe" />
               </div>
               <div className="mb-5">
                 <label className="block text-xs uppercase tracking-wider font-semibold text-gray-500 mb-2">Mobile Number</label>
-                <input type="tel" className="w-full bg-[#0f1117] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white placeholder-gray-600 focus:border-orange-500/50 focus:ring-2 focus:ring-orange-500/20 focus:outline-none text-sm" value={mobile} onChange={e => setMobile(e.target.value)} required pattern="[0-9]{10}" placeholder="10-digit mobile" />
+                <input type="tel" className="w-full bg-[#0f1117] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white placeholder-gray-600 focus:border-orange-500 focus:ring-2 focus:ring-orange-500 focus:outline-none text-sm" value={mobile} onChange={e => setMobile(e.target.value)} required pattern="[0-9]{10}" placeholder="10-digit mobile" />
               </div>
               <div className="mb-5">
                 <label className="block text-xs uppercase tracking-wider font-semibold text-gray-500 mb-2">Email (Optional)</label>
-                <input type="email" className="w-full bg-[#0f1117] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white placeholder-gray-600 focus:border-orange-500/50 focus:ring-2 focus:ring-orange-500/20 focus:outline-none text-sm" value={email} onChange={e => setEmail(e.target.value)} placeholder="john@example.com" />
+                <input type="email" className="w-full bg-[#0f1117] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white placeholder-gray-600 focus:border-orange-500 focus:ring-2 focus:ring-orange-500 focus:outline-none text-sm" value={email} onChange={e => setEmail(e.target.value)} placeholder="john@example.com" />
               </div>
               <button type="submit" className="w-full bg-orange-500 hover:bg-orange-600 text-white rounded-lg px-5 py-3 text-sm font-semibold transition-colors cursor-pointer border-none disabled:opacity-50" disabled={loading}>
                 {loading ? "Saving..." : "Save Member"}
               </button>
             </form>
           </div>
-        </div>
+        </motion.div>
       )}
+      </AnimatePresence>
 
       {/* Family Registration Modal */}
+      <AnimatePresence>
       {showFamilyModal && (
-        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-[100] p-4">
+        <motion.div 
+          initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+          className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-[100] p-4"
+        >
           <div className="bg-[#161923] border border-[#2a2d3e] rounded-xl p-5 sm:p-8 w-full max-w-lg shadow-2xl max-h-[95vh] overflow-y-auto">
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-xl font-bold font-['Outfit'] text-white">Setup Family Account</h2>
@@ -593,7 +619,7 @@ export default function MembersClient({ initialMembers, plans, turfs = [] }: { i
             <form onSubmit={handleFamilySubmit}>
               <div className="mb-6">
                 <label className="block text-xs uppercase tracking-wider font-semibold text-gray-500 mb-2">Primary Mobile Number</label>
-                <input type="tel" className="w-full bg-[#0f1117] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white placeholder-gray-600 focus:border-orange-500/50 focus:ring-2 focus:ring-orange-500/20 focus:outline-none text-sm" value={familyMobile} onChange={e => setFamilyMobile(e.target.value)} required pattern="[0-9]{10}" placeholder="10-digit mobile" />
+                <input type="tel" className="w-full bg-[#0f1117] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white placeholder-gray-600 focus:border-orange-500 focus:ring-2 focus:ring-orange-500 focus:outline-none text-sm" value={familyMobile} onChange={e => setFamilyMobile(e.target.value)} required pattern="[0-9]{10}" placeholder="10-digit mobile" />
               </div>
               
               <div className="mb-4">
@@ -618,13 +644,18 @@ export default function MembersClient({ initialMembers, plans, turfs = [] }: { i
               </button>
             </form>
           </div>
-        </div>
+        </motion.div>
       )}
+      </AnimatePresence>
 
       {/* Assign Plan Modal & ID Card Modal omitted for brevity, keeping same logic */}
       {/* Assign Plan Modal (Refactored to Mobile Input) */}
+      <AnimatePresence>
       {showPlanModal && (
-        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-[100] p-4">
+        <motion.div 
+          initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+          className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-[100] p-4"
+        >
           <div className="bg-[#161923] border border-[#2a2d3e] rounded-xl p-5 sm:p-8 w-full max-w-md shadow-2xl max-h-[95vh] overflow-y-auto">
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-xl font-bold font-['Outfit'] text-white">Assign Plan to Member</h2>
@@ -634,7 +665,7 @@ export default function MembersClient({ initialMembers, plans, turfs = [] }: { i
               <div className="mb-5">
                 <label className="block text-xs uppercase tracking-wider font-semibold text-gray-500 mb-2">Member's Mobile Number</label>
                 <input 
-                  type="tel" className="w-full bg-[#0f1117] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white placeholder-gray-600 focus:border-orange-500/50 focus:ring-2 focus:ring-orange-500/20 focus:outline-none text-sm" 
+                  type="tel" className="w-full bg-[#0f1117] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white placeholder-gray-600 focus:border-orange-500 focus:ring-2 focus:ring-orange-500 focus:outline-none text-sm" 
                   value={assignMobile} onChange={e => setAssignMobile(e.target.value)} required pattern="[0-9]{10}" placeholder="Enter 10-digit mobile..." 
                 />
                 {assignMobile.length === 10 && (
@@ -689,18 +720,18 @@ export default function MembersClient({ initialMembers, plans, turfs = [] }: { i
                 <div className="grid grid-cols-2 gap-4 mb-5">
                   <div>
                     <label className="block text-xs uppercase tracking-wider font-semibold text-gray-500 mb-2">Full Name <span className="text-red-400">*</span></label>
-                    <input type="text" className="w-full bg-[#0f1117] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white placeholder-gray-600 focus:border-orange-500/50 focus:ring-2 focus:ring-orange-500/20 focus:outline-none text-sm" value={assignName} onChange={e => setAssignName(e.target.value)} required placeholder="Required" />
+                    <input type="text" className="w-full bg-[#0f1117] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white placeholder-gray-600 focus:border-orange-500 focus:ring-2 focus:ring-orange-500 focus:outline-none text-sm" value={assignName} onChange={e => setAssignName(e.target.value)} required placeholder="Required" />
                   </div>
                   <div>
                     <label className="block text-xs uppercase tracking-wider font-semibold text-gray-500 mb-2">Email</label>
-                    <input type="email" className="w-full bg-[#0f1117] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white placeholder-gray-600 focus:border-orange-500/50 focus:ring-2 focus:ring-orange-500/20 focus:outline-none text-sm" value={assignEmail} onChange={e => setAssignEmail(e.target.value)} placeholder="Optional" />
+                    <input type="email" className="w-full bg-[#0f1117] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white placeholder-gray-600 focus:border-orange-500 focus:ring-2 focus:ring-orange-500 focus:outline-none text-sm" value={assignEmail} onChange={e => setAssignEmail(e.target.value)} placeholder="Optional" />
                   </div>
                 </div>
               )}
 
               <div className="mb-5">
                 <label className="block text-xs uppercase tracking-wider font-semibold text-gray-500 mb-2">Select Membership Plan</label>
-                <select className="w-full bg-[#0f1117] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white placeholder-gray-600 focus:border-orange-500/50 focus:ring-2 focus:ring-orange-500/20 focus:outline-none text-sm" value={assignPlanId} onChange={e => { setAssignPlanId(e.target.value); setAssignMemberIds([]); }} required>
+                <select className="w-full bg-[#0f1117] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white placeholder-gray-600 focus:border-orange-500 focus:ring-2 focus:ring-orange-500 focus:outline-none text-sm" value={assignPlanId} onChange={e => { setAssignPlanId(e.target.value); setAssignMemberIds([]); }} required>
                   <option value="">-- Choose Plan --</option>
                   {plans.map(p => <option key={p.id} value={p.id}>{p.name} - {p.sport?.name} {p.isFamilyPlan && `(Family Size: ${p.familySize})`}</option>)}
                 </select>
@@ -739,12 +770,12 @@ export default function MembersClient({ initialMembers, plans, turfs = [] }: { i
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-5">
                 <div>
                   <label className="block text-xs uppercase tracking-wider font-semibold text-gray-500 mb-2">Start Date</label>
-                  <input type="date" className="w-full bg-[#0f1117] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white placeholder-gray-600 focus:border-orange-500/50 focus:ring-2 focus:ring-orange-500/20 focus:outline-none text-sm" value={startDate} onChange={e => setStartDate(e.target.value)} required />
+                  <input type="date" className="w-full bg-[#0f1117] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white placeholder-gray-600 focus:border-orange-500 focus:ring-2 focus:ring-orange-500 focus:outline-none text-sm" value={startDate} onChange={e => setStartDate(e.target.value)} required />
                 </div>
                 <div>
                   <label className="block text-xs uppercase tracking-wider font-semibold text-gray-500 mb-2">Start Time</label>
                   <select 
-                    className="w-full bg-[#0f1117] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white placeholder-gray-600 focus:border-orange-500/50 focus:ring-2 focus:ring-orange-500/20 focus:outline-none text-sm"
+                    className="w-full bg-[#0f1117] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white placeholder-gray-600 focus:border-orange-500 focus:ring-2 focus:ring-orange-500 focus:outline-none text-sm"
                     value={assignStartTime}
                     onChange={e => setAssignStartTime(e.target.value)}
                   >
@@ -755,7 +786,7 @@ export default function MembersClient({ initialMembers, plans, turfs = [] }: { i
                 <div>
                   <label className="block text-xs uppercase tracking-wider font-semibold text-gray-500 mb-2">End Time</label>
                   <select 
-                    className="w-full bg-[#0f1117] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white placeholder-gray-600 focus:border-orange-500/50 focus:ring-2 focus:ring-orange-500/20 focus:outline-none text-sm"
+                    className="w-full bg-[#0f1117] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white placeholder-gray-600 focus:border-orange-500 focus:ring-2 focus:ring-orange-500 focus:outline-none text-sm"
                     value={assignEndTime}
                     onChange={e => setAssignEndTime(e.target.value)}
                   >
@@ -766,7 +797,7 @@ export default function MembersClient({ initialMembers, plans, turfs = [] }: { i
               </div>
               <div className="mb-5">
                 <label className="block text-xs uppercase tracking-wider font-semibold text-gray-500 mb-2">Assigned Court/Turf</label>
-                <select className="w-full bg-[#0f1117] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white placeholder-gray-600 focus:border-orange-500/50 focus:ring-2 focus:ring-orange-500/20 focus:outline-none text-sm" value={assignTurfId} onChange={e => setAssignTurfId(e.target.value)}>
+                <select className="w-full bg-[#0f1117] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white placeholder-gray-600 focus:border-orange-500 focus:ring-2 focus:ring-orange-500 focus:outline-none text-sm" value={assignTurfId} onChange={e => setAssignTurfId(e.target.value)}>
                   <option value="">-- No Specific Court --</option>
                   {turfs.filter(t => !selectedAssignPlan || t.sports?.some((ts: any) => ts.sportId === selectedAssignPlan.sportId)).map(t => (
                     <option key={t.id} value={t.id}>{t.name}</option>
@@ -778,12 +809,17 @@ export default function MembersClient({ initialMembers, plans, turfs = [] }: { i
               </button>
             </form>
           </div>
-        </div>
+        </motion.div>
       )}
+      </AnimatePresence>
 
       {/* ID Card Display & Download Modal */}
+      <AnimatePresence>
       {showIdCardModal && idCardData && (
-        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-[100] p-4">
+        <motion.div 
+          initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+          className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-[100] p-4"
+        >
           <div className="bg-[#161923] border border-[#2a2d3e] rounded-xl p-5 sm:p-8 w-full max-w-[420px] shadow-2xl max-h-[95vh] overflow-y-auto">
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-xl font-bold font-['Outfit'] text-white">Digital ID Card</h2>
@@ -845,11 +881,16 @@ export default function MembersClient({ initialMembers, plans, turfs = [] }: { i
               The WhatsApp link sends members directly to their own personalized online portal.
             </p>
           </div>
-        </div>
+        </motion.div>
       )}
+      </AnimatePresence>
 
+      <AnimatePresence>
       {showEditMembershipModal && editingMembership && (
-        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <motion.div 
+          initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+          className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+        >
           <div className="bg-[#12141c] border border-[#2a2d3e] rounded-2xl w-full max-w-md overflow-hidden shadow-2xl relative">
             <div className="p-6 border-b border-[#2a2d3e] flex justify-between items-center bg-[#181b25]">
               <h3 className="text-lg font-bold text-white flex items-center gap-2">
@@ -864,7 +905,7 @@ export default function MembersClient({ initialMembers, plans, turfs = [] }: { i
                   <label className="block text-xs uppercase tracking-wider font-semibold text-gray-500 mb-2">Start Date</label>
                   <input 
                     type="date" 
-                    className="w-full bg-[#0f1117] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white focus:border-orange-500/50 focus:ring-2 focus:ring-orange-500/20 outline-none text-sm"
+                    className="w-full bg-[#0f1117] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white focus:border-orange-500 focus:ring-2 focus:ring-orange-500 focus:outline-none text-sm"
                     value={editMembershipStart}
                     onChange={e => setEditMembershipStart(e.target.value)}
                     required
@@ -874,7 +915,7 @@ export default function MembersClient({ initialMembers, plans, turfs = [] }: { i
                   <label className="block text-xs uppercase tracking-wider font-semibold text-gray-500 mb-2">End Date</label>
                   <input 
                     type="date" 
-                    className="w-full bg-[#0f1117] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white focus:border-orange-500/50 focus:ring-2 focus:ring-orange-500/20 outline-none text-sm"
+                    className="w-full bg-[#0f1117] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white focus:border-orange-500 focus:ring-2 focus:ring-orange-500 focus:outline-none text-sm"
                     value={editMembershipEnd}
                     onChange={e => setEditMembershipEnd(e.target.value)}
                     required
@@ -886,7 +927,7 @@ export default function MembersClient({ initialMembers, plans, turfs = [] }: { i
                 <div>
                   <label className="block text-xs uppercase tracking-wider font-semibold text-gray-500 mb-2">Start Time</label>
                   <select 
-                    className="w-full bg-[#0f1117] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white focus:border-orange-500/50 focus:ring-2 focus:ring-orange-500/20 outline-none text-sm"
+                    className="w-full bg-[#0f1117] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white focus:border-orange-500 focus:ring-2 focus:ring-orange-500 focus:outline-none text-sm"
                     value={editMembershipStartTime}
                     onChange={e => setEditMembershipStartTime(e.target.value)}
                   >
@@ -897,7 +938,7 @@ export default function MembersClient({ initialMembers, plans, turfs = [] }: { i
                 <div>
                   <label className="block text-xs uppercase tracking-wider font-semibold text-gray-500 mb-2">End Time</label>
                   <select 
-                    className="w-full bg-[#0f1117] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white focus:border-orange-500/50 focus:ring-2 focus:ring-orange-500/20 outline-none text-sm"
+                    className="w-full bg-[#0f1117] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white focus:border-orange-500 focus:ring-2 focus:ring-orange-500 focus:outline-none text-sm"
                     value={editMembershipEndTime}
                     onChange={e => setEditMembershipEndTime(e.target.value)}
                   >
@@ -910,7 +951,7 @@ export default function MembersClient({ initialMembers, plans, turfs = [] }: { i
               <div className="mb-5">
                 <label className="block text-xs uppercase tracking-wider font-semibold text-gray-500 mb-2">Assigned Court/Turf</label>
                 <select 
-                  className="w-full bg-[#0f1117] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white focus:border-orange-500/50 focus:ring-2 focus:ring-orange-500/20 outline-none text-sm"
+                  className="w-full bg-[#0f1117] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white focus:border-orange-500 focus:ring-2 focus:ring-orange-500 focus:outline-none text-sm"
                   value={editMembershipTurfId}
                   onChange={e => setEditMembershipTurfId(e.target.value)}
                 >
@@ -924,7 +965,7 @@ export default function MembersClient({ initialMembers, plans, turfs = [] }: { i
               <div className="mb-8">
                 <label className="block text-xs uppercase tracking-wider font-semibold text-gray-500 mb-2">Status</label>
                 <select 
-                  className="w-full bg-[#0f1117] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white focus:border-orange-500/50 focus:ring-2 focus:ring-orange-500/20 outline-none text-sm"
+                  className="w-full bg-[#0f1117] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white focus:border-orange-500 focus:ring-2 focus:ring-orange-500 focus:outline-none text-sm"
                   value={editMembershipStatus}
                   onChange={e => setEditMembershipStatus(e.target.value)}
                   required
@@ -944,8 +985,9 @@ export default function MembersClient({ initialMembers, plans, turfs = [] }: { i
               </button>
             </form>
           </div>
-        </div>
+        </motion.div>
       )}
+      </AnimatePresence>
 
     </div>
   );

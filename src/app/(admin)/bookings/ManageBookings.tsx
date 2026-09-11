@@ -8,10 +8,13 @@ import { FiXCircle, FiCheckCircle, FiClock, FiCreditCard, FiTrash2, FiMaximize2,
 import { rescheduleBooking } from "./actions";
 import { useNfcReader } from "@/hooks/useNfcReader";
 import { playNfcSound } from "@/lib/soundUtils";
+import { TableSkeleton } from "@/components/ui/Skeleton";
+import { AnimatePresence, motion } from "framer-motion";
 
 export default function ManageBookings() {
   const { showAlert, showConfirm } = useAlert();
   const [date, setDate] = useState(todayIST());
+  const [searchQuery, setSearchQuery] = useState('');
   const [bookings, setBookings] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   
@@ -327,7 +330,17 @@ export default function ManageBookings() {
     
     const now = new Date().getTime();
     
-    [...bookings].sort((a, b) => new Date(a.startTime).getTime() - new Date(b.startTime).getTime()).forEach(b => {
+    const filteredBookings = bookings.filter(b => {
+      if (!searchQuery) return true;
+      const q = searchQuery.toLowerCase();
+      return (
+        b.member?.name?.toLowerCase().includes(q) ||
+        b.member?.mobile?.includes(q) ||
+        b.turf?.name?.toLowerCase().includes(q)
+      );
+    });
+
+    [...filteredBookings].sort((a, b) => new Date(a.startTime).getTime() - new Date(b.startTime).getTime()).forEach(b => {
       const start = new Date(b.startTime).getTime();
       const end = new Date(b.endTime).getTime();
       
@@ -343,7 +356,7 @@ export default function ManageBookings() {
     });
     
     return groups;
-  }, [bookings]);
+  }, [bookings, searchQuery]);
 
   function getDisplayStatus(b: any) {
     if (b.status === 'CANCELLED') return { text: 'CANCELLED', color: 'bg-red-500/10 text-red-400 border-red-500/20' };
@@ -365,6 +378,13 @@ export default function ManageBookings() {
           <p className="text-gray-500 text-sm mt-1">View and manage all bookings for a specific day.</p>
         </div>
         <div className="flex items-center gap-3">
+          <input
+            type="text"
+            placeholder="Search Name, Mobile, or Turf..."
+            value={searchQuery}
+            onChange={e => setSearchQuery(e.target.value)}
+            className="bg-[#161923] border border-[#2a2d3e] rounded-lg px-4 py-2.5 text-white focus:border-orange-500/50 focus:ring-2 focus:ring-orange-500 focus:outline-none"
+          />
           <button onClick={handleExportCSV} className="bg-gray-800 hover:bg-gray-700 text-white border border-gray-600 rounded-lg px-4 py-2.5 text-sm font-semibold inline-flex items-center gap-2 transition-colors cursor-pointer">
             <FiFileText /> Export
           </button>
@@ -372,7 +392,7 @@ export default function ManageBookings() {
             type="date" 
             value={date}
             onChange={e => setDate(e.target.value)}
-            className="bg-[#161923] border border-[#2a2d3e] rounded-lg px-4 py-2.5 text-white focus:border-emerald-500/50 focus:outline-none"
+            className="bg-[#161923] border border-[#2a2d3e] rounded-lg px-4 py-2.5 text-white focus:border-orange-500/50 focus:ring-2 focus:ring-orange-500 focus:outline-none"
           />
         </div>
       </div>
@@ -380,7 +400,7 @@ export default function ManageBookings() {
       <div className="bg-[#161923] border border-[#2a2d3e] rounded-xl overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
-            <thead>
+            <thead className="sticky top-0 bg-[#161923] z-10">
               <tr className="bg-[#1c1f2e] border-b border-[#2a2d3e]">
                 <th className="px-6 py-4 text-xs uppercase tracking-wider font-semibold text-gray-500">Time & Court</th>
                 <th className="px-6 py-4 text-xs uppercase tracking-wider font-semibold text-gray-500">Member</th>
@@ -392,11 +412,8 @@ export default function ManageBookings() {
             <tbody className="divide-y divide-[#2a2d3e]">
               {loading ? (
                 <tr>
-                  <td colSpan={5} className="px-6 py-10 text-center text-gray-500">
-                    <div className="flex justify-center mb-2">
-                      <div className="w-6 h-6 border-2 border-emerald-500/30 border-t-emerald-500 rounded-full animate-spin"></div>
-                    </div>
-                    Loading bookings...
+                  <td colSpan={5} className="px-6 py-10">
+                    <TableSkeleton rows={6} cols={6} />
                   </td>
                 </tr>
               ) : bookings.length === 0 ? (
@@ -527,14 +544,27 @@ export default function ManageBookings() {
           </table>
         </div>
       </div>
+      <AnimatePresence>
       {payModal.show && payModal.booking && (() => {
         const totalPaid = payModal.booking.payments?.reduce((sum: number, p: any) => sum + p.amount, 0) || 0;
         const netPrice = payModal.booking.price - (payModal.booking.discountAmount || 0);
         const balance = Math.max(0, netPrice - totalPaid);
         return (
-          <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-[100] p-4">
+          <motion.div 
+            key="pay-modal-backdrop"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-[100] p-4"
+          >
             <div className="absolute inset-0" onClick={closePayModal} />
-            <div className="bg-[#161923] border border-[#2a2d3e] rounded-2xl w-full max-w-2xl shadow-2xl overflow-hidden flex flex-col md:flex-row my-8 relative z-10">
+            <motion.div 
+              key="pay-modal-content"
+              initial={{ scale: 0.95, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.95, opacity: 0 }}
+              className="bg-[#161923] border border-[#2a2d3e] rounded-2xl w-full max-w-2xl shadow-2xl overflow-hidden flex flex-col md:flex-row my-8 relative z-10"
+            >
               <button 
                 onClick={closePayModal}
                 className="absolute top-4 right-4 text-gray-500 hover:text-white z-10"
@@ -656,7 +686,7 @@ export default function ManageBookings() {
                             if (e.key === "Enter") handleNfcPayment();
                           }}
                           placeholder="04A1B2C3"
-                          className="flex-1 bg-[#1c1f2e] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white font-mono uppercase focus:border-orange-500/50 focus:outline-none"
+                          className="flex-1 bg-[#1c1f2e] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white font-mono uppercase focus:border-orange-500/50 focus:ring-2 focus:ring-orange-500 focus:outline-none"
                         />
                         <button
                           type="button"
@@ -679,7 +709,7 @@ export default function ManageBookings() {
                             type="text" 
                             inputMode="numeric"
                             pattern="[0-9]*"
-                            className="w-full bg-[#1c1f2e] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white focus:border-emerald-500/50 focus:outline-none"
+                            className="w-full bg-[#1c1f2e] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white focus:border-orange-500/50 focus:ring-2 focus:ring-orange-500 focus:outline-none"
                             value={cashAmount}
                             onChange={e => {
                               const valStr = e.target.value.replace(/\D/g, '');
@@ -702,7 +732,7 @@ export default function ManageBookings() {
                             type="text" 
                             inputMode="numeric"
                             pattern="[0-9]*"
-                            className="w-full bg-[#1c1f2e] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white focus:border-emerald-500/50 focus:outline-none"
+                            className="w-full bg-[#1c1f2e] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white focus:border-orange-500/50 focus:ring-2 focus:ring-orange-500 focus:outline-none"
                             value={onlineAmount}
                             onChange={e => {
                               const valStr = e.target.value.replace(/\D/g, '');
@@ -765,15 +795,29 @@ export default function ManageBookings() {
                   <p className="text-sm text-orange-400">UPI not configured.</p>
                 )}
               </div>
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
         );
       })()}
+      </AnimatePresence>
 
       {/* Extension Modal */}
+      <AnimatePresence>
       {extModal.show && (
-        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-[100] p-4 overflow-y-auto">
-          <div className="bg-[#161923] border border-[#2a2d3e] rounded-2xl w-full max-w-md shadow-2xl overflow-hidden flex flex-col my-8">
+        <motion.div 
+          key="ext-modal-backdrop"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-[100] p-4 overflow-y-auto"
+        >
+          <motion.div 
+            key="ext-modal-content"
+            initial={{ scale: 0.95, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0.95, opacity: 0 }}
+            className="bg-[#161923] border border-[#2a2d3e] rounded-2xl w-full max-w-md shadow-2xl overflow-hidden flex flex-col my-8"
+          >
             <div className="p-6 border-b border-[#2a2d3e] flex justify-between items-center">
               <h2 className="text-xl font-bold font-['Outfit'] text-white">Extend Booking</h2>
               <button className="text-gray-500 hover:text-white" onClick={() => setExtModal(prev => ({ ...prev, show: false }))}><FiX size={24} /></button>
@@ -846,14 +890,28 @@ export default function ManageBookings() {
                 {extModal.confirming ? "Confirming..." : <><FiCheck /> Confirm Extension</>}
               </button>
             </div>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
       )}
+      </AnimatePresence>
 
       {/* Reschedule Modal */}
+      <AnimatePresence>
       {rescheduleModal.show && rescheduleModal.booking && (
-        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-[100] p-4 overflow-y-auto">
-          <div className="bg-[#161923] border border-[#2a2d3e] rounded-2xl w-full max-w-md shadow-2xl overflow-hidden flex flex-col my-8">
+        <motion.div 
+          key="reschedule-modal-backdrop"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-[100] p-4 overflow-y-auto"
+        >
+          <motion.div 
+            key="reschedule-modal-content"
+            initial={{ scale: 0.95, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0.95, opacity: 0 }}
+            className="bg-[#161923] border border-[#2a2d3e] rounded-2xl w-full max-w-md shadow-2xl overflow-hidden flex flex-col my-8"
+          >
             <div className="p-6 border-b border-[#2a2d3e] flex justify-between items-center">
               <h2 className="text-xl font-bold font-['Outfit'] text-white">Reschedule Booking</h2>
               <button className="text-gray-500 hover:text-white" onClick={() => setRescheduleModal(prev => ({ ...prev, show: false }))}><FiX size={24} /></button>
@@ -872,7 +930,7 @@ export default function ManageBookings() {
                     type="date" 
                     value={rescheduleModal.newDate}
                     onChange={e => setRescheduleModal(prev => ({ ...prev, newDate: e.target.value }))}
-                    className="w-full bg-[#1c1f2e] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white focus:border-yellow-500/50 focus:outline-none"
+                    className="w-full bg-[#1c1f2e] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white focus:border-yellow-500/50 focus:ring-2 focus:ring-orange-500 focus:outline-none"
                   />
                 </div>
                 <div>
@@ -881,7 +939,7 @@ export default function ManageBookings() {
                     type="time" 
                     value={rescheduleModal.newTime}
                     onChange={e => setRescheduleModal(prev => ({ ...prev, newTime: e.target.value }))}
-                    className="w-full bg-[#1c1f2e] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white focus:border-yellow-500/50 focus:outline-none"
+                    className="w-full bg-[#1c1f2e] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white focus:border-yellow-500/50 focus:ring-2 focus:ring-orange-500 focus:outline-none"
                   />
                 </div>
               </div>
@@ -894,9 +952,10 @@ export default function ManageBookings() {
                 {rescheduleModal.loading ? "Checking..." : <><FiCalendar /> Confirm Reschedule</>}
               </button>
             </div>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
       )}
+      </AnimatePresence>
     </div>
   );
 }

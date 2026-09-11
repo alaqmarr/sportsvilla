@@ -5,6 +5,8 @@ import { fetchBookingsByDate, createBooking, searchMember, getUpiId, addPayment,
 import { useAlert } from "@/components/AlertProvider";
 import QRCodeLib from "qrcode";
 import { formatIST, todayIST } from "@/lib/dateUtils";
+import { TableSkeleton } from "@/components/ui/Skeleton";
+import { AnimatePresence, motion } from "framer-motion";
 import { FiCalendar, FiClock, FiCheck, FiX, FiUser, FiCreditCard, FiMapPin, FiList, FiPlus } from "react-icons/fi";
 import ManageBookings from "./ManageBookings";
 
@@ -386,7 +388,7 @@ export default function BookingsClient({ turfs, facilityHours = { openTime: '06:
             <label className="block text-xs uppercase tracking-wider font-semibold text-gray-500 mb-2">1. Select Date</label>
             <input 
               type="date" 
-              className="w-full bg-[#0f1117] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white focus:border-orange-500/50 focus:outline-none"
+              className="w-full bg-[#0f1117] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white focus:border-orange-500/50 focus:ring-2 focus:ring-orange-500 focus:outline-none"
               value={selectedDate}
               onChange={e => setSelectedDate(e.target.value)}
             />
@@ -449,8 +451,8 @@ export default function BookingsClient({ turfs, facilityHours = { openTime: '06:
         <div className="lg:col-span-3 space-y-6">
           <div className="bg-[#161923] border border-[#2a2d3e] rounded-xl p-6">
             {loading ? (
-              <div className="flex items-center justify-center h-[300px]">
-                <div className="w-8 h-8 border-4 border-orange-500/30 border-t-orange-500 rounded-full animate-spin"></div>
+              <div className="p-4">
+                <TableSkeleton rows={6} cols={6} />
               </div>
             ) : selectedSportId ? (
               <>
@@ -550,9 +552,22 @@ export default function BookingsClient({ turfs, facilityHours = { openTime: '06:
       </div>
       <div className="h-24 lg:hidden"></div> {/* padding for sticky bottom bar */}
       {/* Checkout Modal */}
+      <AnimatePresence>
       {showModal && (
-        <div className="fixed inset-0 z-50 flex items-end md:items-center justify-center p-0 md:p-4 bg-black/80 backdrop-blur-sm">
-          <div className="bg-[#161923] md:border md:border-[#2a2d3e] rounded-t-2xl md:rounded-2xl w-full max-w-5xl shadow-2xl overflow-hidden flex flex-col md:flex-row max-h-[95vh] md:max-h-[90vh] animate-[slideUp_0.3s_ease-out] md:animate-none relative">
+        <motion.div 
+          key="checkout-modal-backdrop"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="fixed inset-0 z-50 flex items-end md:items-center justify-center p-0 md:p-4 bg-black/80 backdrop-blur-sm"
+        >
+          <motion.div 
+            key="checkout-modal-content"
+            initial={{ scale: 0.95, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0.95, opacity: 0 }}
+            className="bg-[#161923] md:border md:border-[#2a2d3e] rounded-t-2xl md:rounded-2xl w-full max-w-5xl shadow-2xl overflow-hidden flex flex-col md:flex-row max-h-[95vh] md:max-h-[90vh] relative"
+          >
             
             {/* Left: Customer Details */}
             <div className="flex-1 p-6 md:p-8 border-b md:border-b-0 md:border-r border-[#2a2d3e] overflow-y-auto">
@@ -569,7 +584,7 @@ export default function BookingsClient({ turfs, facilityHours = { openTime: '06:
                   <label className="block text-xs uppercase tracking-wider font-semibold text-gray-500 mb-2">Mobile Number</label>
                   <input 
                     type="tel" 
-                    className="w-full bg-[#0f1117] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white focus:border-emerald-500/50 focus:outline-none"
+                    className="w-full bg-[#0f1117] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white focus:border-orange-500/50 focus:ring-2 focus:ring-orange-500 focus:outline-none"
                     placeholder="Enter 10-digit mobile"
                     value={mobile}
                     onChange={e => handleMobileSearch(e.target.value.replace(/\D/g, ''))}
@@ -589,7 +604,7 @@ export default function BookingsClient({ turfs, facilityHours = { openTime: '06:
                         const val = e.target.value.replace(/\D/g, '');
                         setParticipantCount(val === '' ? '' : parseInt(val, 10));
                       }}
-                      className="w-full bg-[#0f1117] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white focus:border-emerald-500/50 focus:outline-none"
+                      className="w-full bg-[#0f1117] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white focus:border-orange-500/50 focus:ring-2 focus:ring-orange-500 focus:outline-none"
                     />
                   </div>
                 )}
@@ -648,7 +663,7 @@ export default function BookingsClient({ turfs, facilityHours = { openTime: '06:
                     <label className="block text-xs uppercase tracking-wider font-semibold text-gray-500 mb-2">Full Name (New Member)</label>
                     <input 
                       type="text" 
-                      className="w-full bg-[#0f1117] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white focus:border-emerald-500/50 focus:outline-none"
+                      className="w-full bg-[#0f1117] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white focus:border-orange-500/50 focus:ring-2 focus:ring-orange-500 focus:outline-none"
                       placeholder="Enter full name"
                       value={name}
                       onChange={e => setName(e.target.value)}
@@ -664,7 +679,7 @@ export default function BookingsClient({ turfs, facilityHours = { openTime: '06:
                         <div key={idx}>
                           <input 
                             type="text" 
-                            className="w-full bg-[#0f1117] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white focus:border-emerald-500/50 focus:outline-none text-sm"
+                            className="w-full bg-[#0f1117] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white focus:border-orange-500/50 focus:ring-2 focus:ring-orange-500 focus:outline-none text-sm"
                             placeholder={`Guest ${idx + 2 + additionalMemberIds.length} Name (Optional)`}
                             value={guestNames[idx] || ""}
                             onChange={e => {
@@ -757,7 +772,7 @@ export default function BookingsClient({ turfs, facilityHours = { openTime: '06:
                       type="text" 
                       inputMode="numeric"
                       pattern="[0-9]*"
-                      className="w-full bg-[#0f1117] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white focus:border-emerald-500/50 focus:outline-none"
+                      className="w-full bg-[#0f1117] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white focus:border-orange-500/50 focus:ring-2 focus:ring-orange-500 focus:outline-none"
                       value={cashAmount}
                       onChange={e => {
                         const valStr = e.target.value.replace(/\D/g, '');
@@ -780,7 +795,7 @@ export default function BookingsClient({ turfs, facilityHours = { openTime: '06:
                       type="text" 
                       inputMode="numeric"
                       pattern="[0-9]*"
-                      className="w-full bg-[#0f1117] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white focus:border-emerald-500/50 focus:outline-none"
+                      className="w-full bg-[#0f1117] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white focus:border-orange-500/50 focus:ring-2 focus:ring-orange-500 focus:outline-none"
                       value={onlineAmount}
                       onChange={e => {
                         const valStr = e.target.value.replace(/\D/g, '');
@@ -841,9 +856,10 @@ export default function BookingsClient({ turfs, facilityHours = { openTime: '06:
                 </button>
               </div>
             </div>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
       )}
+      </AnimatePresence>
       
       {/* End of NEW tab container */}
       </div>
