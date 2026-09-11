@@ -191,7 +191,7 @@ export default function KioskClient({ initialTransactions = [] }: KioskClientPro
 
         setActivityFeed((prev) => [newFeedItem, ...prev.slice(0, 24)]);
         
-        if (data.action !== "REQUIRE_BOOKING") {
+        if ((data.action as string) !== "REQUIRE_BOOKING") {
           triggerAutoDismiss();
         }
       } catch (err: any) {
@@ -610,15 +610,14 @@ export default function KioskClient({ initialTransactions = [] }: KioskClientPro
             </p>
 
             {/* Action Button for Booking Mode */}
-            {activeResult.action === "REQUIRE_BOOKING" && activeResult.member && (
+            {(activeResult.action as string) === "REQUIRE_BOOKING" && activeResult.member && (
               <div className="mt-8">
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
                     setIsBookingMode(true);
-                    setActiveResult(null); // Close the modal and show booking flow inline
                   }}
-                  className="px-8 py-4 bg-orange-600 hover:bg-orange-500 text-white font-bold rounded-xl text-lg shadow-lg hover:shadow-orange-500/25 transition-all w-full"
+                  className="px-8 py-4 bg-gradient-to-r from-orange-500 to-amber-500 rounded-xl text-white font-bold text-xl shadow-[0_0_20px_rgba(249,115,22,0.4)] hover:scale-105 transition-all"
                 >
                   Book Court Now
                 </button>
@@ -626,7 +625,7 @@ export default function KioskClient({ initialTransactions = [] }: KioskClientPro
             )}
 
             {/* Structured Details Box */}
-            {activeResult.action !== "REQUIRE_BOOKING" && (
+            {(activeResult.action as string) !== "REQUIRE_BOOKING" && (
               <div className="my-6 p-4 rounded-2xl bg-black/40 border border-white/10 grid grid-cols-2 gap-4 text-left">
                 {activeResult.details?.courtName && (
                   <div>
