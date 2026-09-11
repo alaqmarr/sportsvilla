@@ -6,6 +6,7 @@ import useSWR from 'swr'
 import { ChevronLeft, Copy, Share2, Send, Trash2 } from 'lucide-react'
 import Link from 'next/link'
 import { usePlayAuth } from '@/components/play/PlayAuthProvider'
+import { useAlert } from '@/components/AlertProvider'
 
 const fetcher = (url: string) => fetch(url).then(res => res.json())
 
@@ -13,6 +14,7 @@ export default function ManageGamePage() {
   const { id } = useParams()
   const router = useRouter()
   const { member } = usePlayAuth()
+  const { showAlert, showConfirm } = useAlert()
   
   const { data: booking, isLoading, mutate } = useSWR(`/api/client/v1/bookings/${id}`, fetcher)
   
@@ -40,12 +42,12 @@ export default function ManageGamePage() {
       })
       if (res.ok) {
         mutate()
-        alert('Settings updated')
+        showAlert('Success', 'Settings updated', 'success')
       } else {
-        alert('Failed to update settings')
+        showAlert('Error', 'Failed to update settings', 'error')
       }
     } catch (error) {
-      alert('Error updating settings')
+      showAlert('Error', 'Error updating settings', 'error')
     } finally {
       setIsUpdating(false)
     }
@@ -54,7 +56,7 @@ export default function ManageGamePage() {
   const handleCopyInviteCode = () => {
     if (booking?.inviteCode) {
       navigator.clipboard.writeText(booking.inviteCode)
-      alert('Invite code copied!')
+      showAlert('Success', 'Invite code copied!', 'success')
     }
   }
 
@@ -84,34 +86,43 @@ export default function ManageGamePage() {
         body: JSON.stringify({ mobile })
       })
       if (res.ok) {
-        alert('Invite sent via WhatsApp')
+        showAlert('Success', 'Invite sent via WhatsApp', 'success')
         setMobile('')
       } else {
-        alert('Failed to send invite')
+        showAlert('Error', 'Failed to send invite', 'error')
       }
     } catch (error) {
-      alert('Error sending invite')
+      showAlert('Error', 'Error sending invite', 'error')
     } finally {
       setIsInviting(false)
     }
   }
 
   const handleRemoveMember = async (memberId: string) => {
-    if (!confirm('Are you sure you want to remove this member?')) return
-    try {
-      const res = await fetch(`/api/client/v1/bookings/${id}/join`, {
-        method: 'DELETE',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ memberId })
-      })
-      if (res.ok) {
-        mutate()
-      } else {
-        alert('Failed to remove member')
-      }
-    } catch (error) {
-      alert('Error removing member')
-    }
+    showConfirm(
+      'Confirm Removal',
+      'Are you sure you want to remove this member?',
+      async () => {
+        try {
+          const res = await fetch(`/api/client/v1/bookings/${id}/join`, {
+            method: 'DELETE',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ memberId })
+          })
+          if (res.ok) {
+            mutate()
+          } else {
+            showAlert('Error', 'Failed to remove member', 'error')
+          }
+        } catch (error) {
+          showAlert('Error', 'Error removing member', 'error')
+        }
+      },
+      undefined,
+      'Remove',
+      'Cancel',
+      'error'
+    );
   }
 
   if (isLoading) return <div className="p-4 text-center">Loading...</div>

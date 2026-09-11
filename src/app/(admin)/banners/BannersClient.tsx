@@ -2,8 +2,10 @@
 
 import { useState } from "react";
 import { createBanner, toggleBannerStatus, deleteBanner, getAdminPresignedUrl } from "./actions";
+import { useAlert } from "@/components/AlertProvider";
 
 export default function BannersClient({ initialBanners, sports }: { initialBanners: any[], sports: any[] }) {
+  const { showAlert, showConfirm } = useAlert();
   const [banners, setBanners] = useState(initialBanners);
   const [isUploading, setIsUploading] = useState(false);
   const [file, setFile] = useState<File | null>(null);
@@ -44,7 +46,7 @@ export default function BannersClient({ initialBanners, sports }: { initialBanne
       setTitle("");
       setTargetSportId("");
     } catch (err: any) {
-      alert("Failed to create banner: " + err.message);
+      showAlert("Error", "Failed to create banner: " + err.message, "error");
     } finally {
       setIsUploading(false);
     }
@@ -122,10 +124,18 @@ export default function BannersClient({ initialBanners, sports }: { initialBanne
               </button>
               <button 
                 onClick={async () => {
-                  if (confirm("Are you sure you want to delete this banner?")) {
-                    await deleteBanner(b.id);
-                    setBanners(banners.filter(banner => banner.id !== b.id));
-                  }
+                  showConfirm(
+                    "Confirm Deletion",
+                    "Are you sure you want to delete this banner?",
+                    async () => {
+                      await deleteBanner(b.id);
+                      setBanners(banners.filter(banner => banner.id !== b.id));
+                    },
+                    undefined,
+                    "Delete",
+                    "Cancel",
+                    "error"
+                  );
                 }}
                 className="px-3 py-1 bg-red-100 text-red-600 rounded hover:bg-red-200"
               >

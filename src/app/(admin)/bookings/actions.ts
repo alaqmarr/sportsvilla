@@ -8,6 +8,7 @@ import { bumpSyncTimestamp } from '@/lib/sync';
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { sendWhatsAppBookingConfirmedTemplate } from "@/lib/whatsapp";
+import { NfcPaymentService } from "@/services/NfcPaymentService";
 export async function fetchBookableTurfs() {
   return await prisma.turf.findMany({
     where: { 
@@ -725,13 +726,39 @@ export async function confirmExtension(bookingId: string, allocations: any[]) {
   return { success: true };
 }
 
-export async function addPayment(bookingId: string, amount: number, method: "CASH" | "ONLINE") {
+export async function addPayment(
+  bookingId: string,
+  amount: number,
+  method: "CASH" | "ONLINE" | "SPORTSVILLA_CARD",
+  cardUid?: string
+) {
   const booking = await prisma.booking.findUnique({
     where: { id: bookingId },
     include: { payments: true }
   });
   if (!booking) throw new Error("Booking not found");
   if (booking.status === "CANCELLED") throw new Error("Cannot record payment for a cancelled booking");
+
+  if (method === "SPORTSVILLA_CARD") {
+    if (!cardUid) {
+      throw new Error("Card UID is required for SportsVilla Card payment.");
+    }
+    const result = await NfcPaymentService.processPayment({
+      cardUid,
+      bookingId,
+      amount,
+      description: `POS Payment for booking ${bookingId}`,
+      deviceType: "POS_READER",
+      location: "ADMIN_POS",
+    });
+
+    if (!result.success) {
+      throw new Error(result.message || result.error || "SportsVilla Card payment failed.");
+    }
+
+    revalidatePath("/", "layout");
+    return result;
+  }
 
   await prisma.$transaction(async (tx) => {
     await tx.payment.create({

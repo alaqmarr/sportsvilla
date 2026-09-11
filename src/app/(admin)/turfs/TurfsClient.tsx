@@ -5,7 +5,7 @@ import { useAlert } from "@/components/AlertProvider";
 import { FiTrash2, FiEdit2, FiPlus, FiX, FiMapPin, FiMap, FiActivity } from "react-icons/fi";
 
 export default function TurfsClient({ initialTurfs, sports, availableIcons }: { initialTurfs: any[], sports: any[], availableIcons: {value: string, label: string}[] }) {
-  const { showAlert } = useAlert();
+  const { showAlert, showConfirm } = useAlert();
   const [turfs, setTurfs] = useState(initialTurfs);
   const [showModal, setShowModal] = useState(false);
   const [showIconModal, setShowIconModal] = useState(false);
@@ -88,14 +88,23 @@ export default function TurfsClient({ initialTurfs, sports, availableIcons }: { 
   }
 
   async function handleDelete(id: string) {
-    if (!confirm("Are you sure?")) return;
-    try {
-      await deleteTurf(id);
-      setTurfs(turfs.filter(t => t.id !== id));
-      showAlert("Turf Deleted", "The turf has been permanently removed.", "success");
-    } catch (err) {
-      showAlert("Deletion Blocked", "Cannot delete this turf because there are active sessions or children turfs linked to it.", "error");
-    }
+    showConfirm(
+      "Confirm Deletion",
+      "Are you sure?",
+      async () => {
+        try {
+          await deleteTurf(id);
+          setTurfs(turfs.filter(t => t.id !== id));
+          showAlert("Turf Deleted", "The turf has been permanently removed.", "success");
+        } catch (err) {
+          showAlert("Deletion Blocked", "Cannot delete this turf because there are active sessions or children turfs linked to it.", "error");
+        }
+      },
+      undefined,
+      "Delete",
+      "Cancel",
+      "error"
+    );
   }
 
   return (

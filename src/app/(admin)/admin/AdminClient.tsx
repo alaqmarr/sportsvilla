@@ -11,7 +11,7 @@ const ROLE_TEMPLATES: Record<string, string[]> = {
 };
 
 export default function AdminClient({ initialAdmins }: { initialAdmins: AdminUser[] }) {
-  const { showAlert } = useAlert();
+  const { showAlert, showConfirm } = useAlert();
   const [admins, setAdmins] = useState<AdminUser[]>(initialAdmins);
   const [loading, setLoading] = useState(false);
   
@@ -134,17 +134,26 @@ export default function AdminClient({ initialAdmins }: { initialAdmins: AdminUse
   }
 
   async function handleDelete(id: string) {
-    if (!confirm("Are you sure you want to delete this admin permanently?")) return;
-    try {
-      const res = await fetch(`/api/admin/admins?id=${id}`, { method: "DELETE" });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Deletion failed");
-      
-      setAdmins(admins.filter(a => a.id !== id));
-      showAlert("Admin Deleted", "The admin account has been removed.", "success");
-    } catch (err: any) {
-      showAlert("Deletion Failed", err.message, "error");
-    }
+    showConfirm(
+      "Confirm Deletion",
+      "Are you sure you want to delete this admin permanently?",
+      async () => {
+        try {
+          const res = await fetch(`/api/admin/admins?id=${id}`, { method: "DELETE" });
+          const data = await res.json();
+          if (!res.ok) throw new Error(data.error || "Deletion failed");
+          
+          setAdmins(admins.filter(a => a.id !== id));
+          showAlert("Admin Deleted", "The admin account has been removed.", "success");
+        } catch (err: any) {
+          showAlert("Deletion Failed", err.message, "error");
+        }
+      },
+      undefined,
+      "Delete",
+      "Cancel",
+      "error"
+    );
   }
 
   return (

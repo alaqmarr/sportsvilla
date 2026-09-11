@@ -62,6 +62,13 @@ export const RBAC_CATEGORIES: PermissionCategory[] = [
         viewKey: "view:tournaments",
         manageKey: "manage:tournaments",
       },
+      {
+        id: "nfc",
+        name: "NFC Operations",
+        description: "Manage NFC cards, card assignments, transaction ledger, and kiosk check-in",
+        viewKey: "view:nfc",
+        manageKey: "manage:nfc",
+      },
     ],
   },
   {
@@ -262,6 +269,8 @@ export function canViewPage(
     "/app-versions": "view:versions",
     "/audit": "view:audit",
     "/server": "view:server",
+    "/admin/nfc": "view:nfc",
+    "/nfc": "view:nfc",
     "/admin": "manage:admins",
   };
 

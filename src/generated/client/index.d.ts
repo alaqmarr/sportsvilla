@@ -178,6 +178,16 @@ export type Banner = $Result.DefaultSelection<Prisma.$BannerPayload>
  * 
  */
 export type UserSportStat = $Result.DefaultSelection<Prisma.$UserSportStatPayload>
+/**
+ * Model NfcCard
+ * 
+ */
+export type NfcCard = $Result.DefaultSelection<Prisma.$NfcCardPayload>
+/**
+ * Model NfcTransaction
+ * 
+ */
+export type NfcTransaction = $Result.DefaultSelection<Prisma.$NfcTransactionPayload>
 
 /**
  * ##  Prisma Client ʲˢ
@@ -629,6 +639,26 @@ export class PrismaClient<
     * ```
     */
   get userSportStat(): Prisma.UserSportStatDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.nfcCard`: Exposes CRUD operations for the **NfcCard** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more NfcCards
+    * const nfcCards = await prisma.nfcCard.findMany()
+    * ```
+    */
+  get nfcCard(): Prisma.NfcCardDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.nfcTransaction`: Exposes CRUD operations for the **NfcTransaction** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more NfcTransactions
+    * const nfcTransactions = await prisma.nfcTransaction.findMany()
+    * ```
+    */
+  get nfcTransaction(): Prisma.NfcTransactionDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -1095,7 +1125,9 @@ export namespace Prisma {
     LastUpdate: 'LastUpdate',
     AuditLog: 'AuditLog',
     Banner: 'Banner',
-    UserSportStat: 'UserSportStat'
+    UserSportStat: 'UserSportStat',
+    NfcCard: 'NfcCard',
+    NfcTransaction: 'NfcTransaction'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -1111,7 +1143,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "admin" | "setting" | "familyGroup" | "member" | "loyaltyHistory" | "sport" | "turf" | "turfSport" | "membershipPlan" | "memberMembership" | "attendance" | "booking" | "bookingParticipant" | "payment" | "transaction" | "displaySession" | "ticket" | "otp" | "tournament" | "tournamentRegistration" | "tournamentPlayer" | "walletTransaction" | "coupon" | "couponAssignment" | "couponUsage" | "loyaltyTrigger" | "loyaltyAchievement" | "appAnnouncement" | "appVersion" | "lastUpdate" | "auditLog" | "banner" | "userSportStat"
+      modelProps: "admin" | "setting" | "familyGroup" | "member" | "loyaltyHistory" | "sport" | "turf" | "turfSport" | "membershipPlan" | "memberMembership" | "attendance" | "booking" | "bookingParticipant" | "payment" | "transaction" | "displaySession" | "ticket" | "otp" | "tournament" | "tournamentRegistration" | "tournamentPlayer" | "walletTransaction" | "coupon" | "couponAssignment" | "couponUsage" | "loyaltyTrigger" | "loyaltyAchievement" | "appAnnouncement" | "appVersion" | "lastUpdate" | "auditLog" | "banner" | "userSportStat" | "nfcCard" | "nfcTransaction"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -3557,6 +3589,154 @@ export namespace Prisma {
           }
         }
       }
+      NfcCard: {
+        payload: Prisma.$NfcCardPayload<ExtArgs>
+        fields: Prisma.NfcCardFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.NfcCardFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NfcCardPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.NfcCardFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NfcCardPayload>
+          }
+          findFirst: {
+            args: Prisma.NfcCardFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NfcCardPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.NfcCardFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NfcCardPayload>
+          }
+          findMany: {
+            args: Prisma.NfcCardFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NfcCardPayload>[]
+          }
+          create: {
+            args: Prisma.NfcCardCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NfcCardPayload>
+          }
+          createMany: {
+            args: Prisma.NfcCardCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.NfcCardCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NfcCardPayload>[]
+          }
+          delete: {
+            args: Prisma.NfcCardDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NfcCardPayload>
+          }
+          update: {
+            args: Prisma.NfcCardUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NfcCardPayload>
+          }
+          deleteMany: {
+            args: Prisma.NfcCardDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.NfcCardUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.NfcCardUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NfcCardPayload>[]
+          }
+          upsert: {
+            args: Prisma.NfcCardUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NfcCardPayload>
+          }
+          aggregate: {
+            args: Prisma.NfcCardAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateNfcCard>
+          }
+          groupBy: {
+            args: Prisma.NfcCardGroupByArgs<ExtArgs>
+            result: $Utils.Optional<NfcCardGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.NfcCardCountArgs<ExtArgs>
+            result: $Utils.Optional<NfcCardCountAggregateOutputType> | number
+          }
+        }
+      }
+      NfcTransaction: {
+        payload: Prisma.$NfcTransactionPayload<ExtArgs>
+        fields: Prisma.NfcTransactionFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.NfcTransactionFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NfcTransactionPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.NfcTransactionFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NfcTransactionPayload>
+          }
+          findFirst: {
+            args: Prisma.NfcTransactionFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NfcTransactionPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.NfcTransactionFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NfcTransactionPayload>
+          }
+          findMany: {
+            args: Prisma.NfcTransactionFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NfcTransactionPayload>[]
+          }
+          create: {
+            args: Prisma.NfcTransactionCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NfcTransactionPayload>
+          }
+          createMany: {
+            args: Prisma.NfcTransactionCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.NfcTransactionCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NfcTransactionPayload>[]
+          }
+          delete: {
+            args: Prisma.NfcTransactionDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NfcTransactionPayload>
+          }
+          update: {
+            args: Prisma.NfcTransactionUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NfcTransactionPayload>
+          }
+          deleteMany: {
+            args: Prisma.NfcTransactionDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.NfcTransactionUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.NfcTransactionUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NfcTransactionPayload>[]
+          }
+          upsert: {
+            args: Prisma.NfcTransactionUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NfcTransactionPayload>
+          }
+          aggregate: {
+            args: Prisma.NfcTransactionAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateNfcTransaction>
+          }
+          groupBy: {
+            args: Prisma.NfcTransactionGroupByArgs<ExtArgs>
+            result: $Utils.Optional<NfcTransactionGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.NfcTransactionCountArgs<ExtArgs>
+            result: $Utils.Optional<NfcTransactionCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -3698,6 +3878,8 @@ export namespace Prisma {
     auditLog?: AuditLogOmit
     banner?: BannerOmit
     userSportStat?: UserSportStatOmit
+    nfcCard?: NfcCardOmit
+    nfcTransaction?: NfcTransactionOmit
   }
 
   /* Types for Logging */
@@ -3852,6 +4034,8 @@ export namespace Prisma {
     couponUsages: number
     loyaltyAchievements: number
     sportStats: number
+    nfcCards: number
+    nfcTransactions: number
   }
 
   export type MemberCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -3867,6 +4051,8 @@ export namespace Prisma {
     couponUsages?: boolean | MemberCountOutputTypeCountCouponUsagesArgs
     loyaltyAchievements?: boolean | MemberCountOutputTypeCountLoyaltyAchievementsArgs
     sportStats?: boolean | MemberCountOutputTypeCountSportStatsArgs
+    nfcCards?: boolean | MemberCountOutputTypeCountNfcCardsArgs
+    nfcTransactions?: boolean | MemberCountOutputTypeCountNfcTransactionsArgs
   }
 
   // Custom InputTypes
@@ -3962,6 +4148,20 @@ export namespace Prisma {
    */
   export type MemberCountOutputTypeCountSportStatsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: UserSportStatWhereInput
+  }
+
+  /**
+   * MemberCountOutputType without action
+   */
+  export type MemberCountOutputTypeCountNfcCardsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: NfcCardWhereInput
+  }
+
+  /**
+   * MemberCountOutputType without action
+   */
+  export type MemberCountOutputTypeCountNfcTransactionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: NfcTransactionWhereInput
   }
 
 
@@ -4158,6 +4358,7 @@ export namespace Prisma {
     tickets: number
     couponUsages: number
     participants: number
+    nfcTransactions: number
   }
 
   export type BookingCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -4166,6 +4367,7 @@ export namespace Prisma {
     tickets?: boolean | BookingCountOutputTypeCountTicketsArgs
     couponUsages?: boolean | BookingCountOutputTypeCountCouponUsagesArgs
     participants?: boolean | BookingCountOutputTypeCountParticipantsArgs
+    nfcTransactions?: boolean | BookingCountOutputTypeCountNfcTransactionsArgs
   }
 
   // Custom InputTypes
@@ -4212,6 +4414,13 @@ export namespace Prisma {
    */
   export type BookingCountOutputTypeCountParticipantsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: BookingParticipantWhereInput
+  }
+
+  /**
+   * BookingCountOutputType without action
+   */
+  export type BookingCountOutputTypeCountNfcTransactionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: NfcTransactionWhereInput
   }
 
 
@@ -4345,6 +4554,37 @@ export namespace Prisma {
    */
   export type LoyaltyTriggerCountOutputTypeCountAchievementsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: LoyaltyAchievementWhereInput
+  }
+
+
+  /**
+   * Count Type NfcCardCountOutputType
+   */
+
+  export type NfcCardCountOutputType = {
+    transactions: number
+  }
+
+  export type NfcCardCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    transactions?: boolean | NfcCardCountOutputTypeCountTransactionsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * NfcCardCountOutputType without action
+   */
+  export type NfcCardCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NfcCardCountOutputType
+     */
+    select?: NfcCardCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * NfcCardCountOutputType without action
+   */
+  export type NfcCardCountOutputTypeCountTransactionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: NfcTransactionWhereInput
   }
 
 
@@ -7772,6 +8012,8 @@ export namespace Prisma {
     couponUsages?: boolean | Member$couponUsagesArgs<ExtArgs>
     loyaltyAchievements?: boolean | Member$loyaltyAchievementsArgs<ExtArgs>
     sportStats?: boolean | Member$sportStatsArgs<ExtArgs>
+    nfcCards?: boolean | Member$nfcCardsArgs<ExtArgs>
+    nfcTransactions?: boolean | Member$nfcTransactionsArgs<ExtArgs>
     _count?: boolean | MemberCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["member"]>
 
@@ -7834,6 +8076,8 @@ export namespace Prisma {
     couponUsages?: boolean | Member$couponUsagesArgs<ExtArgs>
     loyaltyAchievements?: boolean | Member$loyaltyAchievementsArgs<ExtArgs>
     sportStats?: boolean | Member$sportStatsArgs<ExtArgs>
+    nfcCards?: boolean | Member$nfcCardsArgs<ExtArgs>
+    nfcTransactions?: boolean | Member$nfcTransactionsArgs<ExtArgs>
     _count?: boolean | MemberCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type MemberIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -7859,6 +8103,8 @@ export namespace Prisma {
       couponUsages: Prisma.$CouponUsagePayload<ExtArgs>[]
       loyaltyAchievements: Prisma.$LoyaltyAchievementPayload<ExtArgs>[]
       sportStats: Prisma.$UserSportStatPayload<ExtArgs>[]
+      nfcCards: Prisma.$NfcCardPayload<ExtArgs>[]
+      nfcTransactions: Prisma.$NfcTransactionPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -8279,6 +8525,8 @@ export namespace Prisma {
     couponUsages<T extends Member$couponUsagesArgs<ExtArgs> = {}>(args?: Subset<T, Member$couponUsagesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CouponUsagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     loyaltyAchievements<T extends Member$loyaltyAchievementsArgs<ExtArgs> = {}>(args?: Subset<T, Member$loyaltyAchievementsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LoyaltyAchievementPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     sportStats<T extends Member$sportStatsArgs<ExtArgs> = {}>(args?: Subset<T, Member$sportStatsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserSportStatPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    nfcCards<T extends Member$nfcCardsArgs<ExtArgs> = {}>(args?: Subset<T, Member$nfcCardsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NfcCardPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    nfcTransactions<T extends Member$nfcTransactionsArgs<ExtArgs> = {}>(args?: Subset<T, Member$nfcTransactionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NfcTransactionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -9022,6 +9270,54 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: UserSportStatScalarFieldEnum | UserSportStatScalarFieldEnum[]
+  }
+
+  /**
+   * Member.nfcCards
+   */
+  export type Member$nfcCardsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NfcCard
+     */
+    select?: NfcCardSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the NfcCard
+     */
+    omit?: NfcCardOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NfcCardInclude<ExtArgs> | null
+    where?: NfcCardWhereInput
+    orderBy?: NfcCardOrderByWithRelationInput | NfcCardOrderByWithRelationInput[]
+    cursor?: NfcCardWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: NfcCardScalarFieldEnum | NfcCardScalarFieldEnum[]
+  }
+
+  /**
+   * Member.nfcTransactions
+   */
+  export type Member$nfcTransactionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NfcTransaction
+     */
+    select?: NfcTransactionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the NfcTransaction
+     */
+    omit?: NfcTransactionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NfcTransactionInclude<ExtArgs> | null
+    where?: NfcTransactionWhereInput
+    orderBy?: NfcTransactionOrderByWithRelationInput | NfcTransactionOrderByWithRelationInput[]
+    cursor?: NfcTransactionWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: NfcTransactionScalarFieldEnum | NfcTransactionScalarFieldEnum[]
   }
 
   /**
@@ -17760,6 +18056,7 @@ export namespace Prisma {
     tickets?: boolean | Booking$ticketsArgs<ExtArgs>
     couponUsages?: boolean | Booking$couponUsagesArgs<ExtArgs>
     participants?: boolean | Booking$participantsArgs<ExtArgs>
+    nfcTransactions?: boolean | Booking$nfcTransactionsArgs<ExtArgs>
     _count?: boolean | BookingCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["booking"]>
 
@@ -17845,6 +18142,7 @@ export namespace Prisma {
     tickets?: boolean | Booking$ticketsArgs<ExtArgs>
     couponUsages?: boolean | Booking$couponUsagesArgs<ExtArgs>
     participants?: boolean | Booking$participantsArgs<ExtArgs>
+    nfcTransactions?: boolean | Booking$nfcTransactionsArgs<ExtArgs>
     _count?: boolean | BookingCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type BookingIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -17869,6 +18167,7 @@ export namespace Prisma {
       tickets: Prisma.$TicketPayload<ExtArgs>[]
       couponUsages: Prisma.$CouponUsagePayload<ExtArgs>[]
       participants: Prisma.$BookingParticipantPayload<ExtArgs>[]
+      nfcTransactions: Prisma.$NfcTransactionPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -18292,6 +18591,7 @@ export namespace Prisma {
     tickets<T extends Booking$ticketsArgs<ExtArgs> = {}>(args?: Subset<T, Booking$ticketsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TicketPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     couponUsages<T extends Booking$couponUsagesArgs<ExtArgs> = {}>(args?: Subset<T, Booking$couponUsagesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CouponUsagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     participants<T extends Booking$participantsArgs<ExtArgs> = {}>(args?: Subset<T, Booking$participantsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BookingParticipantPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    nfcTransactions<T extends Booking$nfcTransactionsArgs<ExtArgs> = {}>(args?: Subset<T, Booking$nfcTransactionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NfcTransactionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -18856,6 +19156,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: BookingParticipantScalarFieldEnum | BookingParticipantScalarFieldEnum[]
+  }
+
+  /**
+   * Booking.nfcTransactions
+   */
+  export type Booking$nfcTransactionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NfcTransaction
+     */
+    select?: NfcTransactionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the NfcTransaction
+     */
+    omit?: NfcTransactionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NfcTransactionInclude<ExtArgs> | null
+    where?: NfcTransactionWhereInput
+    orderBy?: NfcTransactionOrderByWithRelationInput | NfcTransactionOrderByWithRelationInput[]
+    cursor?: NfcTransactionWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: NfcTransactionScalarFieldEnum | NfcTransactionScalarFieldEnum[]
   }
 
   /**
@@ -42284,6 +42608,2466 @@ export namespace Prisma {
 
 
   /**
+   * Model NfcCard
+   */
+
+  export type AggregateNfcCard = {
+    _count: NfcCardCountAggregateOutputType | null
+    _min: NfcCardMinAggregateOutputType | null
+    _max: NfcCardMaxAggregateOutputType | null
+  }
+
+  export type NfcCardMinAggregateOutputType = {
+    id: string | null
+    cardUid: string | null
+    cardId: string | null
+    memberId: string | null
+    status: string | null
+    issuedAt: Date | null
+    lastUsedAt: Date | null
+    notes: string | null
+    assignedBy: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type NfcCardMaxAggregateOutputType = {
+    id: string | null
+    cardUid: string | null
+    cardId: string | null
+    memberId: string | null
+    status: string | null
+    issuedAt: Date | null
+    lastUsedAt: Date | null
+    notes: string | null
+    assignedBy: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type NfcCardCountAggregateOutputType = {
+    id: number
+    cardUid: number
+    cardId: number
+    memberId: number
+    status: number
+    issuedAt: number
+    lastUsedAt: number
+    notes: number
+    assignedBy: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type NfcCardMinAggregateInputType = {
+    id?: true
+    cardUid?: true
+    cardId?: true
+    memberId?: true
+    status?: true
+    issuedAt?: true
+    lastUsedAt?: true
+    notes?: true
+    assignedBy?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type NfcCardMaxAggregateInputType = {
+    id?: true
+    cardUid?: true
+    cardId?: true
+    memberId?: true
+    status?: true
+    issuedAt?: true
+    lastUsedAt?: true
+    notes?: true
+    assignedBy?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type NfcCardCountAggregateInputType = {
+    id?: true
+    cardUid?: true
+    cardId?: true
+    memberId?: true
+    status?: true
+    issuedAt?: true
+    lastUsedAt?: true
+    notes?: true
+    assignedBy?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type NfcCardAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which NfcCard to aggregate.
+     */
+    where?: NfcCardWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of NfcCards to fetch.
+     */
+    orderBy?: NfcCardOrderByWithRelationInput | NfcCardOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: NfcCardWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` NfcCards from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` NfcCards.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned NfcCards
+    **/
+    _count?: true | NfcCardCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: NfcCardMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: NfcCardMaxAggregateInputType
+  }
+
+  export type GetNfcCardAggregateType<T extends NfcCardAggregateArgs> = {
+        [P in keyof T & keyof AggregateNfcCard]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateNfcCard[P]>
+      : GetScalarType<T[P], AggregateNfcCard[P]>
+  }
+
+
+
+
+  export type NfcCardGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: NfcCardWhereInput
+    orderBy?: NfcCardOrderByWithAggregationInput | NfcCardOrderByWithAggregationInput[]
+    by: NfcCardScalarFieldEnum[] | NfcCardScalarFieldEnum
+    having?: NfcCardScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: NfcCardCountAggregateInputType | true
+    _min?: NfcCardMinAggregateInputType
+    _max?: NfcCardMaxAggregateInputType
+  }
+
+  export type NfcCardGroupByOutputType = {
+    id: string
+    cardUid: string
+    cardId: string | null
+    memberId: string | null
+    status: string
+    issuedAt: Date
+    lastUsedAt: Date | null
+    notes: string | null
+    assignedBy: string | null
+    createdAt: Date
+    updatedAt: Date
+    _count: NfcCardCountAggregateOutputType | null
+    _min: NfcCardMinAggregateOutputType | null
+    _max: NfcCardMaxAggregateOutputType | null
+  }
+
+  type GetNfcCardGroupByPayload<T extends NfcCardGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<NfcCardGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof NfcCardGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], NfcCardGroupByOutputType[P]>
+            : GetScalarType<T[P], NfcCardGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type NfcCardSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    cardUid?: boolean
+    cardId?: boolean
+    memberId?: boolean
+    status?: boolean
+    issuedAt?: boolean
+    lastUsedAt?: boolean
+    notes?: boolean
+    assignedBy?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    member?: boolean | NfcCard$memberArgs<ExtArgs>
+    transactions?: boolean | NfcCard$transactionsArgs<ExtArgs>
+    _count?: boolean | NfcCardCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["nfcCard"]>
+
+  export type NfcCardSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    cardUid?: boolean
+    cardId?: boolean
+    memberId?: boolean
+    status?: boolean
+    issuedAt?: boolean
+    lastUsedAt?: boolean
+    notes?: boolean
+    assignedBy?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    member?: boolean | NfcCard$memberArgs<ExtArgs>
+  }, ExtArgs["result"]["nfcCard"]>
+
+  export type NfcCardSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    cardUid?: boolean
+    cardId?: boolean
+    memberId?: boolean
+    status?: boolean
+    issuedAt?: boolean
+    lastUsedAt?: boolean
+    notes?: boolean
+    assignedBy?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    member?: boolean | NfcCard$memberArgs<ExtArgs>
+  }, ExtArgs["result"]["nfcCard"]>
+
+  export type NfcCardSelectScalar = {
+    id?: boolean
+    cardUid?: boolean
+    cardId?: boolean
+    memberId?: boolean
+    status?: boolean
+    issuedAt?: boolean
+    lastUsedAt?: boolean
+    notes?: boolean
+    assignedBy?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type NfcCardOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "cardUid" | "cardId" | "memberId" | "status" | "issuedAt" | "lastUsedAt" | "notes" | "assignedBy" | "createdAt" | "updatedAt", ExtArgs["result"]["nfcCard"]>
+  export type NfcCardInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    member?: boolean | NfcCard$memberArgs<ExtArgs>
+    transactions?: boolean | NfcCard$transactionsArgs<ExtArgs>
+    _count?: boolean | NfcCardCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type NfcCardIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    member?: boolean | NfcCard$memberArgs<ExtArgs>
+  }
+  export type NfcCardIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    member?: boolean | NfcCard$memberArgs<ExtArgs>
+  }
+
+  export type $NfcCardPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "NfcCard"
+    objects: {
+      member: Prisma.$MemberPayload<ExtArgs> | null
+      transactions: Prisma.$NfcTransactionPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      cardUid: string
+      cardId: string | null
+      memberId: string | null
+      status: string
+      issuedAt: Date
+      lastUsedAt: Date | null
+      notes: string | null
+      assignedBy: string | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["nfcCard"]>
+    composites: {}
+  }
+
+  type NfcCardGetPayload<S extends boolean | null | undefined | NfcCardDefaultArgs> = $Result.GetResult<Prisma.$NfcCardPayload, S>
+
+  type NfcCardCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<NfcCardFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: NfcCardCountAggregateInputType | true
+    }
+
+  export interface NfcCardDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['NfcCard'], meta: { name: 'NfcCard' } }
+    /**
+     * Find zero or one NfcCard that matches the filter.
+     * @param {NfcCardFindUniqueArgs} args - Arguments to find a NfcCard
+     * @example
+     * // Get one NfcCard
+     * const nfcCard = await prisma.nfcCard.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends NfcCardFindUniqueArgs>(args: SelectSubset<T, NfcCardFindUniqueArgs<ExtArgs>>): Prisma__NfcCardClient<$Result.GetResult<Prisma.$NfcCardPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one NfcCard that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {NfcCardFindUniqueOrThrowArgs} args - Arguments to find a NfcCard
+     * @example
+     * // Get one NfcCard
+     * const nfcCard = await prisma.nfcCard.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends NfcCardFindUniqueOrThrowArgs>(args: SelectSubset<T, NfcCardFindUniqueOrThrowArgs<ExtArgs>>): Prisma__NfcCardClient<$Result.GetResult<Prisma.$NfcCardPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first NfcCard that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NfcCardFindFirstArgs} args - Arguments to find a NfcCard
+     * @example
+     * // Get one NfcCard
+     * const nfcCard = await prisma.nfcCard.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends NfcCardFindFirstArgs>(args?: SelectSubset<T, NfcCardFindFirstArgs<ExtArgs>>): Prisma__NfcCardClient<$Result.GetResult<Prisma.$NfcCardPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first NfcCard that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NfcCardFindFirstOrThrowArgs} args - Arguments to find a NfcCard
+     * @example
+     * // Get one NfcCard
+     * const nfcCard = await prisma.nfcCard.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends NfcCardFindFirstOrThrowArgs>(args?: SelectSubset<T, NfcCardFindFirstOrThrowArgs<ExtArgs>>): Prisma__NfcCardClient<$Result.GetResult<Prisma.$NfcCardPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more NfcCards that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NfcCardFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all NfcCards
+     * const nfcCards = await prisma.nfcCard.findMany()
+     * 
+     * // Get first 10 NfcCards
+     * const nfcCards = await prisma.nfcCard.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const nfcCardWithIdOnly = await prisma.nfcCard.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends NfcCardFindManyArgs>(args?: SelectSubset<T, NfcCardFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NfcCardPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a NfcCard.
+     * @param {NfcCardCreateArgs} args - Arguments to create a NfcCard.
+     * @example
+     * // Create one NfcCard
+     * const NfcCard = await prisma.nfcCard.create({
+     *   data: {
+     *     // ... data to create a NfcCard
+     *   }
+     * })
+     * 
+     */
+    create<T extends NfcCardCreateArgs>(args: SelectSubset<T, NfcCardCreateArgs<ExtArgs>>): Prisma__NfcCardClient<$Result.GetResult<Prisma.$NfcCardPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many NfcCards.
+     * @param {NfcCardCreateManyArgs} args - Arguments to create many NfcCards.
+     * @example
+     * // Create many NfcCards
+     * const nfcCard = await prisma.nfcCard.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends NfcCardCreateManyArgs>(args?: SelectSubset<T, NfcCardCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many NfcCards and returns the data saved in the database.
+     * @param {NfcCardCreateManyAndReturnArgs} args - Arguments to create many NfcCards.
+     * @example
+     * // Create many NfcCards
+     * const nfcCard = await prisma.nfcCard.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many NfcCards and only return the `id`
+     * const nfcCardWithIdOnly = await prisma.nfcCard.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends NfcCardCreateManyAndReturnArgs>(args?: SelectSubset<T, NfcCardCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NfcCardPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a NfcCard.
+     * @param {NfcCardDeleteArgs} args - Arguments to delete one NfcCard.
+     * @example
+     * // Delete one NfcCard
+     * const NfcCard = await prisma.nfcCard.delete({
+     *   where: {
+     *     // ... filter to delete one NfcCard
+     *   }
+     * })
+     * 
+     */
+    delete<T extends NfcCardDeleteArgs>(args: SelectSubset<T, NfcCardDeleteArgs<ExtArgs>>): Prisma__NfcCardClient<$Result.GetResult<Prisma.$NfcCardPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one NfcCard.
+     * @param {NfcCardUpdateArgs} args - Arguments to update one NfcCard.
+     * @example
+     * // Update one NfcCard
+     * const nfcCard = await prisma.nfcCard.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends NfcCardUpdateArgs>(args: SelectSubset<T, NfcCardUpdateArgs<ExtArgs>>): Prisma__NfcCardClient<$Result.GetResult<Prisma.$NfcCardPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more NfcCards.
+     * @param {NfcCardDeleteManyArgs} args - Arguments to filter NfcCards to delete.
+     * @example
+     * // Delete a few NfcCards
+     * const { count } = await prisma.nfcCard.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends NfcCardDeleteManyArgs>(args?: SelectSubset<T, NfcCardDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more NfcCards.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NfcCardUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many NfcCards
+     * const nfcCard = await prisma.nfcCard.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends NfcCardUpdateManyArgs>(args: SelectSubset<T, NfcCardUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more NfcCards and returns the data updated in the database.
+     * @param {NfcCardUpdateManyAndReturnArgs} args - Arguments to update many NfcCards.
+     * @example
+     * // Update many NfcCards
+     * const nfcCard = await prisma.nfcCard.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more NfcCards and only return the `id`
+     * const nfcCardWithIdOnly = await prisma.nfcCard.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends NfcCardUpdateManyAndReturnArgs>(args: SelectSubset<T, NfcCardUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NfcCardPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one NfcCard.
+     * @param {NfcCardUpsertArgs} args - Arguments to update or create a NfcCard.
+     * @example
+     * // Update or create a NfcCard
+     * const nfcCard = await prisma.nfcCard.upsert({
+     *   create: {
+     *     // ... data to create a NfcCard
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the NfcCard we want to update
+     *   }
+     * })
+     */
+    upsert<T extends NfcCardUpsertArgs>(args: SelectSubset<T, NfcCardUpsertArgs<ExtArgs>>): Prisma__NfcCardClient<$Result.GetResult<Prisma.$NfcCardPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of NfcCards.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NfcCardCountArgs} args - Arguments to filter NfcCards to count.
+     * @example
+     * // Count the number of NfcCards
+     * const count = await prisma.nfcCard.count({
+     *   where: {
+     *     // ... the filter for the NfcCards we want to count
+     *   }
+     * })
+    **/
+    count<T extends NfcCardCountArgs>(
+      args?: Subset<T, NfcCardCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], NfcCardCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a NfcCard.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NfcCardAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends NfcCardAggregateArgs>(args: Subset<T, NfcCardAggregateArgs>): Prisma.PrismaPromise<GetNfcCardAggregateType<T>>
+
+    /**
+     * Group by NfcCard.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NfcCardGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends NfcCardGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: NfcCardGroupByArgs['orderBy'] }
+        : { orderBy?: NfcCardGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, NfcCardGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetNfcCardGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the NfcCard model
+   */
+  readonly fields: NfcCardFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for NfcCard.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__NfcCardClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    member<T extends NfcCard$memberArgs<ExtArgs> = {}>(args?: Subset<T, NfcCard$memberArgs<ExtArgs>>): Prisma__MemberClient<$Result.GetResult<Prisma.$MemberPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    transactions<T extends NfcCard$transactionsArgs<ExtArgs> = {}>(args?: Subset<T, NfcCard$transactionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NfcTransactionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the NfcCard model
+   */
+  interface NfcCardFieldRefs {
+    readonly id: FieldRef<"NfcCard", 'String'>
+    readonly cardUid: FieldRef<"NfcCard", 'String'>
+    readonly cardId: FieldRef<"NfcCard", 'String'>
+    readonly memberId: FieldRef<"NfcCard", 'String'>
+    readonly status: FieldRef<"NfcCard", 'String'>
+    readonly issuedAt: FieldRef<"NfcCard", 'DateTime'>
+    readonly lastUsedAt: FieldRef<"NfcCard", 'DateTime'>
+    readonly notes: FieldRef<"NfcCard", 'String'>
+    readonly assignedBy: FieldRef<"NfcCard", 'String'>
+    readonly createdAt: FieldRef<"NfcCard", 'DateTime'>
+    readonly updatedAt: FieldRef<"NfcCard", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * NfcCard findUnique
+   */
+  export type NfcCardFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NfcCard
+     */
+    select?: NfcCardSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the NfcCard
+     */
+    omit?: NfcCardOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NfcCardInclude<ExtArgs> | null
+    /**
+     * Filter, which NfcCard to fetch.
+     */
+    where: NfcCardWhereUniqueInput
+  }
+
+  /**
+   * NfcCard findUniqueOrThrow
+   */
+  export type NfcCardFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NfcCard
+     */
+    select?: NfcCardSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the NfcCard
+     */
+    omit?: NfcCardOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NfcCardInclude<ExtArgs> | null
+    /**
+     * Filter, which NfcCard to fetch.
+     */
+    where: NfcCardWhereUniqueInput
+  }
+
+  /**
+   * NfcCard findFirst
+   */
+  export type NfcCardFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NfcCard
+     */
+    select?: NfcCardSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the NfcCard
+     */
+    omit?: NfcCardOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NfcCardInclude<ExtArgs> | null
+    /**
+     * Filter, which NfcCard to fetch.
+     */
+    where?: NfcCardWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of NfcCards to fetch.
+     */
+    orderBy?: NfcCardOrderByWithRelationInput | NfcCardOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for NfcCards.
+     */
+    cursor?: NfcCardWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` NfcCards from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` NfcCards.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of NfcCards.
+     */
+    distinct?: NfcCardScalarFieldEnum | NfcCardScalarFieldEnum[]
+  }
+
+  /**
+   * NfcCard findFirstOrThrow
+   */
+  export type NfcCardFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NfcCard
+     */
+    select?: NfcCardSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the NfcCard
+     */
+    omit?: NfcCardOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NfcCardInclude<ExtArgs> | null
+    /**
+     * Filter, which NfcCard to fetch.
+     */
+    where?: NfcCardWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of NfcCards to fetch.
+     */
+    orderBy?: NfcCardOrderByWithRelationInput | NfcCardOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for NfcCards.
+     */
+    cursor?: NfcCardWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` NfcCards from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` NfcCards.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of NfcCards.
+     */
+    distinct?: NfcCardScalarFieldEnum | NfcCardScalarFieldEnum[]
+  }
+
+  /**
+   * NfcCard findMany
+   */
+  export type NfcCardFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NfcCard
+     */
+    select?: NfcCardSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the NfcCard
+     */
+    omit?: NfcCardOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NfcCardInclude<ExtArgs> | null
+    /**
+     * Filter, which NfcCards to fetch.
+     */
+    where?: NfcCardWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of NfcCards to fetch.
+     */
+    orderBy?: NfcCardOrderByWithRelationInput | NfcCardOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing NfcCards.
+     */
+    cursor?: NfcCardWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` NfcCards from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` NfcCards.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of NfcCards.
+     */
+    distinct?: NfcCardScalarFieldEnum | NfcCardScalarFieldEnum[]
+  }
+
+  /**
+   * NfcCard create
+   */
+  export type NfcCardCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NfcCard
+     */
+    select?: NfcCardSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the NfcCard
+     */
+    omit?: NfcCardOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NfcCardInclude<ExtArgs> | null
+    /**
+     * The data needed to create a NfcCard.
+     */
+    data: XOR<NfcCardCreateInput, NfcCardUncheckedCreateInput>
+  }
+
+  /**
+   * NfcCard createMany
+   */
+  export type NfcCardCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many NfcCards.
+     */
+    data: NfcCardCreateManyInput | NfcCardCreateManyInput[]
+  }
+
+  /**
+   * NfcCard createManyAndReturn
+   */
+  export type NfcCardCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NfcCard
+     */
+    select?: NfcCardSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the NfcCard
+     */
+    omit?: NfcCardOmit<ExtArgs> | null
+    /**
+     * The data used to create many NfcCards.
+     */
+    data: NfcCardCreateManyInput | NfcCardCreateManyInput[]
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NfcCardIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * NfcCard update
+   */
+  export type NfcCardUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NfcCard
+     */
+    select?: NfcCardSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the NfcCard
+     */
+    omit?: NfcCardOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NfcCardInclude<ExtArgs> | null
+    /**
+     * The data needed to update a NfcCard.
+     */
+    data: XOR<NfcCardUpdateInput, NfcCardUncheckedUpdateInput>
+    /**
+     * Choose, which NfcCard to update.
+     */
+    where: NfcCardWhereUniqueInput
+  }
+
+  /**
+   * NfcCard updateMany
+   */
+  export type NfcCardUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update NfcCards.
+     */
+    data: XOR<NfcCardUpdateManyMutationInput, NfcCardUncheckedUpdateManyInput>
+    /**
+     * Filter which NfcCards to update
+     */
+    where?: NfcCardWhereInput
+    /**
+     * Limit how many NfcCards to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * NfcCard updateManyAndReturn
+   */
+  export type NfcCardUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NfcCard
+     */
+    select?: NfcCardSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the NfcCard
+     */
+    omit?: NfcCardOmit<ExtArgs> | null
+    /**
+     * The data used to update NfcCards.
+     */
+    data: XOR<NfcCardUpdateManyMutationInput, NfcCardUncheckedUpdateManyInput>
+    /**
+     * Filter which NfcCards to update
+     */
+    where?: NfcCardWhereInput
+    /**
+     * Limit how many NfcCards to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NfcCardIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * NfcCard upsert
+   */
+  export type NfcCardUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NfcCard
+     */
+    select?: NfcCardSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the NfcCard
+     */
+    omit?: NfcCardOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NfcCardInclude<ExtArgs> | null
+    /**
+     * The filter to search for the NfcCard to update in case it exists.
+     */
+    where: NfcCardWhereUniqueInput
+    /**
+     * In case the NfcCard found by the `where` argument doesn't exist, create a new NfcCard with this data.
+     */
+    create: XOR<NfcCardCreateInput, NfcCardUncheckedCreateInput>
+    /**
+     * In case the NfcCard was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<NfcCardUpdateInput, NfcCardUncheckedUpdateInput>
+  }
+
+  /**
+   * NfcCard delete
+   */
+  export type NfcCardDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NfcCard
+     */
+    select?: NfcCardSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the NfcCard
+     */
+    omit?: NfcCardOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NfcCardInclude<ExtArgs> | null
+    /**
+     * Filter which NfcCard to delete.
+     */
+    where: NfcCardWhereUniqueInput
+  }
+
+  /**
+   * NfcCard deleteMany
+   */
+  export type NfcCardDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which NfcCards to delete
+     */
+    where?: NfcCardWhereInput
+    /**
+     * Limit how many NfcCards to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * NfcCard.member
+   */
+  export type NfcCard$memberArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Member
+     */
+    select?: MemberSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Member
+     */
+    omit?: MemberOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MemberInclude<ExtArgs> | null
+    where?: MemberWhereInput
+  }
+
+  /**
+   * NfcCard.transactions
+   */
+  export type NfcCard$transactionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NfcTransaction
+     */
+    select?: NfcTransactionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the NfcTransaction
+     */
+    omit?: NfcTransactionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NfcTransactionInclude<ExtArgs> | null
+    where?: NfcTransactionWhereInput
+    orderBy?: NfcTransactionOrderByWithRelationInput | NfcTransactionOrderByWithRelationInput[]
+    cursor?: NfcTransactionWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: NfcTransactionScalarFieldEnum | NfcTransactionScalarFieldEnum[]
+  }
+
+  /**
+   * NfcCard without action
+   */
+  export type NfcCardDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NfcCard
+     */
+    select?: NfcCardSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the NfcCard
+     */
+    omit?: NfcCardOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NfcCardInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model NfcTransaction
+   */
+
+  export type AggregateNfcTransaction = {
+    _count: NfcTransactionCountAggregateOutputType | null
+    _avg: NfcTransactionAvgAggregateOutputType | null
+    _sum: NfcTransactionSumAggregateOutputType | null
+    _min: NfcTransactionMinAggregateOutputType | null
+    _max: NfcTransactionMaxAggregateOutputType | null
+  }
+
+  export type NfcTransactionAvgAggregateOutputType = {
+    amount: number | null
+  }
+
+  export type NfcTransactionSumAggregateOutputType = {
+    amount: number | null
+  }
+
+  export type NfcTransactionMinAggregateOutputType = {
+    id: string | null
+    cardId: string | null
+    cardUid: string | null
+    memberId: string | null
+    bookingId: string | null
+    type: string | null
+    status: string | null
+    amount: number | null
+    deviceType: string | null
+    readerLocation: string | null
+    failureReason: string | null
+    metadata: string | null
+    createdAt: Date | null
+  }
+
+  export type NfcTransactionMaxAggregateOutputType = {
+    id: string | null
+    cardId: string | null
+    cardUid: string | null
+    memberId: string | null
+    bookingId: string | null
+    type: string | null
+    status: string | null
+    amount: number | null
+    deviceType: string | null
+    readerLocation: string | null
+    failureReason: string | null
+    metadata: string | null
+    createdAt: Date | null
+  }
+
+  export type NfcTransactionCountAggregateOutputType = {
+    id: number
+    cardId: number
+    cardUid: number
+    memberId: number
+    bookingId: number
+    type: number
+    status: number
+    amount: number
+    deviceType: number
+    readerLocation: number
+    failureReason: number
+    metadata: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type NfcTransactionAvgAggregateInputType = {
+    amount?: true
+  }
+
+  export type NfcTransactionSumAggregateInputType = {
+    amount?: true
+  }
+
+  export type NfcTransactionMinAggregateInputType = {
+    id?: true
+    cardId?: true
+    cardUid?: true
+    memberId?: true
+    bookingId?: true
+    type?: true
+    status?: true
+    amount?: true
+    deviceType?: true
+    readerLocation?: true
+    failureReason?: true
+    metadata?: true
+    createdAt?: true
+  }
+
+  export type NfcTransactionMaxAggregateInputType = {
+    id?: true
+    cardId?: true
+    cardUid?: true
+    memberId?: true
+    bookingId?: true
+    type?: true
+    status?: true
+    amount?: true
+    deviceType?: true
+    readerLocation?: true
+    failureReason?: true
+    metadata?: true
+    createdAt?: true
+  }
+
+  export type NfcTransactionCountAggregateInputType = {
+    id?: true
+    cardId?: true
+    cardUid?: true
+    memberId?: true
+    bookingId?: true
+    type?: true
+    status?: true
+    amount?: true
+    deviceType?: true
+    readerLocation?: true
+    failureReason?: true
+    metadata?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type NfcTransactionAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which NfcTransaction to aggregate.
+     */
+    where?: NfcTransactionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of NfcTransactions to fetch.
+     */
+    orderBy?: NfcTransactionOrderByWithRelationInput | NfcTransactionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: NfcTransactionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` NfcTransactions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` NfcTransactions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned NfcTransactions
+    **/
+    _count?: true | NfcTransactionCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: NfcTransactionAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: NfcTransactionSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: NfcTransactionMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: NfcTransactionMaxAggregateInputType
+  }
+
+  export type GetNfcTransactionAggregateType<T extends NfcTransactionAggregateArgs> = {
+        [P in keyof T & keyof AggregateNfcTransaction]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateNfcTransaction[P]>
+      : GetScalarType<T[P], AggregateNfcTransaction[P]>
+  }
+
+
+
+
+  export type NfcTransactionGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: NfcTransactionWhereInput
+    orderBy?: NfcTransactionOrderByWithAggregationInput | NfcTransactionOrderByWithAggregationInput[]
+    by: NfcTransactionScalarFieldEnum[] | NfcTransactionScalarFieldEnum
+    having?: NfcTransactionScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: NfcTransactionCountAggregateInputType | true
+    _avg?: NfcTransactionAvgAggregateInputType
+    _sum?: NfcTransactionSumAggregateInputType
+    _min?: NfcTransactionMinAggregateInputType
+    _max?: NfcTransactionMaxAggregateInputType
+  }
+
+  export type NfcTransactionGroupByOutputType = {
+    id: string
+    cardId: string | null
+    cardUid: string
+    memberId: string | null
+    bookingId: string | null
+    type: string
+    status: string
+    amount: number
+    deviceType: string
+    readerLocation: string | null
+    failureReason: string | null
+    metadata: string | null
+    createdAt: Date
+    _count: NfcTransactionCountAggregateOutputType | null
+    _avg: NfcTransactionAvgAggregateOutputType | null
+    _sum: NfcTransactionSumAggregateOutputType | null
+    _min: NfcTransactionMinAggregateOutputType | null
+    _max: NfcTransactionMaxAggregateOutputType | null
+  }
+
+  type GetNfcTransactionGroupByPayload<T extends NfcTransactionGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<NfcTransactionGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof NfcTransactionGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], NfcTransactionGroupByOutputType[P]>
+            : GetScalarType<T[P], NfcTransactionGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type NfcTransactionSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    cardId?: boolean
+    cardUid?: boolean
+    memberId?: boolean
+    bookingId?: boolean
+    type?: boolean
+    status?: boolean
+    amount?: boolean
+    deviceType?: boolean
+    readerLocation?: boolean
+    failureReason?: boolean
+    metadata?: boolean
+    createdAt?: boolean
+    card?: boolean | NfcTransaction$cardArgs<ExtArgs>
+    member?: boolean | NfcTransaction$memberArgs<ExtArgs>
+    booking?: boolean | NfcTransaction$bookingArgs<ExtArgs>
+  }, ExtArgs["result"]["nfcTransaction"]>
+
+  export type NfcTransactionSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    cardId?: boolean
+    cardUid?: boolean
+    memberId?: boolean
+    bookingId?: boolean
+    type?: boolean
+    status?: boolean
+    amount?: boolean
+    deviceType?: boolean
+    readerLocation?: boolean
+    failureReason?: boolean
+    metadata?: boolean
+    createdAt?: boolean
+    card?: boolean | NfcTransaction$cardArgs<ExtArgs>
+    member?: boolean | NfcTransaction$memberArgs<ExtArgs>
+    booking?: boolean | NfcTransaction$bookingArgs<ExtArgs>
+  }, ExtArgs["result"]["nfcTransaction"]>
+
+  export type NfcTransactionSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    cardId?: boolean
+    cardUid?: boolean
+    memberId?: boolean
+    bookingId?: boolean
+    type?: boolean
+    status?: boolean
+    amount?: boolean
+    deviceType?: boolean
+    readerLocation?: boolean
+    failureReason?: boolean
+    metadata?: boolean
+    createdAt?: boolean
+    card?: boolean | NfcTransaction$cardArgs<ExtArgs>
+    member?: boolean | NfcTransaction$memberArgs<ExtArgs>
+    booking?: boolean | NfcTransaction$bookingArgs<ExtArgs>
+  }, ExtArgs["result"]["nfcTransaction"]>
+
+  export type NfcTransactionSelectScalar = {
+    id?: boolean
+    cardId?: boolean
+    cardUid?: boolean
+    memberId?: boolean
+    bookingId?: boolean
+    type?: boolean
+    status?: boolean
+    amount?: boolean
+    deviceType?: boolean
+    readerLocation?: boolean
+    failureReason?: boolean
+    metadata?: boolean
+    createdAt?: boolean
+  }
+
+  export type NfcTransactionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "cardId" | "cardUid" | "memberId" | "bookingId" | "type" | "status" | "amount" | "deviceType" | "readerLocation" | "failureReason" | "metadata" | "createdAt", ExtArgs["result"]["nfcTransaction"]>
+  export type NfcTransactionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    card?: boolean | NfcTransaction$cardArgs<ExtArgs>
+    member?: boolean | NfcTransaction$memberArgs<ExtArgs>
+    booking?: boolean | NfcTransaction$bookingArgs<ExtArgs>
+  }
+  export type NfcTransactionIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    card?: boolean | NfcTransaction$cardArgs<ExtArgs>
+    member?: boolean | NfcTransaction$memberArgs<ExtArgs>
+    booking?: boolean | NfcTransaction$bookingArgs<ExtArgs>
+  }
+  export type NfcTransactionIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    card?: boolean | NfcTransaction$cardArgs<ExtArgs>
+    member?: boolean | NfcTransaction$memberArgs<ExtArgs>
+    booking?: boolean | NfcTransaction$bookingArgs<ExtArgs>
+  }
+
+  export type $NfcTransactionPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "NfcTransaction"
+    objects: {
+      card: Prisma.$NfcCardPayload<ExtArgs> | null
+      member: Prisma.$MemberPayload<ExtArgs> | null
+      booking: Prisma.$BookingPayload<ExtArgs> | null
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      cardId: string | null
+      cardUid: string
+      memberId: string | null
+      bookingId: string | null
+      type: string
+      status: string
+      amount: number
+      deviceType: string
+      readerLocation: string | null
+      failureReason: string | null
+      metadata: string | null
+      createdAt: Date
+    }, ExtArgs["result"]["nfcTransaction"]>
+    composites: {}
+  }
+
+  type NfcTransactionGetPayload<S extends boolean | null | undefined | NfcTransactionDefaultArgs> = $Result.GetResult<Prisma.$NfcTransactionPayload, S>
+
+  type NfcTransactionCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<NfcTransactionFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: NfcTransactionCountAggregateInputType | true
+    }
+
+  export interface NfcTransactionDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['NfcTransaction'], meta: { name: 'NfcTransaction' } }
+    /**
+     * Find zero or one NfcTransaction that matches the filter.
+     * @param {NfcTransactionFindUniqueArgs} args - Arguments to find a NfcTransaction
+     * @example
+     * // Get one NfcTransaction
+     * const nfcTransaction = await prisma.nfcTransaction.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends NfcTransactionFindUniqueArgs>(args: SelectSubset<T, NfcTransactionFindUniqueArgs<ExtArgs>>): Prisma__NfcTransactionClient<$Result.GetResult<Prisma.$NfcTransactionPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one NfcTransaction that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {NfcTransactionFindUniqueOrThrowArgs} args - Arguments to find a NfcTransaction
+     * @example
+     * // Get one NfcTransaction
+     * const nfcTransaction = await prisma.nfcTransaction.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends NfcTransactionFindUniqueOrThrowArgs>(args: SelectSubset<T, NfcTransactionFindUniqueOrThrowArgs<ExtArgs>>): Prisma__NfcTransactionClient<$Result.GetResult<Prisma.$NfcTransactionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first NfcTransaction that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NfcTransactionFindFirstArgs} args - Arguments to find a NfcTransaction
+     * @example
+     * // Get one NfcTransaction
+     * const nfcTransaction = await prisma.nfcTransaction.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends NfcTransactionFindFirstArgs>(args?: SelectSubset<T, NfcTransactionFindFirstArgs<ExtArgs>>): Prisma__NfcTransactionClient<$Result.GetResult<Prisma.$NfcTransactionPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first NfcTransaction that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NfcTransactionFindFirstOrThrowArgs} args - Arguments to find a NfcTransaction
+     * @example
+     * // Get one NfcTransaction
+     * const nfcTransaction = await prisma.nfcTransaction.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends NfcTransactionFindFirstOrThrowArgs>(args?: SelectSubset<T, NfcTransactionFindFirstOrThrowArgs<ExtArgs>>): Prisma__NfcTransactionClient<$Result.GetResult<Prisma.$NfcTransactionPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more NfcTransactions that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NfcTransactionFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all NfcTransactions
+     * const nfcTransactions = await prisma.nfcTransaction.findMany()
+     * 
+     * // Get first 10 NfcTransactions
+     * const nfcTransactions = await prisma.nfcTransaction.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const nfcTransactionWithIdOnly = await prisma.nfcTransaction.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends NfcTransactionFindManyArgs>(args?: SelectSubset<T, NfcTransactionFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NfcTransactionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a NfcTransaction.
+     * @param {NfcTransactionCreateArgs} args - Arguments to create a NfcTransaction.
+     * @example
+     * // Create one NfcTransaction
+     * const NfcTransaction = await prisma.nfcTransaction.create({
+     *   data: {
+     *     // ... data to create a NfcTransaction
+     *   }
+     * })
+     * 
+     */
+    create<T extends NfcTransactionCreateArgs>(args: SelectSubset<T, NfcTransactionCreateArgs<ExtArgs>>): Prisma__NfcTransactionClient<$Result.GetResult<Prisma.$NfcTransactionPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many NfcTransactions.
+     * @param {NfcTransactionCreateManyArgs} args - Arguments to create many NfcTransactions.
+     * @example
+     * // Create many NfcTransactions
+     * const nfcTransaction = await prisma.nfcTransaction.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends NfcTransactionCreateManyArgs>(args?: SelectSubset<T, NfcTransactionCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many NfcTransactions and returns the data saved in the database.
+     * @param {NfcTransactionCreateManyAndReturnArgs} args - Arguments to create many NfcTransactions.
+     * @example
+     * // Create many NfcTransactions
+     * const nfcTransaction = await prisma.nfcTransaction.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many NfcTransactions and only return the `id`
+     * const nfcTransactionWithIdOnly = await prisma.nfcTransaction.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends NfcTransactionCreateManyAndReturnArgs>(args?: SelectSubset<T, NfcTransactionCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NfcTransactionPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a NfcTransaction.
+     * @param {NfcTransactionDeleteArgs} args - Arguments to delete one NfcTransaction.
+     * @example
+     * // Delete one NfcTransaction
+     * const NfcTransaction = await prisma.nfcTransaction.delete({
+     *   where: {
+     *     // ... filter to delete one NfcTransaction
+     *   }
+     * })
+     * 
+     */
+    delete<T extends NfcTransactionDeleteArgs>(args: SelectSubset<T, NfcTransactionDeleteArgs<ExtArgs>>): Prisma__NfcTransactionClient<$Result.GetResult<Prisma.$NfcTransactionPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one NfcTransaction.
+     * @param {NfcTransactionUpdateArgs} args - Arguments to update one NfcTransaction.
+     * @example
+     * // Update one NfcTransaction
+     * const nfcTransaction = await prisma.nfcTransaction.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends NfcTransactionUpdateArgs>(args: SelectSubset<T, NfcTransactionUpdateArgs<ExtArgs>>): Prisma__NfcTransactionClient<$Result.GetResult<Prisma.$NfcTransactionPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more NfcTransactions.
+     * @param {NfcTransactionDeleteManyArgs} args - Arguments to filter NfcTransactions to delete.
+     * @example
+     * // Delete a few NfcTransactions
+     * const { count } = await prisma.nfcTransaction.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends NfcTransactionDeleteManyArgs>(args?: SelectSubset<T, NfcTransactionDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more NfcTransactions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NfcTransactionUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many NfcTransactions
+     * const nfcTransaction = await prisma.nfcTransaction.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends NfcTransactionUpdateManyArgs>(args: SelectSubset<T, NfcTransactionUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more NfcTransactions and returns the data updated in the database.
+     * @param {NfcTransactionUpdateManyAndReturnArgs} args - Arguments to update many NfcTransactions.
+     * @example
+     * // Update many NfcTransactions
+     * const nfcTransaction = await prisma.nfcTransaction.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more NfcTransactions and only return the `id`
+     * const nfcTransactionWithIdOnly = await prisma.nfcTransaction.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends NfcTransactionUpdateManyAndReturnArgs>(args: SelectSubset<T, NfcTransactionUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NfcTransactionPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one NfcTransaction.
+     * @param {NfcTransactionUpsertArgs} args - Arguments to update or create a NfcTransaction.
+     * @example
+     * // Update or create a NfcTransaction
+     * const nfcTransaction = await prisma.nfcTransaction.upsert({
+     *   create: {
+     *     // ... data to create a NfcTransaction
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the NfcTransaction we want to update
+     *   }
+     * })
+     */
+    upsert<T extends NfcTransactionUpsertArgs>(args: SelectSubset<T, NfcTransactionUpsertArgs<ExtArgs>>): Prisma__NfcTransactionClient<$Result.GetResult<Prisma.$NfcTransactionPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of NfcTransactions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NfcTransactionCountArgs} args - Arguments to filter NfcTransactions to count.
+     * @example
+     * // Count the number of NfcTransactions
+     * const count = await prisma.nfcTransaction.count({
+     *   where: {
+     *     // ... the filter for the NfcTransactions we want to count
+     *   }
+     * })
+    **/
+    count<T extends NfcTransactionCountArgs>(
+      args?: Subset<T, NfcTransactionCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], NfcTransactionCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a NfcTransaction.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NfcTransactionAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends NfcTransactionAggregateArgs>(args: Subset<T, NfcTransactionAggregateArgs>): Prisma.PrismaPromise<GetNfcTransactionAggregateType<T>>
+
+    /**
+     * Group by NfcTransaction.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NfcTransactionGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends NfcTransactionGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: NfcTransactionGroupByArgs['orderBy'] }
+        : { orderBy?: NfcTransactionGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, NfcTransactionGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetNfcTransactionGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the NfcTransaction model
+   */
+  readonly fields: NfcTransactionFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for NfcTransaction.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__NfcTransactionClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    card<T extends NfcTransaction$cardArgs<ExtArgs> = {}>(args?: Subset<T, NfcTransaction$cardArgs<ExtArgs>>): Prisma__NfcCardClient<$Result.GetResult<Prisma.$NfcCardPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    member<T extends NfcTransaction$memberArgs<ExtArgs> = {}>(args?: Subset<T, NfcTransaction$memberArgs<ExtArgs>>): Prisma__MemberClient<$Result.GetResult<Prisma.$MemberPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    booking<T extends NfcTransaction$bookingArgs<ExtArgs> = {}>(args?: Subset<T, NfcTransaction$bookingArgs<ExtArgs>>): Prisma__BookingClient<$Result.GetResult<Prisma.$BookingPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the NfcTransaction model
+   */
+  interface NfcTransactionFieldRefs {
+    readonly id: FieldRef<"NfcTransaction", 'String'>
+    readonly cardId: FieldRef<"NfcTransaction", 'String'>
+    readonly cardUid: FieldRef<"NfcTransaction", 'String'>
+    readonly memberId: FieldRef<"NfcTransaction", 'String'>
+    readonly bookingId: FieldRef<"NfcTransaction", 'String'>
+    readonly type: FieldRef<"NfcTransaction", 'String'>
+    readonly status: FieldRef<"NfcTransaction", 'String'>
+    readonly amount: FieldRef<"NfcTransaction", 'Float'>
+    readonly deviceType: FieldRef<"NfcTransaction", 'String'>
+    readonly readerLocation: FieldRef<"NfcTransaction", 'String'>
+    readonly failureReason: FieldRef<"NfcTransaction", 'String'>
+    readonly metadata: FieldRef<"NfcTransaction", 'String'>
+    readonly createdAt: FieldRef<"NfcTransaction", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * NfcTransaction findUnique
+   */
+  export type NfcTransactionFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NfcTransaction
+     */
+    select?: NfcTransactionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the NfcTransaction
+     */
+    omit?: NfcTransactionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NfcTransactionInclude<ExtArgs> | null
+    /**
+     * Filter, which NfcTransaction to fetch.
+     */
+    where: NfcTransactionWhereUniqueInput
+  }
+
+  /**
+   * NfcTransaction findUniqueOrThrow
+   */
+  export type NfcTransactionFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NfcTransaction
+     */
+    select?: NfcTransactionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the NfcTransaction
+     */
+    omit?: NfcTransactionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NfcTransactionInclude<ExtArgs> | null
+    /**
+     * Filter, which NfcTransaction to fetch.
+     */
+    where: NfcTransactionWhereUniqueInput
+  }
+
+  /**
+   * NfcTransaction findFirst
+   */
+  export type NfcTransactionFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NfcTransaction
+     */
+    select?: NfcTransactionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the NfcTransaction
+     */
+    omit?: NfcTransactionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NfcTransactionInclude<ExtArgs> | null
+    /**
+     * Filter, which NfcTransaction to fetch.
+     */
+    where?: NfcTransactionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of NfcTransactions to fetch.
+     */
+    orderBy?: NfcTransactionOrderByWithRelationInput | NfcTransactionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for NfcTransactions.
+     */
+    cursor?: NfcTransactionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` NfcTransactions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` NfcTransactions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of NfcTransactions.
+     */
+    distinct?: NfcTransactionScalarFieldEnum | NfcTransactionScalarFieldEnum[]
+  }
+
+  /**
+   * NfcTransaction findFirstOrThrow
+   */
+  export type NfcTransactionFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NfcTransaction
+     */
+    select?: NfcTransactionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the NfcTransaction
+     */
+    omit?: NfcTransactionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NfcTransactionInclude<ExtArgs> | null
+    /**
+     * Filter, which NfcTransaction to fetch.
+     */
+    where?: NfcTransactionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of NfcTransactions to fetch.
+     */
+    orderBy?: NfcTransactionOrderByWithRelationInput | NfcTransactionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for NfcTransactions.
+     */
+    cursor?: NfcTransactionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` NfcTransactions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` NfcTransactions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of NfcTransactions.
+     */
+    distinct?: NfcTransactionScalarFieldEnum | NfcTransactionScalarFieldEnum[]
+  }
+
+  /**
+   * NfcTransaction findMany
+   */
+  export type NfcTransactionFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NfcTransaction
+     */
+    select?: NfcTransactionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the NfcTransaction
+     */
+    omit?: NfcTransactionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NfcTransactionInclude<ExtArgs> | null
+    /**
+     * Filter, which NfcTransactions to fetch.
+     */
+    where?: NfcTransactionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of NfcTransactions to fetch.
+     */
+    orderBy?: NfcTransactionOrderByWithRelationInput | NfcTransactionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing NfcTransactions.
+     */
+    cursor?: NfcTransactionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` NfcTransactions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` NfcTransactions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of NfcTransactions.
+     */
+    distinct?: NfcTransactionScalarFieldEnum | NfcTransactionScalarFieldEnum[]
+  }
+
+  /**
+   * NfcTransaction create
+   */
+  export type NfcTransactionCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NfcTransaction
+     */
+    select?: NfcTransactionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the NfcTransaction
+     */
+    omit?: NfcTransactionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NfcTransactionInclude<ExtArgs> | null
+    /**
+     * The data needed to create a NfcTransaction.
+     */
+    data: XOR<NfcTransactionCreateInput, NfcTransactionUncheckedCreateInput>
+  }
+
+  /**
+   * NfcTransaction createMany
+   */
+  export type NfcTransactionCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many NfcTransactions.
+     */
+    data: NfcTransactionCreateManyInput | NfcTransactionCreateManyInput[]
+  }
+
+  /**
+   * NfcTransaction createManyAndReturn
+   */
+  export type NfcTransactionCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NfcTransaction
+     */
+    select?: NfcTransactionSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the NfcTransaction
+     */
+    omit?: NfcTransactionOmit<ExtArgs> | null
+    /**
+     * The data used to create many NfcTransactions.
+     */
+    data: NfcTransactionCreateManyInput | NfcTransactionCreateManyInput[]
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NfcTransactionIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * NfcTransaction update
+   */
+  export type NfcTransactionUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NfcTransaction
+     */
+    select?: NfcTransactionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the NfcTransaction
+     */
+    omit?: NfcTransactionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NfcTransactionInclude<ExtArgs> | null
+    /**
+     * The data needed to update a NfcTransaction.
+     */
+    data: XOR<NfcTransactionUpdateInput, NfcTransactionUncheckedUpdateInput>
+    /**
+     * Choose, which NfcTransaction to update.
+     */
+    where: NfcTransactionWhereUniqueInput
+  }
+
+  /**
+   * NfcTransaction updateMany
+   */
+  export type NfcTransactionUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update NfcTransactions.
+     */
+    data: XOR<NfcTransactionUpdateManyMutationInput, NfcTransactionUncheckedUpdateManyInput>
+    /**
+     * Filter which NfcTransactions to update
+     */
+    where?: NfcTransactionWhereInput
+    /**
+     * Limit how many NfcTransactions to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * NfcTransaction updateManyAndReturn
+   */
+  export type NfcTransactionUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NfcTransaction
+     */
+    select?: NfcTransactionSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the NfcTransaction
+     */
+    omit?: NfcTransactionOmit<ExtArgs> | null
+    /**
+     * The data used to update NfcTransactions.
+     */
+    data: XOR<NfcTransactionUpdateManyMutationInput, NfcTransactionUncheckedUpdateManyInput>
+    /**
+     * Filter which NfcTransactions to update
+     */
+    where?: NfcTransactionWhereInput
+    /**
+     * Limit how many NfcTransactions to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NfcTransactionIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * NfcTransaction upsert
+   */
+  export type NfcTransactionUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NfcTransaction
+     */
+    select?: NfcTransactionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the NfcTransaction
+     */
+    omit?: NfcTransactionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NfcTransactionInclude<ExtArgs> | null
+    /**
+     * The filter to search for the NfcTransaction to update in case it exists.
+     */
+    where: NfcTransactionWhereUniqueInput
+    /**
+     * In case the NfcTransaction found by the `where` argument doesn't exist, create a new NfcTransaction with this data.
+     */
+    create: XOR<NfcTransactionCreateInput, NfcTransactionUncheckedCreateInput>
+    /**
+     * In case the NfcTransaction was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<NfcTransactionUpdateInput, NfcTransactionUncheckedUpdateInput>
+  }
+
+  /**
+   * NfcTransaction delete
+   */
+  export type NfcTransactionDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NfcTransaction
+     */
+    select?: NfcTransactionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the NfcTransaction
+     */
+    omit?: NfcTransactionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NfcTransactionInclude<ExtArgs> | null
+    /**
+     * Filter which NfcTransaction to delete.
+     */
+    where: NfcTransactionWhereUniqueInput
+  }
+
+  /**
+   * NfcTransaction deleteMany
+   */
+  export type NfcTransactionDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which NfcTransactions to delete
+     */
+    where?: NfcTransactionWhereInput
+    /**
+     * Limit how many NfcTransactions to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * NfcTransaction.card
+   */
+  export type NfcTransaction$cardArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NfcCard
+     */
+    select?: NfcCardSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the NfcCard
+     */
+    omit?: NfcCardOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NfcCardInclude<ExtArgs> | null
+    where?: NfcCardWhereInput
+  }
+
+  /**
+   * NfcTransaction.member
+   */
+  export type NfcTransaction$memberArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Member
+     */
+    select?: MemberSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Member
+     */
+    omit?: MemberOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MemberInclude<ExtArgs> | null
+    where?: MemberWhereInput
+  }
+
+  /**
+   * NfcTransaction.booking
+   */
+  export type NfcTransaction$bookingArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Booking
+     */
+    select?: BookingSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Booking
+     */
+    omit?: BookingOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BookingInclude<ExtArgs> | null
+    where?: BookingWhereInput
+  }
+
+  /**
+   * NfcTransaction without action
+   */
+  export type NfcTransactionDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NfcTransaction
+     */
+    select?: NfcTransactionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the NfcTransaction
+     */
+    omit?: NfcTransactionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NfcTransactionInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -42763,6 +45547,42 @@ export namespace Prisma {
   export type UserSportStatScalarFieldEnum = (typeof UserSportStatScalarFieldEnum)[keyof typeof UserSportStatScalarFieldEnum]
 
 
+  export const NfcCardScalarFieldEnum: {
+    id: 'id',
+    cardUid: 'cardUid',
+    cardId: 'cardId',
+    memberId: 'memberId',
+    status: 'status',
+    issuedAt: 'issuedAt',
+    lastUsedAt: 'lastUsedAt',
+    notes: 'notes',
+    assignedBy: 'assignedBy',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type NfcCardScalarFieldEnum = (typeof NfcCardScalarFieldEnum)[keyof typeof NfcCardScalarFieldEnum]
+
+
+  export const NfcTransactionScalarFieldEnum: {
+    id: 'id',
+    cardId: 'cardId',
+    cardUid: 'cardUid',
+    memberId: 'memberId',
+    bookingId: 'bookingId',
+    type: 'type',
+    status: 'status',
+    amount: 'amount',
+    deviceType: 'deviceType',
+    readerLocation: 'readerLocation',
+    failureReason: 'failureReason',
+    metadata: 'metadata',
+    createdAt: 'createdAt'
+  };
+
+  export type NfcTransactionScalarFieldEnum = (typeof NfcTransactionScalarFieldEnum)[keyof typeof NfcTransactionScalarFieldEnum]
+
+
   export const SortOrder: {
     asc: 'asc',
     desc: 'desc'
@@ -43017,6 +45837,8 @@ export namespace Prisma {
     couponUsages?: CouponUsageListRelationFilter
     loyaltyAchievements?: LoyaltyAchievementListRelationFilter
     sportStats?: UserSportStatListRelationFilter
+    nfcCards?: NfcCardListRelationFilter
+    nfcTransactions?: NfcTransactionListRelationFilter
   }
 
   export type MemberOrderByWithRelationInput = {
@@ -43044,6 +45866,8 @@ export namespace Prisma {
     couponUsages?: CouponUsageOrderByRelationAggregateInput
     loyaltyAchievements?: LoyaltyAchievementOrderByRelationAggregateInput
     sportStats?: UserSportStatOrderByRelationAggregateInput
+    nfcCards?: NfcCardOrderByRelationAggregateInput
+    nfcTransactions?: NfcTransactionOrderByRelationAggregateInput
   }
 
   export type MemberWhereUniqueInput = Prisma.AtLeast<{
@@ -43074,6 +45898,8 @@ export namespace Prisma {
     couponUsages?: CouponUsageListRelationFilter
     loyaltyAchievements?: LoyaltyAchievementListRelationFilter
     sportStats?: UserSportStatListRelationFilter
+    nfcCards?: NfcCardListRelationFilter
+    nfcTransactions?: NfcTransactionListRelationFilter
   }, "id">
 
   export type MemberOrderByWithAggregationInput = {
@@ -43708,6 +46534,7 @@ export namespace Prisma {
     tickets?: TicketListRelationFilter
     couponUsages?: CouponUsageListRelationFilter
     participants?: BookingParticipantListRelationFilter
+    nfcTransactions?: NfcTransactionListRelationFilter
   }
 
   export type BookingOrderByWithRelationInput = {
@@ -43738,6 +46565,7 @@ export namespace Prisma {
     tickets?: TicketOrderByRelationAggregateInput
     couponUsages?: CouponUsageOrderByRelationAggregateInput
     participants?: BookingParticipantOrderByRelationAggregateInput
+    nfcTransactions?: NfcTransactionOrderByRelationAggregateInput
   }
 
   export type BookingWhereUniqueInput = Prisma.AtLeast<{
@@ -43771,6 +46599,7 @@ export namespace Prisma {
     tickets?: TicketListRelationFilter
     couponUsages?: CouponUsageListRelationFilter
     participants?: BookingParticipantListRelationFilter
+    nfcTransactions?: NfcTransactionListRelationFilter
   }, "id" | "inviteCode">
 
   export type BookingOrderByWithAggregationInput = {
@@ -45327,6 +48156,197 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"UserSportStat"> | Date | string
   }
 
+  export type NfcCardWhereInput = {
+    AND?: NfcCardWhereInput | NfcCardWhereInput[]
+    OR?: NfcCardWhereInput[]
+    NOT?: NfcCardWhereInput | NfcCardWhereInput[]
+    id?: StringFilter<"NfcCard"> | string
+    cardUid?: StringFilter<"NfcCard"> | string
+    cardId?: StringNullableFilter<"NfcCard"> | string | null
+    memberId?: StringNullableFilter<"NfcCard"> | string | null
+    status?: StringFilter<"NfcCard"> | string
+    issuedAt?: DateTimeFilter<"NfcCard"> | Date | string
+    lastUsedAt?: DateTimeNullableFilter<"NfcCard"> | Date | string | null
+    notes?: StringNullableFilter<"NfcCard"> | string | null
+    assignedBy?: StringNullableFilter<"NfcCard"> | string | null
+    createdAt?: DateTimeFilter<"NfcCard"> | Date | string
+    updatedAt?: DateTimeFilter<"NfcCard"> | Date | string
+    member?: XOR<MemberNullableScalarRelationFilter, MemberWhereInput> | null
+    transactions?: NfcTransactionListRelationFilter
+  }
+
+  export type NfcCardOrderByWithRelationInput = {
+    id?: SortOrder
+    cardUid?: SortOrder
+    cardId?: SortOrderInput | SortOrder
+    memberId?: SortOrderInput | SortOrder
+    status?: SortOrder
+    issuedAt?: SortOrder
+    lastUsedAt?: SortOrderInput | SortOrder
+    notes?: SortOrderInput | SortOrder
+    assignedBy?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    member?: MemberOrderByWithRelationInput
+    transactions?: NfcTransactionOrderByRelationAggregateInput
+  }
+
+  export type NfcCardWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    cardUid?: string
+    AND?: NfcCardWhereInput | NfcCardWhereInput[]
+    OR?: NfcCardWhereInput[]
+    NOT?: NfcCardWhereInput | NfcCardWhereInput[]
+    cardId?: StringNullableFilter<"NfcCard"> | string | null
+    memberId?: StringNullableFilter<"NfcCard"> | string | null
+    status?: StringFilter<"NfcCard"> | string
+    issuedAt?: DateTimeFilter<"NfcCard"> | Date | string
+    lastUsedAt?: DateTimeNullableFilter<"NfcCard"> | Date | string | null
+    notes?: StringNullableFilter<"NfcCard"> | string | null
+    assignedBy?: StringNullableFilter<"NfcCard"> | string | null
+    createdAt?: DateTimeFilter<"NfcCard"> | Date | string
+    updatedAt?: DateTimeFilter<"NfcCard"> | Date | string
+    member?: XOR<MemberNullableScalarRelationFilter, MemberWhereInput> | null
+    transactions?: NfcTransactionListRelationFilter
+  }, "id" | "cardUid">
+
+  export type NfcCardOrderByWithAggregationInput = {
+    id?: SortOrder
+    cardUid?: SortOrder
+    cardId?: SortOrderInput | SortOrder
+    memberId?: SortOrderInput | SortOrder
+    status?: SortOrder
+    issuedAt?: SortOrder
+    lastUsedAt?: SortOrderInput | SortOrder
+    notes?: SortOrderInput | SortOrder
+    assignedBy?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: NfcCardCountOrderByAggregateInput
+    _max?: NfcCardMaxOrderByAggregateInput
+    _min?: NfcCardMinOrderByAggregateInput
+  }
+
+  export type NfcCardScalarWhereWithAggregatesInput = {
+    AND?: NfcCardScalarWhereWithAggregatesInput | NfcCardScalarWhereWithAggregatesInput[]
+    OR?: NfcCardScalarWhereWithAggregatesInput[]
+    NOT?: NfcCardScalarWhereWithAggregatesInput | NfcCardScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"NfcCard"> | string
+    cardUid?: StringWithAggregatesFilter<"NfcCard"> | string
+    cardId?: StringNullableWithAggregatesFilter<"NfcCard"> | string | null
+    memberId?: StringNullableWithAggregatesFilter<"NfcCard"> | string | null
+    status?: StringWithAggregatesFilter<"NfcCard"> | string
+    issuedAt?: DateTimeWithAggregatesFilter<"NfcCard"> | Date | string
+    lastUsedAt?: DateTimeNullableWithAggregatesFilter<"NfcCard"> | Date | string | null
+    notes?: StringNullableWithAggregatesFilter<"NfcCard"> | string | null
+    assignedBy?: StringNullableWithAggregatesFilter<"NfcCard"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"NfcCard"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"NfcCard"> | Date | string
+  }
+
+  export type NfcTransactionWhereInput = {
+    AND?: NfcTransactionWhereInput | NfcTransactionWhereInput[]
+    OR?: NfcTransactionWhereInput[]
+    NOT?: NfcTransactionWhereInput | NfcTransactionWhereInput[]
+    id?: StringFilter<"NfcTransaction"> | string
+    cardId?: StringNullableFilter<"NfcTransaction"> | string | null
+    cardUid?: StringFilter<"NfcTransaction"> | string
+    memberId?: StringNullableFilter<"NfcTransaction"> | string | null
+    bookingId?: StringNullableFilter<"NfcTransaction"> | string | null
+    type?: StringFilter<"NfcTransaction"> | string
+    status?: StringFilter<"NfcTransaction"> | string
+    amount?: FloatFilter<"NfcTransaction"> | number
+    deviceType?: StringFilter<"NfcTransaction"> | string
+    readerLocation?: StringNullableFilter<"NfcTransaction"> | string | null
+    failureReason?: StringNullableFilter<"NfcTransaction"> | string | null
+    metadata?: StringNullableFilter<"NfcTransaction"> | string | null
+    createdAt?: DateTimeFilter<"NfcTransaction"> | Date | string
+    card?: XOR<NfcCardNullableScalarRelationFilter, NfcCardWhereInput> | null
+    member?: XOR<MemberNullableScalarRelationFilter, MemberWhereInput> | null
+    booking?: XOR<BookingNullableScalarRelationFilter, BookingWhereInput> | null
+  }
+
+  export type NfcTransactionOrderByWithRelationInput = {
+    id?: SortOrder
+    cardId?: SortOrderInput | SortOrder
+    cardUid?: SortOrder
+    memberId?: SortOrderInput | SortOrder
+    bookingId?: SortOrderInput | SortOrder
+    type?: SortOrder
+    status?: SortOrder
+    amount?: SortOrder
+    deviceType?: SortOrder
+    readerLocation?: SortOrderInput | SortOrder
+    failureReason?: SortOrderInput | SortOrder
+    metadata?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    card?: NfcCardOrderByWithRelationInput
+    member?: MemberOrderByWithRelationInput
+    booking?: BookingOrderByWithRelationInput
+  }
+
+  export type NfcTransactionWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: NfcTransactionWhereInput | NfcTransactionWhereInput[]
+    OR?: NfcTransactionWhereInput[]
+    NOT?: NfcTransactionWhereInput | NfcTransactionWhereInput[]
+    cardId?: StringNullableFilter<"NfcTransaction"> | string | null
+    cardUid?: StringFilter<"NfcTransaction"> | string
+    memberId?: StringNullableFilter<"NfcTransaction"> | string | null
+    bookingId?: StringNullableFilter<"NfcTransaction"> | string | null
+    type?: StringFilter<"NfcTransaction"> | string
+    status?: StringFilter<"NfcTransaction"> | string
+    amount?: FloatFilter<"NfcTransaction"> | number
+    deviceType?: StringFilter<"NfcTransaction"> | string
+    readerLocation?: StringNullableFilter<"NfcTransaction"> | string | null
+    failureReason?: StringNullableFilter<"NfcTransaction"> | string | null
+    metadata?: StringNullableFilter<"NfcTransaction"> | string | null
+    createdAt?: DateTimeFilter<"NfcTransaction"> | Date | string
+    card?: XOR<NfcCardNullableScalarRelationFilter, NfcCardWhereInput> | null
+    member?: XOR<MemberNullableScalarRelationFilter, MemberWhereInput> | null
+    booking?: XOR<BookingNullableScalarRelationFilter, BookingWhereInput> | null
+  }, "id">
+
+  export type NfcTransactionOrderByWithAggregationInput = {
+    id?: SortOrder
+    cardId?: SortOrderInput | SortOrder
+    cardUid?: SortOrder
+    memberId?: SortOrderInput | SortOrder
+    bookingId?: SortOrderInput | SortOrder
+    type?: SortOrder
+    status?: SortOrder
+    amount?: SortOrder
+    deviceType?: SortOrder
+    readerLocation?: SortOrderInput | SortOrder
+    failureReason?: SortOrderInput | SortOrder
+    metadata?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    _count?: NfcTransactionCountOrderByAggregateInput
+    _avg?: NfcTransactionAvgOrderByAggregateInput
+    _max?: NfcTransactionMaxOrderByAggregateInput
+    _min?: NfcTransactionMinOrderByAggregateInput
+    _sum?: NfcTransactionSumOrderByAggregateInput
+  }
+
+  export type NfcTransactionScalarWhereWithAggregatesInput = {
+    AND?: NfcTransactionScalarWhereWithAggregatesInput | NfcTransactionScalarWhereWithAggregatesInput[]
+    OR?: NfcTransactionScalarWhereWithAggregatesInput[]
+    NOT?: NfcTransactionScalarWhereWithAggregatesInput | NfcTransactionScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"NfcTransaction"> | string
+    cardId?: StringNullableWithAggregatesFilter<"NfcTransaction"> | string | null
+    cardUid?: StringWithAggregatesFilter<"NfcTransaction"> | string
+    memberId?: StringNullableWithAggregatesFilter<"NfcTransaction"> | string | null
+    bookingId?: StringNullableWithAggregatesFilter<"NfcTransaction"> | string | null
+    type?: StringWithAggregatesFilter<"NfcTransaction"> | string
+    status?: StringWithAggregatesFilter<"NfcTransaction"> | string
+    amount?: FloatWithAggregatesFilter<"NfcTransaction"> | number
+    deviceType?: StringWithAggregatesFilter<"NfcTransaction"> | string
+    readerLocation?: StringNullableWithAggregatesFilter<"NfcTransaction"> | string | null
+    failureReason?: StringNullableWithAggregatesFilter<"NfcTransaction"> | string | null
+    metadata?: StringNullableWithAggregatesFilter<"NfcTransaction"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"NfcTransaction"> | Date | string
+  }
+
   export type AdminCreateInput = {
     id?: string
     email: string
@@ -45534,6 +48554,8 @@ export namespace Prisma {
     couponUsages?: CouponUsageCreateNestedManyWithoutMemberInput
     loyaltyAchievements?: LoyaltyAchievementCreateNestedManyWithoutMemberInput
     sportStats?: UserSportStatCreateNestedManyWithoutMemberInput
+    nfcCards?: NfcCardCreateNestedManyWithoutMemberInput
+    nfcTransactions?: NfcTransactionCreateNestedManyWithoutMemberInput
   }
 
   export type MemberUncheckedCreateInput = {
@@ -45560,6 +48582,8 @@ export namespace Prisma {
     couponUsages?: CouponUsageUncheckedCreateNestedManyWithoutMemberInput
     loyaltyAchievements?: LoyaltyAchievementUncheckedCreateNestedManyWithoutMemberInput
     sportStats?: UserSportStatUncheckedCreateNestedManyWithoutMemberInput
+    nfcCards?: NfcCardUncheckedCreateNestedManyWithoutMemberInput
+    nfcTransactions?: NfcTransactionUncheckedCreateNestedManyWithoutMemberInput
   }
 
   export type MemberUpdateInput = {
@@ -45586,6 +48610,8 @@ export namespace Prisma {
     couponUsages?: CouponUsageUpdateManyWithoutMemberNestedInput
     loyaltyAchievements?: LoyaltyAchievementUpdateManyWithoutMemberNestedInput
     sportStats?: UserSportStatUpdateManyWithoutMemberNestedInput
+    nfcCards?: NfcCardUpdateManyWithoutMemberNestedInput
+    nfcTransactions?: NfcTransactionUpdateManyWithoutMemberNestedInput
   }
 
   export type MemberUncheckedUpdateInput = {
@@ -45612,6 +48638,8 @@ export namespace Prisma {
     couponUsages?: CouponUsageUncheckedUpdateManyWithoutMemberNestedInput
     loyaltyAchievements?: LoyaltyAchievementUncheckedUpdateManyWithoutMemberNestedInput
     sportStats?: UserSportStatUncheckedUpdateManyWithoutMemberNestedInput
+    nfcCards?: NfcCardUncheckedUpdateManyWithoutMemberNestedInput
+    nfcTransactions?: NfcTransactionUncheckedUpdateManyWithoutMemberNestedInput
   }
 
   export type MemberCreateManyInput = {
@@ -46282,6 +49310,7 @@ export namespace Prisma {
     tickets?: TicketCreateNestedManyWithoutBookingInput
     couponUsages?: CouponUsageCreateNestedManyWithoutBookingInput
     participants?: BookingParticipantCreateNestedManyWithoutBookingInput
+    nfcTransactions?: NfcTransactionCreateNestedManyWithoutBookingInput
   }
 
   export type BookingUncheckedCreateInput = {
@@ -46309,6 +49338,7 @@ export namespace Prisma {
     tickets?: TicketUncheckedCreateNestedManyWithoutBookingInput
     couponUsages?: CouponUsageUncheckedCreateNestedManyWithoutBookingInput
     participants?: BookingParticipantUncheckedCreateNestedManyWithoutBookingInput
+    nfcTransactions?: NfcTransactionUncheckedCreateNestedManyWithoutBookingInput
   }
 
   export type BookingUpdateInput = {
@@ -46336,6 +49366,7 @@ export namespace Prisma {
     tickets?: TicketUpdateManyWithoutBookingNestedInput
     couponUsages?: CouponUsageUpdateManyWithoutBookingNestedInput
     participants?: BookingParticipantUpdateManyWithoutBookingNestedInput
+    nfcTransactions?: NfcTransactionUpdateManyWithoutBookingNestedInput
   }
 
   export type BookingUncheckedUpdateInput = {
@@ -46363,6 +49394,7 @@ export namespace Prisma {
     tickets?: TicketUncheckedUpdateManyWithoutBookingNestedInput
     couponUsages?: CouponUsageUncheckedUpdateManyWithoutBookingNestedInput
     participants?: BookingParticipantUncheckedUpdateManyWithoutBookingNestedInput
+    nfcTransactions?: NfcTransactionUncheckedUpdateManyWithoutBookingNestedInput
   }
 
   export type BookingCreateManyInput = {
@@ -48029,6 +51061,216 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type NfcCardCreateInput = {
+    id?: string
+    cardUid: string
+    cardId?: string | null
+    status?: string
+    issuedAt?: Date | string
+    lastUsedAt?: Date | string | null
+    notes?: string | null
+    assignedBy?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    member?: MemberCreateNestedOneWithoutNfcCardsInput
+    transactions?: NfcTransactionCreateNestedManyWithoutCardInput
+  }
+
+  export type NfcCardUncheckedCreateInput = {
+    id?: string
+    cardUid: string
+    cardId?: string | null
+    memberId?: string | null
+    status?: string
+    issuedAt?: Date | string
+    lastUsedAt?: Date | string | null
+    notes?: string | null
+    assignedBy?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    transactions?: NfcTransactionUncheckedCreateNestedManyWithoutCardInput
+  }
+
+  export type NfcCardUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    cardUid?: StringFieldUpdateOperationsInput | string
+    cardId?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    issuedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    lastUsedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    assignedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    member?: MemberUpdateOneWithoutNfcCardsNestedInput
+    transactions?: NfcTransactionUpdateManyWithoutCardNestedInput
+  }
+
+  export type NfcCardUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    cardUid?: StringFieldUpdateOperationsInput | string
+    cardId?: NullableStringFieldUpdateOperationsInput | string | null
+    memberId?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    issuedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    lastUsedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    assignedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    transactions?: NfcTransactionUncheckedUpdateManyWithoutCardNestedInput
+  }
+
+  export type NfcCardCreateManyInput = {
+    id?: string
+    cardUid: string
+    cardId?: string | null
+    memberId?: string | null
+    status?: string
+    issuedAt?: Date | string
+    lastUsedAt?: Date | string | null
+    notes?: string | null
+    assignedBy?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type NfcCardUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    cardUid?: StringFieldUpdateOperationsInput | string
+    cardId?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    issuedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    lastUsedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    assignedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type NfcCardUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    cardUid?: StringFieldUpdateOperationsInput | string
+    cardId?: NullableStringFieldUpdateOperationsInput | string | null
+    memberId?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    issuedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    lastUsedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    assignedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type NfcTransactionCreateInput = {
+    id?: string
+    cardUid: string
+    type: string
+    status?: string
+    amount?: number
+    deviceType?: string
+    readerLocation?: string | null
+    failureReason?: string | null
+    metadata?: string | null
+    createdAt?: Date | string
+    card?: NfcCardCreateNestedOneWithoutTransactionsInput
+    member?: MemberCreateNestedOneWithoutNfcTransactionsInput
+    booking?: BookingCreateNestedOneWithoutNfcTransactionsInput
+  }
+
+  export type NfcTransactionUncheckedCreateInput = {
+    id?: string
+    cardId?: string | null
+    cardUid: string
+    memberId?: string | null
+    bookingId?: string | null
+    type: string
+    status?: string
+    amount?: number
+    deviceType?: string
+    readerLocation?: string | null
+    failureReason?: string | null
+    metadata?: string | null
+    createdAt?: Date | string
+  }
+
+  export type NfcTransactionUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    cardUid?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    amount?: FloatFieldUpdateOperationsInput | number
+    deviceType?: StringFieldUpdateOperationsInput | string
+    readerLocation?: NullableStringFieldUpdateOperationsInput | string | null
+    failureReason?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    card?: NfcCardUpdateOneWithoutTransactionsNestedInput
+    member?: MemberUpdateOneWithoutNfcTransactionsNestedInput
+    booking?: BookingUpdateOneWithoutNfcTransactionsNestedInput
+  }
+
+  export type NfcTransactionUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    cardId?: NullableStringFieldUpdateOperationsInput | string | null
+    cardUid?: StringFieldUpdateOperationsInput | string
+    memberId?: NullableStringFieldUpdateOperationsInput | string | null
+    bookingId?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    amount?: FloatFieldUpdateOperationsInput | number
+    deviceType?: StringFieldUpdateOperationsInput | string
+    readerLocation?: NullableStringFieldUpdateOperationsInput | string | null
+    failureReason?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type NfcTransactionCreateManyInput = {
+    id?: string
+    cardId?: string | null
+    cardUid: string
+    memberId?: string | null
+    bookingId?: string | null
+    type: string
+    status?: string
+    amount?: number
+    deviceType?: string
+    readerLocation?: string | null
+    failureReason?: string | null
+    metadata?: string | null
+    createdAt?: Date | string
+  }
+
+  export type NfcTransactionUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    cardUid?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    amount?: FloatFieldUpdateOperationsInput | number
+    deviceType?: StringFieldUpdateOperationsInput | string
+    readerLocation?: NullableStringFieldUpdateOperationsInput | string | null
+    failureReason?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type NfcTransactionUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    cardId?: NullableStringFieldUpdateOperationsInput | string | null
+    cardUid?: StringFieldUpdateOperationsInput | string
+    memberId?: NullableStringFieldUpdateOperationsInput | string | null
+    bookingId?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    amount?: FloatFieldUpdateOperationsInput | number
+    deviceType?: StringFieldUpdateOperationsInput | string
+    readerLocation?: NullableStringFieldUpdateOperationsInput | string | null
+    failureReason?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type StringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[]
@@ -48339,6 +51581,18 @@ export namespace Prisma {
     none?: UserSportStatWhereInput
   }
 
+  export type NfcCardListRelationFilter = {
+    every?: NfcCardWhereInput
+    some?: NfcCardWhereInput
+    none?: NfcCardWhereInput
+  }
+
+  export type NfcTransactionListRelationFilter = {
+    every?: NfcTransactionWhereInput
+    some?: NfcTransactionWhereInput
+    none?: NfcTransactionWhereInput
+  }
+
   export type MemberMembershipOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -48384,6 +51638,14 @@ export namespace Prisma {
   }
 
   export type UserSportStatOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type NfcCardOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type NfcTransactionOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -49878,6 +53140,109 @@ export namespace Prisma {
     bookingCount?: SortOrder
   }
 
+  export type NfcCardCountOrderByAggregateInput = {
+    id?: SortOrder
+    cardUid?: SortOrder
+    cardId?: SortOrder
+    memberId?: SortOrder
+    status?: SortOrder
+    issuedAt?: SortOrder
+    lastUsedAt?: SortOrder
+    notes?: SortOrder
+    assignedBy?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type NfcCardMaxOrderByAggregateInput = {
+    id?: SortOrder
+    cardUid?: SortOrder
+    cardId?: SortOrder
+    memberId?: SortOrder
+    status?: SortOrder
+    issuedAt?: SortOrder
+    lastUsedAt?: SortOrder
+    notes?: SortOrder
+    assignedBy?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type NfcCardMinOrderByAggregateInput = {
+    id?: SortOrder
+    cardUid?: SortOrder
+    cardId?: SortOrder
+    memberId?: SortOrder
+    status?: SortOrder
+    issuedAt?: SortOrder
+    lastUsedAt?: SortOrder
+    notes?: SortOrder
+    assignedBy?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type NfcCardNullableScalarRelationFilter = {
+    is?: NfcCardWhereInput | null
+    isNot?: NfcCardWhereInput | null
+  }
+
+  export type NfcTransactionCountOrderByAggregateInput = {
+    id?: SortOrder
+    cardId?: SortOrder
+    cardUid?: SortOrder
+    memberId?: SortOrder
+    bookingId?: SortOrder
+    type?: SortOrder
+    status?: SortOrder
+    amount?: SortOrder
+    deviceType?: SortOrder
+    readerLocation?: SortOrder
+    failureReason?: SortOrder
+    metadata?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type NfcTransactionAvgOrderByAggregateInput = {
+    amount?: SortOrder
+  }
+
+  export type NfcTransactionMaxOrderByAggregateInput = {
+    id?: SortOrder
+    cardId?: SortOrder
+    cardUid?: SortOrder
+    memberId?: SortOrder
+    bookingId?: SortOrder
+    type?: SortOrder
+    status?: SortOrder
+    amount?: SortOrder
+    deviceType?: SortOrder
+    readerLocation?: SortOrder
+    failureReason?: SortOrder
+    metadata?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type NfcTransactionMinOrderByAggregateInput = {
+    id?: SortOrder
+    cardId?: SortOrder
+    cardUid?: SortOrder
+    memberId?: SortOrder
+    bookingId?: SortOrder
+    type?: SortOrder
+    status?: SortOrder
+    amount?: SortOrder
+    deviceType?: SortOrder
+    readerLocation?: SortOrder
+    failureReason?: SortOrder
+    metadata?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type NfcTransactionSumOrderByAggregateInput = {
+    amount?: SortOrder
+  }
+
   export type AuditLogCreateNestedManyWithoutAdminInput = {
     create?: XOR<AuditLogCreateWithoutAdminInput, AuditLogUncheckedCreateWithoutAdminInput> | AuditLogCreateWithoutAdminInput[] | AuditLogUncheckedCreateWithoutAdminInput[]
     connectOrCreate?: AuditLogCreateOrConnectWithoutAdminInput | AuditLogCreateOrConnectWithoutAdminInput[]
@@ -50068,6 +53433,20 @@ export namespace Prisma {
     connect?: UserSportStatWhereUniqueInput | UserSportStatWhereUniqueInput[]
   }
 
+  export type NfcCardCreateNestedManyWithoutMemberInput = {
+    create?: XOR<NfcCardCreateWithoutMemberInput, NfcCardUncheckedCreateWithoutMemberInput> | NfcCardCreateWithoutMemberInput[] | NfcCardUncheckedCreateWithoutMemberInput[]
+    connectOrCreate?: NfcCardCreateOrConnectWithoutMemberInput | NfcCardCreateOrConnectWithoutMemberInput[]
+    createMany?: NfcCardCreateManyMemberInputEnvelope
+    connect?: NfcCardWhereUniqueInput | NfcCardWhereUniqueInput[]
+  }
+
+  export type NfcTransactionCreateNestedManyWithoutMemberInput = {
+    create?: XOR<NfcTransactionCreateWithoutMemberInput, NfcTransactionUncheckedCreateWithoutMemberInput> | NfcTransactionCreateWithoutMemberInput[] | NfcTransactionUncheckedCreateWithoutMemberInput[]
+    connectOrCreate?: NfcTransactionCreateOrConnectWithoutMemberInput | NfcTransactionCreateOrConnectWithoutMemberInput[]
+    createMany?: NfcTransactionCreateManyMemberInputEnvelope
+    connect?: NfcTransactionWhereUniqueInput | NfcTransactionWhereUniqueInput[]
+  }
+
   export type MemberMembershipUncheckedCreateNestedManyWithoutMemberInput = {
     create?: XOR<MemberMembershipCreateWithoutMemberInput, MemberMembershipUncheckedCreateWithoutMemberInput> | MemberMembershipCreateWithoutMemberInput[] | MemberMembershipUncheckedCreateWithoutMemberInput[]
     connectOrCreate?: MemberMembershipCreateOrConnectWithoutMemberInput | MemberMembershipCreateOrConnectWithoutMemberInput[]
@@ -50150,6 +53529,20 @@ export namespace Prisma {
     connectOrCreate?: UserSportStatCreateOrConnectWithoutMemberInput | UserSportStatCreateOrConnectWithoutMemberInput[]
     createMany?: UserSportStatCreateManyMemberInputEnvelope
     connect?: UserSportStatWhereUniqueInput | UserSportStatWhereUniqueInput[]
+  }
+
+  export type NfcCardUncheckedCreateNestedManyWithoutMemberInput = {
+    create?: XOR<NfcCardCreateWithoutMemberInput, NfcCardUncheckedCreateWithoutMemberInput> | NfcCardCreateWithoutMemberInput[] | NfcCardUncheckedCreateWithoutMemberInput[]
+    connectOrCreate?: NfcCardCreateOrConnectWithoutMemberInput | NfcCardCreateOrConnectWithoutMemberInput[]
+    createMany?: NfcCardCreateManyMemberInputEnvelope
+    connect?: NfcCardWhereUniqueInput | NfcCardWhereUniqueInput[]
+  }
+
+  export type NfcTransactionUncheckedCreateNestedManyWithoutMemberInput = {
+    create?: XOR<NfcTransactionCreateWithoutMemberInput, NfcTransactionUncheckedCreateWithoutMemberInput> | NfcTransactionCreateWithoutMemberInput[] | NfcTransactionUncheckedCreateWithoutMemberInput[]
+    connectOrCreate?: NfcTransactionCreateOrConnectWithoutMemberInput | NfcTransactionCreateOrConnectWithoutMemberInput[]
+    createMany?: NfcTransactionCreateManyMemberInputEnvelope
+    connect?: NfcTransactionWhereUniqueInput | NfcTransactionWhereUniqueInput[]
   }
 
   export type NullableDateTimeFieldUpdateOperationsInput = {
@@ -50350,6 +53743,34 @@ export namespace Prisma {
     deleteMany?: UserSportStatScalarWhereInput | UserSportStatScalarWhereInput[]
   }
 
+  export type NfcCardUpdateManyWithoutMemberNestedInput = {
+    create?: XOR<NfcCardCreateWithoutMemberInput, NfcCardUncheckedCreateWithoutMemberInput> | NfcCardCreateWithoutMemberInput[] | NfcCardUncheckedCreateWithoutMemberInput[]
+    connectOrCreate?: NfcCardCreateOrConnectWithoutMemberInput | NfcCardCreateOrConnectWithoutMemberInput[]
+    upsert?: NfcCardUpsertWithWhereUniqueWithoutMemberInput | NfcCardUpsertWithWhereUniqueWithoutMemberInput[]
+    createMany?: NfcCardCreateManyMemberInputEnvelope
+    set?: NfcCardWhereUniqueInput | NfcCardWhereUniqueInput[]
+    disconnect?: NfcCardWhereUniqueInput | NfcCardWhereUniqueInput[]
+    delete?: NfcCardWhereUniqueInput | NfcCardWhereUniqueInput[]
+    connect?: NfcCardWhereUniqueInput | NfcCardWhereUniqueInput[]
+    update?: NfcCardUpdateWithWhereUniqueWithoutMemberInput | NfcCardUpdateWithWhereUniqueWithoutMemberInput[]
+    updateMany?: NfcCardUpdateManyWithWhereWithoutMemberInput | NfcCardUpdateManyWithWhereWithoutMemberInput[]
+    deleteMany?: NfcCardScalarWhereInput | NfcCardScalarWhereInput[]
+  }
+
+  export type NfcTransactionUpdateManyWithoutMemberNestedInput = {
+    create?: XOR<NfcTransactionCreateWithoutMemberInput, NfcTransactionUncheckedCreateWithoutMemberInput> | NfcTransactionCreateWithoutMemberInput[] | NfcTransactionUncheckedCreateWithoutMemberInput[]
+    connectOrCreate?: NfcTransactionCreateOrConnectWithoutMemberInput | NfcTransactionCreateOrConnectWithoutMemberInput[]
+    upsert?: NfcTransactionUpsertWithWhereUniqueWithoutMemberInput | NfcTransactionUpsertWithWhereUniqueWithoutMemberInput[]
+    createMany?: NfcTransactionCreateManyMemberInputEnvelope
+    set?: NfcTransactionWhereUniqueInput | NfcTransactionWhereUniqueInput[]
+    disconnect?: NfcTransactionWhereUniqueInput | NfcTransactionWhereUniqueInput[]
+    delete?: NfcTransactionWhereUniqueInput | NfcTransactionWhereUniqueInput[]
+    connect?: NfcTransactionWhereUniqueInput | NfcTransactionWhereUniqueInput[]
+    update?: NfcTransactionUpdateWithWhereUniqueWithoutMemberInput | NfcTransactionUpdateWithWhereUniqueWithoutMemberInput[]
+    updateMany?: NfcTransactionUpdateManyWithWhereWithoutMemberInput | NfcTransactionUpdateManyWithWhereWithoutMemberInput[]
+    deleteMany?: NfcTransactionScalarWhereInput | NfcTransactionScalarWhereInput[]
+  }
+
   export type MemberMembershipUncheckedUpdateManyWithoutMemberNestedInput = {
     create?: XOR<MemberMembershipCreateWithoutMemberInput, MemberMembershipUncheckedCreateWithoutMemberInput> | MemberMembershipCreateWithoutMemberInput[] | MemberMembershipUncheckedCreateWithoutMemberInput[]
     connectOrCreate?: MemberMembershipCreateOrConnectWithoutMemberInput | MemberMembershipCreateOrConnectWithoutMemberInput[]
@@ -50516,6 +53937,34 @@ export namespace Prisma {
     update?: UserSportStatUpdateWithWhereUniqueWithoutMemberInput | UserSportStatUpdateWithWhereUniqueWithoutMemberInput[]
     updateMany?: UserSportStatUpdateManyWithWhereWithoutMemberInput | UserSportStatUpdateManyWithWhereWithoutMemberInput[]
     deleteMany?: UserSportStatScalarWhereInput | UserSportStatScalarWhereInput[]
+  }
+
+  export type NfcCardUncheckedUpdateManyWithoutMemberNestedInput = {
+    create?: XOR<NfcCardCreateWithoutMemberInput, NfcCardUncheckedCreateWithoutMemberInput> | NfcCardCreateWithoutMemberInput[] | NfcCardUncheckedCreateWithoutMemberInput[]
+    connectOrCreate?: NfcCardCreateOrConnectWithoutMemberInput | NfcCardCreateOrConnectWithoutMemberInput[]
+    upsert?: NfcCardUpsertWithWhereUniqueWithoutMemberInput | NfcCardUpsertWithWhereUniqueWithoutMemberInput[]
+    createMany?: NfcCardCreateManyMemberInputEnvelope
+    set?: NfcCardWhereUniqueInput | NfcCardWhereUniqueInput[]
+    disconnect?: NfcCardWhereUniqueInput | NfcCardWhereUniqueInput[]
+    delete?: NfcCardWhereUniqueInput | NfcCardWhereUniqueInput[]
+    connect?: NfcCardWhereUniqueInput | NfcCardWhereUniqueInput[]
+    update?: NfcCardUpdateWithWhereUniqueWithoutMemberInput | NfcCardUpdateWithWhereUniqueWithoutMemberInput[]
+    updateMany?: NfcCardUpdateManyWithWhereWithoutMemberInput | NfcCardUpdateManyWithWhereWithoutMemberInput[]
+    deleteMany?: NfcCardScalarWhereInput | NfcCardScalarWhereInput[]
+  }
+
+  export type NfcTransactionUncheckedUpdateManyWithoutMemberNestedInput = {
+    create?: XOR<NfcTransactionCreateWithoutMemberInput, NfcTransactionUncheckedCreateWithoutMemberInput> | NfcTransactionCreateWithoutMemberInput[] | NfcTransactionUncheckedCreateWithoutMemberInput[]
+    connectOrCreate?: NfcTransactionCreateOrConnectWithoutMemberInput | NfcTransactionCreateOrConnectWithoutMemberInput[]
+    upsert?: NfcTransactionUpsertWithWhereUniqueWithoutMemberInput | NfcTransactionUpsertWithWhereUniqueWithoutMemberInput[]
+    createMany?: NfcTransactionCreateManyMemberInputEnvelope
+    set?: NfcTransactionWhereUniqueInput | NfcTransactionWhereUniqueInput[]
+    disconnect?: NfcTransactionWhereUniqueInput | NfcTransactionWhereUniqueInput[]
+    delete?: NfcTransactionWhereUniqueInput | NfcTransactionWhereUniqueInput[]
+    connect?: NfcTransactionWhereUniqueInput | NfcTransactionWhereUniqueInput[]
+    update?: NfcTransactionUpdateWithWhereUniqueWithoutMemberInput | NfcTransactionUpdateWithWhereUniqueWithoutMemberInput[]
+    updateMany?: NfcTransactionUpdateManyWithWhereWithoutMemberInput | NfcTransactionUpdateManyWithWhereWithoutMemberInput[]
+    deleteMany?: NfcTransactionScalarWhereInput | NfcTransactionScalarWhereInput[]
   }
 
   export type MemberCreateNestedOneWithoutLoyaltyHistoryInput = {
@@ -51295,6 +54744,13 @@ export namespace Prisma {
     connect?: BookingParticipantWhereUniqueInput | BookingParticipantWhereUniqueInput[]
   }
 
+  export type NfcTransactionCreateNestedManyWithoutBookingInput = {
+    create?: XOR<NfcTransactionCreateWithoutBookingInput, NfcTransactionUncheckedCreateWithoutBookingInput> | NfcTransactionCreateWithoutBookingInput[] | NfcTransactionUncheckedCreateWithoutBookingInput[]
+    connectOrCreate?: NfcTransactionCreateOrConnectWithoutBookingInput | NfcTransactionCreateOrConnectWithoutBookingInput[]
+    createMany?: NfcTransactionCreateManyBookingInputEnvelope
+    connect?: NfcTransactionWhereUniqueInput | NfcTransactionWhereUniqueInput[]
+  }
+
   export type PaymentUncheckedCreateNestedManyWithoutBookingInput = {
     create?: XOR<PaymentCreateWithoutBookingInput, PaymentUncheckedCreateWithoutBookingInput> | PaymentCreateWithoutBookingInput[] | PaymentUncheckedCreateWithoutBookingInput[]
     connectOrCreate?: PaymentCreateOrConnectWithoutBookingInput | PaymentCreateOrConnectWithoutBookingInput[]
@@ -51328,6 +54784,13 @@ export namespace Prisma {
     connectOrCreate?: BookingParticipantCreateOrConnectWithoutBookingInput | BookingParticipantCreateOrConnectWithoutBookingInput[]
     createMany?: BookingParticipantCreateManyBookingInputEnvelope
     connect?: BookingParticipantWhereUniqueInput | BookingParticipantWhereUniqueInput[]
+  }
+
+  export type NfcTransactionUncheckedCreateNestedManyWithoutBookingInput = {
+    create?: XOR<NfcTransactionCreateWithoutBookingInput, NfcTransactionUncheckedCreateWithoutBookingInput> | NfcTransactionCreateWithoutBookingInput[] | NfcTransactionUncheckedCreateWithoutBookingInput[]
+    connectOrCreate?: NfcTransactionCreateOrConnectWithoutBookingInput | NfcTransactionCreateOrConnectWithoutBookingInput[]
+    createMany?: NfcTransactionCreateManyBookingInputEnvelope
+    connect?: NfcTransactionWhereUniqueInput | NfcTransactionWhereUniqueInput[]
   }
 
   export type TurfUpdateOneRequiredWithoutBookingsNestedInput = {
@@ -51424,6 +54887,20 @@ export namespace Prisma {
     deleteMany?: BookingParticipantScalarWhereInput | BookingParticipantScalarWhereInput[]
   }
 
+  export type NfcTransactionUpdateManyWithoutBookingNestedInput = {
+    create?: XOR<NfcTransactionCreateWithoutBookingInput, NfcTransactionUncheckedCreateWithoutBookingInput> | NfcTransactionCreateWithoutBookingInput[] | NfcTransactionUncheckedCreateWithoutBookingInput[]
+    connectOrCreate?: NfcTransactionCreateOrConnectWithoutBookingInput | NfcTransactionCreateOrConnectWithoutBookingInput[]
+    upsert?: NfcTransactionUpsertWithWhereUniqueWithoutBookingInput | NfcTransactionUpsertWithWhereUniqueWithoutBookingInput[]
+    createMany?: NfcTransactionCreateManyBookingInputEnvelope
+    set?: NfcTransactionWhereUniqueInput | NfcTransactionWhereUniqueInput[]
+    disconnect?: NfcTransactionWhereUniqueInput | NfcTransactionWhereUniqueInput[]
+    delete?: NfcTransactionWhereUniqueInput | NfcTransactionWhereUniqueInput[]
+    connect?: NfcTransactionWhereUniqueInput | NfcTransactionWhereUniqueInput[]
+    update?: NfcTransactionUpdateWithWhereUniqueWithoutBookingInput | NfcTransactionUpdateWithWhereUniqueWithoutBookingInput[]
+    updateMany?: NfcTransactionUpdateManyWithWhereWithoutBookingInput | NfcTransactionUpdateManyWithWhereWithoutBookingInput[]
+    deleteMany?: NfcTransactionScalarWhereInput | NfcTransactionScalarWhereInput[]
+  }
+
   export type PaymentUncheckedUpdateManyWithoutBookingNestedInput = {
     create?: XOR<PaymentCreateWithoutBookingInput, PaymentUncheckedCreateWithoutBookingInput> | PaymentCreateWithoutBookingInput[] | PaymentUncheckedCreateWithoutBookingInput[]
     connectOrCreate?: PaymentCreateOrConnectWithoutBookingInput | PaymentCreateOrConnectWithoutBookingInput[]
@@ -51492,6 +54969,20 @@ export namespace Prisma {
     update?: BookingParticipantUpdateWithWhereUniqueWithoutBookingInput | BookingParticipantUpdateWithWhereUniqueWithoutBookingInput[]
     updateMany?: BookingParticipantUpdateManyWithWhereWithoutBookingInput | BookingParticipantUpdateManyWithWhereWithoutBookingInput[]
     deleteMany?: BookingParticipantScalarWhereInput | BookingParticipantScalarWhereInput[]
+  }
+
+  export type NfcTransactionUncheckedUpdateManyWithoutBookingNestedInput = {
+    create?: XOR<NfcTransactionCreateWithoutBookingInput, NfcTransactionUncheckedCreateWithoutBookingInput> | NfcTransactionCreateWithoutBookingInput[] | NfcTransactionUncheckedCreateWithoutBookingInput[]
+    connectOrCreate?: NfcTransactionCreateOrConnectWithoutBookingInput | NfcTransactionCreateOrConnectWithoutBookingInput[]
+    upsert?: NfcTransactionUpsertWithWhereUniqueWithoutBookingInput | NfcTransactionUpsertWithWhereUniqueWithoutBookingInput[]
+    createMany?: NfcTransactionCreateManyBookingInputEnvelope
+    set?: NfcTransactionWhereUniqueInput | NfcTransactionWhereUniqueInput[]
+    disconnect?: NfcTransactionWhereUniqueInput | NfcTransactionWhereUniqueInput[]
+    delete?: NfcTransactionWhereUniqueInput | NfcTransactionWhereUniqueInput[]
+    connect?: NfcTransactionWhereUniqueInput | NfcTransactionWhereUniqueInput[]
+    update?: NfcTransactionUpdateWithWhereUniqueWithoutBookingInput | NfcTransactionUpdateWithWhereUniqueWithoutBookingInput[]
+    updateMany?: NfcTransactionUpdateManyWithWhereWithoutBookingInput | NfcTransactionUpdateManyWithWhereWithoutBookingInput[]
+    deleteMany?: NfcTransactionScalarWhereInput | NfcTransactionScalarWhereInput[]
   }
 
   export type BookingCreateNestedOneWithoutParticipantsInput = {
@@ -52022,6 +55513,112 @@ export namespace Prisma {
     update?: XOR<XOR<SportUpdateToOneWithWhereWithoutSportStatsInput, SportUpdateWithoutSportStatsInput>, SportUncheckedUpdateWithoutSportStatsInput>
   }
 
+  export type MemberCreateNestedOneWithoutNfcCardsInput = {
+    create?: XOR<MemberCreateWithoutNfcCardsInput, MemberUncheckedCreateWithoutNfcCardsInput>
+    connectOrCreate?: MemberCreateOrConnectWithoutNfcCardsInput
+    connect?: MemberWhereUniqueInput
+  }
+
+  export type NfcTransactionCreateNestedManyWithoutCardInput = {
+    create?: XOR<NfcTransactionCreateWithoutCardInput, NfcTransactionUncheckedCreateWithoutCardInput> | NfcTransactionCreateWithoutCardInput[] | NfcTransactionUncheckedCreateWithoutCardInput[]
+    connectOrCreate?: NfcTransactionCreateOrConnectWithoutCardInput | NfcTransactionCreateOrConnectWithoutCardInput[]
+    createMany?: NfcTransactionCreateManyCardInputEnvelope
+    connect?: NfcTransactionWhereUniqueInput | NfcTransactionWhereUniqueInput[]
+  }
+
+  export type NfcTransactionUncheckedCreateNestedManyWithoutCardInput = {
+    create?: XOR<NfcTransactionCreateWithoutCardInput, NfcTransactionUncheckedCreateWithoutCardInput> | NfcTransactionCreateWithoutCardInput[] | NfcTransactionUncheckedCreateWithoutCardInput[]
+    connectOrCreate?: NfcTransactionCreateOrConnectWithoutCardInput | NfcTransactionCreateOrConnectWithoutCardInput[]
+    createMany?: NfcTransactionCreateManyCardInputEnvelope
+    connect?: NfcTransactionWhereUniqueInput | NfcTransactionWhereUniqueInput[]
+  }
+
+  export type MemberUpdateOneWithoutNfcCardsNestedInput = {
+    create?: XOR<MemberCreateWithoutNfcCardsInput, MemberUncheckedCreateWithoutNfcCardsInput>
+    connectOrCreate?: MemberCreateOrConnectWithoutNfcCardsInput
+    upsert?: MemberUpsertWithoutNfcCardsInput
+    disconnect?: MemberWhereInput | boolean
+    delete?: MemberWhereInput | boolean
+    connect?: MemberWhereUniqueInput
+    update?: XOR<XOR<MemberUpdateToOneWithWhereWithoutNfcCardsInput, MemberUpdateWithoutNfcCardsInput>, MemberUncheckedUpdateWithoutNfcCardsInput>
+  }
+
+  export type NfcTransactionUpdateManyWithoutCardNestedInput = {
+    create?: XOR<NfcTransactionCreateWithoutCardInput, NfcTransactionUncheckedCreateWithoutCardInput> | NfcTransactionCreateWithoutCardInput[] | NfcTransactionUncheckedCreateWithoutCardInput[]
+    connectOrCreate?: NfcTransactionCreateOrConnectWithoutCardInput | NfcTransactionCreateOrConnectWithoutCardInput[]
+    upsert?: NfcTransactionUpsertWithWhereUniqueWithoutCardInput | NfcTransactionUpsertWithWhereUniqueWithoutCardInput[]
+    createMany?: NfcTransactionCreateManyCardInputEnvelope
+    set?: NfcTransactionWhereUniqueInput | NfcTransactionWhereUniqueInput[]
+    disconnect?: NfcTransactionWhereUniqueInput | NfcTransactionWhereUniqueInput[]
+    delete?: NfcTransactionWhereUniqueInput | NfcTransactionWhereUniqueInput[]
+    connect?: NfcTransactionWhereUniqueInput | NfcTransactionWhereUniqueInput[]
+    update?: NfcTransactionUpdateWithWhereUniqueWithoutCardInput | NfcTransactionUpdateWithWhereUniqueWithoutCardInput[]
+    updateMany?: NfcTransactionUpdateManyWithWhereWithoutCardInput | NfcTransactionUpdateManyWithWhereWithoutCardInput[]
+    deleteMany?: NfcTransactionScalarWhereInput | NfcTransactionScalarWhereInput[]
+  }
+
+  export type NfcTransactionUncheckedUpdateManyWithoutCardNestedInput = {
+    create?: XOR<NfcTransactionCreateWithoutCardInput, NfcTransactionUncheckedCreateWithoutCardInput> | NfcTransactionCreateWithoutCardInput[] | NfcTransactionUncheckedCreateWithoutCardInput[]
+    connectOrCreate?: NfcTransactionCreateOrConnectWithoutCardInput | NfcTransactionCreateOrConnectWithoutCardInput[]
+    upsert?: NfcTransactionUpsertWithWhereUniqueWithoutCardInput | NfcTransactionUpsertWithWhereUniqueWithoutCardInput[]
+    createMany?: NfcTransactionCreateManyCardInputEnvelope
+    set?: NfcTransactionWhereUniqueInput | NfcTransactionWhereUniqueInput[]
+    disconnect?: NfcTransactionWhereUniqueInput | NfcTransactionWhereUniqueInput[]
+    delete?: NfcTransactionWhereUniqueInput | NfcTransactionWhereUniqueInput[]
+    connect?: NfcTransactionWhereUniqueInput | NfcTransactionWhereUniqueInput[]
+    update?: NfcTransactionUpdateWithWhereUniqueWithoutCardInput | NfcTransactionUpdateWithWhereUniqueWithoutCardInput[]
+    updateMany?: NfcTransactionUpdateManyWithWhereWithoutCardInput | NfcTransactionUpdateManyWithWhereWithoutCardInput[]
+    deleteMany?: NfcTransactionScalarWhereInput | NfcTransactionScalarWhereInput[]
+  }
+
+  export type NfcCardCreateNestedOneWithoutTransactionsInput = {
+    create?: XOR<NfcCardCreateWithoutTransactionsInput, NfcCardUncheckedCreateWithoutTransactionsInput>
+    connectOrCreate?: NfcCardCreateOrConnectWithoutTransactionsInput
+    connect?: NfcCardWhereUniqueInput
+  }
+
+  export type MemberCreateNestedOneWithoutNfcTransactionsInput = {
+    create?: XOR<MemberCreateWithoutNfcTransactionsInput, MemberUncheckedCreateWithoutNfcTransactionsInput>
+    connectOrCreate?: MemberCreateOrConnectWithoutNfcTransactionsInput
+    connect?: MemberWhereUniqueInput
+  }
+
+  export type BookingCreateNestedOneWithoutNfcTransactionsInput = {
+    create?: XOR<BookingCreateWithoutNfcTransactionsInput, BookingUncheckedCreateWithoutNfcTransactionsInput>
+    connectOrCreate?: BookingCreateOrConnectWithoutNfcTransactionsInput
+    connect?: BookingWhereUniqueInput
+  }
+
+  export type NfcCardUpdateOneWithoutTransactionsNestedInput = {
+    create?: XOR<NfcCardCreateWithoutTransactionsInput, NfcCardUncheckedCreateWithoutTransactionsInput>
+    connectOrCreate?: NfcCardCreateOrConnectWithoutTransactionsInput
+    upsert?: NfcCardUpsertWithoutTransactionsInput
+    disconnect?: NfcCardWhereInput | boolean
+    delete?: NfcCardWhereInput | boolean
+    connect?: NfcCardWhereUniqueInput
+    update?: XOR<XOR<NfcCardUpdateToOneWithWhereWithoutTransactionsInput, NfcCardUpdateWithoutTransactionsInput>, NfcCardUncheckedUpdateWithoutTransactionsInput>
+  }
+
+  export type MemberUpdateOneWithoutNfcTransactionsNestedInput = {
+    create?: XOR<MemberCreateWithoutNfcTransactionsInput, MemberUncheckedCreateWithoutNfcTransactionsInput>
+    connectOrCreate?: MemberCreateOrConnectWithoutNfcTransactionsInput
+    upsert?: MemberUpsertWithoutNfcTransactionsInput
+    disconnect?: MemberWhereInput | boolean
+    delete?: MemberWhereInput | boolean
+    connect?: MemberWhereUniqueInput
+    update?: XOR<XOR<MemberUpdateToOneWithWhereWithoutNfcTransactionsInput, MemberUpdateWithoutNfcTransactionsInput>, MemberUncheckedUpdateWithoutNfcTransactionsInput>
+  }
+
+  export type BookingUpdateOneWithoutNfcTransactionsNestedInput = {
+    create?: XOR<BookingCreateWithoutNfcTransactionsInput, BookingUncheckedCreateWithoutNfcTransactionsInput>
+    connectOrCreate?: BookingCreateOrConnectWithoutNfcTransactionsInput
+    upsert?: BookingUpsertWithoutNfcTransactionsInput
+    disconnect?: BookingWhereInput | boolean
+    delete?: BookingWhereInput | boolean
+    connect?: BookingWhereUniqueInput
+    update?: XOR<XOR<BookingUpdateToOneWithWhereWithoutNfcTransactionsInput, BookingUpdateWithoutNfcTransactionsInput>, BookingUncheckedUpdateWithoutNfcTransactionsInput>
+  }
+
   export type NestedStringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[]
@@ -52337,6 +55934,8 @@ export namespace Prisma {
     couponUsages?: CouponUsageCreateNestedManyWithoutMemberInput
     loyaltyAchievements?: LoyaltyAchievementCreateNestedManyWithoutMemberInput
     sportStats?: UserSportStatCreateNestedManyWithoutMemberInput
+    nfcCards?: NfcCardCreateNestedManyWithoutMemberInput
+    nfcTransactions?: NfcTransactionCreateNestedManyWithoutMemberInput
   }
 
   export type MemberUncheckedCreateWithoutFamilyInput = {
@@ -52362,6 +55961,8 @@ export namespace Prisma {
     couponUsages?: CouponUsageUncheckedCreateNestedManyWithoutMemberInput
     loyaltyAchievements?: LoyaltyAchievementUncheckedCreateNestedManyWithoutMemberInput
     sportStats?: UserSportStatUncheckedCreateNestedManyWithoutMemberInput
+    nfcCards?: NfcCardUncheckedCreateNestedManyWithoutMemberInput
+    nfcTransactions?: NfcTransactionUncheckedCreateNestedManyWithoutMemberInput
   }
 
   export type MemberCreateOrConnectWithoutFamilyInput = {
@@ -52513,6 +56114,7 @@ export namespace Prisma {
     tickets?: TicketCreateNestedManyWithoutBookingInput
     couponUsages?: CouponUsageCreateNestedManyWithoutBookingInput
     participants?: BookingParticipantCreateNestedManyWithoutBookingInput
+    nfcTransactions?: NfcTransactionCreateNestedManyWithoutBookingInput
   }
 
   export type BookingUncheckedCreateWithoutMemberInput = {
@@ -52539,6 +56141,7 @@ export namespace Prisma {
     tickets?: TicketUncheckedCreateNestedManyWithoutBookingInput
     couponUsages?: CouponUsageUncheckedCreateNestedManyWithoutBookingInput
     participants?: BookingParticipantUncheckedCreateNestedManyWithoutBookingInput
+    nfcTransactions?: NfcTransactionUncheckedCreateNestedManyWithoutBookingInput
   }
 
   export type BookingCreateOrConnectWithoutMemberInput = {
@@ -52791,6 +56394,82 @@ export namespace Prisma {
 
   export type UserSportStatCreateManyMemberInputEnvelope = {
     data: UserSportStatCreateManyMemberInput | UserSportStatCreateManyMemberInput[]
+  }
+
+  export type NfcCardCreateWithoutMemberInput = {
+    id?: string
+    cardUid: string
+    cardId?: string | null
+    status?: string
+    issuedAt?: Date | string
+    lastUsedAt?: Date | string | null
+    notes?: string | null
+    assignedBy?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    transactions?: NfcTransactionCreateNestedManyWithoutCardInput
+  }
+
+  export type NfcCardUncheckedCreateWithoutMemberInput = {
+    id?: string
+    cardUid: string
+    cardId?: string | null
+    status?: string
+    issuedAt?: Date | string
+    lastUsedAt?: Date | string | null
+    notes?: string | null
+    assignedBy?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    transactions?: NfcTransactionUncheckedCreateNestedManyWithoutCardInput
+  }
+
+  export type NfcCardCreateOrConnectWithoutMemberInput = {
+    where: NfcCardWhereUniqueInput
+    create: XOR<NfcCardCreateWithoutMemberInput, NfcCardUncheckedCreateWithoutMemberInput>
+  }
+
+  export type NfcCardCreateManyMemberInputEnvelope = {
+    data: NfcCardCreateManyMemberInput | NfcCardCreateManyMemberInput[]
+  }
+
+  export type NfcTransactionCreateWithoutMemberInput = {
+    id?: string
+    cardUid: string
+    type: string
+    status?: string
+    amount?: number
+    deviceType?: string
+    readerLocation?: string | null
+    failureReason?: string | null
+    metadata?: string | null
+    createdAt?: Date | string
+    card?: NfcCardCreateNestedOneWithoutTransactionsInput
+    booking?: BookingCreateNestedOneWithoutNfcTransactionsInput
+  }
+
+  export type NfcTransactionUncheckedCreateWithoutMemberInput = {
+    id?: string
+    cardId?: string | null
+    cardUid: string
+    bookingId?: string | null
+    type: string
+    status?: string
+    amount?: number
+    deviceType?: string
+    readerLocation?: string | null
+    failureReason?: string | null
+    metadata?: string | null
+    createdAt?: Date | string
+  }
+
+  export type NfcTransactionCreateOrConnectWithoutMemberInput = {
+    where: NfcTransactionWhereUniqueInput
+    create: XOR<NfcTransactionCreateWithoutMemberInput, NfcTransactionUncheckedCreateWithoutMemberInput>
+  }
+
+  export type NfcTransactionCreateManyMemberInputEnvelope = {
+    data: NfcTransactionCreateManyMemberInput | NfcTransactionCreateManyMemberInput[]
   }
 
   export type FamilyGroupUpsertWithoutMembersInput = {
@@ -53182,6 +56861,74 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"UserSportStat"> | Date | string
   }
 
+  export type NfcCardUpsertWithWhereUniqueWithoutMemberInput = {
+    where: NfcCardWhereUniqueInput
+    update: XOR<NfcCardUpdateWithoutMemberInput, NfcCardUncheckedUpdateWithoutMemberInput>
+    create: XOR<NfcCardCreateWithoutMemberInput, NfcCardUncheckedCreateWithoutMemberInput>
+  }
+
+  export type NfcCardUpdateWithWhereUniqueWithoutMemberInput = {
+    where: NfcCardWhereUniqueInput
+    data: XOR<NfcCardUpdateWithoutMemberInput, NfcCardUncheckedUpdateWithoutMemberInput>
+  }
+
+  export type NfcCardUpdateManyWithWhereWithoutMemberInput = {
+    where: NfcCardScalarWhereInput
+    data: XOR<NfcCardUpdateManyMutationInput, NfcCardUncheckedUpdateManyWithoutMemberInput>
+  }
+
+  export type NfcCardScalarWhereInput = {
+    AND?: NfcCardScalarWhereInput | NfcCardScalarWhereInput[]
+    OR?: NfcCardScalarWhereInput[]
+    NOT?: NfcCardScalarWhereInput | NfcCardScalarWhereInput[]
+    id?: StringFilter<"NfcCard"> | string
+    cardUid?: StringFilter<"NfcCard"> | string
+    cardId?: StringNullableFilter<"NfcCard"> | string | null
+    memberId?: StringNullableFilter<"NfcCard"> | string | null
+    status?: StringFilter<"NfcCard"> | string
+    issuedAt?: DateTimeFilter<"NfcCard"> | Date | string
+    lastUsedAt?: DateTimeNullableFilter<"NfcCard"> | Date | string | null
+    notes?: StringNullableFilter<"NfcCard"> | string | null
+    assignedBy?: StringNullableFilter<"NfcCard"> | string | null
+    createdAt?: DateTimeFilter<"NfcCard"> | Date | string
+    updatedAt?: DateTimeFilter<"NfcCard"> | Date | string
+  }
+
+  export type NfcTransactionUpsertWithWhereUniqueWithoutMemberInput = {
+    where: NfcTransactionWhereUniqueInput
+    update: XOR<NfcTransactionUpdateWithoutMemberInput, NfcTransactionUncheckedUpdateWithoutMemberInput>
+    create: XOR<NfcTransactionCreateWithoutMemberInput, NfcTransactionUncheckedCreateWithoutMemberInput>
+  }
+
+  export type NfcTransactionUpdateWithWhereUniqueWithoutMemberInput = {
+    where: NfcTransactionWhereUniqueInput
+    data: XOR<NfcTransactionUpdateWithoutMemberInput, NfcTransactionUncheckedUpdateWithoutMemberInput>
+  }
+
+  export type NfcTransactionUpdateManyWithWhereWithoutMemberInput = {
+    where: NfcTransactionScalarWhereInput
+    data: XOR<NfcTransactionUpdateManyMutationInput, NfcTransactionUncheckedUpdateManyWithoutMemberInput>
+  }
+
+  export type NfcTransactionScalarWhereInput = {
+    AND?: NfcTransactionScalarWhereInput | NfcTransactionScalarWhereInput[]
+    OR?: NfcTransactionScalarWhereInput[]
+    NOT?: NfcTransactionScalarWhereInput | NfcTransactionScalarWhereInput[]
+    id?: StringFilter<"NfcTransaction"> | string
+    cardId?: StringNullableFilter<"NfcTransaction"> | string | null
+    cardUid?: StringFilter<"NfcTransaction"> | string
+    memberId?: StringNullableFilter<"NfcTransaction"> | string | null
+    bookingId?: StringNullableFilter<"NfcTransaction"> | string | null
+    type?: StringFilter<"NfcTransaction"> | string
+    status?: StringFilter<"NfcTransaction"> | string
+    amount?: FloatFilter<"NfcTransaction"> | number
+    deviceType?: StringFilter<"NfcTransaction"> | string
+    readerLocation?: StringNullableFilter<"NfcTransaction"> | string | null
+    failureReason?: StringNullableFilter<"NfcTransaction"> | string | null
+    metadata?: StringNullableFilter<"NfcTransaction"> | string | null
+    createdAt?: DateTimeFilter<"NfcTransaction"> | Date | string
+  }
+
   export type MemberCreateWithoutLoyaltyHistoryInput = {
     id?: string
     mobile: string
@@ -53205,6 +56952,8 @@ export namespace Prisma {
     couponUsages?: CouponUsageCreateNestedManyWithoutMemberInput
     loyaltyAchievements?: LoyaltyAchievementCreateNestedManyWithoutMemberInput
     sportStats?: UserSportStatCreateNestedManyWithoutMemberInput
+    nfcCards?: NfcCardCreateNestedManyWithoutMemberInput
+    nfcTransactions?: NfcTransactionCreateNestedManyWithoutMemberInput
   }
 
   export type MemberUncheckedCreateWithoutLoyaltyHistoryInput = {
@@ -53230,6 +56979,8 @@ export namespace Prisma {
     couponUsages?: CouponUsageUncheckedCreateNestedManyWithoutMemberInput
     loyaltyAchievements?: LoyaltyAchievementUncheckedCreateNestedManyWithoutMemberInput
     sportStats?: UserSportStatUncheckedCreateNestedManyWithoutMemberInput
+    nfcCards?: NfcCardUncheckedCreateNestedManyWithoutMemberInput
+    nfcTransactions?: NfcTransactionUncheckedCreateNestedManyWithoutMemberInput
   }
 
   export type MemberCreateOrConnectWithoutLoyaltyHistoryInput = {
@@ -53271,6 +57022,8 @@ export namespace Prisma {
     couponUsages?: CouponUsageUpdateManyWithoutMemberNestedInput
     loyaltyAchievements?: LoyaltyAchievementUpdateManyWithoutMemberNestedInput
     sportStats?: UserSportStatUpdateManyWithoutMemberNestedInput
+    nfcCards?: NfcCardUpdateManyWithoutMemberNestedInput
+    nfcTransactions?: NfcTransactionUpdateManyWithoutMemberNestedInput
   }
 
   export type MemberUncheckedUpdateWithoutLoyaltyHistoryInput = {
@@ -53296,6 +57049,8 @@ export namespace Prisma {
     couponUsages?: CouponUsageUncheckedUpdateManyWithoutMemberNestedInput
     loyaltyAchievements?: LoyaltyAchievementUncheckedUpdateManyWithoutMemberNestedInput
     sportStats?: UserSportStatUncheckedUpdateManyWithoutMemberNestedInput
+    nfcCards?: NfcCardUncheckedUpdateManyWithoutMemberNestedInput
+    nfcTransactions?: NfcTransactionUncheckedUpdateManyWithoutMemberNestedInput
   }
 
   export type TurfSportCreateWithoutSportInput = {
@@ -53409,6 +57164,7 @@ export namespace Prisma {
     tickets?: TicketCreateNestedManyWithoutBookingInput
     couponUsages?: CouponUsageCreateNestedManyWithoutBookingInput
     participants?: BookingParticipantCreateNestedManyWithoutBookingInput
+    nfcTransactions?: NfcTransactionCreateNestedManyWithoutBookingInput
   }
 
   export type BookingUncheckedCreateWithoutSportInput = {
@@ -53435,6 +57191,7 @@ export namespace Prisma {
     tickets?: TicketUncheckedCreateNestedManyWithoutBookingInput
     couponUsages?: CouponUsageUncheckedCreateNestedManyWithoutBookingInput
     participants?: BookingParticipantUncheckedCreateNestedManyWithoutBookingInput
+    nfcTransactions?: NfcTransactionUncheckedCreateNestedManyWithoutBookingInput
   }
 
   export type BookingCreateOrConnectWithoutSportInput = {
@@ -53857,6 +57614,7 @@ export namespace Prisma {
     tickets?: TicketCreateNestedManyWithoutBookingInput
     couponUsages?: CouponUsageCreateNestedManyWithoutBookingInput
     participants?: BookingParticipantCreateNestedManyWithoutBookingInput
+    nfcTransactions?: NfcTransactionCreateNestedManyWithoutBookingInput
   }
 
   export type BookingUncheckedCreateWithoutTurfInput = {
@@ -53883,6 +57641,7 @@ export namespace Prisma {
     tickets?: TicketUncheckedCreateNestedManyWithoutBookingInput
     couponUsages?: CouponUsageUncheckedCreateNestedManyWithoutBookingInput
     participants?: BookingParticipantUncheckedCreateNestedManyWithoutBookingInput
+    nfcTransactions?: NfcTransactionUncheckedCreateNestedManyWithoutBookingInput
   }
 
   export type BookingCreateOrConnectWithoutTurfInput = {
@@ -54425,6 +58184,8 @@ export namespace Prisma {
     couponUsages?: CouponUsageCreateNestedManyWithoutMemberInput
     loyaltyAchievements?: LoyaltyAchievementCreateNestedManyWithoutMemberInput
     sportStats?: UserSportStatCreateNestedManyWithoutMemberInput
+    nfcCards?: NfcCardCreateNestedManyWithoutMemberInput
+    nfcTransactions?: NfcTransactionCreateNestedManyWithoutMemberInput
   }
 
   export type MemberUncheckedCreateWithoutMembershipsInput = {
@@ -54450,6 +58211,8 @@ export namespace Prisma {
     couponUsages?: CouponUsageUncheckedCreateNestedManyWithoutMemberInput
     loyaltyAchievements?: LoyaltyAchievementUncheckedCreateNestedManyWithoutMemberInput
     sportStats?: UserSportStatUncheckedCreateNestedManyWithoutMemberInput
+    nfcCards?: NfcCardUncheckedCreateNestedManyWithoutMemberInput
+    nfcTransactions?: NfcTransactionUncheckedCreateNestedManyWithoutMemberInput
   }
 
   export type MemberCreateOrConnectWithoutMembershipsInput = {
@@ -54569,6 +58332,8 @@ export namespace Prisma {
     couponUsages?: CouponUsageUpdateManyWithoutMemberNestedInput
     loyaltyAchievements?: LoyaltyAchievementUpdateManyWithoutMemberNestedInput
     sportStats?: UserSportStatUpdateManyWithoutMemberNestedInput
+    nfcCards?: NfcCardUpdateManyWithoutMemberNestedInput
+    nfcTransactions?: NfcTransactionUpdateManyWithoutMemberNestedInput
   }
 
   export type MemberUncheckedUpdateWithoutMembershipsInput = {
@@ -54594,6 +58359,8 @@ export namespace Prisma {
     couponUsages?: CouponUsageUncheckedUpdateManyWithoutMemberNestedInput
     loyaltyAchievements?: LoyaltyAchievementUncheckedUpdateManyWithoutMemberNestedInput
     sportStats?: UserSportStatUncheckedUpdateManyWithoutMemberNestedInput
+    nfcCards?: NfcCardUncheckedUpdateManyWithoutMemberNestedInput
+    nfcTransactions?: NfcTransactionUncheckedUpdateManyWithoutMemberNestedInput
   }
 
   export type MembershipPlanUpsertWithoutMembershipsInput = {
@@ -54709,6 +58476,8 @@ export namespace Prisma {
     couponUsages?: CouponUsageCreateNestedManyWithoutMemberInput
     loyaltyAchievements?: LoyaltyAchievementCreateNestedManyWithoutMemberInput
     sportStats?: UserSportStatCreateNestedManyWithoutMemberInput
+    nfcCards?: NfcCardCreateNestedManyWithoutMemberInput
+    nfcTransactions?: NfcTransactionCreateNestedManyWithoutMemberInput
   }
 
   export type MemberUncheckedCreateWithoutAttendancesInput = {
@@ -54734,6 +58503,8 @@ export namespace Prisma {
     couponUsages?: CouponUsageUncheckedCreateNestedManyWithoutMemberInput
     loyaltyAchievements?: LoyaltyAchievementUncheckedCreateNestedManyWithoutMemberInput
     sportStats?: UserSportStatUncheckedCreateNestedManyWithoutMemberInput
+    nfcCards?: NfcCardUncheckedCreateNestedManyWithoutMemberInput
+    nfcTransactions?: NfcTransactionUncheckedCreateNestedManyWithoutMemberInput
   }
 
   export type MemberCreateOrConnectWithoutAttendancesInput = {
@@ -54849,6 +58620,8 @@ export namespace Prisma {
     couponUsages?: CouponUsageUpdateManyWithoutMemberNestedInput
     loyaltyAchievements?: LoyaltyAchievementUpdateManyWithoutMemberNestedInput
     sportStats?: UserSportStatUpdateManyWithoutMemberNestedInput
+    nfcCards?: NfcCardUpdateManyWithoutMemberNestedInput
+    nfcTransactions?: NfcTransactionUpdateManyWithoutMemberNestedInput
   }
 
   export type MemberUncheckedUpdateWithoutAttendancesInput = {
@@ -54874,6 +58647,8 @@ export namespace Prisma {
     couponUsages?: CouponUsageUncheckedUpdateManyWithoutMemberNestedInput
     loyaltyAchievements?: LoyaltyAchievementUncheckedUpdateManyWithoutMemberNestedInput
     sportStats?: UserSportStatUncheckedUpdateManyWithoutMemberNestedInput
+    nfcCards?: NfcCardUncheckedUpdateManyWithoutMemberNestedInput
+    nfcTransactions?: NfcTransactionUncheckedUpdateManyWithoutMemberNestedInput
   }
 
   export type SportUpsertWithoutAttendancesInput = {
@@ -55026,6 +58801,8 @@ export namespace Prisma {
     couponUsages?: CouponUsageCreateNestedManyWithoutMemberInput
     loyaltyAchievements?: LoyaltyAchievementCreateNestedManyWithoutMemberInput
     sportStats?: UserSportStatCreateNestedManyWithoutMemberInput
+    nfcCards?: NfcCardCreateNestedManyWithoutMemberInput
+    nfcTransactions?: NfcTransactionCreateNestedManyWithoutMemberInput
   }
 
   export type MemberUncheckedCreateWithoutBookingsInput = {
@@ -55051,6 +58828,8 @@ export namespace Prisma {
     couponUsages?: CouponUsageUncheckedCreateNestedManyWithoutMemberInput
     loyaltyAchievements?: LoyaltyAchievementUncheckedCreateNestedManyWithoutMemberInput
     sportStats?: UserSportStatUncheckedCreateNestedManyWithoutMemberInput
+    nfcCards?: NfcCardUncheckedCreateNestedManyWithoutMemberInput
+    nfcTransactions?: NfcTransactionUncheckedCreateNestedManyWithoutMemberInput
   }
 
   export type MemberCreateOrConnectWithoutBookingsInput = {
@@ -55234,6 +59013,45 @@ export namespace Prisma {
     data: BookingParticipantCreateManyBookingInput | BookingParticipantCreateManyBookingInput[]
   }
 
+  export type NfcTransactionCreateWithoutBookingInput = {
+    id?: string
+    cardUid: string
+    type: string
+    status?: string
+    amount?: number
+    deviceType?: string
+    readerLocation?: string | null
+    failureReason?: string | null
+    metadata?: string | null
+    createdAt?: Date | string
+    card?: NfcCardCreateNestedOneWithoutTransactionsInput
+    member?: MemberCreateNestedOneWithoutNfcTransactionsInput
+  }
+
+  export type NfcTransactionUncheckedCreateWithoutBookingInput = {
+    id?: string
+    cardId?: string | null
+    cardUid: string
+    memberId?: string | null
+    type: string
+    status?: string
+    amount?: number
+    deviceType?: string
+    readerLocation?: string | null
+    failureReason?: string | null
+    metadata?: string | null
+    createdAt?: Date | string
+  }
+
+  export type NfcTransactionCreateOrConnectWithoutBookingInput = {
+    where: NfcTransactionWhereUniqueInput
+    create: XOR<NfcTransactionCreateWithoutBookingInput, NfcTransactionUncheckedCreateWithoutBookingInput>
+  }
+
+  export type NfcTransactionCreateManyBookingInputEnvelope = {
+    data: NfcTransactionCreateManyBookingInput | NfcTransactionCreateManyBookingInput[]
+  }
+
   export type TurfUpsertWithoutBookingsInput = {
     update: XOR<TurfUpdateWithoutBookingsInput, TurfUncheckedUpdateWithoutBookingsInput>
     create: XOR<TurfCreateWithoutBookingsInput, TurfUncheckedCreateWithoutBookingsInput>
@@ -55315,6 +59133,8 @@ export namespace Prisma {
     couponUsages?: CouponUsageUpdateManyWithoutMemberNestedInput
     loyaltyAchievements?: LoyaltyAchievementUpdateManyWithoutMemberNestedInput
     sportStats?: UserSportStatUpdateManyWithoutMemberNestedInput
+    nfcCards?: NfcCardUpdateManyWithoutMemberNestedInput
+    nfcTransactions?: NfcTransactionUpdateManyWithoutMemberNestedInput
   }
 
   export type MemberUncheckedUpdateWithoutBookingsInput = {
@@ -55340,6 +59160,8 @@ export namespace Prisma {
     couponUsages?: CouponUsageUncheckedUpdateManyWithoutMemberNestedInput
     loyaltyAchievements?: LoyaltyAchievementUncheckedUpdateManyWithoutMemberNestedInput
     sportStats?: UserSportStatUncheckedUpdateManyWithoutMemberNestedInput
+    nfcCards?: NfcCardUncheckedUpdateManyWithoutMemberNestedInput
+    nfcTransactions?: NfcTransactionUncheckedUpdateManyWithoutMemberNestedInput
   }
 
   export type SportUpsertWithoutBookingsInput = {
@@ -55489,6 +59311,22 @@ export namespace Prisma {
     data: XOR<BookingParticipantUpdateManyMutationInput, BookingParticipantUncheckedUpdateManyWithoutBookingInput>
   }
 
+  export type NfcTransactionUpsertWithWhereUniqueWithoutBookingInput = {
+    where: NfcTransactionWhereUniqueInput
+    update: XOR<NfcTransactionUpdateWithoutBookingInput, NfcTransactionUncheckedUpdateWithoutBookingInput>
+    create: XOR<NfcTransactionCreateWithoutBookingInput, NfcTransactionUncheckedCreateWithoutBookingInput>
+  }
+
+  export type NfcTransactionUpdateWithWhereUniqueWithoutBookingInput = {
+    where: NfcTransactionWhereUniqueInput
+    data: XOR<NfcTransactionUpdateWithoutBookingInput, NfcTransactionUncheckedUpdateWithoutBookingInput>
+  }
+
+  export type NfcTransactionUpdateManyWithWhereWithoutBookingInput = {
+    where: NfcTransactionScalarWhereInput
+    data: XOR<NfcTransactionUpdateManyMutationInput, NfcTransactionUncheckedUpdateManyWithoutBookingInput>
+  }
+
   export type BookingCreateWithoutParticipantsInput = {
     id?: string
     startTime: Date | string
@@ -55513,6 +59351,7 @@ export namespace Prisma {
     transactions?: TransactionCreateNestedManyWithoutBookingInput
     tickets?: TicketCreateNestedManyWithoutBookingInput
     couponUsages?: CouponUsageCreateNestedManyWithoutBookingInput
+    nfcTransactions?: NfcTransactionCreateNestedManyWithoutBookingInput
   }
 
   export type BookingUncheckedCreateWithoutParticipantsInput = {
@@ -55539,6 +59378,7 @@ export namespace Prisma {
     transactions?: TransactionUncheckedCreateNestedManyWithoutBookingInput
     tickets?: TicketUncheckedCreateNestedManyWithoutBookingInput
     couponUsages?: CouponUsageUncheckedCreateNestedManyWithoutBookingInput
+    nfcTransactions?: NfcTransactionUncheckedCreateNestedManyWithoutBookingInput
   }
 
   export type BookingCreateOrConnectWithoutParticipantsInput = {
@@ -55569,6 +59409,8 @@ export namespace Prisma {
     couponUsages?: CouponUsageCreateNestedManyWithoutMemberInput
     loyaltyAchievements?: LoyaltyAchievementCreateNestedManyWithoutMemberInput
     sportStats?: UserSportStatCreateNestedManyWithoutMemberInput
+    nfcCards?: NfcCardCreateNestedManyWithoutMemberInput
+    nfcTransactions?: NfcTransactionCreateNestedManyWithoutMemberInput
   }
 
   export type MemberUncheckedCreateWithoutJoinedBookingsInput = {
@@ -55594,6 +59436,8 @@ export namespace Prisma {
     couponUsages?: CouponUsageUncheckedCreateNestedManyWithoutMemberInput
     loyaltyAchievements?: LoyaltyAchievementUncheckedCreateNestedManyWithoutMemberInput
     sportStats?: UserSportStatUncheckedCreateNestedManyWithoutMemberInput
+    nfcCards?: NfcCardUncheckedCreateNestedManyWithoutMemberInput
+    nfcTransactions?: NfcTransactionUncheckedCreateNestedManyWithoutMemberInput
   }
 
   export type MemberCreateOrConnectWithoutJoinedBookingsInput = {
@@ -55636,6 +59480,7 @@ export namespace Prisma {
     transactions?: TransactionUpdateManyWithoutBookingNestedInput
     tickets?: TicketUpdateManyWithoutBookingNestedInput
     couponUsages?: CouponUsageUpdateManyWithoutBookingNestedInput
+    nfcTransactions?: NfcTransactionUpdateManyWithoutBookingNestedInput
   }
 
   export type BookingUncheckedUpdateWithoutParticipantsInput = {
@@ -55662,6 +59507,7 @@ export namespace Prisma {
     transactions?: TransactionUncheckedUpdateManyWithoutBookingNestedInput
     tickets?: TicketUncheckedUpdateManyWithoutBookingNestedInput
     couponUsages?: CouponUsageUncheckedUpdateManyWithoutBookingNestedInput
+    nfcTransactions?: NfcTransactionUncheckedUpdateManyWithoutBookingNestedInput
   }
 
   export type MemberUpsertWithoutJoinedBookingsInput = {
@@ -55698,6 +59544,8 @@ export namespace Prisma {
     couponUsages?: CouponUsageUpdateManyWithoutMemberNestedInput
     loyaltyAchievements?: LoyaltyAchievementUpdateManyWithoutMemberNestedInput
     sportStats?: UserSportStatUpdateManyWithoutMemberNestedInput
+    nfcCards?: NfcCardUpdateManyWithoutMemberNestedInput
+    nfcTransactions?: NfcTransactionUpdateManyWithoutMemberNestedInput
   }
 
   export type MemberUncheckedUpdateWithoutJoinedBookingsInput = {
@@ -55723,6 +59571,8 @@ export namespace Prisma {
     couponUsages?: CouponUsageUncheckedUpdateManyWithoutMemberNestedInput
     loyaltyAchievements?: LoyaltyAchievementUncheckedUpdateManyWithoutMemberNestedInput
     sportStats?: UserSportStatUncheckedUpdateManyWithoutMemberNestedInput
+    nfcCards?: NfcCardUncheckedUpdateManyWithoutMemberNestedInput
+    nfcTransactions?: NfcTransactionUncheckedUpdateManyWithoutMemberNestedInput
   }
 
   export type BookingCreateWithoutPaymentsInput = {
@@ -55749,6 +59599,7 @@ export namespace Prisma {
     tickets?: TicketCreateNestedManyWithoutBookingInput
     couponUsages?: CouponUsageCreateNestedManyWithoutBookingInput
     participants?: BookingParticipantCreateNestedManyWithoutBookingInput
+    nfcTransactions?: NfcTransactionCreateNestedManyWithoutBookingInput
   }
 
   export type BookingUncheckedCreateWithoutPaymentsInput = {
@@ -55775,6 +59626,7 @@ export namespace Prisma {
     tickets?: TicketUncheckedCreateNestedManyWithoutBookingInput
     couponUsages?: CouponUsageUncheckedCreateNestedManyWithoutBookingInput
     participants?: BookingParticipantUncheckedCreateNestedManyWithoutBookingInput
+    nfcTransactions?: NfcTransactionUncheckedCreateNestedManyWithoutBookingInput
   }
 
   export type BookingCreateOrConnectWithoutPaymentsInput = {
@@ -55817,6 +59669,7 @@ export namespace Prisma {
     tickets?: TicketUpdateManyWithoutBookingNestedInput
     couponUsages?: CouponUsageUpdateManyWithoutBookingNestedInput
     participants?: BookingParticipantUpdateManyWithoutBookingNestedInput
+    nfcTransactions?: NfcTransactionUpdateManyWithoutBookingNestedInput
   }
 
   export type BookingUncheckedUpdateWithoutPaymentsInput = {
@@ -55843,6 +59696,7 @@ export namespace Prisma {
     tickets?: TicketUncheckedUpdateManyWithoutBookingNestedInput
     couponUsages?: CouponUsageUncheckedUpdateManyWithoutBookingNestedInput
     participants?: BookingParticipantUncheckedUpdateManyWithoutBookingNestedInput
+    nfcTransactions?: NfcTransactionUncheckedUpdateManyWithoutBookingNestedInput
   }
 
   export type BookingCreateWithoutTransactionsInput = {
@@ -55869,6 +59723,7 @@ export namespace Prisma {
     tickets?: TicketCreateNestedManyWithoutBookingInput
     couponUsages?: CouponUsageCreateNestedManyWithoutBookingInput
     participants?: BookingParticipantCreateNestedManyWithoutBookingInput
+    nfcTransactions?: NfcTransactionCreateNestedManyWithoutBookingInput
   }
 
   export type BookingUncheckedCreateWithoutTransactionsInput = {
@@ -55895,6 +59750,7 @@ export namespace Prisma {
     tickets?: TicketUncheckedCreateNestedManyWithoutBookingInput
     couponUsages?: CouponUsageUncheckedCreateNestedManyWithoutBookingInput
     participants?: BookingParticipantUncheckedCreateNestedManyWithoutBookingInput
+    nfcTransactions?: NfcTransactionUncheckedCreateNestedManyWithoutBookingInput
   }
 
   export type BookingCreateOrConnectWithoutTransactionsInput = {
@@ -55925,6 +59781,8 @@ export namespace Prisma {
     couponUsages?: CouponUsageCreateNestedManyWithoutMemberInput
     loyaltyAchievements?: LoyaltyAchievementCreateNestedManyWithoutMemberInput
     sportStats?: UserSportStatCreateNestedManyWithoutMemberInput
+    nfcCards?: NfcCardCreateNestedManyWithoutMemberInput
+    nfcTransactions?: NfcTransactionCreateNestedManyWithoutMemberInput
   }
 
   export type MemberUncheckedCreateWithoutTransactionsInput = {
@@ -55950,6 +59808,8 @@ export namespace Prisma {
     couponUsages?: CouponUsageUncheckedCreateNestedManyWithoutMemberInput
     loyaltyAchievements?: LoyaltyAchievementUncheckedCreateNestedManyWithoutMemberInput
     sportStats?: UserSportStatUncheckedCreateNestedManyWithoutMemberInput
+    nfcCards?: NfcCardUncheckedCreateNestedManyWithoutMemberInput
+    nfcTransactions?: NfcTransactionUncheckedCreateNestedManyWithoutMemberInput
   }
 
   export type MemberCreateOrConnectWithoutTransactionsInput = {
@@ -55992,6 +59852,7 @@ export namespace Prisma {
     tickets?: TicketUpdateManyWithoutBookingNestedInput
     couponUsages?: CouponUsageUpdateManyWithoutBookingNestedInput
     participants?: BookingParticipantUpdateManyWithoutBookingNestedInput
+    nfcTransactions?: NfcTransactionUpdateManyWithoutBookingNestedInput
   }
 
   export type BookingUncheckedUpdateWithoutTransactionsInput = {
@@ -56018,6 +59879,7 @@ export namespace Prisma {
     tickets?: TicketUncheckedUpdateManyWithoutBookingNestedInput
     couponUsages?: CouponUsageUncheckedUpdateManyWithoutBookingNestedInput
     participants?: BookingParticipantUncheckedUpdateManyWithoutBookingNestedInput
+    nfcTransactions?: NfcTransactionUncheckedUpdateManyWithoutBookingNestedInput
   }
 
   export type MemberUpsertWithoutTransactionsInput = {
@@ -56054,6 +59916,8 @@ export namespace Prisma {
     couponUsages?: CouponUsageUpdateManyWithoutMemberNestedInput
     loyaltyAchievements?: LoyaltyAchievementUpdateManyWithoutMemberNestedInput
     sportStats?: UserSportStatUpdateManyWithoutMemberNestedInput
+    nfcCards?: NfcCardUpdateManyWithoutMemberNestedInput
+    nfcTransactions?: NfcTransactionUpdateManyWithoutMemberNestedInput
   }
 
   export type MemberUncheckedUpdateWithoutTransactionsInput = {
@@ -56079,6 +59943,8 @@ export namespace Prisma {
     couponUsages?: CouponUsageUncheckedUpdateManyWithoutMemberNestedInput
     loyaltyAchievements?: LoyaltyAchievementUncheckedUpdateManyWithoutMemberNestedInput
     sportStats?: UserSportStatUncheckedUpdateManyWithoutMemberNestedInput
+    nfcCards?: NfcCardUncheckedUpdateManyWithoutMemberNestedInput
+    nfcTransactions?: NfcTransactionUncheckedUpdateManyWithoutMemberNestedInput
   }
 
   export type BookingCreateWithoutTicketsInput = {
@@ -56105,6 +59971,7 @@ export namespace Prisma {
     transactions?: TransactionCreateNestedManyWithoutBookingInput
     couponUsages?: CouponUsageCreateNestedManyWithoutBookingInput
     participants?: BookingParticipantCreateNestedManyWithoutBookingInput
+    nfcTransactions?: NfcTransactionCreateNestedManyWithoutBookingInput
   }
 
   export type BookingUncheckedCreateWithoutTicketsInput = {
@@ -56131,6 +59998,7 @@ export namespace Prisma {
     transactions?: TransactionUncheckedCreateNestedManyWithoutBookingInput
     couponUsages?: CouponUsageUncheckedCreateNestedManyWithoutBookingInput
     participants?: BookingParticipantUncheckedCreateNestedManyWithoutBookingInput
+    nfcTransactions?: NfcTransactionUncheckedCreateNestedManyWithoutBookingInput
   }
 
   export type BookingCreateOrConnectWithoutTicketsInput = {
@@ -56173,6 +60041,7 @@ export namespace Prisma {
     transactions?: TransactionUpdateManyWithoutBookingNestedInput
     couponUsages?: CouponUsageUpdateManyWithoutBookingNestedInput
     participants?: BookingParticipantUpdateManyWithoutBookingNestedInput
+    nfcTransactions?: NfcTransactionUpdateManyWithoutBookingNestedInput
   }
 
   export type BookingUncheckedUpdateWithoutTicketsInput = {
@@ -56199,6 +60068,7 @@ export namespace Prisma {
     transactions?: TransactionUncheckedUpdateManyWithoutBookingNestedInput
     couponUsages?: CouponUsageUncheckedUpdateManyWithoutBookingNestedInput
     participants?: BookingParticipantUncheckedUpdateManyWithoutBookingNestedInput
+    nfcTransactions?: NfcTransactionUncheckedUpdateManyWithoutBookingNestedInput
   }
 
   export type SportCreateWithoutTournamentsInput = {
@@ -56408,6 +60278,8 @@ export namespace Prisma {
     couponUsages?: CouponUsageCreateNestedManyWithoutMemberInput
     loyaltyAchievements?: LoyaltyAchievementCreateNestedManyWithoutMemberInput
     sportStats?: UserSportStatCreateNestedManyWithoutMemberInput
+    nfcCards?: NfcCardCreateNestedManyWithoutMemberInput
+    nfcTransactions?: NfcTransactionCreateNestedManyWithoutMemberInput
   }
 
   export type MemberUncheckedCreateWithoutTournamentRegistrationsInput = {
@@ -56433,6 +60305,8 @@ export namespace Prisma {
     couponUsages?: CouponUsageUncheckedCreateNestedManyWithoutMemberInput
     loyaltyAchievements?: LoyaltyAchievementUncheckedCreateNestedManyWithoutMemberInput
     sportStats?: UserSportStatUncheckedCreateNestedManyWithoutMemberInput
+    nfcCards?: NfcCardUncheckedCreateNestedManyWithoutMemberInput
+    nfcTransactions?: NfcTransactionUncheckedCreateNestedManyWithoutMemberInput
   }
 
   export type MemberCreateOrConnectWithoutTournamentRegistrationsInput = {
@@ -56560,6 +60434,8 @@ export namespace Prisma {
     couponUsages?: CouponUsageUpdateManyWithoutMemberNestedInput
     loyaltyAchievements?: LoyaltyAchievementUpdateManyWithoutMemberNestedInput
     sportStats?: UserSportStatUpdateManyWithoutMemberNestedInput
+    nfcCards?: NfcCardUpdateManyWithoutMemberNestedInput
+    nfcTransactions?: NfcTransactionUpdateManyWithoutMemberNestedInput
   }
 
   export type MemberUncheckedUpdateWithoutTournamentRegistrationsInput = {
@@ -56585,6 +60461,8 @@ export namespace Prisma {
     couponUsages?: CouponUsageUncheckedUpdateManyWithoutMemberNestedInput
     loyaltyAchievements?: LoyaltyAchievementUncheckedUpdateManyWithoutMemberNestedInput
     sportStats?: UserSportStatUncheckedUpdateManyWithoutMemberNestedInput
+    nfcCards?: NfcCardUncheckedUpdateManyWithoutMemberNestedInput
+    nfcTransactions?: NfcTransactionUncheckedUpdateManyWithoutMemberNestedInput
   }
 
   export type TournamentPlayerUpsertWithWhereUniqueWithoutRegistrationInput = {
@@ -56707,6 +60585,8 @@ export namespace Prisma {
     couponUsages?: CouponUsageCreateNestedManyWithoutMemberInput
     loyaltyAchievements?: LoyaltyAchievementCreateNestedManyWithoutMemberInput
     sportStats?: UserSportStatCreateNestedManyWithoutMemberInput
+    nfcCards?: NfcCardCreateNestedManyWithoutMemberInput
+    nfcTransactions?: NfcTransactionCreateNestedManyWithoutMemberInput
   }
 
   export type MemberUncheckedCreateWithoutWalletTransactionsInput = {
@@ -56732,6 +60612,8 @@ export namespace Prisma {
     couponUsages?: CouponUsageUncheckedCreateNestedManyWithoutMemberInput
     loyaltyAchievements?: LoyaltyAchievementUncheckedCreateNestedManyWithoutMemberInput
     sportStats?: UserSportStatUncheckedCreateNestedManyWithoutMemberInput
+    nfcCards?: NfcCardUncheckedCreateNestedManyWithoutMemberInput
+    nfcTransactions?: NfcTransactionUncheckedCreateNestedManyWithoutMemberInput
   }
 
   export type MemberCreateOrConnectWithoutWalletTransactionsInput = {
@@ -56773,6 +60655,8 @@ export namespace Prisma {
     couponUsages?: CouponUsageUpdateManyWithoutMemberNestedInput
     loyaltyAchievements?: LoyaltyAchievementUpdateManyWithoutMemberNestedInput
     sportStats?: UserSportStatUpdateManyWithoutMemberNestedInput
+    nfcCards?: NfcCardUpdateManyWithoutMemberNestedInput
+    nfcTransactions?: NfcTransactionUpdateManyWithoutMemberNestedInput
   }
 
   export type MemberUncheckedUpdateWithoutWalletTransactionsInput = {
@@ -56798,6 +60682,8 @@ export namespace Prisma {
     couponUsages?: CouponUsageUncheckedUpdateManyWithoutMemberNestedInput
     loyaltyAchievements?: LoyaltyAchievementUncheckedUpdateManyWithoutMemberNestedInput
     sportStats?: UserSportStatUncheckedUpdateManyWithoutMemberNestedInput
+    nfcCards?: NfcCardUncheckedUpdateManyWithoutMemberNestedInput
+    nfcTransactions?: NfcTransactionUncheckedUpdateManyWithoutMemberNestedInput
   }
 
   export type CouponUsageCreateWithoutCouponInput = {
@@ -56944,6 +60830,8 @@ export namespace Prisma {
     couponUsages?: CouponUsageCreateNestedManyWithoutMemberInput
     loyaltyAchievements?: LoyaltyAchievementCreateNestedManyWithoutMemberInput
     sportStats?: UserSportStatCreateNestedManyWithoutMemberInput
+    nfcCards?: NfcCardCreateNestedManyWithoutMemberInput
+    nfcTransactions?: NfcTransactionCreateNestedManyWithoutMemberInput
   }
 
   export type MemberUncheckedCreateWithoutCouponAssignmentsInput = {
@@ -56969,6 +60857,8 @@ export namespace Prisma {
     couponUsages?: CouponUsageUncheckedCreateNestedManyWithoutMemberInput
     loyaltyAchievements?: LoyaltyAchievementUncheckedCreateNestedManyWithoutMemberInput
     sportStats?: UserSportStatUncheckedCreateNestedManyWithoutMemberInput
+    nfcCards?: NfcCardUncheckedCreateNestedManyWithoutMemberInput
+    nfcTransactions?: NfcTransactionUncheckedCreateNestedManyWithoutMemberInput
   }
 
   export type MemberCreateOrConnectWithoutCouponAssignmentsInput = {
@@ -57059,6 +60949,8 @@ export namespace Prisma {
     couponUsages?: CouponUsageUpdateManyWithoutMemberNestedInput
     loyaltyAchievements?: LoyaltyAchievementUpdateManyWithoutMemberNestedInput
     sportStats?: UserSportStatUpdateManyWithoutMemberNestedInput
+    nfcCards?: NfcCardUpdateManyWithoutMemberNestedInput
+    nfcTransactions?: NfcTransactionUpdateManyWithoutMemberNestedInput
   }
 
   export type MemberUncheckedUpdateWithoutCouponAssignmentsInput = {
@@ -57084,6 +60976,8 @@ export namespace Prisma {
     couponUsages?: CouponUsageUncheckedUpdateManyWithoutMemberNestedInput
     loyaltyAchievements?: LoyaltyAchievementUncheckedUpdateManyWithoutMemberNestedInput
     sportStats?: UserSportStatUncheckedUpdateManyWithoutMemberNestedInput
+    nfcCards?: NfcCardUncheckedUpdateManyWithoutMemberNestedInput
+    nfcTransactions?: NfcTransactionUncheckedUpdateManyWithoutMemberNestedInput
   }
 
   export type CouponCreateWithoutUsagesInput = {
@@ -57152,6 +61046,8 @@ export namespace Prisma {
     couponAssignments?: CouponAssignmentCreateNestedManyWithoutMemberInput
     loyaltyAchievements?: LoyaltyAchievementCreateNestedManyWithoutMemberInput
     sportStats?: UserSportStatCreateNestedManyWithoutMemberInput
+    nfcCards?: NfcCardCreateNestedManyWithoutMemberInput
+    nfcTransactions?: NfcTransactionCreateNestedManyWithoutMemberInput
   }
 
   export type MemberUncheckedCreateWithoutCouponUsagesInput = {
@@ -57177,6 +61073,8 @@ export namespace Prisma {
     couponAssignments?: CouponAssignmentUncheckedCreateNestedManyWithoutMemberInput
     loyaltyAchievements?: LoyaltyAchievementUncheckedCreateNestedManyWithoutMemberInput
     sportStats?: UserSportStatUncheckedCreateNestedManyWithoutMemberInput
+    nfcCards?: NfcCardUncheckedCreateNestedManyWithoutMemberInput
+    nfcTransactions?: NfcTransactionUncheckedCreateNestedManyWithoutMemberInput
   }
 
   export type MemberCreateOrConnectWithoutCouponUsagesInput = {
@@ -57208,6 +61106,7 @@ export namespace Prisma {
     transactions?: TransactionCreateNestedManyWithoutBookingInput
     tickets?: TicketCreateNestedManyWithoutBookingInput
     participants?: BookingParticipantCreateNestedManyWithoutBookingInput
+    nfcTransactions?: NfcTransactionCreateNestedManyWithoutBookingInput
   }
 
   export type BookingUncheckedCreateWithoutCouponUsagesInput = {
@@ -57234,6 +61133,7 @@ export namespace Prisma {
     transactions?: TransactionUncheckedCreateNestedManyWithoutBookingInput
     tickets?: TicketUncheckedCreateNestedManyWithoutBookingInput
     participants?: BookingParticipantUncheckedCreateNestedManyWithoutBookingInput
+    nfcTransactions?: NfcTransactionUncheckedCreateNestedManyWithoutBookingInput
   }
 
   export type BookingCreateOrConnectWithoutCouponUsagesInput = {
@@ -57324,6 +61224,8 @@ export namespace Prisma {
     couponAssignments?: CouponAssignmentUpdateManyWithoutMemberNestedInput
     loyaltyAchievements?: LoyaltyAchievementUpdateManyWithoutMemberNestedInput
     sportStats?: UserSportStatUpdateManyWithoutMemberNestedInput
+    nfcCards?: NfcCardUpdateManyWithoutMemberNestedInput
+    nfcTransactions?: NfcTransactionUpdateManyWithoutMemberNestedInput
   }
 
   export type MemberUncheckedUpdateWithoutCouponUsagesInput = {
@@ -57349,6 +61251,8 @@ export namespace Prisma {
     couponAssignments?: CouponAssignmentUncheckedUpdateManyWithoutMemberNestedInput
     loyaltyAchievements?: LoyaltyAchievementUncheckedUpdateManyWithoutMemberNestedInput
     sportStats?: UserSportStatUncheckedUpdateManyWithoutMemberNestedInput
+    nfcCards?: NfcCardUncheckedUpdateManyWithoutMemberNestedInput
+    nfcTransactions?: NfcTransactionUncheckedUpdateManyWithoutMemberNestedInput
   }
 
   export type BookingUpsertWithoutCouponUsagesInput = {
@@ -57386,6 +61290,7 @@ export namespace Prisma {
     transactions?: TransactionUpdateManyWithoutBookingNestedInput
     tickets?: TicketUpdateManyWithoutBookingNestedInput
     participants?: BookingParticipantUpdateManyWithoutBookingNestedInput
+    nfcTransactions?: NfcTransactionUpdateManyWithoutBookingNestedInput
   }
 
   export type BookingUncheckedUpdateWithoutCouponUsagesInput = {
@@ -57412,6 +61317,7 @@ export namespace Prisma {
     transactions?: TransactionUncheckedUpdateManyWithoutBookingNestedInput
     tickets?: TicketUncheckedUpdateManyWithoutBookingNestedInput
     participants?: BookingParticipantUncheckedUpdateManyWithoutBookingNestedInput
+    nfcTransactions?: NfcTransactionUncheckedUpdateManyWithoutBookingNestedInput
   }
 
   export type LoyaltyAchievementCreateWithoutTriggerInput = {
@@ -57503,6 +61409,8 @@ export namespace Prisma {
     couponAssignments?: CouponAssignmentCreateNestedManyWithoutMemberInput
     couponUsages?: CouponUsageCreateNestedManyWithoutMemberInput
     sportStats?: UserSportStatCreateNestedManyWithoutMemberInput
+    nfcCards?: NfcCardCreateNestedManyWithoutMemberInput
+    nfcTransactions?: NfcTransactionCreateNestedManyWithoutMemberInput
   }
 
   export type MemberUncheckedCreateWithoutLoyaltyAchievementsInput = {
@@ -57528,6 +61436,8 @@ export namespace Prisma {
     couponAssignments?: CouponAssignmentUncheckedCreateNestedManyWithoutMemberInput
     couponUsages?: CouponUsageUncheckedCreateNestedManyWithoutMemberInput
     sportStats?: UserSportStatUncheckedCreateNestedManyWithoutMemberInput
+    nfcCards?: NfcCardUncheckedCreateNestedManyWithoutMemberInput
+    nfcTransactions?: NfcTransactionUncheckedCreateNestedManyWithoutMemberInput
   }
 
   export type MemberCreateOrConnectWithoutLoyaltyAchievementsInput = {
@@ -57604,6 +61514,8 @@ export namespace Prisma {
     couponAssignments?: CouponAssignmentUpdateManyWithoutMemberNestedInput
     couponUsages?: CouponUsageUpdateManyWithoutMemberNestedInput
     sportStats?: UserSportStatUpdateManyWithoutMemberNestedInput
+    nfcCards?: NfcCardUpdateManyWithoutMemberNestedInput
+    nfcTransactions?: NfcTransactionUpdateManyWithoutMemberNestedInput
   }
 
   export type MemberUncheckedUpdateWithoutLoyaltyAchievementsInput = {
@@ -57629,6 +61541,8 @@ export namespace Prisma {
     couponAssignments?: CouponAssignmentUncheckedUpdateManyWithoutMemberNestedInput
     couponUsages?: CouponUsageUncheckedUpdateManyWithoutMemberNestedInput
     sportStats?: UserSportStatUncheckedUpdateManyWithoutMemberNestedInput
+    nfcCards?: NfcCardUncheckedUpdateManyWithoutMemberNestedInput
+    nfcTransactions?: NfcTransactionUncheckedUpdateManyWithoutMemberNestedInput
   }
 
   export type AdminCreateWithoutAuditLogsInput = {
@@ -57798,6 +61712,8 @@ export namespace Prisma {
     couponAssignments?: CouponAssignmentCreateNestedManyWithoutMemberInput
     couponUsages?: CouponUsageCreateNestedManyWithoutMemberInput
     loyaltyAchievements?: LoyaltyAchievementCreateNestedManyWithoutMemberInput
+    nfcCards?: NfcCardCreateNestedManyWithoutMemberInput
+    nfcTransactions?: NfcTransactionCreateNestedManyWithoutMemberInput
   }
 
   export type MemberUncheckedCreateWithoutSportStatsInput = {
@@ -57823,6 +61739,8 @@ export namespace Prisma {
     couponAssignments?: CouponAssignmentUncheckedCreateNestedManyWithoutMemberInput
     couponUsages?: CouponUsageUncheckedCreateNestedManyWithoutMemberInput
     loyaltyAchievements?: LoyaltyAchievementUncheckedCreateNestedManyWithoutMemberInput
+    nfcCards?: NfcCardUncheckedCreateNestedManyWithoutMemberInput
+    nfcTransactions?: NfcTransactionUncheckedCreateNestedManyWithoutMemberInput
   }
 
   export type MemberCreateOrConnectWithoutSportStatsInput = {
@@ -57901,6 +61819,8 @@ export namespace Prisma {
     couponAssignments?: CouponAssignmentUpdateManyWithoutMemberNestedInput
     couponUsages?: CouponUsageUpdateManyWithoutMemberNestedInput
     loyaltyAchievements?: LoyaltyAchievementUpdateManyWithoutMemberNestedInput
+    nfcCards?: NfcCardUpdateManyWithoutMemberNestedInput
+    nfcTransactions?: NfcTransactionUpdateManyWithoutMemberNestedInput
   }
 
   export type MemberUncheckedUpdateWithoutSportStatsInput = {
@@ -57926,6 +61846,8 @@ export namespace Prisma {
     couponAssignments?: CouponAssignmentUncheckedUpdateManyWithoutMemberNestedInput
     couponUsages?: CouponUsageUncheckedUpdateManyWithoutMemberNestedInput
     loyaltyAchievements?: LoyaltyAchievementUncheckedUpdateManyWithoutMemberNestedInput
+    nfcCards?: NfcCardUncheckedUpdateManyWithoutMemberNestedInput
+    nfcTransactions?: NfcTransactionUncheckedUpdateManyWithoutMemberNestedInput
   }
 
   export type SportUpsertWithoutSportStatsInput = {
@@ -57969,6 +61891,505 @@ export namespace Prisma {
     bookings?: BookingUncheckedUpdateManyWithoutSportNestedInput
     tournaments?: TournamentUncheckedUpdateManyWithoutSportNestedInput
     banners?: BannerUncheckedUpdateManyWithoutTargetSportNestedInput
+  }
+
+  export type MemberCreateWithoutNfcCardsInput = {
+    id?: string
+    mobile: string
+    name: string
+    email?: string | null
+    dateOfBirth?: Date | string | null
+    loyaltyPoints?: number
+    walletBalance?: number
+    joinDate?: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    family?: FamilyGroupCreateNestedOneWithoutMembersInput
+    memberships?: MemberMembershipCreateNestedManyWithoutMemberInput
+    attendances?: AttendanceCreateNestedManyWithoutMemberInput
+    bookings?: BookingCreateNestedManyWithoutMemberInput
+    joinedBookings?: BookingParticipantCreateNestedManyWithoutMemberInput
+    loyaltyHistory?: LoyaltyHistoryCreateNestedManyWithoutMemberInput
+    tournamentRegistrations?: TournamentRegistrationCreateNestedManyWithoutRegisteredByInput
+    walletTransactions?: WalletTransactionCreateNestedManyWithoutMemberInput
+    transactions?: TransactionCreateNestedManyWithoutMemberInput
+    couponAssignments?: CouponAssignmentCreateNestedManyWithoutMemberInput
+    couponUsages?: CouponUsageCreateNestedManyWithoutMemberInput
+    loyaltyAchievements?: LoyaltyAchievementCreateNestedManyWithoutMemberInput
+    sportStats?: UserSportStatCreateNestedManyWithoutMemberInput
+    nfcTransactions?: NfcTransactionCreateNestedManyWithoutMemberInput
+  }
+
+  export type MemberUncheckedCreateWithoutNfcCardsInput = {
+    id?: string
+    mobile: string
+    familyId?: string | null
+    name: string
+    email?: string | null
+    dateOfBirth?: Date | string | null
+    loyaltyPoints?: number
+    walletBalance?: number
+    joinDate?: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    memberships?: MemberMembershipUncheckedCreateNestedManyWithoutMemberInput
+    attendances?: AttendanceUncheckedCreateNestedManyWithoutMemberInput
+    bookings?: BookingUncheckedCreateNestedManyWithoutMemberInput
+    joinedBookings?: BookingParticipantUncheckedCreateNestedManyWithoutMemberInput
+    loyaltyHistory?: LoyaltyHistoryUncheckedCreateNestedManyWithoutMemberInput
+    tournamentRegistrations?: TournamentRegistrationUncheckedCreateNestedManyWithoutRegisteredByInput
+    walletTransactions?: WalletTransactionUncheckedCreateNestedManyWithoutMemberInput
+    transactions?: TransactionUncheckedCreateNestedManyWithoutMemberInput
+    couponAssignments?: CouponAssignmentUncheckedCreateNestedManyWithoutMemberInput
+    couponUsages?: CouponUsageUncheckedCreateNestedManyWithoutMemberInput
+    loyaltyAchievements?: LoyaltyAchievementUncheckedCreateNestedManyWithoutMemberInput
+    sportStats?: UserSportStatUncheckedCreateNestedManyWithoutMemberInput
+    nfcTransactions?: NfcTransactionUncheckedCreateNestedManyWithoutMemberInput
+  }
+
+  export type MemberCreateOrConnectWithoutNfcCardsInput = {
+    where: MemberWhereUniqueInput
+    create: XOR<MemberCreateWithoutNfcCardsInput, MemberUncheckedCreateWithoutNfcCardsInput>
+  }
+
+  export type NfcTransactionCreateWithoutCardInput = {
+    id?: string
+    cardUid: string
+    type: string
+    status?: string
+    amount?: number
+    deviceType?: string
+    readerLocation?: string | null
+    failureReason?: string | null
+    metadata?: string | null
+    createdAt?: Date | string
+    member?: MemberCreateNestedOneWithoutNfcTransactionsInput
+    booking?: BookingCreateNestedOneWithoutNfcTransactionsInput
+  }
+
+  export type NfcTransactionUncheckedCreateWithoutCardInput = {
+    id?: string
+    cardUid: string
+    memberId?: string | null
+    bookingId?: string | null
+    type: string
+    status?: string
+    amount?: number
+    deviceType?: string
+    readerLocation?: string | null
+    failureReason?: string | null
+    metadata?: string | null
+    createdAt?: Date | string
+  }
+
+  export type NfcTransactionCreateOrConnectWithoutCardInput = {
+    where: NfcTransactionWhereUniqueInput
+    create: XOR<NfcTransactionCreateWithoutCardInput, NfcTransactionUncheckedCreateWithoutCardInput>
+  }
+
+  export type NfcTransactionCreateManyCardInputEnvelope = {
+    data: NfcTransactionCreateManyCardInput | NfcTransactionCreateManyCardInput[]
+  }
+
+  export type MemberUpsertWithoutNfcCardsInput = {
+    update: XOR<MemberUpdateWithoutNfcCardsInput, MemberUncheckedUpdateWithoutNfcCardsInput>
+    create: XOR<MemberCreateWithoutNfcCardsInput, MemberUncheckedCreateWithoutNfcCardsInput>
+    where?: MemberWhereInput
+  }
+
+  export type MemberUpdateToOneWithWhereWithoutNfcCardsInput = {
+    where?: MemberWhereInput
+    data: XOR<MemberUpdateWithoutNfcCardsInput, MemberUncheckedUpdateWithoutNfcCardsInput>
+  }
+
+  export type MemberUpdateWithoutNfcCardsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    mobile?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    loyaltyPoints?: IntFieldUpdateOperationsInput | number
+    walletBalance?: FloatFieldUpdateOperationsInput | number
+    joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    family?: FamilyGroupUpdateOneWithoutMembersNestedInput
+    memberships?: MemberMembershipUpdateManyWithoutMemberNestedInput
+    attendances?: AttendanceUpdateManyWithoutMemberNestedInput
+    bookings?: BookingUpdateManyWithoutMemberNestedInput
+    joinedBookings?: BookingParticipantUpdateManyWithoutMemberNestedInput
+    loyaltyHistory?: LoyaltyHistoryUpdateManyWithoutMemberNestedInput
+    tournamentRegistrations?: TournamentRegistrationUpdateManyWithoutRegisteredByNestedInput
+    walletTransactions?: WalletTransactionUpdateManyWithoutMemberNestedInput
+    transactions?: TransactionUpdateManyWithoutMemberNestedInput
+    couponAssignments?: CouponAssignmentUpdateManyWithoutMemberNestedInput
+    couponUsages?: CouponUsageUpdateManyWithoutMemberNestedInput
+    loyaltyAchievements?: LoyaltyAchievementUpdateManyWithoutMemberNestedInput
+    sportStats?: UserSportStatUpdateManyWithoutMemberNestedInput
+    nfcTransactions?: NfcTransactionUpdateManyWithoutMemberNestedInput
+  }
+
+  export type MemberUncheckedUpdateWithoutNfcCardsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    mobile?: StringFieldUpdateOperationsInput | string
+    familyId?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    loyaltyPoints?: IntFieldUpdateOperationsInput | number
+    walletBalance?: FloatFieldUpdateOperationsInput | number
+    joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    memberships?: MemberMembershipUncheckedUpdateManyWithoutMemberNestedInput
+    attendances?: AttendanceUncheckedUpdateManyWithoutMemberNestedInput
+    bookings?: BookingUncheckedUpdateManyWithoutMemberNestedInput
+    joinedBookings?: BookingParticipantUncheckedUpdateManyWithoutMemberNestedInput
+    loyaltyHistory?: LoyaltyHistoryUncheckedUpdateManyWithoutMemberNestedInput
+    tournamentRegistrations?: TournamentRegistrationUncheckedUpdateManyWithoutRegisteredByNestedInput
+    walletTransactions?: WalletTransactionUncheckedUpdateManyWithoutMemberNestedInput
+    transactions?: TransactionUncheckedUpdateManyWithoutMemberNestedInput
+    couponAssignments?: CouponAssignmentUncheckedUpdateManyWithoutMemberNestedInput
+    couponUsages?: CouponUsageUncheckedUpdateManyWithoutMemberNestedInput
+    loyaltyAchievements?: LoyaltyAchievementUncheckedUpdateManyWithoutMemberNestedInput
+    sportStats?: UserSportStatUncheckedUpdateManyWithoutMemberNestedInput
+    nfcTransactions?: NfcTransactionUncheckedUpdateManyWithoutMemberNestedInput
+  }
+
+  export type NfcTransactionUpsertWithWhereUniqueWithoutCardInput = {
+    where: NfcTransactionWhereUniqueInput
+    update: XOR<NfcTransactionUpdateWithoutCardInput, NfcTransactionUncheckedUpdateWithoutCardInput>
+    create: XOR<NfcTransactionCreateWithoutCardInput, NfcTransactionUncheckedCreateWithoutCardInput>
+  }
+
+  export type NfcTransactionUpdateWithWhereUniqueWithoutCardInput = {
+    where: NfcTransactionWhereUniqueInput
+    data: XOR<NfcTransactionUpdateWithoutCardInput, NfcTransactionUncheckedUpdateWithoutCardInput>
+  }
+
+  export type NfcTransactionUpdateManyWithWhereWithoutCardInput = {
+    where: NfcTransactionScalarWhereInput
+    data: XOR<NfcTransactionUpdateManyMutationInput, NfcTransactionUncheckedUpdateManyWithoutCardInput>
+  }
+
+  export type NfcCardCreateWithoutTransactionsInput = {
+    id?: string
+    cardUid: string
+    cardId?: string | null
+    status?: string
+    issuedAt?: Date | string
+    lastUsedAt?: Date | string | null
+    notes?: string | null
+    assignedBy?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    member?: MemberCreateNestedOneWithoutNfcCardsInput
+  }
+
+  export type NfcCardUncheckedCreateWithoutTransactionsInput = {
+    id?: string
+    cardUid: string
+    cardId?: string | null
+    memberId?: string | null
+    status?: string
+    issuedAt?: Date | string
+    lastUsedAt?: Date | string | null
+    notes?: string | null
+    assignedBy?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type NfcCardCreateOrConnectWithoutTransactionsInput = {
+    where: NfcCardWhereUniqueInput
+    create: XOR<NfcCardCreateWithoutTransactionsInput, NfcCardUncheckedCreateWithoutTransactionsInput>
+  }
+
+  export type MemberCreateWithoutNfcTransactionsInput = {
+    id?: string
+    mobile: string
+    name: string
+    email?: string | null
+    dateOfBirth?: Date | string | null
+    loyaltyPoints?: number
+    walletBalance?: number
+    joinDate?: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    family?: FamilyGroupCreateNestedOneWithoutMembersInput
+    memberships?: MemberMembershipCreateNestedManyWithoutMemberInput
+    attendances?: AttendanceCreateNestedManyWithoutMemberInput
+    bookings?: BookingCreateNestedManyWithoutMemberInput
+    joinedBookings?: BookingParticipantCreateNestedManyWithoutMemberInput
+    loyaltyHistory?: LoyaltyHistoryCreateNestedManyWithoutMemberInput
+    tournamentRegistrations?: TournamentRegistrationCreateNestedManyWithoutRegisteredByInput
+    walletTransactions?: WalletTransactionCreateNestedManyWithoutMemberInput
+    transactions?: TransactionCreateNestedManyWithoutMemberInput
+    couponAssignments?: CouponAssignmentCreateNestedManyWithoutMemberInput
+    couponUsages?: CouponUsageCreateNestedManyWithoutMemberInput
+    loyaltyAchievements?: LoyaltyAchievementCreateNestedManyWithoutMemberInput
+    sportStats?: UserSportStatCreateNestedManyWithoutMemberInput
+    nfcCards?: NfcCardCreateNestedManyWithoutMemberInput
+  }
+
+  export type MemberUncheckedCreateWithoutNfcTransactionsInput = {
+    id?: string
+    mobile: string
+    familyId?: string | null
+    name: string
+    email?: string | null
+    dateOfBirth?: Date | string | null
+    loyaltyPoints?: number
+    walletBalance?: number
+    joinDate?: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    memberships?: MemberMembershipUncheckedCreateNestedManyWithoutMemberInput
+    attendances?: AttendanceUncheckedCreateNestedManyWithoutMemberInput
+    bookings?: BookingUncheckedCreateNestedManyWithoutMemberInput
+    joinedBookings?: BookingParticipantUncheckedCreateNestedManyWithoutMemberInput
+    loyaltyHistory?: LoyaltyHistoryUncheckedCreateNestedManyWithoutMemberInput
+    tournamentRegistrations?: TournamentRegistrationUncheckedCreateNestedManyWithoutRegisteredByInput
+    walletTransactions?: WalletTransactionUncheckedCreateNestedManyWithoutMemberInput
+    transactions?: TransactionUncheckedCreateNestedManyWithoutMemberInput
+    couponAssignments?: CouponAssignmentUncheckedCreateNestedManyWithoutMemberInput
+    couponUsages?: CouponUsageUncheckedCreateNestedManyWithoutMemberInput
+    loyaltyAchievements?: LoyaltyAchievementUncheckedCreateNestedManyWithoutMemberInput
+    sportStats?: UserSportStatUncheckedCreateNestedManyWithoutMemberInput
+    nfcCards?: NfcCardUncheckedCreateNestedManyWithoutMemberInput
+  }
+
+  export type MemberCreateOrConnectWithoutNfcTransactionsInput = {
+    where: MemberWhereUniqueInput
+    create: XOR<MemberCreateWithoutNfcTransactionsInput, MemberUncheckedCreateWithoutNfcTransactionsInput>
+  }
+
+  export type BookingCreateWithoutNfcTransactionsInput = {
+    id?: string
+    startTime: Date | string
+    endTime: Date | string
+    price: number
+    paymentStatus?: string
+    status?: string
+    participantCount?: number
+    visibility?: string
+    inviteMaxCount?: number | null
+    inviteCode?: string | null
+    pointsRedeemed?: number
+    discountAmount?: number
+    advancePaid?: number
+    amountDue?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    turf: TurfCreateNestedOneWithoutBookingsInput
+    member: MemberCreateNestedOneWithoutBookingsInput
+    sport: SportCreateNestedOneWithoutBookingsInput
+    payments?: PaymentCreateNestedManyWithoutBookingInput
+    transactions?: TransactionCreateNestedManyWithoutBookingInput
+    tickets?: TicketCreateNestedManyWithoutBookingInput
+    couponUsages?: CouponUsageCreateNestedManyWithoutBookingInput
+    participants?: BookingParticipantCreateNestedManyWithoutBookingInput
+  }
+
+  export type BookingUncheckedCreateWithoutNfcTransactionsInput = {
+    id?: string
+    turfId: string
+    memberId: string
+    sportId: string
+    startTime: Date | string
+    endTime: Date | string
+    price: number
+    paymentStatus?: string
+    status?: string
+    participantCount?: number
+    visibility?: string
+    inviteMaxCount?: number | null
+    inviteCode?: string | null
+    pointsRedeemed?: number
+    discountAmount?: number
+    advancePaid?: number
+    amountDue?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    payments?: PaymentUncheckedCreateNestedManyWithoutBookingInput
+    transactions?: TransactionUncheckedCreateNestedManyWithoutBookingInput
+    tickets?: TicketUncheckedCreateNestedManyWithoutBookingInput
+    couponUsages?: CouponUsageUncheckedCreateNestedManyWithoutBookingInput
+    participants?: BookingParticipantUncheckedCreateNestedManyWithoutBookingInput
+  }
+
+  export type BookingCreateOrConnectWithoutNfcTransactionsInput = {
+    where: BookingWhereUniqueInput
+    create: XOR<BookingCreateWithoutNfcTransactionsInput, BookingUncheckedCreateWithoutNfcTransactionsInput>
+  }
+
+  export type NfcCardUpsertWithoutTransactionsInput = {
+    update: XOR<NfcCardUpdateWithoutTransactionsInput, NfcCardUncheckedUpdateWithoutTransactionsInput>
+    create: XOR<NfcCardCreateWithoutTransactionsInput, NfcCardUncheckedCreateWithoutTransactionsInput>
+    where?: NfcCardWhereInput
+  }
+
+  export type NfcCardUpdateToOneWithWhereWithoutTransactionsInput = {
+    where?: NfcCardWhereInput
+    data: XOR<NfcCardUpdateWithoutTransactionsInput, NfcCardUncheckedUpdateWithoutTransactionsInput>
+  }
+
+  export type NfcCardUpdateWithoutTransactionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    cardUid?: StringFieldUpdateOperationsInput | string
+    cardId?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    issuedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    lastUsedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    assignedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    member?: MemberUpdateOneWithoutNfcCardsNestedInput
+  }
+
+  export type NfcCardUncheckedUpdateWithoutTransactionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    cardUid?: StringFieldUpdateOperationsInput | string
+    cardId?: NullableStringFieldUpdateOperationsInput | string | null
+    memberId?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    issuedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    lastUsedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    assignedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MemberUpsertWithoutNfcTransactionsInput = {
+    update: XOR<MemberUpdateWithoutNfcTransactionsInput, MemberUncheckedUpdateWithoutNfcTransactionsInput>
+    create: XOR<MemberCreateWithoutNfcTransactionsInput, MemberUncheckedCreateWithoutNfcTransactionsInput>
+    where?: MemberWhereInput
+  }
+
+  export type MemberUpdateToOneWithWhereWithoutNfcTransactionsInput = {
+    where?: MemberWhereInput
+    data: XOR<MemberUpdateWithoutNfcTransactionsInput, MemberUncheckedUpdateWithoutNfcTransactionsInput>
+  }
+
+  export type MemberUpdateWithoutNfcTransactionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    mobile?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    loyaltyPoints?: IntFieldUpdateOperationsInput | number
+    walletBalance?: FloatFieldUpdateOperationsInput | number
+    joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    family?: FamilyGroupUpdateOneWithoutMembersNestedInput
+    memberships?: MemberMembershipUpdateManyWithoutMemberNestedInput
+    attendances?: AttendanceUpdateManyWithoutMemberNestedInput
+    bookings?: BookingUpdateManyWithoutMemberNestedInput
+    joinedBookings?: BookingParticipantUpdateManyWithoutMemberNestedInput
+    loyaltyHistory?: LoyaltyHistoryUpdateManyWithoutMemberNestedInput
+    tournamentRegistrations?: TournamentRegistrationUpdateManyWithoutRegisteredByNestedInput
+    walletTransactions?: WalletTransactionUpdateManyWithoutMemberNestedInput
+    transactions?: TransactionUpdateManyWithoutMemberNestedInput
+    couponAssignments?: CouponAssignmentUpdateManyWithoutMemberNestedInput
+    couponUsages?: CouponUsageUpdateManyWithoutMemberNestedInput
+    loyaltyAchievements?: LoyaltyAchievementUpdateManyWithoutMemberNestedInput
+    sportStats?: UserSportStatUpdateManyWithoutMemberNestedInput
+    nfcCards?: NfcCardUpdateManyWithoutMemberNestedInput
+  }
+
+  export type MemberUncheckedUpdateWithoutNfcTransactionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    mobile?: StringFieldUpdateOperationsInput | string
+    familyId?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    loyaltyPoints?: IntFieldUpdateOperationsInput | number
+    walletBalance?: FloatFieldUpdateOperationsInput | number
+    joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    memberships?: MemberMembershipUncheckedUpdateManyWithoutMemberNestedInput
+    attendances?: AttendanceUncheckedUpdateManyWithoutMemberNestedInput
+    bookings?: BookingUncheckedUpdateManyWithoutMemberNestedInput
+    joinedBookings?: BookingParticipantUncheckedUpdateManyWithoutMemberNestedInput
+    loyaltyHistory?: LoyaltyHistoryUncheckedUpdateManyWithoutMemberNestedInput
+    tournamentRegistrations?: TournamentRegistrationUncheckedUpdateManyWithoutRegisteredByNestedInput
+    walletTransactions?: WalletTransactionUncheckedUpdateManyWithoutMemberNestedInput
+    transactions?: TransactionUncheckedUpdateManyWithoutMemberNestedInput
+    couponAssignments?: CouponAssignmentUncheckedUpdateManyWithoutMemberNestedInput
+    couponUsages?: CouponUsageUncheckedUpdateManyWithoutMemberNestedInput
+    loyaltyAchievements?: LoyaltyAchievementUncheckedUpdateManyWithoutMemberNestedInput
+    sportStats?: UserSportStatUncheckedUpdateManyWithoutMemberNestedInput
+    nfcCards?: NfcCardUncheckedUpdateManyWithoutMemberNestedInput
+  }
+
+  export type BookingUpsertWithoutNfcTransactionsInput = {
+    update: XOR<BookingUpdateWithoutNfcTransactionsInput, BookingUncheckedUpdateWithoutNfcTransactionsInput>
+    create: XOR<BookingCreateWithoutNfcTransactionsInput, BookingUncheckedCreateWithoutNfcTransactionsInput>
+    where?: BookingWhereInput
+  }
+
+  export type BookingUpdateToOneWithWhereWithoutNfcTransactionsInput = {
+    where?: BookingWhereInput
+    data: XOR<BookingUpdateWithoutNfcTransactionsInput, BookingUncheckedUpdateWithoutNfcTransactionsInput>
+  }
+
+  export type BookingUpdateWithoutNfcTransactionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    startTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    endTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    price?: FloatFieldUpdateOperationsInput | number
+    paymentStatus?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    participantCount?: IntFieldUpdateOperationsInput | number
+    visibility?: StringFieldUpdateOperationsInput | string
+    inviteMaxCount?: NullableIntFieldUpdateOperationsInput | number | null
+    inviteCode?: NullableStringFieldUpdateOperationsInput | string | null
+    pointsRedeemed?: IntFieldUpdateOperationsInput | number
+    discountAmount?: FloatFieldUpdateOperationsInput | number
+    advancePaid?: FloatFieldUpdateOperationsInput | number
+    amountDue?: FloatFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    turf?: TurfUpdateOneRequiredWithoutBookingsNestedInput
+    member?: MemberUpdateOneRequiredWithoutBookingsNestedInput
+    sport?: SportUpdateOneRequiredWithoutBookingsNestedInput
+    payments?: PaymentUpdateManyWithoutBookingNestedInput
+    transactions?: TransactionUpdateManyWithoutBookingNestedInput
+    tickets?: TicketUpdateManyWithoutBookingNestedInput
+    couponUsages?: CouponUsageUpdateManyWithoutBookingNestedInput
+    participants?: BookingParticipantUpdateManyWithoutBookingNestedInput
+  }
+
+  export type BookingUncheckedUpdateWithoutNfcTransactionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    turfId?: StringFieldUpdateOperationsInput | string
+    memberId?: StringFieldUpdateOperationsInput | string
+    sportId?: StringFieldUpdateOperationsInput | string
+    startTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    endTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    price?: FloatFieldUpdateOperationsInput | number
+    paymentStatus?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    participantCount?: IntFieldUpdateOperationsInput | number
+    visibility?: StringFieldUpdateOperationsInput | string
+    inviteMaxCount?: NullableIntFieldUpdateOperationsInput | number | null
+    inviteCode?: NullableStringFieldUpdateOperationsInput | string | null
+    pointsRedeemed?: IntFieldUpdateOperationsInput | number
+    discountAmount?: FloatFieldUpdateOperationsInput | number
+    advancePaid?: FloatFieldUpdateOperationsInput | number
+    amountDue?: FloatFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    payments?: PaymentUncheckedUpdateManyWithoutBookingNestedInput
+    transactions?: TransactionUncheckedUpdateManyWithoutBookingNestedInput
+    tickets?: TicketUncheckedUpdateManyWithoutBookingNestedInput
+    couponUsages?: CouponUsageUncheckedUpdateManyWithoutBookingNestedInput
+    participants?: BookingParticipantUncheckedUpdateManyWithoutBookingNestedInput
   }
 
   export type AuditLogCreateManyAdminInput = {
@@ -58047,6 +62468,8 @@ export namespace Prisma {
     couponUsages?: CouponUsageUpdateManyWithoutMemberNestedInput
     loyaltyAchievements?: LoyaltyAchievementUpdateManyWithoutMemberNestedInput
     sportStats?: UserSportStatUpdateManyWithoutMemberNestedInput
+    nfcCards?: NfcCardUpdateManyWithoutMemberNestedInput
+    nfcTransactions?: NfcTransactionUpdateManyWithoutMemberNestedInput
   }
 
   export type MemberUncheckedUpdateWithoutFamilyInput = {
@@ -58072,6 +62495,8 @@ export namespace Prisma {
     couponUsages?: CouponUsageUncheckedUpdateManyWithoutMemberNestedInput
     loyaltyAchievements?: LoyaltyAchievementUncheckedUpdateManyWithoutMemberNestedInput
     sportStats?: UserSportStatUncheckedUpdateManyWithoutMemberNestedInput
+    nfcCards?: NfcCardUncheckedUpdateManyWithoutMemberNestedInput
+    nfcTransactions?: NfcTransactionUncheckedUpdateManyWithoutMemberNestedInput
   }
 
   export type MemberUncheckedUpdateManyWithoutFamilyInput = {
@@ -58211,6 +62636,34 @@ export namespace Prisma {
     updatedAt?: Date | string
   }
 
+  export type NfcCardCreateManyMemberInput = {
+    id?: string
+    cardUid: string
+    cardId?: string | null
+    status?: string
+    issuedAt?: Date | string
+    lastUsedAt?: Date | string | null
+    notes?: string | null
+    assignedBy?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type NfcTransactionCreateManyMemberInput = {
+    id?: string
+    cardId?: string | null
+    cardUid: string
+    bookingId?: string | null
+    type: string
+    status?: string
+    amount?: number
+    deviceType?: string
+    readerLocation?: string | null
+    failureReason?: string | null
+    metadata?: string | null
+    createdAt?: Date | string
+  }
+
   export type MemberMembershipUpdateWithoutMemberInput = {
     id?: StringFieldUpdateOperationsInput | string
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -58304,6 +62757,7 @@ export namespace Prisma {
     tickets?: TicketUpdateManyWithoutBookingNestedInput
     couponUsages?: CouponUsageUpdateManyWithoutBookingNestedInput
     participants?: BookingParticipantUpdateManyWithoutBookingNestedInput
+    nfcTransactions?: NfcTransactionUpdateManyWithoutBookingNestedInput
   }
 
   export type BookingUncheckedUpdateWithoutMemberInput = {
@@ -58330,6 +62784,7 @@ export namespace Prisma {
     tickets?: TicketUncheckedUpdateManyWithoutBookingNestedInput
     couponUsages?: CouponUsageUncheckedUpdateManyWithoutBookingNestedInput
     participants?: BookingParticipantUncheckedUpdateManyWithoutBookingNestedInput
+    nfcTransactions?: NfcTransactionUncheckedUpdateManyWithoutBookingNestedInput
   }
 
   export type BookingUncheckedUpdateManyWithoutMemberInput = {
@@ -58595,6 +63050,92 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type NfcCardUpdateWithoutMemberInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    cardUid?: StringFieldUpdateOperationsInput | string
+    cardId?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    issuedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    lastUsedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    assignedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    transactions?: NfcTransactionUpdateManyWithoutCardNestedInput
+  }
+
+  export type NfcCardUncheckedUpdateWithoutMemberInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    cardUid?: StringFieldUpdateOperationsInput | string
+    cardId?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    issuedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    lastUsedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    assignedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    transactions?: NfcTransactionUncheckedUpdateManyWithoutCardNestedInput
+  }
+
+  export type NfcCardUncheckedUpdateManyWithoutMemberInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    cardUid?: StringFieldUpdateOperationsInput | string
+    cardId?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    issuedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    lastUsedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    assignedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type NfcTransactionUpdateWithoutMemberInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    cardUid?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    amount?: FloatFieldUpdateOperationsInput | number
+    deviceType?: StringFieldUpdateOperationsInput | string
+    readerLocation?: NullableStringFieldUpdateOperationsInput | string | null
+    failureReason?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    card?: NfcCardUpdateOneWithoutTransactionsNestedInput
+    booking?: BookingUpdateOneWithoutNfcTransactionsNestedInput
+  }
+
+  export type NfcTransactionUncheckedUpdateWithoutMemberInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    cardId?: NullableStringFieldUpdateOperationsInput | string | null
+    cardUid?: StringFieldUpdateOperationsInput | string
+    bookingId?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    amount?: FloatFieldUpdateOperationsInput | number
+    deviceType?: StringFieldUpdateOperationsInput | string
+    readerLocation?: NullableStringFieldUpdateOperationsInput | string | null
+    failureReason?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type NfcTransactionUncheckedUpdateManyWithoutMemberInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    cardId?: NullableStringFieldUpdateOperationsInput | string | null
+    cardUid?: StringFieldUpdateOperationsInput | string
+    bookingId?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    amount?: FloatFieldUpdateOperationsInput | number
+    deviceType?: StringFieldUpdateOperationsInput | string
+    readerLocation?: NullableStringFieldUpdateOperationsInput | string | null
+    failureReason?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type TurfSportCreateManySportInput = {
     turfId: string
   }
@@ -58795,6 +63336,7 @@ export namespace Prisma {
     tickets?: TicketUpdateManyWithoutBookingNestedInput
     couponUsages?: CouponUsageUpdateManyWithoutBookingNestedInput
     participants?: BookingParticipantUpdateManyWithoutBookingNestedInput
+    nfcTransactions?: NfcTransactionUpdateManyWithoutBookingNestedInput
   }
 
   export type BookingUncheckedUpdateWithoutSportInput = {
@@ -58821,6 +63363,7 @@ export namespace Prisma {
     tickets?: TicketUncheckedUpdateManyWithoutBookingNestedInput
     couponUsages?: CouponUsageUncheckedUpdateManyWithoutBookingNestedInput
     participants?: BookingParticipantUncheckedUpdateManyWithoutBookingNestedInput
+    nfcTransactions?: NfcTransactionUncheckedUpdateManyWithoutBookingNestedInput
   }
 
   export type BookingUncheckedUpdateManyWithoutSportInput = {
@@ -59101,6 +63644,7 @@ export namespace Prisma {
     tickets?: TicketUpdateManyWithoutBookingNestedInput
     couponUsages?: CouponUsageUpdateManyWithoutBookingNestedInput
     participants?: BookingParticipantUpdateManyWithoutBookingNestedInput
+    nfcTransactions?: NfcTransactionUpdateManyWithoutBookingNestedInput
   }
 
   export type BookingUncheckedUpdateWithoutTurfInput = {
@@ -59127,6 +63671,7 @@ export namespace Prisma {
     tickets?: TicketUncheckedUpdateManyWithoutBookingNestedInput
     couponUsages?: CouponUsageUncheckedUpdateManyWithoutBookingNestedInput
     participants?: BookingParticipantUncheckedUpdateManyWithoutBookingNestedInput
+    nfcTransactions?: NfcTransactionUncheckedUpdateManyWithoutBookingNestedInput
   }
 
   export type BookingUncheckedUpdateManyWithoutTurfInput = {
@@ -59328,6 +63873,21 @@ export namespace Prisma {
     createdAt?: Date | string
   }
 
+  export type NfcTransactionCreateManyBookingInput = {
+    id?: string
+    cardId?: string | null
+    cardUid: string
+    memberId?: string | null
+    type: string
+    status?: string
+    amount?: number
+    deviceType?: string
+    readerLocation?: string | null
+    failureReason?: string | null
+    metadata?: string | null
+    createdAt?: Date | string
+  }
+
   export type PaymentUpdateWithoutBookingInput = {
     id?: StringFieldUpdateOperationsInput | string
     amount?: FloatFieldUpdateOperationsInput | number
@@ -59466,6 +64026,51 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     memberId?: StringFieldUpdateOperationsInput | string
     status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type NfcTransactionUpdateWithoutBookingInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    cardUid?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    amount?: FloatFieldUpdateOperationsInput | number
+    deviceType?: StringFieldUpdateOperationsInput | string
+    readerLocation?: NullableStringFieldUpdateOperationsInput | string | null
+    failureReason?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    card?: NfcCardUpdateOneWithoutTransactionsNestedInput
+    member?: MemberUpdateOneWithoutNfcTransactionsNestedInput
+  }
+
+  export type NfcTransactionUncheckedUpdateWithoutBookingInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    cardId?: NullableStringFieldUpdateOperationsInput | string | null
+    cardUid?: StringFieldUpdateOperationsInput | string
+    memberId?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    amount?: FloatFieldUpdateOperationsInput | number
+    deviceType?: StringFieldUpdateOperationsInput | string
+    readerLocation?: NullableStringFieldUpdateOperationsInput | string | null
+    failureReason?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type NfcTransactionUncheckedUpdateManyWithoutBookingInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    cardId?: NullableStringFieldUpdateOperationsInput | string | null
+    cardUid?: StringFieldUpdateOperationsInput | string
+    memberId?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    amount?: FloatFieldUpdateOperationsInput | number
+    deviceType?: StringFieldUpdateOperationsInput | string
+    readerLocation?: NullableStringFieldUpdateOperationsInput | string | null
+    failureReason?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -59633,6 +64238,66 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     memberId?: StringFieldUpdateOperationsInput | string
     achievedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type NfcTransactionCreateManyCardInput = {
+    id?: string
+    cardUid: string
+    memberId?: string | null
+    bookingId?: string | null
+    type: string
+    status?: string
+    amount?: number
+    deviceType?: string
+    readerLocation?: string | null
+    failureReason?: string | null
+    metadata?: string | null
+    createdAt?: Date | string
+  }
+
+  export type NfcTransactionUpdateWithoutCardInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    cardUid?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    amount?: FloatFieldUpdateOperationsInput | number
+    deviceType?: StringFieldUpdateOperationsInput | string
+    readerLocation?: NullableStringFieldUpdateOperationsInput | string | null
+    failureReason?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    member?: MemberUpdateOneWithoutNfcTransactionsNestedInput
+    booking?: BookingUpdateOneWithoutNfcTransactionsNestedInput
+  }
+
+  export type NfcTransactionUncheckedUpdateWithoutCardInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    cardUid?: StringFieldUpdateOperationsInput | string
+    memberId?: NullableStringFieldUpdateOperationsInput | string | null
+    bookingId?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    amount?: FloatFieldUpdateOperationsInput | number
+    deviceType?: StringFieldUpdateOperationsInput | string
+    readerLocation?: NullableStringFieldUpdateOperationsInput | string | null
+    failureReason?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type NfcTransactionUncheckedUpdateManyWithoutCardInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    cardUid?: StringFieldUpdateOperationsInput | string
+    memberId?: NullableStringFieldUpdateOperationsInput | string | null
+    bookingId?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    amount?: FloatFieldUpdateOperationsInput | number
+    deviceType?: StringFieldUpdateOperationsInput | string
+    readerLocation?: NullableStringFieldUpdateOperationsInput | string | null
+    failureReason?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
 

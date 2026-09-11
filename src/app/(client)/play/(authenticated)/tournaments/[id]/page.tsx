@@ -5,6 +5,7 @@ import { useParams, useRouter } from 'next/navigation';
 import useSWR from 'swr';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronLeft, Calendar, MapPin, Trophy, Users, Info, Upload, CheckCircle2, AlertCircle, Phone, FileText } from 'lucide-react';
+import { useAlert } from '@/components/AlertProvider';
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
@@ -17,6 +18,7 @@ export default function TournamentDetailPage() {
   const params = useParams();
   const router = useRouter();
   const id = params.id as string;
+  const { showAlert } = useAlert();
   
   const { data: detailData, isLoading, error } = useSWR(`/api/client/v1/tournaments/${id}`, fetcher);
   
@@ -399,11 +401,11 @@ export default function TournamentDetailPage() {
               <button
                 onClick={() => {
                   if (!teamName.trim()) {
-                    alert('Please enter a team name');
+                    showAlert("Error", 'Please enter a team name', "error");
                     return;
                   }
                   if (players[0].name === '' || players[0].mobile === '') {
-                    alert('Please fill details for at least the captain');
+                    showAlert("Error", 'Please fill details for at least the captain', "error");
                     return;
                   }
                   setStep(3);

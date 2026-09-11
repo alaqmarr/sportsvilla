@@ -2,7 +2,10 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import useSWR from 'swr';
-import { Tag, Shield, FileText, CalendarDays, X, ChevronRight, Check, Coins, Loader2 } from 'lucide-react';
+import { Tag, Shield, FileText, CalendarDays, X, ChevronRight, Check, Coins, Loader2, CreditCard, AlertCircle } from 'lucide-react';
+import { useNfcReader } from '@/hooks/useNfcReader';
+import { playNfcSound } from '@/lib/soundUtils';
+import { useAlert } from '@/components/AlertProvider';
 
 interface ReviewPanelProps {
   selectedSlots: string[];
@@ -12,9 +15,19 @@ interface ReviewPanelProps {
   pointsBalance: number;
   onApplyCoupon: (code: string) => void;
   onRedeemPoints: () => void;
-  onConfirm: (promoCode: string, walletDeduction: number, pointsDeduction: number, walletOtp?: string, preferredGateway?: string) => void;
+  onConfirm: (
+    promoCode: string,
+    walletDeduction: number,
+    pointsDeduction: number,
+    walletOtp?: string,
+    preferredGateway?: string,
+    cardUid?: string,
+    paymentResponse?: any
+  ) => void | Promise<any>;
   onClose?: () => void;
   timeDisplayOverride?: string;
+  bookingId?: string;
+  createBooking?: () => Promise<string>;
 }
 
 const fetcher = (url: string) => fetch(url).then(r => r.json());
@@ -28,8 +41,11 @@ export const ReviewPanel: React.FC<ReviewPanelProps> = ({
   onApplyCoupon,
   onConfirm,
   onClose,
-  timeDisplayOverride
+  timeDisplayOverride,
+  bookingId,
+  createBooking,
 }) => {
+  const { showAlert, showConfirm } = useAlert();
   const [useWallet, setUseWallet] = useState(false);
   const [selectedCouponCode, setSelectedCouponCode] = useState<string>('');
   const [isOffersOpen, setIsOffersOpen] = useState(false);
@@ -92,6 +108,100 @@ export const ReviewPanel: React.FC<ReviewPanelProps> = ({
   }
 
   const finalAmount = Math.max(0, priceAfterPoints - walletDeduction);
+
+  const [paymentOption, setPaymentOption] = useState<'ONLINE' | 'SPORTSVILLA_CARD'>('ONLINE');
+  const [nfcManualUid, setNfcManualUid] = useState<string>('');
+  const [nfcError, setNfcError] = useState<string | null>(null);
+  const [nfcStatus, setNfcStatus] = useState<string | null>(null);
+  const [isProcessingNfc, setIsProcessingNfc] = useState<boolean>(false);
+  const [nfcSuccess, setNfcSuccess] = useState<boolean>(false);
+
+  const handleCardTap = async (rawUid: string) => {
+    if (isProcessingNfc || nfcSuccess) return;
+    const cardUid = rawUid.toUpperCase().trim();
+    if (!cardUid || cardUid.length < 4) {
+      setNfcError('Invalid card UID.');
+      playNfcSound('error');
+      return;
+    }
+
+    setIsProcessingNfc(true);
+    setNfcError(null);
+    setNfcStatus(`Card ${cardUid} scanned. Processing payment...`);
+
+    try {
+      let activeBookingId = bookingId;
+      if (!activeBookingId && createBooking) {
+        setNfcStatus('Reserving court booking...');
+        activeBookingId = await createBooking();
+      }
+
+      setNfcStatus(`Charging ₹${finalAmount.toFixed(2)} to card ${cardUid}...`);
+
+      const payRes = await fetch('/api/nfc/pay', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          cardUid,
+          bookingId: activeBookingId || undefined,
+          amount: finalAmount,
+          description: `SportsVilla Card booking for ${selectedTurf}`,
+          deviceType: 'WEB_NFC',
+        }),
+      });
+
+      const payData = await payRes.json();
+
+      if (!payRes.ok || !payData.success) {
+        playNfcSound('error');
+        let errorMsg = payData.message || payData.error || 'Payment failed.';
+        if (payData.error === 'INSUFFICIENT_FUNDS') {
+          errorMsg = 'Insufficient Balance on SportsVilla Card.';
+        } else if (payData.error === 'CARD_BLOCKED') {
+          errorMsg = 'This card is blocked. Please contact front desk.';
+        } else if (payData.error === 'CARD_NOT_FOUND' || payData.error === 'UNREGISTERED_CARD') {
+          errorMsg = 'Unregistered Card. Please register at front desk.';
+        }
+        setNfcError(errorMsg);
+        setNfcStatus(null);
+        return;
+      }
+
+      playNfcSound('success');
+      setNfcSuccess(true);
+      setNfcStatus('Payment verified! Confirming booking...');
+
+      await onConfirm(
+        selectedCouponCode,
+        walletDeduction,
+        pointsDeduction,
+        undefined,
+        'SPORTSVILLA_CARD',
+        cardUid,
+        payData
+      );
+    } catch (err: any) {
+      console.error('NFC Payment failed in ReviewPanel:', err);
+      playNfcSound('error');
+      setNfcError(err.message || 'An unexpected error occurred during NFC payment.');
+      setNfcStatus(null);
+    } finally {
+      setIsProcessingNfc(false);
+    }
+  };
+
+  const {
+    isListening: isNfcListening,
+    isWebNfcSupported,
+    isWebNfcActive,
+    enableWebNfc,
+  } = useNfcReader({
+    enabled: paymentOption === 'SPORTSVILLA_CARD' && !isOtpMode,
+    playBeepOnScan: true,
+    onScan: async (cardUid) => {
+      await handleCardTap(cardUid);
+    },
+  });
 
   if (isOffersOpen) {
     return (
@@ -156,13 +266,21 @@ export const ReviewPanel: React.FC<ReviewPanelProps> = ({
       setOtpTimer(60);
       setOtp(['', '', '', '', '', '']);
     } catch (err: any) {
-      alert(err.message || 'Failed to send OTP');
+      showAlert('Error', err.message || 'Failed to send OTP', 'error');
     } finally {
       setIsSendingOtp(false);
     }
   };
 
   const handleProceedClick = () => {
+    if (paymentOption === 'SPORTSVILLA_CARD' && finalAmount > 0) {
+      if (nfcManualUid) {
+        handleCardTap(nfcManualUid);
+      } else {
+        setNfcStatus('Hold your card near reader or enter card UID above.');
+      }
+      return;
+    }
     if (walletDeduction > 0) {
       handleSendOtp();
     } else {
@@ -348,20 +466,174 @@ export const ReviewPanel: React.FC<ReviewPanelProps> = ({
         </div>
 
         {/* Payment Method Selector */}
-        {finalAmount > 0 && activeGateway === 'BOTH' && (
+        {finalAmount > 0 && (
           <div className="bg-[var(--play-surface)] rounded-2xl p-5 shadow-sm border border-[var(--play-border)] space-y-3">
-            <h3 className="font-bold text-[var(--play-text)] mb-4 border-b border-[var(--play-border)] pb-2">Select Payment Method</h3>
-            
+            <h3 className="font-bold text-[var(--play-text)] mb-3 border-b border-[var(--play-border)] pb-2 flex items-center justify-between">
+              <span>Select Payment Option</span>
+            </h3>
+
             <div className="space-y-2">
-              <label className={`flex items-center gap-3 p-3 rounded-xl border cursor-pointer transition-colors ${selectedGateway === 'PHONEPE' ? 'border-[var(--play-brand)] bg-[var(--play-brand-light)]/20' : 'border-[var(--play-border)] hover:bg-[var(--play-surface-alt)]'}`}>
-                <input type="radio" name="gateway" value="PHONEPE" checked={selectedGateway === 'PHONEPE'} onChange={() => setSelectedGateway('PHONEPE')} className="w-4 h-4 text-[var(--play-brand)] focus:ring-[var(--play-brand)]" />
-                <span className="font-medium text-[var(--play-text)]">PhonePe</span>
+              <label className={`flex items-center gap-3 p-3.5 rounded-xl border cursor-pointer transition-all ${
+                paymentOption === 'ONLINE'
+                  ? 'border-[var(--play-brand)] bg-[var(--play-brand-light)]/20 shadow-sm'
+                  : 'border-[var(--play-border)] hover:bg-[var(--play-surface-alt)]'
+              }`}>
+                <input
+                  type="radio"
+                  name="paymentOption"
+                  value="ONLINE"
+                  checked={paymentOption === 'ONLINE'}
+                  onChange={() => {
+                    setPaymentOption('ONLINE');
+                    setNfcError(null);
+                  }}
+                  className="w-4 h-4 text-[var(--play-brand)] focus:ring-[var(--play-brand)]"
+                />
+                <div className="flex-1 flex items-center justify-between">
+                  <span className="font-semibold text-[var(--play-text)]">Pay Online (UPI / Gateway)</span>
+                  <span className="text-xs text-[var(--play-text-muted)] font-medium">Instant</span>
+                </div>
               </label>
-              
-              <label className={`flex items-center gap-3 p-3 rounded-xl border cursor-pointer transition-colors ${selectedGateway === 'RAZORPAY' ? 'border-[var(--play-brand)] bg-[var(--play-brand-light)]/20' : 'border-[var(--play-border)] hover:bg-[var(--play-surface-alt)]'}`}>
-                <input type="radio" name="gateway" value="RAZORPAY" checked={selectedGateway === 'RAZORPAY'} onChange={() => setSelectedGateway('RAZORPAY')} className="w-4 h-4 text-[var(--play-brand)] focus:ring-[var(--play-brand)]" />
-                <span className="font-medium text-[var(--play-text)]">Razorpay</span>
+
+              <label className={`flex items-center gap-3 p-3.5 rounded-xl border cursor-pointer transition-all ${
+                paymentOption === 'SPORTSVILLA_CARD'
+                  ? 'border-[var(--play-brand)] bg-[var(--play-brand-light)]/20 shadow-sm'
+                  : 'border-[var(--play-border)] hover:bg-[var(--play-surface-alt)]'
+              }`}>
+                <input
+                  type="radio"
+                  name="paymentOption"
+                  value="SPORTSVILLA_CARD"
+                  checked={paymentOption === 'SPORTSVILLA_CARD'}
+                  onChange={() => {
+                    setPaymentOption('SPORTSVILLA_CARD');
+                    setNfcError(null);
+                    setNfcStatus(null);
+                  }}
+                  className="w-4 h-4 text-[var(--play-brand)] focus:ring-[var(--play-brand)]"
+                />
+                <div className="flex-1 flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <span className="font-semibold text-[var(--play-text)]">Accept SportsVilla Card</span>
+                    <span className="px-2 py-0.5 text-[10px] font-bold bg-orange-500/10 text-orange-500 border border-orange-500/20 rounded-full">NFC</span>
+                  </div>
+                  <span className="text-xs text-[var(--play-text-muted)] font-medium">Tap to Pay</span>
+                </div>
               </label>
+            </div>
+
+            {/* Sub-gateway selector for Online payment if BOTH */}
+            {paymentOption === 'ONLINE' && activeGateway === 'BOTH' && (
+              <div className="pt-3 border-t border-[var(--play-border)] mt-3">
+                <span className="text-xs font-semibold text-[var(--play-text-muted)] uppercase tracking-wider block mb-2">Gateway</span>
+                <div className="grid grid-cols-2 gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setSelectedGateway('PHONEPE')}
+                    className={`py-2 px-3 rounded-lg border text-sm font-semibold transition-colors ${
+                      selectedGateway === 'PHONEPE'
+                        ? 'border-[var(--play-brand)] bg-[var(--play-brand)] text-white'
+                        : 'border-[var(--play-border)] text-[var(--play-text)] hover:bg-[var(--play-surface-alt)]'
+                    }`}
+                  >
+                    PhonePe
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setSelectedGateway('RAZORPAY')}
+                    className={`py-2 px-3 rounded-lg border text-sm font-semibold transition-colors ${
+                      selectedGateway === 'RAZORPAY'
+                        ? 'border-[var(--play-brand)] bg-[var(--play-brand)] text-white'
+                        : 'border-[var(--play-border)] text-[var(--play-text)] hover:bg-[var(--play-surface-alt)]'
+                    }`}
+                  >
+                    Razorpay
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Interactive Tap State / Prompt for SportsVilla Card */}
+        {finalAmount > 0 && paymentOption === 'SPORTSVILLA_CARD' && (
+          <div className="bg-[var(--play-surface)] rounded-2xl p-6 shadow-sm border-2 border-[var(--play-brand)]/40 text-center space-y-4">
+            <div className="relative flex items-center justify-center py-2">
+              <div className="relative flex items-center justify-center">
+                <div className="w-20 h-20 rounded-full bg-[var(--play-brand-light)] border border-[var(--play-brand)]/30 flex items-center justify-center text-[var(--play-brand-dark)] animate-pulse shadow-md">
+                  <CreditCard className="w-9 h-9" />
+                </div>
+                <div className="absolute inset-0 rounded-full border-2 border-[var(--play-brand)] animate-ping opacity-25 pointer-events-none" />
+              </div>
+            </div>
+
+            <div>
+              <h4 className="text-lg font-bold font-outfit text-[var(--play-text)]">
+                Tap your SportsVilla Card
+              </h4>
+              <p className="text-sm text-[var(--play-text-muted)] max-w-xs mx-auto mt-1">
+                Hold your physical card near the NFC reader or back of this device to pay ₹{finalAmount.toFixed(2)}.
+              </p>
+            </div>
+
+            {isNfcListening && (
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-emerald-500/10 border border-emerald-500/20 rounded-full text-xs font-semibold text-emerald-600">
+                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping" />
+                Reader Ready — Tap Card Now
+              </div>
+            )}
+
+            {isWebNfcSupported && !isWebNfcActive && (
+              <div>
+                <button
+                  type="button"
+                  onClick={enableWebNfc}
+                  className="text-xs text-[var(--play-brand)] font-bold hover:underline"
+                >
+                  Enable Device NFC Sensor
+                </button>
+              </div>
+            )}
+
+            {nfcError && (
+              <div className="p-3.5 bg-red-500/10 border border-red-500/20 rounded-xl text-sm text-red-500 font-semibold flex items-center gap-2 text-left">
+                <AlertCircle className="w-5 h-5 shrink-0" />
+                <span>{nfcError}</span>
+              </div>
+            )}
+
+            {nfcStatus && (
+              <div className="p-3.5 bg-blue-500/10 border border-blue-500/20 rounded-xl text-sm text-blue-500 font-medium flex items-center justify-center gap-2">
+                {isProcessingNfc && <Loader2 className="w-4 h-4 animate-spin" />}
+                <span>{nfcStatus}</span>
+              </div>
+            )}
+
+            {/* Manual Card UID fallback / testing input */}
+            <div className="pt-3 border-t border-[var(--play-border)] text-left">
+              <label className="block text-xs font-semibold text-[var(--play-text-muted)] mb-2">
+                Manual Card UID Entry (Testing / Scanner)
+              </label>
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  value={nfcManualUid}
+                  onChange={(e) => setNfcManualUid(e.target.value.toUpperCase().trim())}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') handleCardTap(nfcManualUid);
+                  }}
+                  placeholder="e.g. 04A1B2C3"
+                  className="flex-1 bg-[var(--play-surface-alt)] border border-[var(--play-border)] rounded-xl px-3.5 py-2.5 text-sm font-mono text-[var(--play-text)] uppercase focus:outline-none focus:border-[var(--play-brand)]"
+                />
+                <button
+                  type="button"
+                  onClick={() => handleCardTap(nfcManualUid)}
+                  disabled={!nfcManualUid || isProcessingNfc || nfcSuccess}
+                  className="px-4 py-2.5 bg-[var(--play-brand)] hover:bg-[var(--play-brand-dark)] text-white text-sm font-bold rounded-xl transition-colors disabled:opacity-50 flex items-center gap-1.5 shrink-0"
+                >
+                  {isProcessingNfc ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Pay'}
+                </button>
+              </div>
             </div>
           </div>
         )}
@@ -399,10 +671,18 @@ export const ReviewPanel: React.FC<ReviewPanelProps> = ({
           <button 
             type="button"
             onClick={handleProceedClick}
-            disabled={isSendingOtp}
+            disabled={isSendingOtp || isProcessingNfc}
             className="flex-1 shrink-0 whitespace-nowrap bg-[var(--play-brand)] hover:bg-[var(--play-brand-dark)] text-white py-4 px-6 rounded-xl font-bold text-base transition-colors shadow-sm flex items-center justify-center disabled:opacity-70"
           >
-            {isSendingOtp ? <Loader2 className="w-5 h-5 animate-spin" /> : (finalAmount === 0 ? 'Confirm Booking' : 'Proceed to Pay')}
+            {isSendingOtp || isProcessingNfc ? (
+              <Loader2 className="w-5 h-5 animate-spin" />
+            ) : paymentOption === 'SPORTSVILLA_CARD' && finalAmount > 0 ? (
+              nfcManualUid ? `Pay ₹${finalAmount.toFixed(2)}` : `Tap Card to Pay ₹${finalAmount.toFixed(2)}`
+            ) : finalAmount === 0 ? (
+              'Confirm Booking'
+            ) : (
+              'Proceed to Pay'
+            )}
           </button>
         </div>
       </div>

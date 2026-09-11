@@ -6,7 +6,7 @@ import { useAlert } from "@/components/AlertProvider";
 import { FiTrash2, FiEdit2, FiPlus, FiX, FiCheck, FiLayers, FiUsers } from "react-icons/fi";
 
 export default function PlansClient({ initialPlans, sports }: { initialPlans: any[], sports: any[] }) {
-  const { showAlert } = useAlert();
+  const { showAlert, showConfirm } = useAlert();
   const router = useRouter();
   const [plans, setPlans] = useState(initialPlans);
   const [showModal, setShowModal] = useState(false);
@@ -63,14 +63,23 @@ export default function PlansClient({ initialPlans, sports }: { initialPlans: an
   }
 
   async function handleDelete(id: string) {
-    if (!confirm("Are you sure?")) return;
-    try {
-      await deletePlan(id);
-      setPlans(plans.filter(p => p.id !== id));
-      showAlert("Plan Deleted", "The membership plan has been permanently removed.", "success");
-    } catch (err) {
-      showAlert("Deletion Blocked", "Cannot delete this plan because there are active members currently enrolled in it.", "error");
-    }
+    showConfirm(
+      "Confirm Deletion",
+      "Are you sure?",
+      async () => {
+        try {
+          await deletePlan(id);
+          setPlans(plans.filter(p => p.id !== id));
+          showAlert("Plan Deleted", "The membership plan has been permanently removed.", "success");
+        } catch (err) {
+          showAlert("Deletion Blocked", "Cannot delete this plan because there are active members currently enrolled in it.", "error");
+        }
+      },
+      undefined,
+      "Delete",
+      "Cancel",
+      "error"
+    );
   }
 
   return (

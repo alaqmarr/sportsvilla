@@ -487,6 +487,36 @@ exports.Prisma.UserSportStatScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.NfcCardScalarFieldEnum = {
+  id: 'id',
+  cardUid: 'cardUid',
+  cardId: 'cardId',
+  memberId: 'memberId',
+  status: 'status',
+  issuedAt: 'issuedAt',
+  lastUsedAt: 'lastUsedAt',
+  notes: 'notes',
+  assignedBy: 'assignedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.NfcTransactionScalarFieldEnum = {
+  id: 'id',
+  cardId: 'cardId',
+  cardUid: 'cardUid',
+  memberId: 'memberId',
+  bookingId: 'bookingId',
+  type: 'type',
+  status: 'status',
+  amount: 'amount',
+  deviceType: 'deviceType',
+  readerLocation: 'readerLocation',
+  failureReason: 'failureReason',
+  metadata: 'metadata',
+  createdAt: 'createdAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -531,7 +561,9 @@ exports.Prisma.ModelName = {
   LastUpdate: 'LastUpdate',
   AuditLog: 'AuditLog',
   Banner: 'Banner',
-  UserSportStat: 'UserSportStat'
+  UserSportStat: 'UserSportStat',
+  NfcCard: 'NfcCard',
+  NfcTransaction: 'NfcTransaction'
 };
 
 /**

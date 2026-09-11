@@ -76,6 +76,14 @@ export function Navigation({
       ]
     },
     {
+      title: "NFC & Cards",
+      links: [
+        { href: "/admin/nfc/assign", label: "Card Assignment", icon: <FiCreditCard /> },
+        { href: "/admin/nfc/transactions", label: "NFC Ledger", icon: <FiFileText /> },
+        { href: "/admin/nfc/kiosk", label: "Check-in Kiosk", icon: <FiShield /> },
+      ]
+    },
+    {
       title: "Management",
       links: [
         { href: "/members", label: "Members Directory", icon: <FiUsers /> },
@@ -222,7 +230,7 @@ export function Navigation({
       
       <main
         className={`flex-1 w-full lg:max-w-[calc(100vw-16rem)] lg:ml-64 overflow-x-hidden ${
-          pathname.startsWith("/whatsapp-admin") ? "p-0" : "p-4 lg:p-10"
+          pathname.startsWith("/whatsapp-admin") || pathname.includes("/kiosk") ? "p-0" : "p-4 lg:p-6"
         }`}
       >
         {!canViewPage(admin, pathname) ? (

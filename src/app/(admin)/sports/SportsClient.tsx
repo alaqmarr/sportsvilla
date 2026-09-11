@@ -5,7 +5,7 @@ import { useAlert } from "@/components/AlertProvider";
 import { FiTrash2, FiEdit2, FiPlus, FiX, FiActivity } from "react-icons/fi";
 
 export default function SportsClient({ initialSports, availableIcons }: { initialSports: any[], availableIcons: {value: string, label: string}[] }) {
-  const { showAlert } = useAlert();
+  const { showAlert, showConfirm } = useAlert();
   const [sports, setSports] = useState(initialSports);
   const [showModal, setShowModal] = useState(false);
   const [showIconModal, setShowIconModal] = useState(false);
@@ -45,14 +45,23 @@ export default function SportsClient({ initialSports, availableIcons }: { initia
   }
 
   async function handleDelete(id: string) {
-    if (!confirm("Are you sure?")) return;
-    try {
-      await deleteSport(id);
-      setSports(sports.filter(s => s.id !== id));
-      showAlert("Sport Deleted", "The sport has been permanently removed.", "success");
-    } catch (err) {
-      showAlert("Deletion Blocked", "Cannot delete this sport because it is currently linked to active membership plans or turfs.", "error");
-    }
+    showConfirm(
+      "Confirm Deletion",
+      "Are you sure?",
+      async () => {
+        try {
+          await deleteSport(id);
+          setSports(sports.filter(s => s.id !== id));
+          showAlert("Sport Deleted", "The sport has been permanently removed.", "success");
+        } catch (err) {
+          showAlert("Deletion Blocked", "Cannot delete this sport because it is currently linked to active membership plans or turfs.", "error");
+        }
+      },
+      undefined,
+      "Delete",
+      "Cancel",
+      "error"
+    );
   }
 
   return (

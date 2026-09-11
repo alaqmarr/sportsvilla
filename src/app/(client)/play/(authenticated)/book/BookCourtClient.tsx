@@ -50,18 +50,16 @@ export function BookCourtClient({ member, sports, availability, initialDateStr, 
   const dateStr = `${selectedDate.getFullYear()}-${String(selectedDate.getMonth() + 1).padStart(2, '0')}-${String(selectedDate.getDate()).padStart(2, '0')}`;
   const selectedTurfDetails = availability?.turfs?.find((t: any) => t.id === selectedTurf);
 
-  const handleConfirmBooking = async (promoCode: string, walletDeduction: number, pointsDeduction: number, walletOtp?: string, preferredGateway?: string) => {
-    if (!selectedTurf) return;
-    
-    // Create Date objects from selected slots
-    const convertTo24Hour = (timeStr: string) => {
-      const [time, modifier] = timeStr.split(' ');
-      let [hours, minutes] = time.split(':');
-      if (hours === '12') hours = '00';
-      if (modifier === 'PM') hours = (parseInt(hours, 10) + 12).toString();
-      return `${hours.padStart(2, '0')}:${minutes}`;
-    };
-    
+  // Helper to calculate Date objects from selected slots
+  const convertTo24Hour = (timeStr: string) => {
+    const [time, modifier] = timeStr.split(' ');
+    let [hours, minutes] = time.split(':');
+    if (hours === '12') hours = '00';
+    if (modifier === 'PM') hours = (parseInt(hours, 10) + 12).toString();
+    return `${hours.padStart(2, '0')}:${minutes}`;
+  };
+
+  const calculateSlotTimes = () => {
     const dateStrAPI = `${selectedDate.getFullYear()}-${String(selectedDate.getMonth() + 1).padStart(2, '0')}-${String(selectedDate.getDate()).padStart(2, '0')}`;
     const firstSlot = selectedSlots[0];
     const lastSlot = selectedSlots[selectedSlots.length - 1];
@@ -70,6 +68,30 @@ export function BookCourtClient({ member, sports, availability, initialDateStr, 
     const durationMins = selectedTurfDetails?.bookingDurationMinutes || 60;
     const endDateTime = new Date(`${dateStrAPI}T${convertTo24Hour(lastSlot)}:00+05:30`);
     endDateTime.setMinutes(endDateTime.getMinutes() + durationMins);
+    return { startDateTime, endDateTime };
+  };
+
+  const handleConfirmBooking = async (
+    promoCode: string,
+    walletDeduction: number,
+    pointsDeduction: number,
+    walletOtp?: string,
+    preferredGateway?: string,
+    cardUid?: string,
+    paymentResponse?: any
+  ) => {
+    if (!selectedTurf) return;
+
+    if (preferredGateway === 'SPORTSVILLA_CARD' && paymentResponse?.bookingId) {
+      setIsCheckoutOpen(false);
+      setProcessStatus('success');
+      setTimeout(() => {
+        router.push(`/play/bookings/${paymentResponse.bookingId}`);
+      }, 1500);
+      return;
+    }
+
+    const { startDateTime, endDateTime } = calculateSlotTimes();
 
     setProcessStatus('processing');
     try {
@@ -78,7 +100,9 @@ export function BookCourtClient({ member, sports, availability, initialDateStr, 
       const gateway = configData?.config?.activeGateway || 'NONE';
       
       let finalGateway = gateway;
-      if (gateway === 'BOTH') {
+      if (preferredGateway === 'SPORTSVILLA_CARD') {
+        finalGateway = 'SPORTSVILLA_CARD';
+      } else if (gateway === 'BOTH') {
         if (!preferredGateway) {
           setProcessStatus('error');
           setProcessMessage('Please select a payment method.');
@@ -108,6 +132,31 @@ export function BookCourtClient({ member, sports, availability, initialDateStr, 
       
       const result = await res.json();
       if (res.ok && result.booking) {
+        if (finalGateway === 'SPORTSVILLA_CARD') {
+          if (cardUid && result.booking.amountDue > 0) {
+            const payRes = await fetch('/api/nfc/pay', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                cardUid,
+                bookingId: result.booking.id,
+                amount: result.booking.amountDue,
+                description: `SportsVilla Card booking for ${selectedTurfDetails?.name || 'court'}`,
+                deviceType: 'WEB_NFC'
+              })
+            });
+            const payData = await payRes.json();
+            if (!payData.success) {
+              throw new Error(payData.message || payData.error || 'NFC card payment failed');
+            }
+          }
+          setIsCheckoutOpen(false);
+          setProcessStatus('success');
+          setTimeout(() => {
+            router.push(`/play/bookings/${result.booking.id}`);
+          }, 1500);
+          return;
+        }
         if (result.booking.amountDue > 0) {
           try {
             if (finalGateway === 'RAZORPAY') {
@@ -374,6 +423,28 @@ export function BookCourtClient({ member, sports, availability, initialDateStr, 
             onApplyCoupon={() => {}}
             onRedeemPoints={() => {}}
             onConfirm={handleConfirmBooking}
+            createBooking={async () => {
+              const { startDateTime, endDateTime } = calculateSlotTimes();
+              const res = await fetch('/api/client/v1/bookings', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  memberId: member.id,
+                  turfId: selectedTurf,
+                  sportId: selectedSportId,
+                  startTime: startDateTime.toISOString(),
+                  endTime: endDateTime.toISOString(),
+                  participantCount: 1,
+                  walletAmountToUse: 0,
+                  pointsAmountToUse: 0
+                }),
+              });
+              const data = await res.json();
+              if (!res.ok || !data.booking) {
+                throw new Error(data.error || 'Failed to initialize booking');
+              }
+              return data.booking.id;
+            }}
           />
         </Modal>
       )}

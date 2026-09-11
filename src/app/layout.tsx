@@ -1,5 +1,6 @@
 import "./globals.css";
 import { AlertProvider } from "@/components/AlertProvider";
+import { NfcSimulatorPanel } from "@/components/nfc/NfcSimulatorPanel";
 
 export const metadata = {
   title: "Sportsvilla Management",
@@ -22,8 +23,10 @@ export default function RootLayout({
       <body>
         <AlertProvider>
           {children}
+          <NfcSimulatorPanel />
         </AlertProvider>
       </body>
     </html>
   );
 }
+

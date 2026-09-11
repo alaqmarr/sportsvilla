@@ -6,9 +6,11 @@ import QRCodeLib from "qrcode";
 import { formatIST, todayIST } from "@/lib/dateUtils";
 import { FiXCircle, FiCheckCircle, FiClock, FiCreditCard, FiTrash2, FiMaximize2, FiUser, FiMapPin, FiX, FiCheck, FiMonitor, FiPrinter, FiCalendar, FiFileText } from "react-icons/fi";
 import { rescheduleBooking } from "./actions";
+import { useNfcReader } from "@/hooks/useNfcReader";
+import { playNfcSound } from "@/lib/soundUtils";
 
 export default function ManageBookings() {
-  const { showAlert } = useAlert();
+  const { showAlert, showConfirm } = useAlert();
   const [date, setDate] = useState(todayIST());
   const [bookings, setBookings] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -18,6 +20,10 @@ export default function ManageBookings() {
   const [cashAmount, setCashAmount] = useState<number | "">(0);
   const [onlineAmount, setOnlineAmount] = useState<number | "">(0);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [paymentMode, setPaymentMode] = useState<"SPLIT" | "SPORTSVILLA_CARD">("SPLIT");
+  const [nfcCardUid, setNfcCardUid] = useState<string>("");
+  const [nfcStatus, setNfcStatus] = useState<string | null>(null);
+  const [nfcError, setNfcError] = useState<string | null>(null);
 
   // Extension Modal State
   const [extModal, setExtModal] = useState<{
@@ -58,14 +64,23 @@ export default function ManageBookings() {
   }
 
   async function handleCancel(id: string) {
-    if (!confirm("Are you sure you want to cancel this booking?")) return;
-    try {
-      await cancelBooking(id);
-      showAlert("Success", "Booking cancelled", "success");
-      loadBookings();
-    } catch (e: any) {
-      showAlert("Error", e.message || "Failed to cancel", "error");
-    }
+    showConfirm(
+      "Confirm Cancellation",
+      "Are you sure you want to cancel this booking?",
+      async () => {
+        try {
+          await cancelBooking(id);
+          showAlert("Success", "Booking cancelled", "success");
+          loadBookings();
+        } catch (e: any) {
+          showAlert("Error", e.message || "Failed to cancel", "error");
+        }
+      },
+      undefined,
+      "Cancel",
+      "Keep",
+      "error"
+    );
   }
 
   const handleExportCSV = () => {
@@ -153,9 +168,65 @@ export default function ManageBookings() {
     }
   }
 
+  const {
+    isListening: isNfcListening,
+    isWebNfcSupported,
+    isWebNfcActive,
+    enableWebNfc,
+  } = useNfcReader({
+    enabled: payModal.show && paymentMode === "SPORTSVILLA_CARD",
+    playBeepOnScan: true,
+    onScan: async (cardUid) => {
+      setNfcCardUid(cardUid);
+      setNfcError(null);
+      setNfcStatus(`Card ${cardUid} detected! Processing payment...`);
+      await handleNfcPayment(cardUid);
+    },
+  });
+
+  async function handleNfcPayment(overrideUid?: string) {
+    if (!payModal.booking) return;
+    const uid = (overrideUid || nfcCardUid || "").trim();
+    if (!uid) {
+      setNfcError("Please scan or enter card UID.");
+      playNfcSound("error");
+      return;
+    }
+
+    const totalPaid = payModal.booking.payments?.reduce((sum: number, p: any) => sum + p.amount, 0) || 0;
+    const balance = Math.max(0, payModal.booking.price - (payModal.booking.discountAmount || 0) - totalPaid);
+    if (balance <= 0) {
+      showAlert("Notice", "Booking is already fully paid.", "error");
+      return;
+    }
+
+    setIsProcessing(true);
+    setNfcError(null);
+    setNfcStatus(`Deducting ₹${balance.toFixed(2)} with card ${uid}...`);
+
+    try {
+      await addPayment(payModal.booking.id, balance, "SPORTSVILLA_CARD", uid);
+      playNfcSound("success");
+      showAlert("Success", `Payment of ₹${balance.toFixed(2)} recorded via SportsVilla Card!`, "success");
+      closePayModal();
+      loadBookings();
+    } catch (err: any) {
+      console.error("NFC payment error:", err);
+      playNfcSound("error");
+      setNfcError(err.message || "Failed to process card payment.");
+      setNfcStatus(null);
+    } finally {
+      setIsProcessing(false);
+    }
+  }
+
   async function openPayModal(booking: any) {
     setCashAmount(0);
     setOnlineAmount(0);
+    setPaymentMode("SPLIT");
+    setNfcCardUid("");
+    setNfcStatus(null);
+    setNfcError(null);
     let qrUrl = "";
     
     const totalPaid = booking.payments?.reduce((sum: number, p: any) => sum + p.amount, 0) || 0;
@@ -171,6 +242,10 @@ export default function ManageBookings() {
 
   function closePayModal() {
     updateDisplaySession({ status: "IDLE" }).catch(() => {});
+    setPaymentMode("SPLIT");
+    setNfcCardUid("");
+    setNfcStatus(null);
+    setNfcError(null);
     setPayModal({ show: false, booking: null, qrData: "" });
   }
 
@@ -492,72 +567,178 @@ export default function ManageBookings() {
                   </div>
                 </div>
 
-                <div className="space-y-4 mb-6">
-                  <div className="flex gap-4">
-                    <div className="flex-1">
-                      <label className="block text-xs uppercase tracking-wider font-semibold text-gray-500 mb-2">Cash (₹)</label>
-                      <input 
-                        type="text" 
-                        inputMode="numeric"
-                        pattern="[0-9]*"
-                        className="w-full bg-[#1c1f2e] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white focus:border-emerald-500/50 focus:outline-none"
-                        value={cashAmount}
-                        onChange={e => {
-                          const valStr = e.target.value.replace(/\D/g, '');
-                          if (valStr === '') {
-                            setCashAmount('');
-                            return;
-                          }
-                          const val = parseInt(valStr, 10);
-                          setCashAmount(val);
-                          if (val + (Number(onlineAmount) || 0) > balance) {
-                            setOnlineAmount(Math.max(0, balance - val));
-                          }
-                        }}
-                        placeholder="0"
-                      />
-                    </div>
-                    <div className="flex-1">
-                      <label className="block text-xs uppercase tracking-wider font-semibold text-gray-500 mb-2">Online (₹)</label>
-                      <input 
-                        type="text" 
-                        inputMode="numeric"
-                        pattern="[0-9]*"
-                        className="w-full bg-[#1c1f2e] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white focus:border-emerald-500/50 focus:outline-none"
-                        value={onlineAmount}
-                        onChange={e => {
-                          const valStr = e.target.value.replace(/\D/g, '');
-                          if (valStr === '') {
-                            setOnlineAmount('');
-                            return;
-                          }
-                          const val = parseInt(valStr, 10);
-                          setOnlineAmount(val);
-                          if (val + (Number(cashAmount) || 0) > balance) {
-                            setCashAmount(Math.max(0, balance - val));
-                          }
-                        }}
-                        placeholder="0"
-                      />
-                    </div>
-                  </div>
+                {/* Payment Method Selector */}
+                <div className="flex bg-[#0f1117] p-1 rounded-xl border border-[#2a2d3e] mb-4">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setPaymentMode("SPLIT");
+                      setNfcError(null);
+                    }}
+                    className={`flex-1 py-2 px-3 rounded-lg text-sm font-bold transition-all ${
+                      paymentMode === "SPLIT"
+                        ? "bg-emerald-500 text-white shadow"
+                        : "text-gray-400 hover:text-white"
+                    }`}
+                  >
+                    Cash / UPI
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setPaymentMode("SPORTSVILLA_CARD");
+                      setNfcError(null);
+                      setNfcStatus(null);
+                    }}
+                    className={`flex-1 py-2 px-3 rounded-lg text-sm font-bold transition-all flex items-center justify-center gap-2 ${
+                      paymentMode === "SPORTSVILLA_CARD"
+                        ? "bg-orange-500 text-white shadow"
+                        : "text-gray-400 hover:text-white"
+                    }`}
+                  >
+                    <FiCreditCard size={16} /> SportsVilla Card
+                  </button>
                 </div>
 
-                <div className="flex gap-3">
-                  <button 
-                    onClick={handleCastToDisplay}
-                    className="flex-1 bg-[#1c1f2e] border border-emerald-500/30 hover:bg-emerald-500/10 text-emerald-400 rounded-lg py-3 font-bold transition-colors flex items-center justify-center gap-2"
-                  >
-                    <FiMonitor /> Cast
-                  </button>
-                  <button 
-                    onClick={handleRecordPayment}
-                    disabled={isProcessing}
-                    className="flex-[2] bg-emerald-500 hover:bg-emerald-600 text-white rounded-lg py-3 font-bold transition-colors border-none disabled:opacity-50"
-                  >
-                    {isProcessing ? "Saving..." : "Record Payment"}
-                  </button>
-                </div>
+                {paymentMode === "SPORTSVILLA_CARD" ? (
+                  <div className="space-y-4 mb-6">
+                    <div className="bg-[#0f1117] border border-orange-500/30 rounded-xl p-5 text-center flex flex-col items-center">
+                      <div className="relative mb-3 flex items-center justify-center">
+                        <div className="w-16 h-16 rounded-full bg-orange-500/10 border border-orange-500/30 flex items-center justify-center text-orange-400 animate-pulse">
+                          <FiCreditCard size={28} />
+                        </div>
+                      </div>
+                      <p className="text-white font-bold mb-1">Tap SportsVilla Card</p>
+                      <p className="text-xs text-gray-400 max-w-[260px] mb-3">
+                        Hold member card near NFC USB reader or device to collect ₹{Number(balance.toFixed(2))}
+                      </p>
+
+                      {isNfcListening && (
+                        <div className="inline-flex items-center gap-2 px-3 py-1 bg-emerald-500/10 border border-emerald-500/30 rounded-full text-xs font-semibold text-emerald-400 mb-2">
+                          <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
+                          Reader Active & Listening
+                        </div>
+                      )}
+
+                      {isWebNfcSupported && !isWebNfcActive && (
+                        <button
+                          type="button"
+                          onClick={enableWebNfc}
+                          className="text-xs text-orange-400 underline hover:text-orange-300 mb-2"
+                        >
+                          Enable Tablet Web NFC
+                        </button>
+                      )}
+                    </div>
+
+                    {nfcError && (
+                      <div className="p-3 bg-red-500/10 border border-red-500/30 rounded-lg text-xs text-red-400 font-medium">
+                        {nfcError}
+                      </div>
+                    )}
+
+                    {nfcStatus && (
+                      <div className="p-3 bg-orange-500/10 border border-orange-500/30 rounded-lg text-xs text-orange-400 font-medium">
+                        {nfcStatus}
+                      </div>
+                    )}
+
+                    <div>
+                      <label className="block text-xs uppercase tracking-wider font-semibold text-gray-500 mb-2">
+                        Card UID (Manual / Scanner)
+                      </label>
+                      <div className="flex gap-2">
+                        <input
+                          type="text"
+                          value={nfcCardUid}
+                          onChange={(e) => setNfcCardUid(e.target.value.toUpperCase().trim())}
+                          onKeyDown={(e) => {
+                            if (e.key === "Enter") handleNfcPayment();
+                          }}
+                          placeholder="04A1B2C3"
+                          className="flex-1 bg-[#1c1f2e] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white font-mono uppercase focus:border-orange-500/50 focus:outline-none"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => handleNfcPayment()}
+                          disabled={!nfcCardUid || isProcessing}
+                          className="bg-orange-500 hover:bg-orange-600 text-white font-bold px-5 rounded-lg disabled:opacity-50 transition-colors flex items-center justify-center gap-2"
+                        >
+                          {isProcessing ? "Charging..." : `Charge ₹${Number(balance.toFixed(2))}`}
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  <>
+                    <div className="space-y-4 mb-6">
+                      <div className="flex gap-4">
+                        <div className="flex-1">
+                          <label className="block text-xs uppercase tracking-wider font-semibold text-gray-500 mb-2">Cash (₹)</label>
+                          <input 
+                            type="text" 
+                            inputMode="numeric"
+                            pattern="[0-9]*"
+                            className="w-full bg-[#1c1f2e] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white focus:border-emerald-500/50 focus:outline-none"
+                            value={cashAmount}
+                            onChange={e => {
+                              const valStr = e.target.value.replace(/\D/g, '');
+                              if (valStr === '') {
+                                setCashAmount('');
+                                return;
+                              }
+                              const val = parseInt(valStr, 10);
+                              setCashAmount(val);
+                              if (val + (Number(onlineAmount) || 0) > balance) {
+                                setOnlineAmount(Math.max(0, balance - val));
+                              }
+                            }}
+                            placeholder="0"
+                          />
+                        </div>
+                        <div className="flex-1">
+                          <label className="block text-xs uppercase tracking-wider font-semibold text-gray-500 mb-2">Online (₹)</label>
+                          <input 
+                            type="text" 
+                            inputMode="numeric"
+                            pattern="[0-9]*"
+                            className="w-full bg-[#1c1f2e] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white focus:border-emerald-500/50 focus:outline-none"
+                            value={onlineAmount}
+                            onChange={e => {
+                              const valStr = e.target.value.replace(/\D/g, '');
+                              if (valStr === '') {
+                                setOnlineAmount('');
+                                return;
+                              }
+                              const val = parseInt(valStr, 10);
+                              setOnlineAmount(val);
+                              if (val + (Number(cashAmount) || 0) > balance) {
+                                setCashAmount(Math.max(0, balance - val));
+                              }
+                            }}
+                            placeholder="0"
+                          />
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="flex gap-3">
+                      <button 
+                        onClick={handleCastToDisplay}
+                        className="flex-1 bg-[#1c1f2e] border border-emerald-500/30 hover:bg-emerald-500/10 text-emerald-400 rounded-lg py-3 font-bold transition-colors flex items-center justify-center gap-2"
+                      >
+                        <FiMonitor /> Cast
+                      </button>
+                      <button 
+                        onClick={handleRecordPayment}
+                        disabled={isProcessing}
+                        className="flex-[2] bg-emerald-500 hover:bg-emerald-600 text-white rounded-lg py-3 font-bold transition-colors border-none disabled:opacity-50"
+                      >
+                        {isProcessing ? "Saving..." : "Record Payment"}
+                      </button>
+                    </div>
+                  </>
+                )}
               </div>
 
               {/* Right Side: QR Code */}

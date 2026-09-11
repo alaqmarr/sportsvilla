@@ -8,12 +8,14 @@ import { SportChips } from '@/components/play/SportChips'
 import { SlotGrid } from '@/components/play/SlotGrid'
 import { ChevronLeft, Calendar } from 'lucide-react'
 import Link from 'next/link'
+import { useAlert } from '@/components/AlertProvider'
 
 const fetcher = (url: string) => fetch(url).then(res => res.json())
 
 export default function ReschedulePage() {
   const { id } = useParams()
   const router = useRouter()
+  const { showAlert } = useAlert()
   const [selectedDate, setSelectedDate] = useState(new Date())
   const [selectedSlots, setSelectedSlots] = useState<string[]>([])
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -45,10 +47,10 @@ export default function ReschedulePage() {
       if (res.ok) {
         router.push(`/play/bookings/${id}`)
       } else {
-        alert('Failed to reschedule')
+        showAlert('Error', 'Failed to reschedule', 'error')
       }
     } catch (error) {
-      alert('Error scheduling')
+      showAlert('Error', 'Error scheduling', 'error')
     } finally {
       setIsSubmitting(false)
     }

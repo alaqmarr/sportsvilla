@@ -11,7 +11,7 @@ import QRCodeLib from "qrcode";
 import { FiTrash2, FiEdit2, FiPlus, FiX, FiDownload, FiImage, FiMessageCircle, FiUserCheck, FiUsers, FiFileText, FiRefreshCcw } from "react-icons/fi";
 
 export default function MembersClient({ initialMembers, plans, turfs = [] }: { initialMembers: any[], plans: any[], turfs?: any[] }) {
-  const { showAlert } = useAlert();
+  const { showAlert, showConfirm } = useAlert();
   const searchParams = useSearchParams();
   const [members, setMembers] = useState(initialMembers);
   
@@ -111,15 +111,24 @@ export default function MembersClient({ initialMembers, plans, turfs = [] }: { i
   };
 
   async function handleResetWallet(id: string) {
-    if (!confirm("Are you sure you want to reset this user's wallet balance to ₹0?")) return;
-    try {
-      await resetWallet(id);
-      showAlert("Success", "Wallet balance reset to 0.", "success");
-      const updatedMembers = members.map(m => m.id === id ? { ...m, walletBalance: 0 } : m);
-      setMembers(updatedMembers);
-    } catch (e: any) {
-      showAlert("Error", e.message, "error");
-    }
+    showConfirm(
+      "Confirm Reset",
+      "Are you sure you want to reset this user's wallet balance to ₹0?",
+      async () => {
+        try {
+          await resetWallet(id);
+          showAlert("Success", "Wallet balance reset to 0.", "success");
+          const updatedMembers = members.map(m => m.id === id ? { ...m, walletBalance: 0 } : m);
+          setMembers(updatedMembers);
+        } catch (e: any) {
+          showAlert("Error", e.message, "error");
+        }
+      },
+      undefined,
+      "Reset",
+      "Cancel",
+      "error"
+    );
   }
 
   function openCreateModal() {
@@ -172,14 +181,23 @@ export default function MembersClient({ initialMembers, plans, turfs = [] }: { i
   }
 
   async function handleDelete(id: string) {
-    if (!confirm("Delete this member?")) return;
-    try {
-      await deleteMember(id);
-      setMembers(members.filter(m => m.id !== id));
-      showAlert("Member Deleted", "The member has been permanently removed from the system.", "success");
-    } catch(err) {
-      showAlert("Deletion Blocked", "Cannot delete this member because they have active or past memberships tied to their account.", "error");
-    }
+    showConfirm(
+      "Confirm Deletion",
+      "Delete this member?",
+      async () => {
+        try {
+          await deleteMember(id);
+          setMembers(members.filter(m => m.id !== id));
+          showAlert("Member Deleted", "The member has been permanently removed from the system.", "success");
+        } catch(err) {
+          showAlert("Deletion Blocked", "Cannot delete this member because they have active or past memberships tied to their account.", "error");
+        }
+      },
+      undefined,
+      "Delete",
+      "Cancel",
+      "error"
+    );
   }
 
   async function handleAssignPlan(e: React.FormEvent) {
@@ -249,14 +267,23 @@ export default function MembersClient({ initialMembers, plans, turfs = [] }: { i
   }
 
   async function handleDeleteMembership(id: string) {
-    if (!confirm("Are you sure you want to permanently delete this membership record? This action cannot be undone.")) return;
-    try {
-      await deleteMemberMembership(id);
-      showAlert("Membership Deleted", "The membership has been removed.", "success");
-      window.location.reload();
-    } catch (err: any) {
-      showAlert("Deletion Failed", err.message || "Failed to delete membership.", "error");
-    }
+    showConfirm(
+      "Confirm Deletion",
+      "Are you sure you want to permanently delete this membership record? This action cannot be undone.",
+      async () => {
+        try {
+          await deleteMemberMembership(id);
+          showAlert("Membership Deleted", "The membership has been removed.", "success");
+          window.location.reload();
+        } catch (err: any) {
+          showAlert("Deletion Failed", err.message || "Failed to delete membership.", "error");
+        }
+      },
+      undefined,
+      "Delete",
+      "Cancel",
+      "error"
+    );
   }
 
   function openIdCardModal(member: any) {

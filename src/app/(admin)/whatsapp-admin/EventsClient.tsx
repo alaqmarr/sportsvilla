@@ -2,10 +2,12 @@
 
 import React, { useState, useEffect } from "react";
 import { FiSave, FiRefreshCw, FiZap, FiSettings, FiCheckCircle } from "react-icons/fi";
+import { useAlert } from "@/components/AlertProvider";
 
 export default function EventsClient({ initialEvents, initialTemplates }: { initialEvents: any[], initialTemplates: any[] }) {
   const [events, setEvents] = useState<any[]>(initialEvents);
   const [templates, setTemplates] = useState<any[]>(initialTemplates);
+  const { showAlert } = useAlert();
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState<string | null>(null);
 
@@ -59,13 +61,13 @@ export default function EventsClient({ initialEvents, initialTemplates }: { init
       });
       const data = await res.json();
       if (data.success) {
-        alert("Saved successfully!");
+        showAlert("Success", "Saved successfully!", "success");
         fetchEvents();
       } else {
-        alert("Failed to save: " + data.error);
+        showAlert("Error", "Failed to save: " + data.error, "error");
       }
     } catch (e) {
-      alert("Error saving event");
+      showAlert("Error", "Error saving event", "error");
     } finally {
       setSaving(null);
     }

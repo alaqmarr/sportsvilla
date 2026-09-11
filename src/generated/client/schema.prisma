@@ -58,6 +58,8 @@ model Member {
   couponUsages            CouponUsage[]
   loyaltyAchievements     LoyaltyAchievement[]
   sportStats              UserSportStat[]
+  nfcCards                NfcCard[]
+  nfcTransactions         NfcTransaction[]
   createdAt               DateTime                 @default(now())
   updatedAt               DateTime                 @updatedAt
 
@@ -215,6 +217,7 @@ model Booking {
   tickets          Ticket[]
   couponUsages     CouponUsage[]
   participants     BookingParticipant[]
+  nfcTransactions  NfcTransaction[]
 
   @@index([startTime])
   @@index([turfId])
@@ -534,4 +537,52 @@ model UserSportStat {
   sport  Sport  @relation(fields: [sportId], references: [id], onDelete: Cascade)
 
   @@unique([memberId, sportId])
+}
+
+model NfcCard {
+  id           String           @id @default(cuid())
+  cardUid      String           @unique // Normalized uppercase hex string (e.g., "04A1B2C3")
+  cardId       String? // Optional printed label (e.g., "SV-1001")
+  memberId     String? // Nullable when card is unassigned
+  member       Member?          @relation(fields: [memberId], references: [id], onDelete: SetNull)
+  status       String           @default("ACTIVE") // "ACTIVE" | "BLOCKED" | "SUSPENDED" | "INACTIVE"
+  issuedAt     DateTime         @default(now())
+  lastUsedAt   DateTime?
+  notes        String?
+  assignedBy   String?
+  createdAt    DateTime         @default(now())
+  updatedAt    DateTime         @updatedAt
+  transactions NfcTransaction[]
+
+  @@index([cardUid])
+  @@index([memberId])
+  @@index([status])
+  @@index([createdAt])
+}
+
+model NfcTransaction {
+  id             String   @id @default(cuid())
+  cardId         String?
+  card           NfcCard? @relation(fields: [cardId], references: [id], onDelete: SetNull)
+  cardUid        String // Exact card UID captured
+  memberId       String?
+  member         Member?  @relation(fields: [memberId], references: [id], onDelete: SetNull)
+  bookingId      String?
+  booking        Booking? @relation(fields: [bookingId], references: [id], onDelete: SetNull)
+  type           String // "CHECKIN" | "PAYMENT" | "TOPUP" | "DROPIN"
+  status         String   @default("SUCCESS") // "SUCCESS" | "FAILED"
+  amount         Float    @default(0) // In Rupees
+  deviceType     String   @default("KEYBOARD_WEDGE") // "KEYBOARD_WEDGE" | "WEB_NFC" | "SIMULATOR"
+  readerLocation String?  @default("FRONT_DESK")
+  failureReason  String?
+  metadata       String? // JSON payload with execution details
+  createdAt      DateTime @default(now())
+
+  @@index([cardId])
+  @@index([cardUid])
+  @@index([memberId])
+  @@index([bookingId])
+  @@index([type])
+  @@index([status])
+  @@index([createdAt])
 }

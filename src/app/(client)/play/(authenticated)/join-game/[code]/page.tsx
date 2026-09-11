@@ -6,12 +6,14 @@ import useSWR from 'swr'
 import { ChevronLeft, MapPin, Calendar, Clock, Users, Trophy } from 'lucide-react'
 import Link from 'next/link'
 import { GameCard } from '@/components/play/GameCard'
+import { useAlert } from '@/components/AlertProvider'
 
 const fetcher = (url: string) => fetch(url).then(res => res.json())
 
 export default function JoinViaCodePage() {
   const { code } = useParams()
   const router = useRouter()
+  const { showAlert } = useAlert()
   const [isJoining, setIsJoining] = useState(false)
 
   const { data: inviteDetails, isLoading } = useSWR(`/api/client/v1/bookings/invite/${code}`, fetcher)
@@ -24,13 +26,13 @@ export default function JoinViaCodePage() {
         method: 'POST'
       })
       if (res.ok) {
-        alert('Joined successfully!')
+        showAlert('Success', 'Joined successfully!', 'success')
         router.push(`/play/bookings/${inviteDetails.id}`)
       } else {
-        alert('Failed to join game')
+        showAlert('Error', 'Failed to join game', 'error')
       }
     } catch (error) {
-      alert('Error joining game')
+      showAlert('Error', 'Error joining game', 'error')
     } finally {
       setIsJoining(false)
     }

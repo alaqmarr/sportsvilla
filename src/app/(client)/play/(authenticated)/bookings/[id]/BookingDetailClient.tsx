@@ -6,11 +6,13 @@ import { ArrowLeft, MessageCircle, X, MapPin, Calendar, Clock, Share2, CheckCirc
 import { useState, useEffect } from "react";
 import QRCode from "qrcode";
 import { Modal } from "@/components/play/Modal";
+import { useAlert } from "@/components/AlertProvider";
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 export function BookingDetailClient({ initialBooking, cancellationLimitHours, allowCancellation }: { initialBooking: any, cancellationLimitHours: number, allowCancellation: boolean }) {
   const router = useRouter();
+  const { showAlert } = useAlert();
 
   const { data, mutate } = useSWR(
     initialBooking.id ? `/api/client/v1/bookings/${initialBooking.id}` : null,
@@ -77,10 +79,10 @@ export function BookingDetailClient({ initialBooking, cancellationLimitHours, al
         mutate();
       } else {
         const result = await res.json();
-        alert(result.error || "Failed to cancel booking");
+        showAlert("Error", result.error || "Failed to cancel booking", "error");
       }
     } catch (e) {
-      alert("An error occurred while cancelling.");
+      showAlert("Error", "An error occurred while cancelling.", "error");
     } finally {
       setIsCancelling(false);
     }
@@ -100,10 +102,10 @@ export function BookingDetailClient({ initialBooking, cancellationLimitHours, al
         mutate();
       } else {
         const result = await res.json();
-        alert(result.error || "Failed to change hosting status");
+        showAlert("Error", result.error || "Failed to change hosting status", "error");
       }
     } catch (e) {
-      alert("An error occurred while changing hosting status.");
+      showAlert("Error", "An error occurred while changing hosting status.", "error");
     } finally {
       setIsTogglingHost(false);
     }
@@ -202,10 +204,10 @@ export function BookingDetailClient({ initialBooking, cancellationLimitHours, al
             if (verifyData.success) {
               await mutate();
             } else {
-              alert(verifyData.error || 'Payment verification failed');
+              showAlert("Error", verifyData.error || 'Payment verification failed', "error");
             }
           } catch (err: any) {
-            alert(err.message || 'Payment verification error');
+            showAlert("Error", err.message || 'Payment verification error', "error");
           } finally {
             setIsPaying(false);
           }
@@ -225,11 +227,11 @@ export function BookingDetailClient({ initialBooking, cancellationLimitHours, al
       const rzp = new (window as any).Razorpay(options);
       rzp.on('payment.failed', function (resp: any) {
         setIsPaying(false);
-        alert(resp?.error?.description || 'Payment failed or was cancelled.');
+        showAlert("Error", resp?.error?.description || 'Payment failed or was cancelled.', "error");
       });
       rzp.open();
     } catch (err: any) {
-      alert(err.message || 'Payment initiation failed');
+      showAlert("Error", err.message || 'Payment initiation failed', "error");
       setIsPaying(false);
     }
   };
@@ -449,7 +451,7 @@ export function BookingDetailClient({ initialBooking, cancellationLimitHours, al
                       navigator.share({ title: 'Join my game on SportsVilla!', url });
                     } else {
                       navigator.clipboard.writeText(url);
-                      alert('Invite link copied to clipboard!');
+                      showAlert("Success", 'Invite link copied to clipboard!', "success");
                     }
                   }}
                   className="w-full py-3 bg-[var(--play-brand)] text-white font-bold rounded-xl hover:brightness-110 flex items-center justify-center gap-2 shadow-sm"

@@ -5,7 +5,7 @@ import { useAlert } from "@/components/AlertProvider";
 import { FiSave, FiSettings, FiCreditCard } from "react-icons/fi";
 
 export default function SettingsClient({ initialSettings }: { initialSettings: Record<string, string> }) {
-  const { showAlert } = useAlert();
+  const { showAlert, showConfirm } = useAlert();
   const [upiId, setUpiId] = useState(initialSettings.upiId || "");
   const [businessName, setBusinessName] = useState(initialSettings.businessName || "SportsVilla");
   const [openTime, setOpenTime] = useState(initialSettings.openTime || "06:00");
@@ -243,20 +243,29 @@ export default function SettingsClient({ initialSettings }: { initialSettings: R
                 type="button" 
                 disabled={loading}
                 onClick={async () => {
-                  if (!confirm("Are you sure you want to run this data migration?")) return;
-                  setLoading(true);
-                  try {
-                    const res = await fetch('/api/admin/family-groups/populate', { method: 'POST' });
-                    const data = await res.json();
-                    if (data.success) {
-                      showAlert("Success", data.message, "success");
-                    } else {
-                      showAlert("Error", data.error || "Failed to populate", "error");
-                    }
-                  } catch (err) {
-                    showAlert("Error", "Failed to run migration", "error");
-                  }
-                  setLoading(false);
+                  showConfirm(
+                    "Confirm Migration",
+                    "Are you sure you want to run this data migration?",
+                    async () => {
+                      setLoading(true);
+                      try {
+                        const res = await fetch('/api/admin/family-groups/populate', { method: 'POST' });
+                        const data = await res.json();
+                        if (data.success) {
+                          showAlert("Success", data.message, "success");
+                        } else {
+                          showAlert("Error", data.error || "Failed to populate", "error");
+                        }
+                      } catch (err) {
+                        showAlert("Error", "Failed to run migration", "error");
+                      }
+                      setLoading(false);
+                    },
+                    undefined,
+                    "Run Migration",
+                    "Cancel",
+                    "error"
+                  );
                 }}
                 className="bg-red-500/10 text-red-500 hover:bg-red-500/20 border border-red-500/20 rounded-lg px-4 py-2 text-sm font-semibold inline-flex items-center gap-2 transition-colors cursor-pointer disabled:opacity-50"
               >

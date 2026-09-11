@@ -6,19 +6,30 @@ import { useRouter } from 'next/navigation';
 import { deleteTournament } from './actions';
 import toast from 'react-hot-toast';
 import { FiCalendar, FiMapPin, FiUsers, FiEdit2, FiTrash2, FiPlus } from 'react-icons/fi';
+import { useAlert } from '@/components/AlertProvider';
 
 export default function TournamentsListClient({ initialTournaments }: any) {
   const [tournaments, setTournaments] = useState(initialTournaments);
   const router = useRouter();
+  const { showAlert, showConfirm } = useAlert();
 
   const handleDelete = async (id: string) => {
-    if (!confirm('Are you sure you want to delete this tournament? This will also delete all registrations and cannot be undone.')) return;
-    const res = await deleteTournament(id);
-    if (res.error) toast.error(res.error);
-    else {
-      toast.success('Tournament deleted');
-      setTournaments(tournaments.filter((t:any) => t.id !== id));
-    }
+    showConfirm(
+      "Confirm Deletion",
+      "Are you sure you want to delete this tournament? This will also delete all registrations and cannot be undone.",
+      async () => {
+        const res = await deleteTournament(id);
+        if (res.error) showAlert("Error", res.error, "error");
+        else {
+          showAlert("Success", "Tournament deleted", "success");
+          setTournaments(tournaments.filter((t:any) => t.id !== id));
+        }
+      },
+      undefined,
+      "Delete",
+      "Cancel",
+      "error"
+    );
   };
 
   return (
