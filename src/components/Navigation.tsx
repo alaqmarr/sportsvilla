@@ -232,7 +232,9 @@ export function Navigation({
       
       <main
         className={`flex-1 w-full lg:max-w-[calc(100vw-16rem)] lg:ml-64 overflow-x-hidden ${
-          pathname.startsWith("/whatsapp-admin") || pathname.includes("/kiosk") ? "p-0" : "p-4 lg:p-6"
+          pathname.startsWith("/whatsapp-admin") || pathname.includes("/kiosk") || pathname.startsWith("/admin/nfc") 
+            ? "p-0" 
+            : "p-0 sm:p-4 lg:p-8"
         }`}
       >
         {!canViewPage(admin, pathname) ? (
