@@ -25,6 +25,7 @@ import { useNfcReader } from "@/hooks/useNfcReader";
 import { playNfcSound } from "@/lib/soundUtils";
 import { NfcCheckinResponse, NfcDeviceType } from "@/types/nfc";
 import { formatIST } from "@/lib/dateUtils";
+import { useAlert } from "@/components/AlertProvider";
 
 interface KioskClientProps {
   initialTransactions?: any[];
@@ -212,12 +213,21 @@ export default function KioskClient({ initialTransactions = [] }: KioskClientPro
     isWebNfcActive,
     enableWebNfc,
     triggerSimulatedScan,
+    scanError,
   } = useNfcReader({
     enabled: true,
     debounceMs: 3000,
     playBeepOnScan: soundEnabled,
     onScan: handleCardScan,
   });
+
+  const { showAlert } = useAlert();
+
+  useEffect(() => {
+    if (scanError) {
+      showAlert("NFC Reader Error", scanError, "error");
+    }
+  }, [scanError, showAlert]);
 
   const handleManualSubmit = (e: React.FormEvent) => {
     e.preventDefault();

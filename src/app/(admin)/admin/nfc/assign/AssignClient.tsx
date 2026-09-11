@@ -15,6 +15,7 @@ import {
   FiFileText,
   FiSmartphone,
   FiZap,
+  FiRadio,
 } from "react-icons/fi";
 import {
   searchMembers,
@@ -26,6 +27,7 @@ import {
 } from "./actions";
 import { playNfcSound } from "@/lib/soundUtils";
 import { useAlert } from "@/components/AlertProvider";
+import { useNfcReader } from "@/hooks/useNfcReader";
 import { formatIST } from "@/lib/dateUtils";
 
 interface MemberResult {
@@ -95,43 +97,20 @@ export default function AssignClient({ initialCards }: { initialCards: any[] }) 
     setCardUid(cleaned);
   };
 
-  // Keyboard wedge rapid scan listener
+  const { isWebNfcSupported, isWebNfcActive, enableWebNfc, scanError } = useNfcReader({
+    enabled: true,
+    debounceMs: 1000,
+    playBeepOnScan: true,
+    onScan: (scannedUid) => {
+      setCardUid(scannedUid);
+    }
+  });
+
   useEffect(() => {
-    let buffer = "";
-    let lastTime = 0;
-
-    const handleKeyDown = (e: KeyboardEvent) => {
-      // Ignore if currently typing in an input other than cardUid
-      const activeEl = document.activeElement;
-      const isInput = activeEl?.tagName === "INPUT" || activeEl?.tagName === "TEXTAREA";
-      if (isInput && activeEl !== cardUidInputRef.current) {
-        return;
-      }
-
-      const currentTime = Date.now();
-      const delta = currentTime - lastTime;
-      lastTime = currentTime;
-
-      if (e.key === "Enter") {
-        if (buffer.length >= 4) {
-          const normalized = buffer.replace(/[^a-fA-F0-9]/g, "").toUpperCase();
-          setCardUid(normalized);
-          playNfcSound("beep");
-          buffer = "";
-          e.preventDefault();
-        }
-      } else if (e.key.length === 1) {
-        if (delta > 60) {
-          buffer = e.key;
-        } else {
-          buffer += e.key;
-        }
-      }
-    };
-
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, []);
+    if (scanError) {
+      showAlert("NFC Reader Error", scanError, "error");
+    }
+  }, [scanError, showAlert]);
 
   // Refresh inventory
   const refreshInventory = async () => {
@@ -449,21 +428,37 @@ export default function AssignClient({ initialCards }: { initialCards: any[] }) 
                   <label className="block text-xs font-semibold uppercase tracking-wider text-gray-400">
                     2. Card UID (Tap or Scan) *
                   </label>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      const mockUid = Array.from({ length: 8 }, () =>
-                        Math.floor(Math.random() * 16).toString(16)
-                      )
-                        .join("")
-                        .toUpperCase();
-                      setCardUid(mockUid);
-                      playNfcSound("beep");
-                    }}
-                    className="text-[11px] text-orange-400 hover:text-orange-300 flex items-center gap-1"
-                  >
-                    <FiZap /> Quick Gen
-                  </button>
+                  <div className="flex items-center gap-3">
+                    {isWebNfcSupported && !isWebNfcActive && (
+                      <button
+                        type="button"
+                        onClick={enableWebNfc}
+                        className="text-[11px] px-2 py-0.5 rounded bg-amber-500/20 text-amber-400 hover:bg-amber-500/30 flex items-center gap-1 border border-amber-500/40"
+                      >
+                        <FiRadio /> Enable Web NFC
+                      </button>
+                    )}
+                    {isWebNfcActive && (
+                      <span className="text-[11px] flex items-center gap-1 text-emerald-400">
+                        <FiRadio className="animate-pulse" /> Web NFC Active
+                      </span>
+                    )}
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const mockUid = Array.from({ length: 8 }, () =>
+                          Math.floor(Math.random() * 16).toString(16)
+                        )
+                          .join("")
+                          .toUpperCase();
+                        setCardUid(mockUid);
+                        playNfcSound("beep");
+                      }}
+                      className="text-[11px] text-orange-400 hover:text-orange-300 flex items-center gap-1"
+                    >
+                      <FiZap /> Quick Gen
+                    </button>
+                  </div>
                 </div>
 
                 <div className="relative">
