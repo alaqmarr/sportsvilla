@@ -88,7 +88,7 @@ export interface NfcCheckinRequest {
 
 export interface NfcCheckinResponse {
   success: boolean;
-  action: "BOOKING_CHECKIN" | "MEMBERSHIP_ATTENDANCE" | "DROPIN_DEDUCTED" | "REJECTED";
+  action: "BOOKING_CHECKIN" | "MEMBERSHIP_ATTENDANCE" | "DROPIN_DEDUCTED" | "REJECTED" | "REQUIRE_BOOKING";
   message: string;
   member?: {
     id: string;
