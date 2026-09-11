@@ -3,9 +3,17 @@ import { Mutex } from "@/lib/mutex";
 import { getISTDateBounds, formatIST } from "@/lib/dateUtils";
 import { bumpSyncTimestamp } from "@/lib/sync";
 import { NfcCheckinRequest, NfcCheckinResponse, NfcDeviceType } from "@/types/nfc";
-import { normalizeCardUid } from "@/hooks/useNfcReader";
 
 export class NfcCheckinService {
+  /**
+   * Normalizes physical card UID string:
+   * Removes non-alphanumeric characters, strips whitespace, converts to uppercase hex.
+   */
+  static normalizeCardUid(raw: string): string {
+    if (!raw) return "";
+    return raw.trim().replace(/[^a-fA-F0-9]/g, "").toUpperCase();
+  }
+
   /**
    * Resolves an NFC card tap for check-in using a prioritized 3-tier resolution engine:
    * Priority 1: Active Booking Check-in (validates time window, checks in ticket, awards sport loyalty points)
@@ -16,11 +24,11 @@ export class NfcCheckinService {
    */
   static async resolveCheckin(request: NfcCheckinRequest): Promise<NfcCheckinResponse> {
     const rawUid = request.cardUid || "";
-    const cardUid = normalizeCardUid(rawUid);
+    const cardUid = NfcCheckinService.normalizeCardUid(rawUid);
     const deviceType: NfcDeviceType = request.deviceType || "KEYBOARD_WEDGE";
     const location = request.location || "FRONT_DESK";
 
-    if (!cardUid || cardUid.length < 4) {
+    if (!cardUid) {
       return {
         success: false,
         action: "REJECTED",
