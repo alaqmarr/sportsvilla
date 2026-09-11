@@ -144,7 +144,7 @@ export function Navigation({
   return (
     <div className="flex flex-col lg:flex-row min-h-screen bg-[#0f1117] overflow-x-hidden">
       {/* Mobile Topbar */}
-      <div className="lg:hidden bg-[#161923] border-b border-[#2a2d3e] p-4 flex justify-between items-center sticky top-0 z-40">
+      <div className="lg:hidden bg-[#161923]/80 backdrop-blur-md border-b border-[#2a2d3e]/50 p-4 flex justify-between items-center sticky top-0 z-40 shadow-lg">
         <div className="flex flex-col">
           <div className="font-['Outfit'] text-lg font-black text-orange-500 tracking-wider uppercase">
             <Image src="/long-logo.png" alt="SportsVilla" width={180} height={44} unoptimized className="h-10 w-auto object-contain" />
@@ -162,7 +162,7 @@ export function Navigation({
 
       {/* Sidebar */}
       <aside
-        className={`fixed top-0 left-0 h-full w-64 bg-[#161923] border-r border-[#2a2d3e] flex flex-col z-50 transform transition-transform duration-200 ease-in-out ${
+        className={`fixed top-0 left-0 h-full w-64 bg-[#161923]/80 backdrop-blur-xl border-r border-[#2a2d3e]/50 flex flex-col z-50 transform transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] shadow-[4px_0_24px_rgba(0,0,0,0.5)] ${
           isSidebarOpen ? "translate-x-0" : "-translate-x-full"
         } lg:translate-x-0`}
       >

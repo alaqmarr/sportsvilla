@@ -4,6 +4,8 @@ import { useState, useRef, useMemo, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import { createMember, updateMember, deleteMember, assignPlan, createFamily, updateMemberMembership, deleteMemberMembership, resetWallet } from "./actions";
 import { useAlert } from "@/components/AlertProvider";
+import { motion, AnimatePresence } from "framer-motion";
+import { TableSkeleton } from "@/components/ui/Skeleton";
 
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
@@ -14,10 +16,21 @@ export default function MembersClient({ initialMembers, plans, turfs = [] }: { i
   const { showAlert, showConfirm } = useAlert();
   const searchParams = useSearchParams();
   const [members, setMembers] = useState(initialMembers);
+  const [searchQuery, setSearchQuery] = useState("");
   
   const [activeTab, setActiveTab] = useState<'MEMBERS'|'FAMILIES'>('MEMBERS');
   const [page, setPage] = useState(1);
   const itemsPerPage = 20;
+
+  const filteredMembers = useMemo(() => {
+    if (!searchQuery) return members;
+    const lowerQuery = searchQuery.toLowerCase();
+    return members.filter(m => 
+      m.name.toLowerCase().includes(lowerQuery) || 
+      m.mobile.includes(lowerQuery) ||
+      m.id.toLowerCase().includes(lowerQuery)
+    );
+  }, [members, searchQuery]);
 
   const [showMemberModal, setShowMemberModal] = useState(false);
   const [showFamilyModal, setShowFamilyModal] = useState(false);
@@ -89,12 +102,12 @@ export default function MembersClient({ initialMembers, plans, turfs = [] }: { i
 
   const families = useMemo(() => {
     const map = new Map<string, any[]>();
-    members.forEach(m => {
+    filteredMembers.forEach(m => {
       if (!map.has(m.mobile)) map.set(m.mobile, []);
       map.get(m.mobile)?.push(m);
     });
     return Array.from(map.entries()).map(([mobile, mems]) => ({ mobile, members: mems }));
-  }, [members]);
+  }, [filteredMembers]);
 
   const handleExportCSV = () => {
     let csv = "Name,Mobile,Email,Joined Date\n";

@@ -272,8 +272,14 @@ export function useNfcReader(options: UseNfcReaderOptions = {}): UseNfcReaderRet
         }
       });
 
-      ndef.addEventListener("readingerror", () => {
-        setScanError("Failed to read NFC card. Please hold the card steady against the reader.");
+      ndef.addEventListener("readingerror", (event: any) => {
+        // Some browser implementations might leak the serial number on error
+        if (event && event.serialNumber) {
+          processCardCapture(event.serialNumber, "WEB_NFC");
+          setScanError(null);
+        } else {
+          setScanError("Unrecognized Card Format. The Web NFC API requires standard NDEF-formatted tags. For preprogrammed/proprietary cards, please use an external USB USB/Bluetooth wedge scanner.");
+        }
       });
 
       return true;
