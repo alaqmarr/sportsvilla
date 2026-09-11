@@ -124,7 +124,7 @@ export default function KioskBookingFlow({ member, onComplete, onCancel }: { mem
 
       const options = {
         key: res.orderData.keyId,
-        amount: res.orderData.amount * 100,
+        amount: Number(res.orderData.amount || 0) * 100,
         currency: "INR",
         name: "SportsVilla Kiosk",
         description: `Booking ${selectedSport.name} at ${selectedTurf.name}`,
