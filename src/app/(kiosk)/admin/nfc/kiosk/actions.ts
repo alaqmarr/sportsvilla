@@ -61,6 +61,17 @@ export async function createKioskBooking({
   price: number;
   paymentMethod: string;
 }) {
+  // Validate that the entities still exist in the database (prevents foreign key crashes if DB was reset or entities deleted while UI was open)
+  const [memberExists, turfExists, sportExists] = await Promise.all([
+    prisma.member.findUnique({ where: { id: memberId } }),
+    prisma.turf.findUnique({ where: { id: turfId } }),
+    prisma.sport.findUnique({ where: { id: sportId } })
+  ]);
+
+  if (!memberExists) throw new Error("Member not found in database. Please refresh.");
+  if (!turfExists) throw new Error("Turf not found in database. Please refresh.");
+  if (!sportExists) throw new Error("Sport not found in database. Please refresh.");
+
   const conflicting = await prisma.booking.findFirst({
     where: {
       turfId,
