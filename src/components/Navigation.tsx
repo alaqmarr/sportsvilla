@@ -233,34 +233,8 @@ export function Navigation({
         </div>
       </aside>
       
-      <main
-        className={`flex-1 w-full lg:max-w-[calc(100vw-16rem)] lg:ml-64 overflow-x-hidden ${
-          pathname.startsWith("/whatsapp-admin") || pathname.includes("/kiosk") || pathname.startsWith("/admin/nfc") 
-            ? "p-0" 
-            : "p-0 sm:p-4 lg:p-8"
-        }`}
-      >
-        {!canViewPage(admin, pathname) ? (
-          <div className="max-w-xl mx-auto my-16 bg-[#161923] border border-[#2a2d3e] rounded-2xl p-8 text-center space-y-4 shadow-xl">
-            <div className="w-16 h-16 rounded-full bg-red-500/10 border border-red-500/20 flex items-center justify-center text-red-400 mx-auto text-2xl">
-              <FiShield />
-            </div>
-            <h2 className="text-xl font-bold font-['Outfit'] text-white">Access Denied</h2>
-            <p className="text-sm text-gray-400 leading-relaxed">
-              You do not have permission to view or manage this module. Your current role is{" "}
-              <span className="font-semibold text-orange-400">{admin?.role || "ADMIN"}</span>.
-            </p>
-            <p className="text-xs text-gray-500">
-              Please contact a Superadmin if you require access to this page.
-            </p>
-          </div>
-        ) : (
-          children
-        )}
-      </main>
-
-      {/* Floating NFC Status Badge */}
-      <div className="fixed top-[4.5rem] lg:top-4 right-4 z-[100]">
+      <main className="flex-1 w-full lg:max-w-[calc(100vw-16rem)] lg:ml-64 overflow-x-hidden flex flex-col min-h-screen">
+        {/* Edge-to-Edge NFC Status Bar */}
         <button
           type="button"
           onClick={() => {
@@ -269,15 +243,15 @@ export function Navigation({
             }
           }}
           className={`
-            flex items-center gap-2 px-3 py-1.5 rounded-full shadow-lg border text-xs font-bold uppercase tracking-wider backdrop-blur-md transition-all
+            w-full flex items-center justify-center gap-2 px-4 py-2.5 text-[11px] sm:text-xs font-bold uppercase tracking-wider transition-all border-b
             ${
               nfc.isWebNfcActive
-                ? "bg-emerald-500/20 border-emerald-500/50 text-emerald-400 cursor-default"
+                ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-400 cursor-default"
                 : nfc.isWebNfcSupported
-                ? "bg-amber-500/20 border-amber-500/50 text-amber-400 hover:bg-amber-500/30 cursor-pointer shadow-[0_0_15px_rgba(245,158,11,0.2)]"
+                ? "bg-amber-500/10 border-amber-500/20 text-amber-400 hover:bg-amber-500/20 cursor-pointer"
                 : nfc.isListening
-                ? "bg-emerald-500/20 border-emerald-500/50 text-emerald-400 cursor-default"
-                : "bg-red-500/20 border-red-500/50 text-red-400 cursor-default"
+                ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-400 cursor-default"
+                : "bg-red-500/10 border-red-500/20 text-red-400 cursor-default"
             }
           `}
         >
@@ -285,12 +259,36 @@ export function Navigation({
           {nfc.isWebNfcActive 
             ? "Mobile NFC Active" 
             : nfc.isWebNfcSupported 
-            ? "Activate NFC" 
+            ? "Tap here to Activate Mobile NFC" 
             : nfc.isListening
             ? "USB Scanner Active"
             : "NFC Unsupported"}
         </button>
-      </div>
+
+        <div className={`flex-1 w-full ${
+          pathname.startsWith("/whatsapp-admin") || pathname.includes("/kiosk") || pathname.startsWith("/admin/nfc") 
+            ? "p-0" 
+            : "p-4 sm:p-6 lg:p-8"
+        }`}>
+          {!canViewPage(admin, pathname) ? (
+            <div className="max-w-xl mx-auto my-16 bg-[#161923] border border-[#2a2d3e] rounded-2xl p-8 text-center space-y-4 shadow-xl">
+              <div className="w-16 h-16 rounded-full bg-red-500/10 border border-red-500/20 flex items-center justify-center text-red-400 mx-auto text-2xl">
+                <FiShield />
+              </div>
+              <h2 className="text-xl font-bold font-['Outfit'] text-white">Access Denied</h2>
+              <p className="text-sm text-gray-400 leading-relaxed">
+                You do not have permission to view or manage this module. Your current role is{" "}
+                <span className="font-semibold text-orange-400">{admin?.role || "ADMIN"}</span>.
+              </p>
+              <p className="text-xs text-gray-500">
+                Please contact a Superadmin if you require access to this page.
+              </p>
+            </div>
+          ) : (
+            children
+          )}
+        </div>
+      </main>
     </div>
   );
 }
