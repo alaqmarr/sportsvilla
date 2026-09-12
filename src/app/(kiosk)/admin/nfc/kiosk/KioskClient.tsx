@@ -116,14 +116,14 @@ export default function KioskClient({ initialTransactions = [] }: KioskClientPro
   }, []);
 
   /**
-   * Starts 6-second auto-dismiss countdown with visual progress bar
+   * Starts 3-second auto-dismiss countdown with visual progress bar
    */
   const triggerAutoDismiss = useCallback(() => {
     if (dismissTimerRef.current) clearTimeout(dismissTimerRef.current);
     if (progressIntervalRef.current) clearInterval(progressIntervalRef.current);
 
     setDismissProgress(100);
-    const totalMs = 6000;
+    const totalMs = 3000;
     const stepMs = 50;
     let elapsed = 0;
 

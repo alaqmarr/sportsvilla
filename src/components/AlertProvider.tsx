@@ -1,12 +1,12 @@
 "use client";
-import { createContext, useContext, useState, ReactNode } from "react";
+import { createContext, useContext, useState, useEffect, ReactNode } from "react";
 import { FiCheckCircle, FiXCircle, FiInfo } from "react-icons/fi";
 
 type AlertType = "success" | "error" | "info" | "warning";
 
 interface AlertAction {
   label: string;
-  onClick: () => void;
+  onClick: () => any;
   style?: "primary" | "secondary" | "danger";
 }
 
@@ -94,6 +94,15 @@ export function AlertProvider({ children }: { children: ReactNode }) {
     setAlert(null);
   };
 
+  useEffect(() => {
+    if (alert && alert.type !== 'error') {
+      const timer = setTimeout(() => {
+        closeAlert();
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [alert]);
+
   return (
     <AlertContext.Provider value={{ showAlert, showConfirm }}>
       {children}
@@ -124,9 +133,15 @@ export function AlertProvider({ children }: { children: ReactNode }) {
                   <button
                     key={idx}
                     className={`flex-1 rounded-xl px-5 py-3 text-sm font-bold cursor-pointer transition-colors shadow-lg ${btnClass}`}
-                    onClick={() => {
-                      action.onClick();
-                      closeAlert();
+                    onClick={async () => {
+                      try {
+                        const result = action.onClick();
+                        if (result instanceof Promise) {
+                          await result;
+                        }
+                      } finally {
+                        closeAlert();
+                      }
                     }}
                   >
                     {action.label}

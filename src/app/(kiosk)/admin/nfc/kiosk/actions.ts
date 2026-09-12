@@ -22,17 +22,21 @@ export async function getKioskFacilities() {
   return { turfs: JSON.parse(JSON.stringify(turfs)), openTime, closeTime };
 }
 
-export async function fetchKioskAvailableSlots(turfId: string, durationMin: number = 60) {
+export async function fetchKioskAvailableSlots(turfId?: string, durationMin: number = 60) {
   const { start: todayStart, end: todayEnd } = getISTDateBounds();
 
+  const whereClause: any = {
+    status: "CONFIRMED",
+    startTime: { gte: todayStart },
+    endTime: { lte: todayEnd }
+  };
+  if (turfId) {
+    whereClause.turfId = turfId;
+  }
+
   const bookings = await prisma.booking.findMany({
-    where: {
-      turfId,
-      status: "CONFIRMED",
-      startTime: { gte: todayStart },
-      endTime: { lte: todayEnd }
-    },
-    select: { startTime: true, endTime: true }
+    where: whereClause,
+    select: { startTime: true, endTime: true, turfId: true }
   });
 
   return JSON.parse(JSON.stringify(bookings));

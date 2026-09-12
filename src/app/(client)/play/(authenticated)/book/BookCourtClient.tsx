@@ -193,6 +193,25 @@ export function BookCourtClient({ member, sports, availability, initialDateStr, 
                   name: 'Sportsvilla',
                   description: 'Court Booking',
                   order_id: paymentData.orderId,
+                  config: {
+                    display: {
+                      blocks: {
+                        upi: {
+                          name: "Pay via UPI QR",
+                          instruments: [
+                            {
+                              method: "upi",
+                              flows: ["qr"]
+                            }
+                          ]
+                        }
+                      },
+                      sequence: ['block.upi'],
+                      preferences: {
+                        show_default_blocks: false
+                      }
+                    }
+                  },
                   handler: async function (response: any) {
                     setProcessStatus('processing');
                     const verifyRes = await fetch('/api/client/v1/payments/verify', {

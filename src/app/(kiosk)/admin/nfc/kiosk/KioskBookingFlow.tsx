@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { getKioskFacilities, fetchKioskAvailableSlots, createKioskBooking } from "./actions";
 import { formatIST, todayIST } from "@/lib/dateUtils";
-import { FiCheckCircle, FiClock, FiCreditCard, FiSmartphone } from "react-icons/fi";
+import { FiCheckCircle, FiClock, FiCreditCard, FiSmartphone, FiArrowLeft } from "react-icons/fi";
 import { useAlert } from "@/components/AlertProvider";
 import { playNfcSound } from "@/lib/soundUtils";
 
@@ -41,10 +41,10 @@ export default function KioskBookingFlow({ member, onComplete, onCancel }: { mem
   const [loading, setLoading] = useState(true);
   const [turfs, setTurfs] = useState<any[]>([]);
   const [hours, setHours] = useState({ openTime: "06:00", closeTime: "23:00" });
+  const [allBookings, setAllBookings] = useState<any[]>([]);
   
   const [selectedSport, setSelectedSport] = useState<any>(null);
   const [selectedTurf, setSelectedTurf] = useState<any>(null);
-  const [availableSlots, setAvailableSlots] = useState<any[]>([]);
   const [selectedSlot, setSelectedSlot] = useState<any>(null);
   
   const [isProcessing, setIsProcessing] = useState(false);
@@ -54,6 +54,12 @@ export default function KioskBookingFlow({ member, onComplete, onCancel }: { mem
       .then((data) => {
         setTurfs(data.turfs);
         setHours({ openTime: data.openTime, closeTime: data.closeTime });
+        
+        // Fetch ALL bookings for today
+        return fetchKioskAvailableSlots(undefined, 60);
+      })
+      .then((bookings) => {
+        setAllBookings(bookings);
         setLoading(false);
       })
       .catch((err) => {
@@ -71,20 +77,45 @@ export default function KioskBookingFlow({ member, onComplete, onCancel }: { mem
     return Array.from(map.values());
   }, [turfs]);
 
-  // Load slot availability when turf is selected
-  useEffect(() => {
-    if (selectedTurf) {
-      fetchKioskAvailableSlots(selectedTurf.id, 60).then(bookings => {
-        const allSlots = generateSlots(todayIST(), 60, hours.openTime, hours.closeTime);
-        const freeSlots = allSlots.filter(slot => {
-          return !bookings.some((b: any) => 
-            new Date(b.startTime) < slot.endTime && new Date(b.endTime) > slot.startTime
-          );
-        });
-        setAvailableSlots(freeSlots);
+  // Derive available slots for the selected sport
+  const availableSlotsForSport = useMemo(() => {
+    if (!selectedSport) return [];
+    
+    // Find all turfs that support this sport
+    const sportTurfs = turfs.filter(t => t.sports.some((ts: any) => ts.sportId === selectedSport.id));
+    if (sportTurfs.length === 0) return [];
+    
+    const allSlots = generateSlots(todayIST(), 60, hours.openTime, hours.closeTime);
+    
+    // A slot is available if AT LEAST ONE of the turfs is free during this slot
+    return allSlots.filter(slot => {
+      // Check if there is any turf that does NOT have a booking during this slot
+      return sportTurfs.some(turf => {
+        const isBooked = allBookings.some((b: any) => 
+          b.turfId === turf.id && 
+          new Date(b.startTime) < slot.endTime && 
+          new Date(b.endTime) > slot.startTime
+        );
+        return !isBooked; // True if this specific turf is free
       });
-    }
-  }, [selectedTurf, hours]);
+    });
+  }, [selectedSport, turfs, hours, allBookings]);
+
+  // Derive available turfs for the selected slot
+  const availableTurfsForSlot = useMemo(() => {
+    if (!selectedSport || !selectedSlot) return [];
+    const sportTurfs = turfs.filter(t => t.sports.some((ts: any) => ts.sportId === selectedSport.id));
+    
+    return sportTurfs.filter(turf => {
+      const isBooked = allBookings.some((b: any) => 
+        b.turfId === turf.id && 
+        new Date(b.startTime) < selectedSlot.endTime && 
+        new Date(b.endTime) > selectedSlot.startTime
+      );
+      return !isBooked;
+    });
+  }, [selectedSport, selectedSlot, turfs, allBookings]);
+
 
   const handleWalletPayment = async () => {
     if (member.walletBalanceRupees < (selectedTurf.bookingPrice || 0)) {
@@ -115,7 +146,6 @@ export default function KioskBookingFlow({ member, onComplete, onCancel }: { mem
   const handleRazorpayPayment = async () => {
     setIsProcessing(true);
     try {
-      // 1. Create the booking as PAYMENT_PENDING and get Razorpay order
       const res = await createKioskBooking({
         memberId: member.id,
         turfId: selectedTurf.id,
@@ -159,6 +189,26 @@ export default function KioskBookingFlow({ member, onComplete, onCancel }: { mem
         theme: {
           color: "#ea580c",
         },
+        // Display ONLY UPI QR directly
+        config: {
+          display: {
+            blocks: {
+              upi: {
+                name: "Pay via UPI QR",
+                instruments: [
+                  {
+                    method: "upi",
+                    flows: ["qr"]
+                  }
+                ]
+              }
+            },
+            sequence: ["block.upi"],
+            preferences: {
+              show_default_blocks: false
+            }
+          }
+        },
         modal: {
           ondismiss: function () {
             setIsProcessing(false);
@@ -179,10 +229,22 @@ export default function KioskBookingFlow({ member, onComplete, onCancel }: { mem
   return (
     <div className="bg-[#1c1f2e] rounded-2xl p-6 shadow-2xl border border-[#2a2d3e] flex flex-col gap-6 animate-in slide-in-from-bottom-8 fade-in">
       <div className="flex justify-between items-center border-b border-[#2a2d3e] pb-4">
-        <h2 className="text-2xl font-bold text-white">Book Court for Today</h2>
+        <div className="flex items-center gap-3">
+          {selectedSport && (
+            <button onClick={() => {
+              if (selectedTurf) setSelectedTurf(null);
+              else if (selectedSlot) setSelectedSlot(null);
+              else setSelectedSport(null);
+            }} className="text-slate-400 hover:text-white p-2 rounded-full hover:bg-white/5">
+              <FiArrowLeft className="text-xl" />
+            </button>
+          )}
+          <h2 className="text-2xl font-bold text-white">Book Court for Today</h2>
+        </div>
         <button onClick={onCancel} className="text-slate-400 hover:text-white px-4 py-2 rounded bg-[#25293d]">Cancel</button>
       </div>
 
+      {/* Step 1: Select Sport */}
       {!selectedSport && (
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {sports.map(s => (
@@ -193,25 +255,15 @@ export default function KioskBookingFlow({ member, onComplete, onCancel }: { mem
         </div>
       )}
 
-      {selectedSport && !selectedTurf && (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {turfs.filter(t => t.sports.some((ts: any) => ts.sportId === selectedSport.id)).map(t => (
-            <button key={t.id} onClick={() => setSelectedTurf(t)} className="p-4 bg-[#161824] border border-[#34384e] rounded-xl hover:border-orange-500 text-left">
-              <h3 className="text-xl font-bold text-white">{t.name}</h3>
-              <p className="text-orange-400 font-semibold mt-1">₹{t.bookingPrice || 0} / hour</p>
-            </button>
-          ))}
-        </div>
-      )}
-
-      {selectedTurf && !selectedSlot && (
+      {/* Step 2: Select Time Slot */}
+      {selectedSport && !selectedSlot && (
         <div>
-          <h3 className="text-lg font-bold text-white mb-3">Select Available Slot ({selectedTurf.name})</h3>
+          <h3 className="text-lg font-bold text-white mb-3">Select Time Slot</h3>
           <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-3 max-h-64 overflow-y-auto custom-scrollbar pr-2">
-            {availableSlots.length === 0 ? (
-              <p className="col-span-full text-slate-400">No slots available today.</p>
+            {availableSlotsForSport.length === 0 ? (
+              <p className="col-span-full text-slate-400">No slots available today for {selectedSport.name}.</p>
             ) : (
-              availableSlots.map((slot, i) => (
+              availableSlotsForSport.map((slot, i) => (
                 <button key={i} onClick={() => setSelectedSlot(slot)} className="p-2 text-sm bg-[#161824] border border-[#34384e] text-white rounded hover:bg-orange-500 hover:border-orange-500 transition">
                   {slot.label}
                 </button>
@@ -221,7 +273,27 @@ export default function KioskBookingFlow({ member, onComplete, onCancel }: { mem
         </div>
       )}
 
-      {selectedSlot && (
+      {/* Step 3: Select Court */}
+      {selectedSport && selectedSlot && !selectedTurf && (
+        <div>
+          <h3 className="text-lg font-bold text-white mb-3">Available Courts at {selectedSlot.label}</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {availableTurfsForSlot.length === 0 ? (
+              <p className="col-span-full text-slate-400">No courts available for this time.</p>
+            ) : (
+              availableTurfsForSlot.map(t => (
+                <button key={t.id} onClick={() => setSelectedTurf(t)} className="p-4 bg-[#161824] border border-[#34384e] rounded-xl hover:border-orange-500 text-left">
+                  <h3 className="text-xl font-bold text-white">{t.name}</h3>
+                  <p className="text-orange-400 font-semibold mt-1">₹{t.bookingPrice || 0} / hour</p>
+                </button>
+              ))
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* Step 4: Checkout */}
+      {selectedTurf && selectedSlot && (
         <div className="bg-[#161824] border border-[#34384e] p-6 rounded-xl flex flex-col items-center text-center">
           <h3 className="text-2xl font-black text-white mb-2">{selectedSport.name} at {selectedTurf.name}</h3>
           <p className="text-orange-400 text-lg mb-6 flex items-center justify-center gap-2"><FiClock /> Today, {selectedSlot.label} (1 Hour)</p>
@@ -244,7 +316,7 @@ export default function KioskBookingFlow({ member, onComplete, onCancel }: { mem
             >
               <FiSmartphone className="text-2xl" />
               Pay with UPI / QR
-              <span className="text-xs font-normal text-orange-200">Scan via PhonePe/GPay</span>
+              <span className="text-xs font-normal text-orange-200">Direct QR Scan</span>
             </button>
           </div>
         </div>
