@@ -42,6 +42,7 @@ function generateSlots(dateStr: string, durationMin: number, openTime: string = 
 export default function BookingsClient({ turfs, facilityHours = { openTime: '06:00', closeTime: '23:00' }, pointsPerRupee = 100 }: { turfs: any[], facilityHours?: { openTime: string, closeTime: string }, pointsPerRupee?: number }) {
   const { showAlert } = useAlert();
   const [activeTab, setActiveTab] = useState<'NEW' | 'MANAGE'>('NEW');
+  const [step, setStep] = useState(1);
   
   // Extract unique sports from turfs
   const sports = useMemo(() => {
@@ -234,7 +235,6 @@ export default function BookingsClient({ turfs, facilityHours = { openTime: '06:
     if (selectedSlots.length === 0) return showAlert("Select Slots", "Please select at least one time slot.", "error");
     if (!autoAllocation && selectedTurfs.length === 0) return showAlert("Select Court", "Please select an available court.", "error");
     
-    setShowModal(true);
     setParticipantCount(1);
     setGuestNames([]);
     setAdditionalMemberIds([]);
@@ -261,7 +261,7 @@ export default function BookingsClient({ turfs, facilityHours = { openTime: '06:
   const finalPrice = totalPrice - applicableDiscount;
 
   useEffect(() => {
-    if (!showModal || !upiSettings.upiId) return;
+    if (step !== 4 || !upiSettings.upiId) return;
 
     const generateDynamicQR = async () => {
       const amountForQR = (Number(onlineAmount) || 0) > 0 
@@ -278,7 +278,7 @@ export default function BookingsClient({ turfs, facilityHours = { openTime: '06:
     };
 
     generateDynamicQR();
-  }, [cashAmount, onlineAmount, showModal, upiSettings, finalPrice]);
+  }, [cashAmount, onlineAmount, step, upiSettings, finalPrice]);
 
   async function confirmBooking() {
     if (!mobile && !memberId) return showAlert("Missing Details", "Please provide a mobile number.", "error");
@@ -365,7 +365,8 @@ export default function BookingsClient({ turfs, facilityHours = { openTime: '06:
       showAlert("Booking Confirmed", `Successfully booked ${selectedSlots.length} slots for ${name || 'Member'}!`, "success", {
         actions: [{ label: "Print Tickets", onClick: () => window.open(`/print/ticket/${createdBookings[0].id}`, "_blank") }]
       });
-      setShowModal(false);
+      setStep(1);
+      setActiveTab('MANAGE');
       loadBookings();
     } catch (err: any) {
       showAlert("Booking Failed", err.message || "Failed to confirm booking.", "error");
@@ -415,9 +416,19 @@ export default function BookingsClient({ turfs, facilityHours = { openTime: '06:
             <p className="text-gray-500 mt-1 text-sm">Select Sport ➔ Select Slots ➔ Pick Court</p>
           </div>
 
-      <div className="grid lg:grid-cols-4 gap-8">
-        <div className="lg:col-span-1 space-y-8 lg:border-r lg:border-[#2a2d3e] lg:pr-6">
-          <div>
+          {/* Stepper Progress */}
+          <div className="flex items-center gap-2 mb-6">
+            {[1, 2, 3, 4].map((s) => (
+              <div key={s} className={`flex-1 h-1.5 rounded-full ${step >= s ? 'bg-orange-500' : 'bg-[#2a2d3e]'}`} />
+            ))}
+          </div>
+
+          <div className="bg-[#161923] border border-[#2a2d3e] rounded-xl p-6">
+            {/* STEP 1: Date & Sport */}
+            <div className={step === 1 ? 'block' : 'hidden'}>
+              <h2 className="text-xl font-bold font-['Outfit'] text-white flex items-center gap-2 mb-6">1. Date & Sport</h2>
+              <div className="space-y-6 max-w-md">
+                <div>
             <label className="block text-sm font-semibold text-gray-400 mb-2">1. Select Date</label>
             <input 
               type="date" 
@@ -442,46 +453,13 @@ export default function BookingsClient({ turfs, facilityHours = { openTime: '06:
               {sports.length === 0 && <div className="text-gray-500 text-sm">No sports configured with turfs.</div>}
             </div>
           </div>
-
-          {selectedSlots.length > 0 && (autoAllocation || selectedTurfs.length > 0) && (
-            <div className="fixed bottom-0 left-0 right-0 z-40 p-4 border-t border-[#2a2d3e] bg-[#161923] shadow-[0_-10px_40px_rgba(0,0,0,0.5)] lg:relative lg:p-5 lg:border-t lg:border-orange-500/20 lg:bg-transparent lg:shadow-none lg:rounded-none">
-              <h3 className="font-bold text-orange-400 mb-2 hidden lg:block">Booking Summary</h3>
-              
-              <div className="flex justify-between items-center lg:hidden">
-                <div className="flex flex-col">
-                  <div className="text-xs text-gray-400">{selectedSlots.length} Slots Selected</div>
-                  <div className="text-xl font-bold text-white">₹{Number(totalPrice.toFixed(2))}</div>
-                </div>
-                <button 
-                  onClick={openCheckout}
-                  className="bg-orange-500 hover:bg-orange-600 text-white rounded-lg px-6 py-3 font-semibold transition-colors border-none cursor-pointer"
-                >
-                  Checkout
-                </button>
-              </div>
-
-              {/* Desktop version */}
-              <div className="hidden lg:block">
-                <div className="text-sm text-white mb-1">{autoAllocation ? autoAllocation.map(a => a.turfName).join(", ") : selectedTurfs.map(t => t.name).join(", ")}</div>
-                <div className="font-semibold text-lg text-emerald-400">
-                  {formatIST(new Date(Math.min(...selectedSlots.map(s => s.startTime.getTime()))), 'h:mm a')} 
-                  <span className="text-gray-500 mx-2">to</span> 
-                  {formatIST(new Date(Math.max(...selectedSlots.map(s => s.endTime.getTime()))), 'h:mm a')}
-                </div>
-                <div className="text-xs text-gray-400 mb-1">{selectedSlots.length} Slots Selected</div>
-                <div className="text-2xl font-bold text-white mb-4">₹{Number(totalPrice.toFixed(2))}</div>
-                <button 
-                  onClick={openCheckout}
-                  className="w-full bg-orange-500 hover:bg-orange-600 text-white rounded-lg py-3 font-semibold transition-colors border-none cursor-pointer"
-                >
-                  Proceed to Checkout
-                </button>
               </div>
             </div>
-          )}
-        </div>
 
-        <div className="lg:col-span-3 space-y-10 lg:pl-4">
+            {/* STEP 2: Time Slots */}
+            <div className={step === 2 ? 'block' : 'hidden'}>
+              <h2 className="text-xl font-bold font-['Outfit'] text-white flex items-center gap-2 mb-6">2. Select Time Slots</h2>
+              <div className="space-y-10">
           <div>
             {loading ? (
               <div className="p-4">
@@ -528,29 +506,32 @@ export default function BookingsClient({ turfs, facilityHours = { openTime: '06:
               </div>
             )}
           </div>
-
-          {selectedSlots.length > 0 && autoAllocation && (
-            <div className="animate-in slide-in-from-bottom-4 duration-300 pt-6 border-t border-[#2a2d3e]">
-              <h2 className="text-xl font-bold font-['Outfit'] text-white flex items-center gap-2 mb-6">
-                4. Allocation Breakdown
-              </h2>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                {autoAllocation.map((alloc, i) => (
-                  <div key={i} className="text-left p-4 rounded-xl border border-emerald-500 bg-[#1c1f2e] shadow-[0_0_15px_rgba(16,185,129,0.15)] relative overflow-hidden">
-                    <div className="font-bold text-white text-lg mb-1">{alloc.turfName}</div>
-                    <div className="text-sm text-gray-400">₹{alloc.price}</div>
-                    <div className="text-sm font-semibold text-emerald-400 mt-2">
-                      {formatIST(alloc.startTime, 'h:mm a')} to {formatIST(alloc.endTime, 'h:mm a')}
-                    </div>
-                    <div className="absolute top-4 right-4 text-emerald-500 text-xl">
-                      <FiCheck />
-                    </div>
-                  </div>
-                ))}
-              </div>
+          </div>
             </div>
-          )}
 
+            {/* STEP 3: Court Selection */}
+            <div className={step === 3 ? 'block' : 'hidden'}>
+              {selectedSlots.length > 0 && autoAllocation && (
+                <div className="animate-in slide-in-from-bottom-4 duration-300">
+                  <h2 className="text-xl font-bold font-['Outfit'] text-white flex items-center gap-2 mb-6">
+                    3. Allocation Breakdown
+                  </h2>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {autoAllocation.map((alloc, i) => (
+                      <div key={i} className="text-left p-4 rounded-xl border border-emerald-500 bg-[#1c1f2e] shadow-[0_0_15px_rgba(16,185,129,0.15)] relative overflow-hidden">
+                        <div className="font-bold text-white text-lg mb-1">{alloc.turfName}</div>
+                        <div className="text-sm text-gray-400">₹{alloc.price}</div>
+                        <div className="text-sm font-semibold text-emerald-400 mt-2">
+                          {formatIST(alloc.startTime, 'h:mm a')} to {formatIST(alloc.endTime, 'h:mm a')}
+                        </div>
+                        <div className="absolute top-4 right-4 text-emerald-500 text-xl">
+                          <FiCheck />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
           {selectedSlots.length > 0 && !autoAllocation && (
             <div className="animate-in slide-in-from-bottom-4 duration-300 pt-6 border-t border-[#2a2d3e]">
               <h2 className="text-xl font-bold font-['Outfit'] text-white flex items-center gap-2 mb-6">
@@ -603,38 +584,15 @@ export default function BookingsClient({ turfs, facilityHours = { openTime: '06:
               </div>
             </div>
           )}
-        </div>
-      </div>
-      <div className="h-24 lg:hidden"></div> {/* padding for sticky bottom bar */}
-      {/* Checkout Modal */}
-      <AnimatePresence>
-      {showModal && (
-        <motion.div 
-          key="checkout-modal-backdrop"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          className="fixed inset-0 z-50 flex items-end md:items-center justify-center p-0 md:p-4 bg-black/80 backdrop-blur-sm"
-        >
-          <motion.div 
-            key="checkout-modal-content"
-            initial={{ scale: 0.95, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            exit={{ scale: 0.95, opacity: 0 }}
-            className="bg-[#161923] md:border md:border-[#2a2d3e] rounded-t-2xl md:rounded-2xl w-full max-w-5xl shadow-2xl overflow-hidden flex flex-col md:flex-row max-h-[95vh] md:max-h-[90vh] relative"
-          >
+            </div>
             
-            {/* Left: Customer Details */}
-            <div className="flex-1 p-6 md:p-10 border-b md:border-b-0 md:border-r border-[#2a2d3e] overflow-y-auto bg-transparent">
-              <div className="flex justify-between items-center mb-6">
-                <h2 className="text-xl font-bold font-['Outfit'] text-white">Customer Details</h2>
-                <button className="md:hidden text-gray-500 hover:text-white" onClick={() => {
-                  updateDisplaySession({ status: "IDLE" }).catch(() => {});
-                  setShowModal(false);
-                }}><FiX size={24} /></button>
-              </div>
-
-              <div className="space-y-5">
+            {/* STEP 4: Checkout */}
+            <div className={step === 4 ? 'block' : 'hidden'}>
+              <h2 className="text-xl font-bold font-['Outfit'] text-white mb-6">4. Checkout & Payment</h2>
+              <div className="flex flex-col md:flex-row gap-8 bg-transparent">
+                {/* Left: Customer Details */}
+                <div className="flex-1 overflow-y-auto">
+                  <div className="space-y-5">
                 <div>
                   <label className="block text-xs uppercase tracking-wider font-semibold text-gray-500 mb-2">Mobile Number</label>
                   <input 
@@ -914,10 +872,41 @@ export default function BookingsClient({ turfs, facilityHours = { openTime: '06:
                 </button>
               </div>
             </div>
-          </motion.div>
-        </motion.div>
-      )}
-      </AnimatePresence>
+              </div>
+            </div>
+            {/* End Step 4 */}
+
+            {/* Stepper Navigation Buttons */}
+            <div className="flex justify-between mt-8 pt-4 border-t border-[#2a2d3e]">
+              {step > 1 ? (
+                <button type="button" onClick={() => setStep(step - 1)} className="px-5 py-2.5 rounded-lg border border-[#2a2d3e] text-gray-400 hover:text-white hover:bg-[#1c1f2e] text-sm font-semibold transition-colors cursor-pointer">
+                  Back
+                </button>
+              ) : <div />}
+              
+              {step < 4 ? (
+                <button 
+                  type="button" 
+                  onClick={() => {
+                     if (step === 1) {
+                        if (!selectedSportId) return showAlert("Select Sport", "Please select a sport.", "error");
+                        setStep(2);
+                     } else if (step === 2) {
+                        if (selectedSlots.length === 0) return showAlert("Select Slots", "Please select at least one time slot.", "error");
+                        setStep(3);
+                     } else if (step === 3) {
+                        if (!autoAllocation && selectedTurfs.length === 0) return showAlert("Select Court", "Please select an available court.", "error");
+                        openCheckout(); 
+                        setStep(4);
+                     }
+                  }} 
+                  className="bg-orange-500 hover:bg-orange-600 text-white rounded-lg px-5 py-2.5 text-sm font-semibold transition-colors border-none cursor-pointer"
+                >
+                  Next Step
+                </button>
+              ) : <div />}
+            </div>
+          </div>
       
       {/* End of NEW tab container */}
       </div>

@@ -229,7 +229,16 @@ export default function SportsClient({
               {step === 3 && "Step 3: Turfs Setup"}
             </h3>
 
-            <form onSubmit={handleSubmit}>
+            <form 
+              onSubmit={handleSubmit}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  e.preventDefault();
+                  if (step < 3) handleNextStep();
+                  // For step 3, we don't auto-submit on Enter to allow them to configure turfs safely
+                }
+              }}
+            >
               <div className={step === 1 ? 'block' : 'hidden'}>
                 <div className="mb-5">
                   <label className="block text-xs uppercase tracking-wider font-semibold text-gray-500 mb-2">Sport Name</label>
