@@ -64,7 +64,7 @@ export class PaymentService {
   /**
    * Creates an order/checkout session for the specified gateway and logs PENDING transaction.
    */
-  static async createOrder(bookingId: string, gateway: 'RAZORPAY' | 'PHONEPE', platform: 'WEB' | 'APP' = 'WEB', origin?: string) {
+  static async createOrder(bookingId: string, gateway: 'RAZORPAY' | 'PHONEPE', platform: 'WEB' | 'APP' = 'WEB', origin?: string, redirectPath?: string) {
     const booking = await prisma.booking.findUnique({
       where: { id: bookingId },
       include: { member: true }
@@ -150,16 +150,20 @@ export class PaymentService {
         throw new ApiError('PhonePe is not configured in database', 500);
       }
 
-      const transactionId = `T${Date.now()}${booking.id.substring(0, 5)}`;
-      
+      const transactionId = `T${Date.now()}${Math.floor(Math.random() * 1000)}`;
+      const baseUrl = origin || process.env.NEXT_PUBLIC_APP_URL || process.env.NEXTAUTH_URL || 'http://localhost:3000';
+      const redirectUrlPath = redirectPath 
+        ? `/api/client/v1/payments/phonepe-redirect?bookingId=${booking.id}&redirectPath=${encodeURIComponent(redirectPath)}`
+        : `/api/client/v1/payments/phonepe-redirect?bookingId=${booking.id}${origin ? `&origin=${encodeURIComponent(origin)}` : ''}`;
+
       const payload: Record<string, unknown> = {
         merchantId: merchantId,
         merchantTransactionId: transactionId,
         merchantUserId: booking.memberId,
         amount: Math.round(amountDue * 100),
-        redirectUrl: `${origin || process.env.NEXT_PUBLIC_APP_URL || process.env.NEXTAUTH_URL || 'http://localhost:3000'}/api/client/v1/payments/phonepe-redirect?bookingId=${booking.id}${origin ? `&origin=${encodeURIComponent(origin)}` : ''}`,
+        redirectUrl: `${baseUrl}${redirectUrlPath}`,
         redirectMode: "POST",
-        callbackUrl: `${origin || process.env.NEXT_PUBLIC_APP_URL || process.env.NEXTAUTH_URL || 'http://localhost:3000'}/api/client/v1/payments/webhook?gateway=PHONEPE&bookingId=${booking.id}`,
+        callbackUrl: `${baseUrl}/api/client/v1/payments/webhook?gateway=PHONEPE&bookingId=${booking.id}`,
         mobileNumber: booking.member.mobile,
         paymentInstrument: {
           type: "PAY_PAGE"
@@ -650,6 +654,42 @@ export class PaymentService {
     }
 
     return { success: false, status: data.code || 'FAILED' };
+  }
+
+  /**
+   * Creates a Razorpay Payment Link (short URL) for the given amount.
+   */
+  static async createPaymentLink(amount: number, description: string, customer: { name: string, contact: string }, referenceId?: string) {
+    const rzpKey = await prisma.setting.findUnique({ where: { key: 'RAZORPAY_KEY_ID' } });
+    const rzpSecret = await prisma.setting.findUnique({ where: { key: 'RAZORPAY_KEY_SECRET' } });
+    
+    if (!rzpKey?.value || !rzpSecret?.value) throw new ApiError('Razorpay is not configured', 500);
+
+    const razorpay = new Razorpay({
+      key_id: rzpKey.value,
+      key_secret: rzpSecret.value
+    });
+
+    try {
+      const pl = await razorpay.paymentLink.create({
+        amount: Math.round(amount * 100),
+        currency: "INR",
+        description: description.substring(0, 2048),
+        customer: {
+          name: customer.name || "Customer",
+          contact: customer.contact || "",
+        },
+        notify: {
+          sms: false,
+          email: false
+        },
+        reminder_enable: false,
+        reference_id: referenceId
+      });
+      return pl.short_url;
+    } catch (err: any) {
+      throw new ApiError(err.message || 'Failed to create Razorpay payment link', 500);
+    }
   }
 
   /**

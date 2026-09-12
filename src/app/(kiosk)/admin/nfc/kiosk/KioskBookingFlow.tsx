@@ -143,6 +143,30 @@ export default function KioskBookingFlow({ member, onComplete, onCancel }: { mem
     }
   };
 
+  const handlePhonePePayment = async () => {
+    setIsProcessing(true);
+    try {
+      const res = await createKioskBooking({
+        memberId: member.id,
+        turfId: selectedTurf.id,
+        sportId: selectedSport.id,
+        startTime: selectedSlot.startTime,
+        endTime: selectedSlot.endTime,
+        price: selectedTurf.bookingPrice || 0,
+        paymentMethod: "PHONEPE"
+      });
+
+      if (!res.success || !res.orderData || !res.orderData.redirectUrl) {
+        throw new Error("Could not initialize PhonePe booking");
+      }
+
+      window.location.href = res.orderData.redirectUrl;
+    } catch (err: any) {
+      showAlert("Error", err.message, "error");
+      setIsProcessing(false);
+    }
+  };
+
   const handleRazorpayPayment = async () => {
     setIsProcessing(true);
     try {
@@ -317,6 +341,15 @@ export default function KioskBookingFlow({ member, onComplete, onCancel }: { mem
               <FiSmartphone className="text-2xl" />
               Pay with UPI / QR
               <span className="text-xs font-normal text-orange-200">Direct QR Scan</span>
+            </button>
+            <button 
+              disabled={isProcessing}
+              onClick={handlePhonePePayment}
+              className="flex-1 p-4 rounded-xl font-bold flex flex-col items-center justify-center gap-2 bg-purple-600 text-white hover:bg-purple-500 disabled:opacity-50"
+            >
+              <FiSmartphone className="text-2xl" />
+              PhonePe
+              <span className="text-xs font-normal text-purple-200">UPI / Gateway</span>
             </button>
           </div>
         </div>

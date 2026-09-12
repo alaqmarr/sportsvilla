@@ -44,26 +44,39 @@ export const POST = async (request: Request) => {
     const transactionId = formData.get('transactionId') as string;
     const code = formData.get('code') as string;
 
-    const frontendUrl = getSafeFrontendUrl(searchParams.get('origin'));
+    const origin = searchParams.get('origin');
+    const redirectPath = searchParams.get('redirectPath');
+    const frontendUrl = getSafeFrontendUrl(origin);
+
+    const buildRedirectUrl = (path: string, queryParams: Record<string, string>) => {
+      if (redirectPath) {
+        const url = new URL(`${frontendUrl}${redirectPath}`);
+        Object.entries(queryParams).forEach(([key, value]) => url.searchParams.append(key, value));
+        return url.toString();
+      }
+      const url = new URL(`${frontendUrl}${path}`);
+      Object.entries(queryParams).forEach(([key, value]) => url.searchParams.append(key, value));
+      return url.toString();
+    };
 
     if (!bookingId || !transactionId) {
       logger.error('Invalid PhonePe Redirect Payload', { bookingId, transactionId });
-      return NextResponse.redirect(`${frontendUrl}/play/booking-failure?error=invalid_payload`, 303);
+      return NextResponse.redirect(buildRedirectUrl('/play/booking-failure', { error: 'invalid_payload' }), 303);
     }
 
     if (code === 'PAYMENT_SUCCESS' || code === 'PAYMENT_PENDING') {
       const { success, status } = await PaymentService.checkPhonePeStatus(bookingId, transactionId);
       
       if (success && status === 'PAID') {
-        return NextResponse.redirect(`${frontendUrl}/play/booking-success?bookingId=${bookingId}`, 303);
+        return NextResponse.redirect(buildRedirectUrl('/play/booking-success', { bookingId }), 303);
       } else if (status === 'OVERBOOKED_REFUNDED') {
-        return NextResponse.redirect(`${frontendUrl}/play/booking-failure?bookingId=${bookingId}&error=slot_claimed_refunded`, 303);
+        return NextResponse.redirect(buildRedirectUrl('/play/booking-failure', { bookingId, error: 'slot_claimed_refunded' }), 303);
       } else if (status === 'PAYMENT_PENDING' || code === 'PAYMENT_PENDING') {
-        return NextResponse.redirect(`${frontendUrl}/play/booking-success?bookingId=${bookingId}&status=pending`, 303);
+        return NextResponse.redirect(buildRedirectUrl('/play/booking-success', { bookingId, status: 'pending' }), 303);
       }
     }
     
-    return NextResponse.redirect(`${frontendUrl}/play/booking-failure?bookingId=${bookingId}&error=${code || 'failed'}`, 303);
+    return NextResponse.redirect(buildRedirectUrl('/play/booking-failure', { bookingId, error: code || 'failed' }), 303);
   } catch (error: unknown) {
     logger.error('PhonePe Redirect Error', error);
     const frontendUrl = getSafeFrontendUrl(null);

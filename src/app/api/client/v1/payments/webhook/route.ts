@@ -84,6 +84,31 @@ export const POST = withApiHandler(async (request: Request) => {
             await PaymentService.sendConfirmationAndTickets(settleResult.booking);
           }
         }
+      } else if (event === 'payment_link.paid') {
+        const linkEntity = eventData.payload?.payment_link?.entity;
+        const refId = linkEntity?.reference_id;
+        const paidAmountRupees = (linkEntity?.amount_paid || 0) / 100;
+        
+        if (refId) {
+          // reference_id can be comma separated bookingIds
+          const bookingIds = refId.split(',');
+          for (const bid of bookingIds) {
+            const booking = await prisma.booking.findUnique({ where: { id: bid } });
+            if (booking && booking.paymentStatus !== 'PAID') {
+               const settleResult = await PaymentService.settleSuccessfulPayment({
+                 bookingId: booking.id,
+                 gateway: 'RAZORPAY',
+                 gatewayOrderId: linkEntity.order_id,
+                 gatewayPaymentId: null, // we might not have it here easily
+                 paidAmountRupees: paidAmountRupees,
+                 metadata: { webhook: true, event, paymentLinkId: linkEntity.id }
+               });
+               if (settleResult.success && settleResult.status === 'PAID') {
+                 await PaymentService.sendConfirmationAndTickets(settleResult.booking);
+               }
+            }
+          }
+        }
       } else if (event === 'payment.failed' && orderId) {
         await prisma.transaction.updateMany({
           where: { gatewayOrderId: orderId, gateway: 'RAZORPAY', status: 'PENDING' },

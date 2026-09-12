@@ -162,6 +162,32 @@ export async function createKioskBooking({
     return { success: true, booking: JSON.parse(JSON.stringify(booking)), paymentMethod: "WALLET" };
   }
 
+  // Handle PHONEPE
+  if (paymentMethod === "PHONEPE") {
+    const b = await prisma.booking.create({
+      data: {
+        memberId,
+        turfId,
+        sportId,
+        startTime,
+        endTime,
+        price,
+        status: "CONFIRMED",
+        paymentStatus: "PENDING",
+        amountDue: price,
+        participants: {
+          create: {
+            memberId,
+            status: "CONFIRMED"
+          }
+        }
+      }
+    });
+
+    const orderData = await PaymentService.createOrder(b.id, "PHONEPE", "WEB", undefined, "/admin/nfc/kiosk");
+    return { success: true, booking: JSON.parse(JSON.stringify(b)), paymentMethod: "PHONEPE", orderData };
+  }
+
   // Handle RAZORPAY
   if (paymentMethod === "RAZORPAY") {
     const b = await prisma.booking.create({

@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useCallback, useRef } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import Script from "next/script";
 import { formatIST, todayIST } from "@/lib/dateUtils";
 import { NfcCheckinResponse, NfcDeviceType } from "@/types/nfc";
@@ -36,6 +37,22 @@ interface KioskClientProps {
 }
 
 export default function KioskClient({ initialTransactions = [] }: KioskClientProps) {
+  const searchParams = useSearchParams();
+
+  useEffect(() => {
+    const success = searchParams.get("success");
+    const error = searchParams.get("error");
+    if (success === "1" || success === "true") {
+      playNfcSound("success");
+      alert("Payment successful and you are checked in!");
+      window.history.replaceState({}, document.title, window.location.pathname);
+    } else if (error) {
+      playNfcSound("error");
+      alert("Booking failed or cancelled.");
+      window.history.replaceState({}, document.title, window.location.pathname);
+    }
+  }, [searchParams]);
+
   // Activity feed state
   const [activityFeed, setActivityFeed] = useState<any[]>(initialTransactions);
   const [isProcessing, setIsProcessing] = useState<boolean>(false);

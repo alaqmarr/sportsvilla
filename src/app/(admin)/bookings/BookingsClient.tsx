@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useEffect, useMemo } from "react";
-import { fetchBookingsByDate, createBooking, searchMember, getUpiId, addPayment, updateDisplaySession, searchMemberByNfc } from "./actions";
+import { fetchBookingsByDate, createBooking, searchMember, getUpiId, addPayment, updateDisplaySession, searchMemberByNfc, generateRazorpayPaymentLink, createAdminRazorpayOrder,
+  createAdminPhonePeOrder, verifyAdminRazorpayOrder } from "./actions";
 import { useAlert } from "@/components/AlertProvider";
 import QRCodeLib from "qrcode";
 import { formatIST, todayIST } from "@/lib/dateUtils";
@@ -11,6 +12,7 @@ import { FiCalendar, FiClock, FiCheck, FiX, FiUser, FiCreditCard, FiMapPin, FiLi
 import ManageBookings from "./ManageBookings";
 import { allocateTurfsForSlots, Allocation } from "@/lib/allocationEngine";
 import { useNfc } from "@/components/nfc/NfcProvider";
+import Script from "next/script";
 
 // Generate slots based on duration and facility open/close time
 function generateSlots(dateStr: string, durationMin: number, openTime: string = "06:00", closeTime: string = "23:00") {
@@ -80,6 +82,8 @@ export default function BookingsClient({ turfs, facilityHours = { openTime: '06:
   const [cashAmount, setCashAmount] = useState<number | "">(0);
   const [onlineAmount, setOnlineAmount] = useState<number | "">(0);
   const [participantCount, setParticipantCount] = useState<number | "">(1);
+  const [generatedRzpLink, setGeneratedRzpLink] = useState<string | null>(null);
+  const [generatedRzpLinkQr, setGeneratedRzpLinkQr] = useState<string | null>(null);
   const [guestNames, setGuestNames] = useState<string[]>([]);
   const [redeemPoints, setRedeemPoints] = useState(false);
 
@@ -263,25 +267,168 @@ export default function BookingsClient({ turfs, facilityHours = { openTime: '06:
   const applicableDiscount = redeemPoints ? Math.min(totalPrice, maxDiscount) : 0;
   const finalPrice = totalPrice - applicableDiscount;
 
-  useEffect(() => {
-    if (step !== 4 || !upiSettings.upiId) return;
+  // Removed manual UPI QR generation as we use Razorpay Dynamic Links now.
 
-    const generateDynamicQR = async () => {
-      const amountForQR = (Number(onlineAmount) || 0) > 0 
-        ? (Number(onlineAmount) || 0) 
-        : Math.max(0, finalPrice - (Number(cashAmount) || 0));
+  async function generatePaymentLink() {
+    if (!mobile && !memberId) return showAlert("Missing Details", "Please provide a mobile number.", "error");
+    if (searchResults.length === 0 && !name) return showAlert("Missing Name", "This is a new member, please enter their full name.", "error");
+    if (searchResults.length > 1 && !memberId) return showAlert("Select Member", "Multiple family members found. Please select one.", "error");
+    
+    setIsProcessing(true);
+    try {
+      // 1. Create the bookings without immediate payment
+      const createdBookings = await createBooking({
+        turfIds: autoAllocation ? autoAllocation.map(a => a.turfId) : selectedTurfs.map(t => t.id),
+        sportId: selectedSportId,
+        slots: autoAllocation 
+          ? autoAllocation.map(a => ({ startTime: a.startTime, endTime: a.endTime }))
+          : selectedSlots.map(s => ({ startTime: s.startTime, endTime: s.endTime })),
+        memberId,
+        mobile,
+        name,
+        participantCount: participantCount === '' ? 1 : participantCount,
+        guestNames,
+        additionalMemberIds,
+        redeemPoints
+      });
 
-      if (amountForQR > 0) {
-        const upiUrl = `upi://pay?pa=${upiSettings.upiId}&pn=${encodeURIComponent(upiSettings.businessName)}&am=${amountForQR}&cu=INR`;
-        const qrUrl = await QRCodeLib.toDataURL(upiUrl, { width: 300, margin: 1 });
-        setQrCodeData(qrUrl);
-      } else {
-        setQrCodeData("");
+      // 2. Generate Razorpay Payment Link for the created bookings
+      const shortUrl = await generateRazorpayPaymentLink(createdBookings.map(b => b.id));
+      const qrUrl = await QRCodeLib.toDataURL(shortUrl);
+      
+      setGeneratedRzpLink(shortUrl);
+      setGeneratedRzpLinkQr(qrUrl);
+      
+      showAlert("Payment Link Generated", "Customer can now scan the dynamic Razorpay QR or open the link.", "success");
+    } catch (err: any) {
+      showAlert("Failed to Generate Link", err.message || "Something went wrong", "error");
+    }
+    setIsProcessing(false);
+  }
+
+  
+  async function handleDirectPhonePeCheckout() {
+    if (!mobile && !memberId) return showAlert("Missing Details", "Please provide a mobile number.", "error");
+    if (searchResults.length === 0 && !name) return showAlert("Missing Name", "This is a new member, please enter their full name.", "error");
+    
+    setIsProcessing(true);
+    try {
+      const createdBookings = await createBooking({
+        turfIds: autoAllocation ? autoAllocation.map(a => a.turfId) : selectedTurfs.map(t => t.id),
+        sportId: selectedSportId,
+        slots: autoAllocation 
+          ? autoAllocation.map(a => ({ startTime: a.startTime, endTime: a.endTime }))
+          : selectedSlots.map(s => ({ startTime: s.startTime, endTime: s.endTime })),
+        memberId,
+        mobile,
+        name,
+        participantCount: participantCount === '' ? 1 : participantCount,
+        guestNames,
+        additionalMemberIds,
+        redeemPoints
+      });
+
+      const bookingIds = createdBookings.map((b: any) => b.id);
+      
+      const res = await createAdminPhonePeOrder(bookingIds, window.location.origin);
+      if (res.redirectUrl) {
+        window.open(res.redirectUrl, '_blank');
+        showAlert("Success", "PhonePe payment opened in new tab. Booking created.", "success");
+        setStep(1);
+        setActiveTab('MANAGE');
+        setIsProcessing(false);
+        loadBookings();
       }
-    };
+    } catch (err: any) {
+      console.error(err);
+      showAlert("Error", err.message, "error");
+      setIsProcessing(false);
+    }
+  }
 
-    generateDynamicQR();
-  }, [cashAmount, onlineAmount, step, upiSettings, finalPrice]);
+  async function handleDirectRazorpayCheckout() {
+    if (!mobile && !memberId) return showAlert("Missing Details", "Please provide a mobile number.", "error");
+    if (searchResults.length === 0 && !name) return showAlert("Missing Name", "This is a new member, please enter their full name.", "error");
+    
+    setIsProcessing(true);
+    try {
+      // 1. Create the bookings without immediate payment
+      const createdBookings = await createBooking({
+        turfIds: autoAllocation ? autoAllocation.map(a => a.turfId) : selectedTurfs.map(t => t.id),
+        sportId: selectedSportId,
+        slots: autoAllocation 
+          ? autoAllocation.map(a => ({ startTime: a.startTime, endTime: a.endTime }))
+          : selectedSlots.map(s => ({ startTime: s.startTime, endTime: s.endTime })),
+        memberId,
+        mobile,
+        name,
+        participantCount: participantCount === '' ? 1 : participantCount,
+        guestNames,
+        additionalMemberIds,
+        redeemPoints
+      });
+
+      const bookingIds = createdBookings.map((b: any) => b.id);
+      
+      // 2. Create Razorpay order
+      const res = await createAdminRazorpayOrder(bookingIds);
+
+      const options = {
+        key: res.keyId,
+        amount: Math.round(Number(res.amount) * 100),
+        currency: "INR",
+        name: "SportsVilla",
+        description: `Booking for ${createdBookings.length} slot(s)`,
+        order_id: res.orderId,
+        handler: async function (response: any) {
+          try {
+            await verifyAdminRazorpayOrder(
+              response.razorpay_order_id,
+              response.razorpay_payment_id,
+              response.razorpay_signature
+            );
+            showAlert("Success", "Payment successful and booking confirmed!", "success");
+            setStep(1);
+            setActiveTab('MANAGE');
+            loadBookings();
+          } catch (err: any) {
+            showAlert("Error", "Payment verification failed: " + err.message, "error");
+          }
+        },
+        prefill: {
+          name: name || "",
+          contact: mobile || "",
+        },
+        theme: {
+          color: "#ea580c",
+        },
+        // Display ONLY UPI QR directly
+        config: {
+          display: {
+            blocks: {
+              upi: {
+                name: "Pay via UPI QR",
+                instruments: [
+                  {
+                    method: "upi",
+                    flows: ["qr"]
+                  }
+                ]
+              }
+            },
+            sequence: ["block.upi"],
+            preferences: { show_default_blocks: false }
+          }
+        }
+      };
+      
+      const rzp = new (window as any).Razorpay(options);
+      rzp.open();
+    } catch (err: any) {
+      showAlert("Error", err.message || "Failed to initialize Razorpay", "error");
+    }
+    setIsProcessing(false);
+  }
 
   async function confirmBooking() {
     if (!mobile && !memberId) return showAlert("Missing Details", "Please provide a mobile number.", "error");
@@ -915,39 +1062,79 @@ export default function BookingsClient({ turfs, facilityHours = { openTime: '06:
                 </div>
               </div>
 
-              {upiSettings.upiId ? (
+              {generatedRzpLinkQr ? (
                 <div className="flex flex-col items-center bg-white rounded-xl p-4 mb-6">
-                  <p className="text-xs font-bold text-gray-500 uppercase tracking-widest mb-2">Scan to Pay via UPI</p>
-                  {qrCodeData ? (
-                    <img src={qrCodeData} alt="UPI QR Code" className="w-48 h-48 rounded-lg" />
-                  ) : (
-                    <div className="w-48 h-48 bg-gray-200 animate-pulse rounded-lg"></div>
-                  )}
-                  <p className="text-sm font-semibold text-gray-800 mt-3">{upiSettings.businessName}</p>
-                  <p className="text-xs text-gray-500">{upiSettings.upiId}</p>
+                  <p className="text-xs font-bold text-gray-500 uppercase tracking-widest mb-2">Scan to Pay via Razorpay</p>
+                  <img src={generatedRzpLinkQr} alt="Razorpay QR Code" className="w-48 h-48 rounded-lg" />
+                  <a href={generatedRzpLink!} target="_blank" rel="noopener noreferrer" className="text-sm font-semibold text-blue-500 mt-3 hover:underline">
+                    Open Payment Link
+                  </a>
+                  <p className="text-xs text-gray-500 text-center mt-2">The booking has been created as UNPAID.<br/>Payment will be tracked automatically.</p>
                 </div>
               ) : (
-                <div className="bg-orange-500/10 border border-orange-500/20 text-orange-400 p-4 rounded-xl text-sm font-medium mb-6 flex items-start gap-3">
+                <div className="bg-blue-500/10 border border-blue-500/20 text-blue-400 p-4 rounded-xl text-sm font-medium mb-6 flex items-start gap-3">
                   <FiCreditCard className="shrink-0 mt-0.5 text-lg" />
-                  <p>UPI payments are not configured. Please add your UPI ID in the Settings dashboard.</p>
+                  <p>Choose "Direct Checkout" to open Razorpay on this screen for the customer to pay now, or "Send Link" to share a payment link.</p>
                 </div>
               )}
 
-              <div className="flex gap-3">
-                <button 
-                  onClick={handleCastToDisplay}
-                  className="bg-[#1c1f2e] border border-emerald-500/30 hover:bg-emerald-500/10 text-emerald-400 rounded-lg px-4 font-bold transition-colors flex items-center justify-center gap-2 whitespace-nowrap"
-                  title="Show QR on second screen"
-                >
-                  Cast Screen
-                </button>
-                <button 
-                  onClick={confirmBooking}
-                  disabled={isProcessing}
-                  className="flex-1 bg-emerald-500 hover:bg-emerald-600 text-white rounded-lg py-4 font-bold text-lg transition-colors border-none cursor-pointer flex items-center justify-center gap-2 disabled:opacity-50"
-                >
-                  {isProcessing ? "Confirming..." : <><FiCheck /> Confirm (+{selectedSlots.length * 50} Loyalty Pts)</>}
-                </button>
+              <div className="flex flex-col gap-3">
+                
+                  <div className="flex gap-3">
+                    <button 
+                      onClick={handleDirectRazorpayCheckout}
+                      disabled={isProcessing || !!generatedRzpLink}
+                      className="flex-[2] bg-blue-600 hover:bg-blue-500 text-white rounded-lg py-4 font-bold transition-colors disabled:opacity-50"
+                    >
+                      Razorpay
+                    </button>
+                    <button 
+                      onClick={handleDirectPhonePeCheckout}
+                      disabled={isProcessing || !!generatedRzpLink}
+                      className="flex-[2] bg-purple-600 hover:bg-purple-500 text-white rounded-lg py-4 font-bold transition-colors disabled:opacity-50"
+                    >
+                      PhonePe
+                    </button>
+                    <button 
+                      onClick={generatePaymentLink}
+                      disabled={isProcessing || !!generatedRzpLink}
+                      className="flex-1 bg-[#1c1f2e] border border-blue-500/30 hover:bg-blue-500/10 text-blue-400 rounded-lg py-4 font-bold transition-colors disabled:opacity-50"
+                      title="Generate Payment Link"
+                    >
+                      Send Link
+                    </button>
+                    <button 
+                      onClick={handleCastToDisplay}
+                      className="flex-1 bg-[#1c1f2e] border border-emerald-500/30 hover:bg-emerald-500/10 text-emerald-400 rounded-lg py-4 font-bold transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+                      title="Show QR on second screen"
+                    >
+                      Cast Screen
+                    </button>
+                  </div>
+                {generatedRzpLink ? (
+                  <button 
+                    onClick={() => {
+                      setStep(1);
+                      setActiveTab('MANAGE');
+                      setGeneratedRzpLink(null);
+                      setGeneratedRzpLinkQr(null);
+                      setCashAmount(0);
+                      setOnlineAmount(0);
+                      loadBookings();
+                    }}
+                    className="w-full bg-blue-500 hover:bg-blue-600 text-white rounded-lg py-4 font-bold text-lg transition-colors border-none cursor-pointer flex items-center justify-center gap-2"
+                  >
+                    Done
+                  </button>
+                ) : (
+                  <button 
+                    onClick={confirmBooking}
+                    disabled={isProcessing}
+                    className="w-full bg-emerald-500 hover:bg-emerald-600 text-white rounded-lg py-4 font-bold text-lg transition-colors border-none cursor-pointer flex items-center justify-center gap-2 disabled:opacity-50"
+                  >
+                    {isProcessing ? "Confirming..." : <><FiCheck /> Confirm Unpaid / Cash Booking</>}
+                  </button>
+                )}
               </div>
             </div>
               </div>

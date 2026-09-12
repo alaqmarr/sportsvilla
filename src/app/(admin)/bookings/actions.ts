@@ -825,3 +825,162 @@ export async function getDisplaySession() {
     where: { id: "MAIN_DISPLAY" }
   });
 }
+
+export async function generateRazorpayPaymentLink(bookingIds: string[]) {
+  const bookings = await prisma.booking.findMany({
+    where: { id: { in: bookingIds } },
+    include: { member: true }
+  });
+  
+  if (bookings.length === 0) throw new Error("No bookings found");
+  
+  const totalDue = bookings.reduce((sum, b) => sum + (b.amountDue || 0), 0);
+  if (totalDue <= 0) throw new Error("No amount due");
+  
+  const primaryMember = bookings[0].member;
+  
+  const { PaymentService } = await import('@/services/PaymentService');
+  const shortUrl = await PaymentService.createPaymentLink(
+    totalDue,
+    `Booking for ${bookings.length} slot(s)`,
+    { name: primaryMember.name, contact: primaryMember.mobile ? `+91${primaryMember.mobile}` : "" },
+    bookings.map(b => b.id).join(',').substring(0, 40)
+  );
+  
+  return shortUrl;
+}
+
+export async function createAdminPhonePeOrder(bookingIds: string[], origin: string) {
+  const bookings = await prisma.booking.findMany({ where: { id: { in: bookingIds } }, include: { member: true } });
+  if (bookings.length === 0) throw new Error("No bookings found");
+  const totalDue = bookings.reduce((sum, b) => sum + (b.amountDue || 0), 0);
+  if (totalDue <= 0) throw new Error("No amount due");
+
+  const merchantId = await prisma.setting.findUnique({ where: { key: 'PHONEPE_MERCHANT_ID' } });
+  const saltKey = await prisma.setting.findUnique({ where: { key: 'PHONEPE_SALT_KEY' } });
+  const saltIndex = await prisma.setting.findUnique({ where: { key: 'PHONEPE_SALT_INDEX' } });
+  const envSetting = await prisma.setting.findUnique({ where: { key: 'PHONEPE_ENV' } });
+  
+  if (!merchantId?.value || !saltKey?.value || !saltIndex?.value) {
+    throw new Error('PhonePe is not configured');
+  }
+
+  const crypto = require('crypto');
+  const transactionId = `T${Date.now()}${Math.floor(Math.random() * 1000)}`;
+  const baseUrl = origin || process.env.NEXT_PUBLIC_APP_URL || process.env.NEXTAUTH_URL || 'http://localhost:3000';
+  
+  const payload = {
+    merchantId: merchantId.value,
+    merchantTransactionId: transactionId,
+    merchantUserId: bookings[0].memberId,
+    amount: Math.round(totalDue * 100),
+    redirectUrl: `${baseUrl}/play/booking-success?multi=1`,
+    redirectMode: "POST",
+    callbackUrl: `${baseUrl}/api/client/v1/payments/webhook?gateway=PHONEPE`,
+    mobileNumber: bookings[0].member.mobile,
+    paymentInstrument: { type: "PAY_PAGE" }
+  };
+
+  const payloadBase64 = Buffer.from(JSON.stringify(payload)).toString('base64');
+  const stringToHash = payloadBase64 + "/pg/v1/pay" + saltKey.value;
+  const sha256 = crypto.createHash('sha256').update(stringToHash).digest('hex');
+  const xVerify = `${sha256}###${saltIndex.value}`;
+
+  const phonePeHost = envSetting?.value === 'PROD' 
+    ? 'https://api.phonepe.com/apis/hermes'
+    : 'https://api-preprod.phonepe.com/apis/hermes';
+
+  const response = await fetch(`${phonePeHost}/pg/v1/pay`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'X-VERIFY': xVerify },
+    body: JSON.stringify({ request: payloadBase64 })
+  });
+
+  const data = await response.json();
+  if (!data.success) {
+    throw new Error(data.message || 'PhonePe init failed');
+  }
+
+  await prisma.transaction.create({
+    data: {
+      gatewayOrderId: transactionId,
+      amount: totalDue,
+      currency: "INR",
+      gateway: "PHONEPE",
+      status: "PENDING",
+      metadata: JSON.stringify({ bookingIds, platform: "WEB", initiatedAt: new Date().toISOString() })
+    }
+  });
+
+  return { redirectUrl: data.data.instrumentResponse.redirectInfo.url, transactionId };
+}
+
+export async function createAdminRazorpayOrder(bookingIds: string[]) {
+  const bookings = await prisma.booking.findMany({ where: { id: { in: bookingIds } }, include: { member: true } });
+  if (bookings.length === 0) throw new Error("No bookings found");
+  const totalDue = bookings.reduce((sum, b) => sum + (b.amountDue || 0), 0);
+  if (totalDue <= 0) throw new Error("No amount due");
+
+  const rzpKey = await prisma.setting.findUnique({ where: { key: 'RAZORPAY_KEY_ID' } });
+  const rzpSecret = await prisma.setting.findUnique({ where: { key: 'RAZORPAY_KEY_SECRET' } });
+  if (!rzpKey?.value || !rzpSecret?.value) throw new Error('Razorpay not configured');
+
+  const Razorpay = (await import('razorpay')).default;
+  const razorpay = new Razorpay({ key_id: rzpKey.value, key_secret: rzpSecret.value });
+  
+  const order = await razorpay.orders.create({
+    amount: Math.round(totalDue * 100),
+    currency: "INR",
+    receipt: "admin_rzp_" + Date.now()
+  });
+
+  await prisma.transaction.create({
+    data: {
+      gatewayOrderId: order.id,
+      amount: totalDue,
+      currency: "INR",
+      gateway: "RAZORPAY",
+      status: "PENDING",
+      metadata: JSON.stringify({ bookingIds })
+    }
+  });
+
+  return { keyId: rzpKey.value, orderId: order.id, amount: totalDue };
+}
+
+export async function verifyAdminRazorpayOrder(orderId: string, paymentId: string, signature: string) {
+  const rzpSecret = await prisma.setting.findUnique({ where: { key: 'RAZORPAY_KEY_SECRET' } });
+  const crypto = await import('crypto');
+  const expected = crypto.createHmac('sha256', rzpSecret!.value).update(orderId + "|" + paymentId).digest('hex');
+  if (expected !== signature) throw new Error("Invalid signature");
+
+  const tx = await prisma.transaction.findFirst({ where: { gatewayOrderId: orderId } });
+  if (!tx || !tx.metadata) throw new Error("Transaction not found");
+
+  const meta = typeof tx.metadata === 'string' ? JSON.parse(tx.metadata) : tx.metadata;
+  const bookingIds: string[] = (meta as any).bookingIds || [];
+
+  const { PaymentService } = await import('@/services/PaymentService');
+  
+  await prisma.transaction.update({
+    where: { id: tx.id },
+    data: { status: "SUCCESS", gatewayPaymentId: paymentId }
+  });
+
+  for (const bid of bookingIds) {
+    const booking = await prisma.booking.findUnique({ where: { id: bid } });
+    if (booking && booking.paymentStatus !== 'PAID') {
+      const settleResult = await PaymentService.settleSuccessfulPayment({
+        bookingId: bid,
+        gateway: 'RAZORPAY',
+        gatewayOrderId: orderId,
+        gatewayPaymentId: paymentId,
+        paidAmountRupees: booking.amountDue || booking.price,
+        metadata: { adminDirect: true }
+      });
+      if (settleResult.success && settleResult.status === 'PAID') {
+        await PaymentService.sendConfirmationAndTickets(settleResult.booking);
+      }
+    }
+  }
+}
