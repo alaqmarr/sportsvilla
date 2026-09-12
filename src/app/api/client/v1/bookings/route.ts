@@ -91,6 +91,10 @@ export async function POST(request: Request) {
     const start = new Date(allocations && allocations.length > 0 ? allocations[0].startTime : startTime!);
     const end = new Date(allocations && allocations.length > 0 ? allocations[allocations.length - 1].endTime : endTime!);
 
+    if (!turfId) {
+      return jsonResponse({ error: 'turfId is required' }, { status: 400 });
+    }
+
     // Bug #6: Block past-date bookings
     if (start < new Date()) {
       return jsonResponse({ error: 'Cannot book a slot in the past.' }, { status: 400 });
