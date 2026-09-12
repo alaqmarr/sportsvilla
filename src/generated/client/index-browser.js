@@ -172,6 +172,9 @@ exports.Prisma.SportScalarFieldEnum = {
   description: 'description',
   iconPath: 'iconPath',
   rewardPointsPerCheckin: 'rewardPointsPerCheckin',
+  openTime: 'openTime',
+  closeTime: 'closeTime',
+  slotDurationMinutes: 'slotDurationMinutes',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };

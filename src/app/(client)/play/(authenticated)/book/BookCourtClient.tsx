@@ -409,7 +409,9 @@ export function BookCourtClient({ member, sports, availability, initialDateStr, 
     return {
       time: s.label,
       available: !!isAvailableInAny,
-      price: availability?.turfs?.[0]?.bookingPrice || 0
+      price: availability?.turfs?.[0]?.bookingPrice || 0,
+      startTime: s.startTime,
+      endTime: s.endTime
     };
   });
 

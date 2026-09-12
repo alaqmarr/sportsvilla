@@ -10474,10 +10474,12 @@ export namespace Prisma {
 
   export type SportAvgAggregateOutputType = {
     rewardPointsPerCheckin: number | null
+    slotDurationMinutes: number | null
   }
 
   export type SportSumAggregateOutputType = {
     rewardPointsPerCheckin: number | null
+    slotDurationMinutes: number | null
   }
 
   export type SportMinAggregateOutputType = {
@@ -10486,6 +10488,9 @@ export namespace Prisma {
     description: string | null
     iconPath: string | null
     rewardPointsPerCheckin: number | null
+    openTime: string | null
+    closeTime: string | null
+    slotDurationMinutes: number | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -10496,6 +10501,9 @@ export namespace Prisma {
     description: string | null
     iconPath: string | null
     rewardPointsPerCheckin: number | null
+    openTime: string | null
+    closeTime: string | null
+    slotDurationMinutes: number | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -10506,6 +10514,9 @@ export namespace Prisma {
     description: number
     iconPath: number
     rewardPointsPerCheckin: number
+    openTime: number
+    closeTime: number
+    slotDurationMinutes: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -10514,10 +10525,12 @@ export namespace Prisma {
 
   export type SportAvgAggregateInputType = {
     rewardPointsPerCheckin?: true
+    slotDurationMinutes?: true
   }
 
   export type SportSumAggregateInputType = {
     rewardPointsPerCheckin?: true
+    slotDurationMinutes?: true
   }
 
   export type SportMinAggregateInputType = {
@@ -10526,6 +10539,9 @@ export namespace Prisma {
     description?: true
     iconPath?: true
     rewardPointsPerCheckin?: true
+    openTime?: true
+    closeTime?: true
+    slotDurationMinutes?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -10536,6 +10552,9 @@ export namespace Prisma {
     description?: true
     iconPath?: true
     rewardPointsPerCheckin?: true
+    openTime?: true
+    closeTime?: true
+    slotDurationMinutes?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -10546,6 +10565,9 @@ export namespace Prisma {
     description?: true
     iconPath?: true
     rewardPointsPerCheckin?: true
+    openTime?: true
+    closeTime?: true
+    slotDurationMinutes?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -10643,6 +10665,9 @@ export namespace Prisma {
     description: string | null
     iconPath: string | null
     rewardPointsPerCheckin: number
+    openTime: string | null
+    closeTime: string | null
+    slotDurationMinutes: number
     createdAt: Date
     updatedAt: Date
     _count: SportCountAggregateOutputType | null
@@ -10672,6 +10697,9 @@ export namespace Prisma {
     description?: boolean
     iconPath?: boolean
     rewardPointsPerCheckin?: boolean
+    openTime?: boolean
+    closeTime?: boolean
+    slotDurationMinutes?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     turfs?: boolean | Sport$turfsArgs<ExtArgs>
@@ -10690,6 +10718,9 @@ export namespace Prisma {
     description?: boolean
     iconPath?: boolean
     rewardPointsPerCheckin?: boolean
+    openTime?: boolean
+    closeTime?: boolean
+    slotDurationMinutes?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["sport"]>
@@ -10700,6 +10731,9 @@ export namespace Prisma {
     description?: boolean
     iconPath?: boolean
     rewardPointsPerCheckin?: boolean
+    openTime?: boolean
+    closeTime?: boolean
+    slotDurationMinutes?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["sport"]>
@@ -10710,11 +10744,14 @@ export namespace Prisma {
     description?: boolean
     iconPath?: boolean
     rewardPointsPerCheckin?: boolean
+    openTime?: boolean
+    closeTime?: boolean
+    slotDurationMinutes?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type SportOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "description" | "iconPath" | "rewardPointsPerCheckin" | "createdAt" | "updatedAt", ExtArgs["result"]["sport"]>
+  export type SportOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "description" | "iconPath" | "rewardPointsPerCheckin" | "openTime" | "closeTime" | "slotDurationMinutes" | "createdAt" | "updatedAt", ExtArgs["result"]["sport"]>
   export type SportInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     turfs?: boolean | Sport$turfsArgs<ExtArgs>
     membershipPlans?: boolean | Sport$membershipPlansArgs<ExtArgs>
@@ -10745,6 +10782,9 @@ export namespace Prisma {
       description: string | null
       iconPath: string | null
       rewardPointsPerCheckin: number
+      openTime: string | null
+      closeTime: string | null
+      slotDurationMinutes: number
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["sport"]>
@@ -11182,6 +11222,9 @@ export namespace Prisma {
     readonly description: FieldRef<"Sport", 'String'>
     readonly iconPath: FieldRef<"Sport", 'String'>
     readonly rewardPointsPerCheckin: FieldRef<"Sport", 'Int'>
+    readonly openTime: FieldRef<"Sport", 'String'>
+    readonly closeTime: FieldRef<"Sport", 'String'>
+    readonly slotDurationMinutes: FieldRef<"Sport", 'Int'>
     readonly createdAt: FieldRef<"Sport", 'DateTime'>
     readonly updatedAt: FieldRef<"Sport", 'DateTime'>
   }
@@ -45148,6 +45191,9 @@ export namespace Prisma {
     description: 'description',
     iconPath: 'iconPath',
     rewardPointsPerCheckin: 'rewardPointsPerCheckin',
+    openTime: 'openTime',
+    closeTime: 'closeTime',
+    slotDurationMinutes: 'slotDurationMinutes',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -46014,6 +46060,9 @@ export namespace Prisma {
     description?: StringNullableFilter<"Sport"> | string | null
     iconPath?: StringNullableFilter<"Sport"> | string | null
     rewardPointsPerCheckin?: IntFilter<"Sport"> | number
+    openTime?: StringNullableFilter<"Sport"> | string | null
+    closeTime?: StringNullableFilter<"Sport"> | string | null
+    slotDurationMinutes?: IntFilter<"Sport"> | number
     createdAt?: DateTimeFilter<"Sport"> | Date | string
     updatedAt?: DateTimeFilter<"Sport"> | Date | string
     turfs?: TurfSportListRelationFilter
@@ -46031,6 +46080,9 @@ export namespace Prisma {
     description?: SortOrderInput | SortOrder
     iconPath?: SortOrderInput | SortOrder
     rewardPointsPerCheckin?: SortOrder
+    openTime?: SortOrderInput | SortOrder
+    closeTime?: SortOrderInput | SortOrder
+    slotDurationMinutes?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     turfs?: TurfSportOrderByRelationAggregateInput
@@ -46051,6 +46103,9 @@ export namespace Prisma {
     description?: StringNullableFilter<"Sport"> | string | null
     iconPath?: StringNullableFilter<"Sport"> | string | null
     rewardPointsPerCheckin?: IntFilter<"Sport"> | number
+    openTime?: StringNullableFilter<"Sport"> | string | null
+    closeTime?: StringNullableFilter<"Sport"> | string | null
+    slotDurationMinutes?: IntFilter<"Sport"> | number
     createdAt?: DateTimeFilter<"Sport"> | Date | string
     updatedAt?: DateTimeFilter<"Sport"> | Date | string
     turfs?: TurfSportListRelationFilter
@@ -46068,6 +46123,9 @@ export namespace Prisma {
     description?: SortOrderInput | SortOrder
     iconPath?: SortOrderInput | SortOrder
     rewardPointsPerCheckin?: SortOrder
+    openTime?: SortOrderInput | SortOrder
+    closeTime?: SortOrderInput | SortOrder
+    slotDurationMinutes?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: SportCountOrderByAggregateInput
@@ -46086,6 +46144,9 @@ export namespace Prisma {
     description?: StringNullableWithAggregatesFilter<"Sport"> | string | null
     iconPath?: StringNullableWithAggregatesFilter<"Sport"> | string | null
     rewardPointsPerCheckin?: IntWithAggregatesFilter<"Sport"> | number
+    openTime?: StringNullableWithAggregatesFilter<"Sport"> | string | null
+    closeTime?: StringNullableWithAggregatesFilter<"Sport"> | string | null
+    slotDurationMinutes?: IntWithAggregatesFilter<"Sport"> | number
     createdAt?: DateTimeWithAggregatesFilter<"Sport"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Sport"> | Date | string
   }
@@ -48758,6 +48819,9 @@ export namespace Prisma {
     description?: string | null
     iconPath?: string | null
     rewardPointsPerCheckin?: number
+    openTime?: string | null
+    closeTime?: string | null
+    slotDurationMinutes?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     turfs?: TurfSportCreateNestedManyWithoutSportInput
@@ -48775,6 +48839,9 @@ export namespace Prisma {
     description?: string | null
     iconPath?: string | null
     rewardPointsPerCheckin?: number
+    openTime?: string | null
+    closeTime?: string | null
+    slotDurationMinutes?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     turfs?: TurfSportUncheckedCreateNestedManyWithoutSportInput
@@ -48792,6 +48859,9 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     iconPath?: NullableStringFieldUpdateOperationsInput | string | null
     rewardPointsPerCheckin?: IntFieldUpdateOperationsInput | number
+    openTime?: NullableStringFieldUpdateOperationsInput | string | null
+    closeTime?: NullableStringFieldUpdateOperationsInput | string | null
+    slotDurationMinutes?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     turfs?: TurfSportUpdateManyWithoutSportNestedInput
@@ -48809,6 +48879,9 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     iconPath?: NullableStringFieldUpdateOperationsInput | string | null
     rewardPointsPerCheckin?: IntFieldUpdateOperationsInput | number
+    openTime?: NullableStringFieldUpdateOperationsInput | string | null
+    closeTime?: NullableStringFieldUpdateOperationsInput | string | null
+    slotDurationMinutes?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     turfs?: TurfSportUncheckedUpdateManyWithoutSportNestedInput
@@ -48826,6 +48899,9 @@ export namespace Prisma {
     description?: string | null
     iconPath?: string | null
     rewardPointsPerCheckin?: number
+    openTime?: string | null
+    closeTime?: string | null
+    slotDurationMinutes?: number
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -48836,6 +48912,9 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     iconPath?: NullableStringFieldUpdateOperationsInput | string | null
     rewardPointsPerCheckin?: IntFieldUpdateOperationsInput | number
+    openTime?: NullableStringFieldUpdateOperationsInput | string | null
+    closeTime?: NullableStringFieldUpdateOperationsInput | string | null
+    slotDurationMinutes?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -48846,6 +48925,9 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     iconPath?: NullableStringFieldUpdateOperationsInput | string | null
     rewardPointsPerCheckin?: IntFieldUpdateOperationsInput | number
+    openTime?: NullableStringFieldUpdateOperationsInput | string | null
+    closeTime?: NullableStringFieldUpdateOperationsInput | string | null
+    slotDurationMinutes?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -51836,12 +51918,16 @@ export namespace Prisma {
     description?: SortOrder
     iconPath?: SortOrder
     rewardPointsPerCheckin?: SortOrder
+    openTime?: SortOrder
+    closeTime?: SortOrder
+    slotDurationMinutes?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
 
   export type SportAvgOrderByAggregateInput = {
     rewardPointsPerCheckin?: SortOrder
+    slotDurationMinutes?: SortOrder
   }
 
   export type SportMaxOrderByAggregateInput = {
@@ -51850,6 +51936,9 @@ export namespace Prisma {
     description?: SortOrder
     iconPath?: SortOrder
     rewardPointsPerCheckin?: SortOrder
+    openTime?: SortOrder
+    closeTime?: SortOrder
+    slotDurationMinutes?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -51860,12 +51949,16 @@ export namespace Prisma {
     description?: SortOrder
     iconPath?: SortOrder
     rewardPointsPerCheckin?: SortOrder
+    openTime?: SortOrder
+    closeTime?: SortOrder
+    slotDurationMinutes?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
 
   export type SportSumOrderByAggregateInput = {
     rewardPointsPerCheckin?: SortOrder
+    slotDurationMinutes?: SortOrder
   }
 
   export type FloatNullableFilter<$PrismaModel = never> = {
@@ -57864,6 +57957,9 @@ export namespace Prisma {
     description?: string | null
     iconPath?: string | null
     rewardPointsPerCheckin?: number
+    openTime?: string | null
+    closeTime?: string | null
+    slotDurationMinutes?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     membershipPlans?: MembershipPlanCreateNestedManyWithoutSportInput
@@ -57880,6 +57976,9 @@ export namespace Prisma {
     description?: string | null
     iconPath?: string | null
     rewardPointsPerCheckin?: number
+    openTime?: string | null
+    closeTime?: string | null
+    slotDurationMinutes?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     membershipPlans?: MembershipPlanUncheckedCreateNestedManyWithoutSportInput
@@ -57959,6 +58058,9 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     iconPath?: NullableStringFieldUpdateOperationsInput | string | null
     rewardPointsPerCheckin?: IntFieldUpdateOperationsInput | number
+    openTime?: NullableStringFieldUpdateOperationsInput | string | null
+    closeTime?: NullableStringFieldUpdateOperationsInput | string | null
+    slotDurationMinutes?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     membershipPlans?: MembershipPlanUpdateManyWithoutSportNestedInput
@@ -57975,6 +58077,9 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     iconPath?: NullableStringFieldUpdateOperationsInput | string | null
     rewardPointsPerCheckin?: IntFieldUpdateOperationsInput | number
+    openTime?: NullableStringFieldUpdateOperationsInput | string | null
+    closeTime?: NullableStringFieldUpdateOperationsInput | string | null
+    slotDurationMinutes?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     membershipPlans?: MembershipPlanUncheckedUpdateManyWithoutSportNestedInput
@@ -57991,6 +58096,9 @@ export namespace Prisma {
     description?: string | null
     iconPath?: string | null
     rewardPointsPerCheckin?: number
+    openTime?: string | null
+    closeTime?: string | null
+    slotDurationMinutes?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     turfs?: TurfSportCreateNestedManyWithoutSportInput
@@ -58007,6 +58115,9 @@ export namespace Prisma {
     description?: string | null
     iconPath?: string | null
     rewardPointsPerCheckin?: number
+    openTime?: string | null
+    closeTime?: string | null
+    slotDurationMinutes?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     turfs?: TurfSportUncheckedCreateNestedManyWithoutSportInput
@@ -58103,6 +58214,9 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     iconPath?: NullableStringFieldUpdateOperationsInput | string | null
     rewardPointsPerCheckin?: IntFieldUpdateOperationsInput | number
+    openTime?: NullableStringFieldUpdateOperationsInput | string | null
+    closeTime?: NullableStringFieldUpdateOperationsInput | string | null
+    slotDurationMinutes?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     turfs?: TurfSportUpdateManyWithoutSportNestedInput
@@ -58119,6 +58233,9 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     iconPath?: NullableStringFieldUpdateOperationsInput | string | null
     rewardPointsPerCheckin?: IntFieldUpdateOperationsInput | number
+    openTime?: NullableStringFieldUpdateOperationsInput | string | null
+    closeTime?: NullableStringFieldUpdateOperationsInput | string | null
+    slotDurationMinutes?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     turfs?: TurfSportUncheckedUpdateManyWithoutSportNestedInput
@@ -58518,6 +58635,9 @@ export namespace Prisma {
     description?: string | null
     iconPath?: string | null
     rewardPointsPerCheckin?: number
+    openTime?: string | null
+    closeTime?: string | null
+    slotDurationMinutes?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     turfs?: TurfSportCreateNestedManyWithoutSportInput
@@ -58534,6 +58654,9 @@ export namespace Prisma {
     description?: string | null
     iconPath?: string | null
     rewardPointsPerCheckin?: number
+    openTime?: string | null
+    closeTime?: string | null
+    slotDurationMinutes?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     turfs?: TurfSportUncheckedCreateNestedManyWithoutSportInput
@@ -58668,6 +58791,9 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     iconPath?: NullableStringFieldUpdateOperationsInput | string | null
     rewardPointsPerCheckin?: IntFieldUpdateOperationsInput | number
+    openTime?: NullableStringFieldUpdateOperationsInput | string | null
+    closeTime?: NullableStringFieldUpdateOperationsInput | string | null
+    slotDurationMinutes?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     turfs?: TurfSportUpdateManyWithoutSportNestedInput
@@ -58684,6 +58810,9 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     iconPath?: NullableStringFieldUpdateOperationsInput | string | null
     rewardPointsPerCheckin?: IntFieldUpdateOperationsInput | number
+    openTime?: NullableStringFieldUpdateOperationsInput | string | null
+    closeTime?: NullableStringFieldUpdateOperationsInput | string | null
+    slotDurationMinutes?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     turfs?: TurfSportUncheckedUpdateManyWithoutSportNestedInput
@@ -58843,6 +58972,9 @@ export namespace Prisma {
     description?: string | null
     iconPath?: string | null
     rewardPointsPerCheckin?: number
+    openTime?: string | null
+    closeTime?: string | null
+    slotDurationMinutes?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     turfs?: TurfSportCreateNestedManyWithoutSportInput
@@ -58859,6 +58991,9 @@ export namespace Prisma {
     description?: string | null
     iconPath?: string | null
     rewardPointsPerCheckin?: number
+    openTime?: string | null
+    closeTime?: string | null
+    slotDurationMinutes?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     turfs?: TurfSportUncheckedCreateNestedManyWithoutSportInput
@@ -59181,6 +59316,9 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     iconPath?: NullableStringFieldUpdateOperationsInput | string | null
     rewardPointsPerCheckin?: IntFieldUpdateOperationsInput | number
+    openTime?: NullableStringFieldUpdateOperationsInput | string | null
+    closeTime?: NullableStringFieldUpdateOperationsInput | string | null
+    slotDurationMinutes?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     turfs?: TurfSportUpdateManyWithoutSportNestedInput
@@ -59197,6 +59335,9 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     iconPath?: NullableStringFieldUpdateOperationsInput | string | null
     rewardPointsPerCheckin?: IntFieldUpdateOperationsInput | number
+    openTime?: NullableStringFieldUpdateOperationsInput | string | null
+    closeTime?: NullableStringFieldUpdateOperationsInput | string | null
+    slotDurationMinutes?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     turfs?: TurfSportUncheckedUpdateManyWithoutSportNestedInput
@@ -60077,6 +60218,9 @@ export namespace Prisma {
     description?: string | null
     iconPath?: string | null
     rewardPointsPerCheckin?: number
+    openTime?: string | null
+    closeTime?: string | null
+    slotDurationMinutes?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     turfs?: TurfSportCreateNestedManyWithoutSportInput
@@ -60093,6 +60237,9 @@ export namespace Prisma {
     description?: string | null
     iconPath?: string | null
     rewardPointsPerCheckin?: number
+    openTime?: string | null
+    closeTime?: string | null
+    slotDurationMinutes?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     turfs?: TurfSportUncheckedCreateNestedManyWithoutSportInput
@@ -60160,6 +60307,9 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     iconPath?: NullableStringFieldUpdateOperationsInput | string | null
     rewardPointsPerCheckin?: IntFieldUpdateOperationsInput | number
+    openTime?: NullableStringFieldUpdateOperationsInput | string | null
+    closeTime?: NullableStringFieldUpdateOperationsInput | string | null
+    slotDurationMinutes?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     turfs?: TurfSportUpdateManyWithoutSportNestedInput
@@ -60176,6 +60326,9 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     iconPath?: NullableStringFieldUpdateOperationsInput | string | null
     rewardPointsPerCheckin?: IntFieldUpdateOperationsInput | number
+    openTime?: NullableStringFieldUpdateOperationsInput | string | null
+    closeTime?: NullableStringFieldUpdateOperationsInput | string | null
+    slotDurationMinutes?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     turfs?: TurfSportUncheckedUpdateManyWithoutSportNestedInput
@@ -61615,6 +61768,9 @@ export namespace Prisma {
     description?: string | null
     iconPath?: string | null
     rewardPointsPerCheckin?: number
+    openTime?: string | null
+    closeTime?: string | null
+    slotDurationMinutes?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     turfs?: TurfSportCreateNestedManyWithoutSportInput
@@ -61631,6 +61787,9 @@ export namespace Prisma {
     description?: string | null
     iconPath?: string | null
     rewardPointsPerCheckin?: number
+    openTime?: string | null
+    closeTime?: string | null
+    slotDurationMinutes?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     turfs?: TurfSportUncheckedCreateNestedManyWithoutSportInput
@@ -61663,6 +61822,9 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     iconPath?: NullableStringFieldUpdateOperationsInput | string | null
     rewardPointsPerCheckin?: IntFieldUpdateOperationsInput | number
+    openTime?: NullableStringFieldUpdateOperationsInput | string | null
+    closeTime?: NullableStringFieldUpdateOperationsInput | string | null
+    slotDurationMinutes?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     turfs?: TurfSportUpdateManyWithoutSportNestedInput
@@ -61679,6 +61841,9 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     iconPath?: NullableStringFieldUpdateOperationsInput | string | null
     rewardPointsPerCheckin?: IntFieldUpdateOperationsInput | number
+    openTime?: NullableStringFieldUpdateOperationsInput | string | null
+    closeTime?: NullableStringFieldUpdateOperationsInput | string | null
+    slotDurationMinutes?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     turfs?: TurfSportUncheckedUpdateManyWithoutSportNestedInput
@@ -61754,6 +61919,9 @@ export namespace Prisma {
     description?: string | null
     iconPath?: string | null
     rewardPointsPerCheckin?: number
+    openTime?: string | null
+    closeTime?: string | null
+    slotDurationMinutes?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     turfs?: TurfSportCreateNestedManyWithoutSportInput
@@ -61770,6 +61938,9 @@ export namespace Prisma {
     description?: string | null
     iconPath?: string | null
     rewardPointsPerCheckin?: number
+    openTime?: string | null
+    closeTime?: string | null
+    slotDurationMinutes?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     turfs?: TurfSportUncheckedCreateNestedManyWithoutSportInput
@@ -61867,6 +62038,9 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     iconPath?: NullableStringFieldUpdateOperationsInput | string | null
     rewardPointsPerCheckin?: IntFieldUpdateOperationsInput | number
+    openTime?: NullableStringFieldUpdateOperationsInput | string | null
+    closeTime?: NullableStringFieldUpdateOperationsInput | string | null
+    slotDurationMinutes?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     turfs?: TurfSportUpdateManyWithoutSportNestedInput
@@ -61883,6 +62057,9 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     iconPath?: NullableStringFieldUpdateOperationsInput | string | null
     rewardPointsPerCheckin?: IntFieldUpdateOperationsInput | number
+    openTime?: NullableStringFieldUpdateOperationsInput | string | null
+    closeTime?: NullableStringFieldUpdateOperationsInput | string | null
+    slotDurationMinutes?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     turfs?: TurfSportUncheckedUpdateManyWithoutSportNestedInput
