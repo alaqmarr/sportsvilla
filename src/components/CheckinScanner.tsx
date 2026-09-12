@@ -1,12 +1,12 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { lookupTicket, confirmTicketCheckin } from "@/app/(admin)/checkin/actions";
 import { useAlert } from "@/components/AlertProvider";
-import { FiCheckCircle, FiXCircle, FiSearch, FiCamera, FiX, FiLink } from "react-icons/fi";
+import { FiCheckCircle, FiXCircle, FiSearch, FiCamera, FiX, FiLink, FiRadio } from "react-icons/fi";
 import { formatIST } from "@/lib/dateUtils";
 import { Html5QrcodeScanner } from "html5-qrcode";
-import { useBarcodeScanner } from "@/hooks/useBarcodeScanner";
+import { useNfc } from "@/components/nfc/NfcProvider";
 
 export default function CheckinScanner({ sports }: { sports: any[] }) {
   const { showAlert } = useAlert();
@@ -18,10 +18,31 @@ export default function CheckinScanner({ sports }: { sports: any[] }) {
   const [showScanner, setShowScanner] = useState(false);
   
   const inputRef = useRef<HTMLInputElement>(null);
+  const nfc = useNfc();
 
-  useBarcodeScanner((code) => {
-    handleScan(code);
-  });
+  useEffect(() => {
+    return nfc.subscribe(async (uid, deviceType) => {
+      // For hardware scans (NFC or Barcode Wedge), we use the unified backend check-in engine
+      try {
+        const res = await fetch("/api/nfc/checkin", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ cardUid: uid, deviceType, location: "ADMIN_DESK" })
+        });
+        const data = await res.json();
+        if (data.success) {
+          playSound('success');
+          showAlert("Check-in Successful", data.message, "success");
+        } else {
+          playSound('error');
+          showAlert("Scan Rejected", data.message, "error");
+        }
+      } catch (e) {
+        playSound('error');
+        showAlert("Error", "Failed to connect to check-in server.", "error");
+      }
+    });
+  }, [nfc, showAlert]);
 
   function startScanner() {
     setShowScanner(true);

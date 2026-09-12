@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { Navigation } from "@/components/Navigation";
 import { prisma } from "@/lib/prisma";
 import React from "react";
+import { NfcProvider } from "@/components/nfc/NfcProvider";
 
 export default async function AdminLayout({
   children,
@@ -32,5 +33,9 @@ export default async function AdminLayout({
     redirect("/login");
   }
 
-  return <Navigation admin={currentAdmin}>{children}</Navigation>;
+  return (
+    <NfcProvider>
+      <Navigation admin={currentAdmin}>{children}</Navigation>
+    </NfcProvider>
+  );
 }

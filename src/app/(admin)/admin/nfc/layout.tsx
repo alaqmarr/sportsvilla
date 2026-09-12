@@ -55,13 +55,11 @@ function FloatingStatusBar() {
 
 export default function NfcLayout({ children }: { children: ReactNode }) {
   return (
-    <NfcProvider>
-      <div className="flex flex-col h-full relative">
-        <FloatingStatusBar />
-        <div className="flex-1 overflow-hidden">
-          {children}
-        </div>
+    <div className="flex flex-col h-full relative">
+      <FloatingStatusBar />
+      <div className="flex-1 overflow-hidden">
+        {children}
       </div>
-    </NfcProvider>
+    </div>
   );
 }

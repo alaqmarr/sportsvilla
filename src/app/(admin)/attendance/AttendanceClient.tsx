@@ -6,7 +6,7 @@ import { useAlert } from "@/components/AlertProvider";
 
 import { FiCheckCircle, FiSearch, FiUser, FiUserCheck, FiUsers, FiCamera, FiX, FiClock, FiActivity, FiLink } from "react-icons/fi";
 import { Html5QrcodeScanner } from "html5-qrcode";
-import { useBarcodeScanner } from "@/hooks/useBarcodeScanner";
+import { useNfc } from "@/components/nfc/NfcProvider";
 
 export default function AttendanceClient({ initialRecords }: { initialRecords: any[] }) {
   const { showAlert } = useAlert();
@@ -20,11 +20,41 @@ export default function AttendanceClient({ initialRecords }: { initialRecords: a
   const [membersList, setMembersList] = useState<any[]>([]);
   const [familySelections, setFamilySelections] = useState<Record<string, string>>({});
 
-  useBarcodeScanner((code) => {
-    playSound('beep');
-    setMobile(code);
-    handleSearch(code);
-  });
+  const nfc = useNfc();
+
+  useEffect(() => {
+    return nfc.subscribe(async (uid, deviceType) => {
+      try {
+        const res = await fetch("/api/nfc/checkin", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ cardUid: uid, deviceType, location: "ADMIN_DESK" })
+        });
+        const data = await res.json();
+        if (data.success) {
+          playSound('success');
+          showAlert("Check-in Successful", data.message, "success");
+          
+          // Add to local UI feed if it's an attendance action
+          if (data.action === "MEMBERSHIP_ATTENDANCE" && data.details?.attendanceId) {
+            setRecords(prev => [{
+              id: data.details.attendanceId,
+              member: { name: data.member.name, mobile: "NFC Tap" },
+              membershipPlan: { name: data.details.membershipPlanName },
+              sport: { name: data.details.sportName },
+              createdAt: new Date().toISOString()
+            }, ...prev]);
+          }
+        } else {
+          playSound('error');
+          showAlert("Scan Rejected", data.message, "error");
+        }
+      } catch (e) {
+        playSound('error');
+        showAlert("Error", "Failed to connect to check-in server.", "error");
+      }
+    });
+  }, [nfc, showAlert]);
 
   const playSound = (type: 'beep' | 'success' | 'error') => {
     try {

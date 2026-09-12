@@ -28,7 +28,25 @@ export interface UseNfcReaderReturn {
  */
 export function normalizeCardUid(raw: string): string {
   if (!raw) return "";
-  return raw.replace(/[^a-zA-Z0-9]/g, "").toUpperCase().trim();
+  const trimmed = raw.trim();
+  
+  // 1. JSON Payload (e.g. from QR Codes)
+  if (trimmed.startsWith('{') && trimmed.endsWith('}')) {
+    return trimmed;
+  }
+  
+  // 2. UUID format (with or without hyphens)
+  if (/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/.test(trimmed)) {
+    return trimmed;
+  }
+  
+  // 3. Cuid format (starts with 'c' or 'cl', 24-32 chars alphanumeric lowercase)
+  if (/^c[a-z0-9]{23,31}$/.test(trimmed)) {
+    return trimmed;
+  }
+  
+  // 4. Fallback for physical NFC cards (uppercase, alphanumeric only)
+  return trimmed.replace(/[^a-zA-Z0-9]/g, "").toUpperCase();
 }
 
 /**

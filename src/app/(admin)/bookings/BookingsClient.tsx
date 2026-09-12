@@ -1,15 +1,17 @@
 "use client";
 
 import { useState, useEffect, useMemo } from "react";
-import { fetchBookingsByDate, createBooking, searchMember, getUpiId, addPayment, updateDisplaySession } from "./actions";
+import { fetchBookingsByDate, createBooking, searchMember, getUpiId, addPayment, updateDisplaySession, searchMemberByNfc } from "./actions";
 import { useAlert } from "@/components/AlertProvider";
 import QRCodeLib from "qrcode";
 import { formatIST, todayIST } from "@/lib/dateUtils";
 import { TableSkeleton } from "@/components/ui/Skeleton";
 import { AnimatePresence, motion } from "framer-motion";
-import { FiCalendar, FiClock, FiCheck, FiX, FiUser, FiCreditCard, FiMapPin, FiList, FiPlus } from "react-icons/fi";
+import { FiCalendar, FiClock, FiCheck, FiX, FiUser, FiCreditCard, FiMapPin, FiList, FiPlus, FiRadio } from "react-icons/fi";
 import ManageBookings from "./ManageBookings";
 import { allocateTurfsForSlots, Allocation } from "@/lib/allocationEngine";
+import { useNfc } from "@/components/nfc/NfcProvider";
+
 // Generate slots based on duration and facility open/close time
 function generateSlots(dateStr: string, durationMin: number, openTime: string = "06:00", closeTime: string = "23:00") {
   const slots = [];
@@ -80,6 +82,24 @@ export default function BookingsClient({ turfs, facilityHours = { openTime: '06:
   const [participantCount, setParticipantCount] = useState<number | "">(1);
   const [guestNames, setGuestNames] = useState<string[]>([]);
   const [redeemPoints, setRedeemPoints] = useState(false);
+
+  const nfc = useNfc();
+
+  useEffect(() => {
+    return nfc.subscribe(async (uid, deviceType) => {
+      if (activeTab === 'NEW' && step === 1) {
+        const member = await searchMemberByNfc(uid);
+        if (member) {
+          setMemberId(member.id);
+          setName(member.name);
+          setMobile(member.mobile);
+          showAlert("Member Found", `Found ${member.name}`, "success");
+        } else {
+          showAlert("Not Found", "No member associated with this card.", "error");
+        }
+      }
+    });
+  }, [nfc, activeTab, step, showAlert]);
 
   useEffect(() => {
     if (activeTab === 'NEW') {
@@ -231,24 +251,7 @@ export default function BookingsClient({ turfs, facilityHours = { openTime: '06:
     return 'AVAILABLE';
   }
 
-  async function openCheckout() {
-    if (selectedSlots.length === 0) return showAlert("Select Slots", "Please select at least one time slot.", "error");
-    if (!autoAllocation && selectedTurfs.length === 0) return showAlert("Select Court", "Please select an available court.", "error");
-    
-    setParticipantCount(1);
-    setGuestNames([]);
-    setAdditionalMemberIds([]);
-    
-    const totalAmount = autoAllocation 
-      ? autoAllocation.reduce((sum, a) => sum + a.price, 0)
-      : selectedSlots.length * selectedTurfs.reduce((sum, t) => sum + ((t.bookingPrice || 0) / (t.bookingDurationMinutes || 60) * 30), 0);
-      
-    if (upiSettings.upiId && totalAmount > 0) {
-      const upiUrl = `upi://pay?pa=${upiSettings.upiId}&pn=${encodeURIComponent(upiSettings.businessName)}&am=${totalAmount}&cu=INR`;
-      const qrUrl = await QRCodeLib.toDataURL(upiUrl, { width: 300, margin: 1 });
-      setQrCodeData(qrUrl);
-    }
-  }
+
 
   const totalTurfPricePer30m = selectedTurfs.reduce((sum, t) => sum + ((t.bookingPrice || 0) / (t.bookingDurationMinutes || 60) * 30), 0);
   const totalPrice = autoAllocation
@@ -424,168 +427,255 @@ export default function BookingsClient({ turfs, facilityHours = { openTime: '06:
           </div>
 
           <div className="bg-[#161923] border border-[#2a2d3e] rounded-xl p-6">
-            {/* STEP 1: Date & Sport */}
+            {/* STEP 1: Customer Details */}
             <div className={step === 1 ? 'block' : 'hidden'}>
-              <h2 className="text-xl font-bold font-['Outfit'] text-white flex items-center gap-2 mb-6">1. Date & Sport</h2>
+              <h2 className="text-xl font-bold font-['Outfit'] text-white flex items-center gap-2 mb-6">1. Customer Details</h2>
+              <div className="space-y-6 max-w-md">
+                <div className="bg-emerald-500/10 border border-emerald-500/20 p-4 rounded-xl mb-4 text-emerald-400 text-sm font-semibold flex items-center gap-2">
+                  <FiCreditCard /> Tap NFC Card to automatically fetch member details
+                </div>
+                <div>
+                  <label className="block text-xs uppercase tracking-wider font-semibold text-gray-500 mb-2">Mobile Number (or Tap NFC)</label>
+                  <input 
+                    type="tel" 
+                    className="w-full bg-transparent border-b border-[#2a2d3e] px-2 py-3 text-white focus:border-orange-500 focus:outline-none transition-colors"
+                    placeholder="Enter 10-digit number"
+                    maxLength={10}
+                    value={mobile}
+                    onChange={(e) => {
+                      const val = e.target.value.replace(/\D/g, '');
+                      handleMobileSearch(val);
+                    }}
+                  />
+                  {searchResults.length > 0 && !memberId && (
+                    <div className="mt-2 bg-[#1c1f2e] border border-[#2a2d3e] rounded-xl overflow-hidden shadow-xl animate-in slide-in-from-top-2">
+                      {searchResults.map(member => (
+                        <button
+                          key={member.id}
+                          type="button"
+                          onClick={() => {
+                            setMemberId(member.id);
+                            setName(member.name);
+                            setSearchResults([]);
+                          }}
+                          className="w-full text-left px-4 py-3 border-b border-[#2a2d3e] hover:bg-[#2a2d3e] transition flex justify-between items-center group cursor-pointer"
+                        >
+                          <div>
+                            <div className="font-bold text-white group-hover:text-orange-400 transition">{member.name}</div>
+                            <div className="text-xs text-gray-500">{member.mobile}</div>
+                          </div>
+                          {member.loyaltyPoints > 0 && (
+                            <div className="text-xs font-bold text-emerald-400 bg-emerald-500/10 px-2 py-1 rounded">
+                              ★ {member.loyaltyPoints} pts
+                            </div>
+                          )}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+                <div>
+                  <label className="block text-xs uppercase tracking-wider font-semibold text-gray-500 mb-2">Customer Name</label>
+                  <input 
+                    type="text"
+                    required
+                    className="w-full bg-transparent border-b border-[#2a2d3e] px-2 py-3 text-white focus:border-orange-500 focus:outline-none transition-colors"
+                    placeholder="Enter full name"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    readOnly={!!memberId}
+                  />
+                </div>
+                <button
+                  type="button"
+                  disabled={!name || mobile.length !== 10}
+                  onClick={() => setStep(2)}
+                  className="w-full bg-orange-500 hover:bg-orange-600 disabled:bg-[#2a2d3e] disabled:text-gray-500 text-white py-4 rounded-xl font-bold transition-all shadow-[0_0_20px_rgba(249,115,22,0.3)] disabled:shadow-none"
+                >
+                  Continue to Booking
+                </button>
+              </div>
+            </div>
+
+            {/* STEP 2: Date & Sport */}
+            <div className={step === 2 ? 'block' : 'hidden'}>
+              <h2 className="text-xl font-bold font-['Outfit'] text-white flex items-center gap-2 mb-6">2. Date & Sport</h2>
               <div className="space-y-6 max-w-md">
                 <div>
-            <label className="block text-sm font-semibold text-gray-400 mb-2">1. Select Date</label>
-            <input 
-              type="date" 
-              className="w-full bg-transparent border-b border-[#2a2d3e] px-2 py-3 text-white focus:border-orange-500 focus:outline-none transition-colors"
-              value={selectedDate}
-              onChange={e => setSelectedDate(e.target.value)}
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-semibold text-gray-400 mb-3">2. Select Sport</label>
-            <div className="flex flex-col gap-2">
-              {sports.map((sport: any) => (
-                <button 
-                  key={sport.id}
-                  onClick={() => setSelectedSportId(sport.id)}
-                  className={`px-4 py-3 rounded-lg text-left transition-colors font-medium ${selectedSportId === sport.id ? 'bg-orange-500/10 text-orange-500' : 'text-gray-400 hover:bg-[#2a2d3e]/50'}`}
-                >
-                  {sport.name}
-                </button>
-              ))}
-              {sports.length === 0 && <div className="text-gray-500 text-sm">No sports configured with turfs.</div>}
-            </div>
-          </div>
-              </div>
-            </div>
-
-            {/* STEP 2: Time Slots */}
-            <div className={step === 2 ? 'block' : 'hidden'}>
-              <h2 className="text-xl font-bold font-['Outfit'] text-white flex items-center gap-2 mb-6">2. Select Time Slots</h2>
-              <div className="space-y-10">
-          <div>
-            {loading ? (
-              <div className="p-4">
-                <TableSkeleton rows={6} cols={6} />
-              </div>
-            ) : selectedSportId ? (
-              <>
-                <div className="flex items-center justify-between mb-6">
-                  <h2 className="text-xl font-bold font-['Outfit'] text-white flex items-center gap-2">
-                    3. Select Time Slots
-                  </h2>
-                  <div className="flex items-center gap-4 text-xs font-semibold">
-                    <div className="flex items-center gap-1.5 text-gray-500"><div className="w-3 h-3 rounded bg-[#0f1117] border border-[#2a2d3e]"></div> Available</div>
-                    <div className="flex items-center gap-1.5 text-gray-500"><div className="w-3 h-3 rounded bg-orange-500 border border-orange-600"></div> Selected</div>
-                    <div className="flex items-center gap-1.5 text-gray-500"><div className="w-3 h-3 rounded bg-[#1c1f2e] opacity-50 border border-red-500/30"></div> Fully Booked</div>
-                  </div>
+                  <label className="block text-sm font-semibold text-gray-400 mb-2">Select Date</label>
+                  <input 
+                    type="date" 
+                    className="w-full bg-transparent border-b border-[#2a2d3e] px-2 py-3 text-white focus:border-orange-500 focus:outline-none transition-colors"
+                    value={selectedDate}
+                    onChange={e => setSelectedDate(e.target.value)}
+                  />
                 </div>
 
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
-                  {slots.map((slot, i) => {
-                    const status = getSlotStatus(slot);
-                    return (
-                      <button
-                        key={i}
-                        onClick={() => status !== 'BOOKED' && toggleSlot(slot)}
-                        disabled={status === 'BOOKED'}
-                        className={`
-                          p-3 rounded-lg border transition-all flex flex-col items-center justify-center gap-1 cursor-pointer
-                          ${status === 'AVAILABLE' ? 'bg-transparent border-[#2a2d3e] text-gray-300 hover:border-orange-500/50' : ''}
-                          ${status === 'SELECTED' ? 'bg-orange-500 border-orange-600 text-white shadow-[0_0_15px_rgba(249,115,22,0.3)]' : ''}
-                          ${status === 'BOOKED' ? 'bg-[#1c1f2e] border-red-500/20 text-gray-600 opacity-50 cursor-not-allowed' : ''}
-                          ${status === 'UNAVAILABLE' ? 'bg-transparent border-[#2a2d3e] text-gray-600 opacity-40 cursor-not-allowed' : ''}
-                        `}
+                <div>
+                  <label className="block text-sm font-semibold text-gray-400 mb-3">Select Sport</label>
+                  <div className="flex flex-col gap-2">
+                    {sports.map((sport: any) => (
+                      <button 
+                        key={sport.id}
+                        onClick={() => setSelectedSportId(sport.id)}
+                        className={`px-4 py-3 rounded-lg text-left transition-colors font-medium ${selectedSportId === sport.id ? 'bg-orange-500/10 text-orange-500 border border-orange-500/30' : 'text-gray-400 hover:bg-[#2a2d3e]/50 border border-transparent'}`}
                       >
-                        <span className="font-semibold text-sm">{slot.label}</span>
+                        {sport.name}
                       </button>
-                    );
-                  })}
-                </div>
-              </>
-            ) : (
-              <div className="flex items-center justify-center h-[300px] text-gray-500">
-                Please select a sport first.
-              </div>
-            )}
-          </div>
-          </div>
-            </div>
-
-            {/* STEP 3: Court Selection */}
-            <div className={step === 3 ? 'block' : 'hidden'}>
-              {selectedSlots.length > 0 && autoAllocation && (
-                <div className="animate-in slide-in-from-bottom-4 duration-300">
-                  <h2 className="text-xl font-bold font-['Outfit'] text-white flex items-center gap-2 mb-6">
-                    3. Allocation Breakdown
-                  </h2>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {autoAllocation.map((alloc, i) => (
-                      <div key={i} className="text-left p-4 rounded-xl border border-emerald-500 bg-[#1c1f2e] shadow-[0_0_15px_rgba(16,185,129,0.15)] relative overflow-hidden">
-                        <div className="font-bold text-white text-lg mb-1">{alloc.turfName}</div>
-                        <div className="text-sm text-gray-400">₹{alloc.price}</div>
-                        <div className="text-sm font-semibold text-emerald-400 mt-2">
-                          {formatIST(alloc.startTime, 'h:mm a')} to {formatIST(alloc.endTime, 'h:mm a')}
-                        </div>
-                        <div className="absolute top-4 right-4 text-emerald-500 text-xl">
-                          <FiCheck />
-                        </div>
-                      </div>
                     ))}
+                    {sports.length === 0 && <div className="text-gray-500 text-sm">No sports configured with turfs.</div>}
                   </div>
                 </div>
-              )}
-          {selectedSlots.length > 0 && !autoAllocation && (
-            <div className="animate-in slide-in-from-bottom-4 duration-300 pt-6 border-t border-[#2a2d3e]">
-              <h2 className="text-xl font-bold font-['Outfit'] text-white flex items-center gap-2 mb-6">
-                4. Select Available Court
-              </h2>
-              
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                {turfAvailability.map((ta) => (
-                  <button
-                    key={ta.turf.id}
-                    onClick={() => {
-                      if (!ta.isBooked) {
-                        if (selectedTurfs.find(t => t.id === ta.turf.id)) {
-                          setSelectedTurfs(selectedTurfs.filter(t => t.id !== ta.turf.id));
-                        } else {
-                          setSelectedTurfs([...selectedTurfs, ta.turf]);
-                        }
-                      }
-                    }}
-                    disabled={ta.isBooked}
-                    className={`
-                      text-left p-4 rounded-xl border transition-all relative overflow-hidden
-                      ${ta.isBooked 
-                        ? 'bg-transparent border-red-500/20 opacity-60 cursor-not-allowed' 
-                        : selectedTurfs.some(t => t.id === ta.turf.id)
-                          ? 'bg-[#1c1f2e] border-emerald-500 shadow-[0_0_15px_rgba(16,185,129,0.15)] cursor-pointer'
-                          : 'bg-transparent border-[#2a2d3e] hover:border-emerald-500/50 cursor-pointer'
-                      }
-                    `}
-                  >
-                    <div className="font-bold text-white text-lg mb-1">{ta.turf.name}</div>
-                    <div className="text-sm text-gray-400">₹{ta.turf.bookingPrice} / {ta.turf.bookingDurationMinutes}m</div>
-                    {ta.turf.capacityPerSlot > 1 && !ta.isBooked && (
-                      <div className="mt-2 text-xs font-semibold text-emerald-400 bg-emerald-500/10 inline-block px-2 py-1 rounded-md">
-                        {ta.remainingCapacity} Spots Left
-                      </div>
-                    )}
-                    {ta.isBooked && (
-                      <div className="absolute top-4 right-4 text-xs font-black tracking-widest text-red-500 bg-red-500/10 px-2 py-1 rounded">
-                        UNAVAILABLE
-                      </div>
-                    )}
-                    {!ta.isBooked && selectedTurfs.some(t => t.id === ta.turf.id) && (
-                      <div className="absolute top-4 right-4 text-emerald-500 text-xl">
-                        <FiCheck />
-                      </div>
-                    )}
-                  </button>
-                ))}
+                <div className="flex gap-4">
+                  <button onClick={() => setStep(1)} className="flex-1 py-4 text-gray-400 hover:text-white bg-[#1c1f2e] hover:bg-[#2a2d3e] rounded-xl font-bold transition-colors">Back</button>
+                  <button onClick={() => setStep(3)} className="flex-1 bg-orange-500 hover:bg-orange-600 text-white py-4 rounded-xl font-bold transition-all">Continue</button>
+                </div>
               </div>
             </div>
-          )}
+
+            {/* STEP 3: Time Slots & Courts */}
+            <div className={step === 3 ? 'block' : 'hidden'}>
+              <h2 className="text-xl font-bold font-['Outfit'] text-white flex items-center gap-2 mb-6">3. Select Time Slots & Courts</h2>
+              <div className="space-y-10">
+                <div>
+                  {loading ? (
+                    <div className="p-4">
+                      <TableSkeleton rows={6} cols={6} />
+                    </div>
+                  ) : selectedSportId ? (
+                    <>
+                      <div className="flex items-center justify-between mb-6">
+                        <h2 className="text-lg font-bold text-gray-300 flex items-center gap-2">
+                          Available Slots
+                        </h2>
+                        <div className="flex items-center gap-4 text-xs font-semibold">
+                          <div className="flex items-center gap-1.5 text-gray-500"><div className="w-3 h-3 rounded bg-[#0f1117] border border-[#2a2d3e]"></div> Available</div>
+                          <div className="flex items-center gap-1.5 text-gray-500"><div className="w-3 h-3 rounded bg-orange-500 border border-orange-600"></div> Selected</div>
+                          <div className="flex items-center gap-1.5 text-gray-500"><div className="w-3 h-3 rounded bg-[#1c1f2e] opacity-50 border border-red-500/30"></div> Fully Booked</div>
+                        </div>
+                      </div>
+
+                      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
+                        {slots.map((slot, i) => {
+                          const status = getSlotStatus(slot);
+                          return (
+                            <button
+                              key={i}
+                              onClick={() => status !== 'BOOKED' && toggleSlot(slot)}
+                              disabled={status === 'BOOKED'}
+                              className={`
+                                p-3 rounded-lg border transition-all flex flex-col items-center justify-center gap-1 cursor-pointer
+                                ${status === 'AVAILABLE' ? 'bg-transparent border-[#2a2d3e] text-gray-300 hover:border-orange-500/50' : ''}
+                                ${status === 'SELECTED' ? 'bg-orange-500 border-orange-600 text-white shadow-[0_0_15px_rgba(249,115,22,0.3)]' : ''}
+                                ${status === 'BOOKED' ? 'bg-[#1c1f2e] border-red-500/20 text-gray-600 opacity-50 cursor-not-allowed' : ''}
+                                ${status === 'UNAVAILABLE' ? 'bg-transparent border-[#2a2d3e] text-gray-600 opacity-40 cursor-not-allowed' : ''}
+                              `}
+                            >
+                              <span className="font-semibold text-sm">{slot.label}</span>
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </>
+                  ) : (
+                    <div className="flex items-center justify-center h-[300px] text-gray-500">
+                      Please select a sport first.
+                    </div>
+                  )}
+                </div>
+
+                {selectedSlots.length > 0 && autoAllocation && (
+                  <div className="animate-in slide-in-from-bottom-4 duration-300">
+                    <h2 className="text-xl font-bold font-['Outfit'] text-white flex items-center gap-2 mb-6">
+                      Smart Allocation Breakdown
+                    </h2>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                      {autoAllocation.map((alloc, i) => (
+                        <div key={i} className="text-left p-4 rounded-xl border border-emerald-500 bg-[#1c1f2e] shadow-[0_0_15px_rgba(16,185,129,0.15)] relative overflow-hidden">
+                          <div className="font-bold text-white text-lg mb-1">{alloc.turfName}</div>
+                          <div className="text-sm text-gray-400">₹{alloc.price}</div>
+                          <div className="text-sm font-semibold text-emerald-400 mt-2">
+                            {formatIST(alloc.startTime, 'h:mm a')} to {formatIST(alloc.endTime, 'h:mm a')}
+                          </div>
+                          <div className="absolute top-4 right-4 text-emerald-500 text-xl">
+                            <FiCheck />
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+                {selectedSlots.length > 0 && !autoAllocation && (
+                  <div className="animate-in slide-in-from-bottom-4 duration-300 pt-6 border-t border-[#2a2d3e]">
+                    <h2 className="text-xl font-bold font-['Outfit'] text-white flex items-center gap-2 mb-6">
+                      Select Available Court
+                    </h2>
+                    
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                      {turfAvailability.map((ta) => (
+                        <button
+                          key={ta.turf.id}
+                          onClick={() => {
+                            if (!ta.isBooked) {
+                              if (selectedTurfs.find(t => t.id === ta.turf.id)) {
+                                setSelectedTurfs(selectedTurfs.filter(t => t.id !== ta.turf.id));
+                              } else {
+                                setSelectedTurfs([...selectedTurfs, ta.turf]);
+                              }
+                            }
+                          }}
+                          disabled={ta.isBooked}
+                          className={`
+                            text-left p-4 rounded-xl border transition-all relative overflow-hidden
+                            ${ta.isBooked 
+                              ? 'bg-transparent border-red-500/20 opacity-60 cursor-not-allowed' 
+                              : selectedTurfs.some(t => t.id === ta.turf.id)
+                                ? 'bg-[#1c1f2e] border-emerald-500 shadow-[0_0_15px_rgba(16,185,129,0.15)] cursor-pointer'
+                                : 'bg-transparent border-[#2a2d3e] hover:border-emerald-500/50 cursor-pointer'
+                            }
+                          `}
+                        >
+                          <div className="font-bold text-white text-lg mb-1">{ta.turf.name}</div>
+                          <div className="text-sm text-gray-400">₹{ta.turf.bookingPrice} / {ta.turf.bookingDurationMinutes}m</div>
+                          {ta.turf.capacityPerSlot > 1 && !ta.isBooked && (
+                            <div className="mt-2 text-xs font-semibold text-emerald-400 bg-emerald-500/10 inline-block px-2 py-1 rounded-md">
+                              {ta.remainingCapacity} Spots Left
+                            </div>
+                          )}
+                          {ta.isBooked && (
+                            <div className="absolute top-4 right-4 text-xs font-black tracking-widest text-red-500 bg-red-500/10 px-2 py-1 rounded">
+                              UNAVAILABLE
+                            </div>
+                          )}
+                          {!ta.isBooked && selectedTurfs.some(t => t.id === ta.turf.id) && (
+                            <div className="absolute top-4 right-4 text-emerald-500 text-xl">
+                              <FiCheck />
+                            </div>
+                          )}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+                
+                <div className="flex gap-4">
+                  <button onClick={() => setStep(2)} className="w-48 py-4 text-gray-400 hover:text-white bg-[#1c1f2e] hover:bg-[#2a2d3e] rounded-xl font-bold transition-colors">Back</button>
+                  <button
+                    onClick={() => {
+                      setParticipantCount(1);
+                      setGuestNames([]);
+                      setAdditionalMemberIds([]);
+                      setStep(4);
+                    }}
+                    disabled={selectedSlots.length === 0 || (!autoAllocation && selectedTurfs.length === 0)}
+                    className="flex-1 bg-orange-500 hover:bg-orange-600 disabled:bg-[#2a2d3e] disabled:text-gray-500 text-white py-4 rounded-xl font-bold transition-all"
+                  >
+                    Continue to Payment
+                  </button>
+                </div>
+              </div>
             </div>
-            
+
             {/* STEP 4: Checkout */}
             <div className={step === 4 ? 'block' : 'hidden'}>
               <h2 className="text-xl font-bold font-['Outfit'] text-white mb-6">4. Checkout & Payment</h2>
@@ -593,18 +683,6 @@ export default function BookingsClient({ turfs, facilityHours = { openTime: '06:
                 {/* Left: Customer Details */}
                 <div className="flex-1 overflow-y-auto">
                   <div className="space-y-5">
-                <div>
-                  <label className="block text-xs uppercase tracking-wider font-semibold text-gray-500 mb-2">Mobile Number</label>
-                  <input 
-                    type="tel" 
-                    className="w-full bg-transparent border-b border-[#2a2d3e] px-2 py-3 text-white focus:border-orange-500 focus:outline-none transition-colors"
-                    placeholder="Enter 10-digit mobile"
-                    value={mobile}
-                    onChange={e => handleMobileSearch(e.target.value.replace(/\D/g, ''))}
-                    maxLength={10}
-                  />
-                </div>
-
                 {((autoAllocation ? autoAllocation.some(a => {
                   const t = turfs.find(t => t.id === a.turfId);
                   return t?.requireEntryVerification || (t?.capacityPerSlot || 1) > 1;
@@ -876,36 +954,7 @@ export default function BookingsClient({ turfs, facilityHours = { openTime: '06:
             </div>
             {/* End Step 4 */}
 
-            {/* Stepper Navigation Buttons */}
-            <div className="flex justify-between mt-8 pt-4 border-t border-[#2a2d3e]">
-              {step > 1 ? (
-                <button type="button" onClick={() => setStep(step - 1)} className="px-5 py-2.5 rounded-lg border border-[#2a2d3e] text-gray-400 hover:text-white hover:bg-[#1c1f2e] text-sm font-semibold transition-colors cursor-pointer">
-                  Back
-                </button>
-              ) : <div />}
-              
-              {step < 4 ? (
-                <button 
-                  type="button" 
-                  onClick={() => {
-                     if (step === 1) {
-                        if (!selectedSportId) return showAlert("Select Sport", "Please select a sport.", "error");
-                        setStep(2);
-                     } else if (step === 2) {
-                        if (selectedSlots.length === 0) return showAlert("Select Slots", "Please select at least one time slot.", "error");
-                        setStep(3);
-                     } else if (step === 3) {
-                        if (!autoAllocation && selectedTurfs.length === 0) return showAlert("Select Court", "Please select an available court.", "error");
-                        openCheckout(); 
-                        setStep(4);
-                     }
-                  }} 
-                  className="bg-orange-500 hover:bg-orange-600 text-white rounded-lg px-5 py-2.5 text-sm font-semibold transition-colors border-none cursor-pointer"
-                >
-                  Next Step
-                </button>
-              ) : <div />}
-            </div>
+
           </div>
       
       {/* End of NEW tab container */}

@@ -7,6 +7,8 @@ import { signOut } from "next-auth/react";
 import LinkComponent from "next/link";
 import Image from "next/image";
 import { canViewPage, AdminUser } from "@/lib/rbac";
+import { useNfc } from "@/components/nfc/NfcProvider";
+import { FiRadio } from "react-icons/fi";
 
 export function Navigation({
   children,
@@ -20,6 +22,7 @@ export function Navigation({
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [currentTime, setCurrentTime] = useState("");
   const lastSyncRef = useRef<number>(Date.now());
+  const nfc = useNfc();
 
   // Close sidebar on route change
   useEffect(() => {
@@ -255,6 +258,39 @@ export function Navigation({
           children
         )}
       </main>
+
+      {/* Floating NFC Status Badge */}
+      <div className="fixed top-[4.5rem] lg:top-4 right-4 z-[100]">
+        <button
+          type="button"
+          onClick={() => {
+            if (nfc.isWebNfcSupported && !nfc.isWebNfcActive) {
+              nfc.enableWebNfc();
+            }
+          }}
+          className={`
+            flex items-center gap-2 px-3 py-1.5 rounded-full shadow-lg border text-xs font-bold uppercase tracking-wider backdrop-blur-md transition-all
+            ${
+              nfc.isWebNfcActive
+                ? "bg-emerald-500/20 border-emerald-500/50 text-emerald-400 cursor-default"
+                : nfc.isWebNfcSupported
+                ? "bg-amber-500/20 border-amber-500/50 text-amber-400 hover:bg-amber-500/30 cursor-pointer shadow-[0_0_15px_rgba(245,158,11,0.2)]"
+                : nfc.isListening
+                ? "bg-emerald-500/20 border-emerald-500/50 text-emerald-400 cursor-default"
+                : "bg-red-500/20 border-red-500/50 text-red-400 cursor-default"
+            }
+          `}
+        >
+          <FiRadio className={nfc.isWebNfcActive || (nfc.isListening && !nfc.isWebNfcSupported) ? "animate-pulse" : ""} />
+          {nfc.isWebNfcActive 
+            ? "Mobile NFC Active" 
+            : nfc.isWebNfcSupported 
+            ? "Activate NFC" 
+            : nfc.isListening
+            ? "USB Scanner Active"
+            : "NFC Unsupported"}
+        </button>
+      </div>
     </div>
   );
 }

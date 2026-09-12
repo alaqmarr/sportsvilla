@@ -44,6 +44,17 @@ export async function searchMember(mobile: string) {
   return await prisma.member.findMany({ where: { mobile } });
 }
 
+export async function searchMemberByNfc(cardUid: string) {
+  const card = await prisma.nfcCard.findFirst({
+    where: { cardUid, status: "ACTIVE" },
+    include: { member: true }
+  });
+  if (card && card.member) {
+    return card.member;
+  }
+  return null;
+}
+
 export async function createBooking(data: {
   turfIds: string[];
   sportId: string;

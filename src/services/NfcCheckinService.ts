@@ -11,7 +11,25 @@ export class NfcCheckinService {
    */
   static normalizeCardUid(raw: string): string {
     if (!raw) return "";
-    return raw.trim().replace(/[^a-fA-F0-9]/g, "").toUpperCase();
+    const trimmed = raw.trim();
+    
+    // 1. JSON Payload (e.g. from QR Codes)
+    if (trimmed.startsWith('{') && trimmed.endsWith('}')) {
+      return trimmed;
+    }
+    
+    // 2. UUID format (with or without hyphens)
+    if (/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/.test(trimmed)) {
+      return trimmed;
+    }
+    
+    // 3. Cuid format (starts with 'c' or 'cl', 24-32 chars alphanumeric lowercase)
+    if (/^c[a-z0-9]{23,31}$/.test(trimmed)) {
+      return trimmed;
+    }
+    
+    // 4. Fallback for physical NFC cards (uppercase, alphanumeric only)
+    return trimmed.replace(/[^a-fA-F0-9]/g, "").toUpperCase();
   }
 
   /**
@@ -24,9 +42,30 @@ export class NfcCheckinService {
    */
   static async resolveCheckin(request: NfcCheckinRequest): Promise<NfcCheckinResponse> {
     const rawUid = request.cardUid || "";
-    const cardUid = NfcCheckinService.normalizeCardUid(rawUid);
+    
+    // Check if the input is actually a QR payload (JSON, UUID, or CUID)
+    const trimmed = rawUid.trim();
+    let qrTicketId: string | null = null;
+    if (trimmed.startsWith('{') && trimmed.endsWith('}')) {
+      try {
+        const payload = JSON.parse(trimmed);
+        if (payload.id) qrTicketId = payload.id;
+      } catch {}
+    } else if (
+      /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/.test(trimmed) ||
+      /^c[a-z0-9]{23,31}$/.test(trimmed)
+    ) {
+      qrTicketId = trimmed;
+    }
+
     const deviceType: NfcDeviceType = request.deviceType || "KEYBOARD_WEDGE";
     const location = request.location || "FRONT_DESK";
+
+    if (qrTicketId) {
+      return await NfcCheckinService.resolveQrTicketCheckin(qrTicketId, deviceType, location);
+    }
+
+    const cardUid = NfcCheckinService.normalizeCardUid(rawUid);
 
     if (!cardUid) {
       return {
@@ -430,5 +469,153 @@ export class NfcCheckinService {
       // Always release mutex lock
       Mutex.release(`nfc:checkin:${cardUid}`);
     }
+  }
+
+  /**
+   * Resolves a direct QR code / Ticket ID check-in via hardware wedge scanners.
+   * This provides a unified UI feed on the Kiosk when people scan digital tickets instead of NFC.
+   */
+  static async resolveQrTicketCheckin(ticketIdOrQrCode: string, deviceType: NfcDeviceType, location: string): Promise<NfcCheckinResponse> {
+    const ticket = await prisma.ticket.findFirst({
+      where: {
+        OR: [
+          { id: ticketIdOrQrCode },
+          { qrCode: ticketIdOrQrCode }
+        ]
+      },
+      include: { booking: { include: { turf: true, sport: true, member: true } } }
+    });
+
+    if (!ticket) {
+      return {
+        success: false,
+        action: "REJECTED",
+        message: "Ticket not found.",
+        error: "INVALID_TICKET",
+      };
+    }
+
+    if (ticket.status !== "VALID") {
+      return {
+        success: false,
+        action: "REJECTED",
+        message: `Ticket is already ${ticket.status}.`,
+        error: `TICKET_${ticket.status}`,
+      };
+    }
+
+    // Check validity dates
+    const now = new Date();
+    const startTime = new Date(ticket.booking.startTime);
+    const bookingDateStr = formatIST(ticket.booking.startTime, 'yyyy-MM-dd');
+    const { start: bookingDayStart, end: bookingDayEnd } = getISTDateBounds(bookingDateStr);
+    
+    const validityEnd = new Date(bookingDayEnd.getTime());
+    if (ticket.booking.turf.bookingValidityDays > 0) {
+      validityEnd.setDate(validityEnd.getDate() + ticket.booking.turf.bookingValidityDays);
+    }
+
+    // Allow check-in a bit early (1 hour)
+    const earlyAllowTime = new Date(startTime.getTime() - 60 * 60000);
+
+    if (now < earlyAllowTime) {
+      return {
+        success: false,
+        action: "REJECTED",
+        message: "Too early to check-in. Booking starts at " + formatIST(startTime, 'h:mm a'),
+        error: "TOO_EARLY",
+      };
+    }
+
+    if (now > validityEnd) {
+      return {
+        success: false,
+        action: "REJECTED",
+        message: "Ticket has expired.",
+        error: "TICKET_EXPIRED",
+      };
+    }
+
+    // Process checkin inside a transaction
+    const sport = ticket.booking.sport;
+    await prisma.$transaction(async (tx) => {
+      await tx.ticket.update({
+        where: { id: ticket.id },
+        data: {
+          status: "CHECKED_IN",
+          usedAt: new Date()
+        }
+      });
+
+      // Award loyalty points for check-in
+      if (sport && sport.rewardPointsPerCheckin > 0) {
+        await tx.member.update({
+          where: { id: ticket.booking.memberId },
+          data: { loyaltyPoints: { increment: sport.rewardPointsPerCheckin } }
+        });
+        await tx.loyaltyHistory.create({
+          data: {
+            memberId: ticket.booking.memberId,
+            points: sport.rewardPointsPerCheckin,
+            type: "EARNED",
+            source: "CHECKIN",
+            description: `Earned for checking into booking: ${sport.name}`
+          }
+        });
+      }
+
+      // Log it as an NFC transaction so it appears in the kiosk feed
+      await tx.nfcTransaction.create({
+        data: {
+          cardUid: ticket.id.substring(0, 16), // Use ticket ID as a pseudo-UID for log
+          memberId: ticket.booking.memberId,
+          bookingId: ticket.booking.id,
+          type: "CHECKIN",
+          status: "SUCCESS",
+          amount: 0,
+          deviceType,
+          readerLocation: location,
+          metadata: JSON.stringify({ isQrTicket: true, ticketId: ticket.id }),
+        },
+      });
+    });
+
+    // We can run the whatsapp sender non-blocking
+    if (ticket.booking.member?.mobile) {
+      try {
+        const { sendWhatsAppCheckinTemplate } = require("@/lib/whatsapp");
+        const formattedTime = new Date().toLocaleTimeString('en-IN', {
+          hour: 'numeric',
+          minute: '2-digit',
+          hour12: true,
+          timeZone: 'Asia/Kolkata'
+        });
+        sendWhatsAppCheckinTemplate(
+          ticket.booking.member.name,
+          sport?.name || "Sportsvilla",
+          formattedTime,
+          ticket.booking.member.mobile
+        ).catch(console.error);
+      } catch(e) {}
+    }
+
+    return {
+      success: true,
+      action: "BOOKING_CHECKIN",
+      message: "Ticket verified. Welcome to " + (sport?.name || "the turf") + "!",
+      member: {
+        id: ticket.booking.member.id,
+        name: ticket.booking.member.name,
+        mobile: ticket.booking.member.mobile,
+        walletBalanceRupees: Number(((ticket.booking.member.walletBalance || 0) / 100).toFixed(2)),
+      },
+      details: {
+        bookingId: ticket.booking.id,
+        ticketId: ticket.id,
+        sportName: sport?.name,
+        courtName: ticket.booking.turf?.name,
+        timeSlot: `${formatIST(startTime, 'h:mm a')} - ${formatIST(new Date(ticket.booking.endTime), 'h:mm a')}`,
+      },
+    };
   }
 }
