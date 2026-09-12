@@ -138,6 +138,9 @@ export function BookCourtClient({ member, sports, availability, initialDateStr, 
           setProcessMessage('Please select a payment method.');
           return;
         }
+        finalGateway = preferredGateway;
+      }
+      
       const allocsToProcess = autoAllocation ? autoAllocation.map(a => ({
         turfId: a.turfId,
         startTime: a.startTime.toISOString(),
