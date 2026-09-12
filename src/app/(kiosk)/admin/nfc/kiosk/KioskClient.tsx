@@ -28,6 +28,7 @@ import {
 import { useNfc } from "@/components/nfc/NfcProvider";
 import { playNfcSound } from "@/lib/soundUtils";
 import KioskBookingFlow from "./KioskBookingFlow";
+import KioskPhoneFlow from "./KioskPhoneFlow";
 import { useAlert } from "@/components/AlertProvider";
 
 interface KioskClientProps {
@@ -41,6 +42,8 @@ export default function KioskClient({ initialTransactions = [] }: KioskClientPro
   const [activeResult, setActiveResult] = useState<NfcCheckinResponse | null>(null);
   const [lastScannedCardUid, setLastScannedCardUid] = useState<string | null>(null);
   const [isBookingMode, setIsBookingMode] = useState<boolean>(false);
+  const [isPhoneMode, setIsPhoneMode] = useState<boolean>(false);
+  const [phoneMember, setPhoneMember] = useState<any>(null);
 
   // Kiosk settings & status
   const [soundEnabled, setSoundEnabled] = useState<boolean>(true);
@@ -312,12 +315,25 @@ export default function KioskClient({ initialTransactions = [] }: KioskClientPro
           {/* Hero Tap Container / Booking Flow */}
           {isBookingMode ? (
             <KioskBookingFlow
-              member={activeResult?.member || { id: "unknown", name: "Guest", walletBalanceRupees: 0 }}
+              member={phoneMember || activeResult?.member || { id: "unknown", name: "Guest", walletBalanceRupees: 0 }}
               onComplete={() => {
                 setIsBookingMode(false);
+                setPhoneMember(null);
                 // The booking flow will show a success message via useAlert
               }}
-              onCancel={() => setIsBookingMode(false)}
+              onCancel={() => {
+                setIsBookingMode(false);
+                setPhoneMember(null);
+              }}
+            />
+          ) : isPhoneMode ? (
+            <KioskPhoneFlow 
+              onSuccess={(member) => {
+                setPhoneMember(member);
+                setIsPhoneMode(false);
+                setIsBookingMode(true);
+              }}
+              onCancel={() => setIsPhoneMode(false)}
             />
           ) : (
             <div className="flex-1 bg-gradient-to-b from-[#1c1f2e] to-[#141724] border-2 border-[#2a2d3e] rounded-3xl p-8 lg:p-12 flex flex-col items-center justify-center text-center relative overflow-hidden shadow-2xl">
@@ -361,6 +377,16 @@ export default function KioskClient({ initialTransactions = [] }: KioskClientPro
                   <span className="w-2 h-2 rounded-full bg-blue-400" />
                   Priority 2: Membership Attendance
                 </span>
+              </div>
+
+              {/* Phone Booking Alternative Button */}
+              <div className="mt-8 relative z-10 w-full max-w-sm mx-auto">
+                <button
+                  onClick={() => setIsPhoneMode(true)}
+                  className="w-full py-4 rounded-xl bg-[#25293d] hover:bg-[#34384e] border border-[#34384e] text-white font-bold text-lg transition shadow-md hover:scale-105 active:scale-95 flex items-center justify-center gap-2"
+                >
+                  <FiUser /> Don't have a card? Use Phone Number
+                </button>
               </div>
 
               {/* Processing Spinner Overlay */}

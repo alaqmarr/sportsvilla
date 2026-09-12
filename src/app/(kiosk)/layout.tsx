@@ -3,6 +3,7 @@ import { authOptions } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import React from "react";
+import { NfcProvider } from "@/components/nfc/NfcProvider";
 
 export default async function KioskLayout({
   children,
@@ -32,5 +33,11 @@ export default async function KioskLayout({
   }
 
   // Pure full screen layout with no navigation, footers or sidebars.
-  return <div className="min-h-screen bg-neutral-950 text-white font-sans">{children}</div>;
+  return (
+    <div className="min-h-screen bg-neutral-950 text-white font-sans">
+      <NfcProvider>
+        {children}
+      </NfcProvider>
+    </div>
+  );
 }

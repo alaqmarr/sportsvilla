@@ -4,8 +4,9 @@ import { useState, useEffect } from "react";
 import { fetchMembers, markAttendance } from "./actions";
 import { useAlert } from "@/components/AlertProvider";
 
-import { FiCheckCircle, FiSearch, FiUser, FiUserCheck, FiUsers, FiCamera, FiX, FiClock, FiActivity } from "react-icons/fi";
+import { FiCheckCircle, FiSearch, FiUser, FiUserCheck, FiUsers, FiCamera, FiX, FiClock, FiActivity, FiLink } from "react-icons/fi";
 import { Html5QrcodeScanner } from "html5-qrcode";
+import { useBarcodeScanner } from "@/hooks/useBarcodeScanner";
 
 export default function AttendanceClient({ initialRecords }: { initialRecords: any[] }) {
   const { showAlert } = useAlert();
@@ -18,6 +19,12 @@ export default function AttendanceClient({ initialRecords }: { initialRecords: a
 
   const [membersList, setMembersList] = useState<any[]>([]);
   const [familySelections, setFamilySelections] = useState<Record<string, string>>({});
+
+  useBarcodeScanner((code) => {
+    playSound('beep');
+    setMobile(code);
+    handleSearch(code);
+  });
 
   const playSound = (type: 'beep' | 'success' | 'error') => {
     try {
@@ -197,7 +204,12 @@ export default function AttendanceClient({ initialRecords }: { initialRecords: a
   return (
     <div>
       <div className="mb-8">
-        <h1 className="text-2xl font-bold font-['Outfit'] text-white">Attendance Kiosk</h1>
+        <h1 className="text-2xl font-bold font-['Outfit'] text-white flex items-center gap-2">
+          Attendance Kiosk
+          <span className="hidden sm:flex items-center gap-1 text-xs px-2 py-1 bg-blue-500/10 text-blue-400 border border-blue-500/20 rounded-full font-medium ml-2">
+            <FiLink /> USB/Bluetooth Scanner Supported
+          </span>
+        </h1>
         <p className="text-gray-500 mt-1 text-sm">Scan ID cards or enter mobile numbers to check members in.</p>
       </div>
 

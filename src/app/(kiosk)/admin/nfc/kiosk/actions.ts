@@ -206,3 +206,29 @@ export async function confirmKioskRazorpayPayment(
 
   return { success: true };
 }
+
+export async function findMembersByMobile(mobile: string) {
+  const members = await prisma.member.findMany({
+    where: { mobile },
+    select: {
+      id: true,
+      name: true,
+      mobile: true,
+      walletBalance: true,
+      family: {
+        include: {
+          members: {
+            select: {
+              id: true,
+              name: true,
+              mobile: true,
+              walletBalance: true,
+            }
+          }
+        }
+      }
+    }
+  });
+
+  return JSON.parse(JSON.stringify(members));
+}

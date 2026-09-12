@@ -1,11 +1,12 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef } from "react";
 import { lookupTicket, confirmTicketCheckin } from "@/app/(admin)/checkin/actions";
 import { useAlert } from "@/components/AlertProvider";
-import { FiCheckCircle, FiXCircle, FiSearch, FiCamera, FiX } from "react-icons/fi";
+import { FiCheckCircle, FiXCircle, FiSearch, FiCamera, FiX, FiLink } from "react-icons/fi";
 import { formatIST } from "@/lib/dateUtils";
 import { Html5QrcodeScanner } from "html5-qrcode";
+import { useBarcodeScanner } from "@/hooks/useBarcodeScanner";
 
 export default function CheckinScanner({ sports }: { sports: any[] }) {
   const { showAlert } = useAlert();
@@ -17,6 +18,10 @@ export default function CheckinScanner({ sports }: { sports: any[] }) {
   const [showScanner, setShowScanner] = useState(false);
   
   const inputRef = useRef<HTMLInputElement>(null);
+
+  useBarcodeScanner((code) => {
+    handleScan(code);
+  });
 
   function startScanner() {
     setShowScanner(true);
@@ -171,6 +176,9 @@ export default function CheckinScanner({ sports }: { sports: any[] }) {
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
         <h2 className="text-xl font-bold font-['Outfit'] text-white flex items-center gap-2">
           <FiCamera className="text-emerald-500" /> Fast Check-in
+          <span className="hidden sm:flex items-center gap-1 text-xs px-2 py-1 bg-blue-500/10 text-blue-400 border border-blue-500/20 rounded-full font-medium ml-2">
+            <FiLink /> USB/Bluetooth Scanner Supported
+          </span>
         </h2>
         <div className="flex items-center gap-3 w-full md:w-auto">
           <label className="text-sm text-gray-400 whitespace-nowrap">Gate for:</label>
