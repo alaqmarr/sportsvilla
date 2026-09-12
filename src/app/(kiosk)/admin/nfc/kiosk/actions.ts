@@ -19,7 +19,7 @@ export async function getKioskFacilities() {
   const openTime = settings.find(s => s.key === "FACILITY_OPEN_TIME")?.value || "06:00";
   const closeTime = settings.find(s => s.key === "FACILITY_CLOSE_TIME")?.value || "23:00";
 
-  return { turfs, openTime, closeTime };
+  return { turfs: JSON.parse(JSON.stringify(turfs)), openTime, closeTime };
 }
 
 export async function fetchKioskAvailableSlots(turfId: string, durationMin: number = 60) {
@@ -35,7 +35,7 @@ export async function fetchKioskAvailableSlots(turfId: string, durationMin: numb
     select: { startTime: true, endTime: true }
   });
 
-  return bookings;
+  return JSON.parse(JSON.stringify(bookings));
 }
 
 import { PaymentService } from "@/services/PaymentService";
@@ -144,7 +144,7 @@ export async function createKioskBooking({
 
       return b;
     });
-    return { success: true, booking, paymentMethod: "WALLET" };
+    return { success: true, booking: JSON.parse(JSON.stringify(booking)), paymentMethod: "WALLET" };
   }
 
   // Handle RAZORPAY
@@ -170,7 +170,7 @@ export async function createKioskBooking({
     });
 
     const orderData = await PaymentService.createOrder(b.id, "RAZORPAY", "WEB");
-    return { success: true, booking: b, paymentMethod: "RAZORPAY", orderData };
+    return { success: true, booking: JSON.parse(JSON.stringify(b)), paymentMethod: "RAZORPAY", orderData };
   }
 
   throw new Error("Invalid payment method");

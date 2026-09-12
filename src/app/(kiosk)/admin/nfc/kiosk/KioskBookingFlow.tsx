@@ -50,11 +50,17 @@ export default function KioskBookingFlow({ member, onComplete, onCancel }: { mem
   const [isProcessing, setIsProcessing] = useState(false);
 
   useEffect(() => {
-    getKioskFacilities().then((data) => {
-      setTurfs(data.turfs);
-      setHours({ openTime: data.openTime, closeTime: data.closeTime });
-      setLoading(false);
-    });
+    getKioskFacilities()
+      .then((data) => {
+        setTurfs(data.turfs);
+        setHours({ openTime: data.openTime, closeTime: data.closeTime });
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error("Failed to fetch kiosk facilities:", err);
+        showAlert("Error", "Failed to load facilities data. Please try again.", "error");
+        setLoading(false);
+      });
   }, []);
 
   const sports = useMemo(() => {
@@ -81,7 +87,7 @@ export default function KioskBookingFlow({ member, onComplete, onCancel }: { mem
   }, [selectedTurf, hours]);
 
   const handleWalletPayment = async () => {
-    if (member.walletBalanceRupees < selectedTurf.pricePerHour) {
+    if (member.walletBalanceRupees < (selectedTurf.bookingPrice || 0)) {
       showAlert("Insufficient Balance", "Your wallet balance is lower than the booking price.", "error");
       return;
     }
@@ -94,7 +100,7 @@ export default function KioskBookingFlow({ member, onComplete, onCancel }: { mem
         sportId: selectedSport.id,
         startTime: selectedSlot.startTime,
         endTime: selectedSlot.endTime,
-        price: selectedTurf.pricePerHour,
+        price: selectedTurf.bookingPrice || 0,
         paymentMethod: "WALLET"
       });
       playNfcSound("success");
@@ -116,7 +122,7 @@ export default function KioskBookingFlow({ member, onComplete, onCancel }: { mem
         sportId: selectedSport.id,
         startTime: selectedSlot.startTime,
         endTime: selectedSlot.endTime,
-        price: selectedTurf.pricePerHour,
+        price: selectedTurf.bookingPrice || 0,
         paymentMethod: "RAZORPAY"
       });
 
@@ -192,7 +198,7 @@ export default function KioskBookingFlow({ member, onComplete, onCancel }: { mem
           {turfs.filter(t => t.sports.some((ts: any) => ts.sportId === selectedSport.id)).map(t => (
             <button key={t.id} onClick={() => setSelectedTurf(t)} className="p-4 bg-[#161824] border border-[#34384e] rounded-xl hover:border-orange-500 text-left">
               <h3 className="text-xl font-bold text-white">{t.name}</h3>
-              <p className="text-orange-400 font-semibold mt-1">₹{t.pricePerHour} / hour</p>
+              <p className="text-orange-400 font-semibold mt-1">₹{t.bookingPrice || 0} / hour</p>
             </button>
           ))}
         </div>
@@ -219,7 +225,7 @@ export default function KioskBookingFlow({ member, onComplete, onCancel }: { mem
         <div className="bg-[#161824] border border-[#34384e] p-6 rounded-xl flex flex-col items-center text-center">
           <h3 className="text-2xl font-black text-white mb-2">{selectedSport.name} at {selectedTurf.name}</h3>
           <p className="text-orange-400 text-lg mb-6 flex items-center justify-center gap-2"><FiClock /> Today, {selectedSlot.label} (1 Hour)</p>
-          <div className="text-3xl font-black text-white mb-8">₹{selectedTurf.pricePerHour}</div>
+          <div className="text-3xl font-black text-white mb-8">₹{selectedTurf.bookingPrice || 0}</div>
           
           <div className="flex gap-4 w-full">
             <button 
