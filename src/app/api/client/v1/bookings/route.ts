@@ -86,10 +86,10 @@ export async function POST(request: Request) {
       return jsonResponse({ error: parseResult.error.issues[0].message }, { status: 400 });
     }
 
-    const { turfId, sportId, startTime, endTime, participantCount, couponCode, walletAmountToUse = 0, walletOtp, pointsAmountToUse = 0, memberId: requestedMemberId, visibility, inviteMaxCount } = parseResult.data;
+    const { turfId, sportId, startTime, endTime, participantCount, couponCode, walletAmountToUse = 0, walletOtp, pointsAmountToUse = 0, memberId: requestedMemberId, visibility, inviteMaxCount, allocations } = parseResult.data;
 
-    const start = new Date(startTime);
-    const end = new Date(endTime);
+    const start = new Date(allocations && allocations.length > 0 ? allocations[0].startTime : startTime!);
+    const end = new Date(allocations && allocations.length > 0 ? allocations[allocations.length - 1].endTime : endTime!);
 
     // Bug #6: Block past-date bookings
     if (start < new Date()) {

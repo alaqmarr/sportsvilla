@@ -4,8 +4,18 @@ import SportsClient from "./SportsClient";
 import { getAvailableIcons } from "@/lib/icons";
 
 export default async function SportsPage() {
-  const sports = await prisma.sport.findMany({ orderBy: { createdAt: "desc" } });
+  const sports = await prisma.sport.findMany({ 
+    orderBy: { createdAt: "desc" },
+    include: {
+      turfs: {
+        include: {
+          turf: true
+        }
+      }
+    }
+  });
+  const turfs = await prisma.turf.findMany({ orderBy: { name: "asc" } });
   const icons = getAvailableIcons();
   
-  return <SportsClient initialSports={sports} availableIcons={icons} />;
+  return <SportsClient initialSports={sports} availableIcons={icons} allTurfs={turfs} />;
 }

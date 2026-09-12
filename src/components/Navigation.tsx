@@ -69,7 +69,7 @@ export function Navigation({
       title: "Operations",
       links: [
         { href: "/calendar", label: "Booking Calendar", icon: <FiCalendar2 /> },
-        { href: "/bookings", label: "Turf Bookings", icon: <FiCalendar2 /> },
+        { href: "/bookings", label: "Sports Bookings", icon: <FiCalendar2 /> },
         { href: "/checkin", label: "Entry Check-in", icon: <FiCheckCircle /> },
         { href: "/attendance", label: "Attendance Kiosk", icon: <FiShield /> },
         { href: "/tournaments", label: "Tournaments", icon: <FiAward /> },
@@ -144,7 +144,7 @@ export function Navigation({
   return (
     <div className="flex flex-col lg:flex-row min-h-screen bg-[#0f1117] overflow-x-hidden">
       {/* Mobile Topbar */}
-      <div className="lg:hidden bg-[#161923]/80 backdrop-blur-md border-b border-[#2a2d3e]/50 p-4 flex justify-between items-center sticky top-0 z-40 shadow-lg">
+      <div className="lg:hidden bg-[#0f1117] border-b border-[#1c1f2e] p-4 flex justify-between items-center sticky top-0 z-40">
         <div className="flex flex-col">
           <div className="font-['Outfit'] text-lg font-black text-orange-500 tracking-wider uppercase">
             <Image src="/long-logo.png" alt="SportsVilla" width={180} height={44} unoptimized className="h-10 w-auto object-contain" />
@@ -162,8 +162,8 @@ export function Navigation({
 
       {/* Sidebar */}
       <aside
-        className={`fixed top-0 left-0 h-full w-64 bg-[#161923]/80 backdrop-blur-xl border-r border-[#2a2d3e]/50 flex flex-col z-50 transform transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] shadow-[4px_0_24px_rgba(0,0,0,0.5)] ${
-          isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+        className={`fixed top-0 left-0 h-full w-64 bg-[#0f1117] border-r border-[#1c1f2e] flex flex-col z-50 transform transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+          isSidebarOpen ? "translate-x-0 shadow-[4px_0_24px_rgba(0,0,0,0.5)]" : "-translate-x-full"
         } lg:translate-x-0`}
       >
         <div className="p-6 pb-4 flex flex-col">
@@ -177,11 +177,11 @@ export function Navigation({
           )}
         </div>
         
-        <nav className="flex flex-col gap-5 flex-1 overflow-y-auto px-3 pb-4 styled-scrollbar">
+        <nav className="flex flex-col gap-4 flex-1 overflow-y-auto px-4 pb-4 styled-scrollbar">
           {filteredLinkGroups.map((group, index) => (
             <div key={index} className="flex flex-col gap-1">
               {group.title !== "Core" && (
-                <div className="px-3 mb-1 text-[11px] font-bold text-gray-500 uppercase tracking-widest">
+                <div className="px-2 mb-1 mt-2 text-[10px] font-bold text-gray-500 uppercase tracking-widest">
                   {group.title}
                 </div>
               )}
@@ -189,10 +189,10 @@ export function Navigation({
                 <LinkComponent
                   key={link.href}
                   href={link.href}
-                  className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
+                  className={`flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
                     (link.href === "/" ? pathname === "/" : pathname === link.href || (link.href !== "/whatsapp/dashboard" && pathname.startsWith(link.href + "/")))
-                      ? 'bg-orange-500/10 text-orange-400 border-l-[3px] border-orange-500 rounded-l-none'
-                      : 'text-gray-400 hover:bg-[#1c1f2e] hover:text-white'
+                      ? 'bg-[#1c1f2e] text-orange-400'
+                      : 'text-gray-400 hover:bg-[#13151c] hover:text-white'
                   }`}
                 >
                   {link.icon}
@@ -202,18 +202,18 @@ export function Navigation({
             </div>
           ))}
         </nav>
-        <div className="mt-auto pt-4 pb-2 border-t border-[#2a2d3e] px-3 space-y-2">
+        <div className="mt-auto pt-4 pb-4 border-t border-[#1c1f2e] px-4 space-y-2">
           {admin && (
-            <div className="px-3 py-2 bg-[#0f1117] rounded-lg border border-[#2a2d3e] flex items-center justify-between">
-              <div className="truncate">
-                <p className="text-xs font-bold text-white truncate">{admin.name || admin.email}</p>
-                <p className="text-[10px] text-gray-500 truncate">{admin.email}</p>
+            <div className="px-3 py-2 bg-transparent flex items-center justify-between">
+              <div className="truncate pr-2">
+                <p className="text-sm font-semibold text-white truncate">{admin.name || admin.email}</p>
+                <p className="text-xs text-gray-500 truncate">{admin.email}</p>
               </div>
               <span
-                className={`px-1.5 py-0.5 rounded text-[9px] font-black uppercase tracking-wider ${
+                className={`px-1.5 py-0.5 rounded text-[9px] font-bold uppercase tracking-wider ${
                   admin.role === "SUPERADMIN"
-                    ? "bg-amber-500/20 text-amber-300 border border-amber-500/30"
-                    : "bg-blue-500/20 text-blue-300 border border-blue-500/30"
+                    ? "bg-amber-500/10 text-amber-400"
+                    : "bg-blue-500/10 text-blue-400"
                 }`}
               >
                 {admin.role || "ADMIN"}
@@ -222,7 +222,7 @@ export function Navigation({
           )}
           <button 
             onClick={() => signOut({ callbackUrl: "/login" })}
-            className="flex w-full items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-gray-400 hover:bg-red-500/10 hover:text-red-400 transition-colors cursor-pointer border-none bg-transparent"
+            className="flex w-full items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium text-gray-400 hover:bg-red-500/10 hover:text-red-400 transition-colors cursor-pointer border-none bg-transparent"
           >
             <FiLogOut className="text-lg" />
             Sign Out

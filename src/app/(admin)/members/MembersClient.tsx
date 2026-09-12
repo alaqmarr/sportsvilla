@@ -417,7 +417,7 @@ export default function MembersClient({ initialMembers, plans, turfs = [] }: { i
         <input 
           type="text" 
           placeholder="Search members by name, mobile, or ID..." 
-          className="w-full sm:max-w-md bg-[#0f1117] border border-[#2a2d3e] rounded-lg px-4 py-2.5 text-white placeholder-gray-600 focus:border-orange-500 focus:ring-2 focus:ring-orange-500 focus:outline-none text-sm transition-all"
+          className="w-full sm:max-w-md bg-[#13151f] border border-[#2a2d3e] rounded-lg px-4 py-2.5 text-white placeholder-gray-600 focus:border-orange-500 focus:ring-2 focus:ring-orange-500 focus:outline-none text-sm transition-all"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
         />
@@ -427,7 +427,7 @@ export default function MembersClient({ initialMembers, plans, turfs = [] }: { i
         !isMounted ? (
           <TableSkeleton rows={5} cols={5} />
         ) : filteredMembers.length === 0 ? (
-          <div className="bg-[#161923] border border-[#2a2d3e] rounded-xl p-16 text-center flex flex-col items-center">
+          <div className="bg-[#0f1117] border border-[#2a2d3e] rounded-2xl p-16 text-center flex flex-col items-center">
             <div className="w-16 h-16 rounded-full bg-orange-500/10 text-orange-400 flex items-center justify-center text-3xl mb-6"><FiUserCheck /></div>
             <h3 className="text-2xl font-bold text-white mb-2">No Members Found</h3>
             <button onClick={openCreateModal} className="bg-orange-500 hover:bg-orange-600 text-white rounded-lg px-5 py-2.5 text-sm font-semibold inline-flex items-center gap-2 transition-colors cursor-pointer border-none mt-4">
@@ -435,20 +435,20 @@ export default function MembersClient({ initialMembers, plans, turfs = [] }: { i
             </button>
           </div>
         ) : (
-          <div className="bg-[#161923] border border-[#2a2d3e] rounded-xl overflow-hidden">
+          <div className="bg-[#0f1117] border border-[#2a2d3e] rounded-2xl overflow-hidden">
             <div className="overflow-x-auto max-h-[60vh] overflow-y-auto">
               <table className="w-full min-w-[800px] relative">
-                <thead className="sticky top-0 bg-[#161923] z-10">
+                <thead className="sticky top-0 bg-[#0f1117] z-10">
                   <tr>
-                    <th className="bg-[#0f1117] text-gray-500 text-xs uppercase tracking-wider font-semibold px-6 py-4 text-left border-b border-[#2a2d3e] w-[30%] shadow-[0_1px_0_0_#2a2d3e]">Member Profile</th>
-                    <th className="bg-[#0f1117] text-gray-500 text-xs uppercase tracking-wider font-semibold px-6 py-4 text-left border-b border-[#2a2d3e] w-[25%] shadow-[0_1px_0_0_#2a2d3e]">Contact details</th>
-                    <th className="bg-[#0f1117] text-gray-500 text-xs uppercase tracking-wider font-semibold px-6 py-4 text-left border-b border-[#2a2d3e] w-[30%] shadow-[0_1px_0_0_#2a2d3e]">Active Plans</th>
-                    <th className="bg-[#0f1117] text-gray-500 text-xs uppercase tracking-wider font-semibold px-6 py-4 text-right border-b border-[#2a2d3e] w-[15%] shadow-[0_1px_0_0_#2a2d3e]">Actions</th>
+                    <th className="bg-[#13151f] text-gray-500 text-xs uppercase tracking-wider font-semibold px-6 py-4 text-left border-b border-[#2a2d3e] w-[30%]">Member Profile</th>
+                    <th className="bg-[#13151f] text-gray-500 text-xs uppercase tracking-wider font-semibold px-6 py-4 text-left border-b border-[#2a2d3e] w-[25%]">Contact details</th>
+                    <th className="bg-[#13151f] text-gray-500 text-xs uppercase tracking-wider font-semibold px-6 py-4 text-left border-b border-[#2a2d3e] w-[30%]">Active Plans</th>
+                    <th className="bg-[#13151f] text-gray-500 text-xs uppercase tracking-wider font-semibold px-6 py-4 text-right border-b border-[#2a2d3e] w-[15%]">Actions</th>
                   </tr>
                 </thead>
                 <tbody>
                   {filteredMembers.slice((page - 1) * itemsPerPage, page * itemsPerPage).map(member => (
-                    <tr key={member.id} className="hover:bg-[#1c1f2e]/50 transition-colors">
+                    <tr key={member.id} className="hover:bg-[#13151f] transition-colors">
                       <td className="px-6 py-5 text-sm border-b border-[#2a2d3e]">
                         <div className="flex items-center gap-4">
                           <div className="w-10 h-10 rounded-full bg-orange-500/10 text-orange-400 font-semibold flex items-center justify-center font-['Outfit'] text-base">
@@ -470,7 +470,7 @@ export default function MembersClient({ initialMembers, plans, turfs = [] }: { i
                           {member.memberships?.length ? member.memberships.map((m: any) => {
                             const isActive = m.status === 'ACTIVE' && new Date(m.endDate) >= new Date();
                             return (
-                              <div key={m.id} className={`text-xs py-1 px-3 rounded-md flex justify-between items-center ${isActive ? 'bg-emerald-500/10 border border-emerald-500/20 text-emerald-400' : 'bg-[#1c1f2e] border border-[#2a2d3e] text-gray-500 opacity-60'}`}>
+                              <div key={m.id} className={`text-xs py-1 px-3 rounded-md flex justify-between items-center ${isActive ? 'bg-emerald-500/10 border border-emerald-500/20 text-emerald-400' : 'bg-[#13151f] border border-[#2a2d3e] text-gray-500 opacity-60'}`}>
                                 <div className="flex flex-col">
                                   <span className="font-bold tracking-wide uppercase">{m.membershipPlan?.name} ({m.membershipPlan?.sport?.name})</span>
                                   {(m.turf || m.timeSlot) && (
@@ -495,7 +495,7 @@ export default function MembersClient({ initialMembers, plans, turfs = [] }: { i
                         <div className="flex gap-2 justify-end">
                           <button onClick={() => openIdCardModal(member)} className="border border-[#2a2d3e] hover:bg-orange-500/10 hover:text-orange-400 hover:border-orange-500/30 text-gray-400 rounded-lg px-3 py-1.5 text-xs font-semibold transition-colors cursor-pointer bg-transparent">ID CARD</button>
                           <button onClick={() => handleResetWallet(member.id)} title="Reset Wallet" className="border border-[#2a2d3e] hover:bg-yellow-500/10 text-yellow-400 rounded-lg p-1.5 transition-colors cursor-pointer bg-transparent"><FiRefreshCcw /></button>
-                          <button onClick={() => openEditModal(member)} title="Edit Member" className="border border-[#2a2d3e] hover:bg-[#1c1f2e] text-gray-400 rounded-lg p-1.5 transition-colors cursor-pointer bg-transparent"><FiEdit2 /></button>
+                          <button onClick={() => openEditModal(member)} title="Edit Member" className="border border-[#2a2d3e] hover:bg-[#1a1d27] text-gray-400 rounded-lg p-1.5 transition-colors cursor-pointer bg-transparent"><FiEdit2 /></button>
                           <button onClick={() => handleDelete(member.id)} title="Delete Member" className="border border-[#2a2d3e] hover:bg-red-500/10 text-red-400 rounded-lg p-1.5 transition-colors cursor-pointer bg-transparent"><FiTrash2 /></button>
                         </div>
                       </td>
@@ -505,7 +505,7 @@ export default function MembersClient({ initialMembers, plans, turfs = [] }: { i
               </table>
             </div>
             {filteredMembers.length > itemsPerPage && (
-              <div className="flex justify-between items-center p-4 border-t border-[#2a2d3e]">
+              <div className="flex justify-between items-center p-4 border-t border-[#2a2d3e] bg-[#13151f]">
                 <div className="text-sm text-gray-500">
                   Showing {(page - 1) * itemsPerPage + 1} to {Math.min(page * itemsPerPage, filteredMembers.length)} of {filteredMembers.length}
                 </div>
@@ -535,7 +535,7 @@ export default function MembersClient({ initialMembers, plans, turfs = [] }: { i
         !isMounted ? (
           <TableSkeleton rows={5} cols={5} />
         ) : families.length === 0 ? (
-          <div className="bg-[#161923] border border-[#2a2d3e] rounded-xl p-16 text-center flex flex-col items-center">
+          <div className="bg-[#0f1117] border border-[#2a2d3e] rounded-2xl p-16 text-center flex flex-col items-center">
             <div className="w-16 h-16 rounded-full bg-orange-500/10 text-orange-400 flex items-center justify-center text-3xl mb-6"><FiUsers /></div>
             <h3 className="text-2xl font-bold text-white mb-2">No Families Setup</h3>
             <button onClick={openFamilyModal} className="bg-orange-500 hover:bg-orange-600 text-white rounded-lg px-5 py-2.5 text-sm font-semibold inline-flex items-center gap-2 transition-colors cursor-pointer border-none mt-4">
@@ -545,17 +545,17 @@ export default function MembersClient({ initialMembers, plans, turfs = [] }: { i
         ) : (
           <div className="space-y-6">
             {families.map(family => (
-              <div key={family.mobile} className="bg-[#161923] border border-[#2a2d3e] rounded-xl overflow-hidden">
-                <div className="bg-[#1c1f2e] border-b border-[#2a2d3e] px-6 py-4 flex justify-between items-center">
+              <div key={family.mobile} className="bg-[#0f1117] border border-[#2a2d3e] rounded-2xl overflow-hidden">
+                <div className="bg-[#13151f] border-b border-[#2a2d3e] px-6 py-4 flex justify-between items-center">
                 <div>
                   <h3 className="text-lg font-bold text-white font-['Outfit']">{family.mobile}</h3>
                   <p className="text-sm text-gray-500 mt-1">{family.members.length} Family Member(s)</p>
                 </div>
                 <div className="w-10 h-10 rounded-full bg-blue-500/10 text-blue-400 flex items-center justify-center text-xl"><FiUsers /></div>
               </div>
-              <div className="space-y-4">
+              <div className="space-y-4 p-4">
                 {family.members.map(member => (
-                  <div key={member.id} className="flex justify-between items-center bg-[#0f1117] border border-[#2a2d3e] p-3 rounded-lg">
+                  <div key={member.id} className="flex justify-between items-center bg-[#13151f] border border-[#2a2d3e] p-3 rounded-lg">
                     <div>
                       <div className="font-semibold text-white text-sm">{member.name}</div>
                       <div className="text-xs text-gray-500 mt-0.5">{member.id}</div>
@@ -577,7 +577,7 @@ export default function MembersClient({ initialMembers, plans, turfs = [] }: { i
           initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
           className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-[100] p-4"
         >
-          <div className="bg-[#161923] border border-[#2a2d3e] rounded-xl p-5 sm:p-8 w-full max-w-md shadow-2xl max-h-[95vh] overflow-y-auto">
+          <div className="bg-[#0f1117] border border-[#2a2d3e] rounded-2xl p-5 sm:p-8 w-full max-w-md shadow-2xl max-h-[95vh] overflow-y-auto">
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-xl font-bold font-['Outfit'] text-white">{editingId ? 'Edit Member' : 'Register Member'}</h2>
               <button className="text-gray-500 hover:text-white cursor-pointer bg-transparent border-none text-xl" onClick={() => setShowMemberModal(false)}><FiX /></button>

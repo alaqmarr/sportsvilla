@@ -383,7 +383,7 @@ export default function ManageBookings() {
             placeholder="Search Name, Mobile, or Turf..."
             value={searchQuery}
             onChange={e => setSearchQuery(e.target.value)}
-            className="bg-[#161923] border border-[#2a2d3e] rounded-lg px-4 py-2.5 text-white focus:border-orange-500/50 focus:ring-2 focus:ring-orange-500 focus:outline-none"
+            className="bg-transparent border-b border-[#2a2d3e] px-2 py-2 text-white focus:border-orange-500 focus:outline-none transition-colors"
           />
           <button onClick={handleExportCSV} className="bg-gray-800 hover:bg-gray-700 text-white border border-gray-600 rounded-lg px-4 py-2.5 text-sm font-semibold inline-flex items-center gap-2 transition-colors cursor-pointer">
             <FiFileText /> Export
@@ -392,16 +392,16 @@ export default function ManageBookings() {
             type="date" 
             value={date}
             onChange={e => setDate(e.target.value)}
-            className="bg-[#161923] border border-[#2a2d3e] rounded-lg px-4 py-2.5 text-white focus:border-orange-500/50 focus:ring-2 focus:ring-orange-500 focus:outline-none"
+            className="bg-transparent border-b border-[#2a2d3e] px-2 py-2 text-white focus:border-orange-500 focus:outline-none transition-colors"
           />
         </div>
       </div>
 
-      <div className="bg-[#161923] border border-[#2a2d3e] rounded-xl overflow-hidden">
-        <div className="overflow-x-auto">
+      <div className="overflow-x-auto mt-6">
+        <div className="min-w-full">
           <table className="w-full text-left border-collapse">
-            <thead className="sticky top-0 bg-[#161923] z-10">
-              <tr className="bg-[#1c1f2e] border-b border-[#2a2d3e]">
+            <thead className="sticky top-0 bg-[#0f1117] z-10">
+              <tr className="border-b border-[#2a2d3e]">
                 <th className="px-6 py-4 text-xs uppercase tracking-wider font-semibold text-gray-500">Time & Court</th>
                 <th className="px-6 py-4 text-xs uppercase tracking-wider font-semibold text-gray-500">Member</th>
                 <th className="px-6 py-4 text-xs uppercase tracking-wider font-semibold text-gray-500">Status</th>
@@ -432,14 +432,14 @@ export default function ManageBookings() {
                   
                   return (
                     <React.Fragment key={section.key}>
-                      <tr className="bg-[#13151d] border-y border-[#2a2d3e]">
-                        <td colSpan={5} className="px-6 py-3 font-bold text-sm">
+                      <tr className="border-b border-[#2a2d3e]">
+                        <td colSpan={5} className="px-6 py-4 font-bold text-sm bg-[#0f1117]">
                           <span className={section.color}>{section.title}</span> 
                           <span className="ml-2 text-xs bg-[#2a2d3e] px-2 py-0.5 rounded-full text-gray-400">{sectionBookings.length}</span>
                         </td>
                       </tr>
                       {sectionBookings.map((b) => (
-                        <tr key={b.id} className="hover:bg-[#1c1f2e] transition-colors">
+                        <tr key={b.id} className="hover:bg-[#161923] transition-colors border-b border-[#2a2d3e]/50">
                           <td className="px-6 py-4">
                             <div className="font-bold text-white mb-1 flex items-center gap-2">
                               <FiClock className="text-gray-400" />
@@ -563,7 +563,7 @@ export default function ManageBookings() {
               initial={{ scale: 0.95, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.95, opacity: 0 }}
-              className="bg-[#161923] border border-[#2a2d3e] rounded-2xl w-full max-w-2xl shadow-2xl overflow-hidden flex flex-col md:flex-row my-8 relative z-10"
+              className="bg-[#0f1117] rounded-xl w-full max-w-2xl shadow-2xl overflow-hidden flex flex-col md:flex-row my-8 relative z-10 border border-[#2a2d3e]/50"
             >
               <button 
                 onClick={closePayModal}
@@ -576,7 +576,7 @@ export default function ManageBookings() {
                 <h3 className="text-xl font-bold font-['Outfit'] text-white mb-2">Record Payment</h3>
                 <p className="text-sm text-gray-400 mb-6">{payModal.booking.member?.name}</p>
                 
-                <div className="bg-[#0f1117] border border-[#2a2d3e] rounded-xl p-4 mb-6">
+                <div className="bg-[#161923]/50 rounded-xl p-4 mb-6">
                   <div className="flex justify-between items-center mb-2">
                     <span className="text-gray-400 font-medium text-sm">Total Booking Value</span>
                     <span className="text-white font-bold">₹{Number(payModal.booking.price.toFixed(2))}</span>
@@ -709,7 +709,7 @@ export default function ManageBookings() {
                             type="text" 
                             inputMode="numeric"
                             pattern="[0-9]*"
-                            className="w-full bg-[#1c1f2e] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white focus:border-orange-500/50 focus:ring-2 focus:ring-orange-500 focus:outline-none"
+                            className="w-full bg-transparent border-b border-[#2a2d3e] px-2 py-3 text-white focus:border-orange-500 focus:outline-none transition-colors"
                             value={cashAmount}
                             onChange={e => {
                               const valStr = e.target.value.replace(/\D/g, '');
@@ -732,7 +732,7 @@ export default function ManageBookings() {
                             type="text" 
                             inputMode="numeric"
                             pattern="[0-9]*"
-                            className="w-full bg-[#1c1f2e] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white focus:border-orange-500/50 focus:ring-2 focus:ring-orange-500 focus:outline-none"
+                            className="w-full bg-transparent border-b border-[#2a2d3e] px-2 py-3 text-white focus:border-orange-500 focus:outline-none transition-colors"
                             value={onlineAmount}
                             onChange={e => {
                               const valStr = e.target.value.replace(/\D/g, '');

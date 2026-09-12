@@ -87,6 +87,9 @@ model Sport {
   description            String?
   iconPath               String?
   rewardPointsPerCheckin Int              @default(0)
+  openTime               String?          // e.g., "06:00"
+  closeTime              String?          // e.g., "23:00"
+  slotDurationMinutes    Int              @default(60)
   turfs                  TurfSport[]
   membershipPlans        MembershipPlan[]
   attendances            Attendance[]

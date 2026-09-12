@@ -122,28 +122,28 @@ export default function TurfsClient({ initialTurfs, sports, availableIcons }: { 
         </button>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
         {turfs.map(turf => (
-          <div key={turf.id} className="bg-[#161923] border border-[#2a2d3e] rounded-xl p-6">
+          <div key={turf.id} className="bg-transparent border border-[#2a2d3e] hover:border-gray-600 rounded-lg p-5 transition-colors group flex flex-col">
             <div className="flex justify-between items-start">
-              <div className="w-11 h-11 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center text-xl overflow-hidden">
+              <div className="w-10 h-10 rounded-md bg-[#161923] border border-[#2a2d3e] text-orange-400 flex items-center justify-center text-lg overflow-hidden">
                 {turf.iconPath ? (
-                  <img src={turf.iconPath} alt={turf.name} className="w-7 h-7 object-contain" />
+                  <img src={turf.iconPath} alt={turf.name} className="w-6 h-6 object-contain" />
                 ) : (
                   <FiMapPin />
                 )}
               </div>
-              <div className="flex gap-2">
+              <div className="flex gap-1.5 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity">
                 <button
                   onClick={() => openEditModal(turf)}
-                  className="border border-[#2a2d3e] hover:bg-[#1c1f2e] text-gray-300 rounded-lg p-2 transition-colors cursor-pointer bg-transparent"
+                  className="text-gray-400 hover:text-white hover:bg-[#161923] rounded-md p-1.5 transition-colors cursor-pointer bg-transparent border-none"
                   title="Edit"
                 >
                   <FiEdit2 size={14} />
                 </button>
                 <button
                   onClick={() => handleDelete(turf.id)}
-                  className="border border-[#2a2d3e] text-red-400 hover:bg-red-500/10 hover:border-red-500/30 rounded-lg p-2 transition-colors cursor-pointer bg-transparent"
+                  className="text-gray-400 hover:text-red-400 hover:bg-[#161923] rounded-md p-1.5 transition-colors cursor-pointer bg-transparent border-none"
                   title="Delete"
                 >
                   <FiTrash2 size={14} />
@@ -151,32 +151,34 @@ export default function TurfsClient({ initialTurfs, sports, availableIcons }: { 
               </div>
             </div>
 
-            <h3 className="text-lg font-semibold text-white mt-4">{turf.name}</h3>
-            <p className="text-sm text-gray-500 mt-1 mb-3">
+            <h3 className="text-base font-semibold text-white mt-4 leading-tight">{turf.name}</h3>
+            <p className="text-sm text-gray-500 mt-1 mb-4 truncate">
               {turf.location || "No location provided"}
             </p>
 
-            {turf.bookingPrice !== null && turf.bookingPrice > 0 && (
-              <div className="text-sm text-orange-400 font-semibold mb-3">
-                ₹{turf.bookingPrice} / {turf.bookingDurationMinutes}m slot
-              </div>
-            )}
+            <div className="mt-auto">
+              {turf.bookingPrice !== null && turf.bookingPrice > 0 && (
+                <div className="text-sm text-gray-300 font-medium mb-3 flex items-center gap-2">
+                  <span className="text-orange-400 font-semibold">₹{turf.bookingPrice}</span> / {turf.bookingDurationMinutes}m
+                </div>
+              )}
 
-            {turf.sports && turf.sports.length > 0 && (
-              <div className="flex flex-wrap gap-2 mb-3">
-                {turf.sports.map((ts: any) => (
-                  <span key={ts.sportId} className="px-2 py-1 bg-[#1c1f2e] border border-[#2a2d3e] rounded-md text-xs font-semibold text-gray-400 flex items-center gap-1">
-                    <FiActivity size={10} /> {ts.sport.name}
-                  </span>
-                ))}
-              </div>
-            )}
+              {turf.sports && turf.sports.length > 0 && (
+                <div className="flex flex-wrap gap-1.5 mb-3">
+                  {turf.sports.map((ts: any) => (
+                    <span key={ts.sportId} className="px-2 py-1 bg-[#161923] rounded text-[11px] font-medium text-gray-400 flex items-center gap-1">
+                      <FiActivity size={10} /> {ts.sport.name}
+                    </span>
+                  ))}
+                </div>
+              )}
 
-            {turf.parentTurfId && (
-              <div className="mt-3 px-3 py-1.5 bg-[#1c1f2e] rounded-lg text-xs text-gray-400 border border-[#2a2d3e] inline-flex items-center gap-2">
-                <FiMap /> Inside: {turfs.find(t => t.id === turf.parentTurfId)?.name || 'Unknown'}
-              </div>
-            )}
+              {turf.parentTurfId && (
+                <div className="px-2.5 py-1.5 bg-[#161923] rounded-md text-xs text-gray-400 inline-flex items-center gap-2">
+                  <FiMap size={12} /> Inside {turfs.find(t => t.id === turf.parentTurfId)?.name || 'Unknown'}
+                </div>
+              )}
+            </div>
           </div>
         ))}
       </div>

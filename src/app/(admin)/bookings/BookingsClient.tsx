@@ -9,7 +9,7 @@ import { TableSkeleton } from "@/components/ui/Skeleton";
 import { AnimatePresence, motion } from "framer-motion";
 import { FiCalendar, FiClock, FiCheck, FiX, FiUser, FiCreditCard, FiMapPin, FiList, FiPlus } from "react-icons/fi";
 import ManageBookings from "./ManageBookings";
-
+import { allocateTurfsForSlots, Allocation } from "@/lib/allocationEngine";
 // Generate slots based on duration and facility open/close time
 function generateSlots(dateStr: string, durationMin: number, openTime: string = "06:00", closeTime: string = "23:00") {
   const slots = [];
@@ -145,9 +145,12 @@ export default function BookingsClient({ turfs, facilityHours = { openTime: '06:
     return turfs.filter(t => t.sports?.some((ts: any) => ts.sport.id === selectedSportId));
   }, [turfs, selectedSportId]);
 
-  // Use 30 minutes as standard slot size
-  const slotDuration = 30;
-  const slots = useMemo(() => generateSlots(selectedDate, slotDuration, facilityHours?.openTime, facilityHours?.closeTime), [selectedDate, slotDuration, facilityHours]);
+  // Use sport-specific settings or fallback
+  const selectedSport = useMemo(() => sports.find((s: any) => s.id === selectedSportId), [sports, selectedSportId]);
+  const slotDuration = selectedSport?.slotDurationMinutes || 30;
+  const openTime = selectedSport?.openTime || facilityHours?.openTime || '06:00';
+  const closeTime = selectedSport?.closeTime || facilityHours?.closeTime || '23:00';
+  const slots = useMemo(() => generateSlots(selectedDate, slotDuration, openTime, closeTime), [selectedDate, slotDuration, openTime, closeTime]);
 
   // Calculate court availability based on selected slots
   const turfAvailability = useMemo(() => {
@@ -178,6 +181,11 @@ export default function BookingsClient({ turfs, facilityHours = { openTime: '06:
       return { turf, isBooked, remainingCapacity };
     });
   }, [applicableTurfs, selectedSlots, bookings]);
+
+  const autoAllocation = useMemo(() => {
+    if (selectedSlots.length === 0) return null;
+    return allocateTurfsForSlots(selectedSlots, bookings, applicableTurfs);
+  }, [selectedSlots, bookings, applicableTurfs]);
 
   // Ensure selected turfs are deselected if they become unavailable
   useEffect(() => {
@@ -224,15 +232,17 @@ export default function BookingsClient({ turfs, facilityHours = { openTime: '06:
 
   async function openCheckout() {
     if (selectedSlots.length === 0) return showAlert("Select Slots", "Please select at least one time slot.", "error");
-    if (selectedTurfs.length === 0) return showAlert("Select Court", "Please select an available court.", "error");
+    if (!autoAllocation && selectedTurfs.length === 0) return showAlert("Select Court", "Please select an available court.", "error");
     
     setShowModal(true);
     setParticipantCount(1);
     setGuestNames([]);
     setAdditionalMemberIds([]);
     
-    const totalTurfPricePer30m = selectedTurfs.reduce((sum, t) => sum + ((t.bookingPrice || 0) / (t.bookingDurationMinutes || 60) * 30), 0);
-    const totalAmount = selectedSlots.length * totalTurfPricePer30m;
+    const totalAmount = autoAllocation 
+      ? autoAllocation.reduce((sum, a) => sum + a.price, 0)
+      : selectedSlots.length * selectedTurfs.reduce((sum, t) => sum + ((t.bookingPrice || 0) / (t.bookingDurationMinutes || 60) * 30), 0);
+      
     if (upiSettings.upiId && totalAmount > 0) {
       const upiUrl = `upi://pay?pa=${upiSettings.upiId}&pn=${encodeURIComponent(upiSettings.businessName)}&am=${totalAmount}&cu=INR`;
       const qrUrl = await QRCodeLib.toDataURL(upiUrl, { width: 300, margin: 1 });
@@ -241,7 +251,9 @@ export default function BookingsClient({ turfs, facilityHours = { openTime: '06:
   }
 
   const totalTurfPricePer30m = selectedTurfs.reduce((sum, t) => sum + ((t.bookingPrice || 0) / (t.bookingDurationMinutes || 60) * 30), 0);
-  const totalPrice = selectedSlots.length * totalTurfPricePer30m * (Number(participantCount) || 1);
+  const totalPrice = autoAllocation
+    ? autoAllocation.reduce((sum, a) => sum + a.price, 0) * (Number(participantCount) || 1)
+    : selectedSlots.length * totalTurfPricePer30m * (Number(participantCount) || 1);
 
   const primaryMember = searchResults.find(m => m.id === memberId) || (searchResults.length === 1 && searchResults[0].mobile === mobile ? searchResults[0] : null);
   const maxDiscount = primaryMember ? Math.floor((primaryMember.loyaltyPoints || 0) / (pointsPerRupee || 100)) : 0;
@@ -278,18 +290,39 @@ export default function BookingsClient({ turfs, facilityHours = { openTime: '06:
       const familyGuestNames = additionalMemberIds.map(id => searchResults.find(r => r.id === id)?.name || "");
       const finalGuestNames = [...familyGuestNames, ...guestNames.slice(0, (Number(participantCount) || 1) - 1 - familyGuestNames.length)];
 
-      const createdBookings = await createBooking({
-        turfIds: selectedTurfs.map(t => t.id),
-        sportId: selectedSportId,
-        slots: selectedSlots,
-        memberId: memberId || undefined,
-        mobile: !memberId ? mobile : undefined,
-        name: !memberId ? name : undefined,
-        participantCount: Number(participantCount) || 1,
-        guestNames: finalGuestNames,
-        additionalMemberIds: additionalMemberIds,
-        redeemPoints: redeemPoints
-      });
+      let createdBookings: any[] = [];
+      if (autoAllocation) {
+        for (const alloc of autoAllocation) {
+          const allocSlots = selectedSlots.filter(s => s.startTime.getTime() >= alloc.startTime.getTime() && s.endTime.getTime() <= alloc.endTime.getTime());
+          const res = await createBooking({
+            turfIds: [alloc.turfId],
+            sportId: selectedSportId,
+            slots: allocSlots,
+            memberId: memberId || undefined,
+            mobile: !memberId ? mobile : undefined,
+            name: !memberId ? name : undefined,
+            participantCount: Number(participantCount) || 1,
+            guestNames: finalGuestNames,
+            additionalMemberIds: additionalMemberIds,
+            redeemPoints: redeemPoints
+          });
+          createdBookings = createdBookings.concat(res || []);
+        }
+      } else {
+        const res = await createBooking({
+          turfIds: selectedTurfs.map(t => t.id),
+          sportId: selectedSportId,
+          slots: selectedSlots,
+          memberId: memberId || undefined,
+          mobile: !memberId ? mobile : undefined,
+          name: !memberId ? name : undefined,
+          participantCount: Number(participantCount) || 1,
+          guestNames: finalGuestNames,
+          additionalMemberIds: additionalMemberIds,
+          redeemPoints: redeemPoints
+        });
+        createdBookings = res || [];
+      }
       
       if (createdBookings && createdBookings.length > 0) {
         const totalCash = Number(cashAmount) || 0;
@@ -382,26 +415,26 @@ export default function BookingsClient({ turfs, facilityHours = { openTime: '06:
             <p className="text-gray-500 mt-1 text-sm">Select Sport ➔ Select Slots ➔ Pick Court</p>
           </div>
 
-      <div className="grid lg:grid-cols-4 gap-6">
-        <div className="lg:col-span-1 space-y-6">
-          <div className="bg-[#161923] border border-[#2a2d3e] rounded-xl p-5">
-            <label className="block text-xs uppercase tracking-wider font-semibold text-gray-500 mb-2">1. Select Date</label>
+      <div className="grid lg:grid-cols-4 gap-8">
+        <div className="lg:col-span-1 space-y-8 lg:border-r lg:border-[#2a2d3e] lg:pr-6">
+          <div>
+            <label className="block text-sm font-semibold text-gray-400 mb-2">1. Select Date</label>
             <input 
               type="date" 
-              className="w-full bg-[#0f1117] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white focus:border-orange-500/50 focus:ring-2 focus:ring-orange-500 focus:outline-none"
+              className="w-full bg-transparent border-b border-[#2a2d3e] px-2 py-3 text-white focus:border-orange-500 focus:outline-none transition-colors"
               value={selectedDate}
               onChange={e => setSelectedDate(e.target.value)}
             />
           </div>
 
-          <div className="bg-[#161923] border border-[#2a2d3e] rounded-xl p-5">
-            <label className="block text-xs uppercase tracking-wider font-semibold text-gray-500 mb-3">2. Select Sport</label>
+          <div>
+            <label className="block text-sm font-semibold text-gray-400 mb-3">2. Select Sport</label>
             <div className="flex flex-col gap-2">
               {sports.map((sport: any) => (
                 <button 
                   key={sport.id}
                   onClick={() => setSelectedSportId(sport.id)}
-                  className={`px-4 py-3 rounded-lg text-left transition-colors border font-semibold ${selectedSportId === sport.id ? 'bg-[#1c1f2e] border-orange-500/50 text-white' : 'bg-[#0f1117] border-[#2a2d3e] text-gray-400 hover:border-gray-500'}`}
+                  className={`px-4 py-3 rounded-lg text-left transition-colors font-medium ${selectedSportId === sport.id ? 'bg-orange-500/10 text-orange-500' : 'text-gray-400 hover:bg-[#2a2d3e]/50'}`}
                 >
                   {sport.name}
                 </button>
@@ -410,8 +443,8 @@ export default function BookingsClient({ turfs, facilityHours = { openTime: '06:
             </div>
           </div>
 
-          {selectedSlots.length > 0 && selectedTurfs.length > 0 && (
-            <div className="fixed bottom-0 left-0 right-0 z-40 p-4 border-t border-[#2a2d3e] bg-[#161923] shadow-[0_-10px_40px_rgba(0,0,0,0.5)] lg:relative lg:p-5 lg:border lg:border-orange-500/20 lg:bg-orange-500/10 lg:shadow-none lg:rounded-xl">
+          {selectedSlots.length > 0 && (autoAllocation || selectedTurfs.length > 0) && (
+            <div className="fixed bottom-0 left-0 right-0 z-40 p-4 border-t border-[#2a2d3e] bg-[#161923] shadow-[0_-10px_40px_rgba(0,0,0,0.5)] lg:relative lg:p-5 lg:border-t lg:border-orange-500/20 lg:bg-transparent lg:shadow-none lg:rounded-none">
               <h3 className="font-bold text-orange-400 mb-2 hidden lg:block">Booking Summary</h3>
               
               <div className="flex justify-between items-center lg:hidden">
@@ -429,7 +462,7 @@ export default function BookingsClient({ turfs, facilityHours = { openTime: '06:
 
               {/* Desktop version */}
               <div className="hidden lg:block">
-                <div className="text-sm text-white mb-1">{selectedTurfs.map(t => t.name).join(", ")}</div>
+                <div className="text-sm text-white mb-1">{autoAllocation ? autoAllocation.map(a => a.turfName).join(", ") : selectedTurfs.map(t => t.name).join(", ")}</div>
                 <div className="font-semibold text-lg text-emerald-400">
                   {formatIST(new Date(Math.min(...selectedSlots.map(s => s.startTime.getTime()))), 'h:mm a')} 
                   <span className="text-gray-500 mx-2">to</span> 
@@ -448,8 +481,8 @@ export default function BookingsClient({ turfs, facilityHours = { openTime: '06:
           )}
         </div>
 
-        <div className="lg:col-span-3 space-y-6">
-          <div className="bg-[#161923] border border-[#2a2d3e] rounded-xl p-6">
+        <div className="lg:col-span-3 space-y-10 lg:pl-4">
+          <div>
             {loading ? (
               <div className="p-4">
                 <TableSkeleton rows={6} cols={6} />
@@ -458,7 +491,7 @@ export default function BookingsClient({ turfs, facilityHours = { openTime: '06:
               <>
                 <div className="flex items-center justify-between mb-6">
                   <h2 className="text-xl font-bold font-['Outfit'] text-white flex items-center gap-2">
-                    <FiClock className="text-orange-500" /> 3. Select Time Slots
+                    3. Select Time Slots
                   </h2>
                   <div className="flex items-center gap-4 text-xs font-semibold">
                     <div className="flex items-center gap-1.5 text-gray-500"><div className="w-3 h-3 rounded bg-[#0f1117] border border-[#2a2d3e]"></div> Available</div>
@@ -477,10 +510,10 @@ export default function BookingsClient({ turfs, facilityHours = { openTime: '06:
                         disabled={status === 'BOOKED'}
                         className={`
                           p-3 rounded-lg border transition-all flex flex-col items-center justify-center gap-1 cursor-pointer
-                          ${status === 'AVAILABLE' ? 'bg-[#0f1117] border-[#2a2d3e] text-gray-300 hover:border-orange-500/50' : ''}
+                          ${status === 'AVAILABLE' ? 'bg-transparent border-[#2a2d3e] text-gray-300 hover:border-orange-500/50' : ''}
                           ${status === 'SELECTED' ? 'bg-orange-500 border-orange-600 text-white shadow-[0_0_15px_rgba(249,115,22,0.3)]' : ''}
                           ${status === 'BOOKED' ? 'bg-[#1c1f2e] border-red-500/20 text-gray-600 opacity-50 cursor-not-allowed' : ''}
-                          ${status === 'UNAVAILABLE' ? 'bg-[#0f1117] border-[#2a2d3e] text-gray-600 opacity-40 cursor-not-allowed' : ''}
+                          ${status === 'UNAVAILABLE' ? 'bg-transparent border-[#2a2d3e] text-gray-600 opacity-40 cursor-not-allowed' : ''}
                         `}
                       >
                         <span className="font-semibold text-sm">{slot.label}</span>
@@ -496,10 +529,32 @@ export default function BookingsClient({ turfs, facilityHours = { openTime: '06:
             )}
           </div>
 
-          {selectedSlots.length > 0 && (
-            <div className="bg-[#161923] border border-[#2a2d3e] rounded-xl p-6 animate-in slide-in-from-bottom-4 duration-300">
+          {selectedSlots.length > 0 && autoAllocation && (
+            <div className="animate-in slide-in-from-bottom-4 duration-300 pt-6 border-t border-[#2a2d3e]">
               <h2 className="text-xl font-bold font-['Outfit'] text-white flex items-center gap-2 mb-6">
-                <FiMapPin className="text-emerald-500" /> 4. Select Available Court
+                4. Allocation Breakdown
+              </h2>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                {autoAllocation.map((alloc, i) => (
+                  <div key={i} className="text-left p-4 rounded-xl border border-emerald-500 bg-[#1c1f2e] shadow-[0_0_15px_rgba(16,185,129,0.15)] relative overflow-hidden">
+                    <div className="font-bold text-white text-lg mb-1">{alloc.turfName}</div>
+                    <div className="text-sm text-gray-400">₹{alloc.price}</div>
+                    <div className="text-sm font-semibold text-emerald-400 mt-2">
+                      {formatIST(alloc.startTime, 'h:mm a')} to {formatIST(alloc.endTime, 'h:mm a')}
+                    </div>
+                    <div className="absolute top-4 right-4 text-emerald-500 text-xl">
+                      <FiCheck />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {selectedSlots.length > 0 && !autoAllocation && (
+            <div className="animate-in slide-in-from-bottom-4 duration-300 pt-6 border-t border-[#2a2d3e]">
+              <h2 className="text-xl font-bold font-['Outfit'] text-white flex items-center gap-2 mb-6">
+                4. Select Available Court
               </h2>
               
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -519,10 +574,10 @@ export default function BookingsClient({ turfs, facilityHours = { openTime: '06:
                     className={`
                       text-left p-4 rounded-xl border transition-all relative overflow-hidden
                       ${ta.isBooked 
-                        ? 'bg-[#0f1117] border-red-500/20 opacity-60 cursor-not-allowed' 
+                        ? 'bg-transparent border-red-500/20 opacity-60 cursor-not-allowed' 
                         : selectedTurfs.some(t => t.id === ta.turf.id)
                           ? 'bg-[#1c1f2e] border-emerald-500 shadow-[0_0_15px_rgba(16,185,129,0.15)] cursor-pointer'
-                          : 'bg-[#0f1117] border-[#2a2d3e] hover:border-emerald-500/50 cursor-pointer'
+                          : 'bg-transparent border-[#2a2d3e] hover:border-emerald-500/50 cursor-pointer'
                       }
                     `}
                   >
@@ -570,7 +625,7 @@ export default function BookingsClient({ turfs, facilityHours = { openTime: '06:
           >
             
             {/* Left: Customer Details */}
-            <div className="flex-1 p-6 md:p-8 border-b md:border-b-0 md:border-r border-[#2a2d3e] overflow-y-auto">
+            <div className="flex-1 p-6 md:p-10 border-b md:border-b-0 md:border-r border-[#2a2d3e] overflow-y-auto bg-transparent">
               <div className="flex justify-between items-center mb-6">
                 <h2 className="text-xl font-bold font-['Outfit'] text-white">Customer Details</h2>
                 <button className="md:hidden text-gray-500 hover:text-white" onClick={() => {
@@ -584,7 +639,7 @@ export default function BookingsClient({ turfs, facilityHours = { openTime: '06:
                   <label className="block text-xs uppercase tracking-wider font-semibold text-gray-500 mb-2">Mobile Number</label>
                   <input 
                     type="tel" 
-                    className="w-full bg-[#0f1117] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white focus:border-orange-500/50 focus:ring-2 focus:ring-orange-500 focus:outline-none"
+                    className="w-full bg-transparent border-b border-[#2a2d3e] px-2 py-3 text-white focus:border-orange-500 focus:outline-none transition-colors"
                     placeholder="Enter 10-digit mobile"
                     value={mobile}
                     onChange={e => handleMobileSearch(e.target.value.replace(/\D/g, ''))}
@@ -592,7 +647,10 @@ export default function BookingsClient({ turfs, facilityHours = { openTime: '06:
                   />
                 </div>
 
-                {selectedTurfs.some(t => t.requireEntryVerification || t.capacityPerSlot > 1) && (
+                {((autoAllocation ? autoAllocation.some(a => {
+                  const t = turfs.find(t => t.id === a.turfId);
+                  return t?.requireEntryVerification || (t?.capacityPerSlot || 1) > 1;
+                }) : selectedTurfs.some(t => t.requireEntryVerification || t.capacityPerSlot > 1))) && (
                   <div>
                     <label className="block text-xs uppercase tracking-wider font-semibold text-gray-500 mb-2">Number of Persons</label>
                     <input 
@@ -604,7 +662,7 @@ export default function BookingsClient({ turfs, facilityHours = { openTime: '06:
                         const val = e.target.value.replace(/\D/g, '');
                         setParticipantCount(val === '' ? '' : parseInt(val, 10));
                       }}
-                      className="w-full bg-[#0f1117] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white focus:border-orange-500/50 focus:ring-2 focus:ring-orange-500 focus:outline-none"
+                      className="w-full bg-transparent border-b border-[#2a2d3e] px-2 py-3 text-white focus:border-orange-500 focus:outline-none transition-colors"
                     />
                   </div>
                 )}
@@ -663,7 +721,7 @@ export default function BookingsClient({ turfs, facilityHours = { openTime: '06:
                     <label className="block text-xs uppercase tracking-wider font-semibold text-gray-500 mb-2">Full Name (New Member)</label>
                     <input 
                       type="text" 
-                      className="w-full bg-[#0f1117] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white focus:border-orange-500/50 focus:ring-2 focus:ring-orange-500 focus:outline-none"
+                      className="w-full bg-transparent border-b border-[#2a2d3e] px-2 py-3 text-white focus:border-orange-500 focus:outline-none transition-colors"
                       placeholder="Enter full name"
                       value={name}
                       onChange={e => setName(e.target.value)}
@@ -697,10 +755,10 @@ export default function BookingsClient({ turfs, facilityHours = { openTime: '06:
 
               <div className="mt-8">
                 <h2 className="text-lg font-bold font-['Outfit'] text-white mb-4">Booking Summary</h2>
-                <div className="bg-[#0f1117] border border-[#2a2d3e] rounded-xl p-5">
+                <div className="bg-[#161923]/50 rounded-xl p-6">
                   <div className="flex justify-between items-center mb-3">
                     <span className="text-gray-400 font-medium">Turf</span>
-                    <span className="text-white font-bold">{selectedTurfs.map(t => t.name).join(", ")}</span>
+                    <span className="text-white font-bold">{autoAllocation ? autoAllocation.map(a => a.turfName).join(", ") : selectedTurfs.map(t => t.name).join(", ")}</span>
                   </div>
                   <div className="flex justify-between items-center mb-3">
                     <span className="text-gray-400 font-medium">Date</span>
@@ -754,7 +812,7 @@ export default function BookingsClient({ turfs, facilityHours = { openTime: '06:
             </div>
 
             {/* Right: Payment & Summary */}
-            <div className="flex-1 p-6 md:p-8 bg-[#0f1117] overflow-y-auto flex flex-col">
+            <div className="flex-1 p-6 md:p-10 overflow-y-auto flex flex-col bg-transparent">
               <div className="flex justify-between items-center mb-6 hidden md:flex">
                 <h2 className="text-xl font-bold font-['Outfit'] text-white">Payment</h2>
                 <button className="text-gray-500 hover:text-white" onClick={() => {
@@ -763,7 +821,7 @@ export default function BookingsClient({ turfs, facilityHours = { openTime: '06:
                 }}><FiX size={24} /></button>
               </div>
 
-              <div className="bg-[#161923] border border-[#2a2d3e] rounded-xl p-5 mb-6 space-y-4">
+              <div className="mb-6 space-y-4">
                 <h3 className="text-white font-bold text-lg mb-2">Record Payment</h3>
                 <div className="flex gap-4">
                   <div className="flex-1">
@@ -772,7 +830,7 @@ export default function BookingsClient({ turfs, facilityHours = { openTime: '06:
                       type="text" 
                       inputMode="numeric"
                       pattern="[0-9]*"
-                      className="w-full bg-[#0f1117] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white focus:border-orange-500/50 focus:ring-2 focus:ring-orange-500 focus:outline-none"
+                      className="w-full bg-transparent border-b border-[#2a2d3e] px-2 py-3 text-white focus:border-orange-500 focus:outline-none transition-colors"
                       value={cashAmount}
                       onChange={e => {
                         const valStr = e.target.value.replace(/\D/g, '');
@@ -795,7 +853,7 @@ export default function BookingsClient({ turfs, facilityHours = { openTime: '06:
                       type="text" 
                       inputMode="numeric"
                       pattern="[0-9]*"
-                      className="w-full bg-[#0f1117] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white focus:border-orange-500/50 focus:ring-2 focus:ring-orange-500 focus:outline-none"
+                      className="w-full bg-transparent border-b border-[#2a2d3e] px-2 py-3 text-white focus:border-orange-500 focus:outline-none transition-colors"
                       value={onlineAmount}
                       onChange={e => {
                         const valStr = e.target.value.replace(/\D/g, '');
