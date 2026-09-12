@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import React from "react";
 import { NfcProvider } from "@/components/nfc/NfcProvider";
+import { FloatingStatusBar } from "./KioskNfcHeader";
 
 export default async function KioskLayout({
   children,
@@ -34,9 +35,12 @@ export default async function KioskLayout({
 
   // Pure full screen layout with no navigation, footers or sidebars.
   return (
-    <div className="min-h-screen bg-neutral-950 text-white font-sans">
+    <div className="min-h-screen bg-neutral-950 text-white font-sans flex flex-col relative">
       <NfcProvider>
-        {children}
+        <FloatingStatusBar />
+        <div className="flex-1 overflow-hidden">
+          {children}
+        </div>
       </NfcProvider>
     </div>
   );
