@@ -45719,10 +45719,10 @@ export namespace Prisma {
 
   export type AdminWhereUniqueInput = Prisma.AtLeast<{
     id?: string
+    email?: string
     AND?: AdminWhereInput | AdminWhereInput[]
     OR?: AdminWhereInput[]
     NOT?: AdminWhereInput | AdminWhereInput[]
-    email?: StringFilter<"Admin"> | string
     password?: StringFilter<"Admin"> | string
     name?: StringNullableFilter<"Admin"> | string | null
     role?: StringFilter<"Admin"> | string
@@ -45731,7 +45731,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"Admin"> | Date | string
     updatedAt?: DateTimeFilter<"Admin"> | Date | string
     auditLogs?: AuditLogListRelationFilter
-  }, "id">
+  }, "id" | "email">
 
   export type AdminOrderByWithAggregationInput = {
     id?: SortOrder

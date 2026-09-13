@@ -540,6 +540,7 @@ export default function BookingsClient({ turfs, facilityHours = { openTime: '06:
 
   return (
     <div>
+      <Script src="https://checkout.razorpay.com/v1/checkout.js" />
       <div className="flex justify-between items-start mb-8 border-b border-[#2a2d3e] pb-4">
         <div className="flex gap-4">
           <button 
@@ -1074,7 +1075,7 @@ export default function BookingsClient({ turfs, facilityHours = { openTime: '06:
               ) : (
                 <div className="bg-blue-500/10 border border-blue-500/20 text-blue-400 p-4 rounded-xl text-sm font-medium mb-6 flex items-start gap-3">
                   <FiCreditCard className="shrink-0 mt-0.5 text-lg" />
-                  <p>Choose "Direct Checkout" to open Razorpay on this screen for the customer to pay now, or "Send Link" to share a payment link.</p>
+                  <p>Choose "Razorpay" or "PhonePe" to open the gateway and collect payment.</p>
                 </div>
               )}
 
@@ -1083,26 +1084,19 @@ export default function BookingsClient({ turfs, facilityHours = { openTime: '06:
                   <div className="flex gap-3">
                     <button 
                       onClick={handleDirectRazorpayCheckout}
-                      disabled={isProcessing || !!generatedRzpLink}
+                      disabled={isProcessing || !!generatedRzpLink || finalPrice - (Number(cashAmount) || 0) - (Number(onlineAmount) || 0) <= 0}
                       className="flex-[2] bg-blue-600 hover:bg-blue-500 text-white rounded-lg py-4 font-bold transition-colors disabled:opacity-50"
                     >
                       Razorpay
                     </button>
                     <button 
                       onClick={handleDirectPhonePeCheckout}
-                      disabled={isProcessing || !!generatedRzpLink}
+                      disabled={isProcessing || !!generatedRzpLink || finalPrice - (Number(cashAmount) || 0) - (Number(onlineAmount) || 0) <= 0}
                       className="flex-[2] bg-purple-600 hover:bg-purple-500 text-white rounded-lg py-4 font-bold transition-colors disabled:opacity-50"
                     >
                       PhonePe
                     </button>
-                    <button 
-                      onClick={generatePaymentLink}
-                      disabled={isProcessing || !!generatedRzpLink}
-                      className="flex-1 bg-[#1c1f2e] border border-blue-500/30 hover:bg-blue-500/10 text-blue-400 rounded-lg py-4 font-bold transition-colors disabled:opacity-50"
-                      title="Generate Payment Link"
-                    >
-                      Send Link
-                    </button>
+
                     <button 
                       onClick={handleCastToDisplay}
                       className="flex-1 bg-[#1c1f2e] border border-emerald-500/30 hover:bg-emerald-500/10 text-emerald-400 rounded-lg py-4 font-bold transition-colors disabled:opacity-50 flex items-center justify-center gap-2"

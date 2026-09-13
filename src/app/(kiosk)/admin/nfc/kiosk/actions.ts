@@ -26,7 +26,7 @@ export async function fetchKioskAvailableSlots(turfId?: string, durationMin: num
   const { start: todayStart, end: todayEnd } = getISTDateBounds();
 
   const whereClause: any = {
-    status: "CONFIRMED",
+    status: { in: ["CONFIRMED", "PAYMENT_PENDING"] },
     startTime: { gte: todayStart },
     endTime: { lte: todayEnd }
   };
@@ -72,10 +72,22 @@ export async function createKioskBooking({
   if (!turfExists) throw new Error("Turf not found in database. Please refresh.");
   if (!sportExists) throw new Error("Sport not found in database. Please refresh.");
 
+  // B18: Prevent price tampering: validate client-supplied price against database turf.bookingPrice / duration
+  const start = new Date(startTime);
+  const end = new Date(endTime);
+  const durationMinutes = Math.max(1, Math.round((end.getTime() - start.getTime()) / (60 * 1000)));
+  const baseSlotMinutes = turfExists.bookingDurationMinutes || 60;
+  const expectedPrice = Math.round(((turfExists.bookingPrice || 0) / baseSlotMinutes) * durationMinutes);
+
+  if (Math.round(price) !== expectedPrice) {
+    throw new Error(`Price tampering detected. Expected ₹${expectedPrice}, but received ₹${price}.`);
+  }
+  const validatedPrice = expectedPrice;
+
   const conflicting = await prisma.booking.findFirst({
     where: {
       turfId,
-      status: "CONFIRMED",
+      status: { in: ["CONFIRMED", "PAYMENT_PENDING"] },
       OR: [
         { startTime: { lt: endTime }, endTime: { gt: startTime } }
       ]
@@ -90,19 +102,19 @@ export async function createKioskBooking({
   if (paymentMethod === "WALLET") {
     const booking = await prisma.$transaction(async (tx) => {
       const member = await tx.member.findUnique({ where: { id: memberId } });
-      if (!member || member.walletBalance < price * 100) {
+      if (!member || member.walletBalance < validatedPrice * 100) {
         throw new Error("Insufficient wallet balance.");
       }
 
       await tx.member.update({
         where: { id: memberId },
-        data: { walletBalance: { decrement: price * 100 } }
+        data: { walletBalance: { decrement: validatedPrice * 100 } }
       });
 
       await tx.walletTransaction.create({
         data: {
           memberId,
-          amount: price * 100,
+          amount: validatedPrice * 100,
           type: "DEBIT",
           description: `Kiosk booking for ${new Date(startTime).toLocaleString()}`
         }
@@ -115,7 +127,7 @@ export async function createKioskBooking({
           sportId,
           startTime,
           endTime,
-          price,
+          price: validatedPrice,
           status: "CONFIRMED",
           paymentStatus: "PAID",
           amountDue: 0,
@@ -131,7 +143,7 @@ export async function createKioskBooking({
       await tx.payment.create({
         data: {
           bookingId: b.id,
-          amount: price,
+          amount: validatedPrice,
           method: "WALLET"
         }
       });
@@ -140,7 +152,7 @@ export async function createKioskBooking({
         data: {
           bookingId: b.id,
           memberId: memberId,
-          amount: price,
+          amount: validatedPrice,
           currency: "INR",
           gateway: "WALLET",
           status: "SUCCESS"
@@ -162,7 +174,7 @@ export async function createKioskBooking({
     return { success: true, booking: JSON.parse(JSON.stringify(booking)), paymentMethod: "WALLET" };
   }
 
-  // Handle PHONEPE
+  // B17: Handle PHONEPE - create booking with PAYMENT_PENDING and UNPAID
   if (paymentMethod === "PHONEPE") {
     const b = await prisma.booking.create({
       data: {
@@ -171,10 +183,10 @@ export async function createKioskBooking({
         sportId,
         startTime,
         endTime,
-        price,
-        status: "CONFIRMED",
-        paymentStatus: "PENDING",
-        amountDue: price,
+        price: validatedPrice,
+        status: "PAYMENT_PENDING",
+        paymentStatus: "UNPAID",
+        amountDue: validatedPrice,
         participants: {
           create: {
             memberId,
@@ -188,7 +200,7 @@ export async function createKioskBooking({
     return { success: true, booking: JSON.parse(JSON.stringify(b)), paymentMethod: "PHONEPE", orderData };
   }
 
-  // Handle RAZORPAY
+  // B17: Handle RAZORPAY - create booking with PAYMENT_PENDING and UNPAID
   if (paymentMethod === "RAZORPAY") {
     const b = await prisma.booking.create({
       data: {
@@ -197,10 +209,10 @@ export async function createKioskBooking({
         sportId,
         startTime,
         endTime,
-        price,
-        status: "CONFIRMED",
-        paymentStatus: "PENDING",
-        amountDue: price,
+        price: validatedPrice,
+        status: "PAYMENT_PENDING",
+        paymentStatus: "UNPAID",
+        amountDue: validatedPrice,
         participants: {
           create: {
             memberId,
@@ -232,18 +244,28 @@ export async function confirmKioskRazorpayPayment(
     razorpaySignature
   );
 
-  const member = await prisma.member.findUnique({ where: { id: memberId } });
-
-  // Auto check-in the user
-  await prisma.ticket.create({
+  // B19: PaymentService.verifyRazorpayPayment already issues tickets via sendConfirmationAndTickets.
+  // Update the existing ticket to CHECKED_IN rather than creating a duplicate ticket.
+  const updated = await prisma.ticket.updateMany({
+    where: { bookingId, status: "VALID" },
     data: {
-      bookingId: bookingId,
-      qrCode: `kiosk_${Date.now()}_${Math.random().toString(36).substring(7)}`,
-      guestName: member?.name || "Member",
       status: "CHECKED_IN",
       usedAt: new Date()
     }
   });
+
+  if (updated.count === 0) {
+    const member = await prisma.member.findUnique({ where: { id: memberId } });
+    await prisma.ticket.create({
+      data: {
+        bookingId: bookingId,
+        qrCode: `kiosk_${Date.now()}_${Math.random().toString(36).substring(7)}`,
+        guestName: member?.name || "Member",
+        status: "CHECKED_IN",
+        usedAt: new Date()
+      }
+    });
+  }
 
   return { success: true };
 }

@@ -88,24 +88,55 @@ export const POST = withApiHandler(async (request: Request) => {
         const linkEntity = eventData.payload?.payment_link?.entity;
         const refId = linkEntity?.reference_id;
         const paidAmountRupees = (linkEntity?.amount_paid || 0) / 100;
+        const paymentId = eventData.payload?.payment?.entity?.id || null;
         
         if (refId) {
           // reference_id can be comma separated bookingIds
-          const bookingIds = refId.split(',');
-          for (const bid of bookingIds) {
-            const booking = await prisma.booking.findUnique({ where: { id: bid } });
-            if (booking && booking.paymentStatus !== 'PAID') {
-               const settleResult = await PaymentService.settleSuccessfulPayment({
-                 bookingId: booking.id,
-                 gateway: 'RAZORPAY',
-                 gatewayOrderId: linkEntity.order_id,
-                 gatewayPaymentId: null, // we might not have it here easily
-                 paidAmountRupees: paidAmountRupees,
-                 metadata: { webhook: true, event, paymentLinkId: linkEntity.id }
-               });
-               if (settleResult.success && settleResult.status === 'PAID') {
-                 await PaymentService.sendConfirmationAndTickets(settleResult.booking);
-               }
+          const bookingIds = refId.split(',').map((id: string) => id.trim()).filter(Boolean);
+          const bookings = await prisma.booking.findMany({
+            where: { id: { in: bookingIds } }
+          });
+
+          // Filter bookings that need payment
+          const unpaidBookings = bookings.filter(b => b.paymentStatus !== 'PAID');
+          
+          if (unpaidBookings.length > 0) {
+            const totalDue = unpaidBookings.reduce((sum, b) => {
+              const due = b.amountDue > 0 ? b.amountDue : (b.price - (b.discountAmount || 0));
+              return sum + (due > 0 ? due : b.price);
+            }, 0);
+
+            let remainingPaid = paidAmountRupees;
+
+            for (let i = 0; i < unpaidBookings.length; i++) {
+              const booking = unpaidBookings[i];
+              const due = booking.amountDue > 0 ? booking.amountDue : (booking.price - (booking.discountAmount || 0));
+              const effectiveDue = due > 0 ? due : booking.price;
+
+              let allocatedAmount = 0;
+              if (i === unpaidBookings.length - 1) {
+                allocatedAmount = Math.max(0, Math.round(remainingPaid * 100) / 100);
+              } else {
+                allocatedAmount = totalDue > 0 
+                  ? Math.round(((effectiveDue / totalDue) * paidAmountRupees) * 100) / 100 
+                  : 0;
+                remainingPaid -= allocatedAmount;
+              }
+
+              if (allocatedAmount > 0) {
+                const settleResult = await PaymentService.settleSuccessfulPayment({
+                  bookingId: booking.id,
+                  gateway: 'RAZORPAY',
+                  gatewayOrderId: linkEntity.order_id,
+                  gatewayPaymentId: paymentId,
+                  paidAmountRupees: allocatedAmount,
+                  metadata: { webhook: true, event, paymentLinkId: linkEntity.id }
+                });
+
+                if (settleResult.success && settleResult.status === 'PAID') {
+                  await PaymentService.sendConfirmationAndTickets(settleResult.booking);
+                }
+              }
             }
           }
         }
@@ -138,11 +169,15 @@ export const POST = withApiHandler(async (request: Request) => {
   try {
     payload = JSON.parse(body);
   } catch {
-    return { success: false, error: 'Invalid JSON payload' };
+    throw new ApiError('Invalid JSON payload', 400);
   }
 
-  if (!payload?.response || !xVerify) {
-    return { success: false, error: 'Invalid webhook payload' };
+  if (!payload?.response) {
+    throw new ApiError('Invalid webhook payload: response field missing', 400);
+  }
+
+  if (!xVerify) {
+    throw new ApiError('Missing x-verify signature header', 401);
   }
 
   const data = await PaymentService.verifyPhonePeWebhook(payload.response, xVerify);

@@ -2,6 +2,43 @@ import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { jsonResponse } from '@/lib/api-logger';
 
+/**
+ * Native semantic version comparator helper (major.minor.patch[-prerelease]).
+ * Avoids MODULE_NOT_FOUND runtime crashes by eliminating external dependencies.
+ */
+function compareSemver(v1: string, v2: string): number {
+  const parse = (v: string) => {
+    const cleaned = v.trim().replace(/^v/i, "");
+    const [main, pre] = cleaned.split("-");
+    const parts = main.split(".").map((num) => {
+      const parsed = parseInt(num, 10);
+      return isNaN(parsed) ? 0 : parsed;
+    });
+    while (parts.length < 3) parts.push(0);
+    return { parts: parts.slice(0, 3), pre };
+  };
+
+  const p1 = parse(v1);
+  const p2 = parse(v2);
+
+  for (let i = 0; i < 3; i++) {
+    if (p1.parts[i] < p2.parts[i]) return -1;
+    if (p1.parts[i] > p2.parts[i]) return 1;
+  }
+
+  if (p1.pre && !p2.pre) return -1;
+  if (!p1.pre && p2.pre) return 1;
+  if (p1.pre && p2.pre) {
+    return p1.pre.localeCompare(p2.pre);
+  }
+
+  return 0;
+}
+
+function isVersionLessThan(clientVer: string, latestVer: string): boolean {
+  return compareSemver(clientVer, latestVer) < 0;
+}
+
 export async function GET(request: Request) {
   try {
     const versions = await prisma.appVersion.findMany();
@@ -18,20 +55,12 @@ export async function GET(request: Request) {
     let forceUpdate = false;
 
     if (versionRecord && clientVersion) {
-      try {
-        const semver = require('semver');
-        if (semver.lt(clientVersion, versionRecord.version)) {
-          needsUpdate = true;
-          forceUpdate = versionRecord.forceUpdate;
-        }
-      } catch (e) {
-        // semver parse error, fallback to simple string comparison
-        if (clientVersion !== versionRecord.version) {
-          needsUpdate = true;
-          forceUpdate = versionRecord.forceUpdate;
-        }
+      if (isVersionLessThan(clientVersion, versionRecord.version)) {
+        needsUpdate = true;
+        forceUpdate = versionRecord.forceUpdate;
       }
     }
+
 
     return jsonResponse({
       success: true,

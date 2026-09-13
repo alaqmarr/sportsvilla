@@ -10,7 +10,7 @@ datasource db {
 
 model Admin {
   id          String   @id @default(cuid())
-  email       String   
+  email       String   @unique
   password    String
   name        String?
   role        String   @default("SUPERADMIN") // "SUPERADMIN" | "ADMIN"
@@ -163,7 +163,7 @@ model MemberMembership {
   status           String         @default("ACTIVE") // ACTIVE, EXPIRED, CANCELLED
 
   turfId   String?
-  turf     Turf?   @relation(fields: [turfId], references: [id], onDelete: Cascade)
+  turf     Turf?   @relation(fields: [turfId], references: [id], onDelete: SetNull)
   timeSlot String?
   allowedDays String? // Comma-separated day indices, e.g. "0,6" for Sun,Sat
 
@@ -230,6 +230,7 @@ model Booking {
   @@index([visibility])
   @@index([inviteCode])
   @@index([turfId, startTime, endTime])
+  @@index([status, createdAt])
 }
 
 model BookingParticipant {
@@ -444,6 +445,10 @@ model CouponUsage {
   coupon  Coupon  @relation(fields: [couponId], references: [id], onDelete: Cascade)
   member  Member  @relation(fields: [memberId], references: [id], onDelete: Cascade)
   booking Booking @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+
+  @@index([couponId])
+  @@index([memberId])
+  @@index([bookingId])
 }
 
 model LoyaltyTrigger {

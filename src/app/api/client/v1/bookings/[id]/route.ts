@@ -2,16 +2,27 @@ import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { authenticateClient } from '@/lib/auth-middleware';
 import { jsonResponse, apiLog } from '@/lib/api-logger';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/lib/auth';
 
 export async function GET(request: Request, context: { params: Promise<{ id: string }> }) {
   apiLog(`[API] GET /api/client/v1/bookings/[id] called`);
-  const authRes = await authenticateClient(request);
-  if ('error' in authRes) return authRes.error;
+
+  // 1. Check for active Admin session
+  const adminSession = await getServerSession(authOptions);
+  const isAdmin = !!adminSession?.user?.email;
+
+  // 2. If not admin, authenticate client
+  let member: any = null;
+  if (!isAdmin) {
+    const authRes = await authenticateClient(request);
+    if ('error' in authRes) return authRes.error;
+    member = authRes.member;
+  }
   
-  const { member } = authRes;
   const params = await context.params;
 
-  apiLog("[GET /bookings/[id]] Hit", { bookingId: params.id, memberId: member.id });
+  apiLog("[GET /bookings/[id]] Hit", { bookingId: params.id, memberId: member?.id, isAdmin });
 
   try {
     const booking = await prisma.booking.findUnique({
@@ -31,6 +42,22 @@ export async function GET(request: Request, context: { params: Promise<{ id: str
     if (!booking) {
       apiLog("[GET /bookings/[id]] Booking not found in DB for ID:", params.id);
       return jsonResponse({ error: "Booking not found" }, { status: 404 });
+    }
+
+    // IDOR Protection: Verify ownership (direct owner, family group, or game participant)
+    if (!isAdmin && member) {
+      const isDirectOwner = booking.memberId === member.id;
+      const isFamilyMember =
+        (member.familyId && booking.member?.familyId === member.familyId) ||
+        (member.mobile && booking.member?.mobile === member.mobile);
+      const isParticipant = booking.participants?.some(p => p.memberId === member.id);
+
+      if (!isDirectOwner && !isFamilyMember && !isParticipant) {
+        return jsonResponse(
+          { error: "Forbidden: You do not have permission to view this booking" },
+          { status: 403 }
+        );
+      }
     }
     
     apiLog("[GET /bookings/[id]] Found booking:", booking.id);
@@ -54,10 +81,17 @@ export async function GET(request: Request, context: { params: Promise<{ id: str
 
 export async function PATCH(request: Request, context: { params: Promise<{ id: string }> }) {
   apiLog(`[API] PATCH /api/client/v1/bookings/[id] called`);
-  const authRes = await authenticateClient(request);
-  if ('error' in authRes) return authRes.error;
+
+  const adminSession = await getServerSession(authOptions);
+  const isAdmin = !!adminSession?.user?.email;
+
+  let member: any = null;
+  if (!isAdmin) {
+    const authRes = await authenticateClient(request);
+    if ('error' in authRes) return authRes.error;
+    member = authRes.member;
+  }
   
-  const { member } = authRes;
   const params = await context.params;
 
   try {
@@ -65,20 +99,27 @@ export async function PATCH(request: Request, context: { params: Promise<{ id: s
     const { visibility, inviteMaxCount } = body;
 
     const existing = await prisma.booking.findUnique({
-      where: { id: params.id }
+      where: { id: params.id },
+      include: { member: true }
     });
 
     if (!existing) {
       return jsonResponse({ error: "Booking not found" }, { status: 404 });
     }
 
-    const familyMembers = await prisma.member.findMany({
-      where: { mobile: member.mobile },
-      select: { id: true }
-    });
-    const familyIds = familyMembers.map(m => m.id);
-    if (!familyIds.includes(existing.memberId)) {
-      return jsonResponse({ error: "Only the host can modify this game" }, { status: 403 });
+    if (!isAdmin && member) {
+      const familyMembers = await prisma.member.findMany({
+        where: { mobile: member.mobile },
+        select: { id: true }
+      });
+      const familyIds = familyMembers.map(m => m.id);
+      const isOwnerOrFamily =
+        familyIds.includes(existing.memberId) ||
+        (member.familyId && existing.member?.familyId === member.familyId);
+
+      if (!isOwnerOrFamily) {
+        return jsonResponse({ error: "Forbidden: Only the host can modify this game" }, { status: 403 });
+      }
     }
 
     let inviteCode = existing.inviteCode;
@@ -107,3 +148,4 @@ export async function PATCH(request: Request, context: { params: Promise<{ id: s
     return jsonResponse({ error: process.env.NODE_ENV === 'production' ? 'Internal server error' : error.message }, { status: 500 });
   }
 }
+

@@ -4,6 +4,8 @@ import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 import { DeleteObjectCommand } from '@aws-sdk/client-s3';
 import { s3Client } from '@/lib/s3';
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
 
 const bucketName = process.env.R2_BUCKET_NAME || '';
 
@@ -20,6 +22,11 @@ export async function saveAppVersion(data: {
   fileKey?: string;
   releaseNotes?: string;
 }) {
+  const session = await getServerSession(authOptions);
+  if (!session?.user?.email) {
+    throw new Error("Unauthorized: Admin session required");
+  }
+
   const existing = await prisma.appVersion.findUnique({
     where: { platform: data.platform },
   });
@@ -58,3 +65,4 @@ export async function saveAppVersion(data: {
 
   revalidatePath("/app-versions");
 }
+

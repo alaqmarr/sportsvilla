@@ -1,121 +1,136 @@
-'use client'
+'use client';
 
-import { useState, useEffect } from 'react'
-import { useParams, useRouter } from 'next/navigation'
-import useSWR from 'swr'
-import { ChevronLeft, Copy, Share2, Send, Trash2 } from 'lucide-react'
-import Link from 'next/link'
-import { usePlayAuth } from '@/components/play/PlayAuthProvider'
-import { useAlert } from '@/components/AlertProvider'
+import { useState, useEffect } from 'react';
+import { useParams, useRouter } from 'next/navigation';
+import useSWR from 'swr';
+import { ChevronLeft, Copy, Share2, Send, Trash2 } from 'lucide-react';
+import Link from 'next/link';
+import { usePlayAuth } from '@/components/play/PlayAuthProvider';
+import { useAlert } from '@/components/AlertProvider';
 
-const fetcher = (url: string) => fetch(url).then(res => res.json())
+const fetcher = (url: string) => fetch(url).then(res => res.json());
 
 export default function ManageGamePage() {
-  const { id } = useParams()
-  const router = useRouter()
-  const { member } = usePlayAuth()
-  const { showAlert, showConfirm } = useAlert()
+  const params = useParams();
+  const rawId = params?.id;
+  const id = typeof rawId === 'string' ? rawId : Array.isArray(rawId) ? rawId[0] : '';
+  const router = useRouter();
+  const { member } = usePlayAuth();
+  const { showAlert, showConfirm } = useAlert();
   
-  const { data: booking, isLoading, mutate } = useSWR(`/api/client/v1/bookings/${id}`, fetcher)
+  const { data: res, isLoading, mutate } = useSWR(id ? `/api/client/v1/bookings/${id}` : null, fetcher);
+  const booking = res?.booking ?? (res?.id ? res : null);
   
-  const [visibility, setVisibility] = useState('Private')
-  const [capacity, setCapacity] = useState(10)
-  const [mobile, setMobile] = useState('')
-  const [isUpdating, setIsUpdating] = useState(false)
-  const [isInviting, setIsInviting] = useState(false)
+  const [visibility, setVisibility] = useState<'PRIVATE' | 'INVITE_ONLY' | 'OPEN'>('PRIVATE');
+  const [capacity, setCapacity] = useState(10);
+  const [mobile, setMobile] = useState('');
+  const [isUpdating, setIsUpdating] = useState(false);
+  const [isInviting, setIsInviting] = useState(false);
 
   useEffect(() => {
     if (booking) {
-      setVisibility(booking.visibility || 'Private')
-      setCapacity(booking.capacity || 10)
+      const v = String(booking.visibility || '').toUpperCase();
+      if (v === 'OPEN') setVisibility('OPEN');
+      else if (v === 'INVITE_ONLY' || v === 'INVITE ONLY') setVisibility('INVITE_ONLY');
+      else setVisibility('PRIVATE');
+
+      setCapacity(booking.inviteMaxCount || booking.capacity || 10);
     }
-  }, [booking])
+  }, [booking]);
 
   const handleUpdateSettings = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsUpdating(true)
+    e.preventDefault();
+    setIsUpdating(true);
     try {
-      const res = await fetch(`/api/client/v1/bookings/${id}`, {
+      const updateRes = await fetch(`/api/client/v1/bookings/${id}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ visibility, capacity })
-      })
-      if (res.ok) {
-        mutate()
-        showAlert('Success', 'Settings updated', 'success')
+        body: JSON.stringify({ 
+          visibility, 
+          inviteMaxCount: capacity,
+          capacity 
+        })
+      });
+      if (updateRes.ok) {
+        mutate();
+        showAlert('Success', 'Settings updated successfully', 'success');
       } else {
-        showAlert('Error', 'Failed to update settings', 'error')
+        const errorData = await updateRes.json().catch(() => ({}));
+        showAlert('Error', errorData.error || 'Failed to update settings', 'error');
       }
     } catch (error) {
-      showAlert('Error', 'Error updating settings', 'error')
+      showAlert('Error', 'Error updating settings', 'error');
     } finally {
-      setIsUpdating(false)
+      setIsUpdating(false);
     }
-  }
+  };
 
   const handleCopyInviteCode = () => {
     if (booking?.inviteCode) {
-      navigator.clipboard.writeText(booking.inviteCode)
-      showAlert('Success', 'Invite code copied!', 'success')
+      navigator.clipboard.writeText(booking.inviteCode);
+      showAlert('Success', 'Invite code copied!', 'success');
     }
-  }
+  };
 
   const handleShare = async () => {
-    if (navigator.share && booking) {
+    if (navigator.share && booking?.inviteCode) {
       try {
         await navigator.share({
-          title: 'Join my game!',
+          title: 'Join my game on SportsVilla!',
           text: `Use invite code: ${booking.inviteCode}`,
           url: `${window.location.origin}/play/join-game/${booking.inviteCode}`
-        })
+        });
       } catch (err) {
-        console.error('Error sharing', err)
+        console.error('Error sharing', err);
       }
     } else {
-      handleCopyInviteCode()
+      handleCopyInviteCode();
     }
-  }
+  };
 
   const handleSendInvite = async () => {
-    if (!mobile) return
-    setIsInviting(true)
+    if (!mobile) return;
+    setIsInviting(true);
     try {
-      const res = await fetch(`/api/client/v1/bookings/${id}/invite-wa`, {
+      const inviteRes = await fetch(`/api/client/v1/bookings/${id}/invite-wa`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ mobile })
-      })
-      if (res.ok) {
-        showAlert('Success', 'Invite sent via WhatsApp', 'success')
-        setMobile('')
+      });
+      if (inviteRes.ok) {
+        showAlert('Success', 'Invite sent via WhatsApp', 'success');
+        setMobile('');
       } else {
-        showAlert('Error', 'Failed to send invite', 'error')
+        const errorData = await inviteRes.json().catch(() => ({}));
+        showAlert('Error', errorData.error || 'Failed to send invite', 'error');
       }
     } catch (error) {
-      showAlert('Error', 'Error sending invite', 'error')
+      showAlert('Error', 'Error sending invite', 'error');
     } finally {
-      setIsInviting(false)
+      setIsInviting(false);
     }
-  }
+  };
 
-  const handleRemoveMember = async (memberId: string) => {
+  const handleRemoveMember = async (targetMemberId: string) => {
     showConfirm(
       'Confirm Removal',
-      'Are you sure you want to remove this member?',
+      'Are you sure you want to remove this member from the squad?',
       async () => {
         try {
-          const res = await fetch(`/api/client/v1/bookings/${id}/join`, {
+          const deleteRes = await fetch(`/api/client/v1/bookings/${id}/join?targetMemberId=${targetMemberId}`, {
             method: 'DELETE',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ memberId })
-          })
-          if (res.ok) {
-            mutate()
+            body: JSON.stringify({ memberId: targetMemberId, targetMemberId })
+          });
+          if (deleteRes.ok) {
+            mutate();
+            showAlert('Success', 'Player removed from squad', 'success');
           } else {
-            showAlert('Error', 'Failed to remove member', 'error')
+            const errorData = await deleteRes.json().catch(() => ({}));
+            showAlert('Error', errorData.error || 'Failed to remove member', 'error');
           }
         } catch (error) {
-          showAlert('Error', 'Error removing member', 'error')
+          showAlert('Error', 'Error removing member', 'error');
         }
       },
       undefined,
@@ -123,10 +138,22 @@ export default function ManageGamePage() {
       'Cancel',
       'error'
     );
-  }
+  };
 
-  if (isLoading) return <div className="p-4 text-center">Loading...</div>
-  if (!booking) return <div className="p-4 text-center text-[var(--play-error)]">Booking not found</div>
+  if (isLoading) return <div className="p-4 text-center text-[var(--play-text-muted)] pt-20">Loading game details...</div>;
+  if (!booking) return <div className="p-4 text-center text-[var(--play-error)] pt-20">Booking not found</div>;
+
+  const squad: Array<{ id: string; name: string; isHost: boolean }> = (booking.participants && booking.participants.length > 0)
+    ? booking.participants.map((p: any) => ({
+        id: p.member?.id || p.memberId || p.id,
+        name: p.member?.name || p.name || 'Player',
+        isHost: (p.member?.id || p.memberId) === booking.memberId
+      }))
+    : (booking.squad || []).map((s: any) => ({
+        id: s.id,
+        name: s.name,
+        isHost: s.id === booking.memberId
+      }));
 
   return (
     <div className="min-h-screen bg-[var(--play-bg)] text-[var(--play-text)] pb-24">
@@ -137,7 +164,7 @@ export default function ManageGamePage() {
         <h1 className="text-lg font-semibold font-outfit">Manage Game</h1>
       </header>
 
-      <main className="px-4 py-6 space-y-8">
+      <main className="px-4 py-6 space-y-8 max-w-lg mx-auto">
         {/* Settings Form */}
         <section className="bg-[var(--play-surface)] p-4 rounded-[var(--play-radius-md)] border border-[var(--play-border)] shadow-sm">
           <h2 className="text-base font-semibold mb-4 border-b border-[var(--play-border)] pb-2">Game Settings</h2>
@@ -146,12 +173,12 @@ export default function ManageGamePage() {
               <label className="block text-sm font-medium text-[var(--play-text-muted)] mb-1">Game Visibility</label>
               <select 
                 value={visibility} 
-                onChange={(e) => setVisibility(e.target.value)}
-                className="w-full border border-[var(--play-border)] rounded-[var(--play-radius-md)] p-2 bg-[var(--play-bg)]"
+                onChange={(e) => setVisibility(e.target.value as 'PRIVATE' | 'INVITE_ONLY' | 'OPEN')}
+                className="w-full border border-[var(--play-border)] rounded-[var(--play-radius-md)] p-2 bg-[var(--play-bg)] text-[var(--play-text)]"
               >
-                <option value="Private">Private</option>
-                <option value="Invite Only">Invite Only</option>
-                <option value="Open">Open</option>
+                <option value="PRIVATE">Private</option>
+                <option value="INVITE_ONLY">Invite Only</option>
+                <option value="OPEN">Open</option>
               </select>
             </div>
             <div>
@@ -161,7 +188,7 @@ export default function ManageGamePage() {
                 value={capacity} 
                 onChange={(e) => setCapacity(Number(e.target.value))}
                 min={2}
-                className="w-full border border-[var(--play-border)] rounded-[var(--play-radius-md)] p-2 bg-[var(--play-bg)]"
+                className="w-full border border-[var(--play-border)] rounded-[var(--play-radius-md)] p-2 bg-[var(--play-bg)] text-[var(--play-text)]"
               />
             </div>
             <button 
@@ -178,12 +205,20 @@ export default function ManageGamePage() {
         <section className="bg-[var(--play-surface)] p-4 rounded-[var(--play-radius-md)] border border-[var(--play-border)] shadow-sm">
           <h2 className="text-base font-semibold mb-4 border-b border-[var(--play-border)] pb-2">Invite Code</h2>
           <div className="flex items-center justify-between bg-[var(--play-bg)] p-3 rounded-[var(--play-radius-md)] border border-[var(--play-border)] mb-4">
-            <span className="text-lg font-mono font-bold tracking-wider">{booking.inviteCode || 'N/A'}</span>
+            <span className="text-lg font-mono font-bold tracking-wider">{booking.inviteCode || 'No Invite Code'}</span>
             <div className="flex gap-2">
-              <button onClick={handleCopyInviteCode} className="p-2 bg-[var(--play-surface)] rounded-full shadow-sm hover:bg-gray-50 border border-[var(--play-border)]">
+              <button 
+                onClick={handleCopyInviteCode} 
+                disabled={!booking.inviteCode}
+                className="p-2 bg-[var(--play-surface)] rounded-full shadow-sm hover:bg-gray-50 border border-[var(--play-border)] disabled:opacity-40"
+              >
                 <Copy className="w-4 h-4 text-[var(--play-text-muted)]" />
               </button>
-              <button onClick={handleShare} className="p-2 bg-[var(--play-surface)] rounded-full shadow-sm hover:bg-gray-50 border border-[var(--play-border)]">
+              <button 
+                onClick={handleShare} 
+                disabled={!booking.inviteCode}
+                className="p-2 bg-[var(--play-surface)] rounded-full shadow-sm hover:bg-gray-50 border border-[var(--play-border)] disabled:opacity-40"
+              >
                 <Share2 className="w-4 h-4 text-[var(--play-text-muted)]" />
               </button>
             </div>
@@ -196,10 +231,10 @@ export default function ManageGamePage() {
           <div className="flex gap-2">
             <input 
               type="tel" 
-              placeholder="Enter mobile number" 
+              placeholder="Enter 10-digit mobile number" 
               value={mobile}
               onChange={(e) => setMobile(e.target.value)}
-              className="flex-1 border border-[var(--play-border)] rounded-[var(--play-radius-md)] p-2 bg-[var(--play-bg)]"
+              className="flex-1 border border-[var(--play-border)] rounded-[var(--play-radius-md)] p-2 bg-[var(--play-bg)] text-[var(--play-text)]"
             />
             <button 
               onClick={handleSendInvite}
@@ -215,39 +250,40 @@ export default function ManageGamePage() {
         <section className="bg-[var(--play-surface)] p-4 rounded-[var(--play-radius-md)] border border-[var(--play-border)] shadow-sm">
           <div className="flex justify-between items-center border-b border-[var(--play-border)] mb-4 pb-2">
             <h2 className="text-base font-semibold">Squad Roster</h2>
-            <span className="text-sm text-[var(--play-text-muted)]">{booking.squad?.length || 0} / {capacity}</span>
+            <span className="text-sm text-[var(--play-text-muted)]">{squad.length} / {capacity}</span>
           </div>
           
           <ul className="space-y-3">
-            {booking.squad?.map((squadMember: any) => (
+            {squad.map((squadMember) => (
               <li key={squadMember.id} className="flex justify-between items-center">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 bg-[var(--play-brand-light)] text-[var(--play-brand-dark)] rounded-full flex items-center justify-center font-bold">
-                    {squadMember.name.charAt(0)}
+                    {squadMember.name.charAt(0).toUpperCase()}
                   </div>
                   <div>
                     <div className="font-medium text-sm">{squadMember.name}</div>
-                    {squadMember.id === booking.hostId && (
+                    {squadMember.isHost && (
                       <span className="text-xs bg-[var(--play-brand-light)] text-[var(--play-brand-dark)] px-2 py-0.5 rounded-[var(--play-radius-pill)]">Host</span>
                     )}
                   </div>
                 </div>
-                {squadMember.id !== booking.hostId && (
+                {!squadMember.isHost && (
                   <button 
                     onClick={() => handleRemoveMember(squadMember.id)}
                     className="p-2 text-[var(--play-error)] hover:bg-red-50 rounded-full transition-colors"
+                    title="Remove Player"
                   >
                     <Trash2 className="w-4 h-4" />
                   </button>
                 )}
               </li>
             ))}
-            {(!booking.squad || booking.squad.length === 0) && (
+            {squad.length === 0 && (
               <li className="text-sm text-[var(--play-text-muted)] text-center py-2">No squad members yet</li>
             )}
           </ul>
         </section>
       </main>
     </div>
-  )
+  );
 }

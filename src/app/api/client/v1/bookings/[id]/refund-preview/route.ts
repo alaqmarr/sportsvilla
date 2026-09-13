@@ -38,8 +38,9 @@ export async function GET(request: Request, context: { params: Promise<{ id: str
     }
 
     const settings = await prisma.setting.findMany();
-    const limitSetting = settings.find(s => s.key === 'CANCELLATION_LIMIT_HOURS');
-    const cancellationLimitHours = limitSetting ? parseFloat(limitSetting.value) : 12;
+    const limitSetting = settings.find(s => s.key === 'CLIENT_CANCELLATION_LIMIT_HOURS')
+      || settings.find(s => s.key === 'CANCELLATION_LIMIT_HOURS');
+    const cancellationLimitHours = limitSetting ? parseFloat(limitSetting.value) : 3;
 
     const preview = BookingService.getRefundPreview(booking, cancellationLimitHours);
     

@@ -2,19 +2,40 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { DEFAULT_PRESET_CARDS, generateRandomHexUid } from "@/lib/nfcSimulator";
 import { NfcSimulatorPreset } from "@/types/nfc";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
 
 export const dynamic = "force-dynamic";
 
 /**
  * GET /api/nfc/simulator/presets
- * Returns live database cards matching the 6 simulation preset categories,
- * falling back to default presets where database fixtures are not yet seeded.
+ * Returns live database cards matching the 6 simulation preset categories for authenticated admins,
+ * or safe synthetic default presets for unauthenticated dev testers.
  */
 export async function GET() {
+  const session = await getServerSession(authOptions);
+  const isDev = process.env.NODE_ENV !== "production";
+  const isAuthenticated = !!session?.user?.email;
+
+  // Protect endpoint in production: require active admin session
+  if (!isAuthenticated && !isDev) {
+    return NextResponse.json({ error: "Unauthorized: Admin session required" }, { status: 401 });
+  }
+
+  // If unauthenticated in development, return safe synthetic mock presets to protect PII
+  if (!isAuthenticated) {
+    return NextResponse.json({
+      success: true,
+      presets: DEFAULT_PRESET_CARDS,
+      timestamp: new Date().toISOString(),
+    });
+  }
+
   try {
     const now = new Date();
     const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0);
     const endOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59, 999);
+
 
     // 1. Preset: Active Member with Booking today & valid ticket
     const bookingCard = await prisma.nfcCard.findFirst({
@@ -226,15 +247,33 @@ export async function GET() {
  * Seeds or resets test fixtures for all 6 preset categories.
  */
 export async function POST(request: Request) {
+  const session = await getServerSession(authOptions);
+  const isDev = process.env.NODE_ENV !== "production";
+  const isAuthenticated = !!session?.user?.email;
+
+  // Protect endpoint in production: require active admin session
+  if (!isAuthenticated && !isDev) {
+    return NextResponse.json({ error: "Unauthorized: Admin session required" }, { status: 401 });
+  }
+
   try {
     const body = await request.json().catch(() => ({}));
     const action = body.action || "seed";
 
     if (action === "clean") {
+      // Data wipe action 'clean' strictly requires admin authentication even in dev
+      if (!isAuthenticated) {
+        return NextResponse.json(
+          { error: "Unauthorized: Admin session required to wipe test fixtures" },
+          { status: 401 }
+        );
+      }
+
       // Clean test fixtures created by simulator
       await prisma.nfcTransaction.deleteMany({
         where: { cardUid: { startsWith: "SIM" } },
       });
+
       await prisma.ticket.deleteMany({
         where: { qrCode: { startsWith: "TKTSIM" } },
       });

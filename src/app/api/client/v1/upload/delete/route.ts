@@ -4,13 +4,26 @@ import { s3Client } from '@/lib/s3';
 import { logger } from '@/lib/logger';
 import { jsonResponse, apiLog } from '@/lib/api-logger';
 import { authenticateClient } from '@/lib/auth-middleware';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/lib/auth';
+import { prisma } from '@/lib/prisma';
 
 const bucketName = process.env.R2_BUCKET_NAME || '';
 
 export async function POST(request: Request) {
   apiLog(`[API] POST /api/client/v1/upload/delete called`);
-  const authRes = await authenticateClient(request);
-  if ('error' in authRes) return authRes.error;
+
+  // 1. Check if caller has an active Admin session
+  const adminSession = await getServerSession(authOptions);
+  const isAdmin = !!adminSession?.user?.email;
+
+  // 2. If not admin, authenticate client session
+  let member: any = null;
+  if (!isAdmin) {
+    const authRes = await authenticateClient(request);
+    if ('error' in authRes) return authRes.error;
+    member = authRes.member;
+  }
 
   try {
     const { key, publicUrl } = await request.json();
@@ -33,6 +46,72 @@ export async function POST(request: Request) {
       return jsonResponse({ error: "key or publicUrl is required" }, { status: 400 });
     }
 
+    // Path traversal and directory jail check
+    if (objectKey.includes('..') || !objectKey.startsWith('uploads/')) {
+      return jsonResponse({ error: "Invalid file key path" }, { status: 400 });
+    }
+
+    // IDOR Protection: Non-admins cannot delete APKs or system assets
+    if (!isAdmin) {
+      if (objectKey.toLowerCase().endsWith('.apk')) {
+        return jsonResponse(
+          { error: "Forbidden: Admin privileges required to delete application packages" },
+          { status: 403 }
+        );
+      }
+
+      const [isAppVersion, isBanner, isAnnouncement, isSport, isTurf, isTournament] = await Promise.all([
+        prisma.appVersion.findFirst({
+          where: { OR: [{ fileKey: objectKey }, { downloadUrl: { contains: objectKey } }] },
+          select: { id: true }
+        }),
+        prisma.banner.findFirst({
+          where: { imageUrl: { contains: objectKey } },
+          select: { id: true }
+        }),
+        prisma.appAnnouncement.findFirst({
+          where: { imageUrl: { contains: objectKey } },
+          select: { id: true }
+        }),
+        prisma.sport.findFirst({
+          where: { iconPath: { contains: objectKey } },
+          select: { id: true }
+        }),
+        prisma.turf.findFirst({
+          where: { iconPath: { contains: objectKey } },
+          select: { id: true }
+        }),
+        prisma.tournament.findFirst({
+          where: { thumbnail: { contains: objectKey } },
+          select: { id: true }
+        })
+      ]);
+
+      if (isAppVersion || isBanner || isAnnouncement || isSport || isTurf || isTournament) {
+        return jsonResponse(
+          { error: "Forbidden: Admin privileges required to delete system resources" },
+          { status: 403 }
+        );
+      }
+
+      // Verify ownership if file is attached to a tournament registration
+      const registration = await prisma.tournamentRegistration.findFirst({
+        where: { paymentScreenshotUrl: { contains: objectKey } },
+        include: { registeredBy: true }
+      });
+
+      if (registration) {
+        const isOwner =
+          registration.registeredById === member.id ||
+          (member.familyId && registration.registeredBy?.familyId === member.familyId) ||
+          (member.mobile && registration.registeredBy?.mobile === member.mobile);
+
+        if (!isOwner) {
+          return jsonResponse({ error: "Forbidden: You do not own this file" }, { status: 403 });
+        }
+      }
+    }
+
     const command = new DeleteObjectCommand({
       Bucket: bucketName,
       Key: objectKey,
@@ -47,3 +126,4 @@ export async function POST(request: Request) {
     return jsonResponse({ error: process.env.NODE_ENV === 'production' ? 'Internal server error' : error.message }, { status: 500 });
   }
 }
+

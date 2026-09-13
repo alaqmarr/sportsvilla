@@ -200,6 +200,7 @@ export async function createBooking(data: {
             participantCount: bookingParticipants,
             paymentStatus: "UNPAID",
             status: "CONFIRMED",
+            amountDue: bookingPrice - itemDiscount,
             tickets: { create: ticketsForThisMember }
           }
         });
@@ -720,6 +721,7 @@ export async function confirmExtension(bookingId: string, allocations: any[]) {
             price: alloc.price,
             paymentStatus: "UNPAID",
             status: "CONFIRMED",
+            amountDue: alloc.price,
             participantCount: booking.participantCount,
             tickets: {
               create: Array.from({ length: booking.participantCount }).map(() => ({

@@ -17,7 +17,7 @@ export interface SettlePaymentParams {
 
 export interface SettlePaymentResult {
   success: boolean;
-  status: 'PAID' | 'ALREADY_PAID' | 'OVERBOOKED_REFUNDED';
+  status: 'PAID' | 'PARTIAL' | 'ALREADY_PAID' | 'OVERBOOKED_REFUNDED';
   message?: string;
   booking?: any;
 }
@@ -445,12 +445,18 @@ export class PaymentService {
       // ------------------------------------------------------------------------
       // CASE B: CAPACITY AVAILABLE -> CONFIRM BOOKING & RECORD PAYMENT
       // ------------------------------------------------------------------------
+      const totalAdvancePaid = (booking.advancePaid || 0) + params.paidAmountRupees;
+      const netTargetPrice = Math.max(0, booking.price - (booking.discountAmount || 0) - (booking.pointsRedeemed || 0));
+      const isFullPayment = totalAdvancePaid >= netTargetPrice;
+      const paymentStatus = isFullPayment ? 'PAID' : 'PARTIAL';
+      const amountDue = isFullPayment ? 0 : Math.max(0, netTargetPrice - totalAdvancePaid);
+
       const updatedBooking = await tx.booking.update({
         where: { id: booking.id },
         data: {
           status: 'CONFIRMED',
-          paymentStatus: 'PAID',
-          amountDue: 0,
+          paymentStatus,
+          amountDue,
           advancePaid: { increment: params.paidAmountRupees }
         },
         include: { turf: true, sport: true, member: true }
@@ -464,25 +470,27 @@ export class PaymentService {
         }
       });
 
-      // Award loyalty points upon successful payment settlement
-      const pointsEarned = Math.floor(
-        Math.max(0, booking.price - (booking.discountAmount || 0) - (booking.pointsRedeemed || 0)) * 0.01
-      );
+      // Award loyalty points upon successful full payment settlement
+      if (paymentStatus === 'PAID') {
+        const pointsEarned = Math.floor(
+          Math.max(0, booking.price - (booking.discountAmount || 0) - (booking.pointsRedeemed || 0)) * 0.01
+        );
 
-      if (pointsEarned > 0) {
-        await tx.member.update({
-          where: { id: booking.memberId },
-          data: { loyaltyPoints: { increment: pointsEarned } }
-        });
-        await tx.loyaltyHistory.create({
-          data: {
-            memberId: booking.memberId,
-            points: pointsEarned,
-            type: 'EARNED',
-            source: 'BOOKING',
-            description: `Earned from booking ${booking.id}`
-          }
-        });
+        if (pointsEarned > 0) {
+          await tx.member.update({
+            where: { id: booking.memberId },
+            data: { loyaltyPoints: { increment: pointsEarned } }
+          });
+          await tx.loyaltyHistory.create({
+            data: {
+              memberId: booking.memberId,
+              points: pointsEarned,
+              type: 'EARNED',
+              source: 'BOOKING',
+              description: `Earned from booking ${booking.id}`
+            }
+          });
+        }
       }
 
       // Update or create Transaction record
@@ -527,7 +535,7 @@ export class PaymentService {
         });
       }
 
-      return { success: true, status: 'PAID', booking: updatedBooking };
+      return { success: true, status: paymentStatus, booking: updatedBooking };
     });
   }
 
@@ -638,7 +646,7 @@ export class PaymentService {
         };
       }
 
-      return { success: true, status: 'PAID' };
+      return { success: true, status: settleResult.status };
     }
 
     // If transaction returned terminal error / decline
@@ -783,7 +791,7 @@ export class PaymentService {
       };
     }
 
-    return { success: true, status: 'PAID' };
+    return { success: true, status: settleResult.status };
   }
 
   /**
@@ -801,7 +809,7 @@ export class PaymentService {
     const expectedXVerify = `${expectedSha256}###${saltIndex}`;
 
     if (xVerifyHeader !== expectedXVerify) {
-      throw new ApiError('Invalid PhonePe signature', 400);
+      throw new ApiError('Invalid PhonePe signature', 401);
     }
 
     const payloadStr = Buffer.from(responseBase64, 'base64').toString('utf-8');

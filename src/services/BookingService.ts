@@ -20,9 +20,13 @@ export class BookingService {
     let penalty = 0;
     let isFree = true;
 
-    if (diffHours < cancellationLimitHours && diffHours >= 0) {
+    if (diffHours < 0) {
+      // Past booking: maximum penalty applies, zero refund
+      penalty = Math.max(booking.price, totalPaid);
+      isFree = false;
+    } else if (diffHours < cancellationLimitHours) {
       const hourIndex = Math.ceil(cancellationLimitHours - diffHours);
-      const penaltyPercentage = hourIndex / cancellationLimitHours;
+      const penaltyPercentage = Math.min(1, hourIndex / cancellationLimitHours);
       penalty = booking.price * penaltyPercentage;
       isFree = false;
     }

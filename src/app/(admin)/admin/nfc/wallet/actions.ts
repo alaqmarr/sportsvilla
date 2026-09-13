@@ -43,19 +43,21 @@ export async function lookupCardOwner(uid: string) {
 export async function creditWallet(userId: string, amount: number, description: string, cardUid: string, cardId: string) {
   if (amount <= 0) return { success: false, error: "Amount must be positive." };
 
+  const amountPaise = Math.round(amount * 100);
+
   try {
     await prisma.$transaction(async (tx: Prisma.TransactionClient) => {
       await tx.member.update({
         where: { id: userId },
         data: {
-          walletBalance: { increment: amount }
+          walletBalance: { increment: amountPaise }
         }
       });
 
       await tx.walletTransaction.create({
         data: {
           memberId: userId,
-          amount,
+          amount: amountPaise,
           type: "CREDIT",
           description: description || "NFC Wallet Top-up"
         }
@@ -84,12 +86,14 @@ export async function creditWallet(userId: string, amount: number, description: 
 export async function deductWallet(userId: string, amount: number, description: string, cardUid: string, cardId: string) {
   if (amount <= 0) return { success: false, error: "Amount must be positive." };
 
+  const amountPaise = Math.round(amount * 100);
+
   try {
     const result = await prisma.$transaction(async (tx: Prisma.TransactionClient) => {
       const updatedMember = await tx.member.update({
         where: { id: userId },
         data: {
-          walletBalance: { decrement: amount }
+          walletBalance: { decrement: amountPaise }
         }
       });
 
@@ -100,7 +104,7 @@ export async function deductWallet(userId: string, amount: number, description: 
       await tx.walletTransaction.create({
         data: {
           memberId: userId,
-          amount,
+          amount: amountPaise,
           type: "DEBIT",
           description: description || "NFC Wallet Deduction"
         }

@@ -74,15 +74,6 @@ export async function POST(request: Request, context: { params: Promise<{ id: st
     const pointsToReverse = loyaltyToReverse?.points || 0;
     const pointsEarnerId = loyaltyToReverse?.memberId;
 
-    // Find original payer from wallet transactions
-    const walletDebit = await prisma.walletTransaction.findFirst({
-      where: {
-        description: `Payment for booking ${booking.id}`,
-        type: 'DEBIT'
-      }
-    });
-    const originalPayerId = walletDebit?.memberId || member.id; // fallback to active user
-
     // Execute everything in a single transaction
     await prisma.$transaction(async (tx) => {
       // FIX #5: Check if it's already cancelled inside the transaction
@@ -97,15 +88,25 @@ export async function POST(request: Request, context: { params: Promise<{ id: st
         data: { status: "CANCELLED" }
       });
 
-      // Refund wallet to original payer
+      // B22: Cancel tickets and participants so cancelled bookings cannot be used for entry
+      await tx.ticket.updateMany({
+        where: { bookingId: params.id },
+        data: { status: 'CANCELLED' }
+      });
+      await tx.bookingParticipant.updateMany({
+        where: { bookingId: params.id },
+        data: { status: 'CANCELLED' }
+      });
+
+      // B22: In wallet refund, ensure refund is credited to booking.memberId, not an arbitrary caller
       if (refundAmountPaise > 0) {
         await tx.member.update({
-          where: { id: originalPayerId },
+          where: { id: booking.memberId },
           data: { walletBalance: { increment: refundAmountPaise } }
         });
         await tx.walletTransaction.create({
           data: {
-            memberId: originalPayerId,
+            memberId: booking.memberId,
             amount: refundAmountPaise,
             type: 'CREDIT',
             description: `Refund for cancelled booking ${booking.id}`
@@ -134,8 +135,22 @@ export async function POST(request: Request, context: { params: Promise<{ id: st
         }
       }
 
-      // We don't currently support redeeming points in booking, 
-      // but if we did, we would reverse it here based on original redeemer.
+      // B22: Restore booking.pointsRedeemed to member loyalty points if points were redeemed on booking creation
+      if (booking.pointsRedeemed && booking.pointsRedeemed > 0) {
+        await tx.member.update({
+          where: { id: booking.memberId },
+          data: { loyaltyPoints: { increment: booking.pointsRedeemed } }
+        });
+        await tx.loyaltyHistory.create({
+          data: {
+            memberId: booking.memberId,
+            points: booking.pointsRedeemed,
+            type: 'EARNED',
+            source: 'MANUAL',
+            description: `Refund redeemed points for cancelled booking ${booking.id}`
+          }
+        });
+      }
       
       // Update UserSportStat (decrease booking count for the target member since it was cancelled)
       await tx.userSportStat.updateMany({

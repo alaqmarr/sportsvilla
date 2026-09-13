@@ -552,14 +552,15 @@ export async function POST(request: Request) {
             }));
             
             if (trigger.rewardAmount > 0) {
+              const rewardPaise = Math.round(trigger.rewardAmount * 100);
               triggerQueries.push(prisma.member.update({
                 where: { id: member.id },
-                data: { walletBalance: { increment: trigger.rewardAmount } }
+                data: { walletBalance: { increment: rewardPaise } }
               }));
               triggerQueries.push(prisma.walletTransaction.create({
                 data: {
                   memberId: member.id,
-                  amount: trigger.rewardAmount,
+                  amount: rewardPaise,
                   type: 'CREDIT',
                   description: `Reward for ${trigger.title}`
                 }

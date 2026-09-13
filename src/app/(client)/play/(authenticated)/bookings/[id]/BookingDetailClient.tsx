@@ -357,21 +357,36 @@ export function BookingDetailClient({ initialBooking, cancellationLimitHours, al
               </div>
             </div>
 
-            {/* QR Code Section - Only show if confirmed and not completely past */}
+            {/* QR Code Section - Only show if confirmed, not completed, and payment is settled */}
             {isConfirmed && !isCompleted && (
-              <div className="bg-white rounded-2xl shadow-sm border border-[var(--play-border)] p-6 flex flex-col items-center justify-center">
-                <p className="text-sm text-[var(--play-text-muted)] font-medium mb-4 uppercase tracking-widest">Entry Pass</p>
-                <div className="p-3 border-2 border-[var(--play-border)] rounded-xl inline-block bg-white">
-                  {qrSrc ? (
-                    <img src={qrSrc} alt="QR Code" className="w-40 h-40 object-contain" />
-                  ) : (
-                    <div className="w-40 h-40 bg-[var(--play-surface-alt)] animate-pulse rounded-lg" />
-                  )}
+              (booking.paymentStatus === 'PAID' || amountDue <= 0) ? (
+                <div className="bg-white rounded-2xl shadow-sm border border-[var(--play-border)] p-6 flex flex-col items-center justify-center">
+                  <p className="text-sm text-[var(--play-text-muted)] font-medium mb-4 uppercase tracking-widest">Entry Pass</p>
+                  <div className="p-3 border-2 border-[var(--play-border)] rounded-xl inline-block bg-white">
+                    {qrSrc ? (
+                      <img src={qrSrc} alt="QR Code" className="w-40 h-40 object-contain" />
+                    ) : (
+                      <div className="w-40 h-40 bg-[var(--play-surface-alt)] animate-pulse rounded-lg" />
+                    )}
+                  </div>
+                  <p className="text-[10px] text-[var(--play-text-light)] mt-4 w-full text-center uppercase tracking-widest font-mono">
+                    ID: {booking.id}
+                  </p>
                 </div>
-                <p className="text-[10px] text-[var(--play-text-light)] mt-4 w-full text-center uppercase tracking-widest font-mono">
-                  ID: {booking.id}
-                </p>
-              </div>
+              ) : (
+                <div className="bg-white rounded-2xl shadow-sm border border-amber-200 p-6 flex flex-col items-center justify-center text-center">
+                  <div className="w-12 h-12 rounded-full bg-amber-100 flex items-center justify-center text-amber-600 mb-3">
+                    <ShieldAlert className="w-6 h-6" />
+                  </div>
+                  <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-amber-100 text-amber-800 mb-2">
+                    Payment Required
+                  </span>
+                  <p className="text-sm font-semibold text-[var(--play-text)] mb-1">Entry Pass Locked</p>
+                  <p className="text-xs text-[var(--play-text-muted)] max-w-xs">
+                    Please complete your outstanding payment of ₹{amountDue} to unlock your Entry Pass QR code for venue check-in.
+                  </p>
+                </div>
+              )
             )}
 
             {/* Location Section */}

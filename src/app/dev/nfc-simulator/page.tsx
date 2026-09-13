@@ -1,5 +1,8 @@
 import { prisma } from "@/lib/prisma";
 import { NfcSimulatorClient } from "./NfcSimulatorClient";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
+import { redirect } from "next/navigation";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -10,9 +13,19 @@ export const metadata = {
 };
 
 export default async function NfcSimulatorPage() {
+  const session = await getServerSession(authOptions);
+  const isDev = process.env.NODE_ENV !== "production";
+  const isAuthenticatedAdmin = !!session?.user?.email;
+
+  // Protect route in production: require admin session
+  if (!isAuthenticatedAdmin && !isDev) {
+    redirect("/login?callbackUrl=/dev/nfc-simulator");
+  }
+
   const now = new Date();
   const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0);
   const endOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59, 999);
+
 
   // 1. Fetch live cards with linked members and transaction count
   const cards = await prisma.nfcCard.findMany({
@@ -97,13 +110,73 @@ export default async function NfcSimulatorPage() {
   });
   const totalTxCount = await prisma.nfcTransaction.count();
 
+  // Protect customer PII if unauthenticated in local development
+  const safeCards = isAuthenticatedAdmin
+    ? cards
+    : cards.map((c) => ({
+        ...c,
+        member: c.member
+          ? {
+              ...c.member,
+              name: `Dev Member ${c.member.id.slice(-4)}`,
+              mobile: "******" + (c.member.mobile ? c.member.mobile.slice(-4) : "0000"),
+            }
+          : null,
+      }));
+
+  const safeBookings = isAuthenticatedAdmin
+    ? bookings
+    : bookings.map((b) => ({
+        ...b,
+        member: b.member
+          ? {
+              ...b.member,
+              name: `Dev Member ${b.member.id.slice(-4)}`,
+              mobile: "******" + (b.member.mobile ? b.member.mobile.slice(-4) : "0000"),
+            }
+          : null,
+      }));
+
+  const safeTransactions = isAuthenticatedAdmin
+    ? transactions
+    : transactions.map((t) => ({
+        ...t,
+        member: t.member
+          ? {
+              ...t.member,
+              name: "Dev Member",
+              mobile: "******" + (t.member.mobile ? t.member.mobile.slice(-4) : "0000"),
+            }
+          : null,
+      }));
+
+  const safeMemberships = isAuthenticatedAdmin
+    ? memberships
+    : memberships.map((m) => ({
+        ...m,
+        member: m.member
+          ? {
+              ...m.member,
+              name: "Dev Member",
+              mobile: "******" + (m.member.mobile ? m.member.mobile.slice(-4) : "0000"),
+            }
+          : null,
+      }));
+
+  const safeAttendances = isAuthenticatedAdmin
+    ? attendances
+    : attendances.map((a) => ({
+        ...a,
+        member: a.member ? { ...a.member, name: "Dev Member" } : null,
+      }));
+
   return (
     <NfcSimulatorClient
-      initialCards={JSON.parse(JSON.stringify(cards))}
-      initialBookings={JSON.parse(JSON.stringify(bookings))}
-      initialTransactions={JSON.parse(JSON.stringify(transactions))}
-      initialMemberships={JSON.parse(JSON.stringify(memberships))}
-      initialAttendances={JSON.parse(JSON.stringify(attendances))}
+      initialCards={JSON.parse(JSON.stringify(safeCards))}
+      initialBookings={JSON.parse(JSON.stringify(safeBookings))}
+      initialTransactions={JSON.parse(JSON.stringify(safeTransactions))}
+      initialMemberships={JSON.parse(JSON.stringify(safeMemberships))}
+      initialAttendances={JSON.parse(JSON.stringify(safeAttendances))}
       stats={{
         totalCards,
         activeCards,
@@ -113,3 +186,4 @@ export default async function NfcSimulatorPage() {
     />
   );
 }
+

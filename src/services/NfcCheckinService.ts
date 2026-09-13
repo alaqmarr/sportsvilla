@@ -339,88 +339,114 @@ export class NfcCheckinService {
         });
 
         if (todayVisits < plan.slotsPerDay) {
-          // Valid membership slot available today!
           let attendanceId = "";
+          let attendanceSucceeded = false;
 
-          await prisma.$transaction(async (tx) => {
-            const att = await tx.attendance.create({
-              data: {
-                memberId: member.id,
-                sportId: plan.sportId,
-                membershipPlanId: plan.id,
-                notes: "NFC Kiosk Check-in",
-                status: "PRESENT",
-                date: now,
-              },
-            });
-            attendanceId = att.id;
-
-            // Award loyalty points for membership check-in if configured
-            if (plan.rewardPointsPerCheckin > 0) {
-              await tx.member.update({
-                where: { id: member.id },
-                data: {
-                  loyaltyPoints: { increment: plan.rewardPointsPerCheckin },
+          try {
+            await prisma.$transaction(async (tx) => {
+              // Guard attendance cap check inside atomic transaction
+              const atomicVisits = await tx.attendance.count({
+                where: {
+                  memberId: member.id,
+                  membershipPlanId: plan.id,
+                  date: {
+                    gte: todayStart,
+                    lte: todayEnd,
+                  },
                 },
               });
 
-              await tx.loyaltyHistory.create({
+              if (atomicVisits >= plan.slotsPerDay) {
+                throw new Error("ATTENDANCE_CAP_REACHED");
+              }
+
+              const att = await tx.attendance.create({
                 data: {
                   memberId: member.id,
-                  points: plan.rewardPointsPerCheckin,
-                  type: "EARNED",
-                  source: "CHECKIN",
-                  description: `Earned for NFC membership attendance: ${plan.name}`,
+                  sportId: plan.sportId,
+                  membershipPlanId: plan.id,
+                  notes: "NFC Kiosk Check-in",
+                  status: "PRESENT",
+                  date: now,
                 },
               });
+              attendanceId = att.id;
+
+              // Award loyalty points for membership check-in if configured
+              if (plan.rewardPointsPerCheckin > 0) {
+                await tx.member.update({
+                  where: { id: member.id },
+                  data: {
+                    loyaltyPoints: { increment: plan.rewardPointsPerCheckin },
+                  },
+                });
+
+                await tx.loyaltyHistory.create({
+                  data: {
+                    memberId: member.id,
+                    points: plan.rewardPointsPerCheckin,
+                    type: "EARNED",
+                    source: "CHECKIN",
+                    description: `Earned for NFC membership attendance: ${plan.name}`,
+                  },
+                });
+              }
+
+              // Update card lastUsedAt
+              await tx.nfcCard.update({
+                where: { id: card.id },
+                data: { lastUsedAt: now },
+              });
+
+              // Log successful NFC transaction
+              await tx.nfcTransaction.create({
+                data: {
+                  cardId: card.id,
+                  cardUid,
+                  memberId: member.id,
+                  type: "CHECKIN",
+                  status: "SUCCESS",
+                  amount: 0,
+                  deviceType,
+                  readerLocation: location,
+                  metadata: JSON.stringify({
+                    action: "MEMBERSHIP_ATTENDANCE",
+                    attendanceId: att.id,
+                    planId: plan.id,
+                    planName: plan.name,
+                    sportName: plan.sport?.name,
+                  }),
+                },
+              });
+            });
+            attendanceSucceeded = true;
+          } catch (err: any) {
+            if (err.message === "ATTENDANCE_CAP_REACHED") {
+              continue; // Cap reached, try next plan or fall through
             }
+            throw err;
+          }
 
-            // Update card lastUsedAt
-            await tx.nfcCard.update({
-              where: { id: card.id },
-              data: { lastUsedAt: now },
-            });
+          if (attendanceSucceeded) {
+            await bumpSyncTimestamp("attendance");
 
-            // Log successful NFC transaction
-            await tx.nfcTransaction.create({
-              data: {
-                cardId: card.id,
-                cardUid,
-                memberId: member.id,
-                type: "CHECKIN",
-                status: "SUCCESS",
-                amount: 0,
-                deviceType,
-                readerLocation: location,
-                metadata: JSON.stringify({
-                  action: "MEMBERSHIP_ATTENDANCE",
-                  attendanceId: att.id,
-                  planId: plan.id,
-                  planName: plan.name,
-                  sportName: plan.sport?.name,
-                }),
+            return {
+              success: true,
+              action: "MEMBERSHIP_ATTENDANCE",
+              message: `Membership attendance marked for ${plan.name}!`,
+              member: {
+                id: member.id,
+                name: member.name,
+                mobile: member.mobile,
+                walletBalanceRupees: Number((member.walletBalance / 100).toFixed(2)),
               },
-            });
-          });
-
-          await bumpSyncTimestamp("attendance");
-
-          return {
-            success: true,
-            action: "MEMBERSHIP_ATTENDANCE",
-            message: `Membership attendance marked for ${plan.name}!`,
-            member: {
-              id: member.id,
-              name: member.name,
-              mobile: member.mobile,
-              walletBalanceRupees: Number((member.walletBalance / 100).toFixed(2)),
-            },
-            details: {
-              attendanceId,
-              membershipPlanName: plan.name,
-              sportName: plan.sport?.name,
-            },
-          };
+              details: {
+                attendanceId,
+                membershipPlanName: plan.name,
+                sportName: plan.sport?.name,
+              },
+            };
+          }
         }
       }
 
@@ -476,146 +502,190 @@ export class NfcCheckinService {
    * This provides a unified UI feed on the Kiosk when people scan digital tickets instead of NFC.
    */
   static async resolveQrTicketCheckin(ticketIdOrQrCode: string, deviceType: NfcDeviceType, location: string): Promise<NfcCheckinResponse> {
-    const ticket = await prisma.ticket.findFirst({
-      where: {
-        OR: [
-          { id: ticketIdOrQrCode },
-          { qrCode: ticketIdOrQrCode }
-        ]
-      },
-      include: { booking: { include: { turf: true, sport: true, member: true } } }
-    });
-
-    if (!ticket) {
+    const ticketCode = (ticketIdOrQrCode || "").trim();
+    if (!ticketCode) {
       return {
         success: false,
         action: "REJECTED",
-        message: "Ticket not found.",
+        message: "Invalid ticket code provided.",
         error: "INVALID_TICKET",
       };
     }
 
-    if (ticket.status !== "VALID") {
+    const lockKey = `ticket_${ticketCode}`;
+    const acquired = await Mutex.acquire(lockKey, 5000);
+    if (!acquired) {
       return {
         success: false,
         action: "REJECTED",
-        message: `Ticket is already ${ticket.status}.`,
-        error: `TICKET_${ticket.status}`,
+        message: "Check-in operation already in progress for this ticket. Please wait.",
+        error: "CONCURRENCY_LOCK_ACTIVE",
       };
     }
 
-    // Check validity dates
-    const now = new Date();
-    const startTime = new Date(ticket.booking.startTime);
-    const bookingDateStr = formatIST(ticket.booking.startTime, 'yyyy-MM-dd');
-    const { start: bookingDayStart, end: bookingDayEnd } = getISTDateBounds(bookingDateStr);
-    
-    const validityEnd = new Date(bookingDayEnd.getTime());
-    if (ticket.booking.turf.bookingValidityDays > 0) {
-      validityEnd.setDate(validityEnd.getDate() + ticket.booking.turf.bookingValidityDays);
-    }
-
-    // Allow check-in a bit early (1 hour)
-    const earlyAllowTime = new Date(startTime.getTime() - 60 * 60000);
-
-    if (now < earlyAllowTime) {
-      return {
-        success: false,
-        action: "REJECTED",
-        message: "Too early to check-in. Booking starts at " + formatIST(startTime, 'h:mm a'),
-        error: "TOO_EARLY",
-      };
-    }
-
-    if (now > validityEnd) {
-      return {
-        success: false,
-        action: "REJECTED",
-        message: "Ticket has expired.",
-        error: "TICKET_EXPIRED",
-      };
-    }
-
-    // Process checkin inside a transaction
-    const sport = ticket.booking.sport;
-    await prisma.$transaction(async (tx) => {
-      await tx.ticket.update({
-        where: { id: ticket.id },
-        data: {
-          status: "CHECKED_IN",
-          usedAt: new Date()
-        }
+    try {
+      const ticket = await prisma.ticket.findFirst({
+        where: {
+          OR: [
+            { id: ticketCode },
+            { qrCode: ticketCode }
+          ]
+        },
+        include: { booking: { include: { turf: true, sport: true, member: true } } }
       });
 
-      // Award loyalty points for check-in
-      if (sport && sport.rewardPointsPerCheckin > 0) {
-        await tx.member.update({
-          where: { id: ticket.booking.memberId },
-          data: { loyaltyPoints: { increment: sport.rewardPointsPerCheckin } }
-        });
-        await tx.loyaltyHistory.create({
-          data: {
-            memberId: ticket.booking.memberId,
-            points: sport.rewardPointsPerCheckin,
-            type: "EARNED",
-            source: "CHECKIN",
-            description: `Earned for checking into booking: ${sport.name}`
-          }
-        });
+      if (!ticket) {
+        return {
+          success: false,
+          action: "REJECTED",
+          message: "Ticket not found.",
+          error: "INVALID_TICKET",
+        };
       }
 
-      // Log it as an NFC transaction so it appears in the kiosk feed
-      await tx.nfcTransaction.create({
-        data: {
-          cardUid: ticket.id.substring(0, 16), // Use ticket ID as a pseudo-UID for log
-          memberId: ticket.booking.memberId,
-          bookingId: ticket.booking.id,
-          type: "CHECKIN",
-          status: "SUCCESS",
-          amount: 0,
-          deviceType,
-          readerLocation: location,
-          metadata: JSON.stringify({ isQrTicket: true, ticketId: ticket.id }),
-        },
-      });
-    });
+      if (ticket.status !== "VALID") {
+        return {
+          success: false,
+          action: "REJECTED",
+          message: `Ticket is already ${ticket.status}.`,
+          error: `TICKET_${ticket.status}`,
+        };
+      }
 
-    // We can run the whatsapp sender non-blocking
-    if (ticket.booking.member?.mobile) {
+      // Check validity dates
+      const now = new Date();
+      const startTime = new Date(ticket.booking.startTime);
+      const bookingDateStr = formatIST(ticket.booking.startTime, 'yyyy-MM-dd');
+      const { start: bookingDayStart, end: bookingDayEnd } = getISTDateBounds(bookingDateStr);
+      
+      const validityEnd = new Date(bookingDayEnd.getTime());
+      if (ticket.booking.turf.bookingValidityDays > 0) {
+        validityEnd.setDate(validityEnd.getDate() + ticket.booking.turf.bookingValidityDays);
+      }
+
+      // Allow check-in a bit early (1 hour)
+      const earlyAllowTime = new Date(startTime.getTime() - 60 * 60000);
+
+      if (now < earlyAllowTime) {
+        return {
+          success: false,
+          action: "REJECTED",
+          message: "Too early to check-in. Booking starts at " + formatIST(startTime, 'h:mm a'),
+          error: "TOO_EARLY",
+        };
+      }
+
+      if (now > validityEnd) {
+        return {
+          success: false,
+          action: "REJECTED",
+          message: "Ticket has expired.",
+          error: "TICKET_EXPIRED",
+        };
+      }
+
+      // Process checkin inside a transaction
+      const sport = ticket.booking.sport;
       try {
-        const { sendWhatsAppCheckinTemplate } = require("@/lib/whatsapp");
-        const formattedTime = new Date().toLocaleTimeString('en-IN', {
-          hour: 'numeric',
-          minute: '2-digit',
-          hour12: true,
-          timeZone: 'Asia/Kolkata'
-        });
-        sendWhatsAppCheckinTemplate(
-          ticket.booking.member.name,
-          sport?.name || "Sportsvilla",
-          formattedTime,
-          ticket.booking.member.mobile
-        ).catch(console.error);
-      } catch(e) {}
-    }
+        await prisma.$transaction(async (tx) => {
+          const freshTicket = await tx.ticket.findUnique({
+            where: { id: ticket.id }
+          });
+          if (!freshTicket || freshTicket.status !== "VALID") {
+            throw new Error("TICKET_ALREADY_USED");
+          }
 
-    return {
-      success: true,
-      action: "BOOKING_CHECKIN",
-      message: "Ticket verified. Welcome to " + (sport?.name || "the turf") + "!",
-      member: {
-        id: ticket.booking.member.id,
-        name: ticket.booking.member.name,
-        mobile: ticket.booking.member.mobile,
-        walletBalanceRupees: Number(((ticket.booking.member.walletBalance || 0) / 100).toFixed(2)),
-      },
-      details: {
-        bookingId: ticket.booking.id,
-        ticketId: ticket.id,
-        sportName: sport?.name,
-        courtName: ticket.booking.turf?.name,
-        timeSlot: `${formatIST(startTime, 'h:mm a')} - ${formatIST(new Date(ticket.booking.endTime), 'h:mm a')}`,
-      },
-    };
+          await tx.ticket.update({
+            where: { id: ticket.id },
+            data: {
+              status: "CHECKED_IN",
+              usedAt: new Date()
+            }
+          });
+
+          // Award loyalty points for check-in
+          if (sport && sport.rewardPointsPerCheckin > 0) {
+            await tx.member.update({
+              where: { id: ticket.booking.memberId },
+              data: { loyaltyPoints: { increment: sport.rewardPointsPerCheckin } }
+            });
+            await tx.loyaltyHistory.create({
+              data: {
+                memberId: ticket.booking.memberId,
+                points: sport.rewardPointsPerCheckin,
+                type: "EARNED",
+                source: "CHECKIN",
+                description: `Earned for checking into booking: ${sport.name}`
+              }
+            });
+          }
+
+          // Log it as an NFC transaction so it appears in the kiosk feed
+          await tx.nfcTransaction.create({
+            data: {
+              cardUid: ticket.id.substring(0, 16), // Use ticket ID as a pseudo-UID for log
+              memberId: ticket.booking.memberId,
+              bookingId: ticket.booking.id,
+              type: "CHECKIN",
+              status: "SUCCESS",
+              amount: 0,
+              deviceType,
+              readerLocation: location,
+              metadata: JSON.stringify({ isQrTicket: true, ticketId: ticket.id }),
+            },
+          });
+        });
+      } catch (err: any) {
+        if (err.message === "TICKET_ALREADY_USED") {
+          return {
+            success: false,
+            action: "REJECTED",
+            message: "Ticket is already CHECKED_IN.",
+            error: "TICKET_CHECKED_IN",
+          };
+        }
+        throw err;
+      }
+
+      // We can run the whatsapp sender non-blocking
+      if (ticket.booking.member?.mobile) {
+        try {
+          const { sendWhatsAppCheckinTemplate } = require("@/lib/whatsapp");
+          const formattedTime = new Date().toLocaleTimeString('en-IN', {
+            hour: 'numeric',
+            minute: '2-digit',
+            hour12: true,
+            timeZone: 'Asia/Kolkata'
+          });
+          sendWhatsAppCheckinTemplate(
+            ticket.booking.member.name,
+            sport?.name || "Sportsvilla",
+            formattedTime,
+            ticket.booking.member.mobile
+          ).catch(console.error);
+        } catch(e) {}
+      }
+
+      return {
+        success: true,
+        action: "BOOKING_CHECKIN",
+        message: "Ticket verified. Welcome to " + (sport?.name || "the turf") + "!",
+        member: {
+          id: ticket.booking.member.id,
+          name: ticket.booking.member.name,
+          mobile: ticket.booking.member.mobile,
+          walletBalanceRupees: Number(((ticket.booking.member.walletBalance || 0) / 100).toFixed(2)),
+        },
+        details: {
+          bookingId: ticket.booking.id,
+          ticketId: ticket.id,
+          sportName: sport?.name,
+          courtName: ticket.booking.turf?.name,
+          timeSlot: `${formatIST(startTime, 'h:mm a')} - ${formatIST(new Date(ticket.booking.endTime), 'h:mm a')}`,
+        },
+      };
+    } finally {
+      Mutex.release(lockKey);
+    }
   }
 }

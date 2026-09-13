@@ -1,18 +1,27 @@
 "use client";
 import { formatIST } from "@/lib/dateUtils";
 import { startOfMonth, endOfMonth, startOfWeek, endOfWeek, isSameMonth, isSameDay, addMonths, subMonths, startOfDay } from "date-fns";
-
 import { useEffect, useState } from "react";
 import QRCodeLib from "qrcode";
-import { FiCheckCircle, FiClock, FiCalendar, FiActivity, FiStar, FiAward, FiTag, FiDollarSign, FiX } from "react-icons/fi";
+import { FiCheckCircle, FiClock, FiCalendar, FiActivity, FiAward, FiTag } from "react-icons/fi";
 
-export default function PortalClient({ member, activePlans, expiredPlans, attendances, upcomingBookings = [], tournaments = [], coupons = [] }: any) {
+export default function PortalClient({ 
+  member, 
+  activePlans = [], 
+  expiredPlans = [], 
+  attendances = [], 
+  upcomingBookings = [], 
+  tournaments = [], 
+  coupons = [] 
+}: any) {
   const [qrCodeData, setQrCodeData] = useState("");
   const [currentMonth, setCurrentMonth] = useState(new Date());
 
   useEffect(() => {
-    QRCodeLib.toDataURL(member.mobile, { width: 300, margin: 0 }).then(setQrCodeData);
-  }, [member.mobile]);
+    if (member?.mobile) {
+      QRCodeLib.toDataURL(member.mobile, { width: 300, margin: 0 }).then(setQrCodeData).catch(console.error);
+    }
+  }, [member?.mobile]);
 
   const prevMonth = () => setCurrentMonth(subMonths(currentMonth, 1));
   const nextMonth = () => setCurrentMonth(addMonths(currentMonth, 1));
@@ -22,9 +31,8 @@ export default function PortalClient({ member, activePlans, expiredPlans, attend
   const startDateCalendar = startOfWeek(monthStart);
   const endDateCalendar = endOfWeek(monthEnd);
   
-  // Calculate which days are allowed across all active plans
   const allowedDaysSet = activePlans.length > 0 ? (() => {
-    let days = new Set<number>();
+    const days = new Set<number>();
     let hasUnrestricted = false;
     for (const plan of activePlans) {
       if (!plan.allowedDays) {
@@ -36,17 +44,18 @@ export default function PortalClient({ member, activePlans, expiredPlans, attend
     return hasUnrestricted ? null : Array.from(days);
   })() : null;
   
-  let days = [];
+  const days = [];
   let day = startDateCalendar;
   
   while (day <= endDateCalendar) {
     for (let i = 0; i < 7; i++) {
       days.push(day);
-      day = new Date(day.getTime() + 24 * 60 * 60 * 1000); // add 1 day
+      day = new Date(day.getTime() + 24 * 60 * 60 * 1000);
     }
   }
 
   const today = startOfDay(new Date());
+  const walletInRupees = ((member?.walletBalance || 0) / 100).toFixed(2);
 
   return (
     <div className="min-h-screen bg-[#fafafa] flex flex-col items-center py-10 px-4 relative overflow-hidden">
@@ -80,23 +89,23 @@ export default function PortalClient({ member, activePlans, expiredPlans, attend
                 </div>
                 <div className="id-card-body">
                   <div style={{ flex: 1, paddingRight: '16px' }}>
-                    <div className="id-card-name">{member.name}</div>
+                    <div className="id-card-name">{member?.name}</div>
                     <div className="id-card-details-grid">
                       <div className="id-card-detail-group">
                         <div className="id-card-label">Mobile</div>
-                        <div className="id-card-value">{member.mobile}</div>
+                        <div className="id-card-value">{member?.mobile}</div>
                       </div>
                       <div className="id-card-detail-group">
                         <div className="id-card-label">Member Since</div>
-                        <div className="id-card-value">{formatIST(new Date(member.joinDate), 'MMM d, yyyy')}</div>
+                        <div className="id-card-value">{member?.joinDate ? formatIST(new Date(member.joinDate), 'MMM d, yyyy') : 'N/A'}</div>
                       </div>
                       <div className="id-card-detail-group">
                         <div className="id-card-label">Loyalty</div>
-                        <div className="id-card-value text-orange-400 font-bold">{member.loyaltyPoints} Pts</div>
+                        <div className="id-card-value text-orange-400 font-bold">{member?.loyaltyPoints || 0} Pts</div>
                       </div>
                       <div className="id-card-detail-group">
                         <div className="id-card-label">Wallet</div>
-                        <div className="id-card-value text-emerald-400 font-bold">₹{((member.walletBalance || 0) / 100).toFixed(2)}</div>
+                        <div className="id-card-value text-emerald-400 font-bold">₹{walletInRupees}</div>
                       </div>
                     </div>
                   </div>
@@ -125,15 +134,15 @@ export default function PortalClient({ member, activePlans, expiredPlans, attend
             activePlans.map((m: any) => (
               <div key={m.id} className="bg-white border border-gray-200 p-4 rounded-xl flex justify-between items-center shadow-sm">
                 <div>
-                  <div className="font-semibold text-emerald-600 text-sm">{m.membershipPlan.sport.name}</div>
-                  <div className="text-sm text-gray-700 font-medium">{m.membershipPlan.name}</div>
+                  <div className="font-semibold text-emerald-600 text-sm">{m.membershipPlan?.sport?.name}</div>
+                  <div className="text-sm text-gray-700 font-medium">{m.membershipPlan?.name}</div>
                   <div className="text-xs text-gray-400 mt-1 flex items-center gap-1">
                     <FiCalendar /> Expires: {formatIST(new Date(m.endDate), 'PP')}
                   </div>
                 </div>
                 <div className="text-right">
                   <div className="text-xs font-semibold bg-emerald-50 text-emerald-600 px-2 py-1 rounded-full">
-                    {m.membershipPlan.slotsPerDay} slots/day
+                    {m.membershipPlan?.slotsPerDay} slots/day
                   </div>
                 </div>
               </div>
@@ -199,23 +208,31 @@ export default function PortalClient({ member, activePlans, expiredPlans, attend
               <FiTag className="text-emerald-500" /> My Coupons
             </h3>
             <div className="flex flex-col gap-3 mb-10">
-              {coupons.map((c: any) => (
-                <div key={c.id} className="bg-gradient-to-r from-emerald-50 to-white border border-emerald-100 p-4 rounded-xl shadow-sm flex items-center justify-between border-dashed">
-                  <div>
-                    <div className="font-bold text-emerald-700 font-mono tracking-widest text-sm">{c.coupon?.code}</div>
-                    <div className="text-xs text-gray-600 mt-0.5 font-medium">
-                      {c.coupon?.discountType === "PERCENTAGE" 
-                        ? `${c.coupon?.discountValue}% OFF` 
-                        : `₹${c.coupon?.discountValue} OFF`}
+              {coupons.map((c: any) => {
+                const coupon = c.coupon || c;
+                const discountText = (coupon.discountPercent || coupon.discountPercentage)
+                  ? `${coupon.discountPercent || coupon.discountPercentage}% OFF`
+                  : coupon.discountAmount 
+                    ? `₹${coupon.discountAmount} OFF`
+                    : 'Special Offer';
+                return (
+                  <div key={c.id || coupon.id} className="bg-gradient-to-r from-emerald-50 to-white border border-emerald-100 p-4 rounded-xl shadow-sm flex items-center justify-between border-dashed">
+                    <div>
+                      <div className="font-bold text-emerald-700 font-mono tracking-widest text-sm">{coupon.code}</div>
+                      <div className="text-xs text-gray-600 mt-0.5 font-medium">
+                        {discountText}
+                        {coupon.maxDiscount ? ` (Up to ₹${coupon.maxDiscount})` : ''}
+                        {coupon.minBookingAmount ? ` • Min ₹${coupon.minBookingAmount}` : ''}
+                      </div>
                     </div>
+                    {coupon.expiryDate && (
+                      <div className="text-[10px] text-gray-400 font-medium">
+                        Valid till {formatIST(new Date(coupon.expiryDate), 'MMM d')}
+                      </div>
+                    )}
                   </div>
-                  {c.coupon?.expiryDate && (
-                    <div className="text-[10px] text-gray-400 font-medium">
-                      Valid till {formatIST(new Date(c.coupon.expiryDate), 'MMM d')}
-                    </div>
-                  )}
-                </div>
-              ))}
+                );
+              })}
             </div>
           </>
         )}
@@ -248,81 +265,41 @@ export default function PortalClient({ member, activePlans, expiredPlans, attend
         </div>
 
         {/* Calendar View */}
-        <h3 className="text-base font-semibold text-gray-800 flex items-center gap-2 mb-4 mt-8">
-          <FiCalendar className="text-orange-500" /> Attendance Calendar
-        </h3>
-        <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden mb-10">
-          <div className="px-4 py-3 border-b border-gray-100 flex justify-between items-center bg-gray-50">
-            <button onClick={prevMonth} className="text-gray-500 hover:text-orange-500 transition-colors bg-transparent border-none font-bold text-lg cursor-pointer">&larr;</button>
-            <span className="font-bold font-['Outfit'] text-gray-800 tracking-wide text-sm">{formatIST(currentMonth, 'MMMM yyyy')}</span>
-            <button onClick={nextMonth} className="text-gray-500 hover:text-orange-500 transition-colors bg-transparent border-none font-bold text-lg cursor-pointer">&rarr;</button>
+        <div className="bg-white border border-gray-200 rounded-xl p-4 shadow-sm mb-10">
+          <div className="flex justify-between items-center mb-4">
+            <h4 className="font-semibold text-gray-800 text-sm">
+              {formatIST(currentMonth, 'MMMM yyyy')}
+            </h4>
+            <div className="flex gap-2">
+              <button onClick={prevMonth} className="px-2 py-1 text-xs border border-gray-200 rounded hover:bg-gray-50 text-gray-600">&lt;</button>
+              <button onClick={nextMonth} className="px-2 py-1 text-xs border border-gray-200 rounded hover:bg-gray-50 text-gray-600">&gt;</button>
+            </div>
           </div>
-          <div className="p-4">
-            <div className="grid grid-cols-7 gap-1 sm:gap-2 mb-2">
-              {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(d => (
-                <div key={d} className="text-center text-[10px] font-bold text-gray-400 uppercase tracking-wider">{d}</div>
-              ))}
-            </div>
-            <div className="grid grid-cols-7 gap-1 sm:gap-2">
-              {days.map((d, idx) => {
-                const isCurrentMonth = isSameMonth(d, monthStart);
-                const dayAttendances = attendances.filter((a: any) => isSameDay(new Date(a.date), d));
-                const attendedDay = dayAttendances.length > 0;
-                const isFuture = d > today;
-                const isAllowedDay = allowedDaysSet === null || allowedDaysSet.includes(d.getDay());
-
-                return (
-                  <div 
-                    key={idx} 
-                    className={`min-h-[50px] sm:min-h-[60px] rounded-lg p-1 sm:p-1.5 flex flex-col transition-all duration-200 border ${
-                      !isCurrentMonth 
-                        ? 'opacity-30 bg-gray-50 border-transparent' 
-                        : attendedDay
-                          ? 'bg-emerald-50 border-emerald-200 shadow-[inset_0_0_10px_rgba(52,211,153,0.1)]'
-                          : !isAllowedDay
-                            ? 'bg-gray-100 border-gray-100 opacity-60'
-                            : isFuture
-                              ? 'bg-white border-gray-100'
-                              : 'bg-gray-50 border-gray-200'
-                    }`}
-                  >
-                    <div className={`text-right text-[10px] sm:text-xs font-bold ${
-                      isCurrentMonth 
-                        ? (attendedDay 
-                            ? 'text-emerald-600' 
-                            : !isAllowedDay 
-                              ? 'text-gray-300'
-                              : 'text-gray-500'
-                          ) 
-                        : 'text-gray-400'
-                    }`}>
-                      {formatIST(d, 'd')}
-                    </div>
-                    <div className="flex-1 flex flex-col gap-0.5 mt-1 overflow-hidden">
-                      {attendedDay && dayAttendances.map((a: any) => (
-                        <div key={a.id} className="text-[8px] sm:text-[9px] text-emerald-700 bg-emerald-100/50 rounded px-1 py-0.5 font-bold flex items-center justify-center truncate marquee-container" title={formatIST(new Date(a.date), 'h:mm a')}>
-                          <div className="marquee-content flex items-center">
-                            <FiCheckCircle size={8} className="mr-0.5 shrink-0" /> {formatIST(new Date(a.date), 'h:mm a')}
-                          </div>
-                        </div>
-                      ))}
-                      {!attendedDay && !isFuture && !isAllowedDay && isCurrentMonth && (
-                        <div className="text-[8px] text-gray-400 flex items-center justify-center h-full">
-                          <FiX className="mr-0.5" /> N/A
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
+          <div className="grid grid-cols-7 gap-1 text-center text-xs font-semibold text-gray-400 mb-2">
+            <div>S</div><div>M</div><div>T</div><div>W</div><div>T</div><div>F</div><div>S</div>
+          </div>
+          <div className="grid grid-cols-7 gap-1 text-xs">
+            {days.map((d, index) => {
+              const inCurrentMonth = isSameMonth(d, currentMonth);
+              const isToday = isSameDay(d, today);
+              const dayNum = d.getDay();
+              const isAllowed = allowedDaysSet ? allowedDaysSet.includes(dayNum) : true;
+              return (
+                <div 
+                  key={index} 
+                  className={`h-8 flex items-center justify-center rounded-lg transition-colors ${
+                    !inCurrentMonth ? 'text-gray-300' :
+                    isToday ? 'bg-orange-500 text-white font-bold' :
+                    isAllowed ? 'text-gray-700 hover:bg-orange-50' : 'text-gray-300 line-through'
+                  }`}
+                >
+                  {d.getDate()}
+                </div>
+              );
+            })}
           </div>
         </div>
 
-        {/* Footer */}
-        <p className="text-center text-xs text-gray-300 mt-6">
-          © {new Date().getFullYear()} Sportsvilla. All rights reserved.
-        </p>
       </div>
     </div>
   );

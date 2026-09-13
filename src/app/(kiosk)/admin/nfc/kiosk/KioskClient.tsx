@@ -37,14 +37,24 @@ interface KioskClientProps {
 }
 
 export default function KioskClient({ initialTransactions = [] }: KioskClientProps) {
+  const router = useRouter();
   const searchParams = useSearchParams();
-
+  
   useEffect(() => {
     const success = searchParams.get("success");
     const error = searchParams.get("error");
-    if (success === "1" || success === "true") {
-      playNfcSound("success");
-      alert("Payment successful and you are checked in!");
+    const status = searchParams.get("status");
+    const bookingId = searchParams.get("bookingId");
+    
+    // The phonepe-redirect route appends bookingId on success/pending
+    if (success === "1" || success === "true" || bookingId) {
+      if (status === "pending") {
+        playNfcSound("success");
+        alert("Payment initiated successfully! Check dashboard for final status.");
+      } else {
+        playNfcSound("success");
+        alert("Payment successful and you are checked in!");
+      }
       window.history.replaceState({}, document.title, window.location.pathname);
     } else if (error) {
       playNfcSound("error");

@@ -11,13 +11,13 @@ export default function OffersPage() {
   const { member } = usePlayAuth();
   const [copiedCode, setCopiedCode] = useState<string | null>(null);
 
-  const { data, error } = useSWR(
+  const { data } = useSWR(
     member?.id ? `/api/client/v1/offers?memberId=${member.id}` : null,
     fetcher
   );
 
   const announcements = data?.announcements || [];
-  const loyalty = data?.loyalty || { currentRank: 'Bronze', nextRank: 'Silver', points: 0, nextRankPoints: 1000 };
+  const loyalty = data?.loyalty || { currentRank: 'Bronze', nextRank: 'Silver', points: member?.loyaltyPoints || 0, nextRankPoints: 1000 };
   const allCoupons = data?.coupons || [];
   const activeCoupons = allCoupons.filter((c: any) => !c.expiryDate || new Date(c.expiryDate) > new Date());
   const expiredCoupons = allCoupons.filter((c: any) => c.expiryDate && new Date(c.expiryDate) <= new Date());
@@ -32,13 +32,13 @@ export default function OffersPage() {
 
   if (!member) return null;
 
-  const progressPercent = Math.min(100, (loyalty.points / loyalty.nextRankPoints) * 100);
+  const progressPercent = Math.min(100, ((loyalty.points || 0) / (loyalty.nextRankPoints || 1000)) * 100);
 
   return (
     <div className="min-h-screen bg-[var(--play-bg)] text-[var(--play-text)] p-4 sm:p-6 pb-24">
       <h1 className="text-2xl font-bold font-outfit mb-6 flex items-center gap-2">
         <Gift className="w-6 h-6 text-[var(--play-brand)]" />
-        Offers & Rewards
+        Offers &amp; Rewards
       </h1>
 
       {/* Announcements */}
@@ -85,7 +85,7 @@ export default function OffersPage() {
         </div>
         
         <p className="text-sm text-[var(--play-text-muted)] text-right">
-          <span className="font-semibold text-[var(--play-text)]">{loyalty.points}</span> / {loyalty.nextRankPoints} pts
+          <span className="font-semibold text-[var(--play-text)]">{loyalty.points || 0}</span> / {loyalty.nextRankPoints || 1000} pts
         </p>
       </section>
 
@@ -95,6 +95,17 @@ export default function OffersPage() {
         <div className="space-y-4">
           {activeCoupons.length > 0 ? activeCoupons.map((coupon: any, idx: number) => {
             const isUsed = coupon.usages && coupon.usages.length > 0;
+            const discountTitle = (coupon.discountPercent || coupon.discountPercentage)
+              ? `${coupon.discountPercent || coupon.discountPercentage}% OFF`
+              : coupon.discountAmount
+                ? `₹${coupon.discountAmount} OFF`
+                : 'Special Offer';
+            const details = [
+              coupon.maxDiscount ? `Max discount: ₹${coupon.maxDiscount}` : null,
+              coupon.minBookingAmount ? `Min booking: ₹${coupon.minBookingAmount}` : null,
+              coupon.maxUsesPerUser ? `Max uses: ${coupon.maxUsesPerUser}` : null,
+            ].filter(Boolean).join(' • ');
+
             return (
               <div key={idx} className={`bg-[var(--play-surface)] rounded-[var(--play-radius-lg)] border border-[var(--play-border)] shadow-sm overflow-hidden flex flex-col sm:flex-row ${isUsed ? 'opacity-70' : ''}`}>
                 <div className="p-4 flex-1 relative">
@@ -103,10 +114,12 @@ export default function OffersPage() {
                       Used
                     </div>
                   )}
-                  <h3 className="font-bold text-lg mb-1">{coupon.title}</h3>
-                  <p className="text-sm text-[var(--play-text-muted)]">{coupon.description}</p>
-                  {coupon.validUntil && (
-                    <p className="text-xs text-red-500 mt-2 font-medium">Valid until: {new Date(coupon.validUntil).toLocaleDateString()}</p>
+                  <h3 className="font-bold text-lg mb-1">{discountTitle}</h3>
+                  {details && <p className="text-sm text-[var(--play-text-muted)]">{details}</p>}
+                  {coupon.expiryDate && (
+                    <p className="text-xs text-red-500 mt-2 font-medium">
+                      Valid until: {new Date(coupon.expiryDate).toLocaleDateString()}
+                    </p>
                   )}
                 </div>
                 <div className="bg-[var(--play-surface-alt)] p-4 border-t sm:border-t-0 sm:border-l border-dashed border-[var(--play-border)] flex flex-row sm:flex-col items-center justify-between sm:justify-center gap-3 w-full sm:w-40 shrink-0">
@@ -147,6 +160,16 @@ export default function OffersPage() {
               <div className="space-y-4 mt-4">
                 {expiredCoupons.map((coupon: any, idx: number) => {
                   const isUsed = coupon.usages && coupon.usages.length > 0;
+                  const discountTitle = (coupon.discountPercent || coupon.discountPercentage)
+                    ? `${coupon.discountPercent || coupon.discountPercentage}% OFF`
+                    : coupon.discountAmount
+                      ? `₹${coupon.discountAmount} OFF`
+                      : 'Expired Coupon';
+                  const details = [
+                    coupon.maxDiscount ? `Max discount: ₹${coupon.maxDiscount}` : null,
+                    coupon.minBookingAmount ? `Min booking: ₹${coupon.minBookingAmount}` : null,
+                  ].filter(Boolean).join(' • ');
+
                   return (
                     <div key={idx} className="bg-[var(--play-bg)] rounded-[var(--play-radius-lg)] border border-[var(--play-border)] shadow-sm overflow-hidden flex flex-col sm:flex-row opacity-60 grayscale">
                       <div className="p-4 flex-1 relative">
@@ -155,8 +178,8 @@ export default function OffersPage() {
                             Used
                           </div>
                         )}
-                        <h3 className="font-bold text-lg mb-1">{coupon.title}</h3>
-                        <p className="text-sm text-[var(--play-text-muted)]">{coupon.description}</p>
+                        <h3 className="font-bold text-lg mb-1">{discountTitle}</h3>
+                        {details && <p className="text-sm text-[var(--play-text-muted)]">{details}</p>}
                         <p className="text-xs text-red-500/70 mt-2 font-medium">Expired on {new Date(coupon.expiryDate).toLocaleDateString()}</p>
                       </div>
                       <div className="bg-[var(--play-surface-alt)] p-4 border-t sm:border-t-0 sm:border-l border-dashed border-[var(--play-border)] flex flex-row sm:flex-col items-center justify-between sm:justify-center gap-3 w-full sm:w-40 shrink-0">

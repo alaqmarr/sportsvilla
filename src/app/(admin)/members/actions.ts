@@ -6,8 +6,19 @@ import { bumpSyncTimestamp } from '@/lib/sync';
 import { getISTDateBounds } from "@/lib/dateUtils";
 import { sendWhatsAppMemberRegisteredTemplate, sendWhatsAppMembershipPurchasedTemplate } from "@/lib/whatsapp";
 import { generateMemberId } from "@/lib/memberUtils";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
+
+async function requireAdminSession() {
+  const session = await getServerSession(authOptions);
+  if (!session?.user?.email) {
+    throw new Error("Unauthorized: Admin session required");
+  }
+  return session;
+}
 
 export async function createMember(data: { name: string; mobile: string; email?: string }) {
+  await requireAdminSession();
   const id = await generateMemberId(data.mobile);
   const member = await prisma.member.create({
     data: {
@@ -31,6 +42,7 @@ export async function createMember(data: { name: string; mobile: string; email?:
 }
 
 export async function createFamily(data: { mobile: string; members: { name: string; email?: string }[] }) {
+  await requireAdminSession();
   if (data.members.length === 0) throw new Error("At least one member is required");
   
   // Create all family members sequentially to ensure correct ID generation
@@ -61,6 +73,7 @@ export async function createFamily(data: { mobile: string; members: { name: stri
 }
 
 export async function updateMember(id: string, data: { name: string; mobile: string; email?: string }) {
+  await requireAdminSession();
   const member = await prisma.member.update({
     where: { id },
     data: {
@@ -75,14 +88,17 @@ export async function updateMember(id: string, data: { name: string; mobile: str
 }
 
 export async function deleteMember(id: string) {
+  await requireAdminSession();
   await prisma.member.delete({ where: { id } });
   await bumpSyncTimestamp('member');
   revalidatePath("/", "layout");
 }
 
 export async function assignPlan(data: { memberIds?: string[]; memberId?: string; mobile?: string; name?: string; email?: string; planId: string; startDate: string; turfId?: string; timeSlot?: string; allowedDays?: number[] }) {
+  await requireAdminSession();
   const plan = await prisma.membershipPlan.findUnique({ where: { id: data.planId }});
   if (!plan) throw new Error("Plan not found");
+
   
   let targetMemberIds: string[] = [];
 
@@ -213,6 +229,7 @@ export async function assignPlan(data: { memberIds?: string[]; memberId?: string
 }
 
 export async function updateMemberMembership(id: string, data: { startDate?: string, endDate?: string, status?: string, turfId?: string, timeSlot?: string }) {
+  await requireAdminSession();
   const updateData: any = {};
   if (data.startDate) {
     updateData.startDate = getISTDateBounds(data.startDate).start;
@@ -260,6 +277,7 @@ export async function updateMemberMembership(id: string, data: { startDate?: str
 }
 
 export async function deleteMemberMembership(id: string) {
+  await requireAdminSession();
   await prisma.memberMembership.delete({
     where: { id }
   });
@@ -268,6 +286,7 @@ export async function deleteMemberMembership(id: string) {
 }
 
 export async function resetWallet(id: string) {
+  await requireAdminSession();
   const result = await prisma.$transaction(async (tx) => {
     const member = await tx.member.findUnique({ where: { id }});
     if (!member) throw new Error("Member not found");

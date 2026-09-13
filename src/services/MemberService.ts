@@ -114,13 +114,21 @@ export class MemberService {
     let familyId = member.familyId;
 
     if (!familyId) {
-      // Create new family group
-      const group = await prisma.familyGroup.create({
-        data: {
-          mobile: member.mobile
-        }
+      const existingGroup = await prisma.familyGroup.findFirst({
+        where: { mobile: member.mobile }
       });
-      familyId = group.id;
+
+      if (existingGroup) {
+        familyId = existingGroup.id;
+      } else {
+        // Create new family group
+        const group = await prisma.familyGroup.create({
+          data: {
+            mobile: member.mobile
+          }
+        });
+        familyId = group.id;
+      }
     }
 
     // Attach all members with same mobile to this family ID

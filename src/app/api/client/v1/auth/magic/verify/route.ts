@@ -94,10 +94,19 @@ export async function POST(request: Request) {
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
-  const token = searchParams.get("token");
-  if (!token) {
+  const rawToken = searchParams.get("token");
+  if (!rawToken) {
     return NextResponse.json({ error: "Missing token parameter" }, { status: 400 });
   }
+
+  const token = rawToken.trim();
+  // Strictly sanitize / validate token format (alphanumeric, -, _, .)
+  if (!/^[a-zA-Z0-9_\-\.]+$/.test(token)) {
+    return NextResponse.json({ error: "Invalid token format" }, { status: 400 });
+  }
+
+  const safeEncodedToken = encodeURIComponent(token);
+  const safeJsonToken = JSON.stringify(safeEncodedToken);
   
   // Return an HTML page that attempts to open the app via custom scheme
   // and falls back to the web login after a short delay
@@ -116,15 +125,16 @@ export async function GET(request: Request) {
     <body>
       <h2>Opening SportsVilla App...</h2>
       <div class="spinner"></div>
-      <p>If the app doesn't open automatically, <a href="/login?magic_verified=${token}" style="color: #16a34a;">continue on web</a>.</p>
+      <p>If the app doesn't open automatically, <a href="/login?magic_verified=${safeEncodedToken}" style="color: #16a34a;">continue on web</a>.</p>
       
       <script>
         // Try opening the app via custom scheme
-        window.location.href = 'sportsvillaapp://login?token=${token}';
+        const token = ${safeJsonToken};
+        window.location.href = 'sportsvillaapp://login?token=' + token;
         
         // Fallback to web login if app is not installed
         setTimeout(function() {
-          window.location.href = '/login?magic_verified=${token}';
+          window.location.href = '/login?magic_verified=' + token;
         }, 2500);
       </script>
     </body>
@@ -132,6 +142,9 @@ export async function GET(request: Request) {
   `;
 
   return new NextResponse(html, {
-    headers: { 'Content-Type': 'text/html' }
+    headers: {
+      'Content-Type': 'text/html; charset=utf-8',
+      'X-Content-Type-Options': 'nosniff'
+    }
   });
 }

@@ -1,6 +1,8 @@
 "use server";
 import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
 
 export async function getSettings() {
   const settings = await prisma.setting.findMany();
@@ -13,6 +15,11 @@ export async function getSettings() {
 }
 
 export async function updateSettings(data: Record<string, string>) {
+  const session = await getServerSession(authOptions);
+  if (!session?.user?.email) {
+    throw new Error("Unauthorized: Admin session required");
+  }
+
   for (const [key, value] of Object.entries(data)) {
     await prisma.setting.upsert({
       where: { key },
@@ -22,3 +29,4 @@ export async function updateSettings(data: Record<string, string>) {
   }
   revalidatePath("/", "layout");
 }
+

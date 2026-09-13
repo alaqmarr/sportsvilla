@@ -1,7 +1,7 @@
 "use client";
 import { formatIST, todayIST } from "@/lib/dateUtils";
 import { useState, useRef, useMemo, useEffect } from "react";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import { createMember, updateMember, deleteMember, assignPlan, createFamily, updateMemberMembership, deleteMemberMembership, resetWallet } from "./actions";
 import { useAlert } from "@/components/AlertProvider";
 import { motion, AnimatePresence } from "framer-motion";
@@ -15,7 +15,12 @@ import { FiTrash2, FiEdit2, FiPlus, FiX, FiDownload, FiImage, FiMessageCircle, F
 export default function MembersClient({ initialMembers, plans, turfs = [] }: { initialMembers: any[], plans: any[], turfs?: any[] }) {
   const { showAlert, showConfirm } = useAlert();
   const searchParams = useSearchParams();
+  const router = useRouter();
   const [members, setMembers] = useState(initialMembers);
+
+  useEffect(() => {
+    setMembers(initialMembers);
+  }, [initialMembers]);
   const [searchQuery, setSearchQuery] = useState("");
   
   const [activeTab, setActiveTab] = useState<'MEMBERS'|'FAMILIES'>('MEMBERS');
@@ -177,7 +182,7 @@ export default function MembersClient({ initialMembers, plans, turfs = [] }: { i
         await createMember({ name, mobile, email });
         showAlert("Registration Complete", `${name} has been successfully registered to Sportsvilla!`, "success");
       }
-      setShowMemberModal(false); window.location.reload();
+      setShowMemberModal(false); router.refresh();
     } catch (err) {
       showAlert("Registration Failed", "We couldn't save the member details. Please check the information and try again.", "error");
     }
@@ -189,7 +194,7 @@ export default function MembersClient({ initialMembers, plans, turfs = [] }: { i
     try {
       await createFamily({ mobile: familyMobile, members: familyMembers.filter(m => m.name.trim() !== "") });
       showAlert("Family Created", "The family account has been successfully set up!", "success");
-      setShowFamilyModal(false); window.location.reload();
+      setShowFamilyModal(false); router.refresh();
     } catch (err: any) {
       showAlert("Creation Failed", err.message || "Could not create family.", "error");
     }
@@ -242,7 +247,7 @@ export default function MembersClient({ initialMembers, plans, turfs = [] }: { i
         allowedDays: assignAllowedDays.length < 7 ? assignAllowedDays : undefined
       });
       showAlert("Plan Assigned", "The membership plan has been successfully activated.", "success");
-      setShowPlanModal(false); window.location.reload();
+      setShowPlanModal(false); router.refresh();
     } catch (err: any) {
       showAlert("Assignment Failed", err.message || "There was an issue assigning the membership plan. Please try again.", "error");
     }
@@ -275,7 +280,7 @@ export default function MembersClient({ initialMembers, plans, turfs = [] }: { i
       });
       showAlert("Membership Updated", "The membership details have been updated.", "success");
       setShowEditMembershipModal(false);
-      window.location.reload();
+      router.refresh();
     } catch (err: any) {
       showAlert("Update Failed", err.message || "Failed to update membership.", "error");
     }
@@ -290,7 +295,7 @@ export default function MembersClient({ initialMembers, plans, turfs = [] }: { i
         try {
           await deleteMemberMembership(id);
           showAlert("Membership Deleted", "The membership has been removed.", "success");
-          window.location.reload();
+          router.refresh();
         } catch (err: any) {
           showAlert("Deletion Failed", err.message || "Failed to delete membership.", "error");
         }

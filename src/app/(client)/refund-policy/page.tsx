@@ -5,7 +5,7 @@ export default function RefundPolicy() {
     <div className="min-h-screen bg-white py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-4xl mx-auto text-gray-800">
         <h1 className="text-3xl font-bold mb-6 text-gray-900">Refund and Cancellation Policy</h1>
-        <p className="mb-4 text-sm text-gray-500">Last updated: {new Date().toLocaleDateString("en-IN")}</p>
+        <p className="mb-4 text-sm text-gray-500" suppressHydrationWarning>Last updated: September 1, 2026</p>
 
         <section className="mb-8">
           <h2 className="text-xl font-semibold mb-3 text-gray-900">1. Overview</h2>

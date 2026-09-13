@@ -2,6 +2,8 @@
 
 import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
 
 export async function updatePhonePeSettings(data: {
   PHONEPE_ENV: string;
@@ -13,6 +15,11 @@ export async function updatePhonePeSettings(data: {
   RAZORPAY_KEY_SECRET?: string;
 }) {
   try {
+    const session = await getServerSession(authOptions);
+    if (!session?.user?.email) {
+      return { success: false, error: "Unauthorized: Admin session required" };
+    }
+
     for (const [key, value] of Object.entries(data)) {
       if (value !== undefined && value !== null) {
         await prisma.setting.upsert({
@@ -29,3 +36,4 @@ export async function updatePhonePeSettings(data: {
     return { success: false, error: error.message };
   }
 }
+

@@ -158,7 +158,7 @@ export default function ManageBookings() {
       const b = rescheduleModal.booking;
       const durationMs = new Date(b.endTime).getTime() - new Date(b.startTime).getTime();
       
-      const newStart = new Date(`${rescheduleModal.newDate}T${rescheduleModal.newTime}:00`);
+      const newStart = new Date(`${rescheduleModal.newDate}T${rescheduleModal.newTime}:00+05:30`);
       const newEnd = new Date(newStart.getTime() + durationMs);
 
       await rescheduleBooking(b.id, b.turfId, newStart, newEnd);
@@ -517,7 +517,7 @@ export default function ManageBookings() {
                                     <FiMaximize2 size={16} />
                                   </button>
                                   <button 
-                                    onClick={() => setRescheduleModal({ show: true, booking: b, newDate: new Date(b.startTime).toISOString().split('T')[0], newTime: formatIST(new Date(b.startTime), 'HH:mm'), loading: false })}
+                                    onClick={() => setRescheduleModal({ show: true, booking: b, newDate: formatIST(new Date(b.startTime), 'yyyy-MM-dd'), newTime: formatIST(new Date(b.startTime), 'HH:mm'), loading: false })}
                                     className="p-2 bg-[#0f1117] border border-[#2a2d3e] text-yellow-400 hover:border-yellow-500/50 rounded-lg transition-colors"
                                     title="Reschedule Booking"
                                   >
