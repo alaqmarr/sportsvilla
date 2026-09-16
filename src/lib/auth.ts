@@ -51,7 +51,7 @@ export const authOptions: NextAuthOptions = {
           where: { email: token.email },
         });
         if (!admin || !admin.isActive) {
-          return {}; // Return empty token to invalidate
+          return null; // Return null to invalidate (BUG-01)
         }
       }
       return token;
@@ -75,5 +75,7 @@ export const authOptions: NextAuthOptions = {
       },
     },
   },
-  secret: process.env.NEXTAUTH_SECRET || "fallback_secret_for_development",
+  secret: process.env.NODE_ENV === "production" && !process.env.NEXTAUTH_SECRET 
+    ? (() => { throw new Error("NEXTAUTH_SECRET is required in production"); })() 
+    : process.env.NEXTAUTH_SECRET || "fallback_secret_for_development",
 };

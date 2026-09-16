@@ -5,6 +5,11 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 
 export async function getSettings() {
+  const session = await getServerSession(authOptions);
+  if (!session?.user?.email) {
+    throw new Error("Unauthorized: Admin session required");
+  }
+
   const settings = await prisma.setting.findMany();
   const settingsMap = settings.reduce((acc, s) => {
     acc[s.key] = s.value;

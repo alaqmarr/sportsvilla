@@ -27,8 +27,9 @@ export async function getServerMember() {
     const email = decodedToken.email;
     
     if (phoneNumber) {
+      const cleanMobile = phoneNumber.replace(/^\+91/, '');
       const member = await prisma.member.findFirst({
-        where: { mobile: phoneNumber }
+        where: { mobile: cleanMobile }
       });
       if (member) return member;
     }

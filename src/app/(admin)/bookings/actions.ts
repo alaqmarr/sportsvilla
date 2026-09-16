@@ -10,6 +10,8 @@ import { authOptions } from "@/lib/auth";
 import { sendWhatsAppBookingConfirmedTemplate } from "@/lib/whatsapp";
 import { NfcPaymentService } from "@/services/NfcPaymentService";
 export async function fetchBookableTurfs() {
+  const session = await getServerSession(authOptions);
+  if (!session?.user?.email) throw new Error("Unauthorized");
   return await prisma.turf.findMany({
     where: { 
       bookingPrice: { not: null },
@@ -20,6 +22,8 @@ export async function fetchBookableTurfs() {
 }
 
 export async function fetchBookingsByDate(date: string) {
+  const session = await getServerSession(authOptions);
+  if (!session?.user?.email) throw new Error("Unauthorized");
   const { start: startOfDay, end: endOfDay } = getISTDateBounds(date);
 
   return await prisma.booking.findMany({
@@ -40,11 +44,15 @@ export async function fetchBookingsByDate(date: string) {
 }
 
 export async function searchMember(mobile: string) {
+  const session = await getServerSession(authOptions);
+  if (!session?.user?.email) throw new Error("Unauthorized");
   if (mobile.length !== 10) return [];
   return await prisma.member.findMany({ where: { mobile } });
 }
 
 export async function searchMemberByNfc(cardUid: string) {
+  const session = await getServerSession(authOptions);
+  if (!session?.user?.email) throw new Error("Unauthorized");
   const card = await prisma.nfcCard.findFirst({
     where: { cardUid, status: "ACTIVE" },
     include: { member: true }
@@ -374,7 +382,7 @@ export async function cancelBooking(id: string) {
           data: {
             memberId: booking.memberId,
             points: booking.pointsRedeemed,
-            type: "EARNED",
+            type: "REFUND",
             source: "MANUAL",
             description: "Refund for cancelled booking"
           }
@@ -391,7 +399,7 @@ export async function cancelBooking(id: string) {
           data: {
             memberId: pointsEarnerId,
             points: pointsToReverse,
-            type: 'REDEEMED',
+            type: 'REVERSED',
             source: 'MANUAL',
             description: `Reversed for cancelled booking ${booking.id}`
           }
@@ -546,9 +554,21 @@ export async function updateBookingPayment(id: string, paymentStatus: "PAID" | "
   }
 
   await prisma.$transaction(async (tx) => {
+    const booking = await tx.booking.findUnique({ where: { id }, include: { payments: true } });
+    if (!booking) throw new Error("Booking not found");
+
+    let newAmountDue = booking.amountDue;
+    if (paymentStatus === "PAID") {
+      newAmountDue = 0;
+    } else if (paymentStatus === "UNPAID") {
+      const totalPaid = booking.payments.reduce((sum, p) => sum + p.amount, 0);
+      const netPrice = Math.max(0, booking.price - (booking.discountAmount || 0) - (booking.pointsRedeemed || 0));
+      newAmountDue = Math.max(0, netPrice - totalPaid);
+    }
+
     await tx.booking.update({
       where: { id },
-      data: { paymentStatus }
+      data: { paymentStatus, amountDue: newAmountDue }
     });
 
     await tx.auditLog.create({
@@ -693,7 +713,7 @@ export async function confirmExtension(bookingId: string, allocations: any[]) {
       if (alloc.isSameCourt && alloc.startTime === booking.endTime.toISOString()) {
         const totalPaid = (await tx.payment.findMany({ where: { bookingId } })).reduce((s, p) => s + p.amount, 0);
         const newPrice = booking.price + alloc.price;
-        const netPayable = newPrice - (booking.discountAmount || 0);
+        const netPayable = newPrice - (booking.discountAmount || 0) - (booking.pointsRedeemed || 0);
         const newStatus: "PAID" | "PARTIAL" | "UNPAID" = totalPaid >= netPayable ? 'PAID' : totalPaid > 0 ? 'PARTIAL' : 'UNPAID';
         const amountDue = Math.max(0, netPayable - totalPaid);
 
@@ -782,7 +802,7 @@ export async function addPayment(
       data: {
         bookingId,
         memberId: booking.memberId,
-        gateway: method === "CASH" ? "MANUAL" : "MANUAL",
+        gateway: method === "CASH" ? "MANUAL" : method === "ONLINE" ? "ONLINE" : "WALLET",
         amount,
         status: "SUCCESS",
         metadata: JSON.stringify({ method })
@@ -790,7 +810,7 @@ export async function addPayment(
     });
 
     const totalPaid = booking.payments.reduce((sum, p) => sum + p.amount, 0) + amount;
-    const netPrice = booking.price - booking.discountAmount;
+    const netPrice = booking.price - (booking.discountAmount || 0) - (booking.pointsRedeemed || 0);
     
     let newStatus = "UNPAID";
     if (totalPaid >= netPrice) {
@@ -846,7 +866,7 @@ export async function generateRazorpayPaymentLink(bookingIds: string[]) {
     totalDue,
     `Booking for ${bookings.length} slot(s)`,
     { name: primaryMember.name, contact: primaryMember.mobile ? `+91${primaryMember.mobile}` : "" },
-    bookings.map(b => b.id).join(',').substring(0, 40)
+    bookings.length === 1 ? bookings[0].id : "BATCH_" + require('crypto').createHash('md5').update(bookings.map(b=>b.id).join(',')).digest('hex').substring(0,34)
   );
   
   return shortUrl;
@@ -906,6 +926,8 @@ export async function createAdminPhonePeOrder(bookingIds: string[], origin: stri
   await prisma.transaction.create({
     data: {
       gatewayOrderId: transactionId,
+      bookingId: bookings[0].id,
+      memberId: bookings[0].memberId,
       amount: totalDue,
       currency: "INR",
       gateway: "PHONEPE",
@@ -969,20 +991,28 @@ export async function verifyAdminRazorpayOrder(orderId: string, paymentId: strin
     data: { status: "SUCCESS", gatewayPaymentId: paymentId }
   });
 
+  
+  let remainingAmount = tx.amount;
   for (const bid of bookingIds) {
     const booking = await prisma.booking.findUnique({ where: { id: bid } });
     if (booking && booking.paymentStatus !== 'PAID') {
+      const due = booking.amountDue || booking.price;
+      const amountToApply = Math.min(due, remainingAmount);
+      
       const settleResult = await PaymentService.settleSuccessfulPayment({
         bookingId: bid,
         gateway: 'RAZORPAY',
         gatewayOrderId: orderId,
         gatewayPaymentId: paymentId,
-        paidAmountRupees: booking.amountDue || booking.price,
+        paidAmountRupees: amountToApply,
         metadata: { adminDirect: true }
       });
       if (settleResult.success && settleResult.status === 'PAID') {
         await PaymentService.sendConfirmationAndTickets(settleResult.booking);
       }
+      remainingAmount -= amountToApply;
+      if (remainingAmount <= 0) break;
     }
   }
+
 }
