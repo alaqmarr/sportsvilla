@@ -125,7 +125,7 @@ export default function MyRegistrationsPage() {
               <div className="grid grid-cols-2 gap-y-3 gap-x-2 text-sm text-[var(--play-text-muted)]">
                 <div className="flex items-center gap-1.5">
                   <Calendar size={16} className="text-[var(--play-brand)]" />
-                  <span>{new Date(reg.date).toLocaleDateString()}</span>
+                  <span>{new Date(reg.date).toLocaleDateString('en-IN', { timeZone: 'Asia/Kolkata' })}</span>
                 </div>
                 <div className="flex items-center gap-1.5">
                   <MapPin size={16} className="text-[var(--play-brand)]" />

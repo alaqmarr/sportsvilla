@@ -124,8 +124,8 @@ export default function JoinViaCodePage() {
               <Calendar className="w-5 h-5 text-[var(--play-brand)] shrink-0" />
               <div className="font-medium">
                 {booking.startTime 
-                  ? new Date(booking.startTime).toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' })
-                  : (booking.date ? new Date(booking.date).toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' }) : 'Date not specified')}
+                  ? new Date(booking.startTime).toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' , timeZone: 'Asia/Kolkata'})
+                  : (booking.date ? new Date(booking.date).toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' , timeZone: 'Asia/Kolkata'}) : 'Date not specified')}
               </div>
             </div>
             

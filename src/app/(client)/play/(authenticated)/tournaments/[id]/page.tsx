@@ -197,9 +197,9 @@ export default function TournamentDetailPage() {
                   <div className="flex items-start gap-3">
                     <Calendar className="text-[var(--play-brand)] shrink-0 mt-0.5" size={20} />
                     <div>
-                      <p className="text-[var(--play-text)] font-medium">{new Date(tournament.startDate).toLocaleDateString(undefined, { weekday: 'long', month: 'long', day: 'numeric' })}</p>
+                      <p className="text-[var(--play-text)] font-medium">{new Date(tournament.startDate).toLocaleDateString(undefined, { weekday: 'long', month: 'long', day: 'numeric' , timeZone: 'Asia/Kolkata'})}</p>
                       {tournament.registrationDeadline && (
-                        <p className="text-sm text-[var(--play-error)] mt-1">Deadline: {new Date(tournament.registrationDeadline).toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' })}</p>
+                        <p className="text-sm text-[var(--play-error)] mt-1">Deadline: {new Date(tournament.registrationDeadline).toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' , timeZone: 'Asia/Kolkata'})}</p>
                       )}
                     </div>
                   </div>
@@ -407,6 +407,12 @@ export default function TournamentDetailPage() {
                   if (players[0].name === '' || players[0].mobile === '') {
                     showAlert("Error", 'Please fill details for at least the captain', "error");
                     return;
+                  }
+                  for (const p of players) {
+                    if (p.mobile && !/^\d{10}$/.test(p.mobile)) {
+                      showAlert("Error", `Invalid mobile number for ${p.name || 'player'}. Must be 10 digits.`, "error");
+                      return;
+                    }
                   }
                   setStep(3);
                 }}

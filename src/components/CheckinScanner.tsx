@@ -158,7 +158,11 @@ export default function CheckinScanner({ sports }: { sports: any[] }) {
     try {
        const json = JSON.parse(codeData);
        // Fetch real-time status from DB instead of relying solely on encoded data
-       performSearch(json.id);
+       if (json?.id) {
+         performSearch(json.id);
+       } else {
+         performSearch(codeData);
+       }
     } catch(e) {
        // Legacy ticket ID
        performSearch(codeData);

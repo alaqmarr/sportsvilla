@@ -194,35 +194,7 @@ export class NfcPaymentService {
         };
       }
 
-      // 3. Lookup Booking if bookingId is provided
-      let bookingRecord: any = null;
-      if (params.bookingId) {
-        bookingRecord = await prisma.booking.findUnique({
-          where: { id: params.bookingId },
-          include: {
-            payments: true,
-            tickets: true,
-          },
-        });
-
-        if (!bookingRecord) {
-          return {
-            success: false,
-            error: "BOOKING_NOT_FOUND",
-            code: "BOOKING_NOT_FOUND",
-            message: "Booking record not found.",
-          };
-        }
-
-        if (bookingRecord.status === "CANCELLED") {
-          return {
-            success: false,
-            error: "BOOKING_CANCELLED",
-            code: "BOOKING_CANCELLED",
-            message: "Cannot apply payment to a cancelled booking.",
-          };
-        }
-      }
+      // 3. (Moved booking lookup inside transaction)
 
       // 4. Atomic Execution inside prisma.$transaction
       const transactionResult = await prisma.$transaction(async (tx) => {
@@ -255,6 +227,16 @@ export class NfcPaymentService {
         });
 
         // Booking-specific updates
+        let bookingRecord: any = null;
+        if (params.bookingId) {
+          bookingRecord = await tx.booking.findUnique({
+            where: { id: params.bookingId },
+            include: { payments: true, tickets: true }
+          });
+          if (!bookingRecord) throw new Error("BOOKING_NOT_FOUND");
+          if (bookingRecord.status === "CANCELLED") throw new Error("BOOKING_CANCELLED");
+        }
+
         if (params.bookingId && bookingRecord) {
           // Create Payment record
           await tx.payment.create({
@@ -286,7 +268,7 @@ export class NfcPaymentService {
             0
           );
           const totalPaid = existingPaid + amountRupees;
-          const netPrice = Math.max(0, bookingRecord.price - (bookingRecord.discountAmount || 0));
+          const netPrice = Math.max(0, bookingRecord.price - (bookingRecord.discountAmount || 0) - (bookingRecord.pointsRedeemed || 0));
           const newPaymentStatus =
             totalPaid >= netPrice ? "PAID" : totalPaid > 0 ? "PARTIAL" : "UNPAID";
           const newAmountDue = Math.max(0, netPrice - totalPaid);

@@ -11,10 +11,14 @@ export default function OffersPage() {
   const { member } = usePlayAuth();
   const [copiedCode, setCopiedCode] = useState<string | null>(null);
 
-  const { data } = useSWR(
+  const { data, error } = useSWR(
     member?.id ? `/api/client/v1/offers?memberId=${member.id}` : null,
     fetcher
   );
+
+  if (error || data?.success === false) {
+    return <div className="p-4 text-red-500">{data?.message || error?.message || 'Failed to load offers.'}</div>;
+  }
 
   const announcements = data?.announcements || [];
   const loyalty = data?.loyalty || { currentRank: 'Bronze', nextRank: 'Silver', points: member?.loyaltyPoints || 0, nextRankPoints: 1000 };
@@ -118,7 +122,7 @@ export default function OffersPage() {
                   {details && <p className="text-sm text-[var(--play-text-muted)]">{details}</p>}
                   {coupon.expiryDate && (
                     <p className="text-xs text-red-500 mt-2 font-medium">
-                      Valid until: {new Date(coupon.expiryDate).toLocaleDateString()}
+                      Valid until: {new Date(coupon.expiryDate).toLocaleDateString('en-IN', { timeZone: 'Asia/Kolkata' })}
                     </p>
                   )}
                 </div>
@@ -180,7 +184,7 @@ export default function OffersPage() {
                         )}
                         <h3 className="font-bold text-lg mb-1">{discountTitle}</h3>
                         {details && <p className="text-sm text-[var(--play-text-muted)]">{details}</p>}
-                        <p className="text-xs text-red-500/70 mt-2 font-medium">Expired on {new Date(coupon.expiryDate).toLocaleDateString()}</p>
+                        <p className="text-xs text-red-500/70 mt-2 font-medium">Expired on {new Date(coupon.expiryDate).toLocaleDateString('en-IN', { timeZone: 'Asia/Kolkata' })}</p>
                       </div>
                       <div className="bg-[var(--play-surface-alt)] p-4 border-t sm:border-t-0 sm:border-l border-dashed border-[var(--play-border)] flex flex-row sm:flex-col items-center justify-between sm:justify-center gap-3 w-full sm:w-40 shrink-0">
                         <div className="font-mono font-bold text-[var(--play-text-muted)] bg-[var(--play-bg)] px-3 py-1 rounded border border-[var(--play-border)]">

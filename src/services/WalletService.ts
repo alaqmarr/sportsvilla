@@ -7,12 +7,25 @@ export class WalletService {
    * Returns true if successful, false if insufficient balance.
    */
   static async deductBalance(memberId: string, amount: number): Promise<boolean> {
-    const res = await prisma.$executeRaw`
-      UPDATE Member 
-      SET walletBalance = walletBalance - ${amount} 
-      WHERE id = ${memberId} AND walletBalance >= ${amount}
-    `;
-    return res > 0;
+    return await prisma.$transaction(async (tx) => {
+      const res = await tx.$executeRaw`
+        UPDATE Member 
+        SET walletBalance = walletBalance - ${amount} 
+        WHERE id = ${memberId} AND walletBalance >= ${amount}
+      `;
+      if (res > 0) {
+        await tx.walletTransaction.create({
+          data: {
+            memberId,
+            amount,
+            type: 'DEBIT',
+            description: 'System deduction'
+          }
+        });
+        return true;
+      }
+      return false;
+    });
   }
 
   /**
@@ -20,11 +33,25 @@ export class WalletService {
    * Returns true if successful, false if insufficient points.
    */
   static async deductPoints(memberId: string, points: number): Promise<boolean> {
-    const res = await prisma.$executeRaw`
-      UPDATE Member 
-      SET loyaltyPoints = loyaltyPoints - ${points} 
-      WHERE id = ${memberId} AND loyaltyPoints >= ${points}
-    `;
-    return res > 0;
+    return await prisma.$transaction(async (tx) => {
+      const res = await tx.$executeRaw`
+        UPDATE Member 
+        SET loyaltyPoints = loyaltyPoints - ${points} 
+        WHERE id = ${memberId} AND loyaltyPoints >= ${points}
+      `;
+      if (res > 0) {
+        await tx.loyaltyHistory.create({
+          data: {
+            memberId,
+            points,
+            type: 'REDEEMED',
+            source: 'BOOKING',
+            description: 'System points deduction'
+          }
+        });
+        return true;
+      }
+      return false;
+    });
   }
 }

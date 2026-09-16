@@ -212,7 +212,16 @@ export class NfcCheckinService {
 
         if (isWithinWindow && validTicket) {
           // Execute booking check-in inside transaction
+          let ticketAlreadyUsed = false;
           await prisma.$transaction(async (tx) => {
+            const freshTicket = await tx.ticket.findUnique({
+              where: { id: validTicket.id }
+            });
+            if (!freshTicket || freshTicket.status !== "VALID") {
+              ticketAlreadyUsed = true;
+              return;
+            }
+
             // Update ticket
             await tx.ticket.update({
               where: { id: validTicket.id },
@@ -270,6 +279,8 @@ export class NfcCheckinService {
               },
             });
           });
+
+          if (ticketAlreadyUsed) continue;
 
           await bumpSyncTimestamp("nfc_checkin");
 

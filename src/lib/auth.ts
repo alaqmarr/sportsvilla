@@ -51,7 +51,7 @@ export const authOptions: NextAuthOptions = {
           where: { email: token.email },
         });
         if (!admin || !admin.isActive) {
-          return null; // Return null to invalidate (BUG-01)
+          return null as any; // Return null to invalidate (BUG-01)
         }
       }
       return token;

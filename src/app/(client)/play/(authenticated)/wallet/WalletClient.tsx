@@ -78,7 +78,7 @@ export function WalletClient({ profile, transactions }: { profile: any, transact
                 </div>
                 <div>
                   <h4 className="font-semibold text-sm text-[var(--play-text)]">{t.description}</h4>
-                  <p className="text-xs text-[var(--play-text-muted)]">{new Date(t.createdAt).toLocaleDateString()}</p>
+                  <p className="text-xs text-[var(--play-text-muted)]">{new Date(t.createdAt).toLocaleDateString('en-IN', { timeZone: 'Asia/Kolkata' })}</p>
                 </div>
               </div>
               <div className={`font-bold ${t.type === 'CREDIT' ? 'text-emerald-500' : 'text-red-500'}`}>

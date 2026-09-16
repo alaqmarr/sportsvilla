@@ -87,7 +87,7 @@ export default function ProfilePage() {
               </div>
               <div className="flex items-center justify-center sm:justify-start gap-2 text-sm text-[var(--play-text-muted)]">
                 <Calendar className="w-4 h-4" />
-                <span>{profile.dateOfBirth ? new Date(profile.dateOfBirth).toLocaleDateString() : 'DOB not set'}</span>
+                <span>{profile.dateOfBirth ? new Date(profile.dateOfBirth).toLocaleDateString('en-IN', { timeZone: 'Asia/Kolkata' }) : 'DOB not set'}</span>
               </div>
             </div>
           </div>

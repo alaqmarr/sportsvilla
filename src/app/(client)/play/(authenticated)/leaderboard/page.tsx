@@ -12,6 +12,10 @@ export default function LeaderboardPage() {
   const [filter, setFilter] = useState('This Month');
   const { data, error } = useSWR(`/api/client/v1/leaderboard?filter=${encodeURIComponent(filter)}`, fetcher);
 
+  if (error || data?.success === false) {
+    return <div className="p-4 text-red-500">{data?.message || error?.message || 'Failed to load leaderboard.'}</div>;
+  }
+
   const leaderboard = data?.leaderboard || [];
   const userRank = data?.userRank || null;
 

@@ -90,6 +90,10 @@ export default function ManageGamePage() {
 
   const handleSendInvite = async () => {
     if (!mobile) return;
+    if (!/^\d{10}$/.test(mobile)) {
+      showAlert('Error', 'Invalid mobile number. Must be 10 digits.', 'error');
+      return;
+    }
     setIsInviting(true);
     try {
       const inviteRes = await fetch(`/api/client/v1/bookings/${id}/invite-wa`, {
