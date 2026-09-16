@@ -95,6 +95,7 @@ export class AvailabilityService {
         name: turf.name,
         iconPath: turf.iconPath,
         capacityPerSlot: capacity,
+        bookingPrice: price,
         slots
       };
     });

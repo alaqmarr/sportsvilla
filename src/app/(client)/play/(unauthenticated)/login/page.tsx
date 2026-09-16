@@ -101,9 +101,7 @@ export default function LoginPage() {
         setStep('REGISTER');
       } else {
         toast.success('Logged in successfully!');
-        router.push('/play/dashboard'); // Ensure pushing to right location
-        // Wait for page transition or redirect to complete so we don't flash content
-        await new Promise(r => setTimeout(r, 2000));
+        window.location.href = '/play/dashboard';
       }
     } catch (error) {
       toast.error(error instanceof Error ? error.message : 'Failed to verify OTP');
@@ -133,7 +131,7 @@ export default function LoginPage() {
       }
 
       toast.success('Account created successfully!');
-      router.push('/play/dashboard');
+      window.location.href = '/play/dashboard';
     } catch (error) {
       toast.error(error instanceof Error ? error.message : 'Registration failed');
     } finally {

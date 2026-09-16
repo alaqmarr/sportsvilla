@@ -479,7 +479,7 @@ export function BookCourtClient({ member, sports, availability, initialDateStr, 
                       key={turf.id}
                       id={turf.id}
                       name={turf.name}
-                      price={turf.slots?.[0]?.price || 0}
+                      price={turf.bookingPrice || 0}
                       isSelected={selectedTurf === turf.id}
                       onSelect={(id) => setSelectedTurf(selectedTurf === id ? null : id)}
                       icon={turf.iconPath ? <img src={turf.iconPath} alt={turf.name} className="w-8 h-8 object-contain" /> : undefined}
