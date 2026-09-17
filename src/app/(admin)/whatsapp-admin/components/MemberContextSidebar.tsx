@@ -100,7 +100,12 @@ export function MemberContextSidebar({
           memberContext.members.map((member: any, i: number) => {
             const activePlan = member.memberships?.find((m: any) => m.status === "ACTIVE");
             return (
-              <Card key={i} variant="default" className="p-4 space-y-4">
+              <Card 
+                key={i} 
+                variant="default" 
+                className="p-4 space-y-4 animate-in fade-in slide-in-from-right-4 duration-500 shadow-sm"
+                style={{ animationDelay: `${i * 100}ms`, animationFillMode: 'both' }}
+              >
                 <div className="flex justify-between items-start">
                   <div>
                     <h3 className="font-bold text-sv-text text-sm">{member.name}</h3>
@@ -111,36 +116,33 @@ export function MemberContextSidebar({
                   </Badge>
                 </div>
                 
-                <div className="grid grid-cols-2 gap-2">
-                  <div className="bg-sv-bg rounded-sv-sm p-2 text-center border border-sv-border">
-                    <p className="text-[10px] text-sv-text-muted font-semibold uppercase tracking-wider mb-0.5">Wallet</p>
-                    <p className="text-sm font-bold text-sv-status-success">
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="bg-gradient-to-br from-sv-bg to-sv-surface-hover rounded-xl p-3 border border-sv-border shadow-sm flex flex-col justify-center items-center">
+                    <p className="text-[10px] text-sv-text-muted font-bold uppercase tracking-wider mb-1">Wallet</p>
+                    <p className="text-lg font-black text-sv-status-success tracking-tight">
                       ₹{((member.walletBalance || 0) / 100).toFixed(0)}
                     </p>
                   </div>
-                  <div className="bg-sv-bg rounded-sv-sm p-2 text-center border border-sv-border">
-                    <p className="text-[10px] text-sv-text-muted font-semibold uppercase tracking-wider mb-0.5">Loyalty</p>
-                    <p className="text-sm font-bold text-sv-brand">
-                      {member.loyaltyPoints || 0} pts
+                  <div className="bg-gradient-to-br from-sv-bg to-sv-surface-hover rounded-xl p-3 border border-sv-border shadow-sm flex flex-col justify-center items-center">
+                    <p className="text-[10px] text-sv-text-muted font-bold uppercase tracking-wider mb-1">Loyalty</p>
+                    <p className="text-lg font-black text-sv-brand tracking-tight">
+                      {member.loyaltyPoints || 0}
                     </p>
                   </div>
                 </div>
 
                 {activePlan && (
-                  <div className="pt-2 border-t border-sv-border">
-                    <p className="text-[10px] font-bold text-sv-text-muted uppercase tracking-wider mb-1">
-                      Membership Status
-                    </p>
-                    <div className="bg-sv-bg border border-sv-brand/30 rounded-sv-md p-2 flex items-center justify-between">
+                  <div className="pt-3 border-t border-sv-border mt-3">
+                    <div className="bg-gradient-to-r from-sv-brand/10 to-transparent border-l-4 border-l-sv-brand rounded-r-xl p-3 flex items-center justify-between shadow-sm">
                       <div>
-                        <p className="text-xs font-bold text-sv-text">
+                        <p className="text-sm font-extrabold text-sv-text mb-0.5 tracking-tight">
                           {activePlan.membershipPlan?.name || "Member Plan"}
                         </p>
-                        <p className="text-[10px] text-sv-text-muted">
-                          Valid until {new Date(activePlan.endDate).toLocaleDateString("en-IN")}
+                        <p className="text-[11px] font-medium text-sv-text-muted">
+                          Expires: {new Date(activePlan.endDate).toLocaleDateString("en-IN", { month: 'short', day: 'numeric', year: 'numeric'})}
                         </p>
                       </div>
-                      <Badge variant="success" size="sm">ACTIVE</Badge>
+                      <Badge variant="success" size="sm" className="shadow-sm">ACTIVE</Badge>
                     </div>
                   </div>
                 )}

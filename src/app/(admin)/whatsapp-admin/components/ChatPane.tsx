@@ -180,17 +180,22 @@ export function ChatPane({
         </div>
       </header>
 
-      {/* Chat Body */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-4 styled-scrollbar flex flex-col relative"
-        style={{
-          backgroundImage: 'url("https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png")',
-          backgroundSize: '400px',
-          backgroundRepeat: 'repeat',
-          opacity: 0.95
-        }}
-      >
-        <div className="absolute inset-0 bg-[#E5DDD5]/40 dark:bg-[#0b141a]/80 pointer-events-none mix-blend-overlay"></div>
-        <div className="relative z-10 flex flex-col space-y-4">
+      {/* Chat Body Wrapper */}
+      <div className="flex-1 relative overflow-hidden flex flex-col">
+        {/* Static Background Layer */}
+        <div 
+          className="absolute inset-0 pointer-events-none z-0" 
+          style={{
+            backgroundImage: 'url("https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png")',
+            backgroundSize: '400px',
+            backgroundRepeat: 'repeat',
+            opacity: 0.95
+          }}
+        />
+        <div className="absolute inset-0 bg-[#E5DDD5]/40 dark:bg-[#0b141a]/80 pointer-events-none mix-blend-overlay z-0" />
+
+        {/* Scrolling Content */}
+        <div className="flex-1 overflow-y-auto p-4 flex flex-col space-y-4 styled-scrollbar relative z-10">
         {chatMessages.length === 0 ? (
           <div className="m-auto bg-white/90 p-4 rounded-xl shadow-sm text-center">
             <h4 className="font-bold text-sv-text mb-1">No messages yet</h4>
@@ -209,13 +214,13 @@ export function ChatPane({
               return (
                 <React.Fragment key={idx}>
                   {showDate && (
-                    <div className="flex justify-center my-2">
+                    <div className="flex justify-center my-2 animate-in fade-in slide-in-from-bottom-2 duration-300">
                       <span className="bg-white/90 dark:bg-sv-surface-raised px-3 py-1 rounded-lg shadow-sm text-[11px] font-medium text-sv-text-muted uppercase tracking-wider">
                         {dateStr}
                       </span>
                     </div>
                   )}
-                  <div className={`flex flex-col group ${isOutgoing ? "items-end" : "items-start"}`}>
+                  <div className={`flex flex-col group animate-in fade-in slide-in-from-bottom-2 duration-300 ${isOutgoing ? "items-end" : "items-start"}`}>
                 <div className="flex items-end gap-1.5 max-w-xl">
                   {!isOutgoing && (
                     <button
@@ -277,8 +282,8 @@ export function ChatPane({
             );
           })
           })()
-        )}
-        <div ref={messagesEndRef} className="h-4" />
+          )}
+          <div ref={messagesEndRef} className="h-4" />
         </div>
       </div>
 

@@ -1,7 +1,7 @@
 import React from "react";
 import { FaWhatsapp } from "react-icons/fa";
 import { FiSearch } from "react-icons/fi";
-import { Badge } from "@/components/admin/ui";
+import { Badge, Avatar } from "@/components/admin/ui";
 
 export function ConversationList({
   conversations,
@@ -36,7 +36,7 @@ export function ConversationList({
           <input
             type="text"
             placeholder="Search conversations..."
-            className="w-full bg-sv-bg border border-sv-border rounded-sv-md pl-9 pr-3 py-2 text-sm focus:outline-none focus:border-sv-brand transition-colors text-sv-text placeholder:text-sv-text-muted"
+            className="w-full bg-sv-bg border border-sv-border rounded-xl pl-9 pr-3 py-2.5 text-sm focus:outline-none focus:border-sv-brand focus:ring-1 focus:ring-sv-brand transition-all text-sv-text placeholder:text-sv-text-muted shadow-sm"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
@@ -49,45 +49,47 @@ export function ConversationList({
             No conversations found.
           </div>
         ) : (
-          filteredConversations.map((conv) => {
+          filteredConversations.map((conv, idx) => {
             const isSelected = selectedPhone === conv.phoneNumber;
             return (
               <button
                 key={conv.phoneNumber}
                 onClick={() => setSelectedPhone(conv.phoneNumber)}
-                className={`w-full text-left p-4 transition-all flex flex-col gap-1.5 border-b border-b-sv-border border-l-4 ${
+                className={`w-full text-left p-3 transition-all flex items-center gap-3 border-b border-b-sv-border border-l-4 animate-in fade-in slide-in-from-right-4 duration-300 ${
                   isSelected 
                     ? "bg-sv-surface-hover border-l-sv-brand" 
                     : "border-l-transparent hover:bg-sv-surface-hover"
                 }`}
+                style={{ animationDelay: `${Math.min(idx * 50, 500)}ms`, animationFillMode: 'both' }}
               >
-                <div className="flex items-center justify-between gap-2">
-                  <span className="font-bold text-sv-text text-sm truncate">
-                    {conv.memberName || `+91 ${conv.phoneNumber}`}
-                  </span>
-                  <div className="flex items-center gap-1.5 shrink-0">
+                <Avatar name={conv.memberName || "User"} size="md" className="shrink-0" />
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center justify-between gap-2 mb-0.5">
+                    <span className={`font-bold text-sm truncate ${isSelected ? 'text-sv-brand' : 'text-sv-text'}`}>
+                      {conv.memberName || `+91 ${conv.phoneNumber}`}
+                    </span>
+                    <span className={`text-[11px] shrink-0 font-medium ${conv.unreadCount > 0 ? 'text-sv-status-success' : 'text-sv-text-muted'}`}>
+                      {(() => {
+                        const msgDate = new Date(conv.lastMessageTime);
+                        const today = new Date();
+                        const isToday = msgDate.getDate() === today.getDate() && msgDate.getMonth() === today.getMonth();
+                        if (isToday) {
+                          return msgDate.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' });
+                        }
+                        return msgDate.toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+                      })()}
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-between gap-2">
+                    <p className={`text-[13px] truncate flex-1 ${conv.unreadCount > 0 ? 'font-semibold text-sv-text' : 'text-sv-text-muted'}`}>
+                      {conv.lastMessage || "Media/Template message"}
+                    </p>
                     {conv.unreadCount > 0 && (
-                      <Badge variant="success" size="sm" dot>
-                        {conv.unreadCount} New
-                      </Badge>
+                      <span className="bg-sv-status-success text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full shrink-0 min-w-[20px] text-center">
+                        {conv.unreadCount}
+                      </span>
                     )}
                   </div>
-                </div>
-                <div className="flex items-center justify-between gap-2 opacity-80 mt-1">
-                  <p className="text-[13px] text-sv-text-muted truncate flex-1">
-                    {conv.lastMessage || "Media/Template message"}
-                  </p>
-                  <span className="text-[11px] text-sv-text-muted shrink-0 font-medium">
-                    {(() => {
-                      const msgDate = new Date(conv.lastMessageTime);
-                      const today = new Date();
-                      const isToday = msgDate.getDate() === today.getDate() && msgDate.getMonth() === today.getMonth();
-                      if (isToday) {
-                        return msgDate.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' });
-                      }
-                      return msgDate.toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
-                    })()}
-                  </span>
                 </div>
               </button>
             );
