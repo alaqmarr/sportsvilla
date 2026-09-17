@@ -525,6 +525,42 @@ exports.Prisma.NfcTransactionScalarFieldEnum = {
   createdAt: 'createdAt'
 };
 
+exports.Prisma.TvScreenGroupScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.TvScreenScalarFieldEnum = {
+  id: 'id',
+  screenGroupId: 'screenGroupId',
+  label: 'label',
+  pairingCode: 'pairingCode',
+  pairingExpiresAt: 'pairingExpiresAt',
+  deviceToken: 'deviceToken',
+  lastHeartbeatAt: 'lastHeartbeatAt',
+  currentItemId: 'currentItemId',
+  cacheUsedBytes: 'cacheUsedBytes',
+  appVersion: 'appVersion',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.TvContentItemScalarFieldEnum = {
+  id: 'id',
+  screenGroupId: 'screenGroupId',
+  type: 'type',
+  r2Key: 'r2Key',
+  checksum: 'checksum',
+  durationSeconds: 'durationSeconds',
+  validFrom: 'validFrom',
+  validTo: 'validTo',
+  sortOrder: 'sortOrder',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -571,7 +607,10 @@ exports.Prisma.ModelName = {
   Banner: 'Banner',
   UserSportStat: 'UserSportStat',
   NfcCard: 'NfcCard',
-  NfcTransaction: 'NfcTransaction'
+  NfcTransaction: 'NfcTransaction',
+  TvScreenGroup: 'TvScreenGroup',
+  TvScreen: 'TvScreen',
+  TvContentItem: 'TvContentItem'
 };
 
 /**

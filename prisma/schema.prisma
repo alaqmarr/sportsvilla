@@ -600,3 +600,53 @@ model NfcTransaction {
   @@index([createdAt])
 }
 
+
+
+model TvScreenGroup {
+  id           String          @id @default(cuid())
+  name         String
+  createdAt    DateTime        @default(now())
+  updatedAt    DateTime        @updatedAt
+  screens      TvScreen[]
+  contentItems TvContentItem[]
+}
+
+model TvScreen {
+  id              String        @id @default(cuid())
+  screenGroupId   String
+  screenGroup     TvScreenGroup @relation(fields: [screenGroupId], references: [id], onDelete: Cascade)
+  label           String
+  pairingCode     String?       // nullable, one-time code
+  pairingExpiresAt DateTime?    // expiration for the code
+  deviceToken     String?       // nullable, hashed token for device auth
+  lastHeartbeatAt DateTime?
+  
+  // Telemetry fields from heartbeat
+  currentItemId   String?
+  cacheUsedBytes  BigInt?       // Using BigInt for file sizes
+  appVersion      String?
+
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  @@index([screenGroupId])
+  @@index([pairingCode])
+}
+
+model TvContentItem {
+  id              String        @id @default(cuid())
+  screenGroupId   String
+  screenGroup     TvScreenGroup @relation(fields: [screenGroupId], references: [id], onDelete: Cascade)
+  type            String        // "image" | "video"
+  r2Key           String
+  checksum        String        // sha256 checksum of file
+  durationSeconds Int?          // null for video = play to completion
+  validFrom       DateTime?
+  validTo         DateTime?
+  sortOrder       Int           @default(0)
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  @@index([screenGroupId])
+}
+

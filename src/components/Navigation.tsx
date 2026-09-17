@@ -231,6 +231,12 @@ export function Navigation({
         ],
       },
       {
+        title: "TV Signage",
+        links: [
+          { href: "/tv/screens", label: "TV Screens", icon: <FiRadio /> },
+        ],
+      },
+      {
         title: "Settings & Tools",
         links: [
           { href: "/sports", label: "Sports Catalog", icon: <FiActivity /> },

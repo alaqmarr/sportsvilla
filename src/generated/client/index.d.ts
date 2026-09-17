@@ -188,6 +188,21 @@ export type NfcCard = $Result.DefaultSelection<Prisma.$NfcCardPayload>
  * 
  */
 export type NfcTransaction = $Result.DefaultSelection<Prisma.$NfcTransactionPayload>
+/**
+ * Model TvScreenGroup
+ * 
+ */
+export type TvScreenGroup = $Result.DefaultSelection<Prisma.$TvScreenGroupPayload>
+/**
+ * Model TvScreen
+ * 
+ */
+export type TvScreen = $Result.DefaultSelection<Prisma.$TvScreenPayload>
+/**
+ * Model TvContentItem
+ * 
+ */
+export type TvContentItem = $Result.DefaultSelection<Prisma.$TvContentItemPayload>
 
 /**
  * ##  Prisma Client ʲˢ
@@ -659,6 +674,36 @@ export class PrismaClient<
     * ```
     */
   get nfcTransaction(): Prisma.NfcTransactionDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.tvScreenGroup`: Exposes CRUD operations for the **TvScreenGroup** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more TvScreenGroups
+    * const tvScreenGroups = await prisma.tvScreenGroup.findMany()
+    * ```
+    */
+  get tvScreenGroup(): Prisma.TvScreenGroupDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.tvScreen`: Exposes CRUD operations for the **TvScreen** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more TvScreens
+    * const tvScreens = await prisma.tvScreen.findMany()
+    * ```
+    */
+  get tvScreen(): Prisma.TvScreenDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.tvContentItem`: Exposes CRUD operations for the **TvContentItem** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more TvContentItems
+    * const tvContentItems = await prisma.tvContentItem.findMany()
+    * ```
+    */
+  get tvContentItem(): Prisma.TvContentItemDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -1127,7 +1172,10 @@ export namespace Prisma {
     Banner: 'Banner',
     UserSportStat: 'UserSportStat',
     NfcCard: 'NfcCard',
-    NfcTransaction: 'NfcTransaction'
+    NfcTransaction: 'NfcTransaction',
+    TvScreenGroup: 'TvScreenGroup',
+    TvScreen: 'TvScreen',
+    TvContentItem: 'TvContentItem'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -1143,7 +1191,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "admin" | "setting" | "familyGroup" | "member" | "loyaltyHistory" | "sport" | "turf" | "turfSport" | "membershipPlan" | "memberMembership" | "attendance" | "booking" | "bookingParticipant" | "payment" | "transaction" | "displaySession" | "ticket" | "otp" | "tournament" | "tournamentRegistration" | "tournamentPlayer" | "walletTransaction" | "coupon" | "couponAssignment" | "couponUsage" | "loyaltyTrigger" | "loyaltyAchievement" | "appAnnouncement" | "appVersion" | "lastUpdate" | "auditLog" | "banner" | "userSportStat" | "nfcCard" | "nfcTransaction"
+      modelProps: "admin" | "setting" | "familyGroup" | "member" | "loyaltyHistory" | "sport" | "turf" | "turfSport" | "membershipPlan" | "memberMembership" | "attendance" | "booking" | "bookingParticipant" | "payment" | "transaction" | "displaySession" | "ticket" | "otp" | "tournament" | "tournamentRegistration" | "tournamentPlayer" | "walletTransaction" | "coupon" | "couponAssignment" | "couponUsage" | "loyaltyTrigger" | "loyaltyAchievement" | "appAnnouncement" | "appVersion" | "lastUpdate" | "auditLog" | "banner" | "userSportStat" | "nfcCard" | "nfcTransaction" | "tvScreenGroup" | "tvScreen" | "tvContentItem"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -3737,6 +3785,228 @@ export namespace Prisma {
           }
         }
       }
+      TvScreenGroup: {
+        payload: Prisma.$TvScreenGroupPayload<ExtArgs>
+        fields: Prisma.TvScreenGroupFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.TvScreenGroupFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TvScreenGroupPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.TvScreenGroupFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TvScreenGroupPayload>
+          }
+          findFirst: {
+            args: Prisma.TvScreenGroupFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TvScreenGroupPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.TvScreenGroupFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TvScreenGroupPayload>
+          }
+          findMany: {
+            args: Prisma.TvScreenGroupFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TvScreenGroupPayload>[]
+          }
+          create: {
+            args: Prisma.TvScreenGroupCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TvScreenGroupPayload>
+          }
+          createMany: {
+            args: Prisma.TvScreenGroupCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.TvScreenGroupCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TvScreenGroupPayload>[]
+          }
+          delete: {
+            args: Prisma.TvScreenGroupDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TvScreenGroupPayload>
+          }
+          update: {
+            args: Prisma.TvScreenGroupUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TvScreenGroupPayload>
+          }
+          deleteMany: {
+            args: Prisma.TvScreenGroupDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.TvScreenGroupUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.TvScreenGroupUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TvScreenGroupPayload>[]
+          }
+          upsert: {
+            args: Prisma.TvScreenGroupUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TvScreenGroupPayload>
+          }
+          aggregate: {
+            args: Prisma.TvScreenGroupAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateTvScreenGroup>
+          }
+          groupBy: {
+            args: Prisma.TvScreenGroupGroupByArgs<ExtArgs>
+            result: $Utils.Optional<TvScreenGroupGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.TvScreenGroupCountArgs<ExtArgs>
+            result: $Utils.Optional<TvScreenGroupCountAggregateOutputType> | number
+          }
+        }
+      }
+      TvScreen: {
+        payload: Prisma.$TvScreenPayload<ExtArgs>
+        fields: Prisma.TvScreenFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.TvScreenFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TvScreenPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.TvScreenFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TvScreenPayload>
+          }
+          findFirst: {
+            args: Prisma.TvScreenFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TvScreenPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.TvScreenFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TvScreenPayload>
+          }
+          findMany: {
+            args: Prisma.TvScreenFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TvScreenPayload>[]
+          }
+          create: {
+            args: Prisma.TvScreenCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TvScreenPayload>
+          }
+          createMany: {
+            args: Prisma.TvScreenCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.TvScreenCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TvScreenPayload>[]
+          }
+          delete: {
+            args: Prisma.TvScreenDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TvScreenPayload>
+          }
+          update: {
+            args: Prisma.TvScreenUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TvScreenPayload>
+          }
+          deleteMany: {
+            args: Prisma.TvScreenDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.TvScreenUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.TvScreenUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TvScreenPayload>[]
+          }
+          upsert: {
+            args: Prisma.TvScreenUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TvScreenPayload>
+          }
+          aggregate: {
+            args: Prisma.TvScreenAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateTvScreen>
+          }
+          groupBy: {
+            args: Prisma.TvScreenGroupByArgs<ExtArgs>
+            result: $Utils.Optional<TvScreenGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.TvScreenCountArgs<ExtArgs>
+            result: $Utils.Optional<TvScreenCountAggregateOutputType> | number
+          }
+        }
+      }
+      TvContentItem: {
+        payload: Prisma.$TvContentItemPayload<ExtArgs>
+        fields: Prisma.TvContentItemFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.TvContentItemFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TvContentItemPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.TvContentItemFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TvContentItemPayload>
+          }
+          findFirst: {
+            args: Prisma.TvContentItemFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TvContentItemPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.TvContentItemFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TvContentItemPayload>
+          }
+          findMany: {
+            args: Prisma.TvContentItemFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TvContentItemPayload>[]
+          }
+          create: {
+            args: Prisma.TvContentItemCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TvContentItemPayload>
+          }
+          createMany: {
+            args: Prisma.TvContentItemCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.TvContentItemCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TvContentItemPayload>[]
+          }
+          delete: {
+            args: Prisma.TvContentItemDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TvContentItemPayload>
+          }
+          update: {
+            args: Prisma.TvContentItemUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TvContentItemPayload>
+          }
+          deleteMany: {
+            args: Prisma.TvContentItemDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.TvContentItemUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.TvContentItemUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TvContentItemPayload>[]
+          }
+          upsert: {
+            args: Prisma.TvContentItemUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TvContentItemPayload>
+          }
+          aggregate: {
+            args: Prisma.TvContentItemAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateTvContentItem>
+          }
+          groupBy: {
+            args: Prisma.TvContentItemGroupByArgs<ExtArgs>
+            result: $Utils.Optional<TvContentItemGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.TvContentItemCountArgs<ExtArgs>
+            result: $Utils.Optional<TvContentItemCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -3880,6 +4150,9 @@ export namespace Prisma {
     userSportStat?: UserSportStatOmit
     nfcCard?: NfcCardOmit
     nfcTransaction?: NfcTransactionOmit
+    tvScreenGroup?: TvScreenGroupOmit
+    tvScreen?: TvScreenOmit
+    tvContentItem?: TvContentItemOmit
   }
 
   /* Types for Logging */
@@ -4585,6 +4858,46 @@ export namespace Prisma {
    */
   export type NfcCardCountOutputTypeCountTransactionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: NfcTransactionWhereInput
+  }
+
+
+  /**
+   * Count Type TvScreenGroupCountOutputType
+   */
+
+  export type TvScreenGroupCountOutputType = {
+    screens: number
+    contentItems: number
+  }
+
+  export type TvScreenGroupCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    screens?: boolean | TvScreenGroupCountOutputTypeCountScreensArgs
+    contentItems?: boolean | TvScreenGroupCountOutputTypeCountContentItemsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * TvScreenGroupCountOutputType without action
+   */
+  export type TvScreenGroupCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TvScreenGroupCountOutputType
+     */
+    select?: TvScreenGroupCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * TvScreenGroupCountOutputType without action
+   */
+  export type TvScreenGroupCountOutputTypeCountScreensArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: TvScreenWhereInput
+  }
+
+  /**
+   * TvScreenGroupCountOutputType without action
+   */
+  export type TvScreenGroupCountOutputTypeCountContentItemsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: TvContentItemWhereInput
   }
 
 
@@ -45184,6 +45497,3457 @@ export namespace Prisma {
 
 
   /**
+   * Model TvScreenGroup
+   */
+
+  export type AggregateTvScreenGroup = {
+    _count: TvScreenGroupCountAggregateOutputType | null
+    _min: TvScreenGroupMinAggregateOutputType | null
+    _max: TvScreenGroupMaxAggregateOutputType | null
+  }
+
+  export type TvScreenGroupMinAggregateOutputType = {
+    id: string | null
+    name: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type TvScreenGroupMaxAggregateOutputType = {
+    id: string | null
+    name: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type TvScreenGroupCountAggregateOutputType = {
+    id: number
+    name: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type TvScreenGroupMinAggregateInputType = {
+    id?: true
+    name?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type TvScreenGroupMaxAggregateInputType = {
+    id?: true
+    name?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type TvScreenGroupCountAggregateInputType = {
+    id?: true
+    name?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type TvScreenGroupAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which TvScreenGroup to aggregate.
+     */
+    where?: TvScreenGroupWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of TvScreenGroups to fetch.
+     */
+    orderBy?: TvScreenGroupOrderByWithRelationInput | TvScreenGroupOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: TvScreenGroupWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` TvScreenGroups from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` TvScreenGroups.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned TvScreenGroups
+    **/
+    _count?: true | TvScreenGroupCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: TvScreenGroupMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: TvScreenGroupMaxAggregateInputType
+  }
+
+  export type GetTvScreenGroupAggregateType<T extends TvScreenGroupAggregateArgs> = {
+        [P in keyof T & keyof AggregateTvScreenGroup]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateTvScreenGroup[P]>
+      : GetScalarType<T[P], AggregateTvScreenGroup[P]>
+  }
+
+
+
+
+  export type TvScreenGroupGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: TvScreenGroupWhereInput
+    orderBy?: TvScreenGroupOrderByWithAggregationInput | TvScreenGroupOrderByWithAggregationInput[]
+    by: TvScreenGroupScalarFieldEnum[] | TvScreenGroupScalarFieldEnum
+    having?: TvScreenGroupScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: TvScreenGroupCountAggregateInputType | true
+    _min?: TvScreenGroupMinAggregateInputType
+    _max?: TvScreenGroupMaxAggregateInputType
+  }
+
+  export type TvScreenGroupGroupByOutputType = {
+    id: string
+    name: string
+    createdAt: Date
+    updatedAt: Date
+    _count: TvScreenGroupCountAggregateOutputType | null
+    _min: TvScreenGroupMinAggregateOutputType | null
+    _max: TvScreenGroupMaxAggregateOutputType | null
+  }
+
+  type GetTvScreenGroupGroupByPayload<T extends TvScreenGroupGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<TvScreenGroupGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof TvScreenGroupGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], TvScreenGroupGroupByOutputType[P]>
+            : GetScalarType<T[P], TvScreenGroupGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type TvScreenGroupSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    screens?: boolean | TvScreenGroup$screensArgs<ExtArgs>
+    contentItems?: boolean | TvScreenGroup$contentItemsArgs<ExtArgs>
+    _count?: boolean | TvScreenGroupCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["tvScreenGroup"]>
+
+  export type TvScreenGroupSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["tvScreenGroup"]>
+
+  export type TvScreenGroupSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["tvScreenGroup"]>
+
+  export type TvScreenGroupSelectScalar = {
+    id?: boolean
+    name?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type TvScreenGroupOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "createdAt" | "updatedAt", ExtArgs["result"]["tvScreenGroup"]>
+  export type TvScreenGroupInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    screens?: boolean | TvScreenGroup$screensArgs<ExtArgs>
+    contentItems?: boolean | TvScreenGroup$contentItemsArgs<ExtArgs>
+    _count?: boolean | TvScreenGroupCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type TvScreenGroupIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type TvScreenGroupIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+
+  export type $TvScreenGroupPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "TvScreenGroup"
+    objects: {
+      screens: Prisma.$TvScreenPayload<ExtArgs>[]
+      contentItems: Prisma.$TvContentItemPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      name: string
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["tvScreenGroup"]>
+    composites: {}
+  }
+
+  type TvScreenGroupGetPayload<S extends boolean | null | undefined | TvScreenGroupDefaultArgs> = $Result.GetResult<Prisma.$TvScreenGroupPayload, S>
+
+  type TvScreenGroupCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<TvScreenGroupFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: TvScreenGroupCountAggregateInputType | true
+    }
+
+  export interface TvScreenGroupDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['TvScreenGroup'], meta: { name: 'TvScreenGroup' } }
+    /**
+     * Find zero or one TvScreenGroup that matches the filter.
+     * @param {TvScreenGroupFindUniqueArgs} args - Arguments to find a TvScreenGroup
+     * @example
+     * // Get one TvScreenGroup
+     * const tvScreenGroup = await prisma.tvScreenGroup.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends TvScreenGroupFindUniqueArgs>(args: SelectSubset<T, TvScreenGroupFindUniqueArgs<ExtArgs>>): Prisma__TvScreenGroupClient<$Result.GetResult<Prisma.$TvScreenGroupPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one TvScreenGroup that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {TvScreenGroupFindUniqueOrThrowArgs} args - Arguments to find a TvScreenGroup
+     * @example
+     * // Get one TvScreenGroup
+     * const tvScreenGroup = await prisma.tvScreenGroup.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends TvScreenGroupFindUniqueOrThrowArgs>(args: SelectSubset<T, TvScreenGroupFindUniqueOrThrowArgs<ExtArgs>>): Prisma__TvScreenGroupClient<$Result.GetResult<Prisma.$TvScreenGroupPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first TvScreenGroup that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TvScreenGroupFindFirstArgs} args - Arguments to find a TvScreenGroup
+     * @example
+     * // Get one TvScreenGroup
+     * const tvScreenGroup = await prisma.tvScreenGroup.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends TvScreenGroupFindFirstArgs>(args?: SelectSubset<T, TvScreenGroupFindFirstArgs<ExtArgs>>): Prisma__TvScreenGroupClient<$Result.GetResult<Prisma.$TvScreenGroupPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first TvScreenGroup that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TvScreenGroupFindFirstOrThrowArgs} args - Arguments to find a TvScreenGroup
+     * @example
+     * // Get one TvScreenGroup
+     * const tvScreenGroup = await prisma.tvScreenGroup.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends TvScreenGroupFindFirstOrThrowArgs>(args?: SelectSubset<T, TvScreenGroupFindFirstOrThrowArgs<ExtArgs>>): Prisma__TvScreenGroupClient<$Result.GetResult<Prisma.$TvScreenGroupPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more TvScreenGroups that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TvScreenGroupFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all TvScreenGroups
+     * const tvScreenGroups = await prisma.tvScreenGroup.findMany()
+     * 
+     * // Get first 10 TvScreenGroups
+     * const tvScreenGroups = await prisma.tvScreenGroup.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const tvScreenGroupWithIdOnly = await prisma.tvScreenGroup.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends TvScreenGroupFindManyArgs>(args?: SelectSubset<T, TvScreenGroupFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TvScreenGroupPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a TvScreenGroup.
+     * @param {TvScreenGroupCreateArgs} args - Arguments to create a TvScreenGroup.
+     * @example
+     * // Create one TvScreenGroup
+     * const TvScreenGroup = await prisma.tvScreenGroup.create({
+     *   data: {
+     *     // ... data to create a TvScreenGroup
+     *   }
+     * })
+     * 
+     */
+    create<T extends TvScreenGroupCreateArgs>(args: SelectSubset<T, TvScreenGroupCreateArgs<ExtArgs>>): Prisma__TvScreenGroupClient<$Result.GetResult<Prisma.$TvScreenGroupPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many TvScreenGroups.
+     * @param {TvScreenGroupCreateManyArgs} args - Arguments to create many TvScreenGroups.
+     * @example
+     * // Create many TvScreenGroups
+     * const tvScreenGroup = await prisma.tvScreenGroup.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends TvScreenGroupCreateManyArgs>(args?: SelectSubset<T, TvScreenGroupCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many TvScreenGroups and returns the data saved in the database.
+     * @param {TvScreenGroupCreateManyAndReturnArgs} args - Arguments to create many TvScreenGroups.
+     * @example
+     * // Create many TvScreenGroups
+     * const tvScreenGroup = await prisma.tvScreenGroup.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many TvScreenGroups and only return the `id`
+     * const tvScreenGroupWithIdOnly = await prisma.tvScreenGroup.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends TvScreenGroupCreateManyAndReturnArgs>(args?: SelectSubset<T, TvScreenGroupCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TvScreenGroupPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a TvScreenGroup.
+     * @param {TvScreenGroupDeleteArgs} args - Arguments to delete one TvScreenGroup.
+     * @example
+     * // Delete one TvScreenGroup
+     * const TvScreenGroup = await prisma.tvScreenGroup.delete({
+     *   where: {
+     *     // ... filter to delete one TvScreenGroup
+     *   }
+     * })
+     * 
+     */
+    delete<T extends TvScreenGroupDeleteArgs>(args: SelectSubset<T, TvScreenGroupDeleteArgs<ExtArgs>>): Prisma__TvScreenGroupClient<$Result.GetResult<Prisma.$TvScreenGroupPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one TvScreenGroup.
+     * @param {TvScreenGroupUpdateArgs} args - Arguments to update one TvScreenGroup.
+     * @example
+     * // Update one TvScreenGroup
+     * const tvScreenGroup = await prisma.tvScreenGroup.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends TvScreenGroupUpdateArgs>(args: SelectSubset<T, TvScreenGroupUpdateArgs<ExtArgs>>): Prisma__TvScreenGroupClient<$Result.GetResult<Prisma.$TvScreenGroupPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more TvScreenGroups.
+     * @param {TvScreenGroupDeleteManyArgs} args - Arguments to filter TvScreenGroups to delete.
+     * @example
+     * // Delete a few TvScreenGroups
+     * const { count } = await prisma.tvScreenGroup.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends TvScreenGroupDeleteManyArgs>(args?: SelectSubset<T, TvScreenGroupDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more TvScreenGroups.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TvScreenGroupUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many TvScreenGroups
+     * const tvScreenGroup = await prisma.tvScreenGroup.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends TvScreenGroupUpdateManyArgs>(args: SelectSubset<T, TvScreenGroupUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more TvScreenGroups and returns the data updated in the database.
+     * @param {TvScreenGroupUpdateManyAndReturnArgs} args - Arguments to update many TvScreenGroups.
+     * @example
+     * // Update many TvScreenGroups
+     * const tvScreenGroup = await prisma.tvScreenGroup.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more TvScreenGroups and only return the `id`
+     * const tvScreenGroupWithIdOnly = await prisma.tvScreenGroup.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends TvScreenGroupUpdateManyAndReturnArgs>(args: SelectSubset<T, TvScreenGroupUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TvScreenGroupPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one TvScreenGroup.
+     * @param {TvScreenGroupUpsertArgs} args - Arguments to update or create a TvScreenGroup.
+     * @example
+     * // Update or create a TvScreenGroup
+     * const tvScreenGroup = await prisma.tvScreenGroup.upsert({
+     *   create: {
+     *     // ... data to create a TvScreenGroup
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the TvScreenGroup we want to update
+     *   }
+     * })
+     */
+    upsert<T extends TvScreenGroupUpsertArgs>(args: SelectSubset<T, TvScreenGroupUpsertArgs<ExtArgs>>): Prisma__TvScreenGroupClient<$Result.GetResult<Prisma.$TvScreenGroupPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of TvScreenGroups.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TvScreenGroupCountArgs} args - Arguments to filter TvScreenGroups to count.
+     * @example
+     * // Count the number of TvScreenGroups
+     * const count = await prisma.tvScreenGroup.count({
+     *   where: {
+     *     // ... the filter for the TvScreenGroups we want to count
+     *   }
+     * })
+    **/
+    count<T extends TvScreenGroupCountArgs>(
+      args?: Subset<T, TvScreenGroupCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], TvScreenGroupCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a TvScreenGroup.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TvScreenGroupAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends TvScreenGroupAggregateArgs>(args: Subset<T, TvScreenGroupAggregateArgs>): Prisma.PrismaPromise<GetTvScreenGroupAggregateType<T>>
+
+    /**
+     * Group by TvScreenGroup.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TvScreenGroupGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends TvScreenGroupGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: TvScreenGroupGroupByArgs['orderBy'] }
+        : { orderBy?: TvScreenGroupGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, TvScreenGroupGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetTvScreenGroupGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the TvScreenGroup model
+   */
+  readonly fields: TvScreenGroupFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for TvScreenGroup.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__TvScreenGroupClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    screens<T extends TvScreenGroup$screensArgs<ExtArgs> = {}>(args?: Subset<T, TvScreenGroup$screensArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TvScreenPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    contentItems<T extends TvScreenGroup$contentItemsArgs<ExtArgs> = {}>(args?: Subset<T, TvScreenGroup$contentItemsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TvContentItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the TvScreenGroup model
+   */
+  interface TvScreenGroupFieldRefs {
+    readonly id: FieldRef<"TvScreenGroup", 'String'>
+    readonly name: FieldRef<"TvScreenGroup", 'String'>
+    readonly createdAt: FieldRef<"TvScreenGroup", 'DateTime'>
+    readonly updatedAt: FieldRef<"TvScreenGroup", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * TvScreenGroup findUnique
+   */
+  export type TvScreenGroupFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TvScreenGroup
+     */
+    select?: TvScreenGroupSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TvScreenGroup
+     */
+    omit?: TvScreenGroupOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TvScreenGroupInclude<ExtArgs> | null
+    /**
+     * Filter, which TvScreenGroup to fetch.
+     */
+    where: TvScreenGroupWhereUniqueInput
+  }
+
+  /**
+   * TvScreenGroup findUniqueOrThrow
+   */
+  export type TvScreenGroupFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TvScreenGroup
+     */
+    select?: TvScreenGroupSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TvScreenGroup
+     */
+    omit?: TvScreenGroupOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TvScreenGroupInclude<ExtArgs> | null
+    /**
+     * Filter, which TvScreenGroup to fetch.
+     */
+    where: TvScreenGroupWhereUniqueInput
+  }
+
+  /**
+   * TvScreenGroup findFirst
+   */
+  export type TvScreenGroupFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TvScreenGroup
+     */
+    select?: TvScreenGroupSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TvScreenGroup
+     */
+    omit?: TvScreenGroupOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TvScreenGroupInclude<ExtArgs> | null
+    /**
+     * Filter, which TvScreenGroup to fetch.
+     */
+    where?: TvScreenGroupWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of TvScreenGroups to fetch.
+     */
+    orderBy?: TvScreenGroupOrderByWithRelationInput | TvScreenGroupOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for TvScreenGroups.
+     */
+    cursor?: TvScreenGroupWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` TvScreenGroups from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` TvScreenGroups.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of TvScreenGroups.
+     */
+    distinct?: TvScreenGroupScalarFieldEnum | TvScreenGroupScalarFieldEnum[]
+  }
+
+  /**
+   * TvScreenGroup findFirstOrThrow
+   */
+  export type TvScreenGroupFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TvScreenGroup
+     */
+    select?: TvScreenGroupSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TvScreenGroup
+     */
+    omit?: TvScreenGroupOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TvScreenGroupInclude<ExtArgs> | null
+    /**
+     * Filter, which TvScreenGroup to fetch.
+     */
+    where?: TvScreenGroupWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of TvScreenGroups to fetch.
+     */
+    orderBy?: TvScreenGroupOrderByWithRelationInput | TvScreenGroupOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for TvScreenGroups.
+     */
+    cursor?: TvScreenGroupWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` TvScreenGroups from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` TvScreenGroups.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of TvScreenGroups.
+     */
+    distinct?: TvScreenGroupScalarFieldEnum | TvScreenGroupScalarFieldEnum[]
+  }
+
+  /**
+   * TvScreenGroup findMany
+   */
+  export type TvScreenGroupFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TvScreenGroup
+     */
+    select?: TvScreenGroupSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TvScreenGroup
+     */
+    omit?: TvScreenGroupOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TvScreenGroupInclude<ExtArgs> | null
+    /**
+     * Filter, which TvScreenGroups to fetch.
+     */
+    where?: TvScreenGroupWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of TvScreenGroups to fetch.
+     */
+    orderBy?: TvScreenGroupOrderByWithRelationInput | TvScreenGroupOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing TvScreenGroups.
+     */
+    cursor?: TvScreenGroupWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` TvScreenGroups from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` TvScreenGroups.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of TvScreenGroups.
+     */
+    distinct?: TvScreenGroupScalarFieldEnum | TvScreenGroupScalarFieldEnum[]
+  }
+
+  /**
+   * TvScreenGroup create
+   */
+  export type TvScreenGroupCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TvScreenGroup
+     */
+    select?: TvScreenGroupSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TvScreenGroup
+     */
+    omit?: TvScreenGroupOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TvScreenGroupInclude<ExtArgs> | null
+    /**
+     * The data needed to create a TvScreenGroup.
+     */
+    data: XOR<TvScreenGroupCreateInput, TvScreenGroupUncheckedCreateInput>
+  }
+
+  /**
+   * TvScreenGroup createMany
+   */
+  export type TvScreenGroupCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many TvScreenGroups.
+     */
+    data: TvScreenGroupCreateManyInput | TvScreenGroupCreateManyInput[]
+  }
+
+  /**
+   * TvScreenGroup createManyAndReturn
+   */
+  export type TvScreenGroupCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TvScreenGroup
+     */
+    select?: TvScreenGroupSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the TvScreenGroup
+     */
+    omit?: TvScreenGroupOmit<ExtArgs> | null
+    /**
+     * The data used to create many TvScreenGroups.
+     */
+    data: TvScreenGroupCreateManyInput | TvScreenGroupCreateManyInput[]
+  }
+
+  /**
+   * TvScreenGroup update
+   */
+  export type TvScreenGroupUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TvScreenGroup
+     */
+    select?: TvScreenGroupSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TvScreenGroup
+     */
+    omit?: TvScreenGroupOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TvScreenGroupInclude<ExtArgs> | null
+    /**
+     * The data needed to update a TvScreenGroup.
+     */
+    data: XOR<TvScreenGroupUpdateInput, TvScreenGroupUncheckedUpdateInput>
+    /**
+     * Choose, which TvScreenGroup to update.
+     */
+    where: TvScreenGroupWhereUniqueInput
+  }
+
+  /**
+   * TvScreenGroup updateMany
+   */
+  export type TvScreenGroupUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update TvScreenGroups.
+     */
+    data: XOR<TvScreenGroupUpdateManyMutationInput, TvScreenGroupUncheckedUpdateManyInput>
+    /**
+     * Filter which TvScreenGroups to update
+     */
+    where?: TvScreenGroupWhereInput
+    /**
+     * Limit how many TvScreenGroups to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * TvScreenGroup updateManyAndReturn
+   */
+  export type TvScreenGroupUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TvScreenGroup
+     */
+    select?: TvScreenGroupSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the TvScreenGroup
+     */
+    omit?: TvScreenGroupOmit<ExtArgs> | null
+    /**
+     * The data used to update TvScreenGroups.
+     */
+    data: XOR<TvScreenGroupUpdateManyMutationInput, TvScreenGroupUncheckedUpdateManyInput>
+    /**
+     * Filter which TvScreenGroups to update
+     */
+    where?: TvScreenGroupWhereInput
+    /**
+     * Limit how many TvScreenGroups to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * TvScreenGroup upsert
+   */
+  export type TvScreenGroupUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TvScreenGroup
+     */
+    select?: TvScreenGroupSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TvScreenGroup
+     */
+    omit?: TvScreenGroupOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TvScreenGroupInclude<ExtArgs> | null
+    /**
+     * The filter to search for the TvScreenGroup to update in case it exists.
+     */
+    where: TvScreenGroupWhereUniqueInput
+    /**
+     * In case the TvScreenGroup found by the `where` argument doesn't exist, create a new TvScreenGroup with this data.
+     */
+    create: XOR<TvScreenGroupCreateInput, TvScreenGroupUncheckedCreateInput>
+    /**
+     * In case the TvScreenGroup was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<TvScreenGroupUpdateInput, TvScreenGroupUncheckedUpdateInput>
+  }
+
+  /**
+   * TvScreenGroup delete
+   */
+  export type TvScreenGroupDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TvScreenGroup
+     */
+    select?: TvScreenGroupSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TvScreenGroup
+     */
+    omit?: TvScreenGroupOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TvScreenGroupInclude<ExtArgs> | null
+    /**
+     * Filter which TvScreenGroup to delete.
+     */
+    where: TvScreenGroupWhereUniqueInput
+  }
+
+  /**
+   * TvScreenGroup deleteMany
+   */
+  export type TvScreenGroupDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which TvScreenGroups to delete
+     */
+    where?: TvScreenGroupWhereInput
+    /**
+     * Limit how many TvScreenGroups to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * TvScreenGroup.screens
+   */
+  export type TvScreenGroup$screensArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TvScreen
+     */
+    select?: TvScreenSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TvScreen
+     */
+    omit?: TvScreenOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TvScreenInclude<ExtArgs> | null
+    where?: TvScreenWhereInput
+    orderBy?: TvScreenOrderByWithRelationInput | TvScreenOrderByWithRelationInput[]
+    cursor?: TvScreenWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: TvScreenScalarFieldEnum | TvScreenScalarFieldEnum[]
+  }
+
+  /**
+   * TvScreenGroup.contentItems
+   */
+  export type TvScreenGroup$contentItemsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TvContentItem
+     */
+    select?: TvContentItemSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TvContentItem
+     */
+    omit?: TvContentItemOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TvContentItemInclude<ExtArgs> | null
+    where?: TvContentItemWhereInput
+    orderBy?: TvContentItemOrderByWithRelationInput | TvContentItemOrderByWithRelationInput[]
+    cursor?: TvContentItemWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: TvContentItemScalarFieldEnum | TvContentItemScalarFieldEnum[]
+  }
+
+  /**
+   * TvScreenGroup without action
+   */
+  export type TvScreenGroupDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TvScreenGroup
+     */
+    select?: TvScreenGroupSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TvScreenGroup
+     */
+    omit?: TvScreenGroupOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TvScreenGroupInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model TvScreen
+   */
+
+  export type AggregateTvScreen = {
+    _count: TvScreenCountAggregateOutputType | null
+    _avg: TvScreenAvgAggregateOutputType | null
+    _sum: TvScreenSumAggregateOutputType | null
+    _min: TvScreenMinAggregateOutputType | null
+    _max: TvScreenMaxAggregateOutputType | null
+  }
+
+  export type TvScreenAvgAggregateOutputType = {
+    cacheUsedBytes: number | null
+  }
+
+  export type TvScreenSumAggregateOutputType = {
+    cacheUsedBytes: bigint | null
+  }
+
+  export type TvScreenMinAggregateOutputType = {
+    id: string | null
+    screenGroupId: string | null
+    label: string | null
+    pairingCode: string | null
+    pairingExpiresAt: Date | null
+    deviceToken: string | null
+    lastHeartbeatAt: Date | null
+    currentItemId: string | null
+    cacheUsedBytes: bigint | null
+    appVersion: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type TvScreenMaxAggregateOutputType = {
+    id: string | null
+    screenGroupId: string | null
+    label: string | null
+    pairingCode: string | null
+    pairingExpiresAt: Date | null
+    deviceToken: string | null
+    lastHeartbeatAt: Date | null
+    currentItemId: string | null
+    cacheUsedBytes: bigint | null
+    appVersion: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type TvScreenCountAggregateOutputType = {
+    id: number
+    screenGroupId: number
+    label: number
+    pairingCode: number
+    pairingExpiresAt: number
+    deviceToken: number
+    lastHeartbeatAt: number
+    currentItemId: number
+    cacheUsedBytes: number
+    appVersion: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type TvScreenAvgAggregateInputType = {
+    cacheUsedBytes?: true
+  }
+
+  export type TvScreenSumAggregateInputType = {
+    cacheUsedBytes?: true
+  }
+
+  export type TvScreenMinAggregateInputType = {
+    id?: true
+    screenGroupId?: true
+    label?: true
+    pairingCode?: true
+    pairingExpiresAt?: true
+    deviceToken?: true
+    lastHeartbeatAt?: true
+    currentItemId?: true
+    cacheUsedBytes?: true
+    appVersion?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type TvScreenMaxAggregateInputType = {
+    id?: true
+    screenGroupId?: true
+    label?: true
+    pairingCode?: true
+    pairingExpiresAt?: true
+    deviceToken?: true
+    lastHeartbeatAt?: true
+    currentItemId?: true
+    cacheUsedBytes?: true
+    appVersion?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type TvScreenCountAggregateInputType = {
+    id?: true
+    screenGroupId?: true
+    label?: true
+    pairingCode?: true
+    pairingExpiresAt?: true
+    deviceToken?: true
+    lastHeartbeatAt?: true
+    currentItemId?: true
+    cacheUsedBytes?: true
+    appVersion?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type TvScreenAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which TvScreen to aggregate.
+     */
+    where?: TvScreenWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of TvScreens to fetch.
+     */
+    orderBy?: TvScreenOrderByWithRelationInput | TvScreenOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: TvScreenWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` TvScreens from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` TvScreens.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned TvScreens
+    **/
+    _count?: true | TvScreenCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: TvScreenAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: TvScreenSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: TvScreenMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: TvScreenMaxAggregateInputType
+  }
+
+  export type GetTvScreenAggregateType<T extends TvScreenAggregateArgs> = {
+        [P in keyof T & keyof AggregateTvScreen]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateTvScreen[P]>
+      : GetScalarType<T[P], AggregateTvScreen[P]>
+  }
+
+
+
+
+  export type TvScreenGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: TvScreenWhereInput
+    orderBy?: TvScreenOrderByWithAggregationInput | TvScreenOrderByWithAggregationInput[]
+    by: TvScreenScalarFieldEnum[] | TvScreenScalarFieldEnum
+    having?: TvScreenScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: TvScreenCountAggregateInputType | true
+    _avg?: TvScreenAvgAggregateInputType
+    _sum?: TvScreenSumAggregateInputType
+    _min?: TvScreenMinAggregateInputType
+    _max?: TvScreenMaxAggregateInputType
+  }
+
+  export type TvScreenGroupByOutputType = {
+    id: string
+    screenGroupId: string
+    label: string
+    pairingCode: string | null
+    pairingExpiresAt: Date | null
+    deviceToken: string | null
+    lastHeartbeatAt: Date | null
+    currentItemId: string | null
+    cacheUsedBytes: bigint | null
+    appVersion: string | null
+    createdAt: Date
+    updatedAt: Date
+    _count: TvScreenCountAggregateOutputType | null
+    _avg: TvScreenAvgAggregateOutputType | null
+    _sum: TvScreenSumAggregateOutputType | null
+    _min: TvScreenMinAggregateOutputType | null
+    _max: TvScreenMaxAggregateOutputType | null
+  }
+
+  type GetTvScreenGroupByPayload<T extends TvScreenGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<TvScreenGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof TvScreenGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], TvScreenGroupByOutputType[P]>
+            : GetScalarType<T[P], TvScreenGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type TvScreenSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    screenGroupId?: boolean
+    label?: boolean
+    pairingCode?: boolean
+    pairingExpiresAt?: boolean
+    deviceToken?: boolean
+    lastHeartbeatAt?: boolean
+    currentItemId?: boolean
+    cacheUsedBytes?: boolean
+    appVersion?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    screenGroup?: boolean | TvScreenGroupDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["tvScreen"]>
+
+  export type TvScreenSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    screenGroupId?: boolean
+    label?: boolean
+    pairingCode?: boolean
+    pairingExpiresAt?: boolean
+    deviceToken?: boolean
+    lastHeartbeatAt?: boolean
+    currentItemId?: boolean
+    cacheUsedBytes?: boolean
+    appVersion?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    screenGroup?: boolean | TvScreenGroupDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["tvScreen"]>
+
+  export type TvScreenSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    screenGroupId?: boolean
+    label?: boolean
+    pairingCode?: boolean
+    pairingExpiresAt?: boolean
+    deviceToken?: boolean
+    lastHeartbeatAt?: boolean
+    currentItemId?: boolean
+    cacheUsedBytes?: boolean
+    appVersion?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    screenGroup?: boolean | TvScreenGroupDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["tvScreen"]>
+
+  export type TvScreenSelectScalar = {
+    id?: boolean
+    screenGroupId?: boolean
+    label?: boolean
+    pairingCode?: boolean
+    pairingExpiresAt?: boolean
+    deviceToken?: boolean
+    lastHeartbeatAt?: boolean
+    currentItemId?: boolean
+    cacheUsedBytes?: boolean
+    appVersion?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type TvScreenOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "screenGroupId" | "label" | "pairingCode" | "pairingExpiresAt" | "deviceToken" | "lastHeartbeatAt" | "currentItemId" | "cacheUsedBytes" | "appVersion" | "createdAt" | "updatedAt", ExtArgs["result"]["tvScreen"]>
+  export type TvScreenInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    screenGroup?: boolean | TvScreenGroupDefaultArgs<ExtArgs>
+  }
+  export type TvScreenIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    screenGroup?: boolean | TvScreenGroupDefaultArgs<ExtArgs>
+  }
+  export type TvScreenIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    screenGroup?: boolean | TvScreenGroupDefaultArgs<ExtArgs>
+  }
+
+  export type $TvScreenPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "TvScreen"
+    objects: {
+      screenGroup: Prisma.$TvScreenGroupPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      screenGroupId: string
+      label: string
+      pairingCode: string | null
+      pairingExpiresAt: Date | null
+      deviceToken: string | null
+      lastHeartbeatAt: Date | null
+      currentItemId: string | null
+      cacheUsedBytes: bigint | null
+      appVersion: string | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["tvScreen"]>
+    composites: {}
+  }
+
+  type TvScreenGetPayload<S extends boolean | null | undefined | TvScreenDefaultArgs> = $Result.GetResult<Prisma.$TvScreenPayload, S>
+
+  type TvScreenCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<TvScreenFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: TvScreenCountAggregateInputType | true
+    }
+
+  export interface TvScreenDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['TvScreen'], meta: { name: 'TvScreen' } }
+    /**
+     * Find zero or one TvScreen that matches the filter.
+     * @param {TvScreenFindUniqueArgs} args - Arguments to find a TvScreen
+     * @example
+     * // Get one TvScreen
+     * const tvScreen = await prisma.tvScreen.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends TvScreenFindUniqueArgs>(args: SelectSubset<T, TvScreenFindUniqueArgs<ExtArgs>>): Prisma__TvScreenClient<$Result.GetResult<Prisma.$TvScreenPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one TvScreen that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {TvScreenFindUniqueOrThrowArgs} args - Arguments to find a TvScreen
+     * @example
+     * // Get one TvScreen
+     * const tvScreen = await prisma.tvScreen.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends TvScreenFindUniqueOrThrowArgs>(args: SelectSubset<T, TvScreenFindUniqueOrThrowArgs<ExtArgs>>): Prisma__TvScreenClient<$Result.GetResult<Prisma.$TvScreenPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first TvScreen that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TvScreenFindFirstArgs} args - Arguments to find a TvScreen
+     * @example
+     * // Get one TvScreen
+     * const tvScreen = await prisma.tvScreen.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends TvScreenFindFirstArgs>(args?: SelectSubset<T, TvScreenFindFirstArgs<ExtArgs>>): Prisma__TvScreenClient<$Result.GetResult<Prisma.$TvScreenPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first TvScreen that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TvScreenFindFirstOrThrowArgs} args - Arguments to find a TvScreen
+     * @example
+     * // Get one TvScreen
+     * const tvScreen = await prisma.tvScreen.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends TvScreenFindFirstOrThrowArgs>(args?: SelectSubset<T, TvScreenFindFirstOrThrowArgs<ExtArgs>>): Prisma__TvScreenClient<$Result.GetResult<Prisma.$TvScreenPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more TvScreens that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TvScreenFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all TvScreens
+     * const tvScreens = await prisma.tvScreen.findMany()
+     * 
+     * // Get first 10 TvScreens
+     * const tvScreens = await prisma.tvScreen.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const tvScreenWithIdOnly = await prisma.tvScreen.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends TvScreenFindManyArgs>(args?: SelectSubset<T, TvScreenFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TvScreenPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a TvScreen.
+     * @param {TvScreenCreateArgs} args - Arguments to create a TvScreen.
+     * @example
+     * // Create one TvScreen
+     * const TvScreen = await prisma.tvScreen.create({
+     *   data: {
+     *     // ... data to create a TvScreen
+     *   }
+     * })
+     * 
+     */
+    create<T extends TvScreenCreateArgs>(args: SelectSubset<T, TvScreenCreateArgs<ExtArgs>>): Prisma__TvScreenClient<$Result.GetResult<Prisma.$TvScreenPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many TvScreens.
+     * @param {TvScreenCreateManyArgs} args - Arguments to create many TvScreens.
+     * @example
+     * // Create many TvScreens
+     * const tvScreen = await prisma.tvScreen.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends TvScreenCreateManyArgs>(args?: SelectSubset<T, TvScreenCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many TvScreens and returns the data saved in the database.
+     * @param {TvScreenCreateManyAndReturnArgs} args - Arguments to create many TvScreens.
+     * @example
+     * // Create many TvScreens
+     * const tvScreen = await prisma.tvScreen.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many TvScreens and only return the `id`
+     * const tvScreenWithIdOnly = await prisma.tvScreen.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends TvScreenCreateManyAndReturnArgs>(args?: SelectSubset<T, TvScreenCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TvScreenPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a TvScreen.
+     * @param {TvScreenDeleteArgs} args - Arguments to delete one TvScreen.
+     * @example
+     * // Delete one TvScreen
+     * const TvScreen = await prisma.tvScreen.delete({
+     *   where: {
+     *     // ... filter to delete one TvScreen
+     *   }
+     * })
+     * 
+     */
+    delete<T extends TvScreenDeleteArgs>(args: SelectSubset<T, TvScreenDeleteArgs<ExtArgs>>): Prisma__TvScreenClient<$Result.GetResult<Prisma.$TvScreenPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one TvScreen.
+     * @param {TvScreenUpdateArgs} args - Arguments to update one TvScreen.
+     * @example
+     * // Update one TvScreen
+     * const tvScreen = await prisma.tvScreen.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends TvScreenUpdateArgs>(args: SelectSubset<T, TvScreenUpdateArgs<ExtArgs>>): Prisma__TvScreenClient<$Result.GetResult<Prisma.$TvScreenPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more TvScreens.
+     * @param {TvScreenDeleteManyArgs} args - Arguments to filter TvScreens to delete.
+     * @example
+     * // Delete a few TvScreens
+     * const { count } = await prisma.tvScreen.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends TvScreenDeleteManyArgs>(args?: SelectSubset<T, TvScreenDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more TvScreens.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TvScreenUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many TvScreens
+     * const tvScreen = await prisma.tvScreen.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends TvScreenUpdateManyArgs>(args: SelectSubset<T, TvScreenUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more TvScreens and returns the data updated in the database.
+     * @param {TvScreenUpdateManyAndReturnArgs} args - Arguments to update many TvScreens.
+     * @example
+     * // Update many TvScreens
+     * const tvScreen = await prisma.tvScreen.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more TvScreens and only return the `id`
+     * const tvScreenWithIdOnly = await prisma.tvScreen.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends TvScreenUpdateManyAndReturnArgs>(args: SelectSubset<T, TvScreenUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TvScreenPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one TvScreen.
+     * @param {TvScreenUpsertArgs} args - Arguments to update or create a TvScreen.
+     * @example
+     * // Update or create a TvScreen
+     * const tvScreen = await prisma.tvScreen.upsert({
+     *   create: {
+     *     // ... data to create a TvScreen
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the TvScreen we want to update
+     *   }
+     * })
+     */
+    upsert<T extends TvScreenUpsertArgs>(args: SelectSubset<T, TvScreenUpsertArgs<ExtArgs>>): Prisma__TvScreenClient<$Result.GetResult<Prisma.$TvScreenPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of TvScreens.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TvScreenCountArgs} args - Arguments to filter TvScreens to count.
+     * @example
+     * // Count the number of TvScreens
+     * const count = await prisma.tvScreen.count({
+     *   where: {
+     *     // ... the filter for the TvScreens we want to count
+     *   }
+     * })
+    **/
+    count<T extends TvScreenCountArgs>(
+      args?: Subset<T, TvScreenCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], TvScreenCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a TvScreen.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TvScreenAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends TvScreenAggregateArgs>(args: Subset<T, TvScreenAggregateArgs>): Prisma.PrismaPromise<GetTvScreenAggregateType<T>>
+
+    /**
+     * Group by TvScreen.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TvScreenGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends TvScreenGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: TvScreenGroupByArgs['orderBy'] }
+        : { orderBy?: TvScreenGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, TvScreenGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetTvScreenGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the TvScreen model
+   */
+  readonly fields: TvScreenFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for TvScreen.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__TvScreenClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    screenGroup<T extends TvScreenGroupDefaultArgs<ExtArgs> = {}>(args?: Subset<T, TvScreenGroupDefaultArgs<ExtArgs>>): Prisma__TvScreenGroupClient<$Result.GetResult<Prisma.$TvScreenGroupPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the TvScreen model
+   */
+  interface TvScreenFieldRefs {
+    readonly id: FieldRef<"TvScreen", 'String'>
+    readonly screenGroupId: FieldRef<"TvScreen", 'String'>
+    readonly label: FieldRef<"TvScreen", 'String'>
+    readonly pairingCode: FieldRef<"TvScreen", 'String'>
+    readonly pairingExpiresAt: FieldRef<"TvScreen", 'DateTime'>
+    readonly deviceToken: FieldRef<"TvScreen", 'String'>
+    readonly lastHeartbeatAt: FieldRef<"TvScreen", 'DateTime'>
+    readonly currentItemId: FieldRef<"TvScreen", 'String'>
+    readonly cacheUsedBytes: FieldRef<"TvScreen", 'BigInt'>
+    readonly appVersion: FieldRef<"TvScreen", 'String'>
+    readonly createdAt: FieldRef<"TvScreen", 'DateTime'>
+    readonly updatedAt: FieldRef<"TvScreen", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * TvScreen findUnique
+   */
+  export type TvScreenFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TvScreen
+     */
+    select?: TvScreenSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TvScreen
+     */
+    omit?: TvScreenOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TvScreenInclude<ExtArgs> | null
+    /**
+     * Filter, which TvScreen to fetch.
+     */
+    where: TvScreenWhereUniqueInput
+  }
+
+  /**
+   * TvScreen findUniqueOrThrow
+   */
+  export type TvScreenFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TvScreen
+     */
+    select?: TvScreenSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TvScreen
+     */
+    omit?: TvScreenOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TvScreenInclude<ExtArgs> | null
+    /**
+     * Filter, which TvScreen to fetch.
+     */
+    where: TvScreenWhereUniqueInput
+  }
+
+  /**
+   * TvScreen findFirst
+   */
+  export type TvScreenFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TvScreen
+     */
+    select?: TvScreenSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TvScreen
+     */
+    omit?: TvScreenOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TvScreenInclude<ExtArgs> | null
+    /**
+     * Filter, which TvScreen to fetch.
+     */
+    where?: TvScreenWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of TvScreens to fetch.
+     */
+    orderBy?: TvScreenOrderByWithRelationInput | TvScreenOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for TvScreens.
+     */
+    cursor?: TvScreenWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` TvScreens from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` TvScreens.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of TvScreens.
+     */
+    distinct?: TvScreenScalarFieldEnum | TvScreenScalarFieldEnum[]
+  }
+
+  /**
+   * TvScreen findFirstOrThrow
+   */
+  export type TvScreenFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TvScreen
+     */
+    select?: TvScreenSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TvScreen
+     */
+    omit?: TvScreenOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TvScreenInclude<ExtArgs> | null
+    /**
+     * Filter, which TvScreen to fetch.
+     */
+    where?: TvScreenWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of TvScreens to fetch.
+     */
+    orderBy?: TvScreenOrderByWithRelationInput | TvScreenOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for TvScreens.
+     */
+    cursor?: TvScreenWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` TvScreens from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` TvScreens.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of TvScreens.
+     */
+    distinct?: TvScreenScalarFieldEnum | TvScreenScalarFieldEnum[]
+  }
+
+  /**
+   * TvScreen findMany
+   */
+  export type TvScreenFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TvScreen
+     */
+    select?: TvScreenSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TvScreen
+     */
+    omit?: TvScreenOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TvScreenInclude<ExtArgs> | null
+    /**
+     * Filter, which TvScreens to fetch.
+     */
+    where?: TvScreenWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of TvScreens to fetch.
+     */
+    orderBy?: TvScreenOrderByWithRelationInput | TvScreenOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing TvScreens.
+     */
+    cursor?: TvScreenWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` TvScreens from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` TvScreens.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of TvScreens.
+     */
+    distinct?: TvScreenScalarFieldEnum | TvScreenScalarFieldEnum[]
+  }
+
+  /**
+   * TvScreen create
+   */
+  export type TvScreenCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TvScreen
+     */
+    select?: TvScreenSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TvScreen
+     */
+    omit?: TvScreenOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TvScreenInclude<ExtArgs> | null
+    /**
+     * The data needed to create a TvScreen.
+     */
+    data: XOR<TvScreenCreateInput, TvScreenUncheckedCreateInput>
+  }
+
+  /**
+   * TvScreen createMany
+   */
+  export type TvScreenCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many TvScreens.
+     */
+    data: TvScreenCreateManyInput | TvScreenCreateManyInput[]
+  }
+
+  /**
+   * TvScreen createManyAndReturn
+   */
+  export type TvScreenCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TvScreen
+     */
+    select?: TvScreenSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the TvScreen
+     */
+    omit?: TvScreenOmit<ExtArgs> | null
+    /**
+     * The data used to create many TvScreens.
+     */
+    data: TvScreenCreateManyInput | TvScreenCreateManyInput[]
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TvScreenIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * TvScreen update
+   */
+  export type TvScreenUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TvScreen
+     */
+    select?: TvScreenSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TvScreen
+     */
+    omit?: TvScreenOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TvScreenInclude<ExtArgs> | null
+    /**
+     * The data needed to update a TvScreen.
+     */
+    data: XOR<TvScreenUpdateInput, TvScreenUncheckedUpdateInput>
+    /**
+     * Choose, which TvScreen to update.
+     */
+    where: TvScreenWhereUniqueInput
+  }
+
+  /**
+   * TvScreen updateMany
+   */
+  export type TvScreenUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update TvScreens.
+     */
+    data: XOR<TvScreenUpdateManyMutationInput, TvScreenUncheckedUpdateManyInput>
+    /**
+     * Filter which TvScreens to update
+     */
+    where?: TvScreenWhereInput
+    /**
+     * Limit how many TvScreens to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * TvScreen updateManyAndReturn
+   */
+  export type TvScreenUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TvScreen
+     */
+    select?: TvScreenSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the TvScreen
+     */
+    omit?: TvScreenOmit<ExtArgs> | null
+    /**
+     * The data used to update TvScreens.
+     */
+    data: XOR<TvScreenUpdateManyMutationInput, TvScreenUncheckedUpdateManyInput>
+    /**
+     * Filter which TvScreens to update
+     */
+    where?: TvScreenWhereInput
+    /**
+     * Limit how many TvScreens to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TvScreenIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * TvScreen upsert
+   */
+  export type TvScreenUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TvScreen
+     */
+    select?: TvScreenSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TvScreen
+     */
+    omit?: TvScreenOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TvScreenInclude<ExtArgs> | null
+    /**
+     * The filter to search for the TvScreen to update in case it exists.
+     */
+    where: TvScreenWhereUniqueInput
+    /**
+     * In case the TvScreen found by the `where` argument doesn't exist, create a new TvScreen with this data.
+     */
+    create: XOR<TvScreenCreateInput, TvScreenUncheckedCreateInput>
+    /**
+     * In case the TvScreen was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<TvScreenUpdateInput, TvScreenUncheckedUpdateInput>
+  }
+
+  /**
+   * TvScreen delete
+   */
+  export type TvScreenDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TvScreen
+     */
+    select?: TvScreenSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TvScreen
+     */
+    omit?: TvScreenOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TvScreenInclude<ExtArgs> | null
+    /**
+     * Filter which TvScreen to delete.
+     */
+    where: TvScreenWhereUniqueInput
+  }
+
+  /**
+   * TvScreen deleteMany
+   */
+  export type TvScreenDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which TvScreens to delete
+     */
+    where?: TvScreenWhereInput
+    /**
+     * Limit how many TvScreens to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * TvScreen without action
+   */
+  export type TvScreenDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TvScreen
+     */
+    select?: TvScreenSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TvScreen
+     */
+    omit?: TvScreenOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TvScreenInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model TvContentItem
+   */
+
+  export type AggregateTvContentItem = {
+    _count: TvContentItemCountAggregateOutputType | null
+    _avg: TvContentItemAvgAggregateOutputType | null
+    _sum: TvContentItemSumAggregateOutputType | null
+    _min: TvContentItemMinAggregateOutputType | null
+    _max: TvContentItemMaxAggregateOutputType | null
+  }
+
+  export type TvContentItemAvgAggregateOutputType = {
+    durationSeconds: number | null
+    sortOrder: number | null
+  }
+
+  export type TvContentItemSumAggregateOutputType = {
+    durationSeconds: number | null
+    sortOrder: number | null
+  }
+
+  export type TvContentItemMinAggregateOutputType = {
+    id: string | null
+    screenGroupId: string | null
+    type: string | null
+    r2Key: string | null
+    checksum: string | null
+    durationSeconds: number | null
+    validFrom: Date | null
+    validTo: Date | null
+    sortOrder: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type TvContentItemMaxAggregateOutputType = {
+    id: string | null
+    screenGroupId: string | null
+    type: string | null
+    r2Key: string | null
+    checksum: string | null
+    durationSeconds: number | null
+    validFrom: Date | null
+    validTo: Date | null
+    sortOrder: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type TvContentItemCountAggregateOutputType = {
+    id: number
+    screenGroupId: number
+    type: number
+    r2Key: number
+    checksum: number
+    durationSeconds: number
+    validFrom: number
+    validTo: number
+    sortOrder: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type TvContentItemAvgAggregateInputType = {
+    durationSeconds?: true
+    sortOrder?: true
+  }
+
+  export type TvContentItemSumAggregateInputType = {
+    durationSeconds?: true
+    sortOrder?: true
+  }
+
+  export type TvContentItemMinAggregateInputType = {
+    id?: true
+    screenGroupId?: true
+    type?: true
+    r2Key?: true
+    checksum?: true
+    durationSeconds?: true
+    validFrom?: true
+    validTo?: true
+    sortOrder?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type TvContentItemMaxAggregateInputType = {
+    id?: true
+    screenGroupId?: true
+    type?: true
+    r2Key?: true
+    checksum?: true
+    durationSeconds?: true
+    validFrom?: true
+    validTo?: true
+    sortOrder?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type TvContentItemCountAggregateInputType = {
+    id?: true
+    screenGroupId?: true
+    type?: true
+    r2Key?: true
+    checksum?: true
+    durationSeconds?: true
+    validFrom?: true
+    validTo?: true
+    sortOrder?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type TvContentItemAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which TvContentItem to aggregate.
+     */
+    where?: TvContentItemWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of TvContentItems to fetch.
+     */
+    orderBy?: TvContentItemOrderByWithRelationInput | TvContentItemOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: TvContentItemWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` TvContentItems from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` TvContentItems.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned TvContentItems
+    **/
+    _count?: true | TvContentItemCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: TvContentItemAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: TvContentItemSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: TvContentItemMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: TvContentItemMaxAggregateInputType
+  }
+
+  export type GetTvContentItemAggregateType<T extends TvContentItemAggregateArgs> = {
+        [P in keyof T & keyof AggregateTvContentItem]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateTvContentItem[P]>
+      : GetScalarType<T[P], AggregateTvContentItem[P]>
+  }
+
+
+
+
+  export type TvContentItemGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: TvContentItemWhereInput
+    orderBy?: TvContentItemOrderByWithAggregationInput | TvContentItemOrderByWithAggregationInput[]
+    by: TvContentItemScalarFieldEnum[] | TvContentItemScalarFieldEnum
+    having?: TvContentItemScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: TvContentItemCountAggregateInputType | true
+    _avg?: TvContentItemAvgAggregateInputType
+    _sum?: TvContentItemSumAggregateInputType
+    _min?: TvContentItemMinAggregateInputType
+    _max?: TvContentItemMaxAggregateInputType
+  }
+
+  export type TvContentItemGroupByOutputType = {
+    id: string
+    screenGroupId: string
+    type: string
+    r2Key: string
+    checksum: string
+    durationSeconds: number | null
+    validFrom: Date | null
+    validTo: Date | null
+    sortOrder: number
+    createdAt: Date
+    updatedAt: Date
+    _count: TvContentItemCountAggregateOutputType | null
+    _avg: TvContentItemAvgAggregateOutputType | null
+    _sum: TvContentItemSumAggregateOutputType | null
+    _min: TvContentItemMinAggregateOutputType | null
+    _max: TvContentItemMaxAggregateOutputType | null
+  }
+
+  type GetTvContentItemGroupByPayload<T extends TvContentItemGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<TvContentItemGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof TvContentItemGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], TvContentItemGroupByOutputType[P]>
+            : GetScalarType<T[P], TvContentItemGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type TvContentItemSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    screenGroupId?: boolean
+    type?: boolean
+    r2Key?: boolean
+    checksum?: boolean
+    durationSeconds?: boolean
+    validFrom?: boolean
+    validTo?: boolean
+    sortOrder?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    screenGroup?: boolean | TvScreenGroupDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["tvContentItem"]>
+
+  export type TvContentItemSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    screenGroupId?: boolean
+    type?: boolean
+    r2Key?: boolean
+    checksum?: boolean
+    durationSeconds?: boolean
+    validFrom?: boolean
+    validTo?: boolean
+    sortOrder?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    screenGroup?: boolean | TvScreenGroupDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["tvContentItem"]>
+
+  export type TvContentItemSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    screenGroupId?: boolean
+    type?: boolean
+    r2Key?: boolean
+    checksum?: boolean
+    durationSeconds?: boolean
+    validFrom?: boolean
+    validTo?: boolean
+    sortOrder?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    screenGroup?: boolean | TvScreenGroupDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["tvContentItem"]>
+
+  export type TvContentItemSelectScalar = {
+    id?: boolean
+    screenGroupId?: boolean
+    type?: boolean
+    r2Key?: boolean
+    checksum?: boolean
+    durationSeconds?: boolean
+    validFrom?: boolean
+    validTo?: boolean
+    sortOrder?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type TvContentItemOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "screenGroupId" | "type" | "r2Key" | "checksum" | "durationSeconds" | "validFrom" | "validTo" | "sortOrder" | "createdAt" | "updatedAt", ExtArgs["result"]["tvContentItem"]>
+  export type TvContentItemInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    screenGroup?: boolean | TvScreenGroupDefaultArgs<ExtArgs>
+  }
+  export type TvContentItemIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    screenGroup?: boolean | TvScreenGroupDefaultArgs<ExtArgs>
+  }
+  export type TvContentItemIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    screenGroup?: boolean | TvScreenGroupDefaultArgs<ExtArgs>
+  }
+
+  export type $TvContentItemPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "TvContentItem"
+    objects: {
+      screenGroup: Prisma.$TvScreenGroupPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      screenGroupId: string
+      type: string
+      r2Key: string
+      checksum: string
+      durationSeconds: number | null
+      validFrom: Date | null
+      validTo: Date | null
+      sortOrder: number
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["tvContentItem"]>
+    composites: {}
+  }
+
+  type TvContentItemGetPayload<S extends boolean | null | undefined | TvContentItemDefaultArgs> = $Result.GetResult<Prisma.$TvContentItemPayload, S>
+
+  type TvContentItemCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<TvContentItemFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: TvContentItemCountAggregateInputType | true
+    }
+
+  export interface TvContentItemDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['TvContentItem'], meta: { name: 'TvContentItem' } }
+    /**
+     * Find zero or one TvContentItem that matches the filter.
+     * @param {TvContentItemFindUniqueArgs} args - Arguments to find a TvContentItem
+     * @example
+     * // Get one TvContentItem
+     * const tvContentItem = await prisma.tvContentItem.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends TvContentItemFindUniqueArgs>(args: SelectSubset<T, TvContentItemFindUniqueArgs<ExtArgs>>): Prisma__TvContentItemClient<$Result.GetResult<Prisma.$TvContentItemPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one TvContentItem that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {TvContentItemFindUniqueOrThrowArgs} args - Arguments to find a TvContentItem
+     * @example
+     * // Get one TvContentItem
+     * const tvContentItem = await prisma.tvContentItem.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends TvContentItemFindUniqueOrThrowArgs>(args: SelectSubset<T, TvContentItemFindUniqueOrThrowArgs<ExtArgs>>): Prisma__TvContentItemClient<$Result.GetResult<Prisma.$TvContentItemPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first TvContentItem that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TvContentItemFindFirstArgs} args - Arguments to find a TvContentItem
+     * @example
+     * // Get one TvContentItem
+     * const tvContentItem = await prisma.tvContentItem.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends TvContentItemFindFirstArgs>(args?: SelectSubset<T, TvContentItemFindFirstArgs<ExtArgs>>): Prisma__TvContentItemClient<$Result.GetResult<Prisma.$TvContentItemPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first TvContentItem that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TvContentItemFindFirstOrThrowArgs} args - Arguments to find a TvContentItem
+     * @example
+     * // Get one TvContentItem
+     * const tvContentItem = await prisma.tvContentItem.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends TvContentItemFindFirstOrThrowArgs>(args?: SelectSubset<T, TvContentItemFindFirstOrThrowArgs<ExtArgs>>): Prisma__TvContentItemClient<$Result.GetResult<Prisma.$TvContentItemPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more TvContentItems that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TvContentItemFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all TvContentItems
+     * const tvContentItems = await prisma.tvContentItem.findMany()
+     * 
+     * // Get first 10 TvContentItems
+     * const tvContentItems = await prisma.tvContentItem.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const tvContentItemWithIdOnly = await prisma.tvContentItem.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends TvContentItemFindManyArgs>(args?: SelectSubset<T, TvContentItemFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TvContentItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a TvContentItem.
+     * @param {TvContentItemCreateArgs} args - Arguments to create a TvContentItem.
+     * @example
+     * // Create one TvContentItem
+     * const TvContentItem = await prisma.tvContentItem.create({
+     *   data: {
+     *     // ... data to create a TvContentItem
+     *   }
+     * })
+     * 
+     */
+    create<T extends TvContentItemCreateArgs>(args: SelectSubset<T, TvContentItemCreateArgs<ExtArgs>>): Prisma__TvContentItemClient<$Result.GetResult<Prisma.$TvContentItemPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many TvContentItems.
+     * @param {TvContentItemCreateManyArgs} args - Arguments to create many TvContentItems.
+     * @example
+     * // Create many TvContentItems
+     * const tvContentItem = await prisma.tvContentItem.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends TvContentItemCreateManyArgs>(args?: SelectSubset<T, TvContentItemCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many TvContentItems and returns the data saved in the database.
+     * @param {TvContentItemCreateManyAndReturnArgs} args - Arguments to create many TvContentItems.
+     * @example
+     * // Create many TvContentItems
+     * const tvContentItem = await prisma.tvContentItem.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many TvContentItems and only return the `id`
+     * const tvContentItemWithIdOnly = await prisma.tvContentItem.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends TvContentItemCreateManyAndReturnArgs>(args?: SelectSubset<T, TvContentItemCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TvContentItemPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a TvContentItem.
+     * @param {TvContentItemDeleteArgs} args - Arguments to delete one TvContentItem.
+     * @example
+     * // Delete one TvContentItem
+     * const TvContentItem = await prisma.tvContentItem.delete({
+     *   where: {
+     *     // ... filter to delete one TvContentItem
+     *   }
+     * })
+     * 
+     */
+    delete<T extends TvContentItemDeleteArgs>(args: SelectSubset<T, TvContentItemDeleteArgs<ExtArgs>>): Prisma__TvContentItemClient<$Result.GetResult<Prisma.$TvContentItemPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one TvContentItem.
+     * @param {TvContentItemUpdateArgs} args - Arguments to update one TvContentItem.
+     * @example
+     * // Update one TvContentItem
+     * const tvContentItem = await prisma.tvContentItem.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends TvContentItemUpdateArgs>(args: SelectSubset<T, TvContentItemUpdateArgs<ExtArgs>>): Prisma__TvContentItemClient<$Result.GetResult<Prisma.$TvContentItemPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more TvContentItems.
+     * @param {TvContentItemDeleteManyArgs} args - Arguments to filter TvContentItems to delete.
+     * @example
+     * // Delete a few TvContentItems
+     * const { count } = await prisma.tvContentItem.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends TvContentItemDeleteManyArgs>(args?: SelectSubset<T, TvContentItemDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more TvContentItems.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TvContentItemUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many TvContentItems
+     * const tvContentItem = await prisma.tvContentItem.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends TvContentItemUpdateManyArgs>(args: SelectSubset<T, TvContentItemUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more TvContentItems and returns the data updated in the database.
+     * @param {TvContentItemUpdateManyAndReturnArgs} args - Arguments to update many TvContentItems.
+     * @example
+     * // Update many TvContentItems
+     * const tvContentItem = await prisma.tvContentItem.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more TvContentItems and only return the `id`
+     * const tvContentItemWithIdOnly = await prisma.tvContentItem.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends TvContentItemUpdateManyAndReturnArgs>(args: SelectSubset<T, TvContentItemUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TvContentItemPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one TvContentItem.
+     * @param {TvContentItemUpsertArgs} args - Arguments to update or create a TvContentItem.
+     * @example
+     * // Update or create a TvContentItem
+     * const tvContentItem = await prisma.tvContentItem.upsert({
+     *   create: {
+     *     // ... data to create a TvContentItem
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the TvContentItem we want to update
+     *   }
+     * })
+     */
+    upsert<T extends TvContentItemUpsertArgs>(args: SelectSubset<T, TvContentItemUpsertArgs<ExtArgs>>): Prisma__TvContentItemClient<$Result.GetResult<Prisma.$TvContentItemPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of TvContentItems.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TvContentItemCountArgs} args - Arguments to filter TvContentItems to count.
+     * @example
+     * // Count the number of TvContentItems
+     * const count = await prisma.tvContentItem.count({
+     *   where: {
+     *     // ... the filter for the TvContentItems we want to count
+     *   }
+     * })
+    **/
+    count<T extends TvContentItemCountArgs>(
+      args?: Subset<T, TvContentItemCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], TvContentItemCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a TvContentItem.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TvContentItemAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends TvContentItemAggregateArgs>(args: Subset<T, TvContentItemAggregateArgs>): Prisma.PrismaPromise<GetTvContentItemAggregateType<T>>
+
+    /**
+     * Group by TvContentItem.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TvContentItemGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends TvContentItemGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: TvContentItemGroupByArgs['orderBy'] }
+        : { orderBy?: TvContentItemGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, TvContentItemGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetTvContentItemGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the TvContentItem model
+   */
+  readonly fields: TvContentItemFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for TvContentItem.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__TvContentItemClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    screenGroup<T extends TvScreenGroupDefaultArgs<ExtArgs> = {}>(args?: Subset<T, TvScreenGroupDefaultArgs<ExtArgs>>): Prisma__TvScreenGroupClient<$Result.GetResult<Prisma.$TvScreenGroupPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the TvContentItem model
+   */
+  interface TvContentItemFieldRefs {
+    readonly id: FieldRef<"TvContentItem", 'String'>
+    readonly screenGroupId: FieldRef<"TvContentItem", 'String'>
+    readonly type: FieldRef<"TvContentItem", 'String'>
+    readonly r2Key: FieldRef<"TvContentItem", 'String'>
+    readonly checksum: FieldRef<"TvContentItem", 'String'>
+    readonly durationSeconds: FieldRef<"TvContentItem", 'Int'>
+    readonly validFrom: FieldRef<"TvContentItem", 'DateTime'>
+    readonly validTo: FieldRef<"TvContentItem", 'DateTime'>
+    readonly sortOrder: FieldRef<"TvContentItem", 'Int'>
+    readonly createdAt: FieldRef<"TvContentItem", 'DateTime'>
+    readonly updatedAt: FieldRef<"TvContentItem", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * TvContentItem findUnique
+   */
+  export type TvContentItemFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TvContentItem
+     */
+    select?: TvContentItemSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TvContentItem
+     */
+    omit?: TvContentItemOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TvContentItemInclude<ExtArgs> | null
+    /**
+     * Filter, which TvContentItem to fetch.
+     */
+    where: TvContentItemWhereUniqueInput
+  }
+
+  /**
+   * TvContentItem findUniqueOrThrow
+   */
+  export type TvContentItemFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TvContentItem
+     */
+    select?: TvContentItemSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TvContentItem
+     */
+    omit?: TvContentItemOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TvContentItemInclude<ExtArgs> | null
+    /**
+     * Filter, which TvContentItem to fetch.
+     */
+    where: TvContentItemWhereUniqueInput
+  }
+
+  /**
+   * TvContentItem findFirst
+   */
+  export type TvContentItemFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TvContentItem
+     */
+    select?: TvContentItemSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TvContentItem
+     */
+    omit?: TvContentItemOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TvContentItemInclude<ExtArgs> | null
+    /**
+     * Filter, which TvContentItem to fetch.
+     */
+    where?: TvContentItemWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of TvContentItems to fetch.
+     */
+    orderBy?: TvContentItemOrderByWithRelationInput | TvContentItemOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for TvContentItems.
+     */
+    cursor?: TvContentItemWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` TvContentItems from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` TvContentItems.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of TvContentItems.
+     */
+    distinct?: TvContentItemScalarFieldEnum | TvContentItemScalarFieldEnum[]
+  }
+
+  /**
+   * TvContentItem findFirstOrThrow
+   */
+  export type TvContentItemFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TvContentItem
+     */
+    select?: TvContentItemSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TvContentItem
+     */
+    omit?: TvContentItemOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TvContentItemInclude<ExtArgs> | null
+    /**
+     * Filter, which TvContentItem to fetch.
+     */
+    where?: TvContentItemWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of TvContentItems to fetch.
+     */
+    orderBy?: TvContentItemOrderByWithRelationInput | TvContentItemOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for TvContentItems.
+     */
+    cursor?: TvContentItemWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` TvContentItems from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` TvContentItems.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of TvContentItems.
+     */
+    distinct?: TvContentItemScalarFieldEnum | TvContentItemScalarFieldEnum[]
+  }
+
+  /**
+   * TvContentItem findMany
+   */
+  export type TvContentItemFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TvContentItem
+     */
+    select?: TvContentItemSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TvContentItem
+     */
+    omit?: TvContentItemOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TvContentItemInclude<ExtArgs> | null
+    /**
+     * Filter, which TvContentItems to fetch.
+     */
+    where?: TvContentItemWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of TvContentItems to fetch.
+     */
+    orderBy?: TvContentItemOrderByWithRelationInput | TvContentItemOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing TvContentItems.
+     */
+    cursor?: TvContentItemWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` TvContentItems from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` TvContentItems.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of TvContentItems.
+     */
+    distinct?: TvContentItemScalarFieldEnum | TvContentItemScalarFieldEnum[]
+  }
+
+  /**
+   * TvContentItem create
+   */
+  export type TvContentItemCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TvContentItem
+     */
+    select?: TvContentItemSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TvContentItem
+     */
+    omit?: TvContentItemOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TvContentItemInclude<ExtArgs> | null
+    /**
+     * The data needed to create a TvContentItem.
+     */
+    data: XOR<TvContentItemCreateInput, TvContentItemUncheckedCreateInput>
+  }
+
+  /**
+   * TvContentItem createMany
+   */
+  export type TvContentItemCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many TvContentItems.
+     */
+    data: TvContentItemCreateManyInput | TvContentItemCreateManyInput[]
+  }
+
+  /**
+   * TvContentItem createManyAndReturn
+   */
+  export type TvContentItemCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TvContentItem
+     */
+    select?: TvContentItemSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the TvContentItem
+     */
+    omit?: TvContentItemOmit<ExtArgs> | null
+    /**
+     * The data used to create many TvContentItems.
+     */
+    data: TvContentItemCreateManyInput | TvContentItemCreateManyInput[]
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TvContentItemIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * TvContentItem update
+   */
+  export type TvContentItemUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TvContentItem
+     */
+    select?: TvContentItemSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TvContentItem
+     */
+    omit?: TvContentItemOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TvContentItemInclude<ExtArgs> | null
+    /**
+     * The data needed to update a TvContentItem.
+     */
+    data: XOR<TvContentItemUpdateInput, TvContentItemUncheckedUpdateInput>
+    /**
+     * Choose, which TvContentItem to update.
+     */
+    where: TvContentItemWhereUniqueInput
+  }
+
+  /**
+   * TvContentItem updateMany
+   */
+  export type TvContentItemUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update TvContentItems.
+     */
+    data: XOR<TvContentItemUpdateManyMutationInput, TvContentItemUncheckedUpdateManyInput>
+    /**
+     * Filter which TvContentItems to update
+     */
+    where?: TvContentItemWhereInput
+    /**
+     * Limit how many TvContentItems to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * TvContentItem updateManyAndReturn
+   */
+  export type TvContentItemUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TvContentItem
+     */
+    select?: TvContentItemSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the TvContentItem
+     */
+    omit?: TvContentItemOmit<ExtArgs> | null
+    /**
+     * The data used to update TvContentItems.
+     */
+    data: XOR<TvContentItemUpdateManyMutationInput, TvContentItemUncheckedUpdateManyInput>
+    /**
+     * Filter which TvContentItems to update
+     */
+    where?: TvContentItemWhereInput
+    /**
+     * Limit how many TvContentItems to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TvContentItemIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * TvContentItem upsert
+   */
+  export type TvContentItemUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TvContentItem
+     */
+    select?: TvContentItemSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TvContentItem
+     */
+    omit?: TvContentItemOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TvContentItemInclude<ExtArgs> | null
+    /**
+     * The filter to search for the TvContentItem to update in case it exists.
+     */
+    where: TvContentItemWhereUniqueInput
+    /**
+     * In case the TvContentItem found by the `where` argument doesn't exist, create a new TvContentItem with this data.
+     */
+    create: XOR<TvContentItemCreateInput, TvContentItemUncheckedCreateInput>
+    /**
+     * In case the TvContentItem was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<TvContentItemUpdateInput, TvContentItemUncheckedUpdateInput>
+  }
+
+  /**
+   * TvContentItem delete
+   */
+  export type TvContentItemDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TvContentItem
+     */
+    select?: TvContentItemSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TvContentItem
+     */
+    omit?: TvContentItemOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TvContentItemInclude<ExtArgs> | null
+    /**
+     * Filter which TvContentItem to delete.
+     */
+    where: TvContentItemWhereUniqueInput
+  }
+
+  /**
+   * TvContentItem deleteMany
+   */
+  export type TvContentItemDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which TvContentItems to delete
+     */
+    where?: TvContentItemWhereInput
+    /**
+     * Limit how many TvContentItems to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * TvContentItem without action
+   */
+  export type TvContentItemDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TvContentItem
+     */
+    select?: TvContentItemSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TvContentItem
+     */
+    omit?: TvContentItemOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TvContentItemInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -45707,6 +49471,51 @@ export namespace Prisma {
   export type NfcTransactionScalarFieldEnum = (typeof NfcTransactionScalarFieldEnum)[keyof typeof NfcTransactionScalarFieldEnum]
 
 
+  export const TvScreenGroupScalarFieldEnum: {
+    id: 'id',
+    name: 'name',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type TvScreenGroupScalarFieldEnum = (typeof TvScreenGroupScalarFieldEnum)[keyof typeof TvScreenGroupScalarFieldEnum]
+
+
+  export const TvScreenScalarFieldEnum: {
+    id: 'id',
+    screenGroupId: 'screenGroupId',
+    label: 'label',
+    pairingCode: 'pairingCode',
+    pairingExpiresAt: 'pairingExpiresAt',
+    deviceToken: 'deviceToken',
+    lastHeartbeatAt: 'lastHeartbeatAt',
+    currentItemId: 'currentItemId',
+    cacheUsedBytes: 'cacheUsedBytes',
+    appVersion: 'appVersion',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type TvScreenScalarFieldEnum = (typeof TvScreenScalarFieldEnum)[keyof typeof TvScreenScalarFieldEnum]
+
+
+  export const TvContentItemScalarFieldEnum: {
+    id: 'id',
+    screenGroupId: 'screenGroupId',
+    type: 'type',
+    r2Key: 'r2Key',
+    checksum: 'checksum',
+    durationSeconds: 'durationSeconds',
+    validFrom: 'validFrom',
+    validTo: 'validTo',
+    sortOrder: 'sortOrder',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type TvContentItemScalarFieldEnum = (typeof TvContentItemScalarFieldEnum)[keyof typeof TvContentItemScalarFieldEnum]
+
+
   export const SortOrder: {
     asc: 'asc',
     desc: 'desc'
@@ -45760,6 +49569,13 @@ export namespace Prisma {
    * Reference to a field of type 'Float'
    */
   export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
+    
+
+
+  /**
+   * Reference to a field of type 'BigInt'
+   */
+  export type BigIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BigInt'>
     
   /**
    * Deep Input Types
@@ -48509,6 +52325,238 @@ export namespace Prisma {
     failureReason?: StringNullableWithAggregatesFilter<"NfcTransaction"> | string | null
     metadata?: StringNullableWithAggregatesFilter<"NfcTransaction"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"NfcTransaction"> | Date | string
+  }
+
+  export type TvScreenGroupWhereInput = {
+    AND?: TvScreenGroupWhereInput | TvScreenGroupWhereInput[]
+    OR?: TvScreenGroupWhereInput[]
+    NOT?: TvScreenGroupWhereInput | TvScreenGroupWhereInput[]
+    id?: StringFilter<"TvScreenGroup"> | string
+    name?: StringFilter<"TvScreenGroup"> | string
+    createdAt?: DateTimeFilter<"TvScreenGroup"> | Date | string
+    updatedAt?: DateTimeFilter<"TvScreenGroup"> | Date | string
+    screens?: TvScreenListRelationFilter
+    contentItems?: TvContentItemListRelationFilter
+  }
+
+  export type TvScreenGroupOrderByWithRelationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    screens?: TvScreenOrderByRelationAggregateInput
+    contentItems?: TvContentItemOrderByRelationAggregateInput
+  }
+
+  export type TvScreenGroupWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: TvScreenGroupWhereInput | TvScreenGroupWhereInput[]
+    OR?: TvScreenGroupWhereInput[]
+    NOT?: TvScreenGroupWhereInput | TvScreenGroupWhereInput[]
+    name?: StringFilter<"TvScreenGroup"> | string
+    createdAt?: DateTimeFilter<"TvScreenGroup"> | Date | string
+    updatedAt?: DateTimeFilter<"TvScreenGroup"> | Date | string
+    screens?: TvScreenListRelationFilter
+    contentItems?: TvContentItemListRelationFilter
+  }, "id">
+
+  export type TvScreenGroupOrderByWithAggregationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: TvScreenGroupCountOrderByAggregateInput
+    _max?: TvScreenGroupMaxOrderByAggregateInput
+    _min?: TvScreenGroupMinOrderByAggregateInput
+  }
+
+  export type TvScreenGroupScalarWhereWithAggregatesInput = {
+    AND?: TvScreenGroupScalarWhereWithAggregatesInput | TvScreenGroupScalarWhereWithAggregatesInput[]
+    OR?: TvScreenGroupScalarWhereWithAggregatesInput[]
+    NOT?: TvScreenGroupScalarWhereWithAggregatesInput | TvScreenGroupScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"TvScreenGroup"> | string
+    name?: StringWithAggregatesFilter<"TvScreenGroup"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"TvScreenGroup"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"TvScreenGroup"> | Date | string
+  }
+
+  export type TvScreenWhereInput = {
+    AND?: TvScreenWhereInput | TvScreenWhereInput[]
+    OR?: TvScreenWhereInput[]
+    NOT?: TvScreenWhereInput | TvScreenWhereInput[]
+    id?: StringFilter<"TvScreen"> | string
+    screenGroupId?: StringFilter<"TvScreen"> | string
+    label?: StringFilter<"TvScreen"> | string
+    pairingCode?: StringNullableFilter<"TvScreen"> | string | null
+    pairingExpiresAt?: DateTimeNullableFilter<"TvScreen"> | Date | string | null
+    deviceToken?: StringNullableFilter<"TvScreen"> | string | null
+    lastHeartbeatAt?: DateTimeNullableFilter<"TvScreen"> | Date | string | null
+    currentItemId?: StringNullableFilter<"TvScreen"> | string | null
+    cacheUsedBytes?: BigIntNullableFilter<"TvScreen"> | bigint | number | null
+    appVersion?: StringNullableFilter<"TvScreen"> | string | null
+    createdAt?: DateTimeFilter<"TvScreen"> | Date | string
+    updatedAt?: DateTimeFilter<"TvScreen"> | Date | string
+    screenGroup?: XOR<TvScreenGroupScalarRelationFilter, TvScreenGroupWhereInput>
+  }
+
+  export type TvScreenOrderByWithRelationInput = {
+    id?: SortOrder
+    screenGroupId?: SortOrder
+    label?: SortOrder
+    pairingCode?: SortOrderInput | SortOrder
+    pairingExpiresAt?: SortOrderInput | SortOrder
+    deviceToken?: SortOrderInput | SortOrder
+    lastHeartbeatAt?: SortOrderInput | SortOrder
+    currentItemId?: SortOrderInput | SortOrder
+    cacheUsedBytes?: SortOrderInput | SortOrder
+    appVersion?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    screenGroup?: TvScreenGroupOrderByWithRelationInput
+  }
+
+  export type TvScreenWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: TvScreenWhereInput | TvScreenWhereInput[]
+    OR?: TvScreenWhereInput[]
+    NOT?: TvScreenWhereInput | TvScreenWhereInput[]
+    screenGroupId?: StringFilter<"TvScreen"> | string
+    label?: StringFilter<"TvScreen"> | string
+    pairingCode?: StringNullableFilter<"TvScreen"> | string | null
+    pairingExpiresAt?: DateTimeNullableFilter<"TvScreen"> | Date | string | null
+    deviceToken?: StringNullableFilter<"TvScreen"> | string | null
+    lastHeartbeatAt?: DateTimeNullableFilter<"TvScreen"> | Date | string | null
+    currentItemId?: StringNullableFilter<"TvScreen"> | string | null
+    cacheUsedBytes?: BigIntNullableFilter<"TvScreen"> | bigint | number | null
+    appVersion?: StringNullableFilter<"TvScreen"> | string | null
+    createdAt?: DateTimeFilter<"TvScreen"> | Date | string
+    updatedAt?: DateTimeFilter<"TvScreen"> | Date | string
+    screenGroup?: XOR<TvScreenGroupScalarRelationFilter, TvScreenGroupWhereInput>
+  }, "id">
+
+  export type TvScreenOrderByWithAggregationInput = {
+    id?: SortOrder
+    screenGroupId?: SortOrder
+    label?: SortOrder
+    pairingCode?: SortOrderInput | SortOrder
+    pairingExpiresAt?: SortOrderInput | SortOrder
+    deviceToken?: SortOrderInput | SortOrder
+    lastHeartbeatAt?: SortOrderInput | SortOrder
+    currentItemId?: SortOrderInput | SortOrder
+    cacheUsedBytes?: SortOrderInput | SortOrder
+    appVersion?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: TvScreenCountOrderByAggregateInput
+    _avg?: TvScreenAvgOrderByAggregateInput
+    _max?: TvScreenMaxOrderByAggregateInput
+    _min?: TvScreenMinOrderByAggregateInput
+    _sum?: TvScreenSumOrderByAggregateInput
+  }
+
+  export type TvScreenScalarWhereWithAggregatesInput = {
+    AND?: TvScreenScalarWhereWithAggregatesInput | TvScreenScalarWhereWithAggregatesInput[]
+    OR?: TvScreenScalarWhereWithAggregatesInput[]
+    NOT?: TvScreenScalarWhereWithAggregatesInput | TvScreenScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"TvScreen"> | string
+    screenGroupId?: StringWithAggregatesFilter<"TvScreen"> | string
+    label?: StringWithAggregatesFilter<"TvScreen"> | string
+    pairingCode?: StringNullableWithAggregatesFilter<"TvScreen"> | string | null
+    pairingExpiresAt?: DateTimeNullableWithAggregatesFilter<"TvScreen"> | Date | string | null
+    deviceToken?: StringNullableWithAggregatesFilter<"TvScreen"> | string | null
+    lastHeartbeatAt?: DateTimeNullableWithAggregatesFilter<"TvScreen"> | Date | string | null
+    currentItemId?: StringNullableWithAggregatesFilter<"TvScreen"> | string | null
+    cacheUsedBytes?: BigIntNullableWithAggregatesFilter<"TvScreen"> | bigint | number | null
+    appVersion?: StringNullableWithAggregatesFilter<"TvScreen"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"TvScreen"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"TvScreen"> | Date | string
+  }
+
+  export type TvContentItemWhereInput = {
+    AND?: TvContentItemWhereInput | TvContentItemWhereInput[]
+    OR?: TvContentItemWhereInput[]
+    NOT?: TvContentItemWhereInput | TvContentItemWhereInput[]
+    id?: StringFilter<"TvContentItem"> | string
+    screenGroupId?: StringFilter<"TvContentItem"> | string
+    type?: StringFilter<"TvContentItem"> | string
+    r2Key?: StringFilter<"TvContentItem"> | string
+    checksum?: StringFilter<"TvContentItem"> | string
+    durationSeconds?: IntNullableFilter<"TvContentItem"> | number | null
+    validFrom?: DateTimeNullableFilter<"TvContentItem"> | Date | string | null
+    validTo?: DateTimeNullableFilter<"TvContentItem"> | Date | string | null
+    sortOrder?: IntFilter<"TvContentItem"> | number
+    createdAt?: DateTimeFilter<"TvContentItem"> | Date | string
+    updatedAt?: DateTimeFilter<"TvContentItem"> | Date | string
+    screenGroup?: XOR<TvScreenGroupScalarRelationFilter, TvScreenGroupWhereInput>
+  }
+
+  export type TvContentItemOrderByWithRelationInput = {
+    id?: SortOrder
+    screenGroupId?: SortOrder
+    type?: SortOrder
+    r2Key?: SortOrder
+    checksum?: SortOrder
+    durationSeconds?: SortOrderInput | SortOrder
+    validFrom?: SortOrderInput | SortOrder
+    validTo?: SortOrderInput | SortOrder
+    sortOrder?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    screenGroup?: TvScreenGroupOrderByWithRelationInput
+  }
+
+  export type TvContentItemWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: TvContentItemWhereInput | TvContentItemWhereInput[]
+    OR?: TvContentItemWhereInput[]
+    NOT?: TvContentItemWhereInput | TvContentItemWhereInput[]
+    screenGroupId?: StringFilter<"TvContentItem"> | string
+    type?: StringFilter<"TvContentItem"> | string
+    r2Key?: StringFilter<"TvContentItem"> | string
+    checksum?: StringFilter<"TvContentItem"> | string
+    durationSeconds?: IntNullableFilter<"TvContentItem"> | number | null
+    validFrom?: DateTimeNullableFilter<"TvContentItem"> | Date | string | null
+    validTo?: DateTimeNullableFilter<"TvContentItem"> | Date | string | null
+    sortOrder?: IntFilter<"TvContentItem"> | number
+    createdAt?: DateTimeFilter<"TvContentItem"> | Date | string
+    updatedAt?: DateTimeFilter<"TvContentItem"> | Date | string
+    screenGroup?: XOR<TvScreenGroupScalarRelationFilter, TvScreenGroupWhereInput>
+  }, "id">
+
+  export type TvContentItemOrderByWithAggregationInput = {
+    id?: SortOrder
+    screenGroupId?: SortOrder
+    type?: SortOrder
+    r2Key?: SortOrder
+    checksum?: SortOrder
+    durationSeconds?: SortOrderInput | SortOrder
+    validFrom?: SortOrderInput | SortOrder
+    validTo?: SortOrderInput | SortOrder
+    sortOrder?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: TvContentItemCountOrderByAggregateInput
+    _avg?: TvContentItemAvgOrderByAggregateInput
+    _max?: TvContentItemMaxOrderByAggregateInput
+    _min?: TvContentItemMinOrderByAggregateInput
+    _sum?: TvContentItemSumOrderByAggregateInput
+  }
+
+  export type TvContentItemScalarWhereWithAggregatesInput = {
+    AND?: TvContentItemScalarWhereWithAggregatesInput | TvContentItemScalarWhereWithAggregatesInput[]
+    OR?: TvContentItemScalarWhereWithAggregatesInput[]
+    NOT?: TvContentItemScalarWhereWithAggregatesInput | TvContentItemScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"TvContentItem"> | string
+    screenGroupId?: StringWithAggregatesFilter<"TvContentItem"> | string
+    type?: StringWithAggregatesFilter<"TvContentItem"> | string
+    r2Key?: StringWithAggregatesFilter<"TvContentItem"> | string
+    checksum?: StringWithAggregatesFilter<"TvContentItem"> | string
+    durationSeconds?: IntNullableWithAggregatesFilter<"TvContentItem"> | number | null
+    validFrom?: DateTimeNullableWithAggregatesFilter<"TvContentItem"> | Date | string | null
+    validTo?: DateTimeNullableWithAggregatesFilter<"TvContentItem"> | Date | string | null
+    sortOrder?: IntWithAggregatesFilter<"TvContentItem"> | number
+    createdAt?: DateTimeWithAggregatesFilter<"TvContentItem"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"TvContentItem"> | Date | string
   }
 
   export type AdminCreateInput = {
@@ -51491,6 +55539,264 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type TvScreenGroupCreateInput = {
+    id?: string
+    name: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    screens?: TvScreenCreateNestedManyWithoutScreenGroupInput
+    contentItems?: TvContentItemCreateNestedManyWithoutScreenGroupInput
+  }
+
+  export type TvScreenGroupUncheckedCreateInput = {
+    id?: string
+    name: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    screens?: TvScreenUncheckedCreateNestedManyWithoutScreenGroupInput
+    contentItems?: TvContentItemUncheckedCreateNestedManyWithoutScreenGroupInput
+  }
+
+  export type TvScreenGroupUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    screens?: TvScreenUpdateManyWithoutScreenGroupNestedInput
+    contentItems?: TvContentItemUpdateManyWithoutScreenGroupNestedInput
+  }
+
+  export type TvScreenGroupUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    screens?: TvScreenUncheckedUpdateManyWithoutScreenGroupNestedInput
+    contentItems?: TvContentItemUncheckedUpdateManyWithoutScreenGroupNestedInput
+  }
+
+  export type TvScreenGroupCreateManyInput = {
+    id?: string
+    name: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type TvScreenGroupUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TvScreenGroupUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TvScreenCreateInput = {
+    id?: string
+    label: string
+    pairingCode?: string | null
+    pairingExpiresAt?: Date | string | null
+    deviceToken?: string | null
+    lastHeartbeatAt?: Date | string | null
+    currentItemId?: string | null
+    cacheUsedBytes?: bigint | number | null
+    appVersion?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    screenGroup: TvScreenGroupCreateNestedOneWithoutScreensInput
+  }
+
+  export type TvScreenUncheckedCreateInput = {
+    id?: string
+    screenGroupId: string
+    label: string
+    pairingCode?: string | null
+    pairingExpiresAt?: Date | string | null
+    deviceToken?: string | null
+    lastHeartbeatAt?: Date | string | null
+    currentItemId?: string | null
+    cacheUsedBytes?: bigint | number | null
+    appVersion?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type TvScreenUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    label?: StringFieldUpdateOperationsInput | string
+    pairingCode?: NullableStringFieldUpdateOperationsInput | string | null
+    pairingExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deviceToken?: NullableStringFieldUpdateOperationsInput | string | null
+    lastHeartbeatAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    currentItemId?: NullableStringFieldUpdateOperationsInput | string | null
+    cacheUsedBytes?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+    appVersion?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    screenGroup?: TvScreenGroupUpdateOneRequiredWithoutScreensNestedInput
+  }
+
+  export type TvScreenUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    screenGroupId?: StringFieldUpdateOperationsInput | string
+    label?: StringFieldUpdateOperationsInput | string
+    pairingCode?: NullableStringFieldUpdateOperationsInput | string | null
+    pairingExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deviceToken?: NullableStringFieldUpdateOperationsInput | string | null
+    lastHeartbeatAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    currentItemId?: NullableStringFieldUpdateOperationsInput | string | null
+    cacheUsedBytes?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+    appVersion?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TvScreenCreateManyInput = {
+    id?: string
+    screenGroupId: string
+    label: string
+    pairingCode?: string | null
+    pairingExpiresAt?: Date | string | null
+    deviceToken?: string | null
+    lastHeartbeatAt?: Date | string | null
+    currentItemId?: string | null
+    cacheUsedBytes?: bigint | number | null
+    appVersion?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type TvScreenUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    label?: StringFieldUpdateOperationsInput | string
+    pairingCode?: NullableStringFieldUpdateOperationsInput | string | null
+    pairingExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deviceToken?: NullableStringFieldUpdateOperationsInput | string | null
+    lastHeartbeatAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    currentItemId?: NullableStringFieldUpdateOperationsInput | string | null
+    cacheUsedBytes?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+    appVersion?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TvScreenUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    screenGroupId?: StringFieldUpdateOperationsInput | string
+    label?: StringFieldUpdateOperationsInput | string
+    pairingCode?: NullableStringFieldUpdateOperationsInput | string | null
+    pairingExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deviceToken?: NullableStringFieldUpdateOperationsInput | string | null
+    lastHeartbeatAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    currentItemId?: NullableStringFieldUpdateOperationsInput | string | null
+    cacheUsedBytes?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+    appVersion?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TvContentItemCreateInput = {
+    id?: string
+    type: string
+    r2Key: string
+    checksum: string
+    durationSeconds?: number | null
+    validFrom?: Date | string | null
+    validTo?: Date | string | null
+    sortOrder?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    screenGroup: TvScreenGroupCreateNestedOneWithoutContentItemsInput
+  }
+
+  export type TvContentItemUncheckedCreateInput = {
+    id?: string
+    screenGroupId: string
+    type: string
+    r2Key: string
+    checksum: string
+    durationSeconds?: number | null
+    validFrom?: Date | string | null
+    validTo?: Date | string | null
+    sortOrder?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type TvContentItemUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    r2Key?: StringFieldUpdateOperationsInput | string
+    checksum?: StringFieldUpdateOperationsInput | string
+    durationSeconds?: NullableIntFieldUpdateOperationsInput | number | null
+    validFrom?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    validTo?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    screenGroup?: TvScreenGroupUpdateOneRequiredWithoutContentItemsNestedInput
+  }
+
+  export type TvContentItemUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    screenGroupId?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    r2Key?: StringFieldUpdateOperationsInput | string
+    checksum?: StringFieldUpdateOperationsInput | string
+    durationSeconds?: NullableIntFieldUpdateOperationsInput | number | null
+    validFrom?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    validTo?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TvContentItemCreateManyInput = {
+    id?: string
+    screenGroupId: string
+    type: string
+    r2Key: string
+    checksum: string
+    durationSeconds?: number | null
+    validFrom?: Date | string | null
+    validTo?: Date | string | null
+    sortOrder?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type TvContentItemUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    r2Key?: StringFieldUpdateOperationsInput | string
+    checksum?: StringFieldUpdateOperationsInput | string
+    durationSeconds?: NullableIntFieldUpdateOperationsInput | number | null
+    validFrom?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    validTo?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TvContentItemUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    screenGroupId?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    r2Key?: StringFieldUpdateOperationsInput | string
+    checksum?: StringFieldUpdateOperationsInput | string
+    durationSeconds?: NullableIntFieldUpdateOperationsInput | number | null
+    validFrom?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    validTo?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type StringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[]
@@ -53491,6 +57797,184 @@ export namespace Prisma {
 
   export type NfcTransactionSumOrderByAggregateInput = {
     amount?: SortOrder
+  }
+
+  export type TvScreenListRelationFilter = {
+    every?: TvScreenWhereInput
+    some?: TvScreenWhereInput
+    none?: TvScreenWhereInput
+  }
+
+  export type TvContentItemListRelationFilter = {
+    every?: TvContentItemWhereInput
+    some?: TvContentItemWhereInput
+    none?: TvContentItemWhereInput
+  }
+
+  export type TvScreenOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type TvContentItemOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type TvScreenGroupCountOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type TvScreenGroupMaxOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type TvScreenGroupMinOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type BigIntNullableFilter<$PrismaModel = never> = {
+    equals?: bigint | number | BigIntFieldRefInput<$PrismaModel> | null
+    in?: bigint[] | number[] | null
+    notIn?: bigint[] | number[] | null
+    lt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
+    lte?: bigint | number | BigIntFieldRefInput<$PrismaModel>
+    gt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
+    gte?: bigint | number | BigIntFieldRefInput<$PrismaModel>
+    not?: NestedBigIntNullableFilter<$PrismaModel> | bigint | number | null
+  }
+
+  export type TvScreenGroupScalarRelationFilter = {
+    is?: TvScreenGroupWhereInput
+    isNot?: TvScreenGroupWhereInput
+  }
+
+  export type TvScreenCountOrderByAggregateInput = {
+    id?: SortOrder
+    screenGroupId?: SortOrder
+    label?: SortOrder
+    pairingCode?: SortOrder
+    pairingExpiresAt?: SortOrder
+    deviceToken?: SortOrder
+    lastHeartbeatAt?: SortOrder
+    currentItemId?: SortOrder
+    cacheUsedBytes?: SortOrder
+    appVersion?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type TvScreenAvgOrderByAggregateInput = {
+    cacheUsedBytes?: SortOrder
+  }
+
+  export type TvScreenMaxOrderByAggregateInput = {
+    id?: SortOrder
+    screenGroupId?: SortOrder
+    label?: SortOrder
+    pairingCode?: SortOrder
+    pairingExpiresAt?: SortOrder
+    deviceToken?: SortOrder
+    lastHeartbeatAt?: SortOrder
+    currentItemId?: SortOrder
+    cacheUsedBytes?: SortOrder
+    appVersion?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type TvScreenMinOrderByAggregateInput = {
+    id?: SortOrder
+    screenGroupId?: SortOrder
+    label?: SortOrder
+    pairingCode?: SortOrder
+    pairingExpiresAt?: SortOrder
+    deviceToken?: SortOrder
+    lastHeartbeatAt?: SortOrder
+    currentItemId?: SortOrder
+    cacheUsedBytes?: SortOrder
+    appVersion?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type TvScreenSumOrderByAggregateInput = {
+    cacheUsedBytes?: SortOrder
+  }
+
+  export type BigIntNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: bigint | number | BigIntFieldRefInput<$PrismaModel> | null
+    in?: bigint[] | number[] | null
+    notIn?: bigint[] | number[] | null
+    lt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
+    lte?: bigint | number | BigIntFieldRefInput<$PrismaModel>
+    gt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
+    gte?: bigint | number | BigIntFieldRefInput<$PrismaModel>
+    not?: NestedBigIntNullableWithAggregatesFilter<$PrismaModel> | bigint | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedBigIntNullableFilter<$PrismaModel>
+    _min?: NestedBigIntNullableFilter<$PrismaModel>
+    _max?: NestedBigIntNullableFilter<$PrismaModel>
+  }
+
+  export type TvContentItemCountOrderByAggregateInput = {
+    id?: SortOrder
+    screenGroupId?: SortOrder
+    type?: SortOrder
+    r2Key?: SortOrder
+    checksum?: SortOrder
+    durationSeconds?: SortOrder
+    validFrom?: SortOrder
+    validTo?: SortOrder
+    sortOrder?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type TvContentItemAvgOrderByAggregateInput = {
+    durationSeconds?: SortOrder
+    sortOrder?: SortOrder
+  }
+
+  export type TvContentItemMaxOrderByAggregateInput = {
+    id?: SortOrder
+    screenGroupId?: SortOrder
+    type?: SortOrder
+    r2Key?: SortOrder
+    checksum?: SortOrder
+    durationSeconds?: SortOrder
+    validFrom?: SortOrder
+    validTo?: SortOrder
+    sortOrder?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type TvContentItemMinOrderByAggregateInput = {
+    id?: SortOrder
+    screenGroupId?: SortOrder
+    type?: SortOrder
+    r2Key?: SortOrder
+    checksum?: SortOrder
+    durationSeconds?: SortOrder
+    validFrom?: SortOrder
+    validTo?: SortOrder
+    sortOrder?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type TvContentItemSumOrderByAggregateInput = {
+    durationSeconds?: SortOrder
+    sortOrder?: SortOrder
   }
 
   export type AuditLogCreateNestedManyWithoutAdminInput = {
@@ -55869,6 +60353,126 @@ export namespace Prisma {
     update?: XOR<XOR<BookingUpdateToOneWithWhereWithoutNfcTransactionsInput, BookingUpdateWithoutNfcTransactionsInput>, BookingUncheckedUpdateWithoutNfcTransactionsInput>
   }
 
+  export type TvScreenCreateNestedManyWithoutScreenGroupInput = {
+    create?: XOR<TvScreenCreateWithoutScreenGroupInput, TvScreenUncheckedCreateWithoutScreenGroupInput> | TvScreenCreateWithoutScreenGroupInput[] | TvScreenUncheckedCreateWithoutScreenGroupInput[]
+    connectOrCreate?: TvScreenCreateOrConnectWithoutScreenGroupInput | TvScreenCreateOrConnectWithoutScreenGroupInput[]
+    createMany?: TvScreenCreateManyScreenGroupInputEnvelope
+    connect?: TvScreenWhereUniqueInput | TvScreenWhereUniqueInput[]
+  }
+
+  export type TvContentItemCreateNestedManyWithoutScreenGroupInput = {
+    create?: XOR<TvContentItemCreateWithoutScreenGroupInput, TvContentItemUncheckedCreateWithoutScreenGroupInput> | TvContentItemCreateWithoutScreenGroupInput[] | TvContentItemUncheckedCreateWithoutScreenGroupInput[]
+    connectOrCreate?: TvContentItemCreateOrConnectWithoutScreenGroupInput | TvContentItemCreateOrConnectWithoutScreenGroupInput[]
+    createMany?: TvContentItemCreateManyScreenGroupInputEnvelope
+    connect?: TvContentItemWhereUniqueInput | TvContentItemWhereUniqueInput[]
+  }
+
+  export type TvScreenUncheckedCreateNestedManyWithoutScreenGroupInput = {
+    create?: XOR<TvScreenCreateWithoutScreenGroupInput, TvScreenUncheckedCreateWithoutScreenGroupInput> | TvScreenCreateWithoutScreenGroupInput[] | TvScreenUncheckedCreateWithoutScreenGroupInput[]
+    connectOrCreate?: TvScreenCreateOrConnectWithoutScreenGroupInput | TvScreenCreateOrConnectWithoutScreenGroupInput[]
+    createMany?: TvScreenCreateManyScreenGroupInputEnvelope
+    connect?: TvScreenWhereUniqueInput | TvScreenWhereUniqueInput[]
+  }
+
+  export type TvContentItemUncheckedCreateNestedManyWithoutScreenGroupInput = {
+    create?: XOR<TvContentItemCreateWithoutScreenGroupInput, TvContentItemUncheckedCreateWithoutScreenGroupInput> | TvContentItemCreateWithoutScreenGroupInput[] | TvContentItemUncheckedCreateWithoutScreenGroupInput[]
+    connectOrCreate?: TvContentItemCreateOrConnectWithoutScreenGroupInput | TvContentItemCreateOrConnectWithoutScreenGroupInput[]
+    createMany?: TvContentItemCreateManyScreenGroupInputEnvelope
+    connect?: TvContentItemWhereUniqueInput | TvContentItemWhereUniqueInput[]
+  }
+
+  export type TvScreenUpdateManyWithoutScreenGroupNestedInput = {
+    create?: XOR<TvScreenCreateWithoutScreenGroupInput, TvScreenUncheckedCreateWithoutScreenGroupInput> | TvScreenCreateWithoutScreenGroupInput[] | TvScreenUncheckedCreateWithoutScreenGroupInput[]
+    connectOrCreate?: TvScreenCreateOrConnectWithoutScreenGroupInput | TvScreenCreateOrConnectWithoutScreenGroupInput[]
+    upsert?: TvScreenUpsertWithWhereUniqueWithoutScreenGroupInput | TvScreenUpsertWithWhereUniqueWithoutScreenGroupInput[]
+    createMany?: TvScreenCreateManyScreenGroupInputEnvelope
+    set?: TvScreenWhereUniqueInput | TvScreenWhereUniqueInput[]
+    disconnect?: TvScreenWhereUniqueInput | TvScreenWhereUniqueInput[]
+    delete?: TvScreenWhereUniqueInput | TvScreenWhereUniqueInput[]
+    connect?: TvScreenWhereUniqueInput | TvScreenWhereUniqueInput[]
+    update?: TvScreenUpdateWithWhereUniqueWithoutScreenGroupInput | TvScreenUpdateWithWhereUniqueWithoutScreenGroupInput[]
+    updateMany?: TvScreenUpdateManyWithWhereWithoutScreenGroupInput | TvScreenUpdateManyWithWhereWithoutScreenGroupInput[]
+    deleteMany?: TvScreenScalarWhereInput | TvScreenScalarWhereInput[]
+  }
+
+  export type TvContentItemUpdateManyWithoutScreenGroupNestedInput = {
+    create?: XOR<TvContentItemCreateWithoutScreenGroupInput, TvContentItemUncheckedCreateWithoutScreenGroupInput> | TvContentItemCreateWithoutScreenGroupInput[] | TvContentItemUncheckedCreateWithoutScreenGroupInput[]
+    connectOrCreate?: TvContentItemCreateOrConnectWithoutScreenGroupInput | TvContentItemCreateOrConnectWithoutScreenGroupInput[]
+    upsert?: TvContentItemUpsertWithWhereUniqueWithoutScreenGroupInput | TvContentItemUpsertWithWhereUniqueWithoutScreenGroupInput[]
+    createMany?: TvContentItemCreateManyScreenGroupInputEnvelope
+    set?: TvContentItemWhereUniqueInput | TvContentItemWhereUniqueInput[]
+    disconnect?: TvContentItemWhereUniqueInput | TvContentItemWhereUniqueInput[]
+    delete?: TvContentItemWhereUniqueInput | TvContentItemWhereUniqueInput[]
+    connect?: TvContentItemWhereUniqueInput | TvContentItemWhereUniqueInput[]
+    update?: TvContentItemUpdateWithWhereUniqueWithoutScreenGroupInput | TvContentItemUpdateWithWhereUniqueWithoutScreenGroupInput[]
+    updateMany?: TvContentItemUpdateManyWithWhereWithoutScreenGroupInput | TvContentItemUpdateManyWithWhereWithoutScreenGroupInput[]
+    deleteMany?: TvContentItemScalarWhereInput | TvContentItemScalarWhereInput[]
+  }
+
+  export type TvScreenUncheckedUpdateManyWithoutScreenGroupNestedInput = {
+    create?: XOR<TvScreenCreateWithoutScreenGroupInput, TvScreenUncheckedCreateWithoutScreenGroupInput> | TvScreenCreateWithoutScreenGroupInput[] | TvScreenUncheckedCreateWithoutScreenGroupInput[]
+    connectOrCreate?: TvScreenCreateOrConnectWithoutScreenGroupInput | TvScreenCreateOrConnectWithoutScreenGroupInput[]
+    upsert?: TvScreenUpsertWithWhereUniqueWithoutScreenGroupInput | TvScreenUpsertWithWhereUniqueWithoutScreenGroupInput[]
+    createMany?: TvScreenCreateManyScreenGroupInputEnvelope
+    set?: TvScreenWhereUniqueInput | TvScreenWhereUniqueInput[]
+    disconnect?: TvScreenWhereUniqueInput | TvScreenWhereUniqueInput[]
+    delete?: TvScreenWhereUniqueInput | TvScreenWhereUniqueInput[]
+    connect?: TvScreenWhereUniqueInput | TvScreenWhereUniqueInput[]
+    update?: TvScreenUpdateWithWhereUniqueWithoutScreenGroupInput | TvScreenUpdateWithWhereUniqueWithoutScreenGroupInput[]
+    updateMany?: TvScreenUpdateManyWithWhereWithoutScreenGroupInput | TvScreenUpdateManyWithWhereWithoutScreenGroupInput[]
+    deleteMany?: TvScreenScalarWhereInput | TvScreenScalarWhereInput[]
+  }
+
+  export type TvContentItemUncheckedUpdateManyWithoutScreenGroupNestedInput = {
+    create?: XOR<TvContentItemCreateWithoutScreenGroupInput, TvContentItemUncheckedCreateWithoutScreenGroupInput> | TvContentItemCreateWithoutScreenGroupInput[] | TvContentItemUncheckedCreateWithoutScreenGroupInput[]
+    connectOrCreate?: TvContentItemCreateOrConnectWithoutScreenGroupInput | TvContentItemCreateOrConnectWithoutScreenGroupInput[]
+    upsert?: TvContentItemUpsertWithWhereUniqueWithoutScreenGroupInput | TvContentItemUpsertWithWhereUniqueWithoutScreenGroupInput[]
+    createMany?: TvContentItemCreateManyScreenGroupInputEnvelope
+    set?: TvContentItemWhereUniqueInput | TvContentItemWhereUniqueInput[]
+    disconnect?: TvContentItemWhereUniqueInput | TvContentItemWhereUniqueInput[]
+    delete?: TvContentItemWhereUniqueInput | TvContentItemWhereUniqueInput[]
+    connect?: TvContentItemWhereUniqueInput | TvContentItemWhereUniqueInput[]
+    update?: TvContentItemUpdateWithWhereUniqueWithoutScreenGroupInput | TvContentItemUpdateWithWhereUniqueWithoutScreenGroupInput[]
+    updateMany?: TvContentItemUpdateManyWithWhereWithoutScreenGroupInput | TvContentItemUpdateManyWithWhereWithoutScreenGroupInput[]
+    deleteMany?: TvContentItemScalarWhereInput | TvContentItemScalarWhereInput[]
+  }
+
+  export type TvScreenGroupCreateNestedOneWithoutScreensInput = {
+    create?: XOR<TvScreenGroupCreateWithoutScreensInput, TvScreenGroupUncheckedCreateWithoutScreensInput>
+    connectOrCreate?: TvScreenGroupCreateOrConnectWithoutScreensInput
+    connect?: TvScreenGroupWhereUniqueInput
+  }
+
+  export type NullableBigIntFieldUpdateOperationsInput = {
+    set?: bigint | number | null
+    increment?: bigint | number
+    decrement?: bigint | number
+    multiply?: bigint | number
+    divide?: bigint | number
+  }
+
+  export type TvScreenGroupUpdateOneRequiredWithoutScreensNestedInput = {
+    create?: XOR<TvScreenGroupCreateWithoutScreensInput, TvScreenGroupUncheckedCreateWithoutScreensInput>
+    connectOrCreate?: TvScreenGroupCreateOrConnectWithoutScreensInput
+    upsert?: TvScreenGroupUpsertWithoutScreensInput
+    connect?: TvScreenGroupWhereUniqueInput
+    update?: XOR<XOR<TvScreenGroupUpdateToOneWithWhereWithoutScreensInput, TvScreenGroupUpdateWithoutScreensInput>, TvScreenGroupUncheckedUpdateWithoutScreensInput>
+  }
+
+  export type TvScreenGroupCreateNestedOneWithoutContentItemsInput = {
+    create?: XOR<TvScreenGroupCreateWithoutContentItemsInput, TvScreenGroupUncheckedCreateWithoutContentItemsInput>
+    connectOrCreate?: TvScreenGroupCreateOrConnectWithoutContentItemsInput
+    connect?: TvScreenGroupWhereUniqueInput
+  }
+
+  export type TvScreenGroupUpdateOneRequiredWithoutContentItemsNestedInput = {
+    create?: XOR<TvScreenGroupCreateWithoutContentItemsInput, TvScreenGroupUncheckedCreateWithoutContentItemsInput>
+    connectOrCreate?: TvScreenGroupCreateOrConnectWithoutContentItemsInput
+    upsert?: TvScreenGroupUpsertWithoutContentItemsInput
+    connect?: TvScreenGroupWhereUniqueInput
+    update?: XOR<XOR<TvScreenGroupUpdateToOneWithWhereWithoutContentItemsInput, TvScreenGroupUpdateWithoutContentItemsInput>, TvScreenGroupUncheckedUpdateWithoutContentItemsInput>
+  }
+
   export type NestedStringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[]
@@ -56100,6 +60704,33 @@ export namespace Prisma {
     _sum?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedIntNullableFilter<$PrismaModel>
     _max?: NestedIntNullableFilter<$PrismaModel>
+  }
+
+  export type NestedBigIntNullableFilter<$PrismaModel = never> = {
+    equals?: bigint | number | BigIntFieldRefInput<$PrismaModel> | null
+    in?: bigint[] | number[] | null
+    notIn?: bigint[] | number[] | null
+    lt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
+    lte?: bigint | number | BigIntFieldRefInput<$PrismaModel>
+    gt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
+    gte?: bigint | number | BigIntFieldRefInput<$PrismaModel>
+    not?: NestedBigIntNullableFilter<$PrismaModel> | bigint | number | null
+  }
+
+  export type NestedBigIntNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: bigint | number | BigIntFieldRefInput<$PrismaModel> | null
+    in?: bigint[] | number[] | null
+    notIn?: bigint[] | number[] | null
+    lt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
+    lte?: bigint | number | BigIntFieldRefInput<$PrismaModel>
+    gt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
+    gte?: bigint | number | BigIntFieldRefInput<$PrismaModel>
+    not?: NestedBigIntNullableWithAggregatesFilter<$PrismaModel> | bigint | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedBigIntNullableFilter<$PrismaModel>
+    _min?: NestedBigIntNullableFilter<$PrismaModel>
+    _max?: NestedBigIntNullableFilter<$PrismaModel>
   }
 
   export type AuditLogCreateWithoutAdminInput = {
@@ -62766,6 +67397,241 @@ export namespace Prisma {
     participants?: BookingParticipantUncheckedUpdateManyWithoutBookingNestedInput
   }
 
+  export type TvScreenCreateWithoutScreenGroupInput = {
+    id?: string
+    label: string
+    pairingCode?: string | null
+    pairingExpiresAt?: Date | string | null
+    deviceToken?: string | null
+    lastHeartbeatAt?: Date | string | null
+    currentItemId?: string | null
+    cacheUsedBytes?: bigint | number | null
+    appVersion?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type TvScreenUncheckedCreateWithoutScreenGroupInput = {
+    id?: string
+    label: string
+    pairingCode?: string | null
+    pairingExpiresAt?: Date | string | null
+    deviceToken?: string | null
+    lastHeartbeatAt?: Date | string | null
+    currentItemId?: string | null
+    cacheUsedBytes?: bigint | number | null
+    appVersion?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type TvScreenCreateOrConnectWithoutScreenGroupInput = {
+    where: TvScreenWhereUniqueInput
+    create: XOR<TvScreenCreateWithoutScreenGroupInput, TvScreenUncheckedCreateWithoutScreenGroupInput>
+  }
+
+  export type TvScreenCreateManyScreenGroupInputEnvelope = {
+    data: TvScreenCreateManyScreenGroupInput | TvScreenCreateManyScreenGroupInput[]
+  }
+
+  export type TvContentItemCreateWithoutScreenGroupInput = {
+    id?: string
+    type: string
+    r2Key: string
+    checksum: string
+    durationSeconds?: number | null
+    validFrom?: Date | string | null
+    validTo?: Date | string | null
+    sortOrder?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type TvContentItemUncheckedCreateWithoutScreenGroupInput = {
+    id?: string
+    type: string
+    r2Key: string
+    checksum: string
+    durationSeconds?: number | null
+    validFrom?: Date | string | null
+    validTo?: Date | string | null
+    sortOrder?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type TvContentItemCreateOrConnectWithoutScreenGroupInput = {
+    where: TvContentItemWhereUniqueInput
+    create: XOR<TvContentItemCreateWithoutScreenGroupInput, TvContentItemUncheckedCreateWithoutScreenGroupInput>
+  }
+
+  export type TvContentItemCreateManyScreenGroupInputEnvelope = {
+    data: TvContentItemCreateManyScreenGroupInput | TvContentItemCreateManyScreenGroupInput[]
+  }
+
+  export type TvScreenUpsertWithWhereUniqueWithoutScreenGroupInput = {
+    where: TvScreenWhereUniqueInput
+    update: XOR<TvScreenUpdateWithoutScreenGroupInput, TvScreenUncheckedUpdateWithoutScreenGroupInput>
+    create: XOR<TvScreenCreateWithoutScreenGroupInput, TvScreenUncheckedCreateWithoutScreenGroupInput>
+  }
+
+  export type TvScreenUpdateWithWhereUniqueWithoutScreenGroupInput = {
+    where: TvScreenWhereUniqueInput
+    data: XOR<TvScreenUpdateWithoutScreenGroupInput, TvScreenUncheckedUpdateWithoutScreenGroupInput>
+  }
+
+  export type TvScreenUpdateManyWithWhereWithoutScreenGroupInput = {
+    where: TvScreenScalarWhereInput
+    data: XOR<TvScreenUpdateManyMutationInput, TvScreenUncheckedUpdateManyWithoutScreenGroupInput>
+  }
+
+  export type TvScreenScalarWhereInput = {
+    AND?: TvScreenScalarWhereInput | TvScreenScalarWhereInput[]
+    OR?: TvScreenScalarWhereInput[]
+    NOT?: TvScreenScalarWhereInput | TvScreenScalarWhereInput[]
+    id?: StringFilter<"TvScreen"> | string
+    screenGroupId?: StringFilter<"TvScreen"> | string
+    label?: StringFilter<"TvScreen"> | string
+    pairingCode?: StringNullableFilter<"TvScreen"> | string | null
+    pairingExpiresAt?: DateTimeNullableFilter<"TvScreen"> | Date | string | null
+    deviceToken?: StringNullableFilter<"TvScreen"> | string | null
+    lastHeartbeatAt?: DateTimeNullableFilter<"TvScreen"> | Date | string | null
+    currentItemId?: StringNullableFilter<"TvScreen"> | string | null
+    cacheUsedBytes?: BigIntNullableFilter<"TvScreen"> | bigint | number | null
+    appVersion?: StringNullableFilter<"TvScreen"> | string | null
+    createdAt?: DateTimeFilter<"TvScreen"> | Date | string
+    updatedAt?: DateTimeFilter<"TvScreen"> | Date | string
+  }
+
+  export type TvContentItemUpsertWithWhereUniqueWithoutScreenGroupInput = {
+    where: TvContentItemWhereUniqueInput
+    update: XOR<TvContentItemUpdateWithoutScreenGroupInput, TvContentItemUncheckedUpdateWithoutScreenGroupInput>
+    create: XOR<TvContentItemCreateWithoutScreenGroupInput, TvContentItemUncheckedCreateWithoutScreenGroupInput>
+  }
+
+  export type TvContentItemUpdateWithWhereUniqueWithoutScreenGroupInput = {
+    where: TvContentItemWhereUniqueInput
+    data: XOR<TvContentItemUpdateWithoutScreenGroupInput, TvContentItemUncheckedUpdateWithoutScreenGroupInput>
+  }
+
+  export type TvContentItemUpdateManyWithWhereWithoutScreenGroupInput = {
+    where: TvContentItemScalarWhereInput
+    data: XOR<TvContentItemUpdateManyMutationInput, TvContentItemUncheckedUpdateManyWithoutScreenGroupInput>
+  }
+
+  export type TvContentItemScalarWhereInput = {
+    AND?: TvContentItemScalarWhereInput | TvContentItemScalarWhereInput[]
+    OR?: TvContentItemScalarWhereInput[]
+    NOT?: TvContentItemScalarWhereInput | TvContentItemScalarWhereInput[]
+    id?: StringFilter<"TvContentItem"> | string
+    screenGroupId?: StringFilter<"TvContentItem"> | string
+    type?: StringFilter<"TvContentItem"> | string
+    r2Key?: StringFilter<"TvContentItem"> | string
+    checksum?: StringFilter<"TvContentItem"> | string
+    durationSeconds?: IntNullableFilter<"TvContentItem"> | number | null
+    validFrom?: DateTimeNullableFilter<"TvContentItem"> | Date | string | null
+    validTo?: DateTimeNullableFilter<"TvContentItem"> | Date | string | null
+    sortOrder?: IntFilter<"TvContentItem"> | number
+    createdAt?: DateTimeFilter<"TvContentItem"> | Date | string
+    updatedAt?: DateTimeFilter<"TvContentItem"> | Date | string
+  }
+
+  export type TvScreenGroupCreateWithoutScreensInput = {
+    id?: string
+    name: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    contentItems?: TvContentItemCreateNestedManyWithoutScreenGroupInput
+  }
+
+  export type TvScreenGroupUncheckedCreateWithoutScreensInput = {
+    id?: string
+    name: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    contentItems?: TvContentItemUncheckedCreateNestedManyWithoutScreenGroupInput
+  }
+
+  export type TvScreenGroupCreateOrConnectWithoutScreensInput = {
+    where: TvScreenGroupWhereUniqueInput
+    create: XOR<TvScreenGroupCreateWithoutScreensInput, TvScreenGroupUncheckedCreateWithoutScreensInput>
+  }
+
+  export type TvScreenGroupUpsertWithoutScreensInput = {
+    update: XOR<TvScreenGroupUpdateWithoutScreensInput, TvScreenGroupUncheckedUpdateWithoutScreensInput>
+    create: XOR<TvScreenGroupCreateWithoutScreensInput, TvScreenGroupUncheckedCreateWithoutScreensInput>
+    where?: TvScreenGroupWhereInput
+  }
+
+  export type TvScreenGroupUpdateToOneWithWhereWithoutScreensInput = {
+    where?: TvScreenGroupWhereInput
+    data: XOR<TvScreenGroupUpdateWithoutScreensInput, TvScreenGroupUncheckedUpdateWithoutScreensInput>
+  }
+
+  export type TvScreenGroupUpdateWithoutScreensInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    contentItems?: TvContentItemUpdateManyWithoutScreenGroupNestedInput
+  }
+
+  export type TvScreenGroupUncheckedUpdateWithoutScreensInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    contentItems?: TvContentItemUncheckedUpdateManyWithoutScreenGroupNestedInput
+  }
+
+  export type TvScreenGroupCreateWithoutContentItemsInput = {
+    id?: string
+    name: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    screens?: TvScreenCreateNestedManyWithoutScreenGroupInput
+  }
+
+  export type TvScreenGroupUncheckedCreateWithoutContentItemsInput = {
+    id?: string
+    name: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    screens?: TvScreenUncheckedCreateNestedManyWithoutScreenGroupInput
+  }
+
+  export type TvScreenGroupCreateOrConnectWithoutContentItemsInput = {
+    where: TvScreenGroupWhereUniqueInput
+    create: XOR<TvScreenGroupCreateWithoutContentItemsInput, TvScreenGroupUncheckedCreateWithoutContentItemsInput>
+  }
+
+  export type TvScreenGroupUpsertWithoutContentItemsInput = {
+    update: XOR<TvScreenGroupUpdateWithoutContentItemsInput, TvScreenGroupUncheckedUpdateWithoutContentItemsInput>
+    create: XOR<TvScreenGroupCreateWithoutContentItemsInput, TvScreenGroupUncheckedCreateWithoutContentItemsInput>
+    where?: TvScreenGroupWhereInput
+  }
+
+  export type TvScreenGroupUpdateToOneWithWhereWithoutContentItemsInput = {
+    where?: TvScreenGroupWhereInput
+    data: XOR<TvScreenGroupUpdateWithoutContentItemsInput, TvScreenGroupUncheckedUpdateWithoutContentItemsInput>
+  }
+
+  export type TvScreenGroupUpdateWithoutContentItemsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    screens?: TvScreenUpdateManyWithoutScreenGroupNestedInput
+  }
+
+  export type TvScreenGroupUncheckedUpdateWithoutContentItemsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    screens?: TvScreenUncheckedUpdateManyWithoutScreenGroupNestedInput
+  }
+
   export type AuditLogCreateManyAdminInput = {
     id?: string
     action: string
@@ -64672,6 +69538,114 @@ export namespace Prisma {
     failureReason?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TvScreenCreateManyScreenGroupInput = {
+    id?: string
+    label: string
+    pairingCode?: string | null
+    pairingExpiresAt?: Date | string | null
+    deviceToken?: string | null
+    lastHeartbeatAt?: Date | string | null
+    currentItemId?: string | null
+    cacheUsedBytes?: bigint | number | null
+    appVersion?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type TvContentItemCreateManyScreenGroupInput = {
+    id?: string
+    type: string
+    r2Key: string
+    checksum: string
+    durationSeconds?: number | null
+    validFrom?: Date | string | null
+    validTo?: Date | string | null
+    sortOrder?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type TvScreenUpdateWithoutScreenGroupInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    label?: StringFieldUpdateOperationsInput | string
+    pairingCode?: NullableStringFieldUpdateOperationsInput | string | null
+    pairingExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deviceToken?: NullableStringFieldUpdateOperationsInput | string | null
+    lastHeartbeatAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    currentItemId?: NullableStringFieldUpdateOperationsInput | string | null
+    cacheUsedBytes?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+    appVersion?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TvScreenUncheckedUpdateWithoutScreenGroupInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    label?: StringFieldUpdateOperationsInput | string
+    pairingCode?: NullableStringFieldUpdateOperationsInput | string | null
+    pairingExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deviceToken?: NullableStringFieldUpdateOperationsInput | string | null
+    lastHeartbeatAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    currentItemId?: NullableStringFieldUpdateOperationsInput | string | null
+    cacheUsedBytes?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+    appVersion?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TvScreenUncheckedUpdateManyWithoutScreenGroupInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    label?: StringFieldUpdateOperationsInput | string
+    pairingCode?: NullableStringFieldUpdateOperationsInput | string | null
+    pairingExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deviceToken?: NullableStringFieldUpdateOperationsInput | string | null
+    lastHeartbeatAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    currentItemId?: NullableStringFieldUpdateOperationsInput | string | null
+    cacheUsedBytes?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+    appVersion?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TvContentItemUpdateWithoutScreenGroupInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    r2Key?: StringFieldUpdateOperationsInput | string
+    checksum?: StringFieldUpdateOperationsInput | string
+    durationSeconds?: NullableIntFieldUpdateOperationsInput | number | null
+    validFrom?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    validTo?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TvContentItemUncheckedUpdateWithoutScreenGroupInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    r2Key?: StringFieldUpdateOperationsInput | string
+    checksum?: StringFieldUpdateOperationsInput | string
+    durationSeconds?: NullableIntFieldUpdateOperationsInput | number | null
+    validFrom?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    validTo?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TvContentItemUncheckedUpdateManyWithoutScreenGroupInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    r2Key?: StringFieldUpdateOperationsInput | string
+    checksum?: StringFieldUpdateOperationsInput | string
+    durationSeconds?: NullableIntFieldUpdateOperationsInput | number | null
+    validFrom?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    validTo?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
 
