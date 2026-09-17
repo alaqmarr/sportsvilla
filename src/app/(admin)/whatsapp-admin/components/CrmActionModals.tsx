@@ -5,14 +5,17 @@ import { Card, Button, Input, Badge } from "@/components/admin/ui";
 
 export function GenerateCouponModal({
   phone,
+  members,
   onClose,
   onCouponGenerated,
 }: {
   phone: string;
+  members: any[];
   onClose: () => void;
   onCouponGenerated: (code: string, amount: number) => void;
 }) {
   const [amount, setAmount] = useState(100);
+  const [selectedMemberId, setSelectedMemberId] = useState(members[0]?.id || "");
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -22,7 +25,7 @@ export function GenerateCouponModal({
       const res = await fetch("/api/admin/whatsapp-crm", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ action: "GENERATE_COUPON", phone, discountAmount: amount }),
+        body: JSON.stringify({ action: "GENERATE_COUPON", phone, memberId: selectedMemberId, discountAmount: amount }),
       });
       const data = await res.json();
       if (data.success) {
@@ -50,6 +53,23 @@ export function GenerateCouponModal({
           </button>
         </div>
         <form onSubmit={handleSubmit} className="p-4 flex flex-col gap-4 bg-sv-surface">
+          {members.length > 1 && (
+            <div>
+              <label className="text-xs font-semibold text-sv-text-muted uppercase tracking-wider mb-1 block">
+                Select Family Member
+              </label>
+              <select
+                className="w-full bg-sv-bg border border-sv-border rounded-sv-md px-3 py-2 text-sm text-sv-text focus:outline-none focus:border-sv-brand focus:ring-1 focus:ring-sv-brand transition-colors"
+                value={selectedMemberId}
+                onChange={(e) => setSelectedMemberId(e.target.value)}
+                required
+              >
+                {members.map((m) => (
+                  <option key={m.id} value={m.id}>{m.name}</option>
+                ))}
+              </select>
+            </div>
+          )}
           <div>
             <label className="text-xs font-semibold text-sv-text-muted uppercase tracking-wider mb-1 block">
               Discount Amount (₹)
@@ -160,15 +180,18 @@ export function RegisterUserModal({
 
 export function AssignMembershipModal({
   phone,
+  members,
   onClose,
   onSuccess,
 }: {
   phone: string;
+  members: any[];
   onClose: () => void;
   onSuccess: () => void;
 }) {
   const [plans, setPlans] = useState<any[]>([]);
   const [selectedPlan, setSelectedPlan] = useState("");
+  const [selectedMemberId, setSelectedMemberId] = useState(members[0]?.id || "");
   const [loading, setLoading] = useState(false);
   const [fetching, setFetching] = useState(true);
 
@@ -192,7 +215,7 @@ export function AssignMembershipModal({
       const res = await fetch("/api/admin/whatsapp-crm", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ action: "ASSIGN_MEMBERSHIP", phone, planId: selectedPlan }),
+        body: JSON.stringify({ action: "ASSIGN_MEMBERSHIP", phone, memberId: selectedMemberId, planId: selectedPlan }),
       });
       const data = await res.json();
       if (data.success) {
@@ -223,6 +246,23 @@ export function AssignMembershipModal({
           <div className="p-8 text-center text-sv-text-muted text-sm">Loading plans...</div>
         ) : (
           <form onSubmit={handleSubmit} className="p-4 flex flex-col gap-4 bg-sv-surface">
+            {members.length > 1 && (
+              <div>
+                <label className="text-xs font-semibold text-sv-text-muted uppercase tracking-wider mb-1 block">
+                  Select Family Member
+                </label>
+                <select
+                  className="w-full bg-sv-bg border border-sv-border rounded-sv-md px-3 py-2 text-sm text-sv-text focus:outline-none focus:border-sv-brand focus:ring-1 focus:ring-sv-brand transition-colors"
+                  value={selectedMemberId}
+                  onChange={(e) => setSelectedMemberId(e.target.value)}
+                  required
+                >
+                  {members.map((m) => (
+                    <option key={m.id} value={m.id}>{m.name}</option>
+                  ))}
+                </select>
+              </div>
+            )}
             <div>
               <label className="text-xs font-semibold text-sv-text-muted uppercase tracking-wider mb-1 block">
                 Select Plan
@@ -236,7 +276,7 @@ export function AssignMembershipModal({
                 <option value="" disabled>Select a plan</option>
                 {plans.map((p) => (
                   <option key={p.id} value={p.id}>
-                    {p.name} ({p.durationMonths} months)
+                    {p.name} ({p.durationInDays} days)
                   </option>
                 ))}
               </select>

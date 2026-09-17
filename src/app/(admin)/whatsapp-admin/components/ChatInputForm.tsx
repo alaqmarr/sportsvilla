@@ -47,11 +47,11 @@ export function ChatInputForm({
         </div>
       )}
       {selectedConv?.is24HourWindowOpen ? (
-        <form onSubmit={handleSendChatMessage} className="flex items-end gap-2">
+        <form onSubmit={handleSendChatMessage} className="flex items-end gap-2 bg-[#f0f2f5] dark:bg-[#202c33] rounded-2xl px-2 py-1.5 shadow-sm border border-black/5 dark:border-white/5">
           <button
             type="button"
             onClick={() => setShowQuickReplies(!showQuickReplies)}
-            className="p-2.5 rounded-full text-sv-text-muted hover:bg-sv-surface-hover hover:text-sv-brand transition-colors shrink-0 mb-0.5"
+            className="p-2.5 rounded-full text-[#54656f] dark:text-[#aebac1] hover:bg-black/5 dark:hover:bg-white/5 transition-colors shrink-0"
             title="Quick Replies"
           >
             <FiMessageSquare className="w-5 h-5" />
@@ -70,18 +70,21 @@ export function ChatInputForm({
                 if (chatInput.trim() && !sendingChat) handleSendChatMessage(e as any);
               }
             }}
-            placeholder={replyingTo ? "Type your reply..." : "Type a message..."}
+            placeholder={replyingTo ? "Type your reply..." : "Type a message"}
             rows={1}
-            className="flex-1 bg-sv-bg border border-sv-border rounded-xl px-4 py-3 text-sv-text text-sm focus:outline-none focus:border-sv-brand focus:ring-1 focus:ring-sv-brand transition-all resize-none min-h-[46px] max-h-32 styled-scrollbar"
+            className="flex-1 bg-white dark:bg-[#2a3942] border-0 rounded-xl px-4 py-2.5 my-1 text-sv-text text-sm focus:outline-none focus:ring-0 transition-all resize-none min-h-[40px] max-h-32 styled-scrollbar shadow-sm"
           />
-          <Button
+          <button
             type="submit"
             disabled={sendingChat || !chatInput.trim()}
-            className="shrink-0 mb-0.5 !rounded-full !p-3"
-            variant="primary"
+            className={`p-2.5 rounded-full shrink-0 transition-colors ${
+              chatInput.trim() 
+                ? "text-white bg-[#00a884] hover:bg-[#008f6f]" 
+                : "text-[#54656f] dark:text-[#aebac1] bg-transparent"
+            }`}
           >
-            <FiSend size={18} className={sendingChat ? "animate-pulse" : ""} />
-          </Button>
+            <FiSend size={18} className={sendingChat ? "animate-pulse" : "ml-0.5"} />
+          </button>
         </form>
       ) : (
         <div className="text-center p-3">

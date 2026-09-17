@@ -17,31 +17,41 @@ export async function POST(req: NextRequest) {
     }
 
     const body = await req.json();
-    const { action, phone, name, email, planId, discountAmount } = body;
+    const { action, phone, memberId, name, email, planId, discountAmount } = body;
 
     if (!phone) {
       return NextResponse.json({ success: false, error: "Phone is required" }, { status: 400 });
     }
 
     if (action === "REGISTER") {
-      const existing = await prisma.member.findFirst({ where: { mobile: phone } });
+      const existing = await prisma.member.findFirst({ where: { mobile: phone, name: name } });
       if (existing) {
-        return NextResponse.json({ success: false, error: "Member already exists with this mobile" }, { status: 400 });
+        return NextResponse.json({ success: false, error: "Member already exists with this name and mobile" }, { status: 400 });
       }
 
+      // Check if there's already a member to inherit family
+      const primary = await prisma.member.findFirst({ where: { mobile: phone } });
+      
       const member = await prisma.member.create({
         data: {
           mobile: phone,
           name: name || "WhatsApp Lead",
           email: email || null,
           walletBalance: 0,
+          familyId: primary?.familyId || null,
         },
       });
       return NextResponse.json({ success: true, member });
     }
 
     if (action === "ASSIGN_MEMBERSHIP") {
-      const member = await prisma.member.findFirst({ where: { mobile: phone } });
+      let member;
+      if (memberId) {
+        member = await prisma.member.findUnique({ where: { id: memberId } });
+      } else {
+        member = await prisma.member.findFirst({ where: { mobile: phone } });
+      }
+
       if (!member) {
         return NextResponse.json({ success: false, error: "Member not found" }, { status: 404 });
       }
@@ -71,8 +81,13 @@ export async function POST(req: NextRequest) {
     }
 
     if (action === "GENERATE_COUPON") {
-      // Find the member just to verify they exist, optional but good.
-      const member = await prisma.member.findFirst({ where: { mobile: phone } });
+      // Find the member
+      let member;
+      if (memberId) {
+        member = await prisma.member.findUnique({ where: { id: memberId } });
+      } else {
+        member = await prisma.member.findFirst({ where: { mobile: phone } });
+      }
       
       const code = `VIP-${Math.random().toString(36).substring(2, 6).toUpperCase()}-${phone.substring(6)}`;
       
@@ -89,6 +104,15 @@ export async function POST(req: NextRequest) {
           targetType: "SPECIFIC_MEMBERS",
         },
       });
+
+      if (member) {
+        await prisma.couponAssignment.create({
+          data: {
+            couponId: coupon.id,
+            memberId: member.id,
+          }
+        });
+      }
 
       return NextResponse.json({ success: true, coupon });
     }

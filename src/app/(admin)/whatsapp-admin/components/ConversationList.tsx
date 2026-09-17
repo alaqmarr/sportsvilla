@@ -73,12 +73,20 @@ export function ConversationList({
                     )}
                   </div>
                 </div>
-                <div className="flex items-center justify-between gap-2 opacity-80">
-                  <p className="text-xs text-sv-text-muted truncate flex-1">
+                <div className="flex items-center justify-between gap-2 opacity-80 mt-1">
+                  <p className="text-[13px] text-sv-text-muted truncate flex-1">
                     {conv.lastMessage || "Media/Template message"}
                   </p>
-                  <span className="text-[10px] text-sv-text-muted shrink-0">
-                    {new Date(conv.lastMessageTime).toLocaleDateString()}
+                  <span className="text-[11px] text-sv-text-muted shrink-0 font-medium">
+                    {(() => {
+                      const msgDate = new Date(conv.lastMessageTime);
+                      const today = new Date();
+                      const isToday = msgDate.getDate() === today.getDate() && msgDate.getMonth() === today.getMonth();
+                      if (isToday) {
+                        return msgDate.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' });
+                      }
+                      return msgDate.toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+                    })()}
                   </span>
                 </div>
               </button>

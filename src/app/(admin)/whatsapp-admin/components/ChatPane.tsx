@@ -19,11 +19,11 @@ const DoubleTick = ({ className = "" }) => (
 const MessageStatus = ({ status }: { status: string; errorMessage?: string | null }) => {
   switch (status?.toUpperCase()) {
     case "READ":
-      return <DoubleTick className="text-sv-brand shrink-0" />;
+      return <DoubleTick className="text-[#53bdeb] shrink-0" />;
     case "DELIVERED":
-      return <DoubleTick className="text-sv-text-muted shrink-0" />;
+      return <DoubleTick className="text-[#667781] dark:text-white/60 shrink-0" />;
     case "SENT":
-      return <SingleTick className="text-sv-text-muted shrink-0" />;
+      return <SingleTick className="text-[#667781] dark:text-white/60 shrink-0" />;
     case "FAILED":
       return (
         <div className="relative group flex items-center justify-center cursor-help shrink-0">
@@ -181,19 +181,41 @@ export function ChatPane({
       </header>
 
       {/* Chat Body */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-3 styled-scrollbar flex flex-col">
+      <div className="flex-1 overflow-y-auto p-4 space-y-4 styled-scrollbar flex flex-col relative"
+        style={{
+          backgroundImage: 'url("https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png")',
+          backgroundSize: '400px',
+          backgroundRepeat: 'repeat',
+          opacity: 0.95
+        }}
+      >
+        <div className="absolute inset-0 bg-[#E5DDD5]/40 dark:bg-[#0b141a]/80 pointer-events-none mix-blend-overlay"></div>
+        <div className="relative z-10 flex flex-col space-y-4">
         {chatMessages.length === 0 ? (
-          <div className="m-auto">
-            <EmptyState title="No messages yet" description="Start the conversation by sending a template." />
+          <div className="m-auto bg-white/90 p-4 rounded-xl shadow-sm text-center">
+            <h4 className="font-bold text-sv-text mb-1">No messages yet</h4>
+            <p className="text-sm text-sv-text-muted">Start the conversation by sending a template.</p>
           </div>
         ) : (
-          chatMessages.map((msg: any, idx: number) => {
-            const isOutgoing = msg.direction === "OUTGOING";
-            return (
-              <div
-                key={idx}
-                className={`flex flex-col group ${isOutgoing ? "items-end" : "items-start"}`}
-              >
+          (() => {
+            let lastDate = "";
+            return chatMessages.map((msg: any, idx: number) => {
+              const isOutgoing = msg.direction === "OUTGOING";
+              const msgDateObj = new Date(msg.createdAt);
+              const dateStr = msgDateObj.toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' });
+              const showDate = dateStr !== lastDate;
+              if (showDate) lastDate = dateStr;
+
+              return (
+                <React.Fragment key={idx}>
+                  {showDate && (
+                    <div className="flex justify-center my-2">
+                      <span className="bg-white/90 dark:bg-sv-surface-raised px-3 py-1 rounded-lg shadow-sm text-[11px] font-medium text-sv-text-muted uppercase tracking-wider">
+                        {dateStr}
+                      </span>
+                    </div>
+                  )}
+                  <div className={`flex flex-col group ${isOutgoing ? "items-end" : "items-start"}`}>
                 <div className="flex items-end gap-1.5 max-w-xl">
                   {!isOutgoing && (
                     <button
@@ -204,12 +226,24 @@ export function ChatPane({
                     </button>
                   )}
                   <div
-                    className={`px-3 py-2 rounded-2xl shadow-sm relative ${
+                    className={`px-3 py-2 shadow-sm relative ${
                       isOutgoing 
-                        ? "bg-sv-brand text-sv-brand-foreground rounded-br-sm" 
-                        : "bg-sv-surface text-sv-text rounded-bl-sm border border-sv-border"
+                        ? "bg-[#d9fdd3] dark:bg-[#005c4b] text-sv-text rounded-lg rounded-tr-none" 
+                        : "bg-white dark:bg-[#202c33] text-sv-text rounded-lg rounded-tl-none border border-black/5 dark:border-white/5"
                     }`}
                   >
+                    {/* Tail SVG */}
+                    {isOutgoing ? (
+                      <svg viewBox="0 0 8 13" width="8" height="13" className="absolute top-0 -right-[8px] text-[#d9fdd3] dark:text-[#005c4b]">
+                        <path opacity=".13" d="M5.188 1H0v11.193l6.467-8.625C7.526 2.156 6.958 1 5.188 1z" />
+                        <path fill="currentColor" d="M5.188 0H0v11.193l6.467-8.625C7.526 1.156 6.958 0 5.188 0z" />
+                      </svg>
+                    ) : (
+                      <svg viewBox="0 0 8 13" width="8" height="13" className="absolute top-0 -left-[8px] text-white dark:text-[#202c33]">
+                        <path opacity=".13" fill="#000000" d="M1.533 3.568L8 12.193V1H2.812C1.042 1 .474 2.156 1.533 3.568z" />
+                        <path fill="currentColor" d="M1.533 2.568L8 11.193V0H2.812C1.042 0 .474 1.156 1.533 2.568z" />
+                      </svg>
+                    )}
                     {/* Context / Replied Message */}
                     {msg.contextMessageId && (
                       <div className={`text-[10px] mb-1 p-1.5 rounded border-l-2 ${isOutgoing ? 'bg-black/10 border-white/40' : 'bg-sv-bg border-sv-brand'} opacity-80 line-clamp-2`}>
@@ -221,8 +255,8 @@ export function ChatPane({
                       {renderWhatsAppRichText(msg.content)}
                     </div>
                     
-                    <div className={`flex items-center justify-end gap-1 mt-1 ${isOutgoing ? 'text-sv-brand-foreground/70' : 'text-sv-text-muted'}`}>
-                      <span className="text-[9px] font-medium tracking-tight">
+                    <div className={`flex items-center justify-end gap-1 mt-1 ${isOutgoing ? 'text-[#667781] dark:text-white/60' : 'text-[#667781] dark:text-white/60'}`}>
+                      <span className="text-[10px] font-medium tracking-tight">
                         {new Date(msg.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                       </span>
                       {isOutgoing && <MessageStatus status={msg.status} errorMessage={msg.errorMessage} />}
@@ -239,10 +273,13 @@ export function ChatPane({
                   )}
                 </div>
               </div>
+            </React.Fragment>
             );
           })
+          })()
         )}
         <div ref={messagesEndRef} className="h-4" />
+        </div>
       </div>
 
       {/* Replying To Banner */}
