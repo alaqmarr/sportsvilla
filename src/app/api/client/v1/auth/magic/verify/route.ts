@@ -99,7 +99,14 @@ export async function GET(request: Request) {
     return NextResponse.json({ error: "Missing token parameter" }, { status: 400 });
   }
 
-  const token = rawToken.trim();
+  let token = rawToken.trim();
+
+  // Workaround for Meta WhatsApp template misconfiguration where the URL contains another URL:
+  if (token.includes('magic=')) {
+    token = token.split('magic=').pop()?.trim() || token;
+  }
+  token = token.split('&')[0];
+
   // Strictly sanitize / validate token format (alphanumeric, -, _, .)
   if (!/^[a-zA-Z0-9_\-\.]+$/.test(token)) {
     return NextResponse.json({ error: "Invalid token format" }, { status: 400 });
