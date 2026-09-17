@@ -7,6 +7,7 @@ import { useState, useEffect } from "react";
 import QRCode from "qrcode";
 import { Modal } from "@/components/play/Modal";
 import { useAlert } from "@/components/AlertProvider";
+import { rawPlayTokens } from "@/lib/tokens";
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
@@ -43,8 +44,8 @@ export function BookingDetailClient({ initialBooking, cancellationLimitHours, al
         width: 200,
         margin: 1,
         color: {
-          dark: "#111827",
-          light: "#FFFFFF",
+          dark: rawPlayTokens.text,
+          light: rawPlayTokens.surface,
         },
       })
       .then(setQrSrc)
@@ -221,7 +222,7 @@ export function BookingDetailClient({ initialBooking, cancellationLimitHours, al
           name: booking.member?.name || '',
           contact: booking.member?.mobile || ''
         },
-        theme: { color: '#22c55e' }
+        theme: { color: rawPlayTokens.brand }
       };
 
       const rzp = new (window as any).Razorpay(options);

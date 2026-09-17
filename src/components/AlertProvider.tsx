@@ -115,7 +115,7 @@ export function AlertProvider({ children }: { children: ReactNode }) {
               {alert.type === 'warning' && <FiInfo size={64} className="text-amber-400" />}
               {alert.type === 'info' && <FiInfo size={64} className="text-blue-400" />}
             </div>
-            <h2 className="text-xl font-bold font-['Outfit'] text-white mb-3">
+            <h2 className="text-xl font-bold font-sans text-white mb-3">
               {alert.title}
             </h2>
             <p className="text-gray-400 text-sm mb-8 leading-relaxed">{alert.message}</p>
@@ -173,3 +173,4 @@ export function useAlert() {
   if (!context) throw new Error("useAlert must be used within AlertProvider");
   return context;
 }
+

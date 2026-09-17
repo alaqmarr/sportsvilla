@@ -29,7 +29,7 @@ export default function SetupClient() {
     <div className="min-h-screen flex items-center justify-center bg-[#0f1117] p-4">
       <div className="bg-[#161923] border border-[#2a2d3e] rounded-2xl p-8 w-full max-w-md shadow-2xl">
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-black font-['Outfit'] text-emerald-500 tracking-wider uppercase mb-2">
+          <h1 className="text-3xl font-black font-sans text-emerald-500 tracking-wider uppercase mb-2">
             Welcome
           </h1>
           <p className="text-gray-400 text-sm">Create the first master administrator account to secure the portal.</p>
@@ -87,3 +87,4 @@ export default function SetupClient() {
     </div>
   );
 }
+

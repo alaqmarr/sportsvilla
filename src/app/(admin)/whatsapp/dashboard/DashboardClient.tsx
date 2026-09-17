@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
+import Link from "next/link";
 import {
   FiAlertTriangle,
   FiCheckCircle,
@@ -12,6 +13,13 @@ import {
 } from "react-icons/fi";
 import { FaWhatsapp } from "react-icons/fa";
 import { toast } from "react-hot-toast";
+import {
+  Card,
+  Button,
+  Badge,
+  PageHeader,
+  Stat,
+} from "@/components/admin/ui";
 
 type AccountMetrics = {
   qualityRating: string;
@@ -97,8 +105,6 @@ export default function DashboardClient({
   };
 
   useEffect(() => {
-    // We already have the server-side data, no need to fetch on mount!
-    // Auto-poll every 15 seconds for real-time live metrics
     const interval = setInterval(() => {
       fetchRealtimeAnalytics(true);
     }, 15000);
@@ -116,231 +122,231 @@ export default function DashboardClient({
     funnel.sent > 0 ? ((funnel.optOuts / funnel.sent) * 100).toFixed(1) : "0.0";
 
   return (
-    <div className="p-6 space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500 max-w-7xl mx-auto text-white">
+    <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500 max-w-7xl mx-auto">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 border-b border-[#2a2d3e]">
-        <div>
-          <div className="flex items-center gap-3">
-            <h1 className="text-3xl font-extrabold tracking-tight text-white font-['Outfit']">
-              WhatsApp Analytics & Compliance
-            </h1>
-            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 text-xs font-semibold">
-              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-              LIVE META API
-            </span>
+      <PageHeader
+        title="WhatsApp Analytics & Compliance"
+        subtitle={`Real-time monitoring of Meta Graph API v25.0 health, messaging funnel, and per-message pricing. (Last sync: ${lastSync})`}
+        statusBadge={
+          <Badge variant="success" size="sm" dot pulseDot>
+            LIVE META API
+          </Badge>
+        }
+        actions={
+          <div className="flex items-center gap-2">
+            <Button
+              onClick={() => fetchRealtimeAnalytics(false)}
+              disabled={loading}
+              isLoading={loading}
+              variant="secondary"
+              size="sm"
+              leftIcon={<FiRefreshCw className={`text-sm text-sv-status-success ${loading ? "animate-spin" : ""}`} />}
+            >
+              Refresh Live
+            </Button>
+            <Link href="/whatsapp-admin">
+              <Button
+                variant="primary"
+                size="sm"
+                leftIcon={<FaWhatsapp className="text-base" />}
+              >
+                Live WhatsApp CRM
+              </Button>
+            </Link>
           </div>
-          <p className="text-sm text-gray-400 mt-1">
-            Real-time monitoring of Meta Graph API v25.0 health, messaging funnel, and per-message pricing.
-            <span className="text-gray-500 ml-2">Last sync: {lastSync}</span>
-          </p>
-        </div>
-        <div className="flex items-center gap-2">
-          <button
-            onClick={() => fetchRealtimeAnalytics(false)}
-            disabled={loading}
-            className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-[#202c33] hover:bg-[#2a3942] border border-[#2a3942] text-gray-200 font-semibold text-xs transition-all disabled:opacity-50"
-          >
-            <FiRefreshCw className={`text-sm text-emerald-400 ${loading ? "animate-spin" : ""}`} />
-            <span>{loading ? "Syncing Meta..." : "Refresh Live"}</span>
-          </button>
-          <a
-            href="/whatsapp-admin"
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#00a884] hover:bg-[#008f6f] text-white font-bold text-sm shadow-lg transition-all"
-          >
-            <FaWhatsapp className="text-lg" />
-            <span>Live WhatsApp CRM</span>
-          </a>
-        </div>
-      </div>
+        }
+      />
 
       {/* 1. Account Health (Kill Switch) */}
       <section className="space-y-4">
-        <h2 className="text-2xl font-bold tracking-tight text-white font-['Outfit']">
+        <h2 className="text-xl font-bold tracking-tight text-sv-text font-sans">
           Account Health & Compliance
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
-          <div className="bg-[#161923] border border-[#2a2d3e] rounded-xl p-5 shadow-lg flex flex-col justify-between">
+          <Card variant="default" padding="lg" className="flex flex-col justify-between">
             <div>
               <div className="flex flex-row items-center justify-between pb-3">
-                <h3 className="text-sm font-medium text-gray-400">Number Quality</h3>
+                <h3 className="text-xs font-semibold uppercase tracking-wider text-sv-text-muted">Number Quality</h3>
                 {accountMetrics.qualityRating === "GREEN" ? (
-                  <FiCheckCircle className="h-5 w-5 text-emerald-400" />
+                  <FiCheckCircle className="h-5 w-5 text-sv-status-success" />
                 ) : (
-                  <FiAlertTriangle className="h-5 w-5 text-yellow-400" />
+                  <FiAlertTriangle className="h-5 w-5 text-sv-status-warning" />
                 )}
               </div>
               <div
-                className={`text-3xl font-bold font-['Outfit'] ${
+                className={`text-3xl font-extrabold font-sans ${
                   accountMetrics.qualityRating === "GREEN"
-                    ? "text-emerald-400"
+                    ? "text-sv-status-success"
                     : accountMetrics.qualityRating === "YELLOW"
-                    ? "text-yellow-400"
-                    : "text-red-400"
+                    ? "text-sv-status-warning"
+                    : "text-sv-status-error"
                 }`}
               >
                 {accountMetrics.qualityRating}
               </div>
             </div>
-            <p className="text-xs text-gray-400 mt-3">Drops to RED can throttle limits.</p>
-          </div>
+            <p className="text-xs text-sv-text-muted mt-3">Drops to RED can throttle limits.</p>
+          </Card>
 
-          <div className="bg-[#161923] border border-[#2a2d3e] rounded-xl p-5 shadow-lg flex flex-col justify-between">
+          <Card variant="default" padding="lg" className="flex flex-col justify-between">
             <div>
               <div className="flex flex-row items-center justify-between pb-3">
-                <h3 className="text-sm font-medium text-gray-400">Messaging Limit</h3>
-                <FiActivity className="h-5 w-5 text-blue-400" />
+                <h3 className="text-xs font-semibold uppercase tracking-wider text-sv-text-muted">Messaging Limit</h3>
+                <FiActivity className="h-5 w-5 text-sv-status-info" />
               </div>
-              <div className="text-3xl font-bold font-['Outfit'] text-white">
+              <div className="text-3xl font-extrabold font-sans text-sv-text">
                 {accountMetrics.messagingLimit}
               </div>
             </div>
-            <p className="text-xs text-gray-400 mt-3">Business-initiated msgs / 24hrs.</p>
-          </div>
+            <p className="text-xs text-sv-text-muted mt-3">Business-initiated msgs / 24hrs.</p>
+          </Card>
 
-          <div className="bg-[#161923] border border-[#2a2d3e] rounded-xl p-5 shadow-lg flex flex-col justify-between">
+          <Card variant="default" padding="lg" className="flex flex-col justify-between">
             <div>
               <div className="flex flex-row items-center justify-between pb-3">
-                <h3 className="text-sm font-medium text-gray-400">Template Warnings</h3>
-                <FiAlertTriangle className="h-5 w-5 text-amber-400" />
+                <h3 className="text-xs font-semibold uppercase tracking-wider text-sv-text-muted">Template Warnings</h3>
+                <FiAlertTriangle className="h-5 w-5 text-sv-status-warning" />
               </div>
-              <div className="text-3xl font-bold font-['Outfit'] text-white">
+              <div className="text-3xl font-extrabold font-sans text-sv-text">
                 {templates.filter((t) => t.status === "PAUSED" || t.status === "REJECTED").length}
               </div>
             </div>
-            <p className="text-xs text-gray-400 mt-3">Templates flagged by Meta.</p>
-          </div>
+            <p className="text-xs text-sv-text-muted mt-3">Templates flagged by Meta.</p>
+          </Card>
 
-          <div className="bg-[#161923] border border-[#2a2d3e] rounded-xl p-5 shadow-lg flex flex-col justify-between">
+          <Card variant="default" padding="lg" className="flex flex-col justify-between">
             <div>
               <div className="flex flex-row items-center justify-between pb-3">
-                <h3 className="text-sm font-medium text-gray-400">Opt-Out Rate</h3>
+                <h3 className="text-xs font-semibold uppercase tracking-wider text-sv-text-muted">Opt-Out Rate</h3>
                 <FiFilter className="h-5 w-5 text-purple-400" />
               </div>
               <div
-                className={`text-3xl font-bold font-['Outfit'] ${
-                  Number(optOutRate) > 1.0 ? "text-red-400" : "text-white"
+                className={`text-3xl font-extrabold font-sans ${
+                  Number(optOutRate) > 1.0 ? "text-sv-status-error" : "text-sv-text"
                 }`}
               >
                 {optOutRate}%
               </div>
             </div>
-            <p className="text-xs text-gray-400 mt-3">Keep below 1.0% to avoid ban.</p>
-          </div>
+            <p className="text-xs text-sv-text-muted mt-3">Keep below 1.0% to avoid ban.</p>
+          </Card>
         </div>
       </section>
 
       {/* 2. Messaging Funnel */}
       <section className="space-y-4">
         <div>
-          <h2 className="text-2xl font-bold tracking-tight text-white font-['Outfit']">
+          <h2 className="text-xl font-bold tracking-tight text-sv-text font-sans">
             The Messaging Funnel
           </h2>
-          <p className="text-xs text-gray-400 mt-1">
-            Real-time data from Meta Graph API v25.0 WABA Analytics (30-day rolling window). Read & Reply counts are not available on this endpoint.
+          <p className="text-xs text-sv-text-muted mt-1">
+            Real-time data from Meta Graph API v25.0 WABA Analytics (30-day rolling window).
           </p>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-5">
-          <div className="bg-[#161923] border border-[#2a2d3e] rounded-xl p-5 shadow-lg">
-            <h3 className="text-sm font-medium text-gray-400 pb-2">1. Sent</h3>
-            <div className="text-3xl font-bold font-['Outfit'] text-white">{funnel.sent}</div>
-          </div>
-          <div className="bg-[#161923] border border-[#2a2d3e] rounded-xl p-5 shadow-lg">
-            <h3 className="text-sm font-medium text-gray-400 pb-2">2. Delivered</h3>
-            <div className="text-3xl font-bold font-['Outfit'] text-white">{funnel.delivered}</div>
-            <div className="text-sm text-emerald-400 font-medium mt-2">{deliveryRate}% Delivery Rate</div>
-          </div>
-          <div className="bg-[#161923] border border-[#2a2d3e] rounded-xl p-5 shadow-lg">
-            <h3 className="text-sm font-medium text-gray-400 pb-2">3. Read</h3>
-            <div className="text-3xl font-bold font-['Outfit'] text-white">{funnel.read}</div>
-            <div className="text-sm text-blue-400 font-medium mt-2">{readRate}% Read Rate</div>
-          </div>
-          <div className="bg-[#161923] border border-[#2a2d3e] rounded-xl p-5 shadow-lg">
-            <h3 className="text-sm font-medium text-gray-400 pb-2">4. Replied</h3>
-            <div className="text-3xl font-bold font-['Outfit'] text-white">{funnel.replied}</div>
-            <div className="text-sm text-purple-400 font-medium mt-2">{replyRate}% Reply Rate</div>
-          </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+          <Card variant="default" padding="lg">
+            <h3 className="text-xs font-semibold uppercase tracking-wider text-sv-text-muted pb-2">1. Sent</h3>
+            <div className="text-3xl font-extrabold font-sans text-sv-text">{funnel.sent}</div>
+          </Card>
+          <Card variant="default" padding="lg">
+            <h3 className="text-xs font-semibold uppercase tracking-wider text-sv-text-muted pb-2">2. Delivered</h3>
+            <div className="text-3xl font-extrabold font-sans text-sv-text">{funnel.delivered}</div>
+            <div className="text-xs text-sv-status-success font-semibold mt-2">{deliveryRate}% Delivery Rate</div>
+          </Card>
+          <Card variant="default" padding="lg">
+            <h3 className="text-xs font-semibold uppercase tracking-wider text-sv-text-muted pb-2">3. Read</h3>
+            <div className="text-3xl font-extrabold font-sans text-sv-text">{funnel.read}</div>
+            <div className="text-xs text-sv-status-info font-semibold mt-2">{readRate}% Read Rate</div>
+          </Card>
+          <Card variant="default" padding="lg">
+            <h3 className="text-xs font-semibold uppercase tracking-wider text-sv-text-muted pb-2">4. Replied</h3>
+            <div className="text-3xl font-extrabold font-sans text-sv-text">{funnel.replied}</div>
+            <div className="text-xs text-sv-brand font-semibold mt-2">{replyRate}% Reply Rate</div>
+          </Card>
         </div>
       </section>
 
       {/* 3. Financial & Billing */}
       <section className="space-y-4">
         <div>
-          <h2 className="text-2xl font-bold tracking-tight text-white font-['Outfit']">
+          <h2 className="text-xl font-bold tracking-tight text-sv-text font-sans">
             Financial & Billing Metrics
           </h2>
-          <p className="text-xs text-gray-400 mt-1">
-            Meta Graph API v25.0 Pricing Analytics — per-message billing (effective July 1, 2025). Breaks down volume and cost by SERVICE, UTILITY, MARKETING categories.
+          <p className="text-xs text-sv-text-muted mt-1">
+            Meta Graph API v25.0 Pricing Analytics — per-message billing. Breaks down volume and cost by category.
           </p>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-          <div className="bg-[#161923] border border-[#2a2d3e] rounded-xl p-5 shadow-lg flex flex-col justify-between">
+          <Card variant="default" padding="lg" className="flex flex-col justify-between">
             <div>
               <div className="flex flex-row items-center justify-between pb-3">
-                <h3 className="text-sm font-medium text-gray-400">Total Messages Billed</h3>
-                <FiSmartphone className="h-5 w-5 text-emerald-400" />
+                <h3 className="text-xs font-semibold uppercase tracking-wider text-sv-text-muted">Total Messages Billed</h3>
+                <FiSmartphone className="h-5 w-5 text-sv-status-success" />
               </div>
-              <div className="text-3xl font-bold font-['Outfit'] text-white">
+              <div className="text-3xl font-extrabold font-sans text-sv-text">
                 {financials.activeWindows}
               </div>
             </div>
-            <p className="text-xs text-gray-400 mt-3">Messages processed by Meta in the last 30 days.</p>
-          </div>
+            <p className="text-xs text-sv-text-muted mt-3">Messages processed by Meta in the last 30 days.</p>
+          </Card>
 
-          <div className="bg-[#161923] border border-[#2a2d3e] rounded-xl p-5 shadow-lg flex flex-col justify-between">
+          <Card variant="default" padding="lg" className="flex flex-col justify-between">
             <div>
               <div className="flex flex-row items-center justify-between pb-3">
-                <h3 className="text-sm font-medium text-gray-400">Cost Per Message (CPM)</h3>
-                <FiDollarSign className="h-5 w-5 text-blue-400" />
+                <h3 className="text-xs font-semibold uppercase tracking-wider text-sv-text-muted">Cost Per Message (CPM)</h3>
+                <FiDollarSign className="h-5 w-5 text-sv-status-info" />
               </div>
-              <div className="text-3xl font-bold font-['Outfit'] text-white">
+              <div className="text-3xl font-extrabold font-sans text-sv-text">
                 ₹{financials.cpc.toFixed(4)}
               </div>
             </div>
-            <p className="text-xs text-gray-400 mt-3">Average Meta fee per message across all categories.</p>
-          </div>
+            <p className="text-xs text-sv-text-muted mt-3">Average Meta fee per message across all categories.</p>
+          </Card>
 
-          <div className="bg-[#161923] border border-[#2a2d3e] rounded-xl p-5 shadow-lg flex flex-col justify-between">
+          <Card variant="default" padding="lg" className="flex flex-col justify-between">
             <div>
               <div className="flex flex-row items-center justify-between pb-3">
-                <h3 className="text-sm font-medium text-gray-400">Total Spend (Meta)</h3>
-                <FiDollarSign className="h-5 w-5 text-purple-400" />
+                <h3 className="text-xs font-semibold uppercase tracking-wider text-sv-text-muted">Total Spend (Meta)</h3>
+                <FiDollarSign className="h-5 w-5 text-sv-brand" />
               </div>
-              <div className="text-3xl font-bold font-['Outfit'] text-white">
+              <div className="text-3xl font-extrabold font-sans text-sv-text">
                 ₹{financials.totalCost.toFixed(2)}
               </div>
             </div>
-            <p className="text-xs text-gray-400 mt-3">Total billed by Meta (pricing_analytics) for the last 30 days.</p>
-          </div>
+            <p className="text-xs text-sv-text-muted mt-3">Total billed by Meta (pricing_analytics) for 30 days.</p>
+          </Card>
         </div>
 
-        <div className="bg-[#161923] border border-[#2a2d3e] rounded-xl overflow-hidden shadow-lg">
-          <table className="w-full text-sm text-left">
-            <thead className="bg-[#1f2330] text-gray-400 font-semibold border-b border-[#2a2d3e] text-xs uppercase tracking-wider">
-              <tr>
-                <th className="px-6 py-4">Pricing Category</th>
-                <th className="px-6 py-4">Messages</th>
-                <th className="px-6 py-4 text-right">Cost (INR)</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-[#2a2d3e]/50">
-              {financials.categories.length === 0 ? (
+        <Card variant="default" padding="none" className="overflow-hidden shadow-sv-md">
+          <div className="overflow-x-auto styled-scrollbar">
+            <table className="w-full text-sm text-left">
+              <thead className="bg-sv-surface-raised text-sv-text-muted font-semibold border-b border-sv-border text-xs uppercase tracking-wider">
                 <tr>
-                  <td colSpan={3} className="px-6 py-8 text-center text-gray-400">
-                    No pricing data returned by Meta Graph API for this 30-day period.
-                  </td>
+                  <th className="px-6 py-4">Pricing Category</th>
+                  <th className="px-6 py-4">Messages</th>
+                  <th className="px-6 py-4 text-right">Cost (INR)</th>
                 </tr>
-              ) : (
-                financials.categories.map((c, i) => (
-                  <tr key={i} className="hover:bg-[#1f2330]/50 transition-colors text-white">
-                    <td className="px-6 py-4 font-medium capitalize">{c.category}</td>
-                    <td className="px-6 py-4">{c.count}</td>
-                    <td className="px-6 py-4 text-right font-medium">₹{c.cost.toFixed(2)}</td>
+              </thead>
+              <tbody className="divide-y divide-sv-border-subtle bg-sv-surface">
+                {financials.categories.length === 0 ? (
+                  <tr>
+                    <td colSpan={3} className="px-6 py-8 text-center text-sv-text-muted">
+                      No pricing data returned by Meta Graph API for this 30-day period.
+                    </td>
                   </tr>
-                ))
-              )}
-            </tbody>
-          </table>
-        </div>
+                ) : (
+                  financials.categories.map((c, i) => (
+                    <tr key={i} className="hover:bg-sv-surface-hover/50 transition-colors text-sv-text">
+                      <td className="px-6 py-4 font-semibold capitalize">{c.category}</td>
+                      <td className="px-6 py-4 text-sv-text-secondary">{c.count}</td>
+                      <td className="px-6 py-4 text-right font-bold text-sv-brand">₹{c.cost.toFixed(2)}</td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
+          </div>
+        </Card>
       </section>
     </div>
   );

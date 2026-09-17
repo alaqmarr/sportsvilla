@@ -57,21 +57,21 @@ export default async function WhatsAppEventsPage() {
   }
 
   return (
-    <div className="flex flex-col w-full h-[100dvh] bg-[#0b141a] overflow-hidden text-gray-200">
+    <div className="flex flex-col w-full h-[100dvh] bg-sv-bg overflow-hidden text-sv-text">
       {/* Header */}
-      <div className="h-16 shrink-0 bg-[#202c33] border-b border-[#2a3942] px-6 flex items-center justify-between">
+      <div className="h-16 shrink-0 bg-sv-surface-raised border-b border-sv-border px-6 flex items-center justify-between">
         <div className="flex items-center gap-4">
-          <Link href="/whatsapp-admin" className="p-2 hover:bg-[#2a3942] rounded-full transition-colors text-gray-300">
+          <Link href="/whatsapp-admin" className="p-2 hover:bg-sv-surface-hover rounded-full transition-colors text-sv-text-muted hover:text-sv-text">
             <FiCornerUpLeft className="text-xl" />
           </Link>
           <div>
-            <h1 className="text-lg font-semibold text-white">WhatsApp Event Triggers</h1>
-            <p className="text-xs text-gray-400">Manage Meta API templates linked to internal events</p>
+            <h1 className="text-lg font-semibold text-sv-text">WhatsApp Event Triggers</h1>
+            <p className="text-xs text-sv-text-muted">Manage Meta API templates linked to internal events</p>
           </div>
         </div>
       </div>
 
-      <div className="flex-1 p-6 overflow-y-auto max-w-7xl mx-auto space-y-6 w-full">
+      <div className="flex-1 p-6 overflow-y-auto max-w-7xl mx-auto space-y-6 w-full styled-scrollbar">
         <EventsClient initialEvents={initialEvents} initialTemplates={initialTemplates} />
       </div>
     </div>

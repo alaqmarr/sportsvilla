@@ -1,10 +1,16 @@
 'use client';
 
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { createTournament, updateTournament } from './actions';
 import toast from 'react-hot-toast';
-import { FiUploadCloud, FiChevronLeft } from 'react-icons/fi';
+import { FiUploadCloud } from 'react-icons/fi';
+import {
+  Card,
+  Button,
+  Input,
+  Select,
+} from '@/components/admin/ui';
 
 export default function TournamentFormClient({ initialData, sports }: { initialData?: any, sports?: any[] }) {
   const router = useRouter();
@@ -85,8 +91,6 @@ export default function TournamentFormClient({ initialData, sports }: { initialD
         toast.success(initialData?.id ? 'Tournament updated!' : 'Tournament created!');
         if (!initialData?.id && res?.tournament?.id) {
           router.push(`/tournaments/${res.tournament!.id}`);
-        } else {
-          // just stay on page if editing
         }
       }
     } catch (e: any) {
@@ -97,153 +101,219 @@ export default function TournamentFormClient({ initialData, sports }: { initialD
   };
 
   return (
-    <form onSubmit={handleSave} className="bg-[#161923] rounded-xl border border-[#2a2d3e] overflow-hidden">
-      <div className="p-6 border-b border-[#2a2d3e] flex justify-between items-center bg-[#0f1117]">
-        <h2 className="text-xl font-bold font-['Outfit'] text-white">
-          {initialData?.id ? 'Edit Tournament Settings' : 'Create New Tournament'}
-        </h2>
-        <div className="flex items-center gap-3">
-          <label className="flex items-center gap-2 cursor-pointer">
-            <input 
-              type="checkbox" 
-              checked={isPublic}
-              onChange={(e) => setIsPublic(e.target.checked)}
-              className="w-4 h-4 text-emerald-500 bg-[#0f1117] border-[#2a2d3e] rounded focus:ring-emerald-500"
-            />
-            <span className="text-sm font-semibold tracking-wider text-gray-400">MAKE PUBLIC</span>
-          </label>
+    <Card variant="default" padding="none" className="overflow-hidden">
+      <form onSubmit={handleSave}>
+        <div className="p-6 border-b border-sv-border-subtle flex justify-between items-center bg-sv-surface-raised">
+          <h2 className="text-xl font-bold font-sans text-sv-text">
+            {initialData?.id ? 'Edit Tournament Settings' : 'Create New Tournament'}
+          </h2>
+          <div className="flex items-center gap-3">
+            <label className="flex items-center gap-2 cursor-pointer">
+              <input 
+                type="checkbox" 
+                checked={isPublic}
+                onChange={(e) => setIsPublic(e.target.checked)}
+                className="w-4 h-4 accent-emerald-500 rounded"
+              />
+              <span className="text-xs font-semibold tracking-wider text-sv-text-secondary uppercase">
+                Make Public
+              </span>
+            </label>
+          </div>
         </div>
-      </div>
 
-      <div className="p-6 space-y-8">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          
-          {/* Main Info Column */}
-          <div className="lg:col-span-2 space-y-6">
-            <div>
-              <label className="block text-xs uppercase tracking-wider font-semibold text-gray-500 mb-2">Tournament Name *</label>
-              <input type="text" value={name} onChange={e => setName(e.target.value)} required className="w-full bg-[#0f1117] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white placeholder-gray-600 focus:border-orange-500/50 focus:outline-none text-sm" placeholder="E.g. Summer Smash 2026" />
-            </div>
-
-            <div>
-              <label className="block text-xs uppercase tracking-wider font-semibold text-gray-500 mb-2">Description</label>
-              <textarea value={description} onChange={e => setDescription(e.target.value)} rows={4} className="w-full bg-[#0f1117] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white placeholder-gray-600 focus:border-orange-500/50 focus:outline-none text-sm" placeholder="Details about the tournament..."></textarea>
-            </div>
+        <div className="p-6 space-y-8">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
-                <label className="block text-xs uppercase tracking-wider font-semibold text-gray-500 mb-2">Start Date *</label>
-                <input type="datetime-local" value={startDate} onChange={e => setStartDate(e.target.value)} required className="w-full bg-[#0f1117] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white placeholder-gray-600 focus:border-orange-500/50 focus:outline-none text-sm [color-scheme:dark]" />
+            {/* Main Info Column */}
+            <div className="lg:col-span-2 space-y-6">
+              <Input
+                label="Tournament Name *"
+                required
+                value={name}
+                onChange={e => setName(e.target.value)}
+                placeholder="E.g. Summer Smash 2026"
+              />
+
+              <div className="space-y-1.5">
+                <label className="block text-xs uppercase tracking-wider font-semibold text-sv-text-secondary">
+                  Description
+                </label>
+                <textarea
+                  value={description}
+                  onChange={e => setDescription(e.target.value)}
+                  rows={4}
+                  className="w-full bg-sv-bg border border-sv-border rounded-sv-sm px-4 py-2.5 text-sv-text placeholder:text-sv-text-muted focus:border-sv-brand focus:ring-1 focus:ring-sv-brand outline-none text-sm"
+                  placeholder="Details about the tournament..."
+                />
               </div>
-              <div>
-                <label className="block text-xs uppercase tracking-wider font-semibold text-gray-500 mb-2">Registration Deadline</label>
-                <input type="datetime-local" value={registrationDeadline} onChange={e => setRegistrationDeadline(e.target.value)} className="w-full bg-[#0f1117] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white placeholder-gray-600 focus:border-orange-500/50 focus:outline-none text-sm [color-scheme:dark]" />
-              </div>
-              <div>
-                <label className="block text-xs uppercase tracking-wider font-semibold text-gray-500 mb-2">Venue</label>
-                <input type="text" value={venue} onChange={e => setVenue(e.target.value)} className="w-full bg-[#0f1117] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white placeholder-gray-600 focus:border-orange-500/50 focus:outline-none text-sm" placeholder="Arena Name / Address" />
-              </div>
-              <div>
-                <label className="block text-xs uppercase tracking-wider font-semibold text-gray-500 mb-2">Sport</label>
-                <select value={sportId} onChange={e => setSportId(e.target.value)} className="w-full bg-[#0f1117] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white placeholder-gray-600 focus:border-orange-500/50 focus:outline-none text-sm">
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <Input
+                  label="Start Date *"
+                  type="datetime-local"
+                  required
+                  value={startDate}
+                  onChange={e => setStartDate(e.target.value)}
+                  className="[color-scheme:dark]"
+                />
+                <Input
+                  label="Registration Deadline"
+                  type="datetime-local"
+                  value={registrationDeadline}
+                  onChange={e => setRegistrationDeadline(e.target.value)}
+                  className="[color-scheme:dark]"
+                />
+                <Input
+                  label="Venue"
+                  value={venue}
+                  onChange={e => setVenue(e.target.value)}
+                  placeholder="Arena Name / Address"
+                />
+                <Select
+                  label="Sport"
+                  value={sportId}
+                  onChange={e => setSportId(e.target.value)}
+                >
                   <option value="">-- Select Sport --</option>
                   {sports?.map((s: any) => (
                     <option key={s.id} value={s.id}>{s.name}</option>
                   ))}
-                </select>
-              </div>
-            </div>
-          </div>
-
-          {/* Right Column (Image & Fees) */}
-          <div className="space-y-6">
-            <div>
-              <label className="block text-xs uppercase tracking-wider font-semibold text-gray-500 mb-2">Thumbnail</label>
-              <div className="border border-dashed border-[#2a2d3e] bg-[#0f1117] rounded-xl p-4 text-center hover:bg-[#1c1f2e] transition relative overflow-hidden h-40 flex flex-col justify-center items-center group cursor-pointer">
-                <input type="file" onChange={handleImageChange} accept="image/*" className="absolute inset-0 opacity-0 cursor-pointer z-10" />
-                {thumbnailUrl ? (
-                  <>
-                    <img src={thumbnailUrl} alt="Preview" className="absolute inset-0 w-full h-full object-cover" />
-                    <div className="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition">
-                      <span className="text-white font-semibold flex items-center gap-2"><FiUploadCloud /> Change Image</span>
-                    </div>
-                  </>
-                ) : uploadingImage ? (
-                  <span className="text-orange-400 font-semibold animate-pulse">Uploading...</span>
-                ) : (
-                  <>
-                    <FiUploadCloud className="text-gray-600 text-3xl mb-2" />
-                    <span className="text-gray-500 text-sm font-semibold tracking-wide">Click or drop to upload</span>
-                  </>
-                )}
+                </Select>
               </div>
             </div>
 
-            <div className="bg-[#0f1117] p-5 rounded-xl border border-[#2a2d3e] space-y-4">
-              <h3 className="font-semibold text-white border-b border-[#2a2d3e] pb-2 text-sm uppercase tracking-wider">Entry & Capacity</h3>
-              
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-xs font-semibold text-gray-500 mb-1">Entry Fee (₹)</label>
-                  <input type="number" value={fee} onChange={e => setFee(e.target.value)} className="w-full px-3 py-2 bg-[#161923] border border-[#2a2d3e] text-white rounded focus:border-orange-500/50 focus:outline-none" placeholder="0" />
-                </div>
-                <div>
-                  <label className="block text-xs font-semibold text-gray-500 mb-1">Team Size</label>
-                  <input type="number" value={teamSize} onChange={e => setTeamSize(e.target.value)} className="w-full px-3 py-2 bg-[#161923] border border-[#2a2d3e] text-white rounded focus:border-orange-500/50 focus:outline-none" min="1" />
-                </div>
-                <div>
-                  <label className="block text-xs font-semibold text-gray-500 mb-1">Max Teams</label>
-                  <input type="number" value={maxTeams} onChange={e => setMaxTeams(e.target.value)} className="w-full px-3 py-2 bg-[#161923] border border-[#2a2d3e] text-white rounded focus:border-orange-500/50 focus:outline-none" placeholder="Unlimited" />
-                </div>
-                <div>
-                  <label className="block text-xs font-semibold text-gray-500 mb-1">Prize Pool</label>
-                  <input type="text" value={prizePool} onChange={e => setPrizePool(e.target.value)} className="w-full px-3 py-2 bg-[#161923] border border-[#2a2d3e] text-white rounded focus:border-orange-500/50 focus:outline-none" placeholder="E.g. ₹50,000" />
-                </div>
-              </div>
-            </div>
-
-            <div className="bg-[#0f1117] p-5 rounded-xl border border-[#2a2d3e] space-y-4">
-              <h3 className="font-semibold text-white border-b border-[#2a2d3e] pb-2 text-sm uppercase tracking-wider">Payment Settings</h3>
-              
+            {/* Right Column (Image & Fees) */}
+            <div className="space-y-6">
               <div>
-                <label className="block text-xs font-semibold text-gray-500 mb-1">UPI ID for Payments</label>
-                <input type="text" value={paymentUpiId} onChange={e => setPaymentUpiId(e.target.value)} className="w-full px-3 py-2 bg-[#161923] border border-[#2a2d3e] text-white rounded focus:border-orange-500/50 focus:outline-none" placeholder="e.g. sportsvilla@upi" />
+                <label className="block text-xs uppercase tracking-wider font-semibold text-sv-text-secondary mb-2">
+                  Thumbnail
+                </label>
+                <div className="border border-dashed border-sv-border bg-sv-bg rounded-sv-lg p-4 text-center hover:bg-sv-surface-raised transition relative overflow-hidden h-40 flex flex-col justify-center items-center group cursor-pointer">
+                  <input
+                    type="file"
+                    onChange={handleImageChange}
+                    accept="image/*"
+                    className="absolute inset-0 opacity-0 cursor-pointer z-10"
+                  />
+                  {thumbnailUrl ? (
+                    <>
+                      <img src={thumbnailUrl} alt="Preview" className="absolute inset-0 w-full h-full object-cover" />
+                      <div className="absolute inset-0 bg-black/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition">
+                        <span className="text-white font-semibold text-xs flex items-center gap-2">
+                          <FiUploadCloud /> Change Image
+                        </span>
+                      </div>
+                    </>
+                  ) : uploadingImage ? (
+                    <span className="text-sv-brand font-semibold text-xs animate-pulse">Uploading...</span>
+                  ) : (
+                    <>
+                      <FiUploadCloud className="text-sv-text-muted text-3xl mb-2" />
+                      <span className="text-sv-text-muted text-xs font-medium tracking-wide">
+                        Click or drop to upload
+                      </span>
+                    </>
+                  )}
+                </div>
               </div>
 
-              <div className="pt-2">
-                <label className="flex items-center gap-2 cursor-pointer mb-3">
-                  <input 
-                    type="checkbox" 
-                    checked={acceptsCash}
-                    onChange={(e) => setAcceptsCash(e.target.checked)}
-                    className="w-4 h-4 text-emerald-500 bg-[#161923] border-[#2a2d3e] rounded focus:ring-emerald-500"
-                  />
-                  <span className="text-sm font-semibold text-gray-400">Accept Cash Payments</span>
-                </label>
+              <div className="bg-sv-bg p-5 rounded-sv-md border border-sv-border space-y-4">
+                <h3 className="font-semibold text-sv-text border-b border-sv-border pb-2 text-xs uppercase tracking-wider">
+                  Entry & Capacity
+                </h3>
                 
-                {acceptsCash && (
-                  <div>
-                    <label className="block text-xs font-semibold text-gray-500 mb-1">Cash Responsible Person</label>
-                    <input type="text" value={cashResponsiblePerson} onChange={e => setCashResponsiblePerson(e.target.value)} className="w-full px-3 py-2 bg-[#161923] border border-[#2a2d3e] text-white rounded focus:border-orange-500/50 focus:outline-none" placeholder="e.g. John Doe (Manager)" required />
-                  </div>
-                )}
+                <div className="grid grid-cols-2 gap-4">
+                  <Input
+                    label="Entry Fee (₹)"
+                    type="number"
+                    value={fee}
+                    onChange={e => setFee(e.target.value)}
+                    placeholder="0"
+                  />
+                  <Input
+                    label="Team Size"
+                    type="number"
+                    min="1"
+                    value={teamSize}
+                    onChange={e => setTeamSize(e.target.value)}
+                  />
+                  <Input
+                    label="Max Teams"
+                    type="number"
+                    value={maxTeams}
+                    onChange={e => setMaxTeams(e.target.value)}
+                    placeholder="Unlimited"
+                  />
+                  <Input
+                    label="Prize Pool"
+                    value={prizePool}
+                    onChange={e => setPrizePool(e.target.value)}
+                    placeholder="E.g. ₹50,000"
+                  />
+                </div>
               </div>
+
+              <div className="bg-sv-bg p-5 rounded-sv-md border border-sv-border space-y-4">
+                <h3 className="font-semibold text-sv-text border-b border-sv-border pb-2 text-xs uppercase tracking-wider">
+                  Payment Settings
+                </h3>
+                
+                <Input
+                  label="UPI ID for Payments"
+                  value={paymentUpiId}
+                  onChange={e => setPaymentUpiId(e.target.value)}
+                  placeholder="e.g. sportsvilla@upi"
+                />
+
+                <div className="pt-2">
+                  <label className="flex items-center gap-2 cursor-pointer mb-3">
+                    <input 
+                      type="checkbox" 
+                      checked={acceptsCash}
+                      onChange={(e) => setAcceptsCash(e.target.checked)}
+                      className="w-4 h-4 accent-emerald-500 rounded"
+                    />
+                    <span className="text-xs font-semibold text-sv-text-secondary">
+                      Accept Cash Payments
+                    </span>
+                  </label>
+                  
+                  {acceptsCash && (
+                    <Input
+                      label="Cash Responsible Person *"
+                      required
+                      value={cashResponsiblePerson}
+                      onChange={e => setCashResponsiblePerson(e.target.value)}
+                      placeholder="e.g. John Doe (Manager)"
+                    />
+                  )}
+                </div>
+              </div>
+              
             </div>
-            
           </div>
         </div>
-      </div>
-      
-      <div className="px-6 py-4 bg-[#0f1117] border-t border-[#2a2d3e] flex justify-end gap-3">
-        {initialData?.id && (
-          <button type="button" onClick={() => router.back()} className="px-5 py-2.5 rounded-lg border border-[#2a2d3e] hover:bg-[#1c1f2e] text-gray-400 transition-colors font-semibold bg-transparent cursor-pointer">
-            Cancel
-          </button>
-        )}
-        <button type="submit" disabled={saving || uploadingImage} className="px-6 py-2.5 rounded-lg bg-orange-500 text-white font-semibold hover:bg-orange-600 transition-colors border-none cursor-pointer disabled:opacity-50">
-          {saving ? 'Saving...' : (initialData?.id ? 'Save Changes' : 'Create Tournament')}
-        </button>
-      </div>
-    </form>
+        
+        <div className="px-6 py-4 bg-sv-surface-raised border-t border-sv-border flex justify-end gap-3">
+          {initialData?.id && (
+            <Button
+              type="button"
+              variant="secondary"
+              onClick={() => router.back()}
+            >
+              Cancel
+            </Button>
+          )}
+          <Button
+            type="submit"
+            variant="primary"
+            isLoading={saving || uploadingImage}
+          >
+            {initialData?.id ? 'Save Changes' : 'Create Tournament'}
+          </Button>
+        </div>
+      </form>
+    </Card>
   );
 }

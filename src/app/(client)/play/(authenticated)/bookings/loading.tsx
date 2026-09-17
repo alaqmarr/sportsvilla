@@ -1,21 +1,23 @@
+import { PlaySkeleton } from '@/components/play/ui/PlaySkeleton';
+
 export default function BookingsLoading() {
   return (
-    <div className="text-[var(--play-text)] pb-24 bg-[var(--play-bg)] min-h-screen">
-      <div className="p-4 sm:p-6 lg:p-8 bg-[var(--play-surface)] sticky top-0 z-10 border-b border-[var(--play-border)]">
-        <h1 className="text-2xl font-bold text-[var(--play-text)] mb-4">My Purchases</h1>
-        <div className="flex gap-2">
-          <div className="h-10 w-24 bg-[var(--play-surface-alt)] animate-pulse rounded-full"></div>
-          <div className="h-10 w-24 bg-[var(--play-surface-alt)] animate-pulse rounded-full"></div>
-          <div className="h-10 w-24 bg-[var(--play-surface-alt)] animate-pulse rounded-full"></div>
-        </div>
+    <div className="text-play-text pb-24 bg-play-bg min-h-screen font-play space-y-6 max-w-7xl mx-auto w-full">
+      <div className="p-5 sm:p-6 bg-play-surface rounded-play-xl border border-play-border shadow-play-sm space-y-4">
+        <PlaySkeleton variant="rectangular" width={200} height={28} />
+        <PlaySkeleton variant="text" width={300} />
       </div>
 
-      <div className="p-4 sm:p-6 lg:p-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {[...Array(6)].map((_, i) => (
-            <div key={i} className="h-32 bg-[var(--play-surface)] animate-pulse rounded-[var(--play-radius-lg)] border border-[var(--play-border)] shadow-sm"></div>
-          ))}
-        </div>
+      <div className="flex gap-2">
+        <PlaySkeleton variant="rectangular" width={90} height={36} className="rounded-play-pill" />
+        <PlaySkeleton variant="rectangular" width={100} height={36} className="rounded-play-pill" />
+        <PlaySkeleton variant="rectangular" width={90} height={36} className="rounded-play-pill" />
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+        {[...Array(6)].map((_, i) => (
+          <PlaySkeleton key={i} variant="card" height={160} className="w-full" />
+        ))}
       </div>
     </div>
   );

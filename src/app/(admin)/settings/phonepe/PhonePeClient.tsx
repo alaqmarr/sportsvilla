@@ -1,8 +1,15 @@
 "use client";
-import { useState } from "react";
+import React, { useState } from "react";
 import { updatePhonePeSettings } from "./actions";
 import { useAlert } from "@/components/AlertProvider";
 import { FiSave, FiCreditCard } from "react-icons/fi";
+import {
+  Card,
+  Button,
+  PageHeader,
+  Input,
+  Select,
+} from "@/components/admin/ui";
 
 export default function PhonePeClient({ initialSettings }: { initialSettings: Record<string, string> }) {
   const { showAlert } = useAlert();
@@ -31,130 +38,133 @@ export default function PhonePeClient({ initialSettings }: { initialSettings: Re
         RAZORPAY_KEY_ID: razorpayKeyId,
         RAZORPAY_KEY_SECRET: razorpayKeySecret
       });
-      showAlert("success", "Payment configurations saved successfully!");
+      showAlert("Success", "Payment configurations saved successfully!", "success");
     } catch (err: any) {
-      showAlert("error", err.message || "Failed to save settings");
+      showAlert("Error", err.message || "Failed to save settings", "error");
     } finally {
       setLoading(false);
     }
   }
 
   return (
-    <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-6">
-      <div className="flex items-center space-x-3 mb-6 pb-4 border-b border-gray-100">
-        <div className="p-2 bg-indigo-50 text-indigo-600 rounded-lg">
-          <FiCreditCard className="w-5 h-5" />
-        </div>
-        <div>
-          <h2 className="text-lg font-semibold text-gray-800">Payment Gateways Configuration</h2>
-          <p className="text-sm text-gray-500">Manage your PhonePe and Razorpay configurations</p>
-        </div>
-      </div>
+    <div className="max-w-3xl space-y-6">
+      <PageHeader
+        title="Payment Gateways"
+        subtitle="Manage your PhonePe and Razorpay configurations and API credentials."
+      />
 
-      <form onSubmit={handleSave} className="space-y-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          
-          <div className="md:col-span-2">
-            <label className="block text-sm font-medium text-gray-700 mb-2">Active Payment Gateway</label>
-            <select
-              value={gateway}
-              onChange={(e) => setGateway(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition-all"
-            >
-              <option value="NONE">None (Disabled)</option>
-              <option value="PHONEPE">PhonePe</option>
-              <option value="RAZORPAY">Razorpay</option>
-              <option value="BOTH">Both (PhonePe & Razorpay)</option>
-            </select>
+      <Card variant="default" padding="none" className="overflow-hidden">
+        <div className="p-6 border-b border-sv-border-subtle bg-sv-surface-raised flex items-center gap-3">
+          <div className="p-2 bg-sv-brand-subtle text-sv-brand rounded-sv-sm">
+            <FiCreditCard className="w-5 h-5" />
           </div>
-
-          <div className="md:col-span-2 mt-4 pt-4 border-t border-gray-100">
-            <h3 className="text-md font-semibold text-gray-800">PhonePe Settings</h3>
-          </div>
-
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">PhonePe Environment</label>
-            <select
-              value={env}
-              onChange={(e) => setEnv(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition-all"
-            >
-              <option value="UAT">UAT (Sandbox / Testing)</option>
-              <option value="PROD">PRODUCTION (Live)</option>
-            </select>
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Merchant ID (Client ID)</label>
-            <input
-              type="text"
-              value={merchantId}
-              onChange={(e) => setMerchantId(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition-all"
-              placeholder="e.g. M22FEYQH8C3J3..."
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Salt Key (Client Secret)</label>
-            <input
-              type="password"
-              value={saltKey}
-              onChange={(e) => setSaltKey(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition-all"
-              placeholder="e.g. NDczNDAwNzItMT..."
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Salt Index</label>
-            <input
-              type="text"
-              value={saltIndex}
-              onChange={(e) => setSaltIndex(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition-all"
-              placeholder="1"
-            />
-          </div>
-
-          <div className="md:col-span-2 mt-4 pt-4 border-t border-gray-100">
-            <h3 className="text-md font-semibold text-gray-800">Razorpay Settings</h3>
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Razorpay Key ID</label>
-            <input
-              type="text"
-              value={razorpayKeyId}
-              onChange={(e) => setRazorpayKeyId(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition-all"
-              placeholder="e.g. rzp_test_..."
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Razorpay Key Secret</label>
-            <input
-              type="password"
-              value={razorpayKeySecret}
-              onChange={(e) => setRazorpayKeySecret(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition-all"
-              placeholder="e.g. A23B..."
-            />
+            <h2 className="text-lg font-bold font-sans text-sv-text">Payment Gateways Configuration</h2>
+            <p className="text-xs text-sv-text-muted">Manage active gateways and environment credentials</p>
           </div>
         </div>
 
-        <div className="flex justify-end pt-4 border-t border-gray-100">
-          <button
-            type="submit"
-            disabled={loading}
-            className="flex items-center space-x-2 px-6 py-2.5 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 focus:ring-4 focus:ring-indigo-100 transition-all disabled:opacity-50"
-          >
-            <FiSave className="w-4 h-4" />
-            <span>{loading ? "Saving..." : "Save Settings"}</span>
-          </button>
+        <div className="p-6">
+          <form onSubmit={handleSave} className="space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              
+              <div className="md:col-span-2">
+                <Select
+                  label="Active Payment Gateway"
+                  value={gateway}
+                  onChange={(e) => setGateway(e.target.value)}
+                >
+                  <option value="NONE">None (Disabled)</option>
+                  <option value="PHONEPE">PhonePe</option>
+                  <option value="RAZORPAY">Razorpay</option>
+                  <option value="BOTH">Both (PhonePe & Razorpay)</option>
+                </Select>
+              </div>
+
+              <div className="md:col-span-2 pt-4 border-t border-sv-border-subtle">
+                <h3 className="text-sm font-bold font-sans text-sv-brand uppercase tracking-wider">PhonePe Settings</h3>
+              </div>
+
+              <div>
+                <Select
+                  label="PhonePe Environment"
+                  value={env}
+                  onChange={(e) => setEnv(e.target.value)}
+                >
+                  <option value="UAT">UAT (Sandbox / Testing)</option>
+                  <option value="PROD">PRODUCTION (Live)</option>
+                </Select>
+              </div>
+
+              <div>
+                <Input
+                  label="Merchant ID (Client ID)"
+                  type="text"
+                  value={merchantId}
+                  onChange={(e) => setMerchantId(e.target.value)}
+                  placeholder="e.g. M22FEYQH8C3J3..."
+                />
+              </div>
+
+              <div>
+                <Input
+                  label="Salt Key (Client Secret)"
+                  type="password"
+                  value={saltKey}
+                  onChange={(e) => setSaltKey(e.target.value)}
+                  placeholder="e.g. NDczNDAwNzItMT..."
+                />
+              </div>
+
+              <div>
+                <Input
+                  label="Salt Index"
+                  type="text"
+                  value={saltIndex}
+                  onChange={(e) => setSaltIndex(e.target.value)}
+                  placeholder="1"
+                />
+              </div>
+
+              <div className="md:col-span-2 pt-4 border-t border-sv-border-subtle">
+                <h3 className="text-sm font-bold font-sans text-sv-brand uppercase tracking-wider">Razorpay Settings</h3>
+              </div>
+
+              <div>
+                <Input
+                  label="Razorpay Key ID"
+                  type="text"
+                  value={razorpayKeyId}
+                  onChange={(e) => setRazorpayKeyId(e.target.value)}
+                  placeholder="e.g. rzp_test_..."
+                />
+              </div>
+
+              <div>
+                <Input
+                  label="Razorpay Key Secret"
+                  type="password"
+                  value={razorpayKeySecret}
+                  onChange={(e) => setRazorpayKeySecret(e.target.value)}
+                  placeholder="e.g. A23B..."
+                />
+              </div>
+            </div>
+
+            <div className="flex justify-end pt-4 border-t border-sv-border">
+              <Button
+                type="submit"
+                disabled={loading}
+                isLoading={loading}
+                variant="primary"
+                leftIcon={<FiSave className="w-4 h-4" />}
+              >
+                Save Settings
+              </Button>
+            </div>
+          </form>
         </div>
-      </form>
+      </Card>
     </div>
   );
 }

@@ -1,11 +1,15 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNfc } from "@/components/nfc/NfcProvider";
 import { getMemberDetailsByCard } from "./actions";
 import { Loader2, User, Calendar, CreditCard, Activity, Wifi } from "lucide-react";
 import { format } from "date-fns";
 import { Prisma } from "@/generated/client";
+import {
+  Card,
+  Badge,
+} from "@/components/admin/ui";
 
 type MemberDetails = Prisma.NfcCardGetPayload<{
   include: {
@@ -54,142 +58,142 @@ export default function LookupClient() {
 
   if (loading) {
     return (
-      <div className="flex flex-col items-center justify-center py-20 text-gray-400">
-        <Loader2 className="w-12 h-12 animate-spin mb-4 text-orange-500" />
-        <p className="text-lg text-white">Fetching details...</p>
+      <div className="flex flex-col items-center justify-center py-20 text-sv-text-muted">
+        <Loader2 className="w-12 h-12 animate-spin mb-4 text-sv-brand" />
+        <p className="text-lg text-sv-text font-medium">Fetching details...</p>
       </div>
     );
   }
 
   if (!data && !error) {
     return (
-      <div className="flex flex-col items-center justify-center py-20 border-2 border-dashed border-[#2a2d3e] rounded-xl bg-[#1c1f2e]">
-        <Wifi className="w-16 h-16 text-blue-500 mb-6 animate-pulse" />
-        <h2 className="text-xl font-semibold text-white mb-2">Ready to Scan</h2>
-        <p className="text-gray-400 text-center max-w-md">
+      <Card variant="ghost" padding="lg" className="flex flex-col items-center justify-center py-20 text-center">
+        <Wifi className="w-16 h-16 text-sv-status-info mb-6 animate-pulse" />
+        <h2 className="text-xl font-bold text-sv-text mb-2">Ready to Scan</h2>
+        <p className="text-sv-text-muted text-center max-w-md text-sm">
           Tap Card to Lookup Member. As soon as the card is tapped, the member&apos;s details will appear here.
         </p>
-      </div>
+      </Card>
     );
   }
 
   return (
     <div className="space-y-6">
       {error && (
-        <div className="p-4 bg-red-900/30 text-red-400 rounded-lg border border-red-800/50">
+        <div className="p-4 bg-sv-error-subtle text-sv-error-text rounded-sv-md border border-sv-error-border text-sm font-medium">
           {error}
         </div>
       )}
 
       {data && !data.member && (
-        <div className="p-6 bg-yellow-900/20 text-yellow-400 rounded-xl border border-yellow-900/50">
+        <div className="p-6 bg-sv-warning-subtle text-sv-warning-text rounded-sv-md border border-sv-warning-border">
           <p className="font-semibold">Unassigned Card</p>
-          <p className="text-sm mt-1 text-gray-300">UID: {data.cardUid}</p>
+          <p className="text-sm mt-1 text-sv-text-muted">UID: {data.cardUid}</p>
         </div>
       )}
 
       {data && data.member && (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {/* Member Info */}
-          <div className="col-span-1 md:col-span-3 bg-[#1c1f2e] rounded-xl shadow-sm border border-[#2a2d3e] p-6 flex flex-col md:flex-row items-center md:items-start gap-6">
-            <div className="w-24 h-24 bg-blue-900/30 text-blue-400 border border-blue-800/40 rounded-full flex items-center justify-center flex-shrink-0">
-              <User size={48} />
+          <Card variant="default" padding="lg" className="col-span-1 md:col-span-3 flex flex-col md:flex-row items-center md:items-start gap-6">
+            <div className="w-20 h-20 bg-sv-brand-subtle text-sv-brand border border-sv-brand/30 rounded-full flex items-center justify-center flex-shrink-0">
+              <User size={40} />
             </div>
             <div className="flex-1 text-center md:text-left">
-              <h2 className="text-2xl font-bold text-white">
+              <h2 className="text-2xl font-bold text-sv-text">
                 {data.member.name}
               </h2>
-              <p className="text-gray-400 mt-1">
+              <p className="text-sv-text-muted text-sm mt-1">
                 {data.member.mobile} {data.member.email && `• ${data.member.email}`}
               </p>
               <div className="mt-4 flex flex-wrap gap-2 justify-center md:justify-start">
-                <span className="px-3 py-1 bg-green-900/30 text-green-400 border border-green-800/40 rounded-full text-sm font-medium">
+                <Badge variant="success" size="md">
                   Card UID: {data.cardUid}
-                </span>
-                <span className="px-3 py-1 bg-purple-900/30 text-purple-400 border border-purple-800/40 rounded-full text-sm font-medium">
+                </Badge>
+                <Badge variant="brand" size="md">
                   Wallet: ₹{((data.member.walletBalance || 0) / 100).toFixed(2)}
-                </span>
-                <span className="px-3 py-1 bg-yellow-900/30 text-yellow-400 border border-yellow-800/40 rounded-full text-sm font-medium">
+                </Badge>
+                <Badge variant="warning" size="md">
                   Points: {data.member.loyaltyPoints}
-                </span>
+                </Badge>
               </div>
             </div>
-          </div>
+          </Card>
 
           {/* Active Memberships */}
-          <div className="bg-[#1c1f2e] rounded-xl shadow-sm border border-[#2a2d3e] p-6">
-            <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
-              <Activity className="w-5 h-5 text-indigo-400" />
+          <Card variant="default" padding="lg">
+            <h3 className="text-base font-bold text-sv-text mb-4 flex items-center gap-2">
+              <Activity className="w-5 h-5 text-sv-status-info" />
               Active Memberships
             </h3>
             {data.member.memberships.length === 0 ? (
-              <p className="text-gray-400 text-sm">No active memberships.</p>
+              <p className="text-sv-text-muted text-sm">No active memberships.</p>
             ) : (
-              <div className="space-y-4">
+              <div className="space-y-3">
                 {data.member.memberships.map((m) => (
-                  <div key={m.id} className="border border-[#2a2d3e] bg-[#161923] rounded-lg p-3">
-                    <p className="font-medium text-white">{m.membershipPlan?.name}</p>
-                    <p className="text-xs text-gray-400 mt-1">
+                  <div key={m.id} className="border border-sv-border bg-sv-bg rounded-sv-sm p-3">
+                    <p className="font-semibold text-sv-text text-sm">{m.membershipPlan?.name}</p>
+                    <p className="text-xs text-sv-text-muted mt-1">
                       {m.turf?.name} • Ends {format(new Date(m.endDate), 'PP')}
                     </p>
                   </div>
                 ))}
               </div>
             )}
-          </div>
+          </Card>
 
           {/* Upcoming Bookings */}
-          <div className="bg-[#1c1f2e] rounded-xl shadow-sm border border-[#2a2d3e] p-6">
-            <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
-              <Calendar className="w-5 h-5 text-orange-400" />
+          <Card variant="default" padding="lg">
+            <h3 className="text-base font-bold text-sv-text mb-4 flex items-center gap-2">
+              <Calendar className="w-5 h-5 text-sv-brand" />
               Upcoming Bookings
             </h3>
             {data.member.bookings.length === 0 ? (
-              <p className="text-gray-400 text-sm">No upcoming bookings.</p>
+              <p className="text-sv-text-muted text-sm">No upcoming bookings.</p>
             ) : (
-              <div className="space-y-4">
+              <div className="space-y-3">
                 {data.member.bookings.map((b) => (
-                  <div key={b.id} className="border border-[#2a2d3e] bg-[#161923] rounded-lg p-3">
-                    <p className="font-medium text-white">
+                  <div key={b.id} className="border border-sv-border bg-sv-bg rounded-sv-sm p-3">
+                    <p className="font-semibold text-sv-text text-sm">
                       {format(new Date(b.startTime), 'PPp')}
                     </p>
-                    <p className="text-xs text-gray-400 mt-1">
+                    <p className="text-xs text-sv-text-muted mt-1">
                       Status: {b.status} • Payment: {b.paymentStatus}
                     </p>
                   </div>
                 ))}
               </div>
             )}
-          </div>
+          </Card>
 
           {/* Recent Transactions */}
-          <div className="bg-[#1c1f2e] rounded-xl shadow-sm border border-[#2a2d3e] p-6">
-            <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
-              <CreditCard className="w-5 h-5 text-emerald-400" />
+          <Card variant="default" padding="lg">
+            <h3 className="text-base font-bold text-sv-text mb-4 flex items-center gap-2">
+              <CreditCard className="w-5 h-5 text-sv-status-success" />
               Recent Wallet Tx
             </h3>
             {data.member.walletTransactions.length === 0 ? (
-              <p className="text-gray-400 text-sm">No recent transactions.</p>
+              <p className="text-sv-text-muted text-sm">No recent transactions.</p>
             ) : (
-              <div className="space-y-4">
+              <div className="space-y-3">
                 {data.member.walletTransactions.map((t) => (
-                  <div key={t.id} className="flex justify-between items-center border-b border-[#2a2d3e] pb-2 last:border-0 last:pb-0">
+                  <div key={t.id} className="flex justify-between items-center border-b border-sv-border-subtle pb-2.5 last:border-0 last:pb-0">
                     <div>
-                      <p className="font-medium text-sm text-white">
+                      <p className="font-medium text-sm text-sv-text">
                         {t.type} {t.description && `• ${t.description}`}
                       </p>
-                      <p className="text-xs text-gray-400 mt-0.5">
+                      <p className="text-xs text-sv-text-muted mt-0.5">
                         {format(new Date(t.createdAt), 'MMM d, yyyy')}
                       </p>
                     </div>
-                    <span className={`font-semibold text-sm ${t.type === 'CREDIT' ? 'text-green-400' : 'text-red-400'}`}>
+                    <span className={`font-bold text-sm ${t.type === 'CREDIT' ? 'text-sv-status-success' : 'text-sv-status-error'}`}>
                       {t.type === 'CREDIT' ? '+' : '-'}₹{t.amount}
                     </span>
                   </div>
                 ))}
               </div>
             )}
-          </div>
+          </Card>
 
         </div>
       )}

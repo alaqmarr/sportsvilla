@@ -67,7 +67,7 @@ export default function PortalClient({
 
         {/* Brand Header */}
         <div className="text-center mb-8">
-          <h1 className="text-2xl font-black font-['Outfit'] text-orange-500 tracking-wider uppercase drop-shadow-sm">
+          <h1 className="text-2xl font-black font-sans text-orange-500 tracking-wider uppercase drop-shadow-sm">
             SPORTSVILLA
           </h1>
           <p className="text-gray-500 font-medium text-sm mt-1">Member Portal</p>
@@ -304,3 +304,4 @@ export default function PortalClient({
     </div>
   );
 }
+

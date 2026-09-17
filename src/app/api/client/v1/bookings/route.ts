@@ -1,3 +1,4 @@
+import { CouponService } from '@/services/CouponService';
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { authenticateClient } from '@/lib/auth-middleware';
@@ -191,74 +192,13 @@ export async function POST(request: Request) {
     let discountAmount = 0;
     let validCouponId: string | null = null;
     if (couponCode) {
-      const coupon = await prisma.coupon.findUnique({
-        where: { code: String(couponCode).toUpperCase() },
-        include: { assignments: true }
-      });
-      
-      // Bug #11: Return error if coupon is invalid instead of silently ignoring
-      if (!coupon) {
-        return jsonResponse({ error: 'Invalid coupon code.' }, { status: 400 });
+      try {
+        const validation = await CouponService.validateCoupon(member.id, String(couponCode), price, sportId);
+        validCouponId = validation.coupon.id;
+        discountAmount = validation.coupon.discountAmount;
+      } catch (err: any) {
+        return jsonResponse({ error: err.message || 'Invalid coupon' }, { status: 400 });
       }
-      if (!coupon.isActive) {
-        return jsonResponse({ error: 'This coupon is no longer active.' }, { status: 400 });
-      }
-      if (coupon.expiryDate && new Date() > coupon.expiryDate) {
-        return jsonResponse({ error: 'This coupon has expired.' }, { status: 400 });
-      }
-
-      // Evaluate target constraints
-      let isAllowed = true;
-      let targetError = '';
-      if (coupon.targetType === 'SPECIFIC_MEMBERS') {
-        isAllowed = coupon.assignments.some(a => a.memberId === member.id);
-        if (!isAllowed) targetError = 'This coupon is not available for your account.';
-      } else if (coupon.targetType === 'MILESTONE_ALL_TIME' || coupon.targetType === 'MILESTONE_FROM_CREATION') {
-        // Bug #9: Count CONFIRMED + COMPLETED, not just COMPLETED
-        const milestoneWhere: any = { 
-          memberId: member.id, 
-          status: { in: ['CONFIRMED', 'COMPLETED'] } 
-        };
-        // Bug #8: Handle MILESTONE_FROM_CREATION — count bookings since member joined
-        if (coupon.targetType === 'MILESTONE_FROM_CREATION' && memberData?.joinDate) {
-          milestoneWhere.createdAt = { gte: memberData.joinDate };
-        }
-        const userBookingsCount = await prisma.booking.count({ where: milestoneWhere });
-        if (userBookingsCount < (coupon.milestoneBookingsCount || 0)) {
-          isAllowed = false;
-          targetError = `You need at least ${coupon.milestoneBookingsCount} bookings to use this coupon.`;
-        }
-      }
-
-      // Global and per user limits
-      if (coupon.maxUses !== null) {
-        const totalUses = await prisma.couponUsage.count({ where: { couponId: coupon.id } });
-        if (totalUses >= coupon.maxUses) {
-          isAllowed = false;
-          targetError = 'This coupon has reached its maximum usage limit.';
-        }
-      }
-      if (isAllowed && coupon.maxUsesPerUser !== null) {
-        const userUses = await prisma.couponUsage.count({ where: { couponId: coupon.id, memberId: member.id } });
-        if (userUses >= coupon.maxUsesPerUser) {
-          isAllowed = false;
-          targetError = 'You have already used this coupon the maximum number of times.';
-        }
-      }
-
-      if (!isAllowed) {
-        return jsonResponse({ error: targetError || 'Coupon not applicable.' }, { status: 400 });
-      }
-
-      validCouponId = coupon.id;
-      if (coupon.discountAmount !== null && coupon.discountAmount > 0) {
-        discountAmount = coupon.discountAmount;
-      } else if (coupon.discountPercentage !== null && coupon.discountPercentage > 0) {
-        discountAmount = (price * coupon.discountPercentage) / 100;
-      }
-      if (coupon.maxDiscount !== null && discountAmount > coupon.maxDiscount) discountAmount = coupon.maxDiscount;
-      if (discountAmount > price) discountAmount = price;
-      discountAmount = Math.floor(discountAmount);
     }
 
     // 1. Calculate Discounts: Coupon + SV Points Redeemed
@@ -631,3 +571,5 @@ export async function POST(request: Request) {
     }
   }
 }
+
+

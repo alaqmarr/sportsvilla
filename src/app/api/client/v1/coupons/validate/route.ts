@@ -11,8 +11,9 @@ export const POST = withApiHandler(async (request: Request) => {
     throw new ApiError('Too many coupon validation requests. Please wait a minute.', 429);
   }
 
-  const { code, bookingAmount } = await request.json();
-  const data = await CouponService.validateCoupon(authRes.member.id, code, bookingAmount);
+  const { code, bookingAmount, sportId } = await request.json();
+  const data = await CouponService.validateCoupon(authRes.member.id, code, bookingAmount, sportId);
   
   return { success: true, ...data };
 });
+

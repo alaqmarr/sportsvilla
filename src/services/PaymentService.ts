@@ -270,7 +270,7 @@ export class PaymentService {
     return await prisma.$transaction(async (tx) => {
       const booking = await tx.booking.findUnique({
         where: { id: params.bookingId },
-        include: { turf: true, sport: true, member: true }
+        include: { turf: true, sport: true, member: true, couponUsages: { include: { coupon: true } } }
       });
 
       if (!booking) {
@@ -459,7 +459,7 @@ export class PaymentService {
           amountDue,
           advancePaid: { increment: params.paidAmountRupees }
         },
-        include: { turf: true, sport: true, member: true }
+        include: { turf: true, sport: true, member: true, couponUsages: { include: { coupon: true } } }
       });
 
       await tx.payment.create({
@@ -825,3 +825,4 @@ export class PaymentService {
     return await BookingCleanupService.cleanupAbandonedBookings(timeoutMinutes);
   }
 }
+

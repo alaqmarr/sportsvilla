@@ -1,126 +1,178 @@
-'use client'
+'use client';
 
-import { useState } from 'react'
-import { useParams, useRouter } from 'next/navigation'
-import useSWR from 'swr'
-import { DatePicker } from '@/components/play/DatePicker'
-import { SportChips } from '@/components/play/SportChips'
-import { SlotGrid } from '@/components/play/SlotGrid'
-import { ChevronLeft, Calendar } from 'lucide-react'
-import Link from 'next/link'
-import { useAlert } from '@/components/AlertProvider'
+import { useState } from 'react';
+import { useParams, useRouter } from 'next/navigation';
+import useSWR from 'swr';
+import { DatePicker } from '@/components/play/DatePicker';
+import { SportChips } from '@/components/play/SportChips';
+import { SlotGrid } from '@/components/play/SlotGrid';
+import { ArrowLeft, Calendar, Clock, Sparkles } from 'lucide-react';
+import Link from 'next/link';
+import { useAlert } from '@/components/AlertProvider';
+import { PlayCard } from '@/components/play/ui/PlayCard';
+import { PlayButton } from '@/components/play/ui/PlayButton';
+import { PlayBadge } from '@/components/play/ui/PlayBadge';
+import { PlaySkeleton } from '@/components/play/ui/PlaySkeleton';
+import { PlayEmptyState } from '@/components/play/ui/PlayEmptyState';
+import { formatIST } from '@/lib/dateUtils';
 
-const fetcher = (url: string) => fetch(url).then(res => res.json())
+const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 export default function ReschedulePage() {
-  const { id } = useParams()
-  const router = useRouter()
-  const { showAlert } = useAlert()
-  const [selectedDate, setSelectedDate] = useState(new Date())
-  const [selectedSlots, setSelectedSlots] = useState<string[]>([])
-  const [isSubmitting, setIsSubmitting] = useState(false)
+  const { id } = useParams();
+  const router = useRouter();
+  const { showAlert } = useAlert();
+  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [selectedSlots, setSelectedSlots] = useState<string[]>([]);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const { data: bookingResponse, isLoading: isLoadingBooking } = useSWR(`/api/client/v1/bookings/${id}`, fetcher)
-  const booking = bookingResponse?.booking
-  
-  const dateStr = selectedDate.toISOString().split('T')[0]
+  const { data: bookingResponse, isLoading: isLoadingBooking } = useSWR(`/api/client/v1/bookings/${id}`, fetcher);
+  const booking = bookingResponse?.booking;
+
+  const dateStr = selectedDate.toISOString().split('T')[0];
   const { data: availability, isLoading: isLoadingSlots } = useSWR(
     booking ? `/api/client/v1/availability?sportId=${booking.sport.id}&turfId=${booking.turf.id}&date=${dateStr}` : null,
     fetcher
-  )
+  );
 
   const handleConfirm = async () => {
-    if (selectedSlots.length === 0) return
-    setIsSubmitting(true)
+    if (selectedSlots.length === 0) return;
+    setIsSubmitting(true);
     try {
-      const selectedSlotObjects = availability?.turfs?.[0]?.slots?.filter((s: any) => selectedSlots.includes(s.time)) || []
-      if (selectedSlotObjects.length === 0) return
-      
-      const newStartTime = selectedSlotObjects[0].startTime
-      const newEndTime = selectedSlotObjects[selectedSlotObjects.length - 1].endTime
+      const selectedSlotObjects = availability?.turfs?.[0]?.slots?.filter((s: any) => selectedSlots.includes(s.time)) || [];
+      if (selectedSlotObjects.length === 0) return;
+
+      const newStartTime = selectedSlotObjects[0].startTime;
+      const newEndTime = selectedSlotObjects[selectedSlotObjects.length - 1].endTime;
 
       const res = await fetch(`/api/client/v1/bookings/${id}/reschedule`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ newStartTime, newEndTime })
-      })
+        body: JSON.stringify({ newStartTime, newEndTime }),
+      });
       if (res.ok) {
-        router.push(`/play/bookings/${id}`)
+        router.push(`/play/bookings/${id}`);
       } else {
-        showAlert('Error', 'Failed to reschedule', 'error')
+        const errorData = await res.json().catch(() => ({}));
+        showAlert('Error', errorData.error || 'Failed to reschedule', 'error');
       }
     } catch (error) {
-      showAlert('Error', 'Error scheduling', 'error')
+      showAlert('Error', 'Error scheduling', 'error');
     } finally {
-      setIsSubmitting(false)
+      setIsSubmitting(false);
     }
+  };
+
+  if (isLoadingBooking) {
+    return (
+      <div className="p-6 max-w-2xl mx-auto space-y-4">
+        <PlaySkeleton variant="rectangular" height={50} className="rounded-play-xl" />
+        <PlaySkeleton variant="card" height={120} />
+        <PlaySkeleton variant="card" height={300} />
+      </div>
+    );
   }
 
-  if (isLoadingBooking) return <div className="p-4 text-center">Loading...</div>
-  if (!booking) return <div className="p-4 text-center text-[var(--play-error)]">Booking not found</div>
+  if (!booking) {
+    return (
+      <div className="p-6 max-w-md mx-auto">
+        <PlayEmptyState
+          title="Booking Not Found"
+          description="We could not locate this reservation for rescheduling."
+          actionText="Back to Bookings"
+          actionHref="/play/bookings"
+        />
+      </div>
+    );
+  }
 
   return (
-    <div className="flex flex-col h-full bg-[var(--play-bg)] text-[var(--play-text)] pb-8 relative">
-      <header className="sticky top-0 z-10 bg-[var(--play-surface)] border-b border-[var(--play-border)] px-4 py-3 flex items-center gap-3">
-        <Link href={`/play/bookings/${id}`} className="text-[var(--play-text)] hover:text-[var(--play-text-muted)]">
-          <ChevronLeft className="w-6 h-6" />
+    <div className="flex flex-col h-full bg-play-bg text-play-text font-play pb-24 relative max-w-4xl mx-auto w-full">
+      <header className="sticky top-0 z-20 bg-play-surface border-b border-play-border px-4 py-3.5 flex items-center gap-3">
+        <Link href={`/play/bookings/${id}`} className="text-play-text-muted hover:text-play-text p-1 -ml-1">
+          <ArrowLeft className="w-5 h-5" />
         </Link>
-        <h1 className="text-lg font-semibold font-outfit">Reschedule Booking</h1>
+        <div>
+          <h1 className="text-lg font-black text-play-text tracking-tight">Reschedule Pass</h1>
+          <p className="text-xs text-play-text-muted">Choose a new playing time for this reservation</p>
+        </div>
       </header>
 
-      <div className="p-4 bg-[var(--play-surface-alt)] border-b border-[var(--play-border)] mb-4">
-        <h2 className="text-sm font-semibold text-[var(--play-text-muted)] mb-2 uppercase tracking-wider">Original Booking</h2>
-        <div className="bg-[var(--play-surface)] p-3 rounded-[var(--play-radius-md)] border border-[var(--play-border)] shadow-sm">
-          <div className="font-semibold">{booking.turf.name}</div>
-          <div className="text-sm text-[var(--play-text-muted)]">{booking.sport.name}</div>
-          <div className="mt-2 flex items-center gap-2 text-sm">
-            <Calendar className="w-4 h-4 text-[var(--play-brand)]" />
-            <span>{new Date(booking.startTime).toLocaleDateString()} • {new Date(booking.startTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit'})}</span>
+      <div className="p-4 sm:p-6 space-y-6">
+        {/* Original Booking Recap */}
+        <PlayCard variant="default" padding="md">
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-xs font-bold uppercase tracking-wider text-play-text-muted">
+              Current Reservation
+            </span>
+            <PlayBadge variant="brand" size="sm">
+              {booking.sport?.name}
+            </PlayBadge>
           </div>
-        </div>
-      </div>
+          <h3 className="font-extrabold text-base text-play-text">{booking.turf?.name}</h3>
+          <div className="mt-2 flex flex-wrap items-center gap-4 text-xs text-play-text-muted">
+            <div className="flex items-center gap-1.5">
+              <Calendar className="w-3.5 h-3.5 text-play-brand" />
+              <span>{formatIST(new Date(booking.startTime), 'EEEE, MMM d')}</span>
+            </div>
+            <div className="flex items-center gap-1.5">
+              <Clock className="w-3.5 h-3.5 text-play-brand" />
+              <span>
+                {formatIST(new Date(booking.startTime), 'h:mm a')} - {formatIST(new Date(booking.endTime), 'h:mm a')}
+              </span>
+            </div>
+          </div>
+        </PlayCard>
 
-      <main className="px-4 space-y-6">
+        {/* Date Selection */}
         <section>
-          <h2 className="text-sm font-semibold text-[var(--play-text-muted)] mb-3">Select New Date</h2>
+          <h2 className="text-xs font-bold uppercase tracking-wider text-play-text-muted mb-2">
+            1. Select New Date
+          </h2>
           <DatePicker selectedDate={selectedDate} onChange={setSelectedDate} />
         </section>
 
+        {/* Slot Grid */}
         <section>
-          <h2 className="text-sm font-semibold text-[var(--play-text-muted)] mb-3">Sport</h2>
-          <SportChips 
-            sports={[{ id: booking.sport.id || '1', name: booking.sport.name || booking.sport }]} 
-            selectedSportId={booking.sport.id || '1'} 
-            onChange={() => {}} 
-          />
-        </section>
-
-        <section>
-          <h2 className="text-sm font-semibold text-[var(--play-text-muted)] mb-3">Available Slots</h2>
+          <div className="flex items-center justify-between mb-2">
+            <h2 className="text-xs font-bold uppercase tracking-wider text-play-text-muted">
+              2. Select New Slot
+            </h2>
+            {selectedSlots.length > 0 && (
+              <PlayBadge variant="brand" size="sm">
+                {selectedSlots.length} Selected
+              </PlayBadge>
+            )}
+          </div>
           {isLoadingSlots ? (
-            <div className="text-center py-4 text-sm text-[var(--play-text-muted)]">Loading slots...</div>
+            <div className="py-8 flex flex-col items-center justify-center">
+              <PlaySkeleton variant="card" height={160} className="w-full" />
+            </div>
           ) : (
-            <SlotGrid 
-              slots={availability?.turfs?.[0]?.slots || []} 
-              selectedSlots={selectedSlots} 
-              onChange={setSelectedSlots} 
+            <SlotGrid
+              slots={availability?.turfs?.[0]?.slots || []}
+              selectedSlots={selectedSlots}
+              onChange={setSelectedSlots}
             />
           )}
         </section>
-      </main>
+      </div>
 
-      {/* Bottom Action */}
-      <div className="sticky bottom-0 w-full bg-[var(--play-surface)] border-t border-[var(--play-border)] shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] mt-auto z-20">
-        <div className="max-w-md mx-auto p-4 w-full">
-          <button 
-            onClick={handleConfirm}
+      {/* Bottom Floating Bar */}
+      <div className="sticky bottom-0 w-full bg-play-surface border-t border-play-border shadow-[0_-4px_12px_rgba(0,0,0,0.06)] mt-auto z-20 p-4">
+        <div className="max-w-md mx-auto w-full">
+          <PlayButton
+            variant="athletic"
+            size="lg"
+            fullWidth
+            isLoading={isSubmitting}
             disabled={selectedSlots.length === 0 || isSubmitting}
-            className="w-full bg-[var(--play-brand)] text-white font-medium py-3 rounded-[var(--play-radius-md)] disabled:opacity-50 disabled:cursor-not-allowed hover:bg-[var(--play-brand-dark)] transition-colors"
+            onClick={handleConfirm}
           >
-            {isSubmitting ? 'Rescheduling...' : 'Confirm Reschedule'}
-          </button>
+            Confirm Reschedule
+          </PlayButton>
         </div>
       </div>
     </div>
-  )
+  );
 }

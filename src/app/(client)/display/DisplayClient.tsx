@@ -52,12 +52,12 @@ export default function DisplayPage() {
 
         {/* Content */}
         <div className="z-10 text-center animate-in fade-in duration-1000 slide-in-from-bottom-10">
-          <h2 className="text-4xl font-['Outfit'] font-light text-gray-400 mb-4 tracking-[0.2em] uppercase">Welcome to</h2>
-          <h1 className="text-[140px] leading-none font-['Outfit'] font-black text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-orange-600 mb-8 tracking-widest drop-shadow-2xl">
+          <h2 className="text-4xl font-sans font-light text-gray-400 mb-4 tracking-[0.2em] uppercase">Welcome to</h2>
+          <h1 className="text-[140px] leading-none font-sans font-black text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-orange-600 mb-8 tracking-widest drop-shadow-2xl">
             SPORTSVILLA
           </h1>
           <div className="w-48 h-1 bg-gradient-to-r from-transparent via-gray-500 to-transparent mx-auto mb-16 opacity-50"></div>
-          <div className="text-7xl font-['Outfit'] font-semibold text-white tracking-wider drop-shadow-lg opacity-90">
+          <div className="text-7xl font-sans font-semibold text-white tracking-wider drop-shadow-lg opacity-90">
             {currentTime}
           </div>
         </div>
@@ -106,3 +106,4 @@ export default function DisplayPage() {
     </div>
   );
 }
+

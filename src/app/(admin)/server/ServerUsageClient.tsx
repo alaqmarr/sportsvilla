@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { fetchServerStats, ServerStats } from "./actions";
 import { FiCpu, FiHardDrive, FiActivity, FiServer } from "react-icons/fi";
-import { formatIST } from "@/lib/dateUtils";
+import { PageHeader, Card, Badge } from "@/components/admin/ui";
 
 function formatBytes(bytes: number) {
   if (bytes === 0) return '0 Bytes';
@@ -22,7 +22,7 @@ function formatUptime(seconds: number) {
 
 function ProgressBar({ percent, color }: { percent: number; color: string }) {
   return (
-    <div className="w-full bg-[#0f1117] rounded-full h-3 mt-3 border border-[#2a2d3e] overflow-hidden">
+    <div className="w-full bg-sv-bg rounded-full h-3 mt-3 border border-sv-border overflow-hidden">
       <div
         className={`h-full rounded-full ${color} transition-all duration-1000 ease-in-out`}
         style={{ width: `${Math.min(100, Math.max(0, percent))}%` }}
@@ -56,102 +56,107 @@ export default function ServerUsageClient({ initialStats }: { initialStats: Serv
   const primaryDisk = stats.disk.length > 0 ? stats.disk[0] : null;
 
   return (
-    <div className="max-w-6xl mx-auto">
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
-        <div>
-          <h1 className="text-3xl font-bold font-['Outfit'] text-white tracking-tight">Server Health</h1>
-          <p className="text-gray-500 mt-2">
-            Live hardware telemetry for {stats.os.distro} ({stats.os.platform})
-          </p>
-        </div>
-        <div className="flex items-center gap-3 bg-[#161923] border border-[#2a2d3e] px-4 py-2 rounded-lg">
-          <div className={`w-2 h-2 rounded-full ${isRefreshing ? 'bg-orange-500 animate-pulse' : 'bg-emerald-500'}`} />
-          <span className="text-sm font-medium text-gray-400">
+    <div className="max-w-6xl mx-auto space-y-6 pb-20 font-sans">
+      <PageHeader
+        title="Server Health"
+        subtitle={`Live hardware telemetry for ${stats.os.distro} (${stats.os.platform})`}
+        breadcrumbs={[
+          { label: "Dashboard", href: "/" },
+          { label: "Server Health" },
+        ]}
+        statusBadge={
+          <Badge
+            variant={isRefreshing ? "warning" : "success"}
+            size="md"
+            dot
+            pulseDot={isRefreshing}
+          >
             Updated: {lastUpdated.toLocaleTimeString()}
-          </span>
-        </div>
-      </div>
+          </Badge>
+        }
+      />
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* CPU Card */}
-        <div className="bg-[#161923] border border-[#2a2d3e] rounded-xl p-6">
+        <Card variant="default" padding="lg">
           <div className="flex justify-between items-start mb-6">
             <div className="flex items-center gap-4">
-              <div className="w-12 h-12 rounded-xl bg-orange-500/10 text-orange-400 flex items-center justify-center text-xl">
+              <div className="w-12 h-12 rounded-sv-md bg-sv-warning-subtle text-sv-warning-text flex items-center justify-center text-xl">
                 <FiCpu />
               </div>
               <div>
-                <h2 className="text-lg font-bold text-white font-['Outfit']">CPU Load</h2>
-                <p className="text-sm text-gray-500">{stats.cpu.brand} ({stats.cpu.cores} Cores)</p>
+                <h2 className="text-lg font-bold text-sv-text font-sans">CPU Load</h2>
+                <p className="text-sm text-sv-text-muted">{stats.cpu.brand} ({stats.cpu.cores} Cores)</p>
               </div>
             </div>
-            <div className="text-2xl font-black font-['Outfit'] text-white">
+            <div className="text-2xl font-black font-sans text-sv-text">
               {stats.cpu.currentLoad.toFixed(1)}%
             </div>
           </div>
-          <ProgressBar percent={stats.cpu.currentLoad} color="bg-gradient-to-r from-orange-600 to-orange-400" />
-        </div>
+          <ProgressBar percent={stats.cpu.currentLoad} color="bg-gradient-to-r from-sv-status-warning to-amber-500" />
+        </Card>
 
         {/* Memory Card */}
-        <div className="bg-[#161923] border border-[#2a2d3e] rounded-xl p-6">
+        <Card variant="default" padding="lg">
           <div className="flex justify-between items-start mb-6">
             <div className="flex items-center gap-4">
-              <div className="w-12 h-12 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center text-xl">
+              <div className="w-12 h-12 rounded-sv-md bg-sv-success-subtle text-sv-success-text flex items-center justify-center text-xl">
                 <FiActivity />
               </div>
               <div>
-                <h2 className="text-lg font-bold text-white font-['Outfit']">Memory (RAM)</h2>
-                <p className="text-sm text-gray-500">{formatBytes(stats.mem.active)} / {formatBytes(stats.mem.total)}</p>
+                <h2 className="text-lg font-bold text-sv-text font-sans">Memory (RAM)</h2>
+                <p className="text-sm text-sv-text-muted">{formatBytes(stats.mem.active)} / {formatBytes(stats.mem.total)}</p>
               </div>
             </div>
-            <div className="text-2xl font-black font-['Outfit'] text-white">
+            <div className="text-2xl font-black font-sans text-sv-text">
               {stats.mem.usedPercent.toFixed(1)}%
             </div>
           </div>
-          <ProgressBar percent={stats.mem.usedPercent} color="bg-gradient-to-r from-emerald-600 to-emerald-400" />
-        </div>
+          <ProgressBar percent={stats.mem.usedPercent} color="bg-gradient-to-r from-sv-status-success to-emerald-400" />
+        </Card>
 
         {/* Disk Card */}
         {primaryDisk && (
-          <div className="bg-[#161923] border border-[#2a2d3e] rounded-xl p-6">
+          <Card variant="default" padding="lg">
             <div className="flex justify-between items-start mb-6">
               <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-xl bg-blue-500/10 text-blue-400 flex items-center justify-center text-xl">
+                <div className="w-12 h-12 rounded-sv-md bg-sv-info-subtle text-sv-info-text flex items-center justify-center text-xl">
                   <FiHardDrive />
                 </div>
                 <div>
-                  <h2 className="text-lg font-bold text-white font-['Outfit']">Storage (Disk)</h2>
-                  <p className="text-sm text-gray-500">{formatBytes(primaryDisk.used)} / {formatBytes(primaryDisk.total)}</p>
+                  <h2 className="text-lg font-bold text-sv-text font-sans">Storage (Disk)</h2>
+                  <p className="text-sm text-sv-text-muted">{formatBytes(primaryDisk.used)} / {formatBytes(primaryDisk.total)}</p>
                 </div>
               </div>
-              <div className="text-2xl font-black font-['Outfit'] text-white">
+              <div className="text-2xl font-black font-sans text-sv-text">
                 {primaryDisk.usedPercent.toFixed(1)}%
               </div>
             </div>
-            <ProgressBar percent={primaryDisk.usedPercent} color="bg-gradient-to-r from-blue-600 to-blue-400" />
-          </div>
+            <ProgressBar percent={primaryDisk.usedPercent} color="bg-gradient-to-r from-sv-status-info to-cyan-400" />
+          </Card>
         )}
 
         {/* System Info */}
-        <div className="bg-[#161923] border border-[#2a2d3e] rounded-xl p-6">
+        <Card variant="default" padding="lg">
           <div className="flex items-center gap-4 mb-6">
-            <div className="w-12 h-12 rounded-xl bg-purple-500/10 text-purple-400 flex items-center justify-center text-xl">
+            <div className="w-12 h-12 rounded-sv-md bg-sv-brand-subtle text-sv-brand flex items-center justify-center text-xl">
               <FiServer />
             </div>
             <div>
-              <h2 className="text-lg font-bold text-white font-['Outfit']">System Uptime</h2>
-              <p className="text-sm text-gray-500">Continuous running time</p>
+              <h2 className="text-lg font-bold text-sv-text font-sans">System Uptime</h2>
+              <p className="text-sm text-sv-text-muted">Continuous running time</p>
             </div>
           </div>
           <div className="flex flex-col gap-2">
-            <div className="bg-[#0f1117] border border-[#2a2d3e] rounded-lg p-4 flex justify-center items-center">
-               <span className="text-2xl font-black font-['Outfit'] text-white tracking-widest text-center">
-                 {formatUptime(stats.os.uptime)}
-               </span>
+            <div className="bg-sv-bg border border-sv-border rounded-sv-md p-4 flex justify-center items-center">
+              <span className="text-2xl font-black font-sans text-sv-text tracking-widest text-center">
+                {formatUptime(stats.os.uptime)}
+              </span>
             </div>
           </div>
-        </div>
+        </Card>
       </div>
     </div>
   );
 }
+

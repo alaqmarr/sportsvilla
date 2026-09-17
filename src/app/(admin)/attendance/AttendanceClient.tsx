@@ -4,9 +4,10 @@ import { useState, useEffect } from "react";
 import { fetchMembers, markAttendance } from "./actions";
 import { useAlert } from "@/components/AlertProvider";
 
-import { FiCheckCircle, FiSearch, FiUser, FiUserCheck, FiUsers, FiCamera, FiX, FiClock, FiActivity, FiLink } from "react-icons/fi";
+import { FiCheckCircle, FiUser, FiCamera, FiX, FiClock, FiActivity, FiLink } from "react-icons/fi";
 import { Html5QrcodeScanner } from "html5-qrcode";
 import { useNfc } from "@/components/nfc/NfcProvider";
+import { PageHeader, Button, Badge, Avatar } from "@/components/admin/ui";
 
 export default function AttendanceClient({ initialRecords }: { initialRecords: any[] }) {
   const { showAlert } = useAlert();
@@ -206,6 +207,7 @@ export default function AttendanceClient({ initialRecords }: { initialRecords: a
     setMobile("");
     setLoading(false);
   }
+
   function startScanner() {
     setShowScanner(true);
     setTimeout(() => {
@@ -232,30 +234,34 @@ export default function AttendanceClient({ initialRecords }: { initialRecords: a
   }
 
   return (
-    <div>
-      <div className="mb-8">
-        <h1 className="text-2xl font-bold font-['Outfit'] text-white flex items-center gap-2">
-          Attendance Kiosk
-          <span className="hidden sm:flex items-center gap-1 text-xs px-2 py-1 bg-blue-500/10 text-blue-400 border border-blue-500/20 rounded-full font-medium ml-2">
+    <div className="space-y-6 pb-20 font-sans">
+      <PageHeader
+        title="Attendance Kiosk"
+        subtitle="Scan ID cards or enter mobile numbers to check members in."
+        breadcrumbs={[
+          { label: "Dashboard", href: "/" },
+          { label: "Attendance" },
+        ]}
+        actions={
+          <div className="hidden sm:flex items-center gap-1.5 text-xs px-3 py-1 bg-sv-info-subtle text-sv-info-text border border-sv-info-border rounded-sv-full font-medium">
             <FiLink /> USB/Bluetooth Scanner Supported
-          </span>
-        </h1>
-        <p className="text-gray-500 mt-1 text-sm">Scan ID cards or enter mobile numbers to check members in.</p>
-      </div>
+          </div>
+        }
+      />
 
       <div className="grid lg:grid-cols-12 gap-8">
         {/* Left Column: Hero Scanner & Member Profile */}
         <div className="lg:col-span-7 flex flex-col gap-6">
-          <div className="bg-[#161923] border border-[#2a2d3e] rounded-xl p-6 relative overflow-hidden">
-            <div className="absolute top-0 right-0 w-48 h-48 bg-orange-500/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/4 pointer-events-none"></div>
+          <div className="bg-sv-surface border border-sv-border rounded-sv-xl p-6 relative overflow-hidden shadow-sv-sm">
+            <div className="absolute top-0 right-0 w-48 h-48 bg-sv-brand/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/4 pointer-events-none"></div>
             
-            <h3 className="text-lg font-semibold font-['Outfit'] text-white mb-5 relative z-10">Member Check-In</h3>
+            <h3 className="text-lg font-semibold text-sv-text mb-5 relative z-10">Member Check-In</h3>
             
             <div className="flex gap-3 mb-5 relative z-10">
               <div className="relative flex-1">
                 <input 
                   type="tel" 
-                  className="w-full bg-[#0f1117] border border-[#2a2d3e] rounded-lg px-5 py-3.5 text-white font-['Outfit'] font-semibold text-lg focus:outline-none focus:border-orange-500/50 focus:ring-2 focus:ring-orange-500/20 placeholder-gray-600"
+                  className="w-full bg-sv-bg border border-sv-border rounded-sv-lg px-5 py-3.5 text-sv-text font-semibold text-lg focus:outline-none focus:border-sv-brand focus:ring-2 focus:ring-sv-brand/20 placeholder:text-sv-text-muted"
                   placeholder="Enter 10-digit mobile..." 
                   value={mobile}
                   onChange={e => {
@@ -272,43 +278,44 @@ export default function AttendanceClient({ initialRecords }: { initialRecords: a
                 />
                 {loading && (
                   <div className="absolute right-4 top-1/2 -translate-y-1/2">
-                    <div className="w-5 h-5 border-2 border-orange-500/30 border-t-orange-500 rounded-full animate-spin"></div>
+                    <div className="w-5 h-5 border-2 border-sv-brand/30 border-t-sv-brand rounded-full animate-spin"></div>
                   </div>
                 )}
               </div>
             </div>
             
             <div className="flex items-center gap-4 mb-5 relative z-10">
-              <div className="flex-1 h-px bg-[#2a2d3e]"></div>
-              <span className="text-xs font-semibold text-gray-600 uppercase tracking-widest">OR</span>
-              <div className="flex-1 h-px bg-[#2a2d3e]"></div>
+              <div className="flex-1 h-px bg-sv-border"></div>
+              <span className="text-xs font-semibold text-sv-text-muted uppercase tracking-widest">OR</span>
+              <div className="flex-1 h-px bg-sv-border"></div>
             </div>
 
-            <button onClick={startScanner} className="w-full py-4 bg-transparent border-2 border-dashed border-[#2a2d3e] hover:border-orange-500/40 hover:text-orange-400 text-gray-500 rounded-lg text-sm font-semibold inline-flex items-center justify-center gap-2 transition-colors cursor-pointer relative z-10 uppercase tracking-wider">
+            <button 
+              onClick={startScanner} 
+              className="w-full py-3.5 bg-transparent border-2 border-dashed border-sv-border hover:border-sv-brand/40 hover:text-sv-brand text-sv-text-muted rounded-sv-lg text-sm font-semibold inline-flex items-center justify-center gap-2 transition-colors cursor-pointer relative z-10 uppercase tracking-wider"
+            >
               <FiCamera size={18} /> Launch QR Scanner
             </button>
           </div>
 
           {member && (
-            <div className="bg-[#161923] border border-[#2a2d3e] rounded-xl p-6 border-t-[3px] border-t-emerald-500">
+            <div className="bg-sv-surface border border-sv-border rounded-sv-xl p-6 border-t-[3px] border-t-sv-status-success shadow-sv-sm">
               <div className="flex items-center gap-5 mb-6">
-                <div className="w-16 h-16 rounded-full bg-emerald-500/10 text-emerald-400 flex items-center justify-center text-2xl font-bold font-['Outfit']">
-                  {member.name.charAt(0)}
-                </div>
+                <Avatar name={member.name || "Member"} size="lg" />
                 <div>
-                  <h2 className="text-2xl font-bold font-['Outfit'] text-white">{member.name}</h2>
-                  <p className="text-gray-500 text-sm flex items-center gap-2 mt-1">
-                    <FiUser className="text-emerald-400" /> {member.mobile} <span className="opacity-50">•</span> Joined {formatIST(new Date(member.joinDate), 'yyyy')}
+                  <h2 className="text-2xl font-bold text-sv-text">{member.name}</h2>
+                  <p className="text-sv-text-muted text-sm flex items-center gap-2 mt-1">
+                    <FiUser className="text-sv-status-success" /> {member.mobile} <span className="opacity-50">•</span> Joined {formatIST(new Date(member.joinDate), 'yyyy')}
                   </p>
                 </div>
               </div>
 
-              <h4 className="text-xs uppercase tracking-wider font-semibold text-gray-500 flex items-center gap-2 mb-4 mt-6">
-                <FiActivity className="text-orange-400" /> Active Subscriptions
+              <h4 className="text-xs uppercase tracking-wider font-semibold text-sv-text-secondary flex items-center gap-2 mb-4 mt-6">
+                <FiActivity className="text-sv-brand" /> Active Subscriptions
               </h4>
               
               {member.memberships.length === 0 ? (
-                <div className="bg-red-500/10 text-red-400 p-4 rounded-lg border border-red-500/20 font-semibold flex items-center gap-3 text-sm">
+                <div className="bg-sv-error-subtle text-sv-error-text p-4 rounded-sv-lg border border-sv-error-border font-semibold flex items-center gap-3 text-sm">
                   <FiX size={20} /> This member has no active plans.
                 </div>
               ) : (
@@ -316,41 +323,52 @@ export default function AttendanceClient({ initialRecords }: { initialRecords: a
                   {member.memberships.map((m: any) => {
                     const isActive = m.status === 'ACTIVE' && new Date(m.endDate) >= new Date();
                     return (
-                      <div key={m.id} className={isActive ? 'p-5 rounded-xl bg-[#1c1f2e] border border-emerald-500/20 hover:border-emerald-500/40 transition-colors' : 'p-5 rounded-xl bg-[#1c1f2e] border border-[#2a2d3e] opacity-50'}>
-                        <div className="text-emerald-400 text-xs uppercase tracking-wider font-semibold mb-1">{m.membershipPlan?.sport?.name}</div>
-                        <div className="text-white font-semibold mb-3">{m.membershipPlan?.name}</div>
+                      <div 
+                        key={m.id} 
+                        className={
+                          isActive 
+                            ? 'p-5 rounded-sv-lg bg-sv-surface-raised border border-sv-success-border/40 hover:border-sv-status-success transition-colors' 
+                            : 'p-5 rounded-sv-lg bg-sv-surface-raised border border-sv-border opacity-50'
+                        }
+                      >
+                        <div className="text-sv-status-success text-xs uppercase tracking-wider font-semibold mb-1">{m.membershipPlan?.sport?.name}</div>
+                        <div className="text-sv-text font-semibold mb-3">{m.membershipPlan?.name}</div>
                         
                         {m.stats && (
-                          <div className="grid grid-cols-3 gap-2 mb-4 bg-black/20 rounded-lg p-2.5 border border-[#2a2d3e]">
+                          <div className="grid grid-cols-3 gap-2 mb-4 bg-sv-bg rounded-sv-md p-2.5 border border-sv-border">
                             <div className="text-center">
-                              <div className="text-[10px] text-gray-500 uppercase tracking-wider font-semibold">Left</div>
-                              <div className="text-white font-bold">{m.stats.daysLeft}d</div>
+                              <div className="text-[10px] text-sv-text-muted uppercase tracking-wider font-semibold">Left</div>
+                              <div className="text-sv-text font-bold">{m.stats.daysLeft}d</div>
                             </div>
-                            <div className="text-center border-x border-[#2a2d3e]">
-                              <div className="text-[10px] text-gray-500 uppercase tracking-wider font-semibold">Attended</div>
-                              <div className="text-emerald-400 font-bold">{m.stats.attended}</div>
+                            <div className="text-center border-x border-sv-border">
+                              <div className="text-[10px] text-sv-text-muted uppercase tracking-wider font-semibold">Attended</div>
+                              <div className="text-sv-status-success font-bold">{m.stats.attended}</div>
                             </div>
                             <div className="text-center">
-                              <div className="text-[10px] text-gray-500 uppercase tracking-wider font-semibold">Missed</div>
-                              <div className="text-red-400 font-bold">{m.stats.missed}</div>
+                              <div className="text-[10px] text-sv-text-muted uppercase tracking-wider font-semibold">Missed</div>
+                              <div className="text-sv-status-error font-bold">{m.stats.missed}</div>
                             </div>
                           </div>
                         )}
 
                         {isActive ? (
-                          <button 
+                          <Button 
+                            variant="primary"
                             onClick={() => handleMarkAttendance(m.membershipPlanId, m.membershipPlan.sportId)}
+                            isLoading={processingId === m.membershipPlanId}
                             disabled={processingId === m.membershipPlanId}
-                            className="w-full bg-emerald-500 hover:bg-emerald-600 text-white rounded-lg py-3 text-sm font-semibold inline-flex items-center justify-center gap-2 transition-colors cursor-pointer border-none"
+                            className="w-full"
                           >
                             <FiCheckCircle size={16} /> 
                             {processingId === m.membershipPlanId ? "CHECKING IN..." : "CHECK IN"}
-                          </button>
+                          </Button>
                         ) : (
-                          <div className="text-xs text-red-400 font-semibold tracking-wider text-center py-2.5 bg-red-500/10 rounded-lg border border-red-500/20">EXPIRED</div>
+                          <div className="text-xs text-sv-error-text font-semibold tracking-wider text-center py-2.5 bg-sv-error-subtle rounded-sv-md border border-sv-error-border">
+                            EXPIRED
+                          </div>
                         )}
                       </div>
-                    )
+                    );
                   })}
                 </div>
               )}
@@ -358,67 +376,67 @@ export default function AttendanceClient({ initialRecords }: { initialRecords: a
           )}
 
           {membersList.length > 1 && (
-            <div className="bg-[#161923] border border-[#2a2d3e] rounded-xl p-6">
+            <div className="bg-sv-surface border border-sv-border rounded-sv-xl p-6 shadow-sv-sm">
               <div className="flex justify-between items-center mb-4">
-                <h3 className="text-lg font-semibold font-['Outfit'] text-white">Select Family Member</h3>
-                <button 
+                <h3 className="text-lg font-semibold text-sv-text">Select Family Member</h3>
+                <Button 
+                  variant="primary"
                   onClick={handleMarkFamilyAttendance}
-                  className="bg-emerald-500 hover:bg-emerald-600 text-white rounded-lg px-4 py-2 text-sm font-semibold inline-flex items-center gap-2 transition-colors cursor-pointer border-none"
+                  leftIcon={<FiCheckCircle />}
                 >
-                  <FiCheckCircle /> Mark Entire Family Present
-                </button>
+                  Mark Entire Family Present
+                </Button>
               </div>
               <div className="flex flex-col gap-3">
                 {membersList.map(m => {
                   const activePlans = m.memberships.filter((mem: any) => mem.status === 'ACTIVE' && new Date(mem.endDate) >= new Date());
                   
                   return (
-                  <div 
-                    key={m.id} 
-                    className="flex flex-col sm:flex-row sm:items-center gap-4 bg-[#1c1f2e] border border-[#2a2d3e] p-4 rounded-lg"
-                  >
                     <div 
-                      className="flex items-center gap-4 cursor-pointer flex-1 hover:opacity-80 transition-opacity"
-                      onClick={() => {
-                        setMember(m);
-                        setMembersList([]);
-                        setFamilySelections({});
-                      }}
+                      key={m.id} 
+                      className="flex flex-col sm:flex-row sm:items-center gap-4 bg-sv-surface-raised border border-sv-border p-4 rounded-sv-lg"
                     >
-                      <div className="w-12 h-12 rounded-full bg-orange-500/10 text-orange-400 flex items-center justify-center font-bold font-['Outfit'] text-lg shrink-0">
-                        {m.name.charAt(0)}
+                      <div 
+                        className="flex items-center gap-4 cursor-pointer flex-1 hover:opacity-80 transition-opacity"
+                        onClick={() => {
+                          setMember(m);
+                          setMembersList([]);
+                          setFamilySelections({});
+                        }}
+                      >
+                        <Avatar name={m.name || "Member"} size="md" />
+                        <div className="min-w-0">
+                          <div className="text-sv-text font-semibold truncate">{m.name}</div>
+                          <div className="text-sv-text-muted text-sm">Joined {formatIST(new Date(m.joinDate), 'yyyy')}</div>
+                        </div>
                       </div>
-                      <div className="min-w-0">
-                        <div className="text-white font-semibold truncate">{m.name}</div>
-                        <div className="text-gray-500 text-sm">Joined {formatIST(new Date(m.joinDate), 'yyyy')}</div>
+                      
+                      <div className="shrink-0 w-full sm:w-auto mt-3 sm:mt-0 pt-3 sm:pt-0 border-t border-sv-border sm:border-none">
+                        {activePlans.length > 1 ? (
+                          <select 
+                            className="w-full sm:w-56 bg-sv-bg border border-sv-border rounded-sv-md px-3 py-2 text-sm text-sv-text focus:outline-none focus:border-sv-brand"
+                            value={familySelections[m.id] || ""}
+                            onChange={(e) => setFamilySelections(prev => ({ ...prev, [m.id]: e.target.value }))}
+                          >
+                            {activePlans.map((ap: any) => (
+                              <option key={ap.membershipPlanId} value={ap.membershipPlanId}>
+                                {ap.membershipPlan?.sport?.name} - {ap.membershipPlan?.name}
+                              </option>
+                            ))}
+                          </select>
+                        ) : activePlans.length === 1 ? (
+                          <Badge variant="success" size="sm">
+                            {activePlans[0].membershipPlan?.sport?.name} ({activePlans[0].membershipPlan?.name})
+                          </Badge>
+                        ) : (
+                          <Badge variant="error" size="sm">
+                            No Active Plans
+                          </Badge>
+                        )}
                       </div>
                     </div>
-                    
-                    <div className="shrink-0 w-full sm:w-auto mt-3 sm:mt-0 pt-3 sm:pt-0 border-t border-[#2a2d3e] sm:border-none">
-                      {activePlans.length > 1 ? (
-                        <select 
-                          className="w-full sm:w-56 bg-[#0f1117] border border-[#2a2d3e] rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-orange-500/50"
-                          value={familySelections[m.id] || ""}
-                          onChange={(e) => setFamilySelections(prev => ({ ...prev, [m.id]: e.target.value }))}
-                        >
-                          {activePlans.map((ap: any) => (
-                            <option key={ap.membershipPlanId} value={ap.membershipPlanId}>
-                              {ap.membershipPlan?.sport?.name} - {ap.membershipPlan?.name}
-                            </option>
-                          ))}
-                        </select>
-                      ) : activePlans.length === 1 ? (
-                        <div className="inline-flex items-center text-xs font-semibold text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-3 py-2 rounded-lg">
-                          {activePlans[0].membershipPlan?.sport?.name} ({activePlans[0].membershipPlan?.name})
-                        </div>
-                      ) : (
-                        <div className="inline-flex items-center text-xs font-semibold text-red-400 bg-red-500/10 border border-red-500/20 px-3 py-2 rounded-lg">
-                          No Active Plans
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                )})}
+                  );
+                })}
               </div>
             </div>
           )}
@@ -426,44 +444,43 @@ export default function AttendanceClient({ initialRecords }: { initialRecords: a
 
         {/* Right Column: Check-in Feed */}
         <div className="lg:col-span-5">
-          <div className="bg-[#161923] border border-[#2a2d3e] rounded-xl overflow-hidden flex flex-col h-[calc(100vh-160px)]">
-            <div className="px-6 py-4 border-b border-[#2a2d3e] flex justify-between items-center shrink-0">
-              <h3 className="font-semibold font-['Outfit'] text-white flex items-center gap-2">
-                <FiClock className="text-orange-400" /> Today's Scans
+          <div className="bg-sv-surface border border-sv-border rounded-sv-xl overflow-hidden flex flex-col h-[calc(100vh-160px)] shadow-sv-sm">
+            <div className="px-6 py-4 border-b border-sv-border flex justify-between items-center shrink-0">
+              <h3 className="font-semibold text-sv-text flex items-center gap-2">
+                <FiClock className="text-sv-brand" /> Today's Scans
               </h3>
-              <div className="bg-blue-500/10 text-blue-400 border border-blue-500/20 px-3 py-1 rounded-full text-xs font-semibold">{records.length} SCANS</div>
+              <Badge variant="info" size="sm">
+                {records.length} SCANS
+              </Badge>
             </div>
             
-            <div className="flex-1 overflow-y-auto p-4 custom-scrollbar">
+            <div className="flex-1 overflow-y-auto p-4 space-y-3">
               {records.length === 0 ? (
                 <div className="h-full flex flex-col items-center justify-center gap-3">
-                  <div className="w-16 h-16 rounded-full bg-[#1c1f2e] flex items-center justify-center">
-                    <FiClock size={28} className="text-gray-700" />
+                  <div className="w-16 h-16 rounded-full bg-sv-surface-raised flex items-center justify-center border border-sv-border">
+                    <FiClock size={28} className="text-sv-text-muted" />
                   </div>
-                  <p className="text-gray-600 text-sm">No check-ins yet today.</p>
+                  <p className="text-sv-text-muted text-sm">No check-ins yet today.</p>
                 </div>
               ) : (
                 <div className="flex flex-col gap-3">
                   {records.map((record: any) => (
-                    <div key={record.id} className="bg-[#1c1f2e] rounded-xl border border-[#2a2d3e] p-4 flex items-center gap-4 hover:bg-[#232738] transition-colors">
-                      {/* Avatar */}
-                      <div className="w-10 h-10 shrink-0 rounded-full bg-orange-500/10 text-orange-400 flex items-center justify-center text-sm font-semibold font-['Outfit']">
-                        {record.member?.name?.charAt(0) || '?'}
-                      </div>
+                    <div key={record.id} className="bg-sv-surface-raised rounded-sv-lg border border-sv-border p-4 flex items-center gap-4 hover:bg-sv-surface-hover transition-colors">
+                      <Avatar name={record.member?.name || "Member"} size="md" />
                       
-                      {/* Info */}
                       <div className="flex-1 min-w-0">
-                        <div className="text-sm font-semibold text-white truncate">{record.member?.name}</div>
-                        <div className="text-xs text-gray-500 mt-0.5">{record.member?.mobile}</div>
-                        <div className="inline-flex items-center gap-1 text-[10px] font-semibold uppercase tracking-wider text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded-full mt-1.5">
-                          <FiActivity size={9} /> {record.sport?.name || record.membershipPlan?.sport?.name || 'Sport'}
+                        <div className="text-sm font-semibold text-sv-text truncate">{record.member?.name}</div>
+                        <div className="text-xs text-sv-text-muted mt-0.5">{record.member?.mobile}</div>
+                        <div className="mt-1.5">
+                          <Badge variant="success" size="sm">
+                            <FiActivity size={9} className="mr-1 inline" /> {record.sport?.name || record.membershipPlan?.sport?.name || 'Sport'}
+                          </Badge>
                         </div>
                       </div>
 
-                      {/* Time */}
                       <div className="text-right shrink-0 pl-2">
-                        <div className="text-xl font-bold font-['Outfit'] text-white leading-none">{formatIST(new Date(record.date), 'h:mm')}</div>
-                        <div className="text-[10px] font-semibold tracking-wider text-gray-500 uppercase mt-0.5">{formatIST(new Date(record.date), 'a')}</div>
+                        <div className="text-xl font-bold text-sv-text leading-none">{formatIST(new Date(record.date), 'h:mm')}</div>
+                        <div className="text-[10px] font-semibold tracking-wider text-sv-text-muted uppercase mt-0.5">{formatIST(new Date(record.date), 'a')}</div>
                       </div>
                     </div>
                   ))}
@@ -476,17 +493,21 @@ export default function AttendanceClient({ initialRecords }: { initialRecords: a
 
       {showScanner && (
         <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-[100]">
-          <div className="bg-[#161923] border border-[#2a2d3e] rounded-xl p-8 w-full max-w-md shadow-2xl">
+          <div className="bg-sv-surface border border-sv-border rounded-sv-xl p-8 w-full max-w-md shadow-sv-xl">
             <div className="flex justify-between items-center mb-6">
-              <h2 className="text-lg font-semibold font-['Outfit'] text-white">Scan QR Code</h2>
-              <button className="text-gray-400 hover:text-white bg-[#1c1f2e] hover:bg-[#2a2d3e] rounded-lg p-2 transition-colors cursor-pointer border-none" onClick={closeScanner}><FiX /></button>
+              <h2 className="text-lg font-semibold text-sv-text">Scan QR Code</h2>
+              <button 
+                className="text-sv-text-muted hover:text-sv-text bg-sv-surface-raised hover:bg-sv-surface-hover rounded-sv-sm p-2 transition-colors cursor-pointer border-none" 
+                onClick={closeScanner}
+              >
+                <FiX />
+              </button>
             </div>
-            <div id="reader" className="w-full bg-black rounded-xl overflow-hidden border border-[#2a2d3e] html5-qrcode-custom"></div>
-            <p className="text-center text-gray-500 mt-6 text-sm">Point camera at the member's Digital ID card</p>
+            <div id="reader" className="w-full bg-black rounded-sv-lg overflow-hidden border border-sv-border html5-qrcode-custom"></div>
+            <p className="text-center text-sv-text-muted mt-6 text-sm">Point camera at the member's Digital ID card</p>
           </div>
         </div>
       )}
-
     </div>
   );
 }

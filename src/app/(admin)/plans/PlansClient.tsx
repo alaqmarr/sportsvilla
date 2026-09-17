@@ -3,7 +3,8 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { createPlan, updatePlan, deletePlan } from "./actions";
 import { useAlert } from "@/components/AlertProvider";
-import { FiTrash2, FiEdit2, FiPlus, FiX, FiCheck, FiLayers, FiUsers } from "react-icons/fi";
+import { FiTrash2, FiEdit2, FiPlus, FiCheck, FiUsers } from "react-icons/fi";
+import { PageHeader, Card, Badge, Button, Modal, Input, Select } from "@/components/admin/ui";
 
 export default function PlansClient({ initialPlans, sports }: { initialPlans: any[], sports: any[] }) {
   const { showAlert, showConfirm } = useAlert();
@@ -24,7 +25,7 @@ export default function PlansClient({ initialPlans, sports }: { initialPlans: an
   const [loading, setLoading] = useState(false);
 
   function openCreateModal() {
-    setEditingId(""); setName(""); setSportId(sports[0]?.id || ""); setDurationInDays(30); setPrice(0); setSlotsPerDay(1); setIsFamilyPlan(false); setFamilySize(""); setRewardPointsOnPurchase(0); setRewardPointsPerCheckin(0);
+    setEditingId(""); setName(""); setSportId(sports[0]?.id || ""); setDurationInDays(30); setPrice(1000); setSlotsPerDay(1); setIsFamilyPlan(false); setFamilySize(""); setRewardPointsOnPurchase(0); setRewardPointsPerCheckin(0);
     setShowModal(true);
   }
 
@@ -65,7 +66,7 @@ export default function PlansClient({ initialPlans, sports }: { initialPlans: an
   async function handleDelete(id: string) {
     showConfirm(
       "Confirm Deletion",
-      "Are you sure?",
+      "Are you sure you want to delete this membership plan?",
       async () => {
         try {
           await deletePlan(id);
@@ -83,242 +84,221 @@ export default function PlansClient({ initialPlans, sports }: { initialPlans: an
   }
 
   return (
-    <div>
-      <div className="flex items-center justify-between mb-8">
-        <div>
-          <h1 className="text-2xl font-bold font-['Outfit'] text-white">Membership Plans</h1>
-          <p className="text-gray-500 mt-1 text-sm">Create subscription tiers and packages for your sports.</p>
-        </div>
-        <button
-          onClick={() => {
-            setEditingId(""); setName(""); setSportId(sports[0]?.id || "");
-            setDurationInDays(30); setPrice(1000); setSlotsPerDay(1); setIsFamilyPlan(false); setFamilySize(""); setRewardPointsOnPurchase(0); setRewardPointsPerCheckin(0); setShowModal(true);
-          }}
-          className="bg-orange-500 hover:bg-orange-600 text-white rounded-lg px-5 py-2.5 text-sm font-semibold inline-flex items-center gap-2 transition-colors cursor-pointer border-none"
-        >
-          <FiPlus size={16} /> Create New Plan
-        </button>
-      </div>
+    <div className="space-y-6 pb-20 font-sans">
+      <PageHeader
+        title="Membership Plans"
+        subtitle="Create subscription tiers and packages for your sports."
+        breadcrumbs={[
+          { label: "Dashboard", href: "/" },
+          { label: "Plans" },
+        ]}
+        actions={
+          <Button
+            onClick={openCreateModal}
+            leftIcon={<FiPlus />}
+            variant="primary"
+          >
+            Create New Plan
+          </Button>
+        }
+      />
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {plans.map(plan => (
-          <div key={plan.id} className="bg-[#161923] border border-[#2a2d3e] rounded-xl p-6">
-            <div className="flex justify-between items-start">
-              <span className="inline-flex items-center px-3 py-1 rounded-full text-[11px] font-semibold uppercase tracking-wider bg-blue-500/10 text-blue-400 border border-blue-500/20">
-                {plan.sport.name}
-              </span>
-              <div className="flex gap-2">
-                <button
-                  onClick={() => {
-                    setEditingId(plan.id); setName(plan.name); setSportId(plan.sportId);
-                    setDurationInDays(plan.durationInDays); setPrice(plan.price); setSlotsPerDay(plan.slotsPerDay); setIsFamilyPlan(plan.isFamilyPlan || false); setFamilySize(plan.familySize || ""); setRewardPointsOnPurchase(plan.rewardPointsOnPurchase || 0); setRewardPointsPerCheckin(plan.rewardPointsPerCheckin || 0); setShowModal(true);
-                  }}
-                  className="border border-[#2a2d3e] hover:bg-[#1c1f2e] text-gray-300 rounded-lg p-2 transition-colors cursor-pointer bg-transparent"
-                  title="Edit"
-                >
-                  <FiEdit2 size={14} />
-                </button>
-                <button
-                  onClick={() => handleDelete(plan.id)}
-                  className="border border-[#2a2d3e] text-red-400 hover:bg-red-500/10 hover:border-red-500/30 rounded-lg p-2 transition-colors cursor-pointer bg-transparent"
-                  title="Delete"
-                >
-                  <FiTrash2 size={14} />
-                </button>
+          <Card key={plan.id} variant="default" className="flex flex-col justify-between p-6">
+            <div>
+              <div className="flex justify-between items-start">
+                <Badge variant="info" size="sm">
+                  {plan.sport.name}
+                </Badge>
+                <div className="flex gap-1.5">
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={() => openEditModal(plan)}
+                    title="Edit"
+                  >
+                    <FiEdit2 size={14} />
+                  </Button>
+                  <Button
+                    variant="danger"
+                    size="icon"
+                    onClick={() => handleDelete(plan.id)}
+                    title="Delete"
+                  >
+                    <FiTrash2 size={14} />
+                  </Button>
+                </div>
               </div>
+
+              <h3 className="text-lg font-semibold text-sv-text mt-4">{plan.name}</h3>
+              <div className="text-3xl font-bold text-sv-text mt-1 mb-5">
+                ₹{plan.price.toLocaleString()}
+              </div>
+
+              <ul className="space-y-3 text-sm text-sv-text-secondary">
+                <li className="flex items-center gap-3">
+                  <FiCheck className="text-sv-status-success text-lg flex-shrink-0" /> Valid for {plan.durationInDays} days
+                </li>
+                <li className="flex items-center gap-3">
+                  <FiCheck className="text-sv-status-success text-lg flex-shrink-0" /> {plan.slotsPerDay} Check-In{plan.slotsPerDay > 1 ? 's' : ''} per day limit
+                </li>
+                <li className="flex items-center gap-3">
+                  <FiCheck className="text-sv-status-success text-lg flex-shrink-0" /> Access to {plan.sport.name} facilities
+                </li>
+                {plan.isFamilyPlan && (
+                  <li className="flex items-center gap-3">
+                    <FiUsers className="text-sv-status-info text-lg flex-shrink-0" /> Family Plan (Up to {plan.familySize} members)
+                  </li>
+                )}
+                {plan.rewardPointsOnPurchase > 0 && (
+                  <li className="flex items-center gap-3 text-sv-brand font-medium">
+                    <span className="text-lg flex-shrink-0 font-bold">★</span> Earn {plan.rewardPointsOnPurchase} pts on purchase
+                  </li>
+                )}
+                {plan.rewardPointsPerCheckin > 0 && (
+                  <li className="flex items-center gap-3 text-sv-brand font-medium">
+                    <span className="text-lg flex-shrink-0 font-bold">★</span> Earn {plan.rewardPointsPerCheckin} pts per check-in
+                  </li>
+                )}
+                <li className="flex items-center gap-3 text-sv-brand font-semibold mt-2 pt-2 border-t border-sv-border-subtle">
+                  <FiUsers className="text-lg flex-shrink-0" /> {plan._count?.memberships || 0} Active Enrollments
+                </li>
+              </ul>
             </div>
 
-            <h3 className="text-lg font-semibold text-white mt-4">{plan.name}</h3>
-            <div className="text-3xl font-bold font-['Outfit'] text-white mt-1 mb-5">
-              ₹{plan.price.toLocaleString()}
-            </div>
-            <ul className="space-y-3 text-sm text-gray-400">
-              <li className="flex items-center gap-3">
-                <FiCheck className="text-emerald-400 text-lg flex-shrink-0" /> Valid for {plan.durationInDays} days
-              </li>
-              <li className="flex items-center gap-3">
-                <FiCheck className="text-emerald-400 text-lg flex-shrink-0" /> {plan.slotsPerDay} Check-In{plan.slotsPerDay > 1 ? 's' : ''} per day limit
-              </li>
-              <li className="flex items-center gap-3">
-                <FiCheck className="text-emerald-400 text-lg flex-shrink-0" /> Access to {plan.sport.name} facilities
-              </li>
-              {plan.isFamilyPlan && (
-                <li className="flex items-center gap-3">
-                  <FiUsers className="text-purple-400 text-lg flex-shrink-0" /> Family Plan (Up to {plan.familySize} members)
-                </li>
-              )}
-              {plan.rewardPointsOnPurchase > 0 && (
-                <li className="flex items-center gap-3 text-orange-400">
-                  <span className="text-lg flex-shrink-0 font-bold">★</span> Earn {plan.rewardPointsOnPurchase} pts on purchase
-                </li>
-              )}
-              {plan.rewardPointsPerCheckin > 0 && (
-                <li className="flex items-center gap-3 text-orange-400">
-                  <span className="text-lg flex-shrink-0 font-bold">★</span> Earn {plan.rewardPointsPerCheckin} pts per check-in
-                </li>
-              )}
-              <li className="flex items-center gap-3 text-orange-400 font-semibold mt-2 pt-2 border-t border-[#2a2d3e]">
-                <FiUsers className="text-lg flex-shrink-0" /> {plan._count?.memberships || 0} Active Enrollments
-              </li>
-            </ul>
-            <div className="mt-6 pt-4 border-t border-[#2a2d3e]">
-              <button
+            <div className="mt-6 pt-4 border-t border-sv-border-subtle">
+              <Button
+                variant="secondary"
                 onClick={() => router.push(`/plans/${plan.id}`)}
-                className="w-full bg-[#1c1f2e] hover:bg-[#2a2d3e] text-white border border-[#2a2d3e] rounded-lg px-4 py-2.5 text-sm font-semibold transition-colors cursor-pointer"
+                className="w-full"
               >
                 View Plan Details
-              </button>
+              </Button>
             </div>
-          </div>
+          </Card>
         ))}
       </div>
 
-      {showModal && (
-        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-[100]">
-          <div className="bg-[#161923] border border-[#2a2d3e] rounded-xl p-8 w-full max-w-md shadow-2xl">
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="text-lg font-semibold text-white font-['Outfit']">{editingId ? 'Edit Plan' : 'Create New Plan'}</h2>
-              <button
-                className="text-gray-500 hover:text-white transition-colors cursor-pointer bg-transparent border-none"
-                onClick={() => setShowModal(false)}
-              >
-                <FiX size={20} />
-              </button>
-            </div>
-            <form onSubmit={handleSubmit}>
-              <div className="mb-5">
-                <label className="block text-sm font-medium text-gray-400 mb-2">Plan Name</label>
-                <input
-                  type="text"
-                  className="w-full bg-[#0f1117] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white placeholder-gray-600 focus:border-orange-500/50 focus:ring-2 focus:ring-orange-500/20 focus:outline-none text-sm"
-                  value={name}
-                  onChange={e => setName(e.target.value)}
-                  required
-                  placeholder="e.g. Monthly Pro"
-                />
-              </div>
-              <div className="mb-5">
-                <label className="block text-sm font-medium text-gray-400 mb-2">Target Sport</label>
-                <select
-                  className="w-full bg-[#0f1117] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white focus:border-orange-500/50 focus:ring-2 focus:ring-orange-500/20 focus:outline-none text-sm appearance-none cursor-pointer"
-                  value={sportId}
-                  onChange={e => setSportId(e.target.value)}
-                  required
-                >
-                  <option value="">-- Select Sport --</option>
-                  {sports.map(s => (
-                    <option key={s.id} value={s.id}>{s.name}</option>
-                  ))}
-                </select>
-              </div>
+      <Modal
+        isOpen={showModal}
+        onClose={() => setShowModal(false)}
+        title={editingId ? 'Edit Plan' : 'Create New Plan'}
+        size="md"
+      >
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <Input
+            label="Plan Name"
+            type="text"
+            required
+            value={name}
+            onChange={e => setName(e.target.value)}
+            placeholder="e.g. Monthly Pro"
+          />
 
-              <div className="grid grid-cols-2 gap-4 mb-5">
-                <div>
-                  <label className="block text-sm font-medium text-gray-400 mb-2">Price (₹)</label>
-                  <input
-                    type="number"
-                    className="w-full bg-[#0f1117] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white placeholder-gray-600 focus:border-orange-500/50 focus:ring-2 focus:ring-orange-500/20 focus:outline-none text-sm"
-                    value={price}
-                    onChange={e => setPrice(Number(e.target.value))}
-                    required
-                    min={0}
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-400 mb-2">Duration (Days)</label>
-                  <input
-                    type="number"
-                    className="w-full bg-[#0f1117] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white placeholder-gray-600 focus:border-orange-500/50 focus:ring-2 focus:ring-orange-500/20 focus:outline-none text-sm"
-                    value={durationInDays}
-                    onChange={e => setDurationInDays(Number(e.target.value))}
-                    required
-                    min={1}
-                  />
-                </div>
-              </div>
+          <Select
+            label="Target Sport"
+            required
+            value={sportId}
+            onChange={e => setSportId(e.target.value)}
+            options={[
+              { label: "-- Select Sport --", value: "" },
+              ...sports.map(s => ({ label: s.name, value: s.id }))
+            ]}
+          />
 
-              <div className="mb-6">
-                <label className="block text-sm font-medium text-gray-400 mb-2">Daily Check-ins Allowed</label>
-                <input
-                  type="number"
-                  className="w-full bg-[#0f1117] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white placeholder-gray-600 focus:border-orange-500/50 focus:ring-2 focus:ring-orange-500/20 focus:outline-none text-sm"
-                  value={slotsPerDay}
-                  onChange={e => setSlotsPerDay(Number(e.target.value))}
-                  required
-                  min={1}
-                />
-                <p className="text-xs text-gray-500 mt-2">Maximum number of times a member can mark attendance per day with this plan.</p>
-              </div>
-
-              <div className="mb-6 bg-[#0f1117] border border-[#2a2d3e] rounded-lg p-4">
-                <label className="flex items-center gap-3 cursor-pointer">
-                  <input
-                    type="checkbox"
-                    className="w-5 h-5 rounded border-[#2a2d3e] text-orange-500 focus:ring-orange-500/20 bg-[#161923]"
-                    checked={isFamilyPlan}
-                    onChange={(e) => setIsFamilyPlan(e.target.checked)}
-                  />
-                  <div>
-                    <div className="text-sm font-medium text-white">This is a Family Plan</div>
-                    <div className="text-xs text-gray-500 mt-0.5">Allows multiple family members under a single assignment</div>
-                  </div>
-                </label>
-
-                {isFamilyPlan && (
-                  <div className="mt-4 pt-4 border-t border-[#2a2d3e]">
-                    <label className="block text-sm font-medium text-gray-400 mb-2">Maximum Family Members Allowed</label>
-                    <input
-                      type="number"
-                      className="w-full bg-[#161923] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white placeholder-gray-600 focus:border-orange-500/50 focus:ring-2 focus:ring-orange-500/20 focus:outline-none text-sm"
-                      value={familySize}
-                      onChange={e => setFamilySize(Number(e.target.value))}
-                      required={isFamilyPlan}
-                      min={2}
-                      placeholder="e.g. 4"
-                    />
-                  </div>
-                )}
-              </div>
-
-              <div className="mb-6 bg-[#161923] border border-orange-500/20 rounded-lg p-4">
-                <h3 className="text-sm font-bold font-['Outfit'] text-white flex items-center gap-2 mb-4">
-                   Loyalty Rewards
-                </h3>
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-xs uppercase tracking-wider font-semibold text-gray-500 mb-2">Points on Purchase</label>
-                    <input
-                      type="number"
-                      className="w-full bg-[#0f1117] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white placeholder-gray-600 focus:border-orange-500/50 focus:ring-2 focus:ring-orange-500/20 focus:outline-none text-sm"
-                      value={rewardPointsOnPurchase}
-                      onChange={e => setRewardPointsOnPurchase(Number(e.target.value))}
-                      min={0}
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-xs uppercase tracking-wider font-semibold text-gray-500 mb-2">Points per Check-in</label>
-                    <input
-                      type="number"
-                      className="w-full bg-[#0f1117] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white placeholder-gray-600 focus:border-orange-500/50 focus:ring-2 focus:ring-orange-500/20 focus:outline-none text-sm"
-                      value={rewardPointsPerCheckin}
-                      onChange={e => setRewardPointsPerCheckin(Number(e.target.value))}
-                      min={0}
-                    />
-                  </div>
-                </div>
-              </div>
-
-              <button
-                type="submit"
-                className="w-full bg-orange-500 hover:bg-orange-600 text-white rounded-lg px-5 py-2.5 text-sm font-semibold inline-flex items-center justify-center gap-2 transition-colors cursor-pointer border-none"
-                disabled={loading}
-              >
-                {loading ? "Saving..." : "Publish Plan"}
-              </button>
-            </form>
+          <div className="grid grid-cols-2 gap-4">
+            <Input
+              label="Price (₹)"
+              type="number"
+              required
+              min={0}
+              value={price}
+              onChange={e => setPrice(Number(e.target.value))}
+            />
+            <Input
+              label="Duration (Days)"
+              type="number"
+              required
+              min={1}
+              value={durationInDays}
+              onChange={e => setDurationInDays(Number(e.target.value))}
+            />
           </div>
-        </div>
-      )}
+
+          <div>
+            <Input
+              label="Daily Check-ins Allowed"
+              type="number"
+              required
+              min={1}
+              value={slotsPerDay}
+              onChange={e => setSlotsPerDay(Number(e.target.value))}
+              helperText="Maximum number of times a member can mark attendance per day with this plan."
+            />
+          </div>
+
+          <div className="bg-sv-surface-raised border border-sv-border rounded-sv-md p-4 space-y-3">
+            <label className="flex items-center gap-3 cursor-pointer">
+              <input
+                type="checkbox"
+                className="w-4 h-4 rounded border-sv-border bg-sv-bg text-sv-brand focus:ring-sv-brand"
+                checked={isFamilyPlan}
+                onChange={(e) => setIsFamilyPlan(e.target.checked)}
+              />
+              <div>
+                <div className="text-sm font-medium text-sv-text">This is a Family Plan</div>
+                <div className="text-xs text-sv-text-muted">Allows multiple family members under a single assignment</div>
+              </div>
+            </label>
+
+            {isFamilyPlan && (
+              <div className="pt-3 border-t border-sv-border-subtle">
+                <Input
+                  label="Maximum Family Members Allowed"
+                  type="number"
+                  required={isFamilyPlan}
+                  min={2}
+                  value={familySize}
+                  onChange={e => setFamilySize(Number(e.target.value))}
+                  placeholder="e.g. 4"
+                />
+              </div>
+            )}
+          </div>
+
+          <div className="bg-sv-surface-raised border border-sv-border rounded-sv-md p-4 space-y-3">
+            <h4 className="text-xs uppercase tracking-wider font-semibold text-sv-brand">
+              Loyalty Rewards
+            </h4>
+            <div className="grid grid-cols-2 gap-4">
+              <Input
+                label="Points on Purchase"
+                type="number"
+                min={0}
+                value={rewardPointsOnPurchase}
+                onChange={e => setRewardPointsOnPurchase(Number(e.target.value))}
+              />
+              <Input
+                label="Points per Check-in"
+                type="number"
+                min={0}
+                value={rewardPointsPerCheckin}
+                onChange={e => setRewardPointsPerCheckin(Number(e.target.value))}
+              />
+            </div>
+          </div>
+
+          <Button
+            type="submit"
+            variant="primary"
+            isLoading={loading}
+            className="w-full mt-4"
+          >
+            {loading ? "Saving..." : "Publish Plan"}
+          </Button>
+        </form>
+      </Modal>
     </div>
   );
 }

@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { FiRefreshCw, FiInfo, FiAlertTriangle, FiXCircle, FiChevronDown, FiChevronUp } from 'react-icons/fi';
 import { fetchLogs, AppLog } from './actions';
 import { formatIST } from '@/lib/dateUtils';
+import { PageHeader, Button, Badge, Card } from '@/components/admin/ui';
 
 export default function AppLogsClient() {
   const [logs, setLogs] = useState<AppLog[]>([]);
@@ -32,39 +33,51 @@ export default function AppLogsClient() {
   };
 
   const getLevelIcon = (level: string) => {
-    if (level === 'ERROR') return <FiXCircle className="text-red-400" />;
-    if (level === 'WARN') return <FiAlertTriangle className="text-yellow-400" />;
-    return <FiInfo className="text-blue-400" />;
+    if (level === 'ERROR') return <FiXCircle className="text-sv-status-error" />;
+    if (level === 'WARN') return <FiAlertTriangle className="text-sv-status-warning" />;
+    return <FiInfo className="text-sv-status-info" />;
   };
 
-  const getLevelBg = (level: string) => {
-    if (level === 'ERROR') return 'bg-red-500/10 border-red-500/20';
-    if (level === 'WARN') return 'bg-yellow-500/10 border-yellow-500/20';
-    return 'bg-blue-500/10 border-blue-500/20';
+  const getLevelBadgeVariant = (level: string): "error" | "warning" | "info" => {
+    if (level === 'ERROR') return 'error';
+    if (level === 'WARN') return 'warning';
+    return 'info';
+  };
+
+  const getLevelContainerBorder = (level: string) => {
+    if (level === 'ERROR') return 'border-sv-error-border bg-sv-error-subtle/30';
+    if (level === 'WARN') return 'border-sv-warning-border bg-sv-warning-subtle/30';
+    return 'border-sv-info-border bg-sv-info-subtle/30';
   };
 
   return (
-    <div>
-      <div className="flex justify-between items-end mb-10">
-        <div>
-          <h1 className="text-3xl font-bold font-['Outfit'] text-white tracking-tight">System Logs</h1>
-          <p className="text-gray-500 mt-2">View real-time application and API logs.</p>
-        </div>
-        <button
-          onClick={loadLogs}
-          disabled={loading}
-          className="flex items-center gap-2 bg-[#2a2d3e] hover:bg-[#32364a] text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
-        >
-          <FiRefreshCw className={loading ? 'animate-spin' : ''} />
-          Refresh Logs
-        </button>
-      </div>
+    <div className="space-y-6 pb-20 font-sans">
+      <PageHeader
+        title="System Logs"
+        subtitle="View real-time application and API logs."
+        breadcrumbs={[
+          { label: "Dashboard", href: "/" },
+          { label: "System Logs" },
+        ]}
+        actions={
+          <Button
+            variant="secondary"
+            onClick={loadLogs}
+            isLoading={loading}
+            leftIcon={<FiRefreshCw className={loading ? 'animate-spin' : ''} />}
+          >
+            Refresh Logs
+          </Button>
+        }
+      />
 
-      <div className="bg-[#161923] border border-[#2a2d3e] rounded-xl p-6">
+      <Card variant="default" padding="lg">
         {loading && logs.length === 0 ? (
-          <div className="text-center py-10 text-gray-500 animate-pulse">Loading logs...</div>
+          <div className="text-center py-12 text-sv-text-muted animate-pulse font-medium">
+            Loading logs...
+          </div>
         ) : logs.length === 0 ? (
-          <div className="p-10 text-center text-gray-500 bg-[#0f1117] rounded-lg border border-dashed border-[#2a2d3e]">
+          <div className="p-10 text-center text-sv-text-muted bg-sv-surface-raised rounded-sv-md border border-dashed border-sv-border">
             No logs found in app.log.
           </div>
         ) : (
@@ -72,45 +85,44 @@ export default function AppLogsClient() {
             {logs.map((log, index) => {
               const isExpanded = expandedIndices.has(index);
               const hasMeta = log.meta && Object.keys(log.meta).length > 0;
-              
+
               return (
-                <div key={index} className={`border rounded-lg overflow-hidden ${getLevelBg(log.level)}`}>
-                  <div 
-                    className={`flex items-start gap-4 p-4 ${hasMeta ? 'cursor-pointer hover:bg-white/5' : ''} transition-colors`}
+                <div
+                  key={index}
+                  className={`border rounded-sv-md overflow-hidden transition-colors ${getLevelContainerBorder(log.level)}`}
+                >
+                  <div
+                    className={`flex items-start gap-4 p-4 ${hasMeta ? 'cursor-pointer hover:bg-sv-surface-hover/60' : ''} transition-colors`}
                     onClick={() => hasMeta && toggleExpand(index)}
                   >
                     <div className="mt-1 flex-shrink-0 text-xl">
                       {getLevelIcon(log.level)}
                     </div>
-                    
+
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-3 mb-1">
-                        <span className={`text-xs font-bold px-2 py-0.5 rounded-full uppercase tracking-wider ${
-                          log.level === 'ERROR' ? 'bg-red-500/20 text-red-400' :
-                          log.level === 'WARN' ? 'bg-yellow-500/20 text-yellow-400' :
-                          'bg-blue-500/20 text-blue-400'
-                        }`}>
+                        <Badge variant={getLevelBadgeVariant(log.level)} size="sm">
                           {log.level}
-                        </span>
-                        <span className="text-xs text-gray-400 font-mono">
+                        </Badge>
+                        <span className="text-xs text-sv-text-muted font-mono">
                           {formatIST(new Date(log.timestamp), 'MMM d, yyyy h:mm:ss a')}
                         </span>
                       </div>
-                      <div className="text-gray-200 text-sm font-medium">
+                      <div className="text-sv-text text-sm font-medium">
                         {log.message}
                       </div>
                     </div>
 
                     {hasMeta && (
-                      <div className="text-gray-500 mt-1">
+                      <div className="text-sv-text-muted mt-1">
                         {isExpanded ? <FiChevronUp /> : <FiChevronDown />}
                       </div>
                     )}
                   </div>
 
                   {isExpanded && hasMeta && (
-                    <div className="border-t border-white/10 bg-black/40 p-4 overflow-x-auto">
-                      <pre className="text-xs font-mono text-gray-300">
+                    <div className="border-t border-sv-border-subtle bg-sv-bg p-4 overflow-x-auto">
+                      <pre className="text-xs font-mono text-sv-text-secondary">
                         {JSON.stringify(log.meta, null, 2)}
                       </pre>
                     </div>
@@ -120,7 +132,8 @@ export default function AppLogsClient() {
             })}
           </div>
         )}
-      </div>
+      </Card>
     </div>
   );
 }
+

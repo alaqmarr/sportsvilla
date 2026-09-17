@@ -1,9 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { FiSearch, FiCreditCard, FiArrowUpCircle, FiArrowDownCircle, FiPlus, FiX } from "react-icons/fi";
+import { FiSearch, FiCreditCard, FiArrowUpCircle, FiArrowDownCircle } from "react-icons/fi";
 import { addWalletTransaction } from "./actions";
 import { formatIST } from "@/lib/dateUtils";
+import { PageHeader, Button, Input, EmptyState } from "@/components/admin/ui";
 
 export default function WalletsClient({ initialMembers }: { initialMembers: any[] }) {
   const [members, setMembers] = useState(initialMembers);
@@ -35,7 +36,6 @@ export default function WalletsClient({ initialMembers }: { initialMembers: any[
     }
 
     if (!isOtpMode) {
-      // First step: send OTP
       setIsSendingOtp(true);
       try {
         const res = await fetch(`/api/admin/members/${selectedMember.id}/wallet/send-otp`, {
@@ -67,7 +67,6 @@ export default function WalletsClient({ initialMembers }: { initialMembers: any[
         otp
       });
       
-      // Update local state for immediate feedback
       const numAmount = Number(amount);
       const amountInPaise = numAmount * 100;
       const newTransaction = {
@@ -109,33 +108,28 @@ export default function WalletsClient({ initialMembers }: { initialMembers: any[
   };
 
   return (
-    <div className="flex flex-col gap-6 max-w-7xl mx-auto w-full">
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div>
-          <h1 className="text-3xl font-bold text-white flex items-center gap-3">
-            <FiCreditCard className="text-orange-500" />
-            Member Wallets
-          </h1>
-          <p className="text-gray-400 mt-1">Manage wallet balances and add credits.</p>
-        </div>
-      </div>
+    <div className="space-y-6 pb-20 font-sans max-w-7xl mx-auto w-full">
+      <PageHeader
+        title="Member Wallets"
+        subtitle="Manage wallet balances and record credits or deductions."
+        breadcrumbs={[
+          { label: "Dashboard", href: "/" },
+          { label: "Wallets" },
+        ]}
+      />
 
-      <div className="bg-[#0f1117] border border-[#2a2d3e] rounded-2xl overflow-hidden flex flex-col md:flex-row">
+      <div className="bg-sv-surface border border-sv-border rounded-sv-xl overflow-hidden flex flex-col md:flex-row shadow-sv-sm">
         {/* Left Side: Member List */}
-        <div className="w-full md:w-1/3 border-r border-[#2a2d3e] flex flex-col h-[700px] bg-[#13151f]">
-          <div className="p-4 border-b border-[#2a2d3e]">
-            <div className="relative">
-              <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-              <input
-                type="text"
-                placeholder="Search member by name or mobile..."
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 bg-[#1a1d27] border border-transparent rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-orange-500 transition-colors"
-              />
-            </div>
+        <div className="w-full md:w-1/3 border-r border-sv-border flex flex-col h-[700px] bg-sv-surface">
+          <div className="p-4 border-b border-sv-border">
+            <Input
+              leftIcon={<FiSearch />}
+              placeholder="Search member by name or mobile..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+            />
           </div>
-          <div className="overflow-y-auto flex-1 py-2">
+          <div className="overflow-y-auto flex-1 py-2 divide-y divide-sv-border-subtle">
             {filteredMembers.map(member => (
               <button
                 key={member.id}
@@ -143,19 +137,25 @@ export default function WalletsClient({ initialMembers }: { initialMembers: any[
                   setSelectedMember(member);
                   setError("");
                 }}
-                className={`w-full flex items-center justify-between px-5 py-3 transition-colors text-left border-l-2 ${selectedMember?.id === member.id ? 'bg-orange-500/10 border-orange-500' : 'border-transparent hover:bg-[#1a1d27]'}`}
+                className={`w-full flex items-center justify-between px-5 py-3.5 transition-colors text-left border-l-2 ${
+                  selectedMember?.id === member.id
+                    ? 'bg-sv-brand/10 border-sv-brand'
+                    : 'border-transparent hover:bg-sv-surface-hover'
+                }`}
               >
                 <div>
-                  <div className={`font-medium ${selectedMember?.id === member.id ? 'text-orange-400' : 'text-gray-200'}`}>{member.name}</div>
-                  <div className="text-xs text-gray-500 mt-0.5">{member.mobile}</div>
+                  <div className={`font-medium ${selectedMember?.id === member.id ? 'text-sv-brand' : 'text-sv-text'}`}>
+                    {member.name}
+                  </div>
+                  <div className="text-xs text-sv-text-muted mt-0.5">{member.mobile}</div>
                 </div>
                 <div className="text-right">
-                  <div className="text-sm font-bold text-white">₹{(member.walletBalance / 100).toFixed(2)}</div>
+                  <div className="text-sm font-bold text-sv-text">₹{(member.walletBalance / 100).toFixed(2)}</div>
                 </div>
               </button>
             ))}
             {filteredMembers.length === 0 && (
-              <div className="text-center p-8 text-gray-500 text-sm">
+              <div className="text-center p-8 text-sv-text-muted text-sm">
                 No members found.
               </div>
             )}
@@ -163,118 +163,123 @@ export default function WalletsClient({ initialMembers }: { initialMembers: any[
         </div>
 
         {/* Right Side: Wallet Details & Actions */}
-        <div className="w-full md:w-2/3 flex flex-col h-[700px] bg-[#0f1117]">
+        <div className="w-full md:w-2/3 flex flex-col h-[700px] bg-sv-surface">
           {selectedMember ? (
             <div className="flex flex-col h-full overflow-hidden">
-              <div className="px-8 py-6 border-b border-[#2a2d3e] flex justify-between items-center bg-[#0f1117]">
+              <div className="px-8 py-6 border-b border-sv-border flex justify-between items-center bg-sv-surface">
                 <div>
-                  <h2 className="text-xl font-bold text-white">{selectedMember.name}</h2>
-                  <p className="text-sm text-gray-400 mt-1">{selectedMember.mobile}</p>
+                  <h2 className="text-xl font-bold text-sv-text">{selectedMember.name}</h2>
+                  <p className="text-sm text-sv-text-secondary mt-1">{selectedMember.mobile}</p>
                 </div>
                 <div className="text-right">
-                  <div className="text-xs text-gray-500 uppercase tracking-wider mb-1 font-semibold">Current Balance</div>
-                  <div className="text-3xl font-black text-green-400">₹{(selectedMember.walletBalance / 100).toFixed(2)}</div>
+                  <div className="text-xs text-sv-text-muted uppercase tracking-wider mb-1 font-semibold">Current Balance</div>
+                  <div className="text-3xl font-black text-sv-status-success">₹{(selectedMember.walletBalance / 100).toFixed(2)}</div>
                 </div>
               </div>
 
-              <div className="flex-1 overflow-y-auto p-8 flex flex-col lg:flex-row gap-10">
-                
+              <div className="flex-1 overflow-y-auto p-8 flex flex-col lg:flex-row gap-8">
                 {/* Transaction Form */}
                 <div className="w-full lg:w-1/2 flex flex-col">
-                  <h3 className="text-sm uppercase tracking-wider font-semibold text-gray-500 mb-6">{isOtpMode ? "Verification Required" : "New Transaction"}</h3>
-                  <form onSubmit={handleTransaction} className="flex flex-col gap-5">
+                  <h3 className="text-xs uppercase tracking-wider font-semibold text-sv-text-secondary mb-4">
+                    {isOtpMode ? "Verification Required" : "New Transaction"}
+                  </h3>
+                  <form onSubmit={handleTransaction} className="flex flex-col gap-4">
                     {error && (
-                      <div className="bg-red-500/10 border border-red-500/20 text-red-400 p-3 rounded-lg text-sm">
+                      <div className="bg-sv-error-subtle border border-sv-error-border text-sv-error-text p-3 rounded-sv-md text-sm">
                         {error}
                       </div>
                     )}
                     
                     {!isOtpMode ? (
                       <>
-                        <div className="flex gap-2 p-1 bg-[#13151f] rounded-lg border border-[#2a2d3e]">
+                        <div className="flex gap-2 p-1 bg-sv-surface-raised rounded-sv-md border border-sv-border">
                           <button 
                             type="button" 
                             onClick={() => setType("CREDIT")}
-                            className={`flex-1 py-2 text-sm font-bold rounded-md flex items-center justify-center gap-2 transition-colors ${type === "CREDIT" ? "bg-green-500/20 text-green-400" : "text-gray-400 hover:text-gray-200"}`}
+                            className={`flex-1 py-2 text-sm font-semibold rounded-sv-sm flex items-center justify-center gap-2 transition-colors ${
+                              type === "CREDIT"
+                                ? "bg-sv-success-subtle text-sv-success-text border border-sv-success-border"
+                                : "text-sv-text-muted hover:text-sv-text"
+                            }`}
                           >
                             <FiArrowUpCircle /> Add Credit
                           </button>
                           <button 
                             type="button" 
                             onClick={() => setType("DEBIT")}
-                            className={`flex-1 py-2 text-sm font-bold rounded-md flex items-center justify-center gap-2 transition-colors ${type === "DEBIT" ? "bg-red-500/20 text-red-400" : "text-gray-400 hover:text-gray-200"}`}
+                            className={`flex-1 py-2 text-sm font-semibold rounded-sv-sm flex items-center justify-center gap-2 transition-colors ${
+                              type === "DEBIT"
+                                ? "bg-sv-error-subtle text-sv-error-text border border-sv-error-border"
+                                : "text-sv-text-muted hover:text-sv-text"
+                            }`}
                           >
                             <FiArrowDownCircle /> Deduct
                           </button>
                         </div>
 
-                        <div>
-                          <label className="block text-xs font-semibold uppercase tracking-wider text-gray-500 mb-2">Amount (₹)</label>
-                          <input 
-                            type="number"
-                            required
-                            min="1"
-                            value={amount}
-                            onChange={(e) => setAmount(e.target.value)}
-                            className="w-full bg-[#13151f] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white placeholder-gray-600 focus:outline-none focus:border-orange-500 transition-colors"
-                            placeholder="Enter amount"
-                          />
-                        </div>
+                        <Input
+                          label="Amount (₹)"
+                          type="number"
+                          required
+                          min="1"
+                          value={amount}
+                          onChange={(e) => setAmount(e.target.value)}
+                          placeholder="Enter amount"
+                        />
 
-                        <div>
-                          <label className="block text-xs font-semibold uppercase tracking-wider text-gray-500 mb-2">Description / Reason</label>
-                          <input 
-                            type="text"
-                            required
-                            value={description}
-                            onChange={(e) => setDescription(e.target.value)}
-                            className="w-full bg-[#13151f] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white placeholder-gray-600 focus:outline-none focus:border-orange-500 transition-colors"
-                            placeholder="e.g. Cash deposit, Refund, etc."
-                          />
-                        </div>
+                        <Input
+                          label="Description / Reason"
+                          type="text"
+                          required
+                          value={description}
+                          onChange={(e) => setDescription(e.target.value)}
+                          placeholder="e.g. Cash deposit, Refund, etc."
+                        />
 
-                        <button 
-                          type="submit" 
-                          disabled={isSendingOtp}
-                          className={`w-full py-3.5 rounded-lg font-bold text-white flex justify-center items-center gap-2 mt-2 transition-colors ${type === "CREDIT" ? "bg-green-600 hover:bg-green-500" : "bg-red-600 hover:bg-red-500"} ${isSendingOtp ? "opacity-50 cursor-not-allowed" : ""}`}
+                        <Button
+                          type="submit"
+                          variant={type === "CREDIT" ? "primary" : "danger"}
+                          isLoading={isSendingOtp}
+                          className="w-full mt-2"
                         >
                           {isSendingOtp ? "Sending OTP..." : type === "CREDIT" ? "Confirm Add Credit" : "Confirm Deduction"}
-                        </button>
+                        </Button>
                       </>
                     ) : (
                       <>
-                        <div className="text-sm text-gray-400 bg-[#13151f] p-4 rounded-lg border border-[#2a2d3e] leading-relaxed">
-                          We've sent a 6-digit OTP to the user's WhatsApp number <strong className="text-white">{selectedMember.mobile}</strong>. Please ask them for the code to authorize this transaction of <strong className="text-white">₹{amount}</strong> ({type}).
+                        <div className="text-sm text-sv-text-secondary bg-sv-surface-raised p-4 rounded-sv-md border border-sv-border leading-relaxed">
+                          We've sent a 6-digit OTP to the user's WhatsApp number <strong className="text-sv-text">{selectedMember.mobile}</strong>. Please ask them for the code to authorize this transaction of <strong className="text-sv-text">₹{amount}</strong> ({type}).
                         </div>
                         
-                        <div>
-                          <label className="block text-xs font-semibold uppercase tracking-wider text-gray-500 mb-2">Enter OTP</label>
-                          <input 
-                            type="text"
-                            required
-                            maxLength={6}
-                            value={otp}
-                            onChange={(e) => setOtp(e.target.value.replace(/\D/g, ''))}
-                            className="w-full bg-[#13151f] border border-[#2a2d3e] rounded-lg px-4 py-3 text-center text-2xl tracking-[0.5em] font-bold text-white placeholder-gray-600 focus:outline-none focus:border-orange-500"
-                            placeholder="------"
-                          />
-                        </div>
+                        <Input
+                          label="Enter OTP"
+                          type="text"
+                          required
+                          maxLength={6}
+                          value={otp}
+                          onChange={(e) => setOtp(e.target.value.replace(/\D/g, ''))}
+                          placeholder="------"
+                          className="text-center text-2xl tracking-[0.5em] font-bold"
+                        />
 
-                        <div className="flex gap-3 mt-4">
-                           <button 
-                            type="button" 
+                        <div className="flex gap-3 mt-2">
+                          <Button
+                            type="button"
+                            variant="secondary"
                             onClick={() => { setIsOtpMode(false); setOtp(""); }}
-                            className="flex-1 py-3.5 rounded-lg font-bold text-gray-300 bg-[#1a1d27] hover:bg-[#2a2d3e] transition-colors"
+                            className="flex-1"
                           >
                             Cancel
-                          </button>
-                          <button 
-                            type="submit" 
+                          </Button>
+                          <Button
+                            type="submit"
+                            variant="primary"
+                            isLoading={isSubmitting}
                             disabled={isSubmitting || otp.length < 6}
-                            className={`flex-1 py-3.5 rounded-lg font-bold text-white flex justify-center items-center gap-2 transition-colors bg-orange-600 hover:bg-orange-500 disabled:opacity-50 disabled:cursor-not-allowed`}
+                            className="flex-1"
                           >
                             {isSubmitting ? "Verifying..." : "Verify & Submit"}
-                          </button>
+                          </Button>
                         </div>
                       </>
                     )}
@@ -283,39 +288,42 @@ export default function WalletsClient({ initialMembers }: { initialMembers: any[
 
                 {/* History */}
                 <div className="w-full lg:w-1/2 flex flex-col">
-                  <h3 className="text-sm uppercase tracking-wider font-semibold text-gray-500 mb-6">Recent Transactions</h3>
-                  <div className="bg-[#13151f] rounded-xl flex-1 overflow-y-auto">
+                  <h3 className="text-xs uppercase tracking-wider font-semibold text-sv-text-secondary mb-4">
+                    Recent Transactions
+                  </h3>
+                  <div className="bg-sv-surface-raised rounded-sv-lg border border-sv-border flex-1 overflow-y-auto">
                     {selectedMember.walletTransactions?.length > 0 ? (
-                      <div className="divide-y divide-[#2a2d3e]">
+                      <div className="divide-y divide-sv-border-subtle">
                         {selectedMember.walletTransactions.map((tx: any) => (
-                          <div key={tx.id} className="p-4 flex justify-between items-center hover:bg-[#1a1d27] transition-colors">
+                          <div key={tx.id} className="p-3.5 flex justify-between items-center hover:bg-sv-surface-hover transition-colors">
                             <div>
-                              <div className="text-gray-200 text-sm font-medium">{tx.description || "No description"}</div>
-                              <div className="text-xs text-gray-500 mt-1">{new Date(tx.createdAt).toLocaleString('en-IN')}</div>
+                              <div className="text-sv-text text-sm font-medium">{tx.description || "No description"}</div>
+                              <div className="text-xs text-sv-text-muted mt-0.5">{formatIST(tx.createdAt, "dd MMM yyyy, hh:mm a")}</div>
                             </div>
-                            <div className={`font-bold ${tx.type === "CREDIT" ? "text-green-400" : "text-red-400"}`}>
+                            <div className={`font-bold ${tx.type === "CREDIT" ? "text-sv-status-success" : "text-sv-status-error"}`}>
                               {tx.type === "CREDIT" ? "+" : "-"}₹{(tx.amount / 100).toFixed(2)}
                             </div>
                           </div>
                         ))}
                       </div>
                     ) : (
-                      <div className="p-8 text-center text-gray-500 text-sm flex flex-col items-center justify-center h-full">
-                        <FiCreditCard className="text-4xl mb-3 opacity-20" />
-                        No transactions found.
-                      </div>
+                      <EmptyState
+                        icon={<FiCreditCard />}
+                        title="No transactions found"
+                        description="No wallet transactions recorded for this member."
+                      />
                     )}
                   </div>
                 </div>
               </div>
             </div>
           ) : (
-            <div className="flex-1 flex flex-col items-center justify-center text-gray-500 p-8 bg-[#0f1117]">
-              <div className="w-16 h-16 rounded-full bg-[#13151f] flex items-center justify-center mb-4 border border-[#2a2d3e]">
-                <FiCreditCard className="text-2xl text-gray-600" />
-              </div>
-              <p className="text-lg font-medium text-gray-300">Select a member</p>
-              <p className="text-sm text-gray-500 mt-1">Choose a member from the list to view their wallet details.</p>
+            <div className="flex-1 flex flex-col items-center justify-center p-8 bg-sv-surface">
+              <EmptyState
+                icon={<FiCreditCard />}
+                title="Select a member"
+                description="Choose a member from the list to view their wallet details and add transactions."
+              />
             </div>
           )}
         </div>

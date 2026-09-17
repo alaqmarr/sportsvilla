@@ -199,7 +199,7 @@ export default function CheckinScanner({ sports }: { sports: any[] }) {
   return (
     <div className="bg-[#0f1117] border border-[#2a2d3e] rounded-xl p-6">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
-        <h2 className="text-xl font-bold font-['Outfit'] text-white flex items-center gap-2">
+        <h2 className="text-xl font-bold font-sans text-white flex items-center gap-2">
           <FiCamera className="text-emerald-500" /> Fast Check-in
           <span className="hidden sm:flex items-center gap-1 text-xs px-2 py-1 bg-blue-500/10 text-blue-400 border border-blue-500/20 rounded-full font-medium ml-2">
             <FiLink /> USB/Bluetooth Scanner Supported
@@ -254,7 +254,7 @@ export default function CheckinScanner({ sports }: { sports: any[] }) {
           <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-[100]">
             <div className="bg-[#161923] border border-[#2a2d3e] rounded-xl p-8 w-full max-w-md shadow-2xl">
               <div className="flex justify-between items-center mb-6">
-                <h2 className="text-lg font-semibold font-['Outfit'] text-white">Scan QR Code</h2>
+                <h2 className="text-lg font-semibold font-sans text-white">Scan QR Code</h2>
                 <button type="button" className="text-gray-400 hover:text-white bg-[#1c1f2e] hover:bg-[#2a2d3e] rounded-lg p-2 transition-colors cursor-pointer border-none" onClick={closeScanner}><FiX /></button>
               </div>
               <div id="reader" className="w-full bg-black rounded-xl overflow-hidden border border-[#2a2d3e] html5-qrcode-custom"></div>
@@ -327,3 +327,4 @@ export default function CheckinScanner({ sports }: { sports: any[] }) {
     </div>
   );
 }
+

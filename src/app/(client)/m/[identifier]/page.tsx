@@ -57,7 +57,7 @@ export default async function MemberPortal({ params }: { params: Promise<{ ident
   if (isMobile && members.length > 1) {
     return (
       <div className="min-h-screen bg-[#111] flex flex-col items-center justify-center p-6 selection:bg-orange-500/30">
-        <h1 className="text-3xl md:text-5xl font-['Outfit'] font-medium text-white mb-10 md:mb-16 tracking-wide text-center">
+        <h1 className="text-3xl md:text-5xl font-sans font-medium text-white mb-10 md:mb-16 tracking-wide text-center">
           Who's playing?
         </h1>
         
@@ -69,7 +69,7 @@ export default async function MemberPortal({ params }: { params: Promise<{ ident
               className="group flex flex-col items-center gap-4 transition-transform hover:scale-105"
             >
               <div className="w-24 h-24 md:w-36 md:h-36 rounded-2xl bg-[#222] border-2 border-transparent group-hover:border-white transition-all overflow-hidden flex items-center justify-center shadow-[0_0_20px_rgba(0,0,0,0.5)]">
-                <div className="text-4xl md:text-6xl font-['Outfit'] font-bold text-gray-400 group-hover:text-white transition-colors">
+                <div className="text-4xl md:text-6xl font-sans font-bold text-gray-400 group-hover:text-white transition-colors">
                   {m.name.charAt(0)}
                 </div>
               </div>

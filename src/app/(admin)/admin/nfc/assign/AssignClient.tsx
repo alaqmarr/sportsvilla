@@ -1,21 +1,17 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   FiCreditCard,
   FiSearch,
   FiUser,
   FiCheckCircle,
-  FiAlertTriangle,
   FiLock,
   FiUnlock,
   FiSlash,
   FiRefreshCw,
   FiTag,
-  FiFileText,
-  FiSmartphone,
   FiZap,
-  FiRadio,
 } from "react-icons/fi";
 import {
   searchMembers,
@@ -29,6 +25,15 @@ import { playNfcSound } from "@/lib/soundUtils";
 import { useAlert } from "@/components/AlertProvider";
 import { useNfc } from "@/components/nfc/NfcProvider";
 import { formatIST } from "@/lib/dateUtils";
+import {
+  Card,
+  Button,
+  Badge,
+  PageHeader,
+  Stat,
+  Input,
+  Select,
+} from "@/components/admin/ui";
 
 interface MemberResult {
   id: string;
@@ -97,6 +102,7 @@ export default function AssignClient({ initialCards }: { initialCards: any[] }) 
     setCardUid(cleaned);
   };
 
+  // Hardware NFC Listener (Preserved intact)
   const { subscribe } = useNfc();
 
   useEffect(() => {
@@ -254,138 +260,120 @@ export default function AssignClient({ initialCards }: { initialCards: any[] }) 
   const unassignedCount = cards.filter((c) => !c.memberId).length;
 
   return (
-    <div className="p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto space-y-8">
+    <div className="space-y-8">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <div className="flex items-center gap-3">
-            <div className="p-2.5 bg-orange-500/10 border border-orange-500/20 rounded-xl text-orange-500">
-              <FiCreditCard className="text-2xl" />
-            </div>
-            <div>
-              <h1 className="text-2xl sm:text-3xl font-bold font-['Outfit'] text-white">
-                NFC Card Assignment
-              </h1>
-              <p className="text-sm text-gray-400">
-                Register, scan, map, and manage SportsVilla physical NFC membership cards.
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <div className="flex items-center gap-3">
-          <button
+      <PageHeader
+        title="NFC Card Assignment"
+        subtitle="Register, scan, map, and manage SportsVilla physical NFC membership cards."
+        actions={
+          <Button
             onClick={refreshInventory}
             disabled={isRefreshing}
-            className="flex items-center gap-2 px-3.5 py-2 bg-[#1c1f2e] hover:bg-[#25283a] border border-[#2a2d3e] text-gray-300 hover:text-white rounded-lg text-sm font-medium transition-colors"
+            isLoading={isRefreshing}
+            variant="secondary"
+            leftIcon={<FiRefreshCw className={isRefreshing ? "animate-spin" : ""} />}
           >
-            <FiRefreshCw className={isRefreshing ? "animate-spin" : ""} />
-            <span>Sync Cards</span>
-          </button>
-        </div>
-      </div>
+            Sync Cards
+          </Button>
+        }
+      />
 
       {/* KPI Bento Strip */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="p-4 bg-[#161923] border border-[#2a2d3e] rounded-xl">
-          <span className="text-xs font-semibold uppercase tracking-wider text-gray-400">
-            Total Cards
-          </span>
-          <p className="text-2xl font-bold font-['Outfit'] text-white mt-1">{cards.length}</p>
-        </div>
-        <div className="p-4 bg-[#161923] border border-[#2a2d3e] rounded-xl">
-          <span className="text-xs font-semibold uppercase tracking-wider text-emerald-400">
-            Active Issued
-          </span>
-          <p className="text-2xl font-bold font-['Outfit'] text-emerald-400 mt-1">{activeCount}</p>
-        </div>
-        <div className="p-4 bg-[#161923] border border-[#2a2d3e] rounded-xl">
-          <span className="text-xs font-semibold uppercase tracking-wider text-rose-400">
-            Blocked Cards
-          </span>
-          <p className="text-2xl font-bold font-['Outfit'] text-rose-400 mt-1">{blockedCount}</p>
-        </div>
-        <div className="p-4 bg-[#161923] border border-[#2a2d3e] rounded-xl">
-          <span className="text-xs font-semibold uppercase tracking-wider text-amber-400">
-            Unassigned / Pool
-          </span>
-          <p className="text-2xl font-bold font-['Outfit'] text-amber-400 mt-1">
-            {unassignedCount}
-          </p>
-        </div>
+        <Stat
+          label="Total Cards"
+          value={cards.length}
+          icon={<FiCreditCard />}
+        />
+        <Stat
+          label="Active Issued"
+          value={activeCount}
+          icon={<FiCheckCircle />}
+        />
+        <Stat
+          label="Blocked Cards"
+          value={blockedCount}
+          icon={<FiLock />}
+        />
+        <Stat
+          label="Unassigned / Pool"
+          value={unassignedCount}
+          icon={<FiTag />}
+        />
       </div>
 
       {/* Two Column Grid: Assignment Form + Inventory Table */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
         {/* Left Column: Card Assignment Terminal */}
         <div className="lg:col-span-5 space-y-6">
-          <div className="p-6 bg-[#161923] border border-[#2a2d3e] rounded-2xl shadow-xl">
-            <div className="flex items-center justify-between pb-4 border-b border-[#2a2d3e]">
+          <Card variant="default" padding="lg" className="shadow-sv-lg">
+            <div className="flex items-center justify-between pb-4 border-b border-sv-border-subtle">
               <div className="flex items-center gap-2">
-                <span className="h-2 w-2 rounded-full bg-orange-500 animate-pulse" />
-                <h2 className="text-lg font-bold font-['Outfit'] text-white">Issue / Assign Card</h2>
+                <span className="h-2 w-2 rounded-full bg-sv-brand animate-pulse" />
+                <h2 className="text-lg font-bold font-sans text-sv-text">Issue / Assign Card</h2>
               </div>
-              <span className="text-xs text-gray-400 bg-[#1c1f2e] px-2 py-1 rounded border border-[#2a2d3e]">
+              <Badge variant="neutral" size="sm">
                 Hardware Ready
-              </span>
+              </Badge>
             </div>
 
             <form onSubmit={handleAssign} className="mt-5 space-y-5">
               {/* Step 1: Member Selection */}
               <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-2">
+                <label className="block text-xs font-semibold uppercase tracking-wider text-sv-text-secondary mb-2">
                   1. Select Member *
                 </label>
 
                 {selectedMember ? (
-                  <div className="p-3.5 bg-orange-500/10 border border-orange-500/30 rounded-xl flex items-center justify-between">
+                  <div className="p-3.5 bg-sv-brand-subtle border border-sv-brand/30 rounded-sv-md flex items-center justify-between">
                     <div className="flex items-center gap-3">
-                      <div className="p-2 bg-orange-500/20 text-orange-400 rounded-lg">
+                      <div className="p-2 bg-sv-brand-subtle text-sv-brand rounded-sv-sm">
                         <FiUser className="text-xl" />
                       </div>
                       <div>
-                        <p className="font-semibold text-white">{selectedMember.name}</p>
-                        <p className="text-xs text-gray-400">
+                        <p className="font-semibold text-sv-text">{selectedMember.name}</p>
+                        <p className="text-xs text-sv-text-muted">
                           {selectedMember.mobile} • Balance: ₹
                           {(selectedMember.walletBalance / 100).toFixed(2)}
                         </p>
                         {selectedMember.nfcCards && selectedMember.nfcCards.length > 0 && (
-                          <p className="text-[11px] text-amber-400 mt-0.5">
+                          <p className="text-[11px] text-sv-status-warning mt-0.5">
                             Already has card: {selectedMember.nfcCards[0].cardUid}
                           </p>
                         )}
                       </div>
                     </div>
-                    <button
+                    <Button
                       type="button"
+                      variant="secondary"
+                      size="sm"
                       onClick={() => {
                         setSelectedMember(null);
                         setMemberQuery("");
                       }}
-                      className="text-xs text-gray-400 hover:text-white px-2 py-1 rounded bg-[#1c1f2e] hover:bg-[#25283a] border border-[#2a2d3e]"
                     >
                       Change
-                    </button>
+                    </Button>
                   </div>
                 ) : (
                   <div className="relative">
                     <div className="relative">
-                      <FiSearch className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400" />
+                      <FiSearch className="absolute left-3.5 top-1/2 -translate-y-1/2 text-sv-text-muted" />
                       <input
                         type="text"
                         value={memberQuery}
                         onChange={(e) => setMemberQuery(e.target.value)}
                         placeholder="Search member by name or mobile..."
-                        className="w-full pl-10 pr-4 py-2.5 bg-[#1c1f2e] border border-[#2a2d3e] rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-orange-500 text-sm"
+                        className="w-full pl-10 pr-4 py-2.5 bg-sv-bg border border-sv-border rounded-sv-sm text-sv-text placeholder:text-sv-text-muted focus:outline-none focus:border-sv-brand text-sm"
                       />
                       {isSearchingMembers && (
-                        <FiRefreshCw className="absolute right-3.5 top-1/2 -translate-y-1/2 text-orange-500 animate-spin text-sm" />
+                        <FiRefreshCw className="absolute right-3.5 top-1/2 -translate-y-1/2 text-sv-brand animate-spin text-sm" />
                       )}
                     </div>
 
                     {/* Search Results Dropdown */}
                     {memberResults.length > 0 && (
-                      <div className="absolute left-0 right-0 top-full mt-1.5 max-h-56 overflow-y-auto bg-[#1c1f2e] border border-[#2a2d3e] rounded-xl shadow-2xl z-30 divide-y divide-[#2a2d3e]">
+                      <div className="absolute left-0 right-0 top-full mt-1.5 max-h-56 overflow-y-auto bg-sv-surface-raised border border-sv-border rounded-sv-md shadow-sv-xl z-30 divide-y divide-sv-border-subtle styled-scrollbar">
                         {memberResults.map((m) => (
                           <div
                             key={m.id}
@@ -394,18 +382,18 @@ export default function AssignClient({ initialCards }: { initialCards: any[] }) 
                               setMemberResults([]);
                               playNfcSound("beep");
                             }}
-                            className="p-3 hover:bg-[#25283a] cursor-pointer transition-colors flex items-center justify-between"
+                            className="p-3 hover:bg-sv-surface-hover cursor-pointer transition-colors flex items-center justify-between"
                           >
                             <div>
-                              <p className="text-sm font-semibold text-white">{m.name}</p>
-                              <p className="text-xs text-gray-400">{m.mobile}</p>
+                              <p className="text-sm font-semibold text-sv-text">{m.name}</p>
+                              <p className="text-xs text-sv-text-muted">{m.mobile}</p>
                             </div>
                             <div className="text-right">
-                              <span className="text-xs font-semibold text-emerald-400">
+                              <span className="text-xs font-semibold text-sv-status-success">
                                 ₹{(m.walletBalance / 100).toFixed(2)}
                               </span>
                               {m.nfcCards && m.nfcCards.length > 0 && (
-                                <span className="block text-[10px] text-amber-400">Card Active</span>
+                                <span className="block text-[10px] text-sv-status-warning">Card Active</span>
                               )}
                             </div>
                           </div>
@@ -419,7 +407,7 @@ export default function AssignClient({ initialCards }: { initialCards: any[] }) 
               {/* Step 2: Card UID Scan / Input */}
               <div>
                 <div className="flex items-center justify-between mb-2">
-                  <label className="block text-xs font-semibold uppercase tracking-wider text-gray-400">
+                  <label className="block text-xs font-semibold uppercase tracking-wider text-sv-text-secondary">
                     2. Card UID (Tap or Scan) *
                   </label>
                   <div className="flex items-center gap-3">
@@ -434,7 +422,7 @@ export default function AssignClient({ initialCards }: { initialCards: any[] }) 
                         setCardUid(mockUid);
                         playNfcSound("beep");
                       }}
-                      className="text-[11px] text-orange-400 hover:text-orange-300 flex items-center gap-1"
+                      className="text-[11px] text-sv-brand hover:underline flex items-center gap-1"
                     >
                       <FiZap /> Quick Gen
                     </button>
@@ -442,41 +430,34 @@ export default function AssignClient({ initialCards }: { initialCards: any[] }) 
                 </div>
 
                 <div className="relative">
-                  <FiCreditCard className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-base" />
+                  <FiCreditCard className="absolute left-3.5 top-1/2 -translate-y-1/2 text-sv-text-muted text-base" />
                   <input
                     ref={cardUidInputRef}
                     type="text"
                     value={cardUid}
                     onChange={(e) => handleCardUidChange(e.target.value)}
                     placeholder="e.g. 04A1B2C3 (Hardware scan auto-populates)"
-                    className="w-full pl-10 pr-4 py-2.5 bg-[#1c1f2e] border border-[#2a2d3e] rounded-xl text-white font-mono tracking-wider placeholder-gray-500 focus:outline-none focus:border-orange-500 text-sm uppercase"
+                    className="w-full pl-10 pr-4 py-2.5 bg-sv-bg border border-sv-border rounded-sv-sm text-sv-text font-mono tracking-wider placeholder:text-sv-text-muted focus:outline-none focus:border-sv-brand text-sm uppercase"
                   />
                 </div>
-                <p className="text-[11px] text-gray-500 mt-1.5">
+                <p className="text-[11px] text-sv-text-muted mt-1.5">
                   Tap card on USB Wedge reader or type hex UID. Automatically formatted to uppercase.
                 </p>
               </div>
 
               {/* Step 3: Optional Printed Label */}
               <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-2">
-                  Card Printed Serial / Label (Optional)
-                </label>
-                <div className="relative">
-                  <FiTag className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400" />
-                  <input
-                    type="text"
-                    value={cardLabel}
-                    onChange={(e) => setCardLabel(e.target.value)}
-                    placeholder="e.g. SV-1001"
-                    className="w-full pl-10 pr-4 py-2.5 bg-[#1c1f2e] border border-[#2a2d3e] rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-orange-500 text-sm"
-                  />
-                </div>
+                <Input
+                  label="Card Printed Serial / Label (Optional)"
+                  value={cardLabel}
+                  onChange={(e) => setCardLabel(e.target.value)}
+                  placeholder="e.g. SV-1001"
+                />
               </div>
 
               {/* Notes */}
-              <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-2">
+              <div className="space-y-1.5">
+                <label className="block text-xs font-semibold uppercase tracking-wider text-sv-text-secondary">
                   Assignment Notes (Optional)
                 </label>
                 <textarea
@@ -484,40 +465,33 @@ export default function AssignClient({ initialCards }: { initialCards: any[] }) 
                   onChange={(e) => setNotes(e.target.value)}
                   rows={2}
                   placeholder="e.g. VIP Club Member replacement card"
-                  className="w-full p-3 bg-[#1c1f2e] border border-[#2a2d3e] rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-orange-500 text-sm resize-none"
+                  className="w-full p-3 bg-sv-bg border border-sv-border rounded-sv-sm text-sv-text placeholder:text-sv-text-muted focus:outline-none focus:border-sv-brand text-sm resize-none"
                 />
               </div>
 
               {/* Submit Button */}
-              <button
+              <Button
                 type="submit"
+                variant="primary"
                 disabled={isSubmitting || !selectedMember || !cardUid}
-                className="w-full py-3 px-4 bg-orange-500 hover:bg-orange-600 disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold rounded-xl shadow-lg shadow-orange-500/20 flex items-center justify-center gap-2 transition-all font-['Outfit']"
+                isLoading={isSubmitting}
+                className="w-full"
+                leftIcon={<FiCheckCircle className="text-lg" />}
               >
-                {isSubmitting ? (
-                  <>
-                    <FiRefreshCw className="animate-spin" />
-                    <span>Writing Card Assignment...</span>
-                  </>
-                ) : (
-                  <>
-                    <FiCheckCircle className="text-lg" />
-                    <span>Assign Card to Member</span>
-                  </>
-                )}
-              </button>
+                Assign Card to Member
+              </Button>
             </form>
-          </div>
+          </Card>
         </div>
 
         {/* Right Column: Card Inventory Table */}
         <div className="lg:col-span-7 space-y-4">
-          <div className="bg-[#161923] border border-[#2a2d3e] rounded-2xl overflow-hidden shadow-xl">
+          <Card variant="default" padding="none" className="overflow-hidden shadow-sv-lg">
             {/* Table Header Controls */}
-            <div className="p-4 sm:p-5 border-b border-[#2a2d3e] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div className="p-4 sm:p-5 border-b border-sv-border-subtle flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-sv-surface-raised">
               <div>
-                <h3 className="font-['Outfit'] font-bold text-lg text-white">Card Inventory</h3>
-                <p className="text-xs text-gray-400">
+                <h3 className="font-sans font-bold text-lg text-sv-text">Card Inventory</h3>
+                <p className="text-xs text-sv-text-muted">
                   Showing {filteredCards.length} registered cards
                 </p>
               </div>
@@ -525,13 +499,13 @@ export default function AssignClient({ initialCards }: { initialCards: any[] }) 
               <div className="flex flex-wrap items-center gap-2.5">
                 {/* Search */}
                 <div className="relative">
-                  <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-xs" />
+                  <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-sv-text-muted text-xs" />
                   <input
                     type="text"
                     value={inventorySearch}
                     onChange={(e) => setInventorySearch(e.target.value)}
                     placeholder="Filter cards or members..."
-                    className="pl-8 pr-3 py-1.5 bg-[#1c1f2e] border border-[#2a2d3e] rounded-lg text-xs text-white placeholder-gray-500 focus:outline-none focus:border-orange-500 w-44 sm:w-52"
+                    className="pl-8 pr-3 py-1.5 bg-sv-bg border border-sv-border rounded-sv-sm text-xs text-sv-text placeholder:text-sv-text-muted focus:outline-none focus:border-sv-brand w-44 sm:w-52"
                   />
                 </div>
 
@@ -539,7 +513,7 @@ export default function AssignClient({ initialCards }: { initialCards: any[] }) 
                 <select
                   value={statusFilter}
                   onChange={(e) => setStatusFilter(e.target.value)}
-                  className="px-2.5 py-1.5 bg-[#1c1f2e] border border-[#2a2d3e] rounded-lg text-xs text-gray-300 focus:outline-none focus:border-orange-500"
+                  className="px-2.5 py-1.5 bg-sv-bg border border-sv-border rounded-sv-sm text-xs text-sv-text focus:outline-none focus:border-sv-brand"
                 >
                   <option value="ALL">All Status</option>
                   <option value="ACTIVE">Active</option>
@@ -550,9 +524,9 @@ export default function AssignClient({ initialCards }: { initialCards: any[] }) 
             </div>
 
             {/* Table */}
-            <div className="overflow-x-auto">
-              <table className="w-full text-left text-xs text-gray-300">
-                <thead className="bg-[#1c1f2e] text-gray-400 uppercase tracking-wider font-semibold border-b border-[#2a2d3e]">
+            <div className="overflow-x-auto styled-scrollbar">
+              <table className="w-full text-left text-xs text-sv-text-secondary">
+                <thead className="bg-sv-surface-raised text-sv-text-muted uppercase tracking-wider font-semibold border-b border-sv-border">
                   <tr>
                     <th className="py-3 px-4">Card UID / Label</th>
                     <th className="py-3 px-4">Assigned Member</th>
@@ -561,86 +535,93 @@ export default function AssignClient({ initialCards }: { initialCards: any[] }) 
                     <th className="py-3 px-4 text-right">Actions</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-[#2a2d3e]">
+                <tbody className="divide-y divide-sv-border-subtle bg-sv-surface">
                   {filteredCards.length === 0 ? (
                     <tr>
-                      <td colSpan={5} className="py-12 text-center text-gray-500">
+                      <td colSpan={5} className="py-12 text-center text-sv-text-muted">
                         No NFC cards found matching current filter.
                       </td>
                     </tr>
                   ) : (
                     filteredCards.map((c) => (
-                      <tr key={c.id} className="hover:bg-[#1c1f2e]/60 transition-colors">
+                      <tr key={c.id} className="hover:bg-sv-surface-hover/50 transition-colors">
                         <td className="py-3 px-4">
-                          <div className="font-mono font-bold text-white tracking-wider">
+                          <div className="font-mono font-bold text-sv-text tracking-wider">
                             {c.cardUid}
                           </div>
-                          {c.cardId && <div className="text-[11px] text-gray-400">{c.cardId}</div>}
+                          {c.cardId && <div className="text-[11px] text-sv-text-muted">{c.cardId}</div>}
                         </td>
                         <td className="py-3 px-4">
                           {c.member ? (
                             <div>
-                              <div className="font-medium text-white">{c.member.name}</div>
-                              <div className="text-[11px] text-gray-400">{c.member.mobile}</div>
+                              <div className="font-medium text-sv-text">{c.member.name}</div>
+                              <div className="text-[11px] text-sv-text-muted">{c.member.mobile}</div>
                             </div>
                           ) : (
-                            <span className="text-gray-500 italic">Unassigned</span>
+                            <span className="text-sv-text-muted italic">Unassigned</span>
                           )}
                         </td>
                         <td className="py-3 px-4">
-                          <span
-                            className={`inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider ${
+                          <Badge
+                            variant={
                               c.status === "ACTIVE"
-                                ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20"
+                                ? "success"
                                 : c.status === "BLOCKED"
-                                ? "bg-rose-500/10 text-rose-400 border border-rose-500/20"
-                                : "bg-gray-500/10 text-gray-400 border border-gray-500/20"
-                            }`}
+                                ? "error"
+                                : "neutral"
+                            }
+                            size="sm"
                           >
                             {c.status}
-                          </span>
+                          </Badge>
                         </td>
-                        <td className="py-3 px-4 text-gray-400">
+                        <td className="py-3 px-4 text-sv-text-muted">
                           <div>
                             {c.lastUsedAt
                               ? formatIST(c.lastUsedAt, "dd MMM yyyy, hh:mm a")
                               : formatIST(c.updatedAt, "dd MMM yyyy, hh:mm a")}
                           </div>
-                          <div className="text-[10px] text-gray-500">
+                          <div className="text-[10px] text-sv-text-muted">
                             {c._count?.transactions || 0} taps logged
                           </div>
                         </td>
                         <td className="py-3 px-4 text-right">
                           <div className="flex items-center justify-end gap-1.5">
                             {c.status === "ACTIVE" ? (
-                              <button
+                              <Button
+                                variant="danger"
+                                size="sm"
                                 onClick={() => handleBlock(c)}
                                 disabled={actionLoadingId === c.id}
                                 title="Block Card"
-                                className="p-1.5 text-rose-400 hover:bg-rose-500/10 rounded border border-rose-500/20 transition-colors"
+                                className="p-1.5"
                               >
                                 <FiLock />
-                              </button>
+                              </Button>
                             ) : c.status === "BLOCKED" ? (
-                              <button
+                              <Button
+                                variant="outline"
+                                size="sm"
                                 onClick={() => handleUnblock(c)}
                                 disabled={actionLoadingId === c.id}
                                 title="Unblock Card"
-                                className="p-1.5 text-emerald-400 hover:bg-emerald-500/10 rounded border border-emerald-500/20 transition-colors"
+                                className="p-1.5"
                               >
                                 <FiUnlock />
-                              </button>
+                              </Button>
                             ) : null}
 
                             {c.memberId && (
-                              <button
+                              <Button
+                                variant="secondary"
+                                size="sm"
                                 onClick={() => handleRevoke(c)}
                                 disabled={actionLoadingId === c.id}
                                 title="Unassign / Revoke Card"
-                                className="p-1.5 text-amber-400 hover:bg-amber-500/10 rounded border border-amber-500/20 transition-colors"
+                                className="p-1.5 text-sv-status-warning"
                               >
                                 <FiSlash />
-                              </button>
+                              </Button>
                             )}
                           </div>
                         </td>
@@ -650,7 +631,7 @@ export default function AssignClient({ initialCards }: { initialCards: any[] }) 
                 </tbody>
               </table>
             </div>
-          </div>
+          </Card>
         </div>
       </div>
     </div>

@@ -3,22 +3,32 @@
 import React, { useState, useRef } from "react";
 import toast from "react-hot-toast";
 import { saveAppVersion } from "./actions";
-import { FiUploadCloud, FiSmartphone, FiSave, FiExternalLink, FiDownload, FiX } from "react-icons/fi";
+import { FiUploadCloud, FiSmartphone, FiSave } from "react-icons/fi";
 import { FaApple } from "react-icons/fa";
+import { PageHeader, Card, Button, Input, Switch } from "@/components/admin/ui";
+
+interface AppVersionRecord {
+  platform: string;
+  version: string;
+  forceUpdate: boolean;
+  downloadUrl: string;
+  fileKey: string;
+  releaseNotes: string;
+}
 
 export default function AppVersionsClient({ initialVersions }: { initialVersions: any[] }) {
   const [loading, setLoading] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
 
-  const defaultAndroid = initialVersions.find(v => v.platform === 'android') || {
+  const defaultAndroid: AppVersionRecord = initialVersions.find(v => v.platform === 'android') || {
     platform: 'android', version: '1.0.0', forceUpdate: true, downloadUrl: '', fileKey: '', releaseNotes: ''
   };
-  const defaultIos = initialVersions.find(v => v.platform === 'ios') || {
+  const defaultIos: AppVersionRecord = initialVersions.find(v => v.platform === 'ios') || {
     platform: 'ios', version: '1.0.0', forceUpdate: true, downloadUrl: '', fileKey: '', releaseNotes: ''
   };
 
-  const [androidData, setAndroidData] = useState(defaultAndroid);
-  const [iosData, setIosData] = useState(defaultIos);
+  const [androidData, setAndroidData] = useState<AppVersionRecord>(defaultAndroid);
+  const [iosData, setIosData] = useState<AppVersionRecord>(defaultIos);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -54,9 +64,9 @@ export default function AppVersionsClient({ initialVersions }: { initialVersions
         xhr.open("PUT", signedUrl, true);
         xhr.setRequestHeader("Content-Type", type || 'application/vnd.android.package-archive');
 
-        xhr.upload.onprogress = (e) => {
-          if (e.lengthComputable) {
-            const percent = Math.round((e.loaded / e.total) * 100);
+        xhr.upload.onprogress = (event) => {
+          if (event.lengthComputable) {
+            const percent = Math.round((event.loaded / event.total) * 100);
             toast.loading(`Uploading APK... ${percent}%`, { id: toastId });
           }
         };
@@ -73,7 +83,7 @@ export default function AppVersionsClient({ initialVersions }: { initialVersions
         xhr.send(file);
       });
 
-      setAndroidData((prev: any) => ({ ...prev, downloadUrl: publicUrl, fileKey: key }));
+      setAndroidData((prev) => ({ ...prev, downloadUrl: publicUrl, fileKey: key }));
       toast.success("APK uploaded successfully!", { id: toastId });
     } catch (err: any) {
       console.error(err);
@@ -84,7 +94,7 @@ export default function AppVersionsClient({ initialVersions }: { initialVersions
     }
   };
 
-  const handleSave = async (platform: string, data: any) => {
+  const handleSave = async (platform: string, data: AppVersionRecord) => {
     setLoading(true);
     try {
       await saveAppVersion(data);
@@ -97,42 +107,49 @@ export default function AppVersionsClient({ initialVersions }: { initialVersions
   };
 
   return (
-    <div className="p-6 max-w-5xl mx-auto text-white">
-      <h1 className="text-3xl font-bold mb-8">App Versions Management</h1>
+    <div className="max-w-5xl mx-auto space-y-8 pb-20 font-sans">
+      <PageHeader
+        title="App Versions"
+        subtitle="Manage mobile application releases, downloads, and forced updates."
+        breadcrumbs={[
+          { label: "Dashboard", href: "/" },
+          { label: "Settings", href: "/settings" },
+          { label: "App Versions" },
+        ]}
+      />
 
       <div className="grid md:grid-cols-2 gap-8">
         {/* Android Card */}
-        <div className="bg-[#1e1e1e] p-6 rounded-2xl border border-[#333]">
-          <div className="flex items-center gap-3 mb-6">
-            <FiSmartphone className="text-emerald-500 text-2xl" />
-            <h2 className="text-xl font-bold">Android Settings</h2>
+        <Card variant="default" padding="lg">
+          <div className="flex items-center gap-3 mb-6 pb-4 border-b border-sv-border-subtle">
+            <div className="w-10 h-10 rounded-sv-md bg-sv-success-subtle text-sv-status-success flex items-center justify-center text-xl">
+              <FiSmartphone />
+            </div>
+            <div>
+              <h2 className="text-lg font-bold text-sv-text font-sans">Android Settings</h2>
+              <p className="text-xs text-sv-text-muted">Configure APK delivery and version controls</p>
+            </div>
           </div>
 
           <div className="space-y-4">
-            <div>
-              <label className="block text-sm text-gray-400 mb-1">Version Number</label>
-              <input
-                type="text"
-                value={androidData.version}
-                onChange={e => setAndroidData({ ...androidData, version: e.target.value })}
-                className="w-full bg-[#2a2a2a] p-3 rounded-lg border border-[#444] text-white"
-                placeholder="1.0.0"
-              />
-            </div>
+            <Input
+              label="Version Number"
+              value={androidData.version}
+              onChange={(e) => setAndroidData({ ...androidData, version: e.target.value })}
+              placeholder="1.0.0"
+            />
 
-            <div>
-              <label className="block text-sm text-gray-400 mb-1">Download URL (APK or PlayStore)</label>
-              <input
-                type="text"
-                value={androidData.downloadUrl}
-                onChange={e => setAndroidData({ ...androidData, downloadUrl: e.target.value })}
-                className="w-full bg-[#2a2a2a] p-3 rounded-lg border border-[#444] text-white"
-                placeholder="https://"
-              />
-            </div>
+            <Input
+              label="Download URL (APK or PlayStore)"
+              value={androidData.downloadUrl}
+              onChange={(e) => setAndroidData({ ...androidData, downloadUrl: e.target.value })}
+              placeholder="https://"
+            />
 
-            <div>
-              <label className="block text-sm text-gray-400 mb-1">Upload New APK to R2</label>
+            <div className="space-y-1.5">
+              <label className="block text-xs font-semibold text-sv-text-secondary select-none">
+                Upload New APK to R2
+              </label>
               <input
                 type="file"
                 accept=".apk"
@@ -143,113 +160,120 @@ export default function AppVersionsClient({ initialVersions }: { initialVersions
               />
               <label
                 htmlFor={isUploading ? undefined : "apk-upload"}
-                className={`flex items-center justify-center gap-2 w-full p-3 rounded-lg border border-dashed text-gray-300 transition-colors ${isUploading ? 'bg-[#333] border-[#555] cursor-not-allowed opacity-70' : 'bg-[#2a2a2a] hover:bg-[#333] border-[#555] cursor-pointer'}`}
+                className={`flex items-center justify-center gap-2.5 w-full p-3.5 rounded-sv-sm border border-dashed text-sm font-medium transition-colors ${
+                  isUploading
+                    ? "bg-sv-surface-raised border-sv-border cursor-not-allowed opacity-70 text-sv-text-muted"
+                    : "bg-sv-surface hover:bg-sv-surface-hover border-sv-border hover:border-sv-border-focus text-sv-text cursor-pointer"
+                }`}
               >
                 {isUploading ? (
                   <>
-                    <div className="animate-spin h-5 w-5 border-2 border-emerald-500 border-t-transparent rounded-full" />
-                    Uploading APK... Please wait
+                    <div className="animate-spin h-4 w-4 border-2 border-sv-brand border-t-transparent rounded-full" />
+                    <span className="text-sv-text-muted">Uploading APK... Please wait</span>
                   </>
                 ) : (
                   <>
-                    <FiUploadCloud />
-                    Click to upload APK
+                    <FiUploadCloud className="text-sv-brand text-lg" />
+                    <span>Click to upload APK</span>
                   </>
                 )}
               </label>
             </div>
 
-            <div className="flex items-center gap-3 py-2">
-              <input
-                type="checkbox"
-                checked={androidData.forceUpdate}
-                onChange={e => setAndroidData({ ...androidData, forceUpdate: e.target.checked })}
-                className="w-5 h-5 accent-emerald-500"
+            <div className="py-2">
+              <Switch
+                label="Force Update"
+                description="Require users to update before accessing the application."
+                checked={Boolean(androidData.forceUpdate)}
+                onChange={(checked) => setAndroidData({ ...androidData, forceUpdate: checked })}
               />
-              <label className="text-sm">Force Update</label>
             </div>
 
-            <div>
-              <label className="block text-sm text-gray-400 mb-1">Release Notes</label>
+            <div className="space-y-1.5">
+              <label className="block text-xs font-semibold text-sv-text-secondary select-none">
+                Release Notes
+              </label>
               <textarea
-                value={androidData.releaseNotes || ''}
-                onChange={e => setAndroidData({ ...androidData, releaseNotes: e.target.value })}
-                className="w-full bg-[#2a2a2a] p-3 rounded-lg border border-[#444] text-white h-24"
-                placeholder="What's new?"
+                value={androidData.releaseNotes || ""}
+                onChange={(e) => setAndroidData({ ...androidData, releaseNotes: e.target.value })}
+                className="w-full bg-sv-bg border border-sv-border focus:border-sv-brand focus:ring-1 focus:ring-sv-brand text-sv-text placeholder:text-sv-text-muted text-sm rounded-sv-sm p-3 outline-none h-24 resize-none transition-colors"
+                placeholder="What's new in this version?"
               />
             </div>
 
-            <button
-              onClick={() => handleSave('android', androidData)}
-              disabled={loading}
-              className="w-full mt-4 bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 px-4 rounded-lg flex items-center justify-center gap-2"
+            <Button
+              variant="primary"
+              size="lg"
+              className="w-full mt-2"
+              onClick={() => handleSave("android", androidData)}
+              isLoading={loading}
+              leftIcon={<FiSave />}
             >
-              <FiSave />
               Save Android Version
-            </button>
+            </Button>
           </div>
-        </div>
+        </Card>
 
         {/* iOS Card */}
-        <div className="bg-[#1e1e1e] p-6 rounded-2xl border border-[#333]">
-          <div className="flex items-center gap-3 mb-6">
-            <FaApple className="text-emerald-500 text-2xl" />
-            <h2 className="text-xl font-bold">iOS Settings</h2>
+        <Card variant="default" padding="lg">
+          <div className="flex items-center gap-3 mb-6 pb-4 border-b border-sv-border-subtle">
+            <div className="w-10 h-10 rounded-sv-md bg-sv-surface-raised text-sv-text flex items-center justify-center text-xl border border-sv-border">
+              <FaApple />
+            </div>
+            <div>
+              <h2 className="text-lg font-bold text-sv-text font-sans">iOS Settings</h2>
+              <p className="text-xs text-sv-text-muted">Configure App Store URL and version controls</p>
+            </div>
           </div>
 
           <div className="space-y-4">
-            <div>
-              <label className="block text-sm text-gray-400 mb-1">Version Number</label>
-              <input
-                type="text"
-                value={iosData.version}
-                onChange={e => setIosData({ ...iosData, version: e.target.value })}
-                className="w-full bg-[#2a2a2a] p-3 rounded-lg border border-[#444] text-white"
-                placeholder="1.0.0"
+            <Input
+              label="Version Number"
+              value={iosData.version}
+              onChange={(e) => setIosData({ ...iosData, version: e.target.value })}
+              placeholder="1.0.0"
+            />
+
+            <Input
+              label="App Store URL"
+              value={iosData.downloadUrl}
+              onChange={(e) => setIosData({ ...iosData, downloadUrl: e.target.value })}
+              placeholder="https://apps.apple.com/..."
+            />
+
+            <div className="py-2">
+              <Switch
+                label="Force Update"
+                description="Require users to update before accessing the application."
+                checked={Boolean(iosData.forceUpdate)}
+                onChange={(checked) => setIosData({ ...iosData, forceUpdate: checked })}
               />
             </div>
 
-            <div>
-              <label className="block text-sm text-gray-400 mb-1">App Store URL</label>
-              <input
-                type="text"
-                value={iosData.downloadUrl}
-                onChange={e => setIosData({ ...iosData, downloadUrl: e.target.value })}
-                className="w-full bg-[#2a2a2a] p-3 rounded-lg border border-[#444] text-white"
-                placeholder="https://apps.apple.com/..."
-              />
-            </div>
-
-            <div className="flex items-center gap-3 py-2">
-              <input
-                type="checkbox"
-                checked={iosData.forceUpdate}
-                onChange={e => setIosData({ ...iosData, forceUpdate: e.target.checked })}
-                className="w-5 h-5 accent-emerald-500"
-              />
-              <label className="text-sm">Force Update</label>
-            </div>
-
-            <div>
-              <label className="block text-sm text-gray-400 mb-1">Release Notes</label>
+            <div className="space-y-1.5">
+              <label className="block text-xs font-semibold text-sv-text-secondary select-none">
+                Release Notes
+              </label>
               <textarea
-                value={iosData.releaseNotes || ''}
-                onChange={e => setIosData({ ...iosData, releaseNotes: e.target.value })}
-                className="w-full bg-[#2a2a2a] p-3 rounded-lg border border-[#444] text-white h-24"
-                placeholder="What's new?"
+                value={iosData.releaseNotes || ""}
+                onChange={(e) => setIosData({ ...iosData, releaseNotes: e.target.value })}
+                className="w-full bg-sv-bg border border-sv-border focus:border-sv-brand focus:ring-1 focus:ring-sv-brand text-sv-text placeholder:text-sv-text-muted text-sm rounded-sv-sm p-3 outline-none h-24 resize-none transition-colors"
+                placeholder="What's new in this version?"
               />
             </div>
 
-            <button
-              onClick={() => handleSave('ios', iosData)}
-              disabled={loading}
-              className="w-full mt-4 bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 px-4 rounded-lg flex items-center justify-center gap-2"
+            <Button
+              variant="primary"
+              size="lg"
+              className="w-full mt-2"
+              onClick={() => handleSave("ios", iosData)}
+              isLoading={loading}
+              leftIcon={<FiSave />}
             >
-              <FiSave />
               Save iOS Version
-            </button>
+            </Button>
           </div>
-        </div>
+        </Card>
       </div>
     </div>
   );

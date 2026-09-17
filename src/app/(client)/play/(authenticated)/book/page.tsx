@@ -3,6 +3,7 @@ import { requireServerMember } from '@/lib/serverAuth';
 import { todayIST } from '@/lib/dateUtils';
 import { BookCourtClient } from './BookCourtClient';
 import { AvailabilityService } from '@/services/AvailabilityService';
+import { PlayEmptyState } from '@/components/play/ui/PlayEmptyState';
 
 export default async function BookCourtPage(props: {
   searchParams: Promise<{ date?: string; sportId?: string }>;
@@ -17,7 +18,14 @@ export default async function BookCourtPage(props: {
   });
 
   if (sports.length === 0) {
-    return <div className="p-10 text-center">No sports available.</div>;
+    return (
+      <div className="p-6 max-w-xl mx-auto">
+        <PlayEmptyState
+          title="No Sports Configured"
+          description="There are currently no bookable sports available. Please check back later."
+        />
+      </div>
+    );
   }
 
   const today = todayIST();

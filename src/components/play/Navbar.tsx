@@ -1,186 +1,223 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
-import { Search, LogOut, User, Users, Wallet, Menu, X, Home, CalendarDays, Ticket, Trophy, Award, Tag, CreditCard, UserCircle } from 'lucide-react';
-import { usePlayAuth } from './PlayAuthProvider';
 import { usePathname } from 'next/navigation';
+import {
+  Wallet,
+  LogOut,
+  User,
+  Users,
+  PlusCircle,
+  ChevronDown,
+} from 'lucide-react';
+import { usePlayAuth } from './PlayAuthProvider';
+import { PlayAvatar } from './ui/PlayAvatar';
+import { BottomNav } from './BottomNav';
 
-const navItems = [
-  { label: 'Home', href: '/play/dashboard', icon: Home },
-  { label: 'Book Court', href: '/play/book', icon: CalendarDays },
-  { label: 'My Bookings', href: '/play/bookings', icon: Ticket },
-  { label: 'Join Game', href: '/play/join-game', icon: Users },
-  { label: 'Tournaments', href: '/play/tournaments', icon: Trophy },
-  { label: 'Wallet', href: '/play/wallet', icon: Wallet },
-  { label: 'Leaderboard', href: '/play/leaderboard', icon: Award },
-  { label: 'Offers', href: '/play/offers', icon: Tag },
-  { label: 'Passes', href: '/play/memberships', icon: CreditCard },
-  { label: 'Profile', href: '/play/profile', icon: UserCircle },
+interface NavItem {
+  label: string;
+  href: string;
+}
+
+const desktopNavItems: NavItem[] = [
+  { label: 'Home', href: '/play/dashboard' },
+  { label: 'Book Court', href: '/play/book' },
+  { label: 'Bookings', href: '/play/bookings' },
+  { label: 'Games', href: '/play/join-game' },
+  { label: 'Passes', href: '/play/memberships' },
+  { label: 'Tournaments', href: '/play/tournaments' },
+  { label: 'Leaderboard', href: '/play/leaderboard' },
+  { label: 'Offers', href: '/play/offers' },
 ];
 
 export function Navbar() {
   const { member, familyMembers, switchMember, logout } = usePlayAuth();
   const [isProfileOpen, setIsProfileOpen] = useState(false);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const pathname = usePathname();
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  // Close dropdown on click outside
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setIsProfileOpen(false);
+      }
+    }
+    if (isProfileOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isProfileOpen]);
 
   return (
     <>
-      <header className="sticky top-0 z-50 w-full bg-[var(--play-surface)] shadow-sm border-b border-[var(--play-border)]">
-      <div className="flex h-16 items-center justify-between px-4 md:px-8">
-        <div className="flex items-center gap-4 md:gap-6">
-          <button 
-            className="md:hidden p-2 -ml-2 text-[var(--play-text)] hover:bg-[var(--play-surface-alt)] rounded-md"
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-          >
-            <Menu className="w-6 h-6" />
-          </button>
-          <Link href="/play/dashboard" className="flex items-center">
-            <img src="/long-logo.png" alt="Sportsvilla" className="h-6 w-auto object-contain" />
-          </Link>
-          <div className="hidden md:flex relative">
-            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--play-text-muted)]" />
-            <input
-              type="text"
-              placeholder="Search courts, tournaments..."
-              className="play-input pl-10 w-64 lg:w-96 bg-[var(--play-bg)] border-transparent focus:border-[var(--play-brand)]"
-            />
-          </div>
-        </div>
-
-        <div className="flex items-center gap-4">
-          <Link href="/play/wallet" className="hidden sm:flex items-center gap-2 play-badge bg-[var(--play-surface-alt)] border border-[var(--play-border)] py-1.5 px-3">
-            <Wallet className="h-4 w-4 text-[var(--play-brand)]" />
-            <span className="font-semibold text-[var(--play-text)]">₹{member?.walletBalance || 0}</span>
-          </Link>
-
-          <div className="relative">
-            <button
-              onClick={() => setIsProfileOpen(!isProfileOpen)}
-              className="flex h-10 w-10 items-center justify-center rounded-full bg-[var(--play-surface-alt)] border border-[var(--play-border)] hover:border-[var(--play-brand)] transition-colors overflow-hidden"
+      {/* Top Navbar */}
+      <header className="sticky top-0 z-40 w-full h-16 bg-play-surface/90 backdrop-blur-md border-b border-play-border">
+        <div className="max-w-7xl mx-auto h-full px-4 sm:px-6 lg:px-8 flex items-center justify-between">
+          {/* Left: Brand Logo */}
+          <div className="flex items-center shrink-0">
+            <Link
+              href="/play/dashboard"
+              className="flex items-center gap-2 group focus:outline-none"
+              aria-label="SportsVilla Home"
             >
-              {member?.avatarUrl ? (
-                <img src={member.avatarUrl} alt={member?.name} className="h-full w-full object-cover" />
-              ) : (
-                <User className="h-5 w-5 text-[var(--play-text-muted)]" />
-              )}
-            </button>
+              <img
+                src="/long-logo.png"
+                alt="SportsVilla"
+                className="h-7 w-auto object-contain transition-transform group-hover:scale-105"
+              />
+            </Link>
+          </div>
 
-            {isProfileOpen && (
-              <>
-                <div
-                  className="fixed inset-0 z-40"
-                  onClick={() => setIsProfileOpen(false)}
+          {/* Center: Desktop Navigation Links (>=768px) */}
+          <nav
+            className="hidden md:flex items-center space-x-1 lg:space-x-2"
+            aria-label="Desktop Navigation"
+          >
+            {desktopNavItems.map((item) => {
+              const isActive =
+                pathname === item.href ||
+                (item.href !== '/play/dashboard' &&
+                  pathname.startsWith(`${item.href}/`));
+
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className={`relative px-3 py-1.5 rounded-play-md font-play text-sm font-medium transition-all duration-150 ${
+                    isActive
+                      ? 'text-play-brand font-semibold bg-play-surface-subtle shadow-sm'
+                      : 'text-play-text-secondary hover:text-play-text hover:bg-play-surface-hover'
+                  }`}
+                >
+                  {item.label}
+                  {isActive && (
+                    <span className="absolute bottom-0 left-3 right-3 h-0.5 bg-play-brand rounded-full" />
+                  )}
+                </Link>
+              );
+            })}
+          </nav>
+
+          {/* Right: Wallet Balance Pill + Profile Dropdown */}
+          <div className="flex items-center space-x-3">
+            {/* Wallet Pill */}
+            <Link
+              href="/play/wallet"
+              className="flex items-center gap-2 bg-play-surface-subtle hover:bg-play-surface-hover border border-play-border px-3 py-1.5 rounded-play-pill text-xs font-semibold text-play-text transition-colors shadow-play-sm group"
+              title="View wallet & add funds"
+            >
+              <Wallet className="w-4 h-4 text-play-brand group-hover:scale-110 transition-transform" />
+              <span>₹{member?.walletBalance ?? 0}</span>
+              <PlusCircle className="w-3.5 h-3.5 text-play-brand/70 hover:text-play-brand" />
+            </Link>
+
+            {/* Profile Avatar & Dropdown */}
+            <div className="relative" ref={dropdownRef}>
+              <button
+                type="button"
+                onClick={() => setIsProfileOpen((prev) => !prev)}
+                className="flex items-center gap-1 p-0.5 rounded-full hover:ring-2 hover:ring-play-brand/30 transition-all focus:outline-none"
+                aria-expanded={isProfileOpen}
+                aria-label="User Profile Menu"
+              >
+                <PlayAvatar
+                  name={member?.name}
+                  src={member?.avatarUrl}
+                  size="sm"
+                  status="online"
                 />
-                <div className="absolute right-0 top-12 z-50 w-64 rounded-[var(--play-radius-md)] bg-[var(--play-surface)] p-2 shadow-lg border border-[var(--play-border)]">
-                  <div className="px-3 py-2 pb-3 border-b border-[var(--play-border)]">
-                    <p className="text-sm font-medium text-[var(--play-text)]">{member?.name || 'Guest'}</p>
-                    <p className="text-xs text-[var(--play-text-muted)]">{member?.email || member?.phone}</p>
+                <ChevronDown className="w-3.5 h-3.5 text-play-text-muted hidden sm:block" />
+              </button>
+
+              {/* Dropdown Menu */}
+              {isProfileOpen && (
+                <div className="absolute right-0 top-12 z-50 w-64 rounded-play-xl bg-play-surface p-2 shadow-play-xl border border-play-border animate-in fade-in-50 zoom-in-95 duration-100">
+                  <div className="px-3 py-2.5 border-b border-play-border">
+                    <p className="font-play text-sm font-bold text-play-text truncate">
+                      {member?.name || 'Player'}
+                    </p>
+                    <p className="text-xs text-play-text-muted truncate">
+                      {member?.email || member?.phone || ''}
+                    </p>
                   </div>
-                  
-                  {familyMembers.length > 0 && (
-                    <div className="py-2 border-b border-[var(--play-border)]">
-                      <p className="px-3 py-1 text-xs font-semibold text-[var(--play-text-light)] uppercase tracking-wider">Switch Profile</p>
+
+                  <div className="py-1">
+                    <Link
+                      href="/play/profile"
+                      onClick={() => setIsProfileOpen(false)}
+                      className="flex w-full items-center gap-2.5 rounded-play-md px-3 py-2 text-sm text-play-text hover:bg-play-surface-subtle transition-colors"
+                    >
+                      <User className="w-4 h-4 text-play-brand" />
+                      <span>My Profile</span>
+                    </Link>
+
+                    <Link
+                      href="/play/wallet"
+                      onClick={() => setIsProfileOpen(false)}
+                      className="flex w-full items-center gap-2.5 rounded-play-md px-3 py-2 text-sm text-play-text hover:bg-play-surface-subtle transition-colors"
+                    >
+                      <Wallet className="w-4 h-4 text-play-brand" />
+                      <span>Wallet & Transactions</span>
+                    </Link>
+                  </div>
+
+                  {/* Family Profile Switcher */}
+                  {familyMembers && familyMembers.length > 0 && (
+                    <div className="py-1.5 border-t border-play-border">
+                      <p className="px-3 py-1 text-[10px] font-semibold text-play-text-muted uppercase tracking-wider">
+                        Switch Member
+                      </p>
                       {familyMembers.map((famMember) => (
                         <button
                           key={famMember.id}
+                          type="button"
                           onClick={() => {
                             switchMember(famMember.id);
                             setIsProfileOpen(false);
                           }}
-                          className="flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm text-[var(--play-text)] hover:bg-[var(--play-surface-alt)]"
+                          className={`flex w-full items-center gap-2.5 rounded-play-md px-3 py-2 text-sm transition-colors text-left ${
+                            famMember.id === member?.id
+                              ? 'bg-play-surface-subtle font-semibold text-play-brand'
+                              : 'text-play-text hover:bg-play-surface-subtle'
+                          }`}
                         >
-                          <Users className="h-4 w-4 text-[var(--play-text-muted)]" />
+                          <Users className="w-4 h-4 text-play-text-muted shrink-0" />
                           <span className="truncate">{famMember.name}</span>
                         </button>
                       ))}
                     </div>
                   )}
-                  
-                  <div className="pt-2">
+
+                  {/* Logout Action */}
+                  <div className="pt-1.5 border-t border-play-border">
                     <button
+                      type="button"
                       onClick={() => {
                         logout();
                         setIsProfileOpen(false);
                       }}
-                      className="flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm text-[var(--play-error)] hover:bg-red-50"
+                      className="flex w-full items-center gap-2.5 rounded-play-md px-3 py-2 text-sm text-play-error hover:bg-play-error-subtle transition-colors"
                     >
-                      <LogOut className="h-4 w-4" />
-                      Logout
+                      <LogOut className="w-4 h-4" />
+                      <span>Log Out</span>
                     </button>
                   </div>
                 </div>
-              </>
-            )}
-          </div>
-        </div>
-      </div>
-    </header>
-      
-      {/* Mobile Menu Overlay */}
-      {isMobileMenuOpen && (
-        <div className="md:hidden fixed inset-0 z-[100] bg-black/50 backdrop-blur-sm">
-          <div className="absolute top-0 left-0 bottom-0 w-3/4 max-w-sm bg-[var(--play-surface)] shadow-2xl flex flex-col transform transition-transform duration-300">
-            <div className="p-4 border-b border-[var(--play-border)] flex justify-between items-center">
-              <span className="text-xl font-bold text-[var(--play-brand)]">Sportsvilla</span>
-              <button 
-                onClick={() => setIsMobileMenuOpen(false)}
-                className="p-2 text-[var(--play-text-muted)] hover:bg-[var(--play-surface-alt)] rounded-md"
-              >
-                <X className="w-6 h-6" />
-              </button>
-            </div>
-            
-            <div className="flex-1 overflow-y-auto p-4 space-y-1">
-              {navItems.map((item) => {
-                const isActive = pathname === item.href || pathname.startsWith(`${item.href}/`);
-                const Icon = item.icon;
-                return (
-                  <Link
-                    key={item.href}
-                    href={item.href}
-                    onClick={() => setIsMobileMenuOpen(false)}
-                    className={`flex items-center gap-3 px-4 py-3 rounded-[var(--play-radius-md)] text-base font-medium transition-colors ${
-                      isActive 
-                        ? 'bg-[var(--play-brand-light)] text-[var(--play-brand-dark)]' 
-                        : 'text-[var(--play-text)] hover:bg-[var(--play-surface-alt)]'
-                    }`}
-                  >
-                    <Icon className={`h-5 w-5 ${isActive ? 'text-[var(--play-brand)]' : 'text-[var(--play-text-light)]'}`} />
-                    {item.label}
-                  </Link>
-                );
-              })}
-            </div>
-            
-            <div className="p-4 border-t border-[var(--play-border)]">
-              <Link
-                href="/play/wallet"
-                onClick={() => setIsMobileMenuOpen(false)}
-                className="flex items-center justify-between px-4 py-3 bg-[var(--play-surface-alt)] rounded-[var(--play-radius-md)] text-[var(--play-text)] font-medium mb-4"
-              >
-                <div className="flex items-center gap-3">
-                  <Wallet className="h-5 w-5 text-[var(--play-brand)]" />
-                  Wallet Balance
-                </div>
-                <span className="font-bold">₹{member?.walletBalance || 0}</span>
-              </Link>
-              
-              <button
-                onClick={() => {
-                  logout();
-                  setIsMobileMenuOpen(false);
-                }}
-                className="flex w-full items-center gap-3 px-4 py-3 rounded-[var(--play-radius-md)] text-base font-medium text-[var(--play-error)] hover:bg-red-50"
-              >
-                <LogOut className="h-5 w-5" />
-                Logout
-              </button>
+              )}
             </div>
           </div>
         </div>
-      )}
+      </header>
+
+      {/* Mobile Bottom Tab Bar (<768px) */}
+      <BottomNav />
     </>
   );
 }

@@ -1,43 +1,20 @@
+import { Skeleton, SkeletonCard, TableSkeleton } from "@/components/admin/ui";
+
 export default function AdminLoading() {
   return (
-    <div className="animate-pulse w-full max-w-7xl mx-auto p-6 lg:p-8">
-      <div className="mb-10">
-        <div className="h-8 w-64 bg-[#1c1f2e] rounded-lg mb-3"></div>
-        <div className="h-4 w-96 bg-[#161923] rounded-lg"></div>
+    <div className="w-full max-w-7xl mx-auto p-6 lg:p-8 space-y-8 font-sans">
+      <div className="space-y-3 pb-6 border-b border-sv-border-subtle">
+        <Skeleton className="h-8 w-64 rounded-sv-md" />
+        <Skeleton className="h-4 w-96 rounded-sv-sm" />
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {[1, 2, 3].map((i) => (
-          <div key={i} className="bg-[#161923] border border-[#2a2d3e] rounded-xl p-6 flex items-center gap-5 shadow-lg">
-            <div className="w-12 h-12 rounded-xl bg-[#1c1f2e]"></div>
-            <div>
-              <div className="h-8 w-16 bg-[#1c1f2e] rounded-lg mb-2"></div>
-              <div className="h-4 w-24 bg-[#1c1f2e] rounded-lg"></div>
-            </div>
-          </div>
+          <SkeletonCard key={i} className="min-h-[120px]" />
         ))}
       </div>
 
-      <div className="bg-[#161923] border border-[#2a2d3e] rounded-xl p-6 shadow-lg">
-        <div className="h-6 w-48 bg-[#1c1f2e] rounded-lg mb-5"></div>
-        <div className="flex flex-col gap-3">
-          {[1, 2, 3].map((i) => (
-            <div key={i} className="flex justify-between items-center p-4 rounded-lg bg-[#1c1f2e] border border-[#2a2d3e]">
-              <div className="flex items-center gap-4">
-                <div className="w-10 h-10 rounded-full bg-[#2a2d3e]"></div>
-                <div>
-                  <div className="h-4 w-32 bg-[#2a2d3e] rounded-lg mb-2"></div>
-                  <div className="h-3 w-24 bg-[#2a2d3e] rounded-lg"></div>
-                </div>
-              </div>
-              <div className="text-right">
-                <div className="h-4 w-24 bg-[#2a2d3e] rounded-lg mb-2"></div>
-                <div className="h-3 w-20 bg-[#2a2d3e] rounded-lg"></div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
+      <TableSkeleton rows={4} columns={4} />
     </div>
   );
 }

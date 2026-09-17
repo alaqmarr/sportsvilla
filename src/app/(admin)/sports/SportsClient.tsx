@@ -1,8 +1,15 @@
 "use client";
-import { useState } from "react";
+import React, { useState } from "react";
 import { createSport, updateSport, deleteSport } from "./actions";
 import { useAlert } from "@/components/AlertProvider";
-import { FiTrash2, FiEdit2, FiPlus, FiX, FiActivity } from "react-icons/fi";
+import { FiTrash2, FiEdit2, FiPlus, FiActivity } from "react-icons/fi";
+import {
+  Card,
+  Button,
+  Badge,
+  PageHeader,
+  Modal,
+} from "@/components/admin/ui";
 
 interface TurfState {
   id?: string;
@@ -163,299 +170,349 @@ export default function SportsClient({
   }
 
   return (
-    <div>
-      <div className="flex justify-between items-center mb-8">
-        <div>
-          <h1 className="text-2xl font-bold font-['Outfit'] text-white">Sports Config</h1>
-          <p className="text-gray-500 mt-1 text-sm">Manage the different activities available at your facility.</p>
-        </div>
-        <button onClick={openCreateModal} className="bg-orange-500 hover:bg-orange-600 text-white rounded-lg px-5 py-2.5 text-sm font-semibold inline-flex items-center gap-2 transition-colors cursor-pointer border-none">
-          <FiPlus size={16} /> Add New Sport
-        </button>
-      </div>
+    <div className="space-y-6">
+      <PageHeader
+        title="Sports Config"
+        subtitle="Manage the different activities available at your facility."
+        actions={
+          <Button onClick={openCreateModal} leftIcon={<FiPlus size={16} />}>
+            Add New Sport
+          </Button>
+        }
+      />
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {sports.map(sport => (
-          <div key={sport.id} className="bg-[#161923] border border-[#2a2d3e] rounded-xl p-6">
-            <div className="flex justify-between items-start">
-              <div className="w-11 h-11 rounded-lg bg-orange-500/10 text-orange-400 flex items-center justify-center text-xl overflow-hidden">
-                {sport.iconPath ? (
-                  <img src={sport.iconPath} alt={sport.name} className="w-7 h-7 object-contain" />
-                ) : (
-                  <FiActivity />
-                )}
-              </div>
-              <div className="flex gap-2">
-                <button onClick={() => openEditModal(sport)} className="border border-[#2a2d3e] hover:bg-[#1c1f2e] text-gray-400 rounded-lg p-2 transition-colors cursor-pointer bg-transparent" title="Edit">
-                  <FiEdit2 size={14} />
-                </button>
-                <button onClick={() => handleDelete(sport.id)} className="border border-[#2a2d3e] hover:bg-red-500/10 text-red-400 rounded-lg p-2 transition-colors cursor-pointer bg-transparent" title="Delete">
-                  <FiTrash2 size={14} />
-                </button>
-              </div>
-            </div>
-            
+          <Card key={sport.id} variant="default" padding="lg" className="flex flex-col justify-between">
             <div>
-              <h3 className="text-lg font-semibold text-white mt-4">{sport.name}</h3>
-              {sport.rewardPointsPerCheckin > 0 && (
-                <div className="inline-block bg-orange-500/20 text-orange-400 text-xs font-bold px-2 py-0.5 rounded mt-2 uppercase tracking-wider">
-                  {sport.rewardPointsPerCheckin} Pts / Check-in
+              <div className="flex justify-between items-start">
+                <div className="w-11 h-11 rounded-sv-md bg-sv-brand-subtle text-sv-brand flex items-center justify-center text-xl overflow-hidden border border-sv-brand/20">
+                  {sport.iconPath ? (
+                    <img src={sport.iconPath} alt={sport.name} className="w-7 h-7 object-contain" />
+                  ) : (
+                    <FiActivity />
+                  )}
                 </div>
-              )}
-              <p className="text-sm text-gray-500 mt-2 line-clamp-2">
-                {sport.description || "No description provided for this sport."}
-              </p>
+                <div className="flex gap-2">
+                  <Button variant="outline" size="icon" onClick={() => openEditModal(sport)} title="Edit">
+                    <FiEdit2 size={14} />
+                  </Button>
+                  <Button variant="danger" size="icon" onClick={() => handleDelete(sport.id)} title="Delete">
+                    <FiTrash2 size={14} />
+                  </Button>
+                </div>
+              </div>
+              
+              <div>
+                <h3 className="text-lg font-bold text-sv-text mt-4">{sport.name}</h3>
+                {sport.rewardPointsPerCheckin > 0 && (
+                  <div className="mt-2">
+                    <Badge variant="brand" size="sm">
+                      {sport.rewardPointsPerCheckin} Pts / Check-in
+                    </Badge>
+                  </div>
+                )}
+                <p className="text-sm text-sv-text-muted mt-2 line-clamp-2">
+                  {sport.description || "No description provided for this sport."}
+                </p>
+              </div>
             </div>
-          </div>
+          </Card>
         ))}
       </div>
 
-      {showModal && (
-        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-[100]">
-          <div className="bg-[#161923] border border-[#2a2d3e] rounded-xl p-8 w-full max-w-lg shadow-2xl">
-            <div className="flex justify-between items-center mb-6">
-              <h2 className="text-xl font-bold font-['Outfit'] text-white">{editingId ? 'Edit Sport Details' : 'Add New Sport'}</h2>
-              <button className="text-gray-500 hover:text-white cursor-pointer bg-transparent border-none text-xl" onClick={() => setShowModal(false)}><FiX /></button>
-            </div>
+      <Modal
+        isOpen={showModal}
+        onClose={() => setShowModal(false)}
+        title={editingId ? 'Edit Sport Details' : 'Add New Sport'}
+        size="lg"
+      >
+        <div>
+          <div className="flex items-center gap-2 mb-6">
+            {[1, 2, 3].map((s) => (
+              <div
+                key={s}
+                className={`flex-1 h-1.5 rounded-full ${
+                  step >= s ? 'bg-sv-brand' : 'bg-sv-border'
+                }`}
+              />
+            ))}
+          </div>
+          <h3 className="text-base font-semibold text-sv-text mb-6">
+            {step === 1 && "Step 1: Core Details"}
+            {step === 2 && "Step 2: Time Settings"}
+            {step === 3 && "Step 3: Turfs Setup"}
+          </h3>
 
-            <div className="flex items-center gap-2 mb-6">
-              {[1, 2, 3].map((s) => (
-                <div key={s} className={`flex-1 h-1.5 rounded-full ${step >= s ? 'bg-orange-500' : 'bg-[#2a2d3e]'}`} />
-              ))}
-            </div>
-            <h3 className="text-lg font-semibold text-white mb-6">
-              {step === 1 && "Step 1: Core Details"}
-              {step === 2 && "Step 2: Time Settings"}
-              {step === 3 && "Step 3: Turfs Setup"}
-            </h3>
-
-            <form 
-              onSubmit={handleSubmit}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter') {
-                  e.preventDefault();
-                  if (step < 3) handleNextStep();
-                  // For step 3, we don't auto-submit on Enter to allow them to configure turfs safely
-                }
-              }}
-            >
-              <div className={step === 1 ? 'block' : 'hidden'}>
-                <div className="mb-5">
-                  <label className="block text-xs uppercase tracking-wider font-semibold text-gray-500 mb-2">Sport Name</label>
-                  <input type="text" className="w-full bg-[#0f1117] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white placeholder-gray-600 focus:border-orange-500/50 focus:ring-2 focus:ring-orange-500/20 focus:outline-none text-sm" value={name} onChange={e => setName(e.target.value)} placeholder="e.g. Badminton" />
+          <form 
+            onSubmit={handleSubmit}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                e.preventDefault();
+                if (step < 3) handleNextStep();
+              }
+            }}
+          >
+            <div className={step === 1 ? 'block' : 'hidden'}>
+              <div className="mb-5 space-y-1.5">
+                <label className="block text-xs uppercase tracking-wider font-semibold text-sv-text-secondary">Sport Name *</label>
+                <input
+                  type="text"
+                  className="w-full bg-sv-bg border border-sv-border rounded-sv-sm px-4 py-2.5 text-sv-text placeholder:text-sv-text-muted focus:border-sv-brand focus:ring-1 focus:ring-sv-brand outline-none text-sm"
+                  value={name}
+                  onChange={e => setName(e.target.value)}
+                  placeholder="e.g. Badminton"
+                />
+              </div>
+              <div className="mb-5 space-y-1.5">
+                <label className="block text-xs uppercase tracking-wider font-semibold text-sv-text-secondary">Icon</label>
+                <div 
+                  onClick={() => setShowIconModal(true)}
+                  className="w-full bg-sv-bg border border-sv-border hover:border-sv-brand/50 rounded-sv-sm px-4 py-2.5 cursor-pointer flex items-center justify-between transition-colors"
+                >
+                  <div className="flex items-center gap-3">
+                    {iconPath ? (
+                      <img src={iconPath} alt="Selected Icon" className="w-6 h-6 object-contain" />
+                    ) : (
+                      <FiActivity className="w-6 h-6 text-sv-text-muted" />
+                    )}
+                    <span className={iconPath ? "text-sv-text text-sm font-medium" : "text-sv-text-muted text-sm"}>
+                      {iconPath ? availableIcons.find(i => i.value === iconPath)?.label : "Select an Icon"}
+                    </span>
+                  </div>
+                  <span className="text-sv-brand text-xs font-semibold uppercase tracking-wider">Change</span>
                 </div>
-                <div className="mb-5">
-                  <label className="block text-xs uppercase tracking-wider font-semibold text-gray-500 mb-2">Icon</label>
-                  <div 
-                    onClick={() => setShowIconModal(true)}
-                    className="w-full bg-[#0f1117] border border-[#2a2d3e] hover:border-orange-500/50 rounded-lg px-4 py-3 cursor-pointer flex items-center justify-between transition-colors"
+              </div>
+              <div className="mb-5 space-y-1.5">
+                <label className="block text-xs uppercase tracking-wider font-semibold text-sv-text-secondary">Description</label>
+                <textarea
+                  className="w-full bg-sv-bg border border-sv-border rounded-sv-sm px-4 py-2.5 text-sv-text placeholder:text-sv-text-muted focus:border-sv-brand focus:ring-1 focus:ring-sv-brand outline-none text-sm"
+                  value={description}
+                  onChange={e => setDescription(e.target.value)}
+                  rows={3}
+                  placeholder="Optional details about this sport..."
+                />
+              </div>
+            </div>
+
+            <div className={step === 2 ? 'block' : 'hidden'}>
+              <div className="grid grid-cols-2 gap-4 mb-5">
+                <div className="space-y-1.5">
+                  <label className="block text-xs uppercase tracking-wider font-semibold text-sv-text-secondary">Open Time</label>
+                  <input
+                    type="time"
+                    className="w-full bg-sv-bg border border-sv-border rounded-sv-sm px-4 py-2.5 text-sv-text focus:border-sv-brand focus:ring-1 focus:ring-sv-brand outline-none text-sm [color-scheme:dark]"
+                    value={openTime}
+                    onChange={e => setOpenTime(e.target.value)}
+                  />
+                </div>
+                <div className="space-y-1.5">
+                  <label className="block text-xs uppercase tracking-wider font-semibold text-sv-text-secondary">Close Time</label>
+                  <input
+                    type="time"
+                    className="w-full bg-sv-bg border border-sv-border rounded-sv-sm px-4 py-2.5 text-sv-text focus:border-sv-brand focus:ring-1 focus:ring-sv-brand outline-none text-sm [color-scheme:dark]"
+                    value={closeTime}
+                    onChange={e => setCloseTime(e.target.value)}
+                  />
+                </div>
+              </div>
+              <div className="mb-5 space-y-1.5">
+                <label className="block text-xs uppercase tracking-wider font-semibold text-sv-text-secondary">Slot Duration (Minutes)</label>
+                <input
+                  type="number"
+                  min="15"
+                  step="15"
+                  className="w-full bg-sv-bg border border-sv-border rounded-sv-sm px-4 py-2.5 text-sv-text focus:border-sv-brand focus:ring-1 focus:ring-sv-brand outline-none text-sm"
+                  value={slotDurationMinutes}
+                  onChange={e => setSlotDurationMinutes(Number(e.target.value))}
+                />
+              </div>
+              <div className="mb-5 space-y-1.5">
+                <label className="block text-xs uppercase tracking-wider font-semibold text-sv-text-secondary">Reward Points Per Check-in</label>
+                <input
+                  type="number"
+                  min="0"
+                  className="w-full bg-sv-bg border border-sv-border rounded-sv-sm px-4 py-2.5 text-sv-text focus:border-sv-brand focus:ring-1 focus:ring-sv-brand outline-none text-sm"
+                  value={rewardPointsPerCheckin}
+                  onChange={e => setRewardPointsPerCheckin(Number(e.target.value))}
+                  placeholder="0"
+                />
+              </div>
+            </div>
+
+            <div className={step === 3 ? 'block' : 'hidden'}>
+              <div className="space-y-4 max-h-[45vh] overflow-y-auto pr-2 styled-scrollbar">
+                {turfStates.map((turf, index) => (
+                  <div
+                    key={index}
+                    className={`border rounded-sv-sm p-4 transition-colors ${
+                      turf.selected
+                        ? 'bg-sv-brand-subtle border-sv-brand/50'
+                        : 'bg-sv-bg border-sv-border'
+                    }`}
                   >
-                    <div className="flex items-center gap-3">
-                      {iconPath ? (
-                        <img src={iconPath} alt="Selected Icon" className="w-6 h-6 object-contain" />
-                      ) : (
-                        <FiActivity className="w-6 h-6 text-gray-500" />
-                      )}
-                      <span className={iconPath ? "text-white text-sm" : "text-gray-500 text-sm"}>
-                        {iconPath ? availableIcons.find(i => i.value === iconPath)?.label : "Select an Icon"}
-                      </span>
-                    </div>
-                    <span className="text-orange-500 text-xs font-semibold uppercase tracking-wider">Change</span>
-                  </div>
-                </div>
-                <div className="mb-5">
-                  <label className="block text-xs uppercase tracking-wider font-semibold text-gray-500 mb-2">Description</label>
-                  <textarea className="w-full bg-[#0f1117] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white placeholder-gray-600 focus:border-orange-500/50 focus:ring-2 focus:ring-orange-500/20 focus:outline-none text-sm" value={description} onChange={e => setDescription(e.target.value)} rows={3} placeholder="Optional details about this sport..." />
-                </div>
-              </div>
-
-              <div className={step === 2 ? 'block' : 'hidden'}>
-                <div className="grid grid-cols-2 gap-4 mb-5">
-                  <div>
-                    <label className="block text-xs uppercase tracking-wider font-semibold text-gray-500 mb-2">Open Time</label>
-                    <input type="time" className="w-full bg-[#0f1117] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white focus:border-orange-500/50 focus:ring-2 focus:ring-orange-500/20 focus:outline-none text-sm" value={openTime} onChange={e => setOpenTime(e.target.value)} />
-                  </div>
-                  <div>
-                    <label className="block text-xs uppercase tracking-wider font-semibold text-gray-500 mb-2">Close Time</label>
-                    <input type="time" className="w-full bg-[#0f1117] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white focus:border-orange-500/50 focus:ring-2 focus:ring-orange-500/20 focus:outline-none text-sm" value={closeTime} onChange={e => setCloseTime(e.target.value)} />
-                  </div>
-                </div>
-                <div className="mb-5">
-                  <label className="block text-xs uppercase tracking-wider font-semibold text-gray-500 mb-2">Slot Duration (Minutes)</label>
-                  <input type="number" min="15" step="15" className="w-full bg-[#0f1117] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white focus:border-orange-500/50 focus:ring-2 focus:ring-orange-500/20 focus:outline-none text-sm" value={slotDurationMinutes} onChange={e => setSlotDurationMinutes(Number(e.target.value))} />
-                </div>
-                <div className="mb-5">
-                  <label className="block text-xs uppercase tracking-wider font-semibold text-gray-500 mb-2">Reward Points Per Check-in</label>
-                  <input type="number" min="0" className="w-full bg-[#0f1117] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white focus:border-orange-500/50 focus:ring-2 focus:ring-orange-500/20 focus:outline-none text-sm" value={rewardPointsPerCheckin} onChange={e => setRewardPointsPerCheckin(Number(e.target.value))} placeholder="0" />
-                </div>
-              </div>
-
-              <div className={step === 3 ? 'block' : 'hidden'}>
-                <div className="space-y-4 max-h-[45vh] overflow-y-auto pr-2 custom-scrollbar">
-                  {turfStates.map((turf, index) => (
-                    <div key={index} className={`border rounded-lg p-4 transition-colors ${turf.selected ? 'bg-orange-500/10 border-orange-500/50' : 'bg-[#0f1117] border-[#2a2d3e]'}`}>
-                      <div className="flex items-center justify-between mb-3">
-                        <label className="flex items-center gap-3 cursor-pointer">
+                    <div className="flex items-center justify-between mb-3">
+                      <label className="flex items-center gap-3 cursor-pointer">
+                        <input 
+                          type="checkbox" 
+                          checked={turf.selected} 
+                          onChange={(e) => {
+                            const newTurfs = [...turfStates];
+                            newTurfs[index].selected = e.target.checked;
+                            setTurfStates(newTurfs);
+                          }}
+                          className="w-5 h-5 accent-orange-500" 
+                        />
+                        {turf.isNew ? (
                           <input 
-                            type="checkbox" 
-                            checked={turf.selected} 
+                            type="text" 
+                            value={turf.name || ""} 
                             onChange={(e) => {
                               const newTurfs = [...turfStates];
-                              newTurfs[index].selected = e.target.checked;
+                              newTurfs[index].name = e.target.value;
                               setTurfStates(newTurfs);
                             }}
-                            className="w-5 h-5 accent-orange-500" 
+                            placeholder="New Turf Name" 
+                            className="bg-sv-surface border border-sv-border rounded-sv-xs px-3 py-1 text-sm text-sv-text focus:outline-none focus:border-sv-brand"
                           />
-                          {turf.isNew ? (
-                            <input 
-                              type="text" 
-                              value={turf.name || ""} 
-                              onChange={(e) => {
-                                const newTurfs = [...turfStates];
-                                newTurfs[index].name = e.target.value;
-                                setTurfStates(newTurfs);
-                              }}
-                              placeholder="New Turf Name" 
-                              className="bg-[#161923] border border-[#2a2d3e] rounded px-3 py-1 text-sm text-white focus:outline-none focus:border-orange-500"
-                            />
-                          ) : (
-                            <span className="text-white font-semibold">{turf.name}</span>
-                          )}
-                        </label>
-                        {turf.isNew && (
-                           <button type="button" onClick={() => {
-                              const newTurfs = turfStates.filter((_, i) => i !== index);
-                              setTurfStates(newTurfs);
-                           }} className="text-red-400 hover:text-red-300">
-                             <FiTrash2 size={16} />
-                           </button>
+                        ) : (
+                          <span className="text-sv-text font-semibold">{turf.name}</span>
                         )}
-                      </div>
-                      
-                      {turf.selected && (
-                        <div className="grid grid-cols-3 gap-3 mt-3 pt-3 border-t border-[#2a2d3e]">
-                          <div>
-                            <label className="block text-[10px] uppercase tracking-wider text-gray-500 mb-1">Booking Price</label>
-                            <input 
-                              type="number" 
-                              min="0"
-                              value={turf.bookingPrice}
-                              onChange={(e) => {
-                                const newTurfs = [...turfStates];
-                                newTurfs[index].bookingPrice = Number(e.target.value);
-                                setTurfStates(newTurfs);
-                              }}
-                              className="w-full bg-[#161923] border border-[#2a2d3e] rounded px-3 py-2 text-sm text-white focus:outline-none focus:border-orange-500"
-                            />
-                          </div>
-                          <div>
-                            <label className="block text-[10px] uppercase tracking-wider text-gray-500 mb-1">Capacity/Slot</label>
-                            <input 
-                              type="number" 
-                              min="1"
-                              value={turf.capacityPerSlot}
-                              onChange={(e) => {
-                                const newTurfs = [...turfStates];
-                                newTurfs[index].capacityPerSlot = Number(e.target.value);
-                                setTurfStates(newTurfs);
-                              }}
-                              className="w-full bg-[#161923] border border-[#2a2d3e] rounded px-3 py-2 text-sm text-white focus:outline-none focus:border-orange-500"
-                            />
-                          </div>
-                          <div>
-                            <label className="block text-[10px] uppercase tracking-wider text-gray-500 mb-1">Icon</label>
-                            <select 
-                              value={turf.iconPath || ""}
-                              onChange={(e) => {
-                                const newTurfs = [...turfStates];
-                                newTurfs[index].iconPath = e.target.value;
-                                setTurfStates(newTurfs);
-                              }}
-                              className="w-full bg-[#161923] border border-[#2a2d3e] rounded px-3 py-2 text-sm text-white focus:outline-none focus:border-orange-500"
-                            >
-                              <option value="">None</option>
-                              {availableIcons.map(icon => (
-                                <option key={icon.value} value={icon.value}>{icon.label}</option>
-                              ))}
-                            </select>
-                          </div>
-                        </div>
+                      </label>
+                      {turf.isNew && (
+                         <button
+                           type="button"
+                           onClick={() => {
+                             const newTurfs = turfStates.filter((_, i) => i !== index);
+                             setTurfStates(newTurfs);
+                           }}
+                           className="text-sv-error-text hover:opacity-80"
+                         >
+                           <FiTrash2 size={16} />
+                         </button>
                       )}
                     </div>
-                  ))}
-                  
-                  <button 
-                    type="button" 
-                    onClick={() => {
-                      setTurfStates([...turfStates, {
-                        isNew: true,
-                        name: "New Turf",
-                        bookingPrice: 0,
-                        capacityPerSlot: 1,
-                        iconPath: "",
-                        selected: true
-                      }]);
-                    }}
-                    className="w-full py-3 border border-dashed border-[#2a2d3e] text-gray-400 rounded-lg hover:text-orange-400 hover:border-orange-400/50 transition-colors flex items-center justify-center gap-2"
-                  >
-                    <FiPlus size={16} /> Add New Turf
-                  </button>
-                </div>
-              </div>
-
-              <div className="flex justify-between mt-6 pt-4 border-t border-[#2a2d3e]">
-                {step > 1 ? (
-                  <button type="button" onClick={() => setStep(step - 1)} className="px-5 py-2.5 rounded-lg border border-[#2a2d3e] text-gray-400 hover:text-white hover:bg-[#1c1f2e] text-sm font-semibold transition-colors">
-                    Back
-                  </button>
-                ) : (
-                  <div />
-                )}
-                {step < 3 ? (
-                  <button 
-                    type="button" 
-                    onClick={handleNextStep} 
-                    className="bg-orange-500 hover:bg-orange-600 text-white rounded-lg px-5 py-2.5 text-sm font-semibold transition-colors border-none cursor-pointer"
-                  >
-                    Next Step
-                  </button>
-                ) : (
-                  <button type="submit" className="bg-orange-500 hover:bg-orange-600 text-white rounded-lg px-5 py-2.5 text-sm font-semibold transition-colors border-none cursor-pointer" disabled={loading}>
-                    {loading ? "Saving..." : "Save Sport"}
-                  </button>
-                )}
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
-
-      {showIconModal && (
-        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-[110]" onClick={() => setShowIconModal(false)}>
-          <div className="bg-[#161923] border border-[#2a2d3e] rounded-xl p-6 w-full max-w-lg shadow-2xl" onClick={e => e.stopPropagation()}>
-            <div className="flex justify-between items-center mb-6">
-              <h3 className="text-lg font-bold text-white">Select Icon</h3>
-              <button type="button" className="text-gray-500 hover:text-white cursor-pointer bg-transparent border-none text-xl" onClick={() => setShowIconModal(false)}><FiX /></button>
-            </div>
-            <div className="grid grid-cols-3 sm:grid-cols-4 gap-4 max-h-[60vh] overflow-y-auto pr-2 custom-scrollbar">
-              {availableIcons.map(icon => (
-                <div 
-                  key={icon.value}
-                  onClick={() => { setIconPath(icon.value); setShowIconModal(false); }}
-                  className={`flex flex-col items-center justify-center gap-3 p-4 rounded-xl cursor-pointer border transition-all ${iconPath === icon.value ? 'bg-orange-500/10 border-orange-500 text-orange-400' : 'bg-[#0f1117] border-[#2a2d3e] hover:border-orange-500/50 text-gray-400 hover:text-white'}`}
+                    
+                    {turf.selected && (
+                      <div className="grid grid-cols-3 gap-3 mt-3 pt-3 border-t border-sv-border">
+                        <div>
+                          <label className="block text-[10px] uppercase tracking-wider text-sv-text-muted mb-1">Booking Price</label>
+                          <input 
+                            type="number" 
+                            min="0"
+                            value={turf.bookingPrice}
+                            onChange={(e) => {
+                              const newTurfs = [...turfStates];
+                              newTurfs[index].bookingPrice = Number(e.target.value);
+                              setTurfStates(newTurfs);
+                            }}
+                            className="w-full bg-sv-surface border border-sv-border rounded-sv-xs px-3 py-2 text-sm text-sv-text focus:outline-none focus:border-sv-brand"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-[10px] uppercase tracking-wider text-sv-text-muted mb-1">Capacity/Slot</label>
+                          <input 
+                            type="number" 
+                            min="1"
+                            value={turf.capacityPerSlot}
+                            onChange={(e) => {
+                              const newTurfs = [...turfStates];
+                              newTurfs[index].capacityPerSlot = Number(e.target.value);
+                              setTurfStates(newTurfs);
+                            }}
+                            className="w-full bg-sv-surface border border-sv-border rounded-sv-xs px-3 py-2 text-sm text-sv-text focus:outline-none focus:border-sv-brand"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-[10px] uppercase tracking-wider text-sv-text-muted mb-1">Icon</label>
+                          <select 
+                            value={turf.iconPath || ""}
+                            onChange={(e) => {
+                              const newTurfs = [...turfStates];
+                              newTurfs[index].iconPath = e.target.value;
+                              setTurfStates(newTurfs);
+                            }}
+                            className="w-full bg-sv-surface border border-sv-border rounded-sv-xs px-3 py-2 text-sm text-sv-text focus:outline-none focus:border-sv-brand"
+                          >
+                            <option value="">None</option>
+                            {availableIcons.map(icon => (
+                              <option key={icon.value} value={icon.value}>{icon.label}</option>
+                            ))}
+                          </select>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                ))}
+                
+                <button 
+                  type="button" 
+                  onClick={() => {
+                    setTurfStates([...turfStates, {
+                      isNew: true,
+                      name: "New Turf",
+                      bookingPrice: 0,
+                      capacityPerSlot: 1,
+                      iconPath: "",
+                      selected: true
+                    }]);
+                  }}
+                  className="w-full py-3 border border-dashed border-sv-border text-sv-text-muted rounded-sv-sm hover:text-sv-brand hover:border-sv-brand/50 transition-colors flex items-center justify-center gap-2"
                 >
-                  {icon.value ? (
-                    <img src={icon.value} alt={icon.label} className="w-8 h-8 object-contain" />
-                  ) : (
-                    <FiActivity className="w-8 h-8" />
-                  )}
-                  <span className="text-[10px] uppercase tracking-wider text-center font-semibold leading-tight">{icon.label}</span>
-                </div>
-              ))}
+                  <FiPlus size={16} /> Add New Turf
+                </button>
+              </div>
             </div>
-          </div>
+
+            <div className="flex justify-between mt-6 pt-4 border-t border-sv-border">
+              {step > 1 ? (
+                <Button type="button" variant="secondary" onClick={() => setStep(step - 1)}>
+                  Back
+                </Button>
+              ) : (
+                <div />
+              )}
+              {step < 3 ? (
+                <Button type="button" variant="primary" onClick={handleNextStep}>
+                  Next Step
+                </Button>
+              ) : (
+                <Button type="submit" variant="primary" isLoading={loading}>
+                  Save Sport
+                </Button>
+              )}
+            </div>
+          </form>
         </div>
-      )}
+      </Modal>
+
+      <Modal
+        isOpen={showIconModal}
+        onClose={() => setShowIconModal(false)}
+        title="Select Icon"
+        size="md"
+      >
+        <div className="grid grid-cols-3 sm:grid-cols-4 gap-4 max-h-[60vh] overflow-y-auto pr-2 styled-scrollbar">
+          {availableIcons.map(icon => (
+            <div 
+              key={icon.value}
+              onClick={() => { setIconPath(icon.value); setShowIconModal(false); }}
+              className={`flex flex-col items-center justify-center gap-3 p-4 rounded-sv-md cursor-pointer border transition-all ${
+                iconPath === icon.value
+                  ? 'bg-sv-brand-subtle border-sv-brand text-sv-brand'
+                  : 'bg-sv-bg border-sv-border hover:border-sv-brand/50 text-sv-text-muted hover:text-sv-text'
+              }`}
+            >
+              {icon.value ? (
+                <img src={icon.value} alt={icon.label} className="w-8 h-8 object-contain" />
+              ) : (
+                <FiActivity className="w-8 h-8" />
+              )}
+              <span className="text-[10px] uppercase tracking-wider text-center font-semibold leading-tight">{icon.label}</span>
+            </div>
+          ))}
+        </div>
+      </Modal>
     </div>
   );
 }

@@ -1,8 +1,8 @@
 "use client";
 
 import React, { ReactNode } from "react";
-import { NfcProvider, useNfc } from "@/components/nfc/NfcProvider";
-import { FiRadio, FiAlertTriangle, FiSmartphone, FiHardDrive } from "react-icons/fi";
+import { useNfc } from "@/components/nfc/NfcProvider";
+import { FiRadio, FiAlertTriangle, FiHardDrive } from "react-icons/fi";
 import { useAlert } from "@/components/AlertProvider";
 
 function FloatingStatusBar() {
@@ -19,7 +19,7 @@ function FloatingStatusBar() {
     <div className="sticky top-0 z-50 w-full">
       {/* If Web NFC is unsupported, just show a subtle banner */}
       {!isWebNfcSupported && (
-        <div className="bg-[#1c1f2e] border-b border-[#2a2d3e] px-4 py-2 flex items-center justify-center gap-2 text-xs text-slate-400">
+        <div className="bg-sv-surface-raised border-b border-sv-border px-4 py-2 flex items-center justify-center gap-2 text-xs text-sv-text-muted">
           <FiHardDrive /> Web NFC unsupported on this device. Using USB Wedge Scanner.
         </div>
       )}
@@ -33,7 +33,7 @@ function FloatingStatusBar() {
           </span>
           <button
             onClick={enableWebNfc}
-            className="ml-2 px-3 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-400 text-amber-950 font-bold text-xs flex items-center gap-1.5 transition"
+            className="ml-2 px-3 py-1.5 rounded-sv-sm bg-amber-500 hover:bg-amber-400 text-amber-950 font-bold text-xs flex items-center gap-1.5 transition"
           >
             <FiRadio /> Tap to Enable NFC Permission
           </button>

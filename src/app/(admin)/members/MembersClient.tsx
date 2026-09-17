@@ -5,12 +5,13 @@ import { useSearchParams, useRouter } from "next/navigation";
 import { createMember, updateMember, deleteMember, assignPlan, createFamily, updateMemberMembership, deleteMemberMembership, resetWallet } from "./actions";
 import { useAlert } from "@/components/AlertProvider";
 import { motion, AnimatePresence } from "framer-motion";
-import { TableSkeleton } from "@/components/ui/Skeleton";
 
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import QRCodeLib from "qrcode";
 import { FiTrash2, FiEdit2, FiPlus, FiX, FiDownload, FiImage, FiMessageCircle, FiUserCheck, FiUsers, FiFileText, FiRefreshCcw } from "react-icons/fi";
+import { PageHeader, Button, Badge, Card, EmptyState, Avatar, TableSkeleton } from "@/components/admin/ui";
+import { rawAdminTokens } from "@/lib/tokens";
 
 export default function MembersClient({ initialMembers, plans, turfs = [] }: { initialMembers: any[], plans: any[], turfs?: any[] }) {
   const { showAlert, showConfirm } = useAlert();
@@ -390,49 +391,97 @@ export default function MembersClient({ initialMembers, plans, turfs = [] }: { i
   }
 
   return (
-    <div>
-      <div className="flex justify-between items-start mb-6">
-        <div>
-          <h1 className="text-2xl font-bold font-['Outfit'] text-white">Members Directory</h1>
-          <div className="flex gap-4 mt-4 border-b border-[#2a2d3e]">
-            <button onClick={() => setActiveTab('MEMBERS')} className={`pb-3 px-2 text-sm font-semibold transition-colors border-b-2 ${activeTab === 'MEMBERS' ? 'border-orange-500 text-orange-400' : 'border-transparent text-gray-500 hover:text-gray-300'}`}>All Members</button>
-            <button onClick={() => setActiveTab('FAMILIES')} className={`pb-3 px-2 text-sm font-semibold transition-colors border-b-2 ${activeTab === 'FAMILIES' ? 'border-orange-500 text-orange-400' : 'border-transparent text-gray-500 hover:text-gray-300'}`}>Families</button>
+    <div className="space-y-6 pb-12 font-sans text-sv-text">
+      <PageHeader
+        title="Members Directory"
+        subtitle="Manage member profiles, family accounts, digital ID cards, and subscription plans"
+        breadcrumbs={[
+          { label: "Dashboard", href: "/" },
+          { label: "Members" },
+        ]}
+        actions={
+          <div className="flex items-center gap-2.5 flex-wrap">
+            <Button
+              variant="outline"
+              size="sm"
+              leftIcon={<FiFileText />}
+              onClick={handleExportCSV}
+            >
+              Export CSV
+            </Button>
+            <Button
+              variant="secondary"
+              size="sm"
+              leftIcon={<FiPlus />}
+              onClick={openAssignModal}
+            >
+              Assign Plan
+            </Button>
+            {activeTab === 'FAMILIES' ? (
+              <Button
+                variant="primary"
+                size="sm"
+                leftIcon={<FiUsers />}
+                onClick={openFamilyModal}
+              >
+                Setup Family
+              </Button>
+            ) : (
+              <Button
+                variant="primary"
+                size="sm"
+                leftIcon={<FiUserCheck />}
+                onClick={openCreateModal}
+              >
+                Register Member
+              </Button>
+            )}
           </div>
-        </div>
-        <div className="flex gap-3">
-          <button onClick={handleExportCSV} className="bg-gray-800 hover:bg-gray-700 text-white border border-gray-600 rounded-lg px-4 py-2.5 text-sm font-semibold inline-flex items-center gap-2 transition-colors cursor-pointer">
-            <FiFileText /> Export CSV
-          </button>
-          <button onClick={openAssignModal} className="bg-emerald-500 hover:bg-emerald-600 text-white rounded-lg px-5 py-2.5 text-sm font-semibold inline-flex items-center gap-2 transition-colors cursor-pointer border-none">
-            <FiPlus /> Assign Plan
-          </button>
-          {activeTab === 'FAMILIES' ? (
-            <button onClick={openFamilyModal} className="bg-orange-500 hover:bg-orange-600 text-white rounded-lg px-5 py-2.5 text-sm font-semibold inline-flex items-center gap-2 transition-colors cursor-pointer border-none">
-              <FiUsers /> Setup Family
-            </button>
-          ) : (
-            <button onClick={openCreateModal} className="bg-orange-500 hover:bg-orange-600 text-white rounded-lg px-5 py-2.5 text-sm font-semibold inline-flex items-center gap-2 transition-colors cursor-pointer border-none">
-              <FiUserCheck /> Register Member
-            </button>
-          )}
-        </div>
-      </div>
+        }
+      />
 
-      <div className="mb-6">
-        <input 
-          type="text" 
-          placeholder="Search members by name, mobile, or ID..." 
-          className="w-full sm:max-w-md bg-[#13151f] border border-[#2a2d3e] rounded-lg px-4 py-2.5 text-white placeholder-gray-600 focus:border-orange-500 focus:ring-2 focus:ring-orange-500 focus:outline-none text-sm transition-all"
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-        />
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div className="flex gap-1.5 p-1 bg-sv-surface border border-sv-border rounded-sv-md">
+          <button
+            type="button"
+            onClick={() => setActiveTab('MEMBERS')}
+            className={`px-3 py-1.5 text-xs font-semibold rounded-sv-xs transition-colors ${
+              activeTab === 'MEMBERS'
+                ? 'bg-sv-brand text-white shadow-sv-sm'
+                : 'text-sv-text-secondary hover:text-sv-text'
+            }`}
+          >
+            All Members ({members.length})
+          </button>
+          <button
+            type="button"
+            onClick={() => setActiveTab('FAMILIES')}
+            className={`px-3 py-1.5 text-xs font-semibold rounded-sv-xs transition-colors ${
+              activeTab === 'FAMILIES'
+                ? 'bg-sv-brand text-white shadow-sv-sm'
+                : 'text-sv-text-secondary hover:text-sv-text'
+            }`}
+          >
+            Families
+          </button>
+        </div>
+
+        <div className="w-full sm:max-w-md">
+          <input 
+            type="text" 
+            placeholder="Search members by name, mobile, or ID..." 
+            className="w-full bg-sv-bg border border-sv-border rounded-sv-sm px-3.5 py-2 text-sv-text placeholder:text-sv-text-muted text-sm focus:border-sv-brand focus:ring-1 focus:ring-sv-brand outline-none transition-colors"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+        </div>
       </div>
 
       {activeTab === 'MEMBERS' && (
         !isMounted ? (
-          <TableSkeleton rows={5} cols={5} />
+          <TableSkeleton rows={5} columns={5} />
         ) : filteredMembers.length === 0 ? (
-          <div className="bg-[#0f1117] border border-[#2a2d3e] rounded-2xl p-16 text-center flex flex-col items-center">
+          <div className="bg-sv-bg border border-sv-border rounded-2xl p-16 text-center flex flex-col items-center">
             <div className="w-16 h-16 rounded-full bg-orange-500/10 text-orange-400 flex items-center justify-center text-3xl mb-6"><FiUserCheck /></div>
             <h3 className="text-2xl font-bold text-white mb-2">No Members Found</h3>
             <button onClick={openCreateModal} className="bg-orange-500 hover:bg-orange-600 text-white rounded-lg px-5 py-2.5 text-sm font-semibold inline-flex items-center gap-2 transition-colors cursor-pointer border-none mt-4">
@@ -440,23 +489,23 @@ export default function MembersClient({ initialMembers, plans, turfs = [] }: { i
             </button>
           </div>
         ) : (
-          <div className="bg-[#0f1117] border border-[#2a2d3e] rounded-2xl overflow-hidden">
+          <div className="bg-sv-bg border border-sv-border rounded-2xl overflow-hidden">
             <div className="overflow-x-auto max-h-[60vh] overflow-y-auto">
               <table className="w-full min-w-[800px] relative">
-                <thead className="sticky top-0 bg-[#0f1117] z-10">
+                <thead className="sticky top-0 bg-sv-bg z-10">
                   <tr>
-                    <th className="bg-[#13151f] text-gray-500 text-xs uppercase tracking-wider font-semibold px-6 py-4 text-left border-b border-[#2a2d3e] w-[30%]">Member Profile</th>
-                    <th className="bg-[#13151f] text-gray-500 text-xs uppercase tracking-wider font-semibold px-6 py-4 text-left border-b border-[#2a2d3e] w-[25%]">Contact details</th>
-                    <th className="bg-[#13151f] text-gray-500 text-xs uppercase tracking-wider font-semibold px-6 py-4 text-left border-b border-[#2a2d3e] w-[30%]">Active Plans</th>
-                    <th className="bg-[#13151f] text-gray-500 text-xs uppercase tracking-wider font-semibold px-6 py-4 text-right border-b border-[#2a2d3e] w-[15%]">Actions</th>
+                    <th className="bg-sv-surface text-gray-500 text-xs uppercase tracking-wider font-semibold px-6 py-4 text-left border-b border-sv-border w-[30%]">Member Profile</th>
+                    <th className="bg-sv-surface text-gray-500 text-xs uppercase tracking-wider font-semibold px-6 py-4 text-left border-b border-sv-border w-[25%]">Contact details</th>
+                    <th className="bg-sv-surface text-gray-500 text-xs uppercase tracking-wider font-semibold px-6 py-4 text-left border-b border-sv-border w-[30%]">Active Plans</th>
+                    <th className="bg-sv-surface text-gray-500 text-xs uppercase tracking-wider font-semibold px-6 py-4 text-right border-b border-sv-border w-[15%]">Actions</th>
                   </tr>
                 </thead>
                 <tbody>
                   {filteredMembers.slice((page - 1) * itemsPerPage, page * itemsPerPage).map(member => (
-                    <tr key={member.id} className="hover:bg-[#13151f] transition-colors">
-                      <td className="px-6 py-5 text-sm border-b border-[#2a2d3e]">
+                    <tr key={member.id} className="hover:bg-sv-surface transition-colors">
+                      <td className="px-6 py-5 text-sm border-b border-sv-border">
                         <div className="flex items-center gap-4">
-                          <div className="w-10 h-10 rounded-full bg-orange-500/10 text-orange-400 font-semibold flex items-center justify-center font-['Outfit'] text-base">
+                          <div className="w-10 h-10 rounded-full bg-orange-500/10 text-orange-400 font-semibold flex items-center justify-center font-sans text-base">
                             {member.name.charAt(0)}
                           </div>
                           <div>
@@ -466,16 +515,16 @@ export default function MembersClient({ initialMembers, plans, turfs = [] }: { i
                           </div>
                         </div>
                       </td>
-                      <td className="px-6 py-5 text-sm border-b border-[#2a2d3e]">
+                      <td className="px-6 py-5 text-sm border-b border-sv-border">
                         <div className="text-sm text-gray-300">{member.mobile}</div>
                         <div className="text-xs text-gray-500 mt-0.5">{member.email || 'No email provided'}</div>
                       </td>
-                      <td className="px-6 py-5 text-sm border-b border-[#2a2d3e]">
+                      <td className="px-6 py-5 text-sm border-b border-sv-border">
                         <div className="flex flex-col gap-2">
                           {member.memberships?.length ? member.memberships.map((m: any) => {
                             const isActive = m.status === 'ACTIVE' && new Date(m.endDate) >= new Date();
                             return (
-                              <div key={m.id} className={`text-xs py-1 px-3 rounded-md flex justify-between items-center ${isActive ? 'bg-emerald-500/10 border border-emerald-500/20 text-emerald-400' : 'bg-[#13151f] border border-[#2a2d3e] text-gray-500 opacity-60'}`}>
+                              <div key={m.id} className={`text-xs py-1 px-3 rounded-md flex justify-between items-center ${isActive ? 'bg-emerald-500/10 border border-emerald-500/20 text-emerald-400' : 'bg-sv-surface border border-sv-border text-gray-500 opacity-60'}`}>
                                 <div className="flex flex-col">
                                   <span className="font-bold tracking-wide uppercase">{m.membershipPlan?.name} ({m.membershipPlan?.sport?.name})</span>
                                   {(m.turf || m.timeSlot) && (
@@ -496,12 +545,12 @@ export default function MembersClient({ initialMembers, plans, turfs = [] }: { i
                           }) : <span className="text-xs text-red-400 font-semibold bg-red-500/10 border border-red-500/20 px-3 py-1 rounded-md inline-block">No Active Plans</span>}
                         </div>
                       </td>
-                      <td className="px-6 py-5 text-sm border-b border-[#2a2d3e]">
+                      <td className="px-6 py-5 text-sm border-b border-sv-border">
                         <div className="flex gap-2 justify-end">
-                          <button onClick={() => openIdCardModal(member)} className="border border-[#2a2d3e] hover:bg-orange-500/10 hover:text-orange-400 hover:border-orange-500/30 text-gray-400 rounded-lg px-3 py-1.5 text-xs font-semibold transition-colors cursor-pointer bg-transparent">ID CARD</button>
-                          <button onClick={() => handleResetWallet(member.id)} title="Reset Wallet" className="border border-[#2a2d3e] hover:bg-yellow-500/10 text-yellow-400 rounded-lg p-1.5 transition-colors cursor-pointer bg-transparent"><FiRefreshCcw /></button>
-                          <button onClick={() => openEditModal(member)} title="Edit Member" className="border border-[#2a2d3e] hover:bg-[#1a1d27] text-gray-400 rounded-lg p-1.5 transition-colors cursor-pointer bg-transparent"><FiEdit2 /></button>
-                          <button onClick={() => handleDelete(member.id)} title="Delete Member" className="border border-[#2a2d3e] hover:bg-red-500/10 text-red-400 rounded-lg p-1.5 transition-colors cursor-pointer bg-transparent"><FiTrash2 /></button>
+                          <button onClick={() => openIdCardModal(member)} className="border border-sv-border hover:bg-orange-500/10 hover:text-orange-400 hover:border-orange-500/30 text-gray-400 rounded-lg px-3 py-1.5 text-xs font-semibold transition-colors cursor-pointer bg-transparent">ID CARD</button>
+                          <button onClick={() => handleResetWallet(member.id)} title="Reset Wallet" className="border border-sv-border hover:bg-yellow-500/10 text-yellow-400 rounded-lg p-1.5 transition-colors cursor-pointer bg-transparent"><FiRefreshCcw /></button>
+                          <button onClick={() => openEditModal(member)} title="Edit Member" className="border border-sv-border hover:bg-sv-surface-hover text-gray-400 rounded-lg p-1.5 transition-colors cursor-pointer bg-transparent"><FiEdit2 /></button>
+                          <button onClick={() => handleDelete(member.id)} title="Delete Member" className="border border-sv-border hover:bg-red-500/10 text-red-400 rounded-lg p-1.5 transition-colors cursor-pointer bg-transparent"><FiTrash2 /></button>
                         </div>
                       </td>
                     </tr>
@@ -510,7 +559,7 @@ export default function MembersClient({ initialMembers, plans, turfs = [] }: { i
               </table>
             </div>
             {filteredMembers.length > itemsPerPage && (
-              <div className="flex justify-between items-center p-4 border-t border-[#2a2d3e] bg-[#13151f]">
+              <div className="flex justify-between items-center p-4 border-t border-sv-border bg-sv-surface">
                 <div className="text-sm text-gray-500">
                   Showing {(page - 1) * itemsPerPage + 1} to {Math.min(page * itemsPerPage, filteredMembers.length)} of {filteredMembers.length}
                 </div>
@@ -518,14 +567,14 @@ export default function MembersClient({ initialMembers, plans, turfs = [] }: { i
                   <button 
                     disabled={page === 1}
                     onClick={() => setPage(p => p - 1)}
-                    className="px-3 py-1 bg-[#1a1d27] border border-[#2a2d3e] text-white rounded disabled:opacity-50"
+                    className="px-3 py-1 bg-sv-surface-raised border border-sv-border text-white rounded disabled:opacity-50"
                   >
                     Previous
                   </button>
                   <button 
                     disabled={page * itemsPerPage >= filteredMembers.length}
                     onClick={() => setPage(p => p + 1)}
-                    className="px-3 py-1 bg-[#1a1d27] border border-[#2a2d3e] text-white rounded disabled:opacity-50"
+                    className="px-3 py-1 bg-sv-surface-raised border border-sv-border text-white rounded disabled:opacity-50"
                   >
                     Next
                   </button>
@@ -538,9 +587,9 @@ export default function MembersClient({ initialMembers, plans, turfs = [] }: { i
 
       {activeTab === 'FAMILIES' && (
         !isMounted ? (
-          <TableSkeleton rows={5} cols={5} />
+          <TableSkeleton rows={5} columns={5} />
         ) : families.length === 0 ? (
-          <div className="bg-[#0f1117] border border-[#2a2d3e] rounded-2xl p-16 text-center flex flex-col items-center">
+          <div className="bg-sv-bg border border-sv-border rounded-2xl p-16 text-center flex flex-col items-center">
             <div className="w-16 h-16 rounded-full bg-orange-500/10 text-orange-400 flex items-center justify-center text-3xl mb-6"><FiUsers /></div>
             <h3 className="text-2xl font-bold text-white mb-2">No Families Setup</h3>
             <button onClick={openFamilyModal} className="bg-orange-500 hover:bg-orange-600 text-white rounded-lg px-5 py-2.5 text-sm font-semibold inline-flex items-center gap-2 transition-colors cursor-pointer border-none mt-4">
@@ -550,17 +599,17 @@ export default function MembersClient({ initialMembers, plans, turfs = [] }: { i
         ) : (
           <div className="space-y-6">
             {families.map(family => (
-              <div key={family.mobile} className="bg-[#0f1117] border border-[#2a2d3e] rounded-2xl overflow-hidden">
-                <div className="bg-[#13151f] border-b border-[#2a2d3e] px-6 py-4 flex justify-between items-center">
+              <div key={family.mobile} className="bg-sv-bg border border-sv-border rounded-2xl overflow-hidden">
+                <div className="bg-sv-surface border-b border-sv-border px-6 py-4 flex justify-between items-center">
                 <div>
-                  <h3 className="text-lg font-bold text-white font-['Outfit']">{family.mobile}</h3>
+                  <h3 className="text-lg font-bold text-white font-sans">{family.mobile}</h3>
                   <p className="text-sm text-gray-500 mt-1">{family.members.length} Family Member(s)</p>
                 </div>
                 <div className="w-10 h-10 rounded-full bg-blue-500/10 text-blue-400 flex items-center justify-center text-xl"><FiUsers /></div>
               </div>
               <div className="space-y-4 p-4">
                 {family.members.map(member => (
-                  <div key={member.id} className="flex justify-between items-center bg-[#13151f] border border-[#2a2d3e] p-3 rounded-lg">
+                  <div key={member.id} className="flex justify-between items-center bg-sv-surface border border-sv-border p-3 rounded-lg">
                     <div>
                       <div className="font-semibold text-white text-sm">{member.name}</div>
                       <div className="text-xs text-gray-500 mt-0.5">{member.id}</div>
@@ -582,23 +631,23 @@ export default function MembersClient({ initialMembers, plans, turfs = [] }: { i
           initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
           className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-[100] p-4"
         >
-          <div className="bg-[#0f1117] border border-[#2a2d3e] rounded-2xl p-5 sm:p-8 w-full max-w-md shadow-2xl max-h-[95vh] overflow-y-auto">
+          <div className="bg-sv-bg border border-sv-border rounded-2xl p-5 sm:p-8 w-full max-w-md shadow-2xl max-h-[95vh] overflow-y-auto">
             <div className="flex justify-between items-center mb-6">
-              <h2 className="text-xl font-bold font-['Outfit'] text-white">{editingId ? 'Edit Member' : 'Register Member'}</h2>
+              <h2 className="text-xl font-bold font-sans text-white">{editingId ? 'Edit Member' : 'Register Member'}</h2>
               <button className="text-gray-500 hover:text-white cursor-pointer bg-transparent border-none text-xl" onClick={() => setShowMemberModal(false)}><FiX /></button>
             </div>
             <form onSubmit={handleMemberSubmit}>
               <div className="mb-5">
                 <label className="block text-xs uppercase tracking-wider font-semibold text-gray-500 mb-2">Full Name</label>
-                <input type="text" className="w-full bg-[#0f1117] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white placeholder-gray-600 focus:border-orange-500 focus:ring-2 focus:ring-orange-500 focus:outline-none text-sm" value={name} onChange={e => setName(e.target.value)} required placeholder="e.g. John Doe" />
+                <input type="text" className="w-full bg-sv-bg border border-sv-border rounded-lg px-4 py-3 text-white placeholder-gray-600 focus:border-sv-brand focus:ring-2 focus:ring-sv-brand focus:outline-none text-sm" value={name} onChange={e => setName(e.target.value)} required placeholder="e.g. John Doe" />
               </div>
               <div className="mb-5">
                 <label className="block text-xs uppercase tracking-wider font-semibold text-gray-500 mb-2">Mobile Number</label>
-                <input type="tel" className="w-full bg-[#0f1117] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white placeholder-gray-600 focus:border-orange-500 focus:ring-2 focus:ring-orange-500 focus:outline-none text-sm" value={mobile} onChange={e => setMobile(e.target.value)} required pattern="[0-9]{10}" placeholder="10-digit mobile" />
+                <input type="tel" className="w-full bg-sv-bg border border-sv-border rounded-lg px-4 py-3 text-white placeholder-gray-600 focus:border-sv-brand focus:ring-2 focus:ring-sv-brand focus:outline-none text-sm" value={mobile} onChange={e => setMobile(e.target.value)} required pattern="[0-9]{10}" placeholder="10-digit mobile" />
               </div>
               <div className="mb-5">
                 <label className="block text-xs uppercase tracking-wider font-semibold text-gray-500 mb-2">Email (Optional)</label>
-                <input type="email" className="w-full bg-[#0f1117] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white placeholder-gray-600 focus:border-orange-500 focus:ring-2 focus:ring-orange-500 focus:outline-none text-sm" value={email} onChange={e => setEmail(e.target.value)} placeholder="john@example.com" />
+                <input type="email" className="w-full bg-sv-bg border border-sv-border rounded-lg px-4 py-3 text-white placeholder-gray-600 focus:border-sv-brand focus:ring-2 focus:ring-sv-brand focus:outline-none text-sm" value={email} onChange={e => setEmail(e.target.value)} placeholder="john@example.com" />
               </div>
               <button type="submit" className="w-full bg-orange-500 hover:bg-orange-600 text-white rounded-lg px-5 py-3 text-sm font-semibold transition-colors cursor-pointer border-none disabled:opacity-50" disabled={loading}>
                 {loading ? "Saving..." : "Save Member"}
@@ -616,15 +665,15 @@ export default function MembersClient({ initialMembers, plans, turfs = [] }: { i
           initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
           className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-[100] p-4"
         >
-          <div className="bg-[#161923] border border-[#2a2d3e] rounded-xl p-5 sm:p-8 w-full max-w-lg shadow-2xl max-h-[95vh] overflow-y-auto">
+          <div className="bg-sv-surface border border-sv-border rounded-xl p-5 sm:p-8 w-full max-w-lg shadow-2xl max-h-[95vh] overflow-y-auto">
             <div className="flex justify-between items-center mb-6">
-              <h2 className="text-xl font-bold font-['Outfit'] text-white">Setup Family Account</h2>
+              <h2 className="text-xl font-bold font-sans text-white">Setup Family Account</h2>
               <button className="text-gray-500 hover:text-white cursor-pointer bg-transparent border-none text-xl" onClick={() => setShowFamilyModal(false)}><FiX /></button>
             </div>
             <form onSubmit={handleFamilySubmit}>
               <div className="mb-6">
                 <label className="block text-xs uppercase tracking-wider font-semibold text-gray-500 mb-2">Primary Mobile Number</label>
-                <input type="tel" className="w-full bg-[#0f1117] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white placeholder-gray-600 focus:border-orange-500 focus:ring-2 focus:ring-orange-500 focus:outline-none text-sm" value={familyMobile} onChange={e => setFamilyMobile(e.target.value)} required pattern="[0-9]{10}" placeholder="10-digit mobile" />
+                <input type="tel" className="w-full bg-sv-bg border border-sv-border rounded-lg px-4 py-3 text-white placeholder-gray-600 focus:border-sv-brand focus:ring-2 focus:ring-sv-brand focus:outline-none text-sm" value={familyMobile} onChange={e => setFamilyMobile(e.target.value)} required pattern="[0-9]{10}" placeholder="10-digit mobile" />
               </div>
               
               <div className="mb-4">
@@ -637,7 +686,7 @@ export default function MembersClient({ initialMembers, plans, turfs = [] }: { i
                 <div className="space-y-3">
                   {familyMembers.map((m, idx) => (
                     <div key={idx} className="flex gap-2 items-center">
-                      <input type="text" className="flex-1 bg-[#0f1117] border border-[#2a2d3e] rounded-lg px-3 py-2 text-white placeholder-gray-600 focus:border-orange-500/50 focus:outline-none text-sm" value={m.name} onChange={e => { const nm = [...familyMembers]; nm[idx].name = e.target.value; setFamilyMembers(nm); }} required placeholder={`Member ${idx + 1} Name`} />
+                      <input type="text" className="flex-1 bg-sv-bg border border-sv-border rounded-lg px-3 py-2 text-white placeholder-gray-600 focus:border-sv-brand/50 focus:outline-none text-sm" value={m.name} onChange={e => { const nm = [...familyMembers]; nm[idx].name = e.target.value; setFamilyMembers(nm); }} required placeholder={`Member ${idx + 1} Name`} />
                       <button type="button" onClick={() => setFamilyMembers(familyMembers.filter((_, i) => i !== idx))} className="text-gray-500 hover:text-red-400 p-2"><FiTrash2 /></button>
                     </div>
                   ))}
@@ -661,16 +710,16 @@ export default function MembersClient({ initialMembers, plans, turfs = [] }: { i
           initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
           className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-[100] p-4"
         >
-          <div className="bg-[#161923] border border-[#2a2d3e] rounded-xl p-5 sm:p-8 w-full max-w-md shadow-2xl max-h-[95vh] overflow-y-auto">
+          <div className="bg-sv-surface border border-sv-border rounded-xl p-5 sm:p-8 w-full max-w-md shadow-2xl max-h-[95vh] overflow-y-auto">
             <div className="flex justify-between items-center mb-6">
-              <h2 className="text-xl font-bold font-['Outfit'] text-white">Assign Plan to Member</h2>
+              <h2 className="text-xl font-bold font-sans text-white">Assign Plan to Member</h2>
               <button className="text-gray-500 hover:text-white cursor-pointer bg-transparent border-none text-xl" onClick={() => setShowPlanModal(false)}><FiX /></button>
             </div>
             <form onSubmit={handleAssignPlan}>
               <div className="mb-5">
                 <label className="block text-xs uppercase tracking-wider font-semibold text-gray-500 mb-2">Member's Mobile Number</label>
                 <input 
-                  type="tel" className="w-full bg-[#0f1117] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white placeholder-gray-600 focus:border-orange-500 focus:ring-2 focus:ring-orange-500 focus:outline-none text-sm" 
+                  type="tel" className="w-full bg-sv-bg border border-sv-border rounded-lg px-4 py-3 text-white placeholder-gray-600 focus:border-sv-brand focus:ring-2 focus:ring-sv-brand focus:outline-none text-sm" 
                   value={assignMobile} onChange={e => setAssignMobile(e.target.value)} required pattern="[0-9]{10}" placeholder="Enter 10-digit mobile..." 
                 />
                 {assignMobile.length === 10 && (
@@ -691,7 +740,7 @@ export default function MembersClient({ initialMembers, plans, turfs = [] }: { i
                     {existingAssignMembers.map(m => {
                       const isChecked = assignMemberIds.includes(m.id);
                       return (
-                      <label key={m.id} className={`flex items-center gap-3 p-3 rounded-lg border cursor-pointer transition-colors ${isChecked ? 'bg-[#1c1f2e] border-emerald-500 text-white' : 'border-[#2a2d3e] text-gray-400 hover:bg-[#1c1f2e]'}`}>
+                      <label key={m.id} className={`flex items-center gap-3 p-3 rounded-lg border cursor-pointer transition-colors ${isChecked ? 'bg-sv-surface-raised border-emerald-500 text-white' : 'border-sv-border text-gray-400 hover:bg-sv-surface-hover'}`}>
                         <input 
                           type={selectedAssignPlan?.isFamilyPlan ? "checkbox" : "radio"} 
                           name="family_member" 
@@ -712,7 +761,7 @@ export default function MembersClient({ initialMembers, plans, turfs = [] }: { i
                               }
                             }
                           }} 
-                          className={`w-4 h-4 text-emerald-500 bg-[#0f1117] border-[#2a2d3e] focus:ring-emerald-500 ${selectedAssignPlan?.isFamilyPlan ? 'rounded' : ''}`} 
+                          className={`w-4 h-4 text-emerald-500 bg-sv-bg border-sv-border focus:ring-emerald-500 ${selectedAssignPlan?.isFamilyPlan ? 'rounded' : ''}`} 
                         />
                         <span className="font-medium">{m.name}</span>
                       </label>
@@ -725,18 +774,18 @@ export default function MembersClient({ initialMembers, plans, turfs = [] }: { i
                 <div className="grid grid-cols-2 gap-4 mb-5">
                   <div>
                     <label className="block text-xs uppercase tracking-wider font-semibold text-gray-500 mb-2">Full Name <span className="text-red-400">*</span></label>
-                    <input type="text" className="w-full bg-[#0f1117] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white placeholder-gray-600 focus:border-orange-500 focus:ring-2 focus:ring-orange-500 focus:outline-none text-sm" value={assignName} onChange={e => setAssignName(e.target.value)} required placeholder="Required" />
+                    <input type="text" className="w-full bg-sv-bg border border-sv-border rounded-lg px-4 py-3 text-white placeholder-gray-600 focus:border-sv-brand focus:ring-2 focus:ring-sv-brand focus:outline-none text-sm" value={assignName} onChange={e => setAssignName(e.target.value)} required placeholder="Required" />
                   </div>
                   <div>
                     <label className="block text-xs uppercase tracking-wider font-semibold text-gray-500 mb-2">Email</label>
-                    <input type="email" className="w-full bg-[#0f1117] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white placeholder-gray-600 focus:border-orange-500 focus:ring-2 focus:ring-orange-500 focus:outline-none text-sm" value={assignEmail} onChange={e => setAssignEmail(e.target.value)} placeholder="Optional" />
+                    <input type="email" className="w-full bg-sv-bg border border-sv-border rounded-lg px-4 py-3 text-white placeholder-gray-600 focus:border-sv-brand focus:ring-2 focus:ring-sv-brand focus:outline-none text-sm" value={assignEmail} onChange={e => setAssignEmail(e.target.value)} placeholder="Optional" />
                   </div>
                 </div>
               )}
 
               <div className="mb-5">
                 <label className="block text-xs uppercase tracking-wider font-semibold text-gray-500 mb-2">Select Membership Plan</label>
-                <select className="w-full bg-[#0f1117] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white placeholder-gray-600 focus:border-orange-500 focus:ring-2 focus:ring-orange-500 focus:outline-none text-sm" value={assignPlanId} onChange={e => { setAssignPlanId(e.target.value); setAssignMemberIds([]); }} required>
+                <select className="w-full bg-sv-bg border border-sv-border rounded-lg px-4 py-3 text-white placeholder-gray-600 focus:border-sv-brand focus:ring-2 focus:ring-sv-brand focus:outline-none text-sm" value={assignPlanId} onChange={e => { setAssignPlanId(e.target.value); setAssignMemberIds([]); }} required>
                   <option value="">-- Choose Plan --</option>
                   {plans.map(p => <option key={p.id} value={p.id}>{p.name} - {p.sport?.name} {p.isFamilyPlan && `(Family Size: ${p.familySize})`}</option>)}
                 </select>
@@ -762,7 +811,7 @@ export default function MembersClient({ initialMembers, plans, turfs = [] }: { i
                       className={`px-3 py-1.5 text-xs font-medium rounded-md border transition-colors ${
                         assignAllowedDays.includes(day.id) 
                           ? 'bg-orange-500/20 border-orange-500/50 text-orange-400' 
-                          : 'bg-[#0f1117] border-[#2a2d3e] text-gray-500 hover:border-gray-600'
+                          : 'bg-sv-bg border-sv-border text-gray-500 hover:border-gray-600'
                       }`}
                     >
                       {day.label}
@@ -775,12 +824,12 @@ export default function MembersClient({ initialMembers, plans, turfs = [] }: { i
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-5">
                 <div>
                   <label className="block text-xs uppercase tracking-wider font-semibold text-gray-500 mb-2">Start Date</label>
-                  <input type="date" className="w-full bg-[#0f1117] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white placeholder-gray-600 focus:border-orange-500 focus:ring-2 focus:ring-orange-500 focus:outline-none text-sm" value={startDate} onChange={e => setStartDate(e.target.value)} required />
+                  <input type="date" className="w-full bg-sv-bg border border-sv-border rounded-lg px-4 py-3 text-white placeholder-gray-600 focus:border-sv-brand focus:ring-2 focus:ring-sv-brand focus:outline-none text-sm" value={startDate} onChange={e => setStartDate(e.target.value)} required />
                 </div>
                 <div>
                   <label className="block text-xs uppercase tracking-wider font-semibold text-gray-500 mb-2">Start Time</label>
                   <select 
-                    className="w-full bg-[#0f1117] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white placeholder-gray-600 focus:border-orange-500 focus:ring-2 focus:ring-orange-500 focus:outline-none text-sm"
+                    className="w-full bg-sv-bg border border-sv-border rounded-lg px-4 py-3 text-white placeholder-gray-600 focus:border-sv-brand focus:ring-2 focus:ring-sv-brand focus:outline-none text-sm"
                     value={assignStartTime}
                     onChange={e => setAssignStartTime(e.target.value)}
                   >
@@ -791,7 +840,7 @@ export default function MembersClient({ initialMembers, plans, turfs = [] }: { i
                 <div>
                   <label className="block text-xs uppercase tracking-wider font-semibold text-gray-500 mb-2">End Time</label>
                   <select 
-                    className="w-full bg-[#0f1117] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white placeholder-gray-600 focus:border-orange-500 focus:ring-2 focus:ring-orange-500 focus:outline-none text-sm"
+                    className="w-full bg-sv-bg border border-sv-border rounded-lg px-4 py-3 text-white placeholder-gray-600 focus:border-sv-brand focus:ring-2 focus:ring-sv-brand focus:outline-none text-sm"
                     value={assignEndTime}
                     onChange={e => setAssignEndTime(e.target.value)}
                   >
@@ -802,7 +851,7 @@ export default function MembersClient({ initialMembers, plans, turfs = [] }: { i
               </div>
               <div className="mb-5">
                 <label className="block text-xs uppercase tracking-wider font-semibold text-gray-500 mb-2">Assigned Court/Turf</label>
-                <select className="w-full bg-[#0f1117] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white placeholder-gray-600 focus:border-orange-500 focus:ring-2 focus:ring-orange-500 focus:outline-none text-sm" value={assignTurfId} onChange={e => setAssignTurfId(e.target.value)}>
+                <select className="w-full bg-sv-bg border border-sv-border rounded-lg px-4 py-3 text-white placeholder-gray-600 focus:border-sv-brand focus:ring-2 focus:ring-sv-brand focus:outline-none text-sm" value={assignTurfId} onChange={e => setAssignTurfId(e.target.value)}>
                   <option value="">-- No Specific Court --</option>
                   {turfs.filter(t => !selectedAssignPlan || t.sports?.some((ts: any) => ts.sportId === selectedAssignPlan.sportId)).map(t => (
                     <option key={t.id} value={t.id}>{t.name}</option>
@@ -825,9 +874,9 @@ export default function MembersClient({ initialMembers, plans, turfs = [] }: { i
           initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
           className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-[100] p-4"
         >
-          <div className="bg-[#161923] border border-[#2a2d3e] rounded-xl p-5 sm:p-8 w-full max-w-[420px] shadow-2xl max-h-[95vh] overflow-y-auto">
+          <div className="bg-sv-surface border border-sv-border rounded-xl p-5 sm:p-8 w-full max-w-[420px] shadow-2xl max-h-[95vh] overflow-y-auto">
             <div className="flex justify-between items-center mb-6">
-              <h2 className="text-xl font-bold font-['Outfit'] text-white">Digital ID Card</h2>
+              <h2 className="text-xl font-bold font-sans text-white">Digital ID Card</h2>
               <button className="text-gray-500 hover:text-white cursor-pointer bg-transparent border-none text-xl" onClick={() => setShowIdCardModal(false)}><FiX /></button>
             </div>
             
@@ -871,13 +920,13 @@ export default function MembersClient({ initialMembers, plans, turfs = [] }: { i
             </div>
 
             <div className="flex flex-col gap-3">
-              <button onClick={shareWhatsApp} disabled={generatingIdCard} className="w-full bg-[#25D366] hover:bg-[#20bd5a] text-white rounded-lg px-5 py-3 text-sm font-semibold inline-flex items-center justify-center gap-2 transition-colors cursor-pointer border-none">
+              <button onClick={shareWhatsApp} disabled={generatingIdCard} className="w-full bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg px-5 py-3 text-sm font-semibold inline-flex items-center justify-center gap-2 transition-colors cursor-pointer border-none">
                 <FiMessageCircle /> Send via WhatsApp
               </button>
               <button onClick={downloadPNG} disabled={generatingIdCard} className="w-full bg-orange-500 hover:bg-orange-600 text-white rounded-lg px-5 py-3 text-sm font-semibold inline-flex items-center justify-center gap-2 transition-colors cursor-pointer border-none">
                 <FiImage /> Download PNG
               </button>
-              <button onClick={downloadPDF} disabled={generatingIdCard} className="w-full border border-[#2a2d3e] hover:bg-[#1c1f2e] text-gray-300 rounded-lg px-5 py-3 text-sm font-semibold inline-flex items-center justify-center gap-2 transition-colors cursor-pointer bg-transparent">
+              <button onClick={downloadPDF} disabled={generatingIdCard} className="w-full border border-sv-border hover:bg-sv-surface-hover text-gray-300 rounded-lg px-5 py-3 text-sm font-semibold inline-flex items-center justify-center gap-2 transition-colors cursor-pointer bg-transparent">
                 <FiDownload /> Download PDF
               </button>
             </div>
@@ -896,8 +945,8 @@ export default function MembersClient({ initialMembers, plans, turfs = [] }: { i
           initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
           className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4"
         >
-          <div className="bg-[#12141c] border border-[#2a2d3e] rounded-2xl w-full max-w-md overflow-hidden shadow-2xl relative">
-            <div className="p-6 border-b border-[#2a2d3e] flex justify-between items-center bg-[#181b25]">
+          <div className="bg-sv-surface border border-sv-border rounded-2xl w-full max-w-md overflow-hidden shadow-2xl relative">
+            <div className="p-6 border-b border-sv-border flex justify-between items-center bg-sv-surface-raised">
               <h3 className="text-lg font-bold text-white flex items-center gap-2">
                 <FiEdit2 className="text-orange-500" /> Edit Membership
               </h3>
@@ -910,7 +959,7 @@ export default function MembersClient({ initialMembers, plans, turfs = [] }: { i
                   <label className="block text-xs uppercase tracking-wider font-semibold text-gray-500 mb-2">Start Date</label>
                   <input 
                     type="date" 
-                    className="w-full bg-[#0f1117] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white focus:border-orange-500 focus:ring-2 focus:ring-orange-500 focus:outline-none text-sm"
+                    className="w-full bg-sv-bg border border-sv-border rounded-lg px-4 py-3 text-white focus:border-sv-brand focus:ring-2 focus:ring-sv-brand focus:outline-none text-sm"
                     value={editMembershipStart}
                     onChange={e => setEditMembershipStart(e.target.value)}
                     required
@@ -920,7 +969,7 @@ export default function MembersClient({ initialMembers, plans, turfs = [] }: { i
                   <label className="block text-xs uppercase tracking-wider font-semibold text-gray-500 mb-2">End Date</label>
                   <input 
                     type="date" 
-                    className="w-full bg-[#0f1117] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white focus:border-orange-500 focus:ring-2 focus:ring-orange-500 focus:outline-none text-sm"
+                    className="w-full bg-sv-bg border border-sv-border rounded-lg px-4 py-3 text-white focus:border-sv-brand focus:ring-2 focus:ring-sv-brand focus:outline-none text-sm"
                     value={editMembershipEnd}
                     onChange={e => setEditMembershipEnd(e.target.value)}
                     required
@@ -932,7 +981,7 @@ export default function MembersClient({ initialMembers, plans, turfs = [] }: { i
                 <div>
                   <label className="block text-xs uppercase tracking-wider font-semibold text-gray-500 mb-2">Start Time</label>
                   <select 
-                    className="w-full bg-[#0f1117] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white focus:border-orange-500 focus:ring-2 focus:ring-orange-500 focus:outline-none text-sm"
+                    className="w-full bg-sv-bg border border-sv-border rounded-lg px-4 py-3 text-white focus:border-sv-brand focus:ring-2 focus:ring-sv-brand focus:outline-none text-sm"
                     value={editMembershipStartTime}
                     onChange={e => setEditMembershipStartTime(e.target.value)}
                   >
@@ -943,7 +992,7 @@ export default function MembersClient({ initialMembers, plans, turfs = [] }: { i
                 <div>
                   <label className="block text-xs uppercase tracking-wider font-semibold text-gray-500 mb-2">End Time</label>
                   <select 
-                    className="w-full bg-[#0f1117] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white focus:border-orange-500 focus:ring-2 focus:ring-orange-500 focus:outline-none text-sm"
+                    className="w-full bg-sv-bg border border-sv-border rounded-lg px-4 py-3 text-white focus:border-sv-brand focus:ring-2 focus:ring-sv-brand focus:outline-none text-sm"
                     value={editMembershipEndTime}
                     onChange={e => setEditMembershipEndTime(e.target.value)}
                   >
@@ -956,7 +1005,7 @@ export default function MembersClient({ initialMembers, plans, turfs = [] }: { i
               <div className="mb-5">
                 <label className="block text-xs uppercase tracking-wider font-semibold text-gray-500 mb-2">Assigned Court/Turf</label>
                 <select 
-                  className="w-full bg-[#0f1117] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white focus:border-orange-500 focus:ring-2 focus:ring-orange-500 focus:outline-none text-sm"
+                  className="w-full bg-sv-bg border border-sv-border rounded-lg px-4 py-3 text-white focus:border-sv-brand focus:ring-2 focus:ring-sv-brand focus:outline-none text-sm"
                   value={editMembershipTurfId}
                   onChange={e => setEditMembershipTurfId(e.target.value)}
                 >
@@ -970,7 +1019,7 @@ export default function MembersClient({ initialMembers, plans, turfs = [] }: { i
               <div className="mb-8">
                 <label className="block text-xs uppercase tracking-wider font-semibold text-gray-500 mb-2">Status</label>
                 <select 
-                  className="w-full bg-[#0f1117] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white focus:border-orange-500 focus:ring-2 focus:ring-orange-500 focus:outline-none text-sm"
+                  className="w-full bg-sv-bg border border-sv-border rounded-lg px-4 py-3 text-white focus:border-sv-brand focus:ring-2 focus:ring-sv-brand focus:outline-none text-sm"
                   value={editMembershipStatus}
                   onChange={e => setEditMembershipStatus(e.target.value)}
                   required

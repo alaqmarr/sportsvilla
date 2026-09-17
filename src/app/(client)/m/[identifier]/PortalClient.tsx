@@ -58,7 +58,7 @@ export default function PortalClient({ member, activePlans, expiredPlans, attend
 
         {/* Brand Header */}
         <div className="text-center mb-8">
-          <h1 className="text-2xl font-black font-['Outfit'] text-orange-500 tracking-wider uppercase drop-shadow-sm">
+          <h1 className="text-2xl font-black font-sans text-orange-500 tracking-wider uppercase drop-shadow-sm">
             SPORTSVILLA
           </h1>
           <p className="text-gray-500 font-medium text-sm mt-1">Member Portal</p>
@@ -254,7 +254,7 @@ export default function PortalClient({ member, activePlans, expiredPlans, attend
         <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden mb-10">
           <div className="px-4 py-3 border-b border-gray-100 flex justify-between items-center bg-gray-50">
             <button onClick={prevMonth} className="text-gray-500 hover:text-orange-500 transition-colors bg-transparent border-none font-bold text-lg cursor-pointer">&larr;</button>
-            <span className="font-bold font-['Outfit'] text-gray-800 tracking-wide text-sm">{formatIST(currentMonth, 'MMMM yyyy')}</span>
+            <span className="font-bold font-sans text-gray-800 tracking-wide text-sm">{formatIST(currentMonth, 'MMMM yyyy')}</span>
             <button onClick={nextMonth} className="text-gray-500 hover:text-orange-500 transition-colors bg-transparent border-none font-bold text-lg cursor-pointer">&rarr;</button>
           </div>
           <div className="p-4">

@@ -404,6 +404,11 @@ model Coupon {
   code               String    @unique
   discountAmount     Float?
   discountPercentage Float?
+  type               String    @default("DISCOUNT") // DISCOUNT, CASHBACK
+  cashbackAmount     Float?
+  cashbackPercentage Float?
+  validSportIds      String? // JSON array of Sport IDs
+  rewardCouponId     String?
   maxDiscount        Float?
   maxUses            Int?
   maxUsesPerUser     Int?

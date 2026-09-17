@@ -31,7 +31,7 @@ function EntryForm() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#0f1117] p-4 font-['Inter']">
+    <div className="min-h-screen flex items-center justify-center bg-[#0f1117] p-4 font-sans">
       <div className="bg-[#161923] border border-[#2a2d3e] rounded-2xl p-8 w-full max-w-md shadow-2xl relative overflow-hidden">
         
         {/* Decorative background glow */}
@@ -39,7 +39,7 @@ function EntryForm() {
         <div className="absolute bottom-0 left-0 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl translate-y-1/2 -translate-x-1/3 pointer-events-none"></div>
 
         <div className="text-center mb-8 relative z-10">
-          <h1 className="text-3xl font-black font-['Outfit'] text-orange-500 tracking-wider uppercase mb-2">
+          <h1 className="text-3xl font-black font-sans text-orange-500 tracking-wider uppercase mb-2">
             SportsVilla
           </h1>
           <p className="text-gray-400 text-sm">Enter your registered mobile number to view your ID Card and attendance.</p>
@@ -83,3 +83,4 @@ export default function MemberEntryPage() {
     </Suspense>
   );
 }
+

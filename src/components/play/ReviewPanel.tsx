@@ -82,16 +82,28 @@ export const ReviewPanel: React.FC<ReviewPanelProps> = ({
 
   // Calculate Discount
   let discount = 0;
+  let cashback = 0;
   const selectedCoupon = coupons.find((c: any) => c.code === selectedCouponCode);
   
   if (selectedCoupon) {
-    if (selectedCoupon.discountPercentage) {
-      discount = (price * selectedCoupon.discountPercentage) / 100;
-      if (selectedCoupon.maxDiscount && discount > selectedCoupon.maxDiscount) {
-        discount = selectedCoupon.maxDiscount;
+    if (selectedCoupon.type === 'CASHBACK') {
+      if (selectedCoupon.cashbackPercentage) {
+        cashback = (price * selectedCoupon.cashbackPercentage) / 100;
+        if (selectedCoupon.maxDiscount && cashback > selectedCoupon.maxDiscount) {
+          cashback = selectedCoupon.maxDiscount;
+        }
+      } else if (selectedCoupon.cashbackAmount) {
+        cashback = selectedCoupon.cashbackAmount;
       }
-    } else if (selectedCoupon.discountAmount) {
-      discount = selectedCoupon.discountAmount;
+    } else {
+      if (selectedCoupon.discountPercentage) {
+        discount = (price * selectedCoupon.discountPercentage) / 100;
+        if (selectedCoupon.maxDiscount && discount > selectedCoupon.maxDiscount) {
+          discount = selectedCoupon.maxDiscount;
+        }
+      } else if (selectedCoupon.discountAmount) {
+        discount = selectedCoupon.discountAmount;
+      }
     }
   }
 
@@ -240,10 +252,14 @@ export const ReviewPanel: React.FC<ReviewPanelProps> = ({
                 </div>
                 {selectedCouponCode === coupon.code && <Check className="w-5 h-5 text-[var(--play-brand)]" />}
               </div>
-              <p className="font-bold text-[var(--play-text)]">
-                {coupon.discountPercentage ? `${coupon.discountPercentage}% OFF` : `₹${coupon.discountAmount} OFF`}
-              </p>
-              {coupon.maxDiscount && <p className="text-xs text-[var(--play-text-muted)] mt-1">Up to ₹{coupon.maxDiscount}</p>}
+                <p className="font-bold text-[var(--play-text)]">
+                  {coupon.type === 'CASHBACK'
+                    ? (coupon.cashbackPercentage ? `${coupon.cashbackPercentage}% CASHBACK` : `₹${coupon.cashbackAmount} CASHBACK`)
+                    : (coupon.discountPercentage ? `${coupon.discountPercentage}% OFF` : `₹${coupon.discountAmount} OFF`)}
+                </p>
+                {coupon.maxDiscount && <p className="text-xs text-[var(--play-text-muted)] mt-1">Up to ₹{coupon.maxDiscount}</p>}
+                {coupon.rewardCouponId && <p className="text-xs text-emerald-500 font-medium mt-1">🎁 Unlocks a reward coupon</p>}
+                {coupon.validSportIds && <p className="text-xs text-amber-500 font-medium mt-1">🎯 Valid on selected games</p>}
             </div>
           ))}
           {coupons.length === 0 && !isLoading && (
@@ -403,16 +419,18 @@ export const ReviewPanel: React.FC<ReviewPanelProps> = ({
             <div className={`w-10 h-10 rounded-full flex items-center justify-center ${selectedCoupon ? 'bg-[var(--play-brand-light)] text-[var(--play-brand-dark)]' : 'bg-[var(--play-surface-alt)] text-[var(--play-text-muted)]'}`}>
               <Tag className="w-5 h-5" />
             </div>
-            <div>
-              <span className="font-bold text-[var(--play-text)] block">
-                {selectedCoupon ? `'${selectedCoupon.code}' Applied` : 'View Offers'}
-              </span>
-              {selectedCoupon ? (
-                <span className="text-sm font-medium text-emerald-500">You saved ₹{discount.toFixed(2)}</span>
-              ) : (
-                <span className="text-sm text-[var(--play-text-muted)]">{coupons.length} offers available</span>
-              )}
-            </div>
+              <div>
+                <span className="font-bold text-[var(--play-text)] block">
+                  {selectedCoupon ? `'${selectedCoupon.code}' Applied` : 'View Offers'}
+                </span>
+                {selectedCoupon ? (
+                  <span className={`text-sm font-medium ${cashback > 0 ? 'text-amber-500' : 'text-emerald-500'}`}>
+                    {cashback > 0 ? `Earn ₹${cashback.toFixed(2)} cashback` : `You saved ₹${discount.toFixed(2)}`}
+                  </span>
+                ) : (
+                  <span className="text-sm text-[var(--play-text-muted)]">{coupons.length} offers available</span>
+                )}
+              </div>
           </div>
           <ChevronRight className="w-5 h-5 text-[var(--play-text-light)]" />
         </div>
@@ -449,6 +467,13 @@ export const ReviewPanel: React.FC<ReviewPanelProps> = ({
             <div className="flex justify-between text-sm text-emerald-500 font-medium">
               <span>Offer Discount ({selectedCouponCode})</span>
               <span>- ₹ {discount.toFixed(2)}</span>
+            </div>
+          )}
+          
+          {cashback > 0 && (
+            <div className="flex justify-between text-sm text-amber-500 font-medium">
+              <span>Wallet Cashback ({selectedCouponCode})</span>
+              <span>+ ₹ {cashback.toFixed(2)} (After Payment)</span>
             </div>
           )}
 
@@ -495,31 +520,6 @@ export const ReviewPanel: React.FC<ReviewPanelProps> = ({
                 </div>
               </label>
 
-              <label className={`flex items-center gap-3 p-3.5 rounded-xl border cursor-pointer transition-all ${
-                paymentOption === 'SPORTSVILLA_CARD'
-                  ? 'border-[var(--play-brand)] bg-[var(--play-brand-light)]/20 shadow-sm'
-                  : 'border-[var(--play-border)] hover:bg-[var(--play-surface-alt)]'
-              }`}>
-                <input
-                  type="radio"
-                  name="paymentOption"
-                  value="SPORTSVILLA_CARD"
-                  checked={paymentOption === 'SPORTSVILLA_CARD'}
-                  onChange={() => {
-                    setPaymentOption('SPORTSVILLA_CARD');
-                    setNfcError(null);
-                    setNfcStatus(null);
-                  }}
-                  className="w-4 h-4 text-[var(--play-brand)] focus:ring-[var(--play-brand)]"
-                />
-                <div className="flex-1 flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <span className="font-semibold text-[var(--play-text)]">Accept SportsVilla Card</span>
-                    <span className="px-2 py-0.5 text-[10px] font-bold bg-orange-500/10 text-orange-500 border border-orange-500/20 rounded-full">NFC</span>
-                  </div>
-                  <span className="text-xs text-[var(--play-text-muted)] font-medium">Tap to Pay</span>
-                </div>
-              </label>
             </div>
 
             {/* Sub-gateway selector for Online payment if BOTH */}
@@ -555,88 +555,7 @@ export const ReviewPanel: React.FC<ReviewPanelProps> = ({
           </div>
         )}
 
-        {/* Interactive Tap State / Prompt for SportsVilla Card */}
-        {finalAmount > 0 && paymentOption === 'SPORTSVILLA_CARD' && (
-          <div className="bg-[var(--play-surface)] rounded-2xl p-6 shadow-sm border-2 border-[var(--play-brand)]/40 text-center space-y-4">
-            <div className="relative flex items-center justify-center py-2">
-              <div className="relative flex items-center justify-center">
-                <div className="w-20 h-20 rounded-full bg-[var(--play-brand-light)] border border-[var(--play-brand)]/30 flex items-center justify-center text-[var(--play-brand-dark)] animate-pulse shadow-md">
-                  <CreditCard className="w-9 h-9" />
-                </div>
-                <div className="absolute inset-0 rounded-full border-2 border-[var(--play-brand)] animate-ping opacity-25 pointer-events-none" />
-              </div>
-            </div>
 
-            <div>
-              <h4 className="text-lg font-bold font-outfit text-[var(--play-text)]">
-                Tap your SportsVilla Card
-              </h4>
-              <p className="text-sm text-[var(--play-text-muted)] max-w-xs mx-auto mt-1">
-                Hold your physical card near the NFC reader or back of this device to pay ₹{finalAmount.toFixed(2)}.
-              </p>
-            </div>
-
-            {isNfcListening && (
-              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-emerald-500/10 border border-emerald-500/20 rounded-full text-xs font-semibold text-emerald-600">
-                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping" />
-                Reader Ready — Tap Card Now
-              </div>
-            )}
-
-            {isWebNfcSupported && !isWebNfcActive && (
-              <div>
-                <button
-                  type="button"
-                  onClick={enableWebNfc}
-                  className="text-xs text-[var(--play-brand)] font-bold hover:underline"
-                >
-                  Enable Device NFC Sensor
-                </button>
-              </div>
-            )}
-
-            {nfcError && (
-              <div className="p-3.5 bg-red-500/10 border border-red-500/20 rounded-xl text-sm text-red-500 font-semibold flex items-center gap-2 text-left">
-                <AlertCircle className="w-5 h-5 shrink-0" />
-                <span>{nfcError}</span>
-              </div>
-            )}
-
-            {nfcStatus && (
-              <div className="p-3.5 bg-blue-500/10 border border-blue-500/20 rounded-xl text-sm text-blue-500 font-medium flex items-center justify-center gap-2">
-                {isProcessingNfc && <Loader2 className="w-4 h-4 animate-spin" />}
-                <span>{nfcStatus}</span>
-              </div>
-            )}
-
-            {/* Manual Card UID fallback / testing input */}
-            <div className="pt-3 border-t border-[var(--play-border)] text-left">
-              <label className="block text-xs font-semibold text-[var(--play-text-muted)] mb-2">
-                Manual Card UID Entry (Testing / Scanner)
-              </label>
-              <div className="flex gap-2">
-                <input
-                  type="text"
-                  value={nfcManualUid}
-                  onChange={(e) => setNfcManualUid(e.target.value.toUpperCase().trim())}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter') handleCardTap(nfcManualUid);
-                  }}
-                  placeholder="e.g. 04A1B2C3"
-                  className="flex-1 bg-[var(--play-surface-alt)] border border-[var(--play-border)] rounded-xl px-3.5 py-2.5 text-sm font-mono text-[var(--play-text)] uppercase focus:outline-none focus:border-[var(--play-brand)]"
-                />
-                <button
-                  type="button"
-                  onClick={() => handleCardTap(nfcManualUid)}
-                  disabled={!nfcManualUid || isProcessingNfc || nfcSuccess}
-                  className="px-4 py-2.5 bg-[var(--play-brand)] hover:bg-[var(--play-brand-dark)] text-white text-sm font-bold rounded-xl transition-colors disabled:opacity-50 flex items-center gap-1.5 shrink-0"
-                >
-                  {isProcessingNfc ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Pay'}
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
 
         {/* Policies */}
         <div className="space-y-3">

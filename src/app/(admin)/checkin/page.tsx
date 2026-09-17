@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import CheckinScanner from "@/components/CheckinScanner";
+import { PageHeader, Card, CardContent, Badge } from "@/components/admin/ui";
 
 export const metadata = {
   title: "Fast Check-in | SportsVilla",
@@ -11,13 +12,26 @@ export default async function CheckinPage() {
   });
 
   return (
-    <div className="p-4 md:p-8 max-w-4xl mx-auto">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold font-['Outfit'] text-white">Entry & Check-in</h1>
-        <p className="text-gray-400 mt-2">Scan QR codes or enter mobile numbers to verify entry.</p>
-      </div>
+    <div className="space-y-6 pb-12 font-sans text-sv-text max-w-5xl mx-auto">
+      <PageHeader
+        title="Entry & Fast Check-in"
+        subtitle="Dedicated kiosk terminal for gate and turnstile entry verification via QR ticket or NFC card"
+        breadcrumbs={[
+          { label: "Dashboard", href: "/" },
+          { label: "Check-in" },
+        ]}
+        statusBadge={
+          <Badge variant="success" size="md" dot pulseDot>
+            Terminal Ready
+          </Badge>
+        }
+      />
 
-      <CheckinScanner sports={sports} />
+      <Card variant="default">
+        <CardContent className="p-6">
+          <CheckinScanner sports={sports} />
+        </CardContent>
+      </Card>
     </div>
   );
 }

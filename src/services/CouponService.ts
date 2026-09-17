@@ -76,7 +76,7 @@ export class CouponService {
   /**
    * Validates a coupon code against a specific booking amount.
    */
-  static async validateCoupon(memberId: string, code: string, bookingAmount: number) {
+  static async validateCoupon(memberId: string, code: string, bookingAmount: number, sportId?: string) {
     if (!code || bookingAmount === undefined) {
       throw new ApiError('Missing code or bookingAmount', 400);
     }
@@ -124,27 +124,54 @@ export class CouponService {
       }
     }
 
+    if (coupon.validSportIds && sportId) {
+      try {
+        const validIds = JSON.parse(coupon.validSportIds);
+        if (Array.isArray(validIds) && !validIds.includes(sportId)) {
+          throw new ApiError('This coupon is not valid for the selected sport.', 400);
+        }
+      } catch (e) {
+        // Fallback or ignore if JSON is invalid
+      }
+    }
+
     let discountAmount = 0;
-    if (coupon.discountAmount !== null) {
-      discountAmount = coupon.discountAmount;
-    } else if (coupon.discountPercentage !== null) {
-      discountAmount = (bookingAmount * coupon.discountPercentage) / 100;
-    }
+    let cashbackAmount = 0;
 
-    if (coupon.maxDiscount !== null && discountAmount > coupon.maxDiscount) {
-      discountAmount = coupon.maxDiscount;
-    }
-
-    if (discountAmount > bookingAmount) {
-      discountAmount = bookingAmount;
+    if (coupon.type === 'CASHBACK') {
+      if (coupon.cashbackAmount !== null) {
+        cashbackAmount = coupon.cashbackAmount;
+      } else if (coupon.cashbackPercentage !== null) {
+        cashbackAmount = (bookingAmount * coupon.cashbackPercentage) / 100;
+      }
+      if (coupon.maxDiscount !== null && cashbackAmount > coupon.maxDiscount) {
+        cashbackAmount = coupon.maxDiscount;
+      }
+    } else {
+      if (coupon.discountAmount !== null) {
+        discountAmount = coupon.discountAmount;
+      } else if (coupon.discountPercentage !== null) {
+        discountAmount = (bookingAmount * coupon.discountPercentage) / 100;
+      }
+      if (coupon.maxDiscount !== null && discountAmount > coupon.maxDiscount) {
+        discountAmount = coupon.maxDiscount;
+      }
+      if (discountAmount > bookingAmount) {
+        discountAmount = bookingAmount;
+      }
     }
 
     return {
       coupon: {
         id: coupon.id,
         code: coupon.code,
-        discountAmount: Math.floor(discountAmount)
+        type: coupon.type || 'DISCOUNT',
+        discountAmount: Math.floor(discountAmount),
+        cashbackAmount: Math.floor(cashbackAmount),
+        rewardCouponId: coupon.rewardCouponId
       }
     };
   }
 }
+
+

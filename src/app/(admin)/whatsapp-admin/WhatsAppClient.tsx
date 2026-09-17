@@ -54,7 +54,7 @@ const DoubleTick = ({ className = "" }: { className?: string }) => (
 const MessageTicks = ({ status, errorMessage }: { status: string; errorMessage?: string }) => {
   switch (status?.toUpperCase()) {
     case "READ":
-      return <DoubleTick className="text-[#53bdeb]" />;
+      return <DoubleTick className="text-sky-400" />;
     case "DELIVERED":
       return <DoubleTick className="text-gray-400" />;
     case "SENT":
@@ -87,7 +87,7 @@ const MessageTicks = ({ status, errorMessage }: { status: string; errorMessage?:
 const PreviewTicks = ({ status }: { status: string }) => {
   switch (status?.toUpperCase()) {
     case "READ":
-      return <DoubleTick className="text-[#53bdeb] shrink-0" />;
+      return <DoubleTick className="text-sky-400 shrink-0" />;
     case "DELIVERED":
       return <DoubleTick className="text-gray-500 shrink-0" />;
     default:
@@ -391,12 +391,12 @@ export default function WhatsAppClient({ initialConversations, initialMessages =
   );
 
   return (
-    <div className="flex flex-col w-full h-[100dvh] bg-[#0b141a] overflow-hidden text-gray-200">
+    <div className="flex flex-col w-full h-[100dvh] bg-sv-bg overflow-hidden text-sv-text">
       {/* Compact Top Bar */}
-      <div className="bg-[#111b21] border-b border-[#222d34] px-4 py-2 flex items-center justify-between shrink-0">
+      <div className="bg-sv-surface-raised border-b border-sv-border px-4 py-2 flex items-center justify-between shrink-0">
         <div className="flex items-center gap-2">
           <div className="p-1.5 bg-emerald-500/10 border border-emerald-500/30 rounded-lg">
-            <FaWhatsapp className="text-[#25D366]" size={20} />
+            <FaWhatsapp className="text-emerald-400" size={20} />
           </div>
           <h1 className="text-base font-extrabold text-white tracking-tight">Live CRM Chat</h1>
           <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
@@ -410,7 +410,7 @@ export default function WhatsAppClient({ initialConversations, initialMessages =
               fetchLogs();
               setShowDebugModal(true);
             }}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#202c33] hover:bg-[#2a3942] border border-[#2a3942] text-gray-200 text-xs font-semibold transition-all"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-sv-surface hover:bg-sv-surface-hover border border-sv-border text-sv-text text-xs font-semibold transition-all"
           >
             <FiTerminal className="text-orange-400" /> Logs
           </button>
@@ -422,7 +422,7 @@ export default function WhatsAppClient({ initialConversations, initialMessages =
                 fetchMemberContext(selectedPhone);
               }
             }}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#00a884] hover:bg-[#008f6f] text-white text-xs font-bold transition-all"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold transition-all"
           >
             <FiRefreshCw className={loading ? "animate-spin" : ""} /> Refresh
           </button>
@@ -435,24 +435,24 @@ export default function WhatsAppClient({ initialConversations, initialMessages =
         <div
           className={`${
             selectedPhone ? "hidden md:flex" : "flex"
-          } col-span-12 md:col-span-3 border-r border-[#222d34] bg-[#111b21] flex-col h-full overflow-hidden`}
+          } col-span-12 md:col-span-3 border-r border-sv-border bg-sv-surface flex-col h-full overflow-hidden`}
         >
-          <div className="p-3 border-b border-[#222d34] bg-[#111b21]">
+          <div className="p-3 border-b border-sv-border bg-sv-surface">
             <div className="relative">
-              <FiSearch className="absolute left-3 top-2.5 text-gray-400 text-xs" />
+              <FiSearch className="absolute left-3 top-2.5 text-sv-text-muted text-xs" />
               <input
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search name, phone, or messages..."
-                className="w-full pl-8 pr-3 py-1.5 bg-[#202c33] text-white text-xs rounded-lg border border-[#2a3942] focus:outline-none focus:border-[#00a884] placeholder-gray-500"
+                className="w-full pl-8 pr-3 py-1.5 bg-sv-surface-raised text-white text-xs rounded-lg border border-sv-border focus:outline-none focus:border-emerald-500 placeholder-sv-text-muted"
               />
             </div>
           </div>
 
           <div className="overflow-y-auto flex-1">
             {filteredConversations.length === 0 ? (
-              <div className="p-6 text-center text-gray-500 text-xs">
+              <div className="p-6 text-center text-sv-text-muted text-xs">
                 No matching WhatsApp conversations found.
               </div>
             ) : (
@@ -462,10 +462,10 @@ export default function WhatsAppClient({ initialConversations, initialMessages =
                   <button
                     key={conv.phoneNumber}
                     onClick={() => setSelectedPhone(conv.phoneNumber)}
-                    className={`w-full text-left p-3.5 transition-all flex flex-col gap-1 border-b border-b-[#222d34] border-l-4 ${
+                    className={`w-full text-left p-3.5 transition-all flex flex-col gap-1 border-b border-b-sv-border border-l-4 ${
                       isSelected 
-                        ? "bg-[#00a884]/20 border-l-[#00a884]" 
-                        : "border-l-transparent hover:bg-[#202c33]"
+                        ? "bg-emerald-500/20 border-l-emerald-500" 
+                        : "border-l-transparent hover:bg-sv-surface-hover"
                     }`}
                   >
                     <div className="flex items-center justify-between gap-2">
@@ -476,17 +476,17 @@ export default function WhatsAppClient({ initialConversations, initialMessages =
                       </span>
                       <div className="flex items-center gap-1.5 shrink-0">
                         {conv.unreadCount > 0 && (
-                          <span className="w-5 h-5 rounded-full bg-[#00a884] shadow-sm text-white text-[10px] font-bold flex items-center justify-center">
+                          <span className="w-5 h-5 rounded-full bg-emerald-600 shadow-sm text-white text-[10px] font-bold flex items-center justify-center">
                             {conv.unreadCount}
                           </span>
                         )}
-                        <span className="text-[10px] text-gray-400">
+                        <span className="text-[10px] text-sv-text-muted">
                           {new Date(conv.updatedAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
                         </span>
                       </div>
                     </div>
 
-                    <p className="text-xs text-gray-400 truncate font-sans flex items-center gap-1.5">
+                    <p className="text-xs text-sv-text-muted truncate font-sans flex items-center gap-1.5">
                       {conv.lastDirection === "OUTGOING" && (
                         <PreviewTicks status={conv.lastStatus} />
                       )}
@@ -505,7 +505,7 @@ export default function WhatsAppClient({ initialConversations, initialMessages =
                           🔴 Expired (Template needed)
                         </span>
                       )}
-                      <span className="text-[10px] text-gray-500">{conv.totalMessages} msgs</span>
+                      <span className="text-[10px] text-sv-text-muted">{conv.totalMessages} msgs</span>
                     </div>
                   </button>
                 );
@@ -514,35 +514,35 @@ export default function WhatsAppClient({ initialConversations, initialMessages =
           </div>
 
           {/* Mobile Navigation Links */}
-          <div className="md:hidden border-t border-[#222d34] p-2 bg-[#111b21] grid grid-cols-3 gap-1.5">
-            <Link href="/whatsapp-admin/health" className="bg-[#202c33] hover:bg-[#2a3942] border border-[#2a3942] rounded-lg py-2 text-center text-[10px] font-bold text-gray-300 transition-all">
+          <div className="md:hidden border-t border-sv-border p-2 bg-sv-surface grid grid-cols-3 gap-1.5">
+            <Link href="/whatsapp-admin/health" className="bg-sv-surface-raised hover:bg-sv-surface-hover border border-sv-border rounded-lg py-2 text-center text-[10px] font-bold text-sv-text-muted hover:text-sv-text transition-all">
               <FiActivity className="inline mb-0.5" size={12} /> Health
             </Link>
-            <Link href="/whatsapp-admin/templates" className="bg-[#202c33] hover:bg-[#2a3942] border border-[#2a3942] rounded-lg py-2 text-center text-[10px] font-bold text-gray-300 transition-all">
+            <Link href="/whatsapp-admin/templates" className="bg-sv-surface-raised hover:bg-sv-surface-hover border border-sv-border rounded-lg py-2 text-center text-[10px] font-bold text-sv-text-muted hover:text-sv-text transition-all">
               <FiLayers className="inline mb-0.5" size={12} /> Templates
             </Link>
-            <Link href="/whatsapp-admin/events" className="bg-[#202c33] hover:bg-[#2a3942] border border-[#2a3942] rounded-lg py-2 text-center text-[10px] font-bold text-gray-300 transition-all">
+            <Link href="/whatsapp-admin/events" className="bg-sv-surface-raised hover:bg-sv-surface-hover border border-sv-border rounded-lg py-2 text-center text-[10px] font-bold text-sv-text-muted hover:text-sv-text transition-all">
               <FiZap className="inline mb-0.5" size={12} /> Events
             </Link>
           </div>
         </div>
 
         {/* Column 2: WhatsApp Web Dark Real-Time Chat Area */}
-        <div className="col-span-12 md:col-span-6 bg-[#0b141a] flex flex-col h-full overflow-hidden relative">
+        <div className="col-span-12 md:col-span-6 bg-sv-bg flex flex-col h-full overflow-hidden relative">
           {selectedPhone ? (
             <>
               {/* Edge-to-Edge Chat Header */}
-              <div className="px-4 py-2.5 border-b border-[#222d34] bg-[#202c33] flex items-center justify-between shrink-0">
+              <div className="px-4 py-2.5 border-b border-sv-border bg-sv-surface-raised flex items-center justify-between shrink-0">
                 <div className="flex items-center gap-3">
                   {/* Mobile Back Button */}
                   <button 
-                    className="md:hidden text-[#00a884] hover:bg-white/5 p-1 rounded-full mr-1 transition-colors"
+                    className="md:hidden text-emerald-400 hover:bg-white/5 p-1 rounded-full mr-1 transition-colors"
                     onClick={() => setSelectedPhone(null)}
                   >
                     <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
                   </button>
                   
-                  <div className="w-9 h-9 rounded-full bg-gradient-to-br from-[#00a884] to-[#02735e] flex items-center justify-center text-white font-bold font-sans text-xs shrink-0 shadow-lg">
+                  <div className="w-9 h-9 rounded-full bg-gradient-to-br from-emerald-500 to-teal-700 flex items-center justify-center text-white font-bold font-sans text-xs shrink-0 shadow-lg">
                     {selectedPhone.slice(-2)}
                   </div>
                   <div className="flex flex-col truncate">
@@ -551,7 +551,7 @@ export default function WhatsAppClient({ initialConversations, initialMessages =
                         ? `${conversations.find((c) => c.phoneNumber === selectedPhone)?.memberName} (${selectedPhone})` 
                         : `+91 ${selectedPhone}`}
                     </h3>
-                    <p className="text-[11px] text-gray-300 truncate font-medium mt-0.5">
+                    <p className="text-[11px] text-sv-text-muted truncate font-medium mt-0.5">
                       {conversations.find((c) => c.phoneNumber === selectedPhone)?.is24HourWindowOpen
                         ? "🟢 Active (24h Window Open)"
                         : "🔴 Inactive (24h Window Closed)"}
@@ -566,7 +566,7 @@ export default function WhatsAppClient({ initialConversations, initialMessages =
                       fetchMemberContext(selectedPhone);
                     }}
                     title="Refresh Conversation"
-                    className="p-1.5 rounded-lg bg-[#2a3942] hover:bg-[#374955] text-gray-300 transition-colors"
+                    className="p-1.5 rounded-lg bg-sv-surface hover:bg-sv-surface-hover border border-sv-border text-sv-text transition-colors"
                   >
                     <FiRefreshCw size={13} />
                   </button>
@@ -575,19 +575,18 @@ export default function WhatsAppClient({ initialConversations, initialMessages =
 
               {/* WhatsApp Messages List with Reply support */}
               <div
-                className="flex-1 p-4 overflow-y-auto space-y-2.5"
+                className="flex-1 p-4 overflow-y-auto space-y-2.5 bg-sv-bg"
                 style={{
-                  backgroundColor: "#0b141a",
                   backgroundImage: "radial-gradient(circle at 50% 50%, rgba(20, 30, 36, 0.4) 0%, transparent 100%)",
                 }}
               >
                 {chatLoading ? (
                   <div className="flex flex-col items-center justify-center h-full space-y-3">
                     <FiRefreshCw className="animate-spin text-2xl text-emerald-400" />
-                    <p className="text-gray-400 text-xs">Loading chat history...</p>
+                    <p className="text-sv-text-muted text-xs">Loading chat history...</p>
                   </div>
                 ) : chatMessages.length === 0 ? (
-                  <div className="text-center py-12 text-gray-500 text-xs">
+                  <div className="text-center py-12 text-sv-text-muted text-xs">
                     No WhatsApp messages recorded with this number yet.
                   </div>
                 ) : (
@@ -611,7 +610,7 @@ export default function WhatsAppClient({ initialConversations, initialMessages =
                                 })
                               }
                               title="Reply to message"
-                              className="opacity-0 group-hover:opacity-100 p-1.5 rounded-full bg-[#202c33] text-gray-300 hover:text-white transition-opacity shrink-0"
+                              className="opacity-0 group-hover:opacity-100 p-1.5 rounded-full bg-sv-surface-raised hover:bg-sv-surface-hover text-sv-text-muted hover:text-white transition-opacity shrink-0"
                             >
                               <FiCornerUpLeft size={13} />
                             </button>
@@ -620,15 +619,15 @@ export default function WhatsAppClient({ initialConversations, initialMessages =
                           <div
                             className={`px-3.5 py-2.5 rounded-2xl text-sm font-sans shadow ${
                               isOutgoing
-                                ? "bg-[#005c4b] text-white rounded-br-none"
-                                : "bg-[#202c33] text-gray-100 rounded-bl-none border border-[#2a3942]"
+                                ? "bg-emerald-950/80 border border-emerald-700/40 text-white rounded-br-none"
+                                : "bg-sv-surface-raised text-sv-text rounded-bl-none border border-sv-border"
                             }`}
                           >
                             <div className="space-y-0.5 leading-relaxed text-sm">
                               {renderWhatsAppRichText(msg.content)}
                             </div>
                             <div className="flex items-center justify-end gap-1.5 mt-1 -mb-0.5">
-                              <span className="text-[10px] text-gray-400/80">
+                              <span className="text-[10px] text-sv-text-muted">
                                 {new Date(msg.createdAt).toLocaleTimeString([], {
                                   hour: "2-digit",
                                   minute: "2-digit",
@@ -650,7 +649,7 @@ export default function WhatsAppClient({ initialConversations, initialMessages =
                                 })
                               }
                               title="Reply to message"
-                              className="opacity-0 group-hover:opacity-100 p-1.5 rounded-full bg-[#202c33] text-gray-300 hover:text-white transition-opacity shrink-0"
+                              className="opacity-0 group-hover:opacity-100 p-1.5 rounded-full bg-sv-surface-raised hover:bg-sv-surface-hover text-sv-text-muted hover:text-white transition-opacity shrink-0"
                             >
                               <FiCornerUpLeft size={13} />
                             </button>
@@ -666,16 +665,16 @@ export default function WhatsAppClient({ initialConversations, initialMessages =
 
               {/* Reply Quote Banner */}
               {replyingTo && (
-                <div className="bg-[#1e2a30] px-4 py-2 border-t border-[#2a3942] flex items-center justify-between shrink-0">
-                  <div className="flex items-center gap-2 border-l-2 border-[#00a884] pl-3 overflow-hidden">
+                <div className="bg-sv-surface px-4 py-2 border-t border-sv-border flex items-center justify-between shrink-0">
+                  <div className="flex items-center gap-2 border-l-2 border-emerald-500 pl-3 overflow-hidden">
                     <div className="truncate">
-                      <p className="text-xs font-bold text-[#00a884]">Replying to {replyingTo.sender}</p>
-                      <p className="text-xs text-gray-300 truncate font-sans">{replyingTo.content}</p>
+                      <p className="text-xs font-bold text-emerald-400">Replying to {replyingTo.sender}</p>
+                      <p className="text-xs text-sv-text-muted truncate font-sans">{replyingTo.content}</p>
                     </div>
                   </div>
                   <button
                     onClick={() => setReplyingTo(null)}
-                    className="p-1 rounded hover:bg-[#202c33] text-gray-400 hover:text-white shrink-0"
+                    className="p-1 rounded hover:bg-sv-surface-hover text-sv-text-muted hover:text-white shrink-0"
                   >
                     <FiX size={16} />
                   </button>
@@ -683,10 +682,10 @@ export default function WhatsAppClient({ initialConversations, initialMessages =
               )}
 
               {/* WhatsApp Edge-to-Edge Input Bar */}
-              <div className="relative border-t border-[#202c33] bg-[#202c33] shrink-0">
+              <div className="relative border-t border-sv-border bg-sv-surface-raised shrink-0">
                 {showQuickReplies && (
-                  <div className="absolute bottom-full left-2 mb-2 w-64 bg-[#2a3942] border border-[#3b4a54] rounded-xl shadow-lg overflow-hidden z-10">
-                    <div className="p-2 border-b border-[#3b4a54] text-xs font-bold text-gray-400 uppercase tracking-wider">Quick Replies</div>
+                  <div className="absolute bottom-full left-2 mb-2 w-64 bg-sv-surface border border-sv-border rounded-xl shadow-lg overflow-hidden z-10">
+                    <div className="p-2 border-b border-sv-border text-xs font-bold text-sv-text-muted uppercase tracking-wider">Quick Replies</div>
                     <div className="max-h-48 overflow-y-auto">
                       {["Sure, checking this for you.", "Your slot is confirmed!", "Can you please share the date?", "Apologies, this slot is already booked."].map((reply, i) => (
                         <button
@@ -695,7 +694,7 @@ export default function WhatsAppClient({ initialConversations, initialMessages =
                             setChatInput(reply);
                             setShowQuickReplies(false);
                           }}
-                          className="w-full text-left px-4 py-2.5 text-sm text-gray-200 hover:bg-[#3b4a54] transition-colors"
+                          className="w-full text-left px-4 py-2.5 text-sm text-sv-text hover:bg-sv-surface-hover transition-colors"
                         >
                           {reply}
                         </button>
@@ -708,9 +707,9 @@ export default function WhatsAppClient({ initialConversations, initialMessages =
                   const is24hOpen = conversations.find((c) => c.phoneNumber === selectedPhone)?.is24HourWindowOpen;
                   if (!is24hOpen) {
                     return (
-                      <div className="p-4 text-center bg-[#202c33]">
+                      <div className="p-4 text-center bg-sv-surface-raised">
                         <p className="text-xs text-rose-400 font-bold mb-1">24h Window is Closed</p>
-                        <p className="text-[11px] text-gray-400">You cannot send normal messages right now. Please use the <Link href="/whatsapp-admin/templates" className="text-emerald-400 underline">Templates Tester</Link> tab to send an approved template and restart the conversation.</p>
+                        <p className="text-[11px] text-sv-text-muted">You cannot send normal messages right now. Please use the <Link href="/whatsapp-admin/templates" className="text-emerald-400 underline">Templates Tester</Link> tab to send an approved template and restart the conversation.</p>
                       </div>
                     );
                   }
@@ -718,12 +717,12 @@ export default function WhatsAppClient({ initialConversations, initialMessages =
                   return (
                     <form
                       onSubmit={handleSendChatMessage}
-                      className="p-3 flex flex-row items-end gap-2 bg-[#202c33]"
+                      className="p-3 flex flex-row items-end gap-2 bg-sv-surface-raised"
                     >
                       <button
                         type="button"
                         onClick={() => setShowQuickReplies(!showQuickReplies)}
-                        className="text-gray-400 hover:text-white p-2 shrink-0 transition-colors mb-1"
+                        className="text-sv-text-muted hover:text-white p-2 shrink-0 transition-colors mb-1"
                         title="Quick Replies"
                       >
                         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
@@ -746,12 +745,12 @@ export default function WhatsAppClient({ initialConversations, initialMessages =
                         }}
                         placeholder={replyingTo ? "Type your reply..." : "Type a WhatsApp message..."}
                         rows={1}
-                        className="flex-1 bg-[#2a3942] border border-transparent rounded-xl px-4 py-2.5 text-white font-sans text-sm focus:border-[#00a884] outline-none transition-all placeholder-gray-400 resize-none min-h-[42px] max-h-32 styled-scrollbar"
+                        className="flex-1 bg-sv-surface border border-sv-border rounded-xl px-4 py-2.5 text-white font-sans text-sm focus:border-emerald-500 outline-none transition-all placeholder-sv-text-muted resize-none min-h-[42px] max-h-32 styled-scrollbar"
                       />
                       <button
                         type="submit"
                         disabled={sendingChat || !chatInput.trim()}
-                        className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-[#00a884] hover:bg-[#008f6f] disabled:opacity-50 text-white font-bold text-xs shadow transition-all shrink-0 mb-1"
+                        className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 text-white font-bold text-xs shadow transition-all shrink-0 mb-1"
                       >
                         <FiSend /> {sendingChat ? "..." : "Send"}
                       </button>
@@ -761,10 +760,10 @@ export default function WhatsAppClient({ initialConversations, initialMessages =
               </div>
             </>
           ) : (
-            <div className="flex-1 flex flex-col items-center justify-center text-gray-500 space-y-3 p-8">
+            <div className="flex-1 flex flex-col items-center justify-center text-sv-text-muted space-y-3 p-8">
               <FiMessageSquare className="text-5xl opacity-20 text-emerald-500" />
-              <h4 className="text-sm font-bold text-gray-400">WhatsApp CRM Live Workspace</h4>
-              <p className="text-xs text-center max-w-sm text-gray-500">
+              <h4 className="text-sm font-bold text-white">WhatsApp CRM Live Workspace</h4>
+              <p className="text-xs text-center max-w-sm text-sv-text-muted">
                 Select a customer conversation from the left to start chatting in real time and view their live CRM & family details!
               </p>
             </div>
@@ -772,15 +771,15 @@ export default function WhatsAppClient({ initialConversations, initialMessages =
         </div>
 
         {/* Column 3: Member CRM Profile & Family Context Sidebar (Edge-to-Edge) */}
-        <div className="hidden md:flex col-span-3 border-l border-[#222d34] bg-[#111b21] flex-col h-full overflow-y-auto">
-          <div className="p-3 border-b border-[#222d34] bg-[#111b21] flex items-center justify-between shrink-0">
+        <div className="hidden md:flex col-span-3 border-l border-sv-border bg-sv-surface flex-col h-full overflow-y-auto">
+          <div className="p-3 border-b border-sv-border bg-sv-surface flex items-center justify-between shrink-0">
             <h3 className="font-bold text-white text-xs flex items-center gap-2">
               <FiUser className="text-emerald-400" /> Member & Family Context
             </h3>
             {selectedPhone && (
               <button
                 onClick={() => fetchMemberContext(selectedPhone)}
-                className="text-xs text-gray-400 hover:text-white transition-colors"
+                className="text-xs text-sv-text-muted hover:text-white transition-colors"
                 title="Reload Member Context"
               >
                 <FiRefreshCw className={loadingMemberContext ? "animate-spin" : ""} size={13} />
@@ -790,19 +789,19 @@ export default function WhatsAppClient({ initialConversations, initialMessages =
 
           <div className="p-3 space-y-3 flex-1">
             {!selectedPhone ? (
-              <div className="text-center py-16 text-gray-500 text-xs space-y-2">
+              <div className="text-center py-16 text-sv-text-muted text-xs space-y-2">
                 <FiUser className="text-3xl mx-auto opacity-30" />
                 <p>Customer details, family members, memberships, and bookings will appear here.</p>
               </div>
             ) : loadingMemberContext ? (
-              <div className="text-center py-16 text-gray-400 text-xs space-y-3">
+              <div className="text-center py-16 text-sv-text-muted text-xs space-y-3">
                 <FiRefreshCw className="animate-spin text-2xl mx-auto text-emerald-400" />
                 <p>Looking up CRM records for +91 {selectedPhone}...</p>
               </div>
             ) : memberContext?.found ? (
               <div className="space-y-3">
                 {/* Family Accounts Badge */}
-                <div className="bg-[#202c33] border border-[#2a3942] rounded-xl p-2.5 space-y-2">
+                <div className="bg-sv-surface-raised border border-sv-border rounded-xl p-2.5 space-y-2">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <FiUsers className="text-emerald-400 text-sm" />
@@ -810,7 +809,7 @@ export default function WhatsAppClient({ initialConversations, initialMessages =
                         <p className="text-xs font-bold text-white">
                           {memberContext.count > 1 ? `Family Account (${memberContext.count})` : "Member Account"}
                         </p>
-                        <p className="text-[10px] text-gray-400 font-sans">+91 {selectedPhone}</p>
+                        <p className="text-[10px] text-sv-text-muted font-sans">+91 {selectedPhone}</p>
                       </div>
                     </div>
                     <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/20 text-emerald-300">
@@ -819,7 +818,7 @@ export default function WhatsAppClient({ initialConversations, initialMessages =
                   </div>
 
                   {/* Quick Family Actions */}
-                  <div className="flex items-center gap-1.5 pt-1 border-t border-[#2a3942]">
+                  <div className="flex items-center gap-1.5 pt-1 border-t border-sv-border">
                     <button
                       type="button"
                       onClick={() => {
@@ -836,7 +835,7 @@ export default function WhatsAppClient({ initialConversations, initialMessages =
                           `\n\nReply to this message if you need to book a turf or manage your memberships! ⚽🏏`;
                         triggerQuickShare(text);
                       }}
-                      className="flex-1 bg-[#18232c] hover:bg-emerald-500/20 hover:text-emerald-300 hover:border-emerald-500/30 border border-[#2a3942] text-[10px] font-medium text-gray-300 py-1 px-2 rounded-lg flex items-center justify-center gap-1 transition-all"
+                      className="flex-1 bg-sv-surface hover:bg-emerald-500/20 hover:text-emerald-300 hover:border-emerald-500/30 border border-sv-border text-[10px] font-medium text-sv-text py-1 px-2 rounded-lg flex items-center justify-center gap-1 transition-all"
                       title="Share full summary of all linked family accounts"
                     >
                       👨‍👩‍👧 Share Family
@@ -847,7 +846,7 @@ export default function WhatsAppClient({ initialConversations, initialMessages =
                         const text = `➕ *Add a Family Member to SportsVilla*\nHello! You can register a family member or friend under your phone number anytime using our official portal:\n\n🌐 *Register Online*: https://sportsvilla.co.in/register?mobile=${selectedPhone}\n\nWe look forward to seeing you all on the field! 🏆`;
                         triggerQuickShare(text);
                       }}
-                      className="flex-1 bg-[#18232c] hover:bg-blue-500/20 hover:text-blue-300 hover:border-blue-500/30 border border-[#2a3942] text-[10px] font-medium text-gray-300 py-1 px-2 rounded-lg flex items-center justify-center gap-1 transition-all"
+                      className="flex-1 bg-sv-surface hover:bg-blue-500/20 hover:text-blue-300 hover:border-blue-500/30 border border-sv-border text-[10px] font-medium text-sv-text py-1 px-2 rounded-lg flex items-center justify-center gap-1 transition-all"
                       title="Send sign-up/registration link to add another family member"
                     >
                       ➕ Add Member Link
@@ -862,28 +861,28 @@ export default function WhatsAppClient({ initialConversations, initialMessages =
                     return (
                       <div
                         key={mIdx}
-                        className="bg-[#18232c] border border-[#222d34] rounded-xl p-3 space-y-2.5 shadow"
+                        className="bg-sv-surface-raised border border-sv-border rounded-xl p-3 space-y-2.5 shadow"
                       >
                         <div className="flex items-start justify-between">
                           <div>
                             <h4 className="text-xs font-bold text-white">{member.name}</h4>
-                            <p className="text-[11px] text-gray-400 font-sans">+91 {member.mobile}</p>
+                            <p className="text-[11px] text-sv-text-muted font-sans">+91 {member.mobile}</p>
                           </div>
-                          <span className="text-[10px] text-gray-500">
+                          <span className="text-[10px] text-sv-text-muted">
                             Joined {new Date(member.joinDate || member.createdAt).toLocaleDateString("en-IN")}
                           </span>
                         </div>
 
                         {/* Wallet & Loyalty stats */}
                         <div className="grid grid-cols-2 gap-1.5 pt-1">
-                          <div className="bg-[#111b21] rounded-lg p-1.5 text-center">
-                            <span className="text-[9px] text-gray-400 block">Wallet</span>
+                          <div className="bg-sv-surface rounded-lg p-1.5 text-center">
+                            <span className="text-[9px] text-sv-text-muted block">Wallet</span>
                             <span className="text-xs font-bold text-emerald-400 font-sans">
                               ₹{((member.walletBalance || 0) / 100).toFixed(0)}
                             </span>
                           </div>
-                          <div className="bg-[#111b21] rounded-lg p-1.5 text-center">
-                            <span className="text-[9px] text-gray-400 block">Loyalty</span>
+                          <div className="bg-sv-surface rounded-lg p-1.5 text-center">
+                            <span className="text-[9px] text-sv-text-muted block">Loyalty</span>
                             <span className="text-xs font-bold text-amber-400 font-sans">
                               🏆 {member.loyaltyPoints || 0} pts
                             </span>
@@ -891,17 +890,17 @@ export default function WhatsAppClient({ initialConversations, initialMessages =
                         </div>
 
                         {/* Active Membership Plan */}
-                        <div className="pt-2 border-t border-[#222d34]">
-                          <h5 className="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1 flex items-center gap-1">
+                        <div className="pt-2 border-t border-sv-border">
+                          <h5 className="text-[10px] font-bold text-sv-text-muted uppercase tracking-wider mb-1 flex items-center gap-1">
                             <FiAward className="text-orange-400" /> Membership Status
                           </h5>
                           {activePlan ? (
-                            <div className="bg-[#111b21] border border-emerald-500/30 rounded-lg p-2 flex items-center justify-between">
+                            <div className="bg-sv-surface border border-emerald-500/30 rounded-lg p-2 flex items-center justify-between">
                               <div>
                                 <p className="text-xs font-bold text-white">
                                   {activePlan.membershipPlan?.name || "Member Plan"}
                                 </p>
-                                <p className="text-[10px] text-gray-400">
+                                <p className="text-[10px] text-sv-text-muted">
                                   Valid until {new Date(activePlan.endDate).toLocaleDateString("en-IN")}
                                 </p>
                               </div>
@@ -910,13 +909,13 @@ export default function WhatsAppClient({ initialConversations, initialMessages =
                               </span>
                             </div>
                           ) : (
-                            <p className="text-[11px] text-gray-500 italic">No active membership</p>
+                            <p className="text-[11px] text-sv-text-muted italic">No active membership</p>
                           )}
                         </div>
 
                         {/* Recent Bookings */}
-                        <div className="pt-2 border-t border-[#222d34]">
-                          <h5 className="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1 flex items-center gap-1">
+                        <div className="pt-2 border-t border-sv-border">
+                          <h5 className="text-[10px] font-bold text-sv-text-muted uppercase tracking-wider mb-1 flex items-center gap-1">
                             <FiCalendar className="text-blue-400" /> Recent Bookings
                           </h5>
                           {member.bookings && member.bookings.length > 0 ? (
@@ -924,13 +923,13 @@ export default function WhatsAppClient({ initialConversations, initialMessages =
                               {member.bookings.map((b: any, bIdx: number) => (
                                 <div
                                   key={bIdx}
-                                  className="bg-[#111b21] rounded-lg p-1.5 flex items-center justify-between text-xs"
+                                  className="bg-sv-surface rounded-lg p-1.5 flex items-center justify-between text-xs"
                                 >
                                   <div>
                                     <span className="text-white font-medium block text-xs">
                                       {b.turf?.name || b.sport?.name || "Turf Booking"}
                                     </span>
-                                    <span className="text-[10px] text-gray-400">
+                                    <span className="text-[10px] text-sv-text-muted">
                                       {new Date(b.createdAt).toLocaleDateString("en-IN")}
                                     </span>
                                   </div>
@@ -938,7 +937,7 @@ export default function WhatsAppClient({ initialConversations, initialMessages =
                                     className={`text-[9px] font-bold px-1.5 py-0.5 rounded ${
                                       b.status === "CONFIRMED"
                                         ? "bg-emerald-500/10 text-emerald-400"
-                                        : "bg-gray-500/10 text-gray-400"
+                                        : "bg-gray-500/10 text-sv-text-muted"
                                     }`}
                                   >
                                     {b.status}
@@ -947,17 +946,17 @@ export default function WhatsAppClient({ initialConversations, initialMessages =
                               ))}
                             </div>
                           ) : (
-                            <p className="text-[11px] text-gray-500 italic">No recent turf bookings</p>
+                            <p className="text-[11px] text-sv-text-muted italic">No recent turf bookings</p>
                           )}
                         </div>
 
                         {/* Quick WhatsApp Share Actions */}
-                        <div className="pt-2 border-t border-[#222d34]">
+                        <div className="pt-2 border-t border-sv-border">
                           <div className="flex items-center justify-between mb-1.5">
-                            <span className="text-[9px] font-bold text-gray-400 uppercase tracking-wider flex items-center gap-1">
+                            <span className="text-[9px] font-bold text-sv-text-muted uppercase tracking-wider flex items-center gap-1">
                               <FiSend className="text-emerald-400" /> Quick WhatsApp Share
                             </span>
-                            <span className="text-[8px] text-gray-500 font-sans">(0 server load)</span>
+                            <span className="text-[8px] text-sv-text-muted font-sans">(0 server load)</span>
                           </div>
                           <div className="grid grid-cols-3 gap-1">
                             <button
@@ -967,10 +966,10 @@ export default function WhatsAppClient({ initialConversations, initialMessages =
                                   activePlan
                                     ? `${activePlan.membershipPlan?.name || "Active Plan"} (Valid till ${new Date(activePlan.endDate).toLocaleDateString("en-IN")})`
                                     : "Standard Member"
-                                }\n\nThank you for being part of SportsVilla! Let us know if you need any assistance.`;
+                                  }\n\nThank you for being part of SportsVilla! Let us know if you need any assistance.`;
                                 triggerQuickShare(text);
                               }}
-                              className="bg-[#111b21] hover:bg-emerald-500/20 hover:text-emerald-300 hover:border-emerald-500/40 border border-[#222d34] text-[10px] text-gray-300 font-medium py-1 px-1 rounded-md flex items-center justify-center gap-1 transition-all"
+                              className="bg-sv-surface hover:bg-emerald-500/20 hover:text-emerald-300 hover:border-emerald-500/40 border border-sv-border text-[10px] text-sv-text font-medium py-1 px-1 rounded-md flex items-center justify-center gap-1 transition-all"
                               title="Load full member account summary into chat box"
                             >
                               👤 Profile
@@ -989,7 +988,7 @@ export default function WhatsAppClient({ initialConversations, initialMessages =
                                 })}\n🟢 *Status*: ${b.status}\n\nWe look forward to hosting you! Reply here for any rescheduling or queries. ⚽🏏`;
                                 triggerQuickShare(text);
                               }}
-                              className="bg-[#111b21] hover:bg-blue-500/20 hover:text-blue-300 hover:border-blue-500/40 border border-[#222d34] text-[10px] text-gray-300 font-medium py-1 px-1 rounded-md flex items-center justify-center gap-1 transition-all disabled:opacity-30 disabled:hover:bg-[#111b21] disabled:hover:text-gray-500 disabled:cursor-not-allowed"
+                              className="bg-sv-surface hover:bg-blue-500/20 hover:text-blue-300 hover:border-blue-500/40 border border-sv-border text-[10px] text-sv-text font-medium py-1 px-1 rounded-md flex items-center justify-center gap-1 transition-all disabled:opacity-30 disabled:hover:bg-sv-surface disabled:hover:text-sv-text-muted disabled:cursor-not-allowed"
                               title="Load latest turf booking into chat box"
                             >
                               🎟️ Booking
@@ -1001,7 +1000,7 @@ export default function WhatsAppClient({ initialConversations, initialMessages =
                                 const text = `💳 *SportsVilla Wallet & Rewards Update*\nHello *${member.name}*! Here is your latest balance update:\n\n💰 *Wallet Balance*: ₹${((member.walletBalance || 0) / 100).toFixed(0)}\n🏆 *Loyalty Points*: ${member.loyaltyPoints || 0} pts\n\nYou can use your wallet balance and rewards towards your next turf booking or tournament entry! 🏏⚽`;
                                 triggerQuickShare(text);
                               }}
-                              className="bg-[#111b21] hover:bg-amber-500/20 hover:text-amber-300 hover:border-amber-500/40 border border-[#222d34] text-[10px] text-gray-300 font-medium py-1 px-1 rounded-md flex items-center justify-center gap-1 transition-all"
+                              className="bg-sv-surface hover:bg-amber-500/20 hover:text-amber-300 hover:border-amber-500/40 border border-sv-border text-[10px] text-sv-text font-medium py-1 px-1 rounded-md flex items-center justify-center gap-1 transition-all"
                               title="Load wallet balance & rewards points into chat box"
                             >
                               💳 Wallet
@@ -1014,19 +1013,19 @@ export default function WhatsAppClient({ initialConversations, initialMessages =
                 </div>
               </div>
             ) : (
-              <div className="bg-[#18232c] border border-[#222d34] rounded-xl p-5 space-y-4">
+              <div className="bg-sv-surface-raised border border-sv-border rounded-xl p-5 space-y-4">
                 <div className="text-center space-y-2">
                   <div className="w-10 h-10 rounded-full bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400 mx-auto text-lg">
                     <FiTag />
                   </div>
                   <h4 className="text-xs font-bold text-white">Unregistered Lead / Contact</h4>
-                  <p className="text-xs text-gray-400 leading-relaxed">
+                  <p className="text-xs text-sv-text-muted leading-relaxed">
                     +91 {selectedPhone} is not linked to any member account.
                   </p>
                 </div>
                 
-                <div className="pt-3 border-t border-[#222d34] space-y-2">
-                  <p className="text-[10px] font-bold text-gray-500 uppercase tracking-widest text-center mb-2">Quick Actions</p>
+                <div className="pt-3 border-t border-sv-border space-y-2">
+                  <p className="text-[10px] font-bold text-sv-text-muted uppercase tracking-widest text-center mb-2">Quick Actions</p>
                   
                   <button
                     type="button"
@@ -1034,7 +1033,7 @@ export default function WhatsAppClient({ initialConversations, initialMessages =
                       const text = `👋 *Welcome to SportsVilla!*\nWe noticed you aren't registered with us yet. Register online in 30 seconds using your number (+91 ${selectedPhone}) to unlock wallet rewards, turf bookings, and member discounts:\n\n🌐 *Register Here*: https://sportsvilla.co.in/register?mobile=${selectedPhone}\n\nSee you on the field! ⚽🏏`;
                       triggerQuickShare(text);
                     }}
-                    className="w-full bg-[#111b21] hover:bg-emerald-500/10 hover:text-emerald-400 hover:border-emerald-500/40 border border-[#222d34] text-xs text-gray-300 font-medium py-2.5 px-3 rounded-lg flex items-center justify-center gap-2 transition-all cursor-pointer"
+                    className="w-full bg-sv-surface hover:bg-emerald-500/10 hover:text-emerald-400 hover:border-emerald-500/40 border border-sv-border text-xs text-sv-text font-medium py-2.5 px-3 rounded-lg flex items-center justify-center gap-2 transition-all cursor-pointer"
                   >
                     📝 Send Registration Link
                   </button>
@@ -1045,7 +1044,7 @@ export default function WhatsAppClient({ initialConversations, initialMessages =
                       const text = `🎁 *Exclusive Welcome Discount from SportsVilla!*\nUse promo code *SPORTSVILLA100* on your first turf booking or membership purchase to get ₹100 OFF!\n\n🌐 *Claim Now*: https://sportsvilla.co.in/register?mobile=${selectedPhone}&coupon=SPORTSVILLA100`;
                       triggerQuickShare(text);
                     }}
-                    className="w-full bg-[#111b21] hover:bg-amber-500/10 hover:text-amber-400 hover:border-amber-500/40 border border-[#222d34] text-xs text-gray-300 font-medium py-2.5 px-3 rounded-lg flex items-center justify-center gap-2 transition-all cursor-pointer"
+                    className="w-full bg-sv-surface hover:bg-amber-500/10 hover:text-amber-400 hover:border-amber-500/40 border border-sv-border text-xs text-sv-text font-medium py-2.5 px-3 rounded-lg flex items-center justify-center gap-2 transition-all cursor-pointer"
                   >
                     🏷️ Send Welcome Coupon
                   </button>
@@ -1056,7 +1055,7 @@ export default function WhatsAppClient({ initialConversations, initialMessages =
                       const text = `⚽🏏 *Book Your Turf at SportsVilla*\nExplore our turfs, check live slot availability, and book instantly:\n\n📅 *Booking Portal*: https://sportsvilla.co.in/turfs\n\nReply to this message if you need help choosing a slot!`;
                       triggerQuickShare(text);
                     }}
-                    className="w-full bg-[#111b21] hover:bg-blue-500/10 hover:text-blue-400 hover:border-blue-500/40 border border-[#222d34] text-xs text-gray-300 font-medium py-2.5 px-3 rounded-lg flex items-center justify-center gap-2 transition-all cursor-pointer"
+                    className="w-full bg-sv-surface hover:bg-blue-500/10 hover:text-blue-400 hover:border-blue-500/40 border border-sv-border text-xs text-sv-text font-medium py-2.5 px-3 rounded-lg flex items-center justify-center gap-2 transition-all cursor-pointer"
                   >
                     🏟️ Send Turf Booking Link
                   </button>
@@ -1065,7 +1064,7 @@ export default function WhatsAppClient({ initialConversations, initialMessages =
                     href={`/members?addMobile=${selectedPhone}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-full bg-[#202c33] hover:bg-[#2a3942] border border-[#222d34] text-xs text-white font-medium py-2.5 px-3 rounded-lg flex items-center justify-center gap-2 transition-all text-center mt-4"
+                    className="w-full bg-sv-surface-raised hover:bg-sv-surface-hover border border-sv-border text-xs text-white font-medium py-2.5 px-3 rounded-lg flex items-center justify-center gap-2 transition-all text-center mt-4"
                   >
                     ⚡ Create Profile in CRM
                   </a>
@@ -1079,19 +1078,19 @@ export default function WhatsAppClient({ initialConversations, initialMessages =
       {/* Webhook Debug Modal / Drawer */}
       {showDebugModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
-          <div className="bg-[#161923] border border-[#2a2d3e] rounded-2xl w-full max-w-5xl max-h-[85vh] flex flex-col overflow-hidden shadow-2xl">
-            <div className="p-5 border-b border-[#2a2d3e] flex items-center justify-between bg-[#0f1117]">
+          <div className="bg-sv-surface border border-sv-border rounded-2xl w-full max-w-5xl max-h-[85vh] flex flex-col overflow-hidden shadow-2xl">
+            <div className="p-5 border-b border-sv-border flex items-center justify-between bg-sv-bg">
               <div>
                 <h3 className="font-bold text-white text-base flex items-center gap-2">
                   <FiTerminal className="text-orange-400" /> Meta Webhook Debug Logs & Raw Payload Inspector
                 </h3>
-                <p className="text-xs text-gray-400">
+                <p className="text-xs text-sv-text-muted">
                   Inspect raw HTTP hits from Meta and the live WhatsApp message database table
                 </p>
               </div>
               <button
                 onClick={() => setShowDebugModal(false)}
-                className="p-2 rounded-lg bg-[#202433] hover:bg-[#2a2d3e] text-gray-300"
+                className="p-2 rounded-lg bg-sv-surface-raised hover:bg-sv-surface-hover text-sv-text-muted hover:text-white"
               >
                 <FiX size={18} />
               </button>
@@ -1099,35 +1098,35 @@ export default function WhatsAppClient({ initialConversations, initialMessages =
 
             <div className="overflow-y-auto flex-1 p-6 space-y-6">
               {/* Raw Webhook Hits */}
-              <div className="bg-[#0f1117] border border-[#2a2d3e] rounded-xl overflow-hidden">
-                <div className="p-4 border-b border-[#2a2d3e] flex items-center justify-between">
+              <div className="bg-sv-bg border border-sv-border rounded-xl overflow-hidden">
+                <div className="p-4 border-b border-sv-border flex items-center justify-between">
                   <h4 className="font-bold text-white text-sm">Raw Webhook Hits from Meta ({webhookLogs.length})</h4>
-                  <span className="text-xs text-gray-400 font-mono">/api/client/v1/whatsapp/webhook</span>
+                  <span className="text-xs text-sv-text-muted font-mono">/api/client/v1/whatsapp/webhook</span>
                 </div>
                 <div className="overflow-x-auto">
                   <table className="w-full text-left border-collapse">
                     <thead>
-                      <tr className="border-b border-[#2a2d3e] bg-[#161923] text-xs font-semibold text-gray-400 uppercase">
+                      <tr className="border-b border-sv-border bg-sv-surface text-xs font-semibold text-sv-text-muted uppercase">
                         <th className="p-3">Time</th>
                         <th className="p-3">Event</th>
                         <th className="p-3">Raw Payload</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-[#2a2d3e]/60 text-xs font-mono">
+                    <tbody className="divide-y divide-sv-border text-xs font-mono">
                       {webhookLogs.length === 0 ? (
                         <tr>
-                          <td colSpan={3} className="p-6 text-center text-gray-500">
+                          <td colSpan={3} className="p-6 text-center text-sv-text-muted">
                             No raw webhook hits received yet.
                           </td>
                         </tr>
                       ) : (
                         webhookLogs.map((log: any, idx: number) => (
-                          <tr key={idx} className="hover:bg-[#202433]/40">
-                            <td className="p-3 text-gray-400 whitespace-nowrap">
+                          <tr key={idx} className="hover:bg-sv-surface-hover">
+                            <td className="p-3 text-sv-text-muted whitespace-nowrap">
                               {new Date(log.createdAt).toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })}
                             </td>
                             <td className="p-3 text-orange-400 font-bold">{log.event}</td>
-                            <td className="p-3 text-gray-300 max-w-xl truncate" title={log.payload}>
+                            <td className="p-3 text-sv-text-muted max-w-xl truncate" title={log.payload}>
                               {log.payload}
                             </td>
                           </tr>
@@ -1139,15 +1138,15 @@ export default function WhatsAppClient({ initialConversations, initialMessages =
               </div>
 
               {/* Message Logs Table */}
-              <div className="bg-[#0f1117] border border-[#2a2d3e] rounded-xl overflow-hidden">
-                <div className="p-4 border-b border-[#2a2d3e] flex items-center justify-between">
+              <div className="bg-sv-bg border border-sv-border rounded-xl overflow-hidden">
+                <div className="p-4 border-b border-sv-border flex items-center justify-between">
                   <h4 className="font-bold text-white text-sm">Recent Message Database Records ({messages.length})</h4>
-                  <span className="text-xs text-gray-400 font-mono">WhatsAppMessage table</span>
+                  <span className="text-xs text-sv-text-muted font-mono">WhatsAppMessage table</span>
                 </div>
                 <div className="overflow-x-auto">
                   <table className="w-full text-left border-collapse">
                     <thead>
-                      <tr className="border-b border-[#2a2d3e] bg-[#161923] text-xs font-semibold text-gray-400 uppercase">
+                      <tr className="border-b border-sv-border bg-sv-surface text-xs font-semibold text-sv-text-muted uppercase">
                         <th className="p-3">Time</th>
                         <th className="p-3">Direction</th>
                         <th className="p-3">Phone Number</th>
@@ -1155,17 +1154,17 @@ export default function WhatsAppClient({ initialConversations, initialMessages =
                         <th className="p-3">Status</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-[#2a2d3e]/60 text-xs">
+                    <tbody className="divide-y divide-sv-border text-xs">
                       {messages.length === 0 ? (
                         <tr>
-                          <td colSpan={5} className="p-6 text-center text-gray-500">
+                          <td colSpan={5} className="p-6 text-center text-sv-text-muted">
                             No messages in database yet.
                           </td>
                         </tr>
                       ) : (
                         messages.map((msg: any, idx: number) => (
-                          <tr key={idx} className="hover:bg-[#202433]/40">
-                            <td className="p-3 text-gray-400 font-mono whitespace-nowrap">
+                          <tr key={idx} className="hover:bg-sv-surface-hover">
+                            <td className="p-3 text-sv-text-muted font-mono whitespace-nowrap">
                               {new Date(msg.createdAt).toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })}
                             </td>
                             <td className="p-3">
@@ -1180,7 +1179,7 @@ export default function WhatsAppClient({ initialConversations, initialMessages =
                               </span>
                             </td>
                             <td className="p-3 font-mono text-white">{msg.phoneNumber}</td>
-                            <td className="p-3 font-mono text-gray-300 max-w-md truncate" title={msg.content}>
+                            <td className="p-3 font-mono text-sv-text-muted max-w-md truncate" title={msg.content}>
                               {msg.content}
                             </td>
                             <td className="p-3">{getStatusBadge(msg.status)}</td>
@@ -1193,7 +1192,7 @@ export default function WhatsAppClient({ initialConversations, initialMessages =
               </div>
             </div>
 
-            <div className="p-4 border-t border-[#2a2d3e] bg-[#0f1117] flex justify-end">
+            <div className="p-4 border-t border-sv-border bg-sv-bg flex justify-end">
               <button
                 onClick={() => setShowDebugModal(false)}
                 className="px-5 py-2 rounded-xl bg-orange-500 hover:bg-orange-600 text-white font-bold text-xs"

@@ -13,6 +13,8 @@ import ManageBookings from "./ManageBookings";
 import { allocateTurfsForSlots, Allocation } from "@/lib/allocationEngine";
 import { useNfc } from "@/components/nfc/NfcProvider";
 import Script from "next/script";
+import { PageHeader, Button, Card, CardContent, Badge } from "@/components/admin/ui";
+import { rawAdminTokens } from "@/lib/tokens";
 
 // Generate slots based on duration and facility open/close time
 function generateSlots(dateStr: string, durationMin: number, openTime: string = "06:00", closeTime: string = "23:00") {
@@ -400,7 +402,7 @@ export default function BookingsClient({ turfs, facilityHours = { openTime: '06:
           contact: mobile || "",
         },
         theme: {
-          color: "#ea580c",
+          color: rawAdminTokens.brandHover,
         },
         // Display ONLY UPI QR directly
         config: {
@@ -539,54 +541,69 @@ export default function BookingsClient({ turfs, facilityHours = { openTime: '06:
   }
 
   return (
-    <div>
+    <div className="space-y-6 pb-12 font-sans text-sv-text">
       <Script src="https://checkout.razorpay.com/v1/checkout.js" />
-      <div className="flex justify-between items-start mb-8 border-b border-[#2a2d3e] pb-4">
-        <div className="flex gap-4">
-          <button 
-            onClick={() => setActiveTab('MANAGE')}
-            className={`px-4 py-2 font-bold text-sm tracking-wide transition-colors ${activeTab === 'MANAGE' ? 'text-white border-b-2 border-orange-500' : 'text-gray-500 hover:text-white'}`}
-          >
-            <div className="flex items-center gap-2"><FiList /> Manage Bookings</div>
-          </button>
-          <button 
-            onClick={() => setActiveTab('NEW')}
-            className={`px-4 py-2 font-bold text-sm tracking-wide transition-colors ${activeTab === 'NEW' ? 'text-white border-b-2 border-orange-500' : 'text-gray-500 hover:text-white'}`}
-          >
-            <div className="flex items-center gap-2"><FiPlus /> New Booking</div>
-          </button>
-        </div>
-      </div>
+      <PageHeader
+        title="Sports Bookings"
+        subtitle="Manage court reservations, create walk-in bookings, and collect offline or gateway payments"
+        breadcrumbs={[
+          { label: "Dashboard", href: "/" },
+          { label: "Bookings" },
+        ]}
+        actions={
+          <div className="flex items-center gap-2">
+            <Button
+              variant={activeTab === 'MANAGE' ? 'primary' : 'secondary'}
+              size="sm"
+              leftIcon={<FiList />}
+              onClick={() => setActiveTab('MANAGE')}
+            >
+              Manage Bookings
+            </Button>
+            <Button
+              variant={activeTab === 'NEW' ? 'primary' : 'secondary'}
+              size="sm"
+              leftIcon={<FiPlus />}
+              onClick={() => setActiveTab('NEW')}
+            >
+              New Booking
+            </Button>
+          </div>
+        }
+      />
 
       {activeTab === 'MANAGE' ? (
         <ManageBookings />
       ) : (
-        <div className="animate-in fade-in duration-300">
-          <div className="mb-6">
-            <h1 className="text-2xl font-bold font-['Outfit'] text-white">Create New Booking</h1>
-            <p className="text-gray-500 mt-1 text-sm">Select Sport ➔ Select Slots ➔ Pick Court</p>
+        <div className="animate-in fade-in duration-300 space-y-6">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+              <h2 className="text-xl font-bold text-sv-text font-sans tracking-tight">Create New Booking</h2>
+              <p className="text-sv-text-muted text-xs sm:text-sm mt-0.5">Select Sport ➔ Select Slots ➔ Pick Court ➔ Payment</p>
+            </div>
           </div>
 
           {/* Stepper Progress */}
-          <div className="flex items-center gap-2 mb-6">
+          <div className="flex items-center gap-2">
             {[1, 2, 3, 4].map((s) => (
-              <div key={s} className={`flex-1 h-1.5 rounded-full ${step >= s ? 'bg-orange-500' : 'bg-[#2a2d3e]'}`} />
+              <div key={s} className={`flex-1 h-1.5 rounded-full transition-colors ${step >= s ? 'bg-sv-brand' : 'bg-sv-surface-raised'}`} />
             ))}
           </div>
 
-          <div className="bg-[#161923] border border-[#2a2d3e] rounded-xl p-6">
+          <Card variant="default">
+            <CardContent className="p-6">
             {/* STEP 1: Customer Details */}
             <div className={step === 1 ? 'block' : 'hidden'}>
-              <h2 className="text-xl font-bold font-['Outfit'] text-white flex items-center gap-2 mb-6">1. Customer Details</h2>
+              <h3 className="text-lg font-bold text-sv-text font-sans flex items-center gap-2 mb-6">1. Customer Details</h3>
               <div className="space-y-6 max-w-md">
-                <div className="bg-emerald-500/10 border border-emerald-500/20 p-4 rounded-xl mb-4 text-emerald-400 text-sm font-semibold flex items-center gap-2">
+                <div className="bg-sv-success-subtle border border-sv-success-border p-4 rounded-sv-md mb-4 text-sv-success-text text-sm font-semibold flex items-center gap-2">
                   <FiCreditCard /> Tap NFC Card to automatically fetch member details
                 </div>
                 <div>
                   <label className="block text-xs uppercase tracking-wider font-semibold text-gray-500 mb-2">Mobile Number (or Tap NFC)</label>
                   <input 
                     type="tel" 
-                    className="w-full bg-transparent border-b border-[#2a2d3e] px-2 py-3 text-white focus:border-orange-500 focus:outline-none transition-colors"
+                    className="w-full bg-transparent border-b border-sv-border px-2 py-3 text-white focus:border-sv-brand focus:outline-none transition-colors"
                     placeholder="Enter 10-digit number"
                     maxLength={10}
                     value={mobile}
@@ -596,7 +613,7 @@ export default function BookingsClient({ turfs, facilityHours = { openTime: '06:
                     }}
                   />
                   {searchResults.length > 0 && !memberId && (
-                    <div className="mt-2 bg-[#1c1f2e] border border-[#2a2d3e] rounded-xl overflow-hidden shadow-xl animate-in slide-in-from-top-2">
+                    <div className="mt-2 bg-sv-surface-raised border border-sv-border rounded-xl overflow-hidden shadow-xl animate-in slide-in-from-top-2">
                       {searchResults.map(member => (
                         <button
                           key={member.id}
@@ -606,7 +623,7 @@ export default function BookingsClient({ turfs, facilityHours = { openTime: '06:
                             setName(member.name);
                             setSearchResults([]);
                           }}
-                          className="w-full text-left px-4 py-3 border-b border-[#2a2d3e] hover:bg-[#2a2d3e] transition flex justify-between items-center group cursor-pointer"
+                          className="w-full text-left px-4 py-3 border-b border-sv-border hover:bg-sv-surface-hover transition flex justify-between items-center group cursor-pointer"
                         >
                           <div>
                             <div className="font-bold text-white group-hover:text-orange-400 transition">{member.name}</div>
@@ -627,7 +644,7 @@ export default function BookingsClient({ turfs, facilityHours = { openTime: '06:
                   <input 
                     type="text"
                     required
-                    className="w-full bg-transparent border-b border-[#2a2d3e] px-2 py-3 text-white focus:border-orange-500 focus:outline-none transition-colors"
+                    className="w-full bg-transparent border-b border-sv-border px-2 py-3 text-white focus:border-sv-brand focus:outline-none transition-colors"
                     placeholder="Enter full name"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
@@ -638,7 +655,7 @@ export default function BookingsClient({ turfs, facilityHours = { openTime: '06:
                   type="button"
                   disabled={!name || mobile.length !== 10}
                   onClick={() => setStep(2)}
-                  className="w-full bg-orange-500 hover:bg-orange-600 disabled:bg-[#2a2d3e] disabled:text-gray-500 text-white py-4 rounded-xl font-bold transition-all shadow-[0_0_20px_rgba(249,115,22,0.3)] disabled:shadow-none"
+                  className="w-full bg-orange-500 hover:bg-orange-600 disabled:bg-sv-surface-raised disabled:text-gray-500 text-white py-4 rounded-xl font-bold transition-all shadow-[0_0_20px_rgba(249,115,22,0.3)] disabled:shadow-none"
                 >
                   Continue to Booking
                 </button>
@@ -647,13 +664,13 @@ export default function BookingsClient({ turfs, facilityHours = { openTime: '06:
 
             {/* STEP 2: Date & Sport */}
             <div className={step === 2 ? 'block' : 'hidden'}>
-              <h2 className="text-xl font-bold font-['Outfit'] text-white flex items-center gap-2 mb-6">2. Date & Sport</h2>
+              <h2 className="text-xl font-bold font-sans text-white flex items-center gap-2 mb-6">2. Date & Sport</h2>
               <div className="space-y-6 max-w-md">
                 <div>
                   <label className="block text-sm font-semibold text-gray-400 mb-2">Select Date</label>
                   <input 
                     type="date" 
-                    className="w-full bg-transparent border-b border-[#2a2d3e] px-2 py-3 text-white focus:border-orange-500 focus:outline-none transition-colors"
+                    className="w-full bg-transparent border-b border-sv-border px-2 py-3 text-white focus:border-sv-brand focus:outline-none transition-colors"
                     value={selectedDate}
                     onChange={e => setSelectedDate(e.target.value)}
                   />
@@ -666,7 +683,7 @@ export default function BookingsClient({ turfs, facilityHours = { openTime: '06:
                       <button 
                         key={sport.id}
                         onClick={() => setSelectedSportId(sport.id)}
-                        className={`px-4 py-3 rounded-lg text-left transition-colors font-medium ${selectedSportId === sport.id ? 'bg-orange-500/10 text-orange-500 border border-orange-500/30' : 'text-gray-400 hover:bg-[#2a2d3e]/50 border border-transparent'}`}
+                        className={`px-4 py-3 rounded-lg text-left transition-colors font-medium ${selectedSportId === sport.id ? 'bg-orange-500/10 text-orange-500 border border-orange-500/30' : 'text-gray-400 hover:bg-sv-surface-hover/50 border border-transparent'}`}
                       >
                         {sport.name}
                       </button>
@@ -675,7 +692,7 @@ export default function BookingsClient({ turfs, facilityHours = { openTime: '06:
                   </div>
                 </div>
                 <div className="flex gap-4">
-                  <button onClick={() => setStep(1)} className="flex-1 py-4 text-gray-400 hover:text-white bg-[#1c1f2e] hover:bg-[#2a2d3e] rounded-xl font-bold transition-colors">Back</button>
+                  <button onClick={() => setStep(1)} className="flex-1 py-4 text-gray-400 hover:text-white bg-sv-surface-raised hover:bg-sv-surface-hover rounded-xl font-bold transition-colors">Back</button>
                   <button onClick={() => setStep(3)} className="flex-1 bg-orange-500 hover:bg-orange-600 text-white py-4 rounded-xl font-bold transition-all">Continue</button>
                 </div>
               </div>
@@ -683,7 +700,7 @@ export default function BookingsClient({ turfs, facilityHours = { openTime: '06:
 
             {/* STEP 3: Time Slots & Courts */}
             <div className={step === 3 ? 'block' : 'hidden'}>
-              <h2 className="text-xl font-bold font-['Outfit'] text-white flex items-center gap-2 mb-6">3. Select Time Slots & Courts</h2>
+              <h2 className="text-xl font-bold font-sans text-white flex items-center gap-2 mb-6">3. Select Time Slots & Courts</h2>
               <div className="space-y-10">
                 <div>
                   {loading ? (
@@ -697,9 +714,9 @@ export default function BookingsClient({ turfs, facilityHours = { openTime: '06:
                           Available Slots
                         </h2>
                         <div className="flex items-center gap-4 text-xs font-semibold">
-                          <div className="flex items-center gap-1.5 text-gray-500"><div className="w-3 h-3 rounded bg-[#0f1117] border border-[#2a2d3e]"></div> Available</div>
+                          <div className="flex items-center gap-1.5 text-gray-500"><div className="w-3 h-3 rounded bg-sv-bg border border-sv-border"></div> Available</div>
                           <div className="flex items-center gap-1.5 text-gray-500"><div className="w-3 h-3 rounded bg-orange-500 border border-orange-600"></div> Selected</div>
-                          <div className="flex items-center gap-1.5 text-gray-500"><div className="w-3 h-3 rounded bg-[#1c1f2e] opacity-50 border border-red-500/30"></div> Fully Booked</div>
+                          <div className="flex items-center gap-1.5 text-gray-500"><div className="w-3 h-3 rounded bg-sv-surface-raised opacity-50 border border-red-500/30"></div> Fully Booked</div>
                         </div>
                       </div>
 
@@ -713,10 +730,10 @@ export default function BookingsClient({ turfs, facilityHours = { openTime: '06:
                               disabled={status === 'BOOKED'}
                               className={`
                                 p-3 rounded-lg border transition-all flex flex-col items-center justify-center gap-1 cursor-pointer
-                                ${status === 'AVAILABLE' ? 'bg-transparent border-[#2a2d3e] text-gray-300 hover:border-orange-500/50' : ''}
+                                ${status === 'AVAILABLE' ? 'bg-transparent border-sv-border text-gray-300 hover:border-orange-500/50' : ''}
                                 ${status === 'SELECTED' ? 'bg-orange-500 border-orange-600 text-white shadow-[0_0_15px_rgba(249,115,22,0.3)]' : ''}
-                                ${status === 'BOOKED' ? 'bg-[#1c1f2e] border-red-500/20 text-gray-600 opacity-50 cursor-not-allowed' : ''}
-                                ${status === 'UNAVAILABLE' ? 'bg-transparent border-[#2a2d3e] text-gray-600 opacity-40 cursor-not-allowed' : ''}
+                                ${status === 'BOOKED' ? 'bg-sv-surface-raised border-red-500/20 text-gray-600 opacity-50 cursor-not-allowed' : ''}
+                                ${status === 'UNAVAILABLE' ? 'bg-transparent border-sv-border text-gray-600 opacity-40 cursor-not-allowed' : ''}
                               `}
                             >
                               <span className="font-semibold text-sm">{slot.label}</span>
@@ -734,12 +751,12 @@ export default function BookingsClient({ turfs, facilityHours = { openTime: '06:
 
                 {selectedSlots.length > 0 && autoAllocation && (
                   <div className="animate-in slide-in-from-bottom-4 duration-300">
-                    <h2 className="text-xl font-bold font-['Outfit'] text-white flex items-center gap-2 mb-6">
+                    <h2 className="text-xl font-bold font-sans text-white flex items-center gap-2 mb-6">
                       Smart Allocation Breakdown
                     </h2>
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                       {autoAllocation.map((alloc, i) => (
-                        <div key={i} className="text-left p-4 rounded-xl border border-emerald-500 bg-[#1c1f2e] shadow-[0_0_15px_rgba(16,185,129,0.15)] relative overflow-hidden">
+                        <div key={i} className="text-left p-4 rounded-xl border border-emerald-500 bg-sv-surface-raised shadow-[0_0_15px_rgba(16,185,129,0.15)] relative overflow-hidden">
                           <div className="font-bold text-white text-lg mb-1">{alloc.turfName}</div>
                           <div className="text-sm text-gray-400">₹{alloc.price}</div>
                           <div className="text-sm font-semibold text-emerald-400 mt-2">
@@ -754,8 +771,8 @@ export default function BookingsClient({ turfs, facilityHours = { openTime: '06:
                   </div>
                 )}
                 {selectedSlots.length > 0 && !autoAllocation && (
-                  <div className="animate-in slide-in-from-bottom-4 duration-300 pt-6 border-t border-[#2a2d3e]">
-                    <h2 className="text-xl font-bold font-['Outfit'] text-white flex items-center gap-2 mb-6">
+                  <div className="animate-in slide-in-from-bottom-4 duration-300 pt-6 border-t border-sv-border">
+                    <h2 className="text-xl font-bold font-sans text-white flex items-center gap-2 mb-6">
                       Select Available Court
                     </h2>
                     
@@ -778,8 +795,8 @@ export default function BookingsClient({ turfs, facilityHours = { openTime: '06:
                             ${ta.isBooked 
                               ? 'bg-transparent border-red-500/20 opacity-60 cursor-not-allowed' 
                               : selectedTurfs.some(t => t.id === ta.turf.id)
-                                ? 'bg-[#1c1f2e] border-emerald-500 shadow-[0_0_15px_rgba(16,185,129,0.15)] cursor-pointer'
-                                : 'bg-transparent border-[#2a2d3e] hover:border-emerald-500/50 cursor-pointer'
+                                ? 'bg-sv-surface-raised border-emerald-500 shadow-[0_0_15px_rgba(16,185,129,0.15)] cursor-pointer'
+                                : 'bg-transparent border-sv-border hover:border-emerald-500/50 cursor-pointer'
                             }
                           `}
                         >
@@ -807,7 +824,7 @@ export default function BookingsClient({ turfs, facilityHours = { openTime: '06:
                 )}
                 
                 <div className="flex gap-4">
-                  <button onClick={() => setStep(2)} className="w-48 py-4 text-gray-400 hover:text-white bg-[#1c1f2e] hover:bg-[#2a2d3e] rounded-xl font-bold transition-colors">Back</button>
+                  <button onClick={() => setStep(2)} className="w-48 py-4 text-gray-400 hover:text-white bg-sv-surface-raised hover:bg-sv-surface-hover rounded-xl font-bold transition-colors">Back</button>
                   <button
                     onClick={() => {
                       setParticipantCount(1);
@@ -816,7 +833,7 @@ export default function BookingsClient({ turfs, facilityHours = { openTime: '06:
                       setStep(4);
                     }}
                     disabled={selectedSlots.length === 0 || (!autoAllocation && selectedTurfs.length === 0)}
-                    className="flex-1 bg-orange-500 hover:bg-orange-600 disabled:bg-[#2a2d3e] disabled:text-gray-500 text-white py-4 rounded-xl font-bold transition-all"
+                    className="flex-1 bg-orange-500 hover:bg-orange-600 disabled:bg-sv-surface-raised disabled:text-gray-500 text-white py-4 rounded-xl font-bold transition-all"
                   >
                     Continue to Payment
                   </button>
@@ -826,7 +843,7 @@ export default function BookingsClient({ turfs, facilityHours = { openTime: '06:
 
             {/* STEP 4: Checkout */}
             <div className={step === 4 ? 'block' : 'hidden'}>
-              <h2 className="text-xl font-bold font-['Outfit'] text-white mb-6">4. Checkout & Payment</h2>
+              <h2 className="text-xl font-bold font-sans text-white mb-6">4. Checkout & Payment</h2>
               <div className="flex flex-col md:flex-row gap-8 bg-transparent">
                 {/* Left: Customer Details */}
                 <div className="flex-1 overflow-y-auto">
@@ -846,7 +863,7 @@ export default function BookingsClient({ turfs, facilityHours = { openTime: '06:
                         const val = e.target.value.replace(/\D/g, '');
                         setParticipantCount(val === '' ? '' : parseInt(val, 10));
                       }}
-                      className="w-full bg-transparent border-b border-[#2a2d3e] px-2 py-3 text-white focus:border-orange-500 focus:outline-none transition-colors"
+                      className="w-full bg-transparent border-b border-sv-border px-2 py-3 text-white focus:border-sv-brand focus:outline-none transition-colors"
                     />
                   </div>
                 )}
@@ -861,7 +878,7 @@ export default function BookingsClient({ turfs, facilityHours = { openTime: '06:
                         const isSelected = isPrimary || isAdditional;
 
                         return (
-                          <label key={m.id} className={`flex items-center gap-3 p-3 rounded-lg border cursor-pointer transition-colors ${isSelected ? 'bg-[#1c1f2e] border-emerald-500 text-white' : 'border-[#2a2d3e] text-gray-400 hover:bg-[#1c1f2e]'}`}>
+                          <label key={m.id} className={`flex items-center gap-3 p-3 rounded-lg border cursor-pointer transition-colors ${isSelected ? 'bg-sv-surface-raised border-emerald-500 text-white' : 'border-sv-border text-gray-400 hover:bg-sv-surface-raised'}`}>
                             <input 
                               type="checkbox" 
                               checked={isSelected} 
@@ -905,7 +922,7 @@ export default function BookingsClient({ turfs, facilityHours = { openTime: '06:
                     <label className="block text-xs uppercase tracking-wider font-semibold text-gray-500 mb-2">Full Name (New Member)</label>
                     <input 
                       type="text" 
-                      className="w-full bg-transparent border-b border-[#2a2d3e] px-2 py-3 text-white focus:border-orange-500 focus:outline-none transition-colors"
+                      className="w-full bg-transparent border-b border-sv-border px-2 py-3 text-white focus:border-sv-brand focus:outline-none transition-colors"
                       placeholder="Enter full name"
                       value={name}
                       onChange={e => setName(e.target.value)}
@@ -921,7 +938,7 @@ export default function BookingsClient({ turfs, facilityHours = { openTime: '06:
                         <div key={idx}>
                           <input 
                             type="text" 
-                            className="w-full bg-[#0f1117] border border-[#2a2d3e] rounded-lg px-4 py-3 text-white focus:border-orange-500/50 focus:ring-2 focus:ring-orange-500 focus:outline-none text-sm"
+                            className="w-full bg-sv-bg border border-sv-border rounded-lg px-4 py-3 text-white focus:border-sv-brand/50 focus:ring-2 focus:ring-orange-500 focus:outline-none text-sm"
                             placeholder={`Guest ${idx + 2 + additionalMemberIds.length} Name (Optional)`}
                             value={guestNames[idx] || ""}
                             onChange={e => {
@@ -938,8 +955,8 @@ export default function BookingsClient({ turfs, facilityHours = { openTime: '06:
               </div>
 
               <div className="mt-8">
-                <h2 className="text-lg font-bold font-['Outfit'] text-white mb-4">Booking Summary</h2>
-                <div className="bg-[#161923]/50 rounded-xl p-6">
+                <h2 className="text-lg font-bold font-sans text-white mb-4">Booking Summary</h2>
+                <div className="bg-sv-surface-raised rounded-xl p-6">
                   <div className="flex justify-between items-center mb-3">
                     <span className="text-gray-400 font-medium">Turf</span>
                     <span className="text-white font-bold">{autoAllocation ? autoAllocation.map(a => a.turfName).join(", ") : selectedTurfs.map(t => t.name).join(", ")}</span>
@@ -948,7 +965,7 @@ export default function BookingsClient({ turfs, facilityHours = { openTime: '06:
                     <span className="text-gray-400 font-medium">Date</span>
                     <span className="text-white font-bold">{formatIST(new Date(selectedDate), 'MMM d, yyyy')}</span>
                   </div>
-                  <div className="flex justify-between items-start mb-4 pb-4 border-b border-[#2a2d3e]">
+                  <div className="flex justify-between items-start mb-4 pb-4 border-b border-sv-border">
                     <span className="text-gray-400 font-medium">Time Slots ({selectedSlots.length})</span>
                     <div className="text-right">
                       {selectedSlots.map((s, i) => (
@@ -962,7 +979,7 @@ export default function BookingsClient({ turfs, facilityHours = { openTime: '06:
                   </div>
 
                   {primaryMember && (primaryMember.loyaltyPoints || 0) > 0 && (
-                    <div className="flex justify-between items-center mb-4 bg-[#1c1f2e] p-3 rounded-lg border border-[#2a2d3e]">
+                    <div className="flex justify-between items-center mb-4 bg-sv-surface-raised p-3 rounded-lg border border-sv-border">
                       <div className="flex flex-col">
                         <span className="text-white font-medium text-sm">Loyalty Points: <span className="text-orange-400 font-bold">{primaryMember.loyaltyPoints}</span></span>
                         <span className="text-xs text-gray-400">Max Discount: ₹{maxDiscount} (1 Rupee = {pointsPerRupee} pts)</span>
@@ -970,7 +987,7 @@ export default function BookingsClient({ turfs, facilityHours = { openTime: '06:
                       </div>
                       <label className={`flex items-center gap-2 ${maxDiscount >= 50 ? 'cursor-pointer' : 'cursor-not-allowed opacity-50'}`}>
                         <input type="checkbox" className="hidden" disabled={maxDiscount < 50} checked={redeemPoints && maxDiscount >= 50} onChange={(e) => setRedeemPoints(e.target.checked)} />
-                        <div className={`w-10 h-5 rounded-full p-1 transition-colors ${(redeemPoints && maxDiscount >= 50) ? 'bg-orange-500' : 'bg-[#0f1117] border border-[#2a2d3e]'}`}>
+                        <div className={`w-10 h-5 rounded-full p-1 transition-colors ${(redeemPoints && maxDiscount >= 50) ? 'bg-orange-500' : 'bg-sv-bg border border-sv-border'}`}>
                           <div className={`w-3 h-3 bg-white rounded-full transition-transform ${(redeemPoints && maxDiscount >= 50) ? 'translate-x-5' : ''}`}></div>
                         </div>
                         <span className={`text-sm font-semibold ${(redeemPoints && maxDiscount >= 50) ? 'text-orange-400' : 'text-gray-500'}`}>
@@ -987,7 +1004,7 @@ export default function BookingsClient({ turfs, facilityHours = { openTime: '06:
                     </div>
                   )}
 
-                  <div className="flex justify-between items-center border-t border-[#2a2d3e] pt-4 mt-2">
+                  <div className="flex justify-between items-center border-t border-sv-border pt-4 mt-2">
                     <span className="text-gray-400 font-medium">Amount to Pay</span>
                     <span className="text-3xl font-black text-emerald-400">₹{Number(finalPrice.toFixed(2))}</span>
                   </div>
@@ -998,7 +1015,7 @@ export default function BookingsClient({ turfs, facilityHours = { openTime: '06:
             {/* Right: Payment & Summary */}
             <div className="flex-1 p-6 md:p-10 overflow-y-auto flex flex-col bg-transparent">
               <div className="flex justify-between items-center mb-6 hidden md:flex">
-                <h2 className="text-xl font-bold font-['Outfit'] text-white">Payment</h2>
+                <h2 className="text-xl font-bold font-sans text-white">Payment</h2>
                 <button className="text-gray-500 hover:text-white" onClick={() => {
                   updateDisplaySession({ status: "IDLE" }).catch(() => {});
                   setShowModal(false);
@@ -1014,7 +1031,7 @@ export default function BookingsClient({ turfs, facilityHours = { openTime: '06:
                       type="text" 
                       inputMode="numeric"
                       pattern="[0-9]*"
-                      className="w-full bg-transparent border-b border-[#2a2d3e] px-2 py-3 text-white focus:border-orange-500 focus:outline-none transition-colors"
+                      className="w-full bg-transparent border-b border-sv-border px-2 py-3 text-white focus:border-sv-brand focus:outline-none transition-colors"
                       value={cashAmount}
                       onChange={e => {
                         const valStr = e.target.value.replace(/\D/g, '');
@@ -1037,7 +1054,7 @@ export default function BookingsClient({ turfs, facilityHours = { openTime: '06:
                       type="text" 
                       inputMode="numeric"
                       pattern="[0-9]*"
-                      className="w-full bg-transparent border-b border-[#2a2d3e] px-2 py-3 text-white focus:border-orange-500 focus:outline-none transition-colors"
+                      className="w-full bg-transparent border-b border-sv-border px-2 py-3 text-white focus:border-sv-brand focus:outline-none transition-colors"
                       value={onlineAmount}
                       onChange={e => {
                         const valStr = e.target.value.replace(/\D/g, '');
@@ -1055,7 +1072,7 @@ export default function BookingsClient({ turfs, facilityHours = { openTime: '06:
                     />
                   </div>
                 </div>
-                <div className="flex justify-between items-center pt-2 border-t border-[#2a2d3e]">
+                <div className="flex justify-between items-center pt-2 border-t border-sv-border">
                   <span className="text-sm text-gray-400">Pay at Counter (PAC)</span>
                   <span className={`text-lg font-bold ${finalPrice - (Number(cashAmount)||0) - (Number(onlineAmount)||0) > 0 ? 'text-orange-400' : 'text-emerald-400'}`}>
                     ₹{Number(Math.max(0, finalPrice - (Number(cashAmount)||0) - (Number(onlineAmount)||0)).toFixed(2))}
@@ -1099,7 +1116,7 @@ export default function BookingsClient({ turfs, facilityHours = { openTime: '06:
 
                     <button 
                       onClick={handleCastToDisplay}
-                      className="flex-1 bg-[#1c1f2e] border border-emerald-500/30 hover:bg-emerald-500/10 text-emerald-400 rounded-lg py-4 font-bold transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+                      className="flex-1 bg-sv-surface-raised border border-emerald-500/30 hover:bg-emerald-500/10 text-emerald-400 rounded-lg py-4 font-bold transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
                       title="Show QR on second screen"
                     >
                       Cast Screen
@@ -1134,9 +1151,8 @@ export default function BookingsClient({ turfs, facilityHours = { openTime: '06:
               </div>
             </div>
             {/* End Step 4 */}
-
-
-          </div>
+            </CardContent>
+          </Card>
       
       {/* End of NEW tab container */}
       </div>
