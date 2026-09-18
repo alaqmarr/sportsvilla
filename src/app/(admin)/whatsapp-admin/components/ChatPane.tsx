@@ -156,7 +156,7 @@ export function ChatPane({
   return (
     <section className="flex-1 flex flex-col h-full bg-[#E5DDD5] dark:bg-[#0b141a] relative">
       {/* Chat Header */}
-      <header className="bg-sv-surface border-b border-sv-border p-3 flex items-center justify-between shrink-0 shadow-sm z-10">
+      <header className="bg-sv-surface border-b border-sv-border border-[#2a2d3e] p-3 flex items-center justify-between shrink-0 shadow-sm z-10">
         <div className="flex items-center gap-3">
           <Avatar name={selectedConv?.memberName || "User"} size="md" />
           <div>
@@ -197,7 +197,7 @@ export function ChatPane({
         {/* Scrolling Content */}
         <div className="flex-1 overflow-y-auto p-4 flex flex-col space-y-4 styled-scrollbar relative z-10">
         {chatMessages.length === 0 ? (
-          <div className="m-auto bg-white/90 p-4 rounded-xl shadow-sm text-center">
+          <div className="m-auto bg-[#161923]/90 p-4 rounded-xl shadow-sm text-center">
             <h4 className="font-bold text-sv-text mb-1">No messages yet</h4>
             <p className="text-sm text-sv-text-muted">Start the conversation by sending a template.</p>
           </div>
@@ -215,7 +215,7 @@ export function ChatPane({
                 <React.Fragment key={idx}>
                   {showDate && (
                     <div className="flex justify-center my-2 animate-in fade-in slide-in-from-bottom-2 duration-300">
-                      <span className="bg-white/90 dark:bg-sv-surface-raised px-3 py-1 rounded-lg shadow-sm text-[11px] font-medium text-sv-text-muted uppercase tracking-wider">
+                      <span className="bg-[#161923]/90 dark:bg-sv-surface-raised px-3 py-1 rounded-lg shadow-sm text-[11px] font-medium text-sv-text-muted uppercase tracking-wider">
                         {dateStr}
                       </span>
                     </div>
@@ -234,7 +234,7 @@ export function ChatPane({
                     className={`px-3 py-2 shadow-sm relative ${
                       isOutgoing 
                         ? "bg-[#d9fdd3] dark:bg-[#005c4b] text-sv-text rounded-lg rounded-tr-none" 
-                        : "bg-white dark:bg-[#202c33] text-sv-text rounded-lg rounded-tl-none border border-black/5 dark:border-white/5"
+                        : "bg-[#161923] dark:bg-[#202c33] text-sv-text rounded-lg rounded-tl-none border border-[#2a2d3e] border-black/5 dark:border-white/5"
                     }`}
                   >
                     {/* Tail SVG */}
@@ -289,7 +289,7 @@ export function ChatPane({
 
       {/* Replying To Banner */}
       {replyingTo && (
-        <div className="bg-sv-surface px-4 py-2 flex items-center justify-between shrink-0 border-t border-sv-border">
+        <div className="bg-sv-surface px-4 py-2 flex items-center justify-between shrink-0 border-t border-sv-border border-[#2a2d3e]">
           <div className="flex items-center gap-2 border-l-4 border-sv-brand pl-3">
             <div>
               <p className="text-xs font-bold text-sv-brand">Replying to {replyingTo.sender}</p>

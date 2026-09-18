@@ -384,7 +384,7 @@ export default function ManageBookings() {
             placeholder="Search Name, Mobile, or Turf..."
             value={searchQuery}
             onChange={e => setSearchQuery(e.target.value)}
-            className="bg-transparent border-b border-sv-border px-2 py-2 text-white focus:border-sv-brand focus:outline-none transition-colors"
+            className="bg-transparent border-b border-sv-border border-[#2a2d3e] px-2 py-2 text-white focus:border-sv-brand focus:outline-none transition-colors"
           />
           <Button variant="secondary" size="sm" onClick={handleExportCSV} leftIcon={<FiFileText />}>
             Export
@@ -393,7 +393,7 @@ export default function ManageBookings() {
             type="date" 
             value={date}
             onChange={e => setDate(e.target.value)}
-            className="bg-transparent border-b border-sv-border px-2 py-2 text-white focus:border-sv-brand focus:outline-none transition-colors"
+            className="bg-transparent border-b border-sv-border border-[#2a2d3e] px-2 py-2 text-white focus:border-sv-brand focus:outline-none transition-colors"
           />
         </div>
       </div>
@@ -402,7 +402,7 @@ export default function ManageBookings() {
         <div className="overflow-x-auto styled-scrollbar min-w-full">
           <table className="w-full text-left border-collapse">
             <thead className="sticky top-0 bg-sv-bg z-10">
-              <tr className="border-b border-sv-border">
+              <tr className="border-b border-sv-border border-[#2a2d3e]">
                 <th className="px-6 py-4 text-xs uppercase tracking-wider font-semibold text-gray-500">Time & Court</th>
                 <th className="px-6 py-4 text-xs uppercase tracking-wider font-semibold text-gray-500">Member</th>
                 <th className="px-6 py-4 text-xs uppercase tracking-wider font-semibold text-gray-500">Status</th>
@@ -433,7 +433,7 @@ export default function ManageBookings() {
                   
                   return (
                     <React.Fragment key={section.key}>
-                      <tr className="border-b border-sv-border">
+                      <tr className="border-b border-sv-border border-[#2a2d3e]">
                         <td colSpan={5} className="px-6 py-4 font-bold text-sm bg-sv-bg">
                           <span className={section.color}>{section.title}</span> 
                           <span className="ml-2 text-xs bg-sv-surface-raised px-2 py-0.5 rounded-full text-gray-400">{sectionBookings.length}</span>
@@ -457,7 +457,7 @@ export default function ManageBookings() {
                             <div className="text-xs text-gray-500 mt-1">{b.member?.mobile}</div>
                             {b.tickets && b.tickets.length > 0 && (
                               <div className="mt-2">
-                                <div className="text-[10px] font-bold px-2 py-1 rounded bg-sv-surface-raised border border-sv-border inline-block text-gray-300">
+                                <div className="text-[10px] font-bold px-2 py-1 rounded bg-sv-surface-raised border border-[#2a2d3e] border-sv-border border-[#2a2d3e] inline-block text-gray-300">
                                   {b.tickets.filter((t:any) => t.status === "CHECKED_IN").length} / {b.tickets.length} CHECKED IN
                                 </div>
                                 {b.tickets.filter((t:any) => t.status === "CHECKED_IN" && t.usedAt).map((t:any, idx:number) => (
@@ -469,14 +469,14 @@ export default function ManageBookings() {
                             )}
                           </td>
                           <td className="px-6 py-4">
-                            <span className={`px-2 py-1 rounded-md text-[10px] font-bold tracking-wider uppercase border ${getDisplayStatus(b).color}`}>
+                            <span className={`px-2 py-1 rounded-md text-[10px] font-bold tracking-wider uppercase border border-[#2a2d3e] ${getDisplayStatus(b).color}`}>
                               {getDisplayStatus(b).text}
                             </span>
                           </td>
                           <td className="px-6 py-4">
                             <button 
                               onClick={() => b.paymentStatus !== 'PAID' && handleTogglePayment(b.id, b.paymentStatus)}
-                              className={`px-3 py-1.5 rounded-lg text-xs font-bold uppercase transition-colors border ${
+                              className={`px-3 py-1.5 rounded-lg text-xs font-bold uppercase transition-colors border border-[#2a2d3e] ${
                                 b.paymentStatus === 'PAID' ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20 cursor-default' :
                                 b.paymentStatus === 'PARTIAL' ? 'bg-blue-500/10 text-blue-400 border-blue-500/20 hover:bg-blue-500/20 cursor-pointer' :
                                 'bg-orange-500/10 text-orange-400 border-orange-500/20 hover:bg-orange-500/20 cursor-pointer'
@@ -497,7 +497,7 @@ export default function ManageBookings() {
                                   {(b.paymentStatus === 'UNPAID' || b.paymentStatus === 'PARTIAL') && (
                                     <button 
                                       onClick={() => openPayModal(b)}
-                                      className="p-2 bg-sv-bg border border-sv-border text-emerald-400 hover:border-emerald-500/50 rounded-lg transition-colors"
+                                      className="p-2 bg-sv-bg border border-[#2a2d3e] border-sv-border border-[#2a2d3e] text-emerald-400 hover:border-emerald-500/50 rounded-lg transition-colors"
                                       title="Receive Payment"
                                     >
                                       <FiCreditCard size={16} />
@@ -505,28 +505,28 @@ export default function ManageBookings() {
                                   )}
                                   <button 
                                     onClick={() => window.open(`/print/ticket/${b.id}`, '_blank')}
-                                    className="p-2 bg-sv-bg border border-sv-border text-purple-400 hover:border-purple-500/50 rounded-lg transition-colors"
+                                    className="p-2 bg-sv-bg border border-[#2a2d3e] border-sv-border border-[#2a2d3e] text-purple-400 hover:border-purple-500/50 rounded-lg transition-colors"
                                     title="Print Ticket"
                                   >
                                     <FiPrinter size={16} />
                                   </button>
                                   <button 
                                     onClick={() => openExtensionModal(b.id)}
-                                    className="p-2 bg-sv-bg border border-sv-border text-blue-400 hover:border-blue-500/50 rounded-lg transition-colors"
+                                    className="p-2 bg-sv-bg border border-[#2a2d3e] border-sv-border border-[#2a2d3e] text-blue-400 hover:border-blue-500/50 rounded-lg transition-colors"
                                     title="Extend Slot"
                                   >
                                     <FiMaximize2 size={16} />
                                   </button>
                                   <button 
                                     onClick={() => setRescheduleModal({ show: true, booking: b, newDate: formatIST(new Date(b.startTime), 'yyyy-MM-dd'), newTime: formatIST(new Date(b.startTime), 'HH:mm'), loading: false })}
-                                    className="p-2 bg-sv-bg border border-sv-border text-yellow-400 hover:border-yellow-500/50 rounded-lg transition-colors"
+                                    className="p-2 bg-sv-bg border border-[#2a2d3e] border-sv-border border-[#2a2d3e] text-yellow-400 hover:border-yellow-500/50 rounded-lg transition-colors"
                                     title="Reschedule Booking"
                                   >
                                     <FiCalendar size={16} />
                                   </button>
                                   <button 
                                     onClick={() => handleCancel(b.id)}
-                                    className="p-2 bg-sv-bg border border-sv-border text-red-400 hover:border-red-500/50 rounded-lg transition-colors"
+                                    className="p-2 bg-sv-bg border border-[#2a2d3e] border-sv-border border-[#2a2d3e] text-red-400 hover:border-red-500/50 rounded-lg transition-colors"
                                     title="Cancel Booking"
                                   >
                                     <FiTrash2 size={16} />
@@ -564,7 +564,7 @@ export default function ManageBookings() {
               initial={{ scale: 0.95, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.95, opacity: 0 }}
-              className="bg-sv-bg rounded-xl w-full max-w-2xl shadow-2xl overflow-hidden flex flex-col md:flex-row my-8 relative z-10 border border-sv-border-subtle"
+              className="bg-sv-bg rounded-xl w-full max-w-2xl shadow-2xl overflow-hidden flex flex-col md:flex-row my-8 relative z-10 border border-[#2a2d3e] border-sv-border-subtle"
             >
               <button 
                 onClick={closePayModal}
@@ -573,7 +573,7 @@ export default function ManageBookings() {
                 <FiX size={24} />
               </button>
               
-              <div className="flex-1 p-6 border-b md:border-b-0 md:border-r border-sv-border">
+              <div className="flex-1 p-6 border-b md:border-b-0 md:border-r border-sv-border border-[#2a2d3e]">
                 <h3 className="text-xl font-bold font-sans text-white mb-2">Record Payment</h3>
                 <p className="text-sm text-gray-400 mb-6">{payModal.booking.member?.name}</p>
                 
@@ -592,14 +592,14 @@ export default function ManageBookings() {
                     <span className="text-emerald-400 font-medium text-sm">Amount Paid</span>
                     <span className="text-emerald-400 font-bold">₹{Number(totalPaid.toFixed(2))}</span>
                   </div>
-                  <div className="flex justify-between items-center pt-2 border-t border-sv-border">
+                  <div className="flex justify-between items-center pt-2 border-t border-sv-border border-[#2a2d3e]">
                     <span className="text-orange-400 font-bold">Remaining Balance</span>
                     <span className="text-orange-400 font-bold text-xl">₹{Number(balance.toFixed(2))}</span>
                   </div>
                 </div>
 
                 {/* Payment Method Selector */}
-                <div className="flex bg-sv-bg p-1 rounded-xl border border-sv-border mb-4">
+                <div className="flex bg-sv-bg p-1 rounded-xl border border-[#2a2d3e] border-sv-border border-[#2a2d3e] mb-4">
                   <button
                     type="button"
                     onClick={() => {
@@ -633,9 +633,9 @@ export default function ManageBookings() {
 
                 {paymentMode === "SPORTSVILLA_CARD" ? (
                   <div className="space-y-4 mb-6">
-                    <div className="bg-sv-bg border border-orange-500/30 rounded-xl p-5 text-center flex flex-col items-center">
+                    <div className="bg-sv-bg border border-[#2a2d3e] border-orange-500/30 rounded-xl p-5 text-center flex flex-col items-center">
                       <div className="relative mb-3 flex items-center justify-center">
-                        <div className="w-16 h-16 rounded-full bg-orange-500/10 border border-orange-500/30 flex items-center justify-center text-orange-400 animate-pulse">
+                        <div className="w-16 h-16 rounded-full bg-orange-500/10 border border-[#2a2d3e] border-orange-500/30 flex items-center justify-center text-orange-400 animate-pulse">
                           <FiCreditCard size={28} />
                         </div>
                       </div>
@@ -645,7 +645,7 @@ export default function ManageBookings() {
                       </p>
 
                       {isNfcListening && (
-                        <div className="inline-flex items-center gap-2 px-3 py-1 bg-emerald-500/10 border border-emerald-500/30 rounded-full text-xs font-semibold text-emerald-400 mb-2">
+                        <div className="inline-flex items-center gap-2 px-3 py-1 bg-emerald-500/10 border border-[#2a2d3e] border-emerald-500/30 rounded-full text-xs font-semibold text-emerald-400 mb-2">
                           <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
                           Reader Active & Listening
                         </div>
@@ -663,13 +663,13 @@ export default function ManageBookings() {
                     </div>
 
                     {nfcError && (
-                      <div className="p-3 bg-red-500/10 border border-red-500/30 rounded-lg text-xs text-red-400 font-medium">
+                      <div className="p-3 bg-red-500/10 border border-[#2a2d3e] border-red-500/30 rounded-lg text-xs text-red-400 font-medium">
                         {nfcError}
                       </div>
                     )}
 
                     {nfcStatus && (
-                      <div className="p-3 bg-orange-500/10 border border-orange-500/30 rounded-lg text-xs text-orange-400 font-medium">
+                      <div className="p-3 bg-orange-500/10 border border-[#2a2d3e] border-orange-500/30 rounded-lg text-xs text-orange-400 font-medium">
                         {nfcStatus}
                       </div>
                     )}
@@ -687,7 +687,7 @@ export default function ManageBookings() {
                             if (e.key === "Enter") handleNfcPayment();
                           }}
                           placeholder="04A1B2C3"
-                          className="flex-1 bg-sv-surface-raised border border-sv-border rounded-lg px-4 py-3 text-white font-mono uppercase focus:border-sv-brand/50 focus:ring-2 focus:ring-sv-brand focus:outline-none"
+                          className="flex-1 bg-sv-surface-raised border border-[#2a2d3e] border-sv-border border-[#2a2d3e] rounded-lg px-4 py-3 text-white font-mono uppercase focus:border-sv-brand/50 focus:ring-2 focus:ring-sv-brand focus:outline-none"
                         />
                         <button
                           type="button"
@@ -710,7 +710,7 @@ export default function ManageBookings() {
                             type="text" 
                             inputMode="numeric"
                             pattern="[0-9]*"
-                            className="w-full bg-transparent border-b border-sv-border px-2 py-3 text-white focus:border-sv-brand focus:outline-none transition-colors"
+                            className="w-full bg-transparent border-b border-sv-border border-[#2a2d3e] px-2 py-3 text-white focus:border-sv-brand focus:outline-none transition-colors"
                             value={cashAmount}
                             onChange={e => {
                               const valStr = e.target.value.replace(/\D/g, '');
@@ -733,7 +733,7 @@ export default function ManageBookings() {
                             type="text" 
                             inputMode="numeric"
                             pattern="[0-9]*"
-                            className="w-full bg-transparent border-b border-sv-border px-2 py-3 text-white focus:border-sv-brand focus:outline-none transition-colors"
+                            className="w-full bg-transparent border-b border-sv-border border-[#2a2d3e] px-2 py-3 text-white focus:border-sv-brand focus:outline-none transition-colors"
                             value={onlineAmount}
                             onChange={e => {
                               const valStr = e.target.value.replace(/\D/g, '');
@@ -756,7 +756,7 @@ export default function ManageBookings() {
                     <div className="flex gap-3">
                       <button 
                         onClick={handleCastToDisplay}
-                        className="flex-1 bg-sv-surface-raised border border-emerald-500/30 hover:bg-emerald-500/10 text-emerald-400 rounded-lg py-3 font-bold transition-colors flex items-center justify-center gap-2"
+                        className="flex-1 bg-sv-surface-raised border border-[#2a2d3e] border-emerald-500/30 hover:bg-emerald-500/10 text-emerald-400 rounded-lg py-3 font-bold transition-colors flex items-center justify-center gap-2"
                       >
                         <FiMonitor /> Cast
                       </button>
@@ -778,11 +778,11 @@ export default function ManageBookings() {
                   <>
                     <p className="text-xs font-bold text-gray-500 uppercase tracking-widest mb-4">Scan to Pay via UPI</p>
                     {payModal.qrData ? (
-                      <div className="bg-white p-3 rounded-xl mb-4">
+                      <div className="bg-[#161923] p-3 rounded-xl mb-4">
                         <img src={payModal.qrData} alt="UPI QR Code" className="w-48 h-48" />
                       </div>
                     ) : (
-                      <div className="w-48 h-48 bg-gray-200 animate-pulse rounded-xl mb-4"></div>
+                      <div className="w-48 h-48 bg-[#2a2d3e] animate-pulse rounded-xl mb-4"></div>
                     )}
                     <p className="text-sm font-semibold text-gray-300">{upiSettings.businessName}</p>
                     <p className="text-xs text-gray-500">{upiSettings.upiId}</p>
@@ -817,9 +817,9 @@ export default function ManageBookings() {
             initial={{ scale: 0.95, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.95, opacity: 0 }}
-            className="bg-sv-surface border border-sv-border rounded-2xl w-full max-w-md shadow-2xl overflow-hidden flex flex-col my-8"
+            className="bg-sv-surface border border-[#2a2d3e] border-sv-border border-[#2a2d3e] rounded-2xl w-full max-w-md shadow-2xl overflow-hidden flex flex-col my-8"
           >
-            <div className="p-6 border-b border-sv-border flex justify-between items-center">
+            <div className="p-6 border-b border-sv-border border-[#2a2d3e] flex justify-between items-center">
               <h2 className="text-xl font-bold font-sans text-white">Extend Booking</h2>
               <button className="text-gray-500 hover:text-white" onClick={() => setExtModal(prev => ({ ...prev, show: false }))}><FiX size={24} /></button>
             </div>
@@ -831,7 +831,7 @@ export default function ManageBookings() {
                   <button
                     key={mins}
                     onClick={() => handleDurationChange(mins)}
-                    className={`py-2 rounded-lg font-bold text-sm border transition-colors ${extModal.duration === mins ? 'bg-blue-500/10 border-blue-500/50 text-blue-400' : 'bg-sv-bg border-sv-border text-gray-400 hover:bg-sv-surface-hover'}`}
+                    className={`py-2 rounded-lg font-bold text-sm border border-[#2a2d3e] transition-colors ${extModal.duration === mins ? 'bg-blue-500/10 border-blue-500/50 text-blue-400' : 'bg-sv-bg border-sv-border border-[#2a2d3e] text-gray-400 hover:bg-sv-surface-hover'}`}
                   >
                     {mins} mins
                   </button>
@@ -845,7 +845,7 @@ export default function ManageBookings() {
               ) : extModal.preview ? (
                 extModal.preview.available ? (
                   <div className="space-y-4 mb-6">
-                    <div className="p-4 rounded-xl border bg-emerald-500/10 border-emerald-500/20">
+                    <div className="p-4 rounded-xl border border-[#2a2d3e] bg-emerald-500/10 border-emerald-500/20">
                       <p className="text-sm font-semibold mb-1 text-white">Court Available</p>
                       <p className="text-xs text-emerald-400">
                         We found availability for your extension. Review the court breakdown below.
@@ -854,10 +854,10 @@ export default function ManageBookings() {
 
                     <div className="space-y-2">
                       {extModal.preview.allocations.map((alloc: any, idx: number) => (
-                        <div key={idx} className="bg-sv-bg rounded-xl p-4 border border-sv-border">
+                        <div key={idx} className="bg-sv-bg rounded-xl p-4 border border-[#2a2d3e] border-sv-border border-[#2a2d3e]">
                           <div className="flex justify-between items-center mb-1">
                             <span className="text-white font-bold">{alloc.turfName}</span>
-                            <span className="text-xs px-2 py-1 bg-sv-surface-raised rounded text-gray-400 border border-sv-border">
+                            <span className="text-xs px-2 py-1 bg-sv-surface-raised rounded text-gray-400 border border-[#2a2d3e] border-sv-border border-[#2a2d3e]">
                               {alloc.isSameCourt ? 'Current' : 'Alternative'}
                             </span>
                           </div>
@@ -871,13 +871,13 @@ export default function ManageBookings() {
                       ))}
                     </div>
 
-                    <div className="flex justify-between items-center pt-4 border-t border-sv-border">
+                    <div className="flex justify-between items-center pt-4 border-t border-sv-border border-[#2a2d3e]">
                       <span className="text-gray-400 text-sm">Total Additional Amount</span>
                       <span className="text-xl font-bold text-emerald-400">₹{Number(extModal.preview.totalPrice.toFixed(2))}</span>
                     </div>
                   </div>
                 ) : (
-                  <div className="bg-red-500/10 border border-red-500/20 rounded-xl p-4 mb-6">
+                  <div className="bg-red-500/10 border border-[#2a2d3e] border-red-500/20 rounded-xl p-4 mb-6">
                     <p className="text-red-400 text-sm text-center font-semibold">{extModal.preview.message}</p>
                   </div>
                 )
@@ -886,7 +886,7 @@ export default function ManageBookings() {
               <button 
                 onClick={confirmExtensionAction}
                 disabled={extModal.loading || extModal.confirming || !extModal.preview?.available}
-                className="w-full bg-blue-500 hover:bg-blue-600 text-white rounded-lg py-3.5 font-bold text-lg transition-colors border-none cursor-pointer flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full bg-blue-500 hover:bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg py-3.5 font-bold text-lg transition-colors border-none cursor-pointer flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {extModal.confirming ? "Confirming..." : <><FiCheck /> Confirm Extension</>}
               </button>
@@ -911,15 +911,15 @@ export default function ManageBookings() {
             initial={{ scale: 0.95, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.95, opacity: 0 }}
-            className="bg-sv-surface border border-sv-border rounded-2xl w-full max-w-md shadow-2xl overflow-hidden flex flex-col my-8"
+            className="bg-sv-surface border border-[#2a2d3e] border-sv-border border-[#2a2d3e] rounded-2xl w-full max-w-md shadow-2xl overflow-hidden flex flex-col my-8"
           >
-            <div className="p-6 border-b border-sv-border flex justify-between items-center">
+            <div className="p-6 border-b border-sv-border border-[#2a2d3e] flex justify-between items-center">
               <h2 className="text-xl font-bold font-sans text-white">Reschedule Booking</h2>
               <button className="text-gray-500 hover:text-white" onClick={() => setRescheduleModal(prev => ({ ...prev, show: false }))}><FiX size={24} /></button>
             </div>
             
             <div className="p-6">
-              <div className="mb-4 bg-sv-bg p-4 rounded-xl border border-sv-border">
+              <div className="mb-4 bg-sv-bg p-4 rounded-xl border border-[#2a2d3e] border-sv-border border-[#2a2d3e]">
                 <p className="text-sm text-gray-400">Current Slot</p>
                 <p className="text-white font-bold">{formatIST(new Date(rescheduleModal.booking.startTime), 'MMM d, yyyy h:mm a')}</p>
               </div>
@@ -931,7 +931,7 @@ export default function ManageBookings() {
                     type="date" 
                     value={rescheduleModal.newDate}
                     onChange={e => setRescheduleModal(prev => ({ ...prev, newDate: e.target.value }))}
-                    className="w-full bg-sv-surface-raised border border-sv-border rounded-lg px-4 py-3 text-white focus:border-sv-warning-border focus:ring-2 focus:ring-sv-brand focus:outline-none"
+                    className="w-full bg-sv-surface-raised border border-[#2a2d3e] border-sv-border border-[#2a2d3e] rounded-lg px-4 py-3 text-white focus:border-sv-warning-border border-[#2a2d3e] focus:ring-2 focus:ring-sv-brand focus:outline-none"
                   />
                 </div>
                 <div>
@@ -940,7 +940,7 @@ export default function ManageBookings() {
                     type="time" 
                     value={rescheduleModal.newTime}
                     onChange={e => setRescheduleModal(prev => ({ ...prev, newTime: e.target.value }))}
-                    className="w-full bg-sv-surface-raised border border-sv-border rounded-lg px-4 py-3 text-white focus:border-sv-warning-border focus:ring-2 focus:ring-sv-brand focus:outline-none"
+                    className="w-full bg-sv-surface-raised border border-[#2a2d3e] border-sv-border border-[#2a2d3e] rounded-lg px-4 py-3 text-white focus:border-sv-warning-border border-[#2a2d3e] focus:ring-2 focus:ring-sv-brand focus:outline-none"
                   />
                 </div>
               </div>

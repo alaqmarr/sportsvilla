@@ -131,7 +131,7 @@ function EventCard({ eventDef, dbEvent, templates, onSave, saving }: any) {
     <Card
       variant="default"
       padding="lg"
-      className={`shadow-sv-lg transition-all ${isActive ? 'border-emerald-500/50 shadow-emerald-500/10' : 'border-sv-border'}`}
+      className={`shadow-sv-lg transition-all ${isActive ? 'border-emerald-500/50 shadow-emerald-500/10' : 'border-sv-border border-[#2a2d3e]'}`}
     >
       <div className="flex justify-between items-start mb-4">
         <div className="flex items-center gap-3">
@@ -150,7 +150,7 @@ function EventCard({ eventDef, dbEvent, templates, onSave, saving }: any) {
             checked={isActive}
             onChange={(e) => setIsActive(e.target.checked)}
           />
-          <div className="w-11 h-6 bg-sv-surface-raised peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500"></div>
+          <div className="w-11 h-6 bg-sv-surface-raised peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-[#161923] after:border-[#2a2d3e] after:border border-[#2a2d3e] after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500"></div>
         </label>
       </div>
 
@@ -160,7 +160,7 @@ function EventCard({ eventDef, dbEvent, templates, onSave, saving }: any) {
           <select 
             value={templateName}
             onChange={(e) => setTemplateName(e.target.value)}
-            className="w-full text-sm bg-sv-bg border border-sv-border text-sv-text rounded-sv-sm focus:border-emerald-500 outline-none px-3 py-2.5"
+            className="w-full text-sm bg-sv-bg border border-[#2a2d3e] border-sv-border border-[#2a2d3e] text-sv-text rounded-sv-sm focus:border-emerald-500 outline-none px-3 py-2.5"
           >
             <option value="">-- Select Template --</option>
             {templates.filter((t: any) => t.status === "APPROVED").map((t: any) => (

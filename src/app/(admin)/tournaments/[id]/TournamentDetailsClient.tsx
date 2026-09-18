@@ -137,7 +137,7 @@ export default function TournamentDetailsClient({ tournament, registrations: ini
                     <input
                       type="text"
                       placeholder={`Player ${i + 1} Name`}
-                      className="flex-1 bg-sv-bg border border-sv-border rounded-sv-sm px-3 py-2 text-sv-text placeholder:text-sv-text-muted focus:border-sv-brand outline-none text-sm"
+                      className="flex-1 bg-sv-bg border border-[#2a2d3e] border-sv-border border-[#2a2d3e] rounded-sv-sm px-3 py-2 text-sv-text placeholder:text-sv-text-muted focus:border-sv-brand outline-none text-sm"
                       value={p.name}
                       onChange={e => {
                         const newP = [...manualPlayers];
@@ -148,7 +148,7 @@ export default function TournamentDetailsClient({ tournament, registrations: ini
                     <input
                       type="text"
                       placeholder={`Player ${i + 1} Mobile`}
-                      className="flex-1 bg-sv-bg border border-sv-border rounded-sv-sm px-3 py-2 text-sv-text placeholder:text-sv-text-muted focus:border-sv-brand outline-none text-sm"
+                      className="flex-1 bg-sv-bg border border-[#2a2d3e] border-sv-border border-[#2a2d3e] rounded-sv-sm px-3 py-2 text-sv-text placeholder:text-sv-text-muted focus:border-sv-brand outline-none text-sm"
                       value={p.mobile}
                       onChange={e => {
                         const newP = [...manualPlayers];
@@ -177,7 +177,7 @@ export default function TournamentDetailsClient({ tournament, registrations: ini
           <div className="overflow-x-auto styled-scrollbar">
             <table className="w-full text-left border-collapse text-sm">
               <thead>
-                <tr className="bg-sv-surface-raised border-b border-sv-border text-xs uppercase tracking-wider font-semibold text-sv-text-muted">
+                <tr className="bg-sv-surface-raised border-b border-sv-border border-[#2a2d3e] text-xs uppercase tracking-wider font-semibold text-sv-text-muted">
                   <th className="px-6 py-4">Team / Players</th>
                   <th className="px-6 py-4">Registered By</th>
                   <th className="px-6 py-4">Payment Info</th>
@@ -203,7 +203,7 @@ export default function TournamentDetailsClient({ tournament, registrations: ini
                         Method: <span className="font-semibold text-sv-text">{r.paymentMethod || 'UPI'}</span>
                       </div>
                       {r.paymentUtr && (
-                        <div className="text-[10px] font-mono bg-sv-surface-raised text-sv-text-muted border border-sv-border px-2 py-0.5 rounded inline-block">
+                        <div className="text-[10px] font-mono bg-sv-surface-raised text-sv-text-muted border border-[#2a2d3e] border-sv-border border-[#2a2d3e] px-2 py-0.5 rounded inline-block">
                           UTR: {r.paymentUtr}
                         </div>
                       )}

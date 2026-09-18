@@ -169,7 +169,7 @@ export default function ReportClient() {
                   <button
                     key={m.id}
                     onClick={() => setReportData(m)}
-                    className="bg-sv-bg border border-sv-border hover:border-sv-brand hover:bg-sv-surface-hover text-left px-4 py-3 rounded-sv-md text-sv-text font-semibold transition-colors flex justify-between items-center"
+                    className="bg-sv-bg border border-[#2a2d3e] border-sv-border border-[#2a2d3e] hover:border-sv-brand hover:bg-sv-surface-hover text-left px-4 py-3 rounded-sv-md text-sv-text font-semibold transition-colors flex justify-between items-center"
                   >
                     <span>{m.name}</span>
                     <Badge variant="brand" size="sm">
@@ -224,10 +224,10 @@ export default function ReportClient() {
                         return (
                           <div
                             key={m.id}
-                            className={`p-4 rounded-sv-md border ${
+                            className={`p-4 rounded-sv-md border border-[#2a2d3e] ${
                               isActive
                                 ? "bg-sv-surface-raised border-sv-status-success/30"
-                                : "bg-sv-bg border-sv-border opacity-70"
+                                : "bg-sv-bg border-sv-border border-[#2a2d3e] opacity-70"
                             }`}
                           >
                             <div className="flex justify-between items-start mb-2">
@@ -252,7 +252,7 @@ export default function ReportClient() {
                               {formatIST(new Date(m.endDate), "MMM d, yy")}
                             </div>
 
-                            <div className="grid grid-cols-3 gap-2 bg-sv-bg-subtle rounded-sv-sm p-3 border border-sv-border">
+                            <div className="grid grid-cols-3 gap-2 bg-sv-bg-subtle rounded-sv-sm p-3 border border-[#2a2d3e] border-sv-border border-[#2a2d3e]">
                               <div className="text-center">
                                 <div className="text-[10px] text-sv-text-muted uppercase tracking-wider font-semibold">
                                   Attended
@@ -261,7 +261,7 @@ export default function ReportClient() {
                                   {stats.attended}
                                 </div>
                               </div>
-                              <div className="text-center border-x border-sv-border">
+                              <div className="text-center border-x border-sv-border border-[#2a2d3e]">
                                 <div className="text-[10px] text-sv-text-muted uppercase tracking-wider font-semibold">
                                   Missed
                                 </div>
@@ -359,14 +359,14 @@ export default function ReportClient() {
                     return (
                       <div
                         key={idx}
-                        className={`min-h-[80px] rounded-sv-sm p-2 flex flex-col border transition-colors ${
+                        className={`min-h-[80px] rounded-sv-sm p-2 flex flex-col border border-[#2a2d3e] transition-colors ${
                           !isCurrMonth
                             ? "opacity-25 bg-sv-bg border-transparent"
                             : attended
-                            ? "bg-sv-success-subtle border-sv-success-border text-sv-success-text"
+                            ? "bg-sv-success-subtle border-sv-success-border border-[#2a2d3e] text-sv-success-text"
                             : missed
-                            ? "bg-sv-error-subtle border-sv-error-border text-sv-error-text"
-                            : "bg-sv-surface-raised border-sv-border"
+                            ? "bg-sv-error-subtle border-sv-error-border border-[#2a2d3e] text-sv-error-text"
+                            : "bg-sv-surface-raised border-sv-border border-[#2a2d3e]"
                         }`}
                       >
                         <div
@@ -387,7 +387,7 @@ export default function ReportClient() {
                             dayAttendances.map((a: any) => (
                               <div
                                 key={a.id}
-                                className="text-[10px] leading-tight flex flex-col gap-0.5 mb-1 bg-sv-status-success/15 px-2 py-1.5 rounded-sv-xs border border-sv-status-success/30"
+                                className="text-[10px] leading-tight flex flex-col gap-0.5 mb-1 bg-sv-status-success/15 px-2 py-1.5 rounded-sv-xs border border-[#2a2d3e] border-sv-status-success/30"
                                 title={`${formatIST(
                                   new Date(a.date),
                                   "h:mm a"

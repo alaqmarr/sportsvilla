@@ -113,7 +113,7 @@ export default function WalletClient() {
       <Card variant="default" padding="lg" className="flex-1 flex flex-col items-center justify-center min-h-[60vh] text-center p-8 shadow-sv-xl m-6">
         <div className="relative mb-8">
           <div className="absolute inset-0 bg-sv-brand-subtle blur-xl rounded-full animate-pulse" />
-          <div className="relative bg-sv-surface-raised p-6 rounded-full border border-sv-brand/30">
+          <div className="relative bg-sv-surface-raised p-6 rounded-full border border-[#2a2d3e] border-sv-brand/30">
             {isScanning ? (
               <FiRefreshCw size={48} className="text-sv-brand animate-spin" />
             ) : (
@@ -151,7 +151,7 @@ export default function WalletClient() {
         {/* Left Column: Member Details */}
         <Card variant="default" padding="lg" className="col-span-1 space-y-6">
           <div className="flex items-center gap-4">
-            <div className="bg-sv-brand-subtle p-3.5 rounded-sv-md border border-sv-brand/20">
+            <div className="bg-sv-brand-subtle p-3.5 rounded-sv-md border border-[#2a2d3e] border-sv-brand/20">
               <FiUser size={24} className="text-sv-brand" />
             </div>
             <div className="truncate">
@@ -161,7 +161,7 @@ export default function WalletClient() {
           </div>
           
           <div className="flex items-center gap-4">
-            <div className="bg-sv-info-subtle p-3.5 rounded-sv-md border border-sv-info-border">
+            <div className="bg-sv-info-subtle p-3.5 rounded-sv-md border border-[#2a2d3e] border-sv-info-border border-[#2a2d3e]">
               <FiPhone size={24} className="text-sv-status-info" />
             </div>
             <div className="truncate">
@@ -171,7 +171,7 @@ export default function WalletClient() {
           </div>
 
           <div className="pt-6 border-t border-sv-border-subtle">
-            <div className="bg-sv-success-subtle rounded-sv-md p-5 border border-sv-success-border text-center">
+            <div className="bg-sv-success-subtle rounded-sv-md p-5 border border-[#2a2d3e] border-sv-success-border border-[#2a2d3e] text-center">
               <p className="text-xs text-sv-success-text uppercase tracking-wider font-semibold mb-2">Current Balance</p>
               <div className="text-3xl font-extrabold text-sv-status-success flex items-center justify-center gap-1">
                 <FiDollarSign size={24} />

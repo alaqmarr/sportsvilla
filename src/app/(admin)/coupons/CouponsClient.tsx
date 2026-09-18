@@ -146,7 +146,7 @@ export default function CouponsClient({ initialCoupons, members }: { initialCoup
           <Card key={coupon.id} variant="default" className="p-5 flex flex-col justify-between relative overflow-hidden">
             <div>
               <div className="flex items-center justify-between gap-2 mb-3">
-                <div className="text-2xl font-black text-sv-text tracking-widest bg-sv-surface-raised px-3 py-1 rounded-sv-sm border border-sv-border">
+                <div className="text-2xl font-black text-sv-text tracking-widest bg-sv-surface-raised px-3 py-1 rounded-sv-sm border border-[#2a2d3e] border-sv-border border-[#2a2d3e]">
                   {coupon.code}
                 </div>
                 <div className="flex items-center gap-1.5">
@@ -280,7 +280,7 @@ export default function CouponsClient({ initialCoupons, members }: { initialCoup
               ]}
             />
 
-            <div className="md:col-span-2 flex gap-2 p-1 bg-sv-surface-raised rounded-sv-md border border-sv-border">
+            <div className="md:col-span-2 flex gap-2 p-1 bg-sv-surface-raised rounded-sv-md border border-[#2a2d3e] border-sv-border border-[#2a2d3e]">
               <button
                 type="button"
                 onClick={() => setDiscountType("AMOUNT")}
@@ -351,7 +351,7 @@ export default function CouponsClient({ initialCoupons, members }: { initialCoup
             />
 
             {targetType.startsWith("MILESTONE") && (
-              <div className="md:col-span-2 bg-sv-surface-raised p-4 rounded-sv-lg border border-sv-border">
+              <div className="md:col-span-2 bg-sv-surface-raised p-4 rounded-sv-lg border border-[#2a2d3e] border-sv-border border-[#2a2d3e]">
                 <Input
                   label="Number of Bookings Required *"
                   type="number"
@@ -365,13 +365,13 @@ export default function CouponsClient({ initialCoupons, members }: { initialCoup
             )}
 
             {targetType === "SPECIFIC_MEMBERS" && (
-              <div className="md:col-span-2 bg-sv-surface-raised p-4 rounded-sv-lg border border-sv-border space-y-3">
+              <div className="md:col-span-2 bg-sv-surface-raised p-4 rounded-sv-lg border border-[#2a2d3e] border-sv-border border-[#2a2d3e] space-y-3">
                 <label className="block text-xs font-semibold text-sv-text-secondary select-none">
                   Assign to Members *
                 </label>
                 <div className="flex flex-wrap gap-2">
                   {selectedMembers.map(m => (
-                    <div key={m.id} className="bg-sv-brand/10 text-sv-brand border border-sv-brand/30 px-3 py-1 rounded-sv-full text-xs font-medium flex items-center gap-1.5">
+                    <div key={m.id} className="bg-sv-brand/10 text-sv-brand border border-[#2a2d3e] border-sv-brand/30 px-3 py-1 rounded-sv-full text-xs font-medium flex items-center gap-1.5">
                       {m.name}
                       <button type="button" onClick={() => setSelectedMembers(prev => prev.filter(sm => sm.id !== m.id))} className="hover:text-sv-text">
                         <FiX size={12} />
@@ -386,7 +386,7 @@ export default function CouponsClient({ initialCoupons, members }: { initialCoup
                   onChange={e => setMemberSearch(e.target.value)}
                 />
                 {memberSearch && filteredMembers.length > 0 && (
-                  <div className="bg-sv-bg border border-sv-border rounded-sv-md overflow-hidden divide-y divide-sv-border-subtle">
+                  <div className="bg-sv-bg border border-[#2a2d3e] border-sv-border border-[#2a2d3e] rounded-sv-md overflow-hidden divide-y divide-sv-border-subtle">
                     {filteredMembers.map(m => (
                       <button
                         key={m.id}
@@ -404,8 +404,8 @@ export default function CouponsClient({ initialCoupons, members }: { initialCoup
             )}
             
             <div className="md:col-span-2">
-              <label className="flex items-center gap-3 cursor-pointer p-3 border border-sv-border rounded-sv-md bg-sv-surface-raised hover:bg-sv-surface-hover transition-colors">
-                <input type="checkbox" checked={appOnly} onChange={e => setAppOnly(e.target.checked)} className="w-4 h-4 rounded border-sv-border bg-sv-bg text-sv-brand focus:ring-sv-brand" />
+              <label className="flex items-center gap-3 cursor-pointer p-3 border border-[#2a2d3e] border-sv-border border-[#2a2d3e] rounded-sv-md bg-sv-surface-raised hover:bg-sv-surface-hover transition-colors">
+                <input type="checkbox" checked={appOnly} onChange={e => setAppOnly(e.target.checked)} className="w-4 h-4 rounded border-sv-border border-[#2a2d3e] bg-sv-bg text-sv-brand focus:ring-sv-brand" />
                 <div>
                   <div className="text-sv-text font-medium text-sm">App-Only Coupon</div>
                   <div className="text-xs text-sv-text-muted">Coupon can only be redeemed through the mobile app.</div>
@@ -414,8 +414,8 @@ export default function CouponsClient({ initialCoupons, members }: { initialCoup
             </div>
             
             <div className="md:col-span-2">
-              <label className="flex items-center gap-3 cursor-pointer p-3 border border-sv-border rounded-sv-md bg-sv-surface-raised hover:bg-sv-surface-hover transition-colors">
-                <input type="checkbox" checked={isPublic} onChange={e => setIsPublic(e.target.checked)} className="w-4 h-4 rounded border-sv-border bg-sv-bg text-sv-brand focus:ring-sv-brand" />
+              <label className="flex items-center gap-3 cursor-pointer p-3 border border-[#2a2d3e] border-sv-border border-[#2a2d3e] rounded-sv-md bg-sv-surface-raised hover:bg-sv-surface-hover transition-colors">
+                <input type="checkbox" checked={isPublic} onChange={e => setIsPublic(e.target.checked)} className="w-4 h-4 rounded border-sv-border border-[#2a2d3e] bg-sv-bg text-sv-brand focus:ring-sv-brand" />
                 <div>
                   <div className="text-sv-text font-medium text-sm">Public Visibility</div>
                   <div className="text-xs text-sv-text-muted">If checked, this coupon will be shown to everyone in the app. If unchecked, it remains private.</div>

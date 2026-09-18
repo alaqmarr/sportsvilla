@@ -53,7 +53,7 @@ export default async function PhonePeSettingsPage() {
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-bold text-gray-800">Payment Integrations</h1>
+        <h1 className="text-2xl font-bold text-gray-200">Payment Integrations</h1>
       </div>
       <PhonePeClient initialSettings={initialSettings} />
     </div>

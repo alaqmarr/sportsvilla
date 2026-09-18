@@ -243,7 +243,7 @@ export default function AttendanceClient({ initialRecords }: { initialRecords: a
           { label: "Attendance" },
         ]}
         actions={
-          <div className="hidden sm:flex items-center gap-1.5 text-xs px-3 py-1 bg-sv-info-subtle text-sv-info-text border border-sv-info-border rounded-sv-full font-medium">
+          <div className="hidden sm:flex items-center gap-1.5 text-xs px-3 py-1 bg-sv-info-subtle text-sv-info-text border border-[#2a2d3e] border-sv-info-border border-[#2a2d3e] rounded-sv-full font-medium">
             <FiLink /> USB/Bluetooth Scanner Supported
           </div>
         }
@@ -252,7 +252,7 @@ export default function AttendanceClient({ initialRecords }: { initialRecords: a
       <div className="grid lg:grid-cols-12 gap-8">
         {/* Left Column: Hero Scanner & Member Profile */}
         <div className="lg:col-span-7 flex flex-col gap-6">
-          <div className="bg-sv-surface border border-sv-border rounded-sv-xl p-6 relative overflow-hidden shadow-sv-sm">
+          <div className="bg-sv-surface border border-[#2a2d3e] border-sv-border border-[#2a2d3e] rounded-sv-xl p-6 relative overflow-hidden shadow-sv-sm">
             <div className="absolute top-0 right-0 w-48 h-48 bg-sv-brand/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/4 pointer-events-none"></div>
             
             <h3 className="text-lg font-semibold text-sv-text mb-5 relative z-10">Member Check-In</h3>
@@ -261,7 +261,7 @@ export default function AttendanceClient({ initialRecords }: { initialRecords: a
               <div className="relative flex-1">
                 <input 
                   type="tel" 
-                  className="w-full bg-sv-bg border border-sv-border rounded-sv-lg px-5 py-3.5 text-sv-text font-semibold text-lg focus:outline-none focus:border-sv-brand focus:ring-2 focus:ring-sv-brand/20 placeholder:text-sv-text-muted"
+                  className="w-full bg-sv-bg border border-[#2a2d3e] border-sv-border border-[#2a2d3e] rounded-sv-lg px-5 py-3.5 text-sv-text font-semibold text-lg focus:outline-none focus:border-sv-brand focus:ring-2 focus:ring-sv-brand/20 placeholder:text-sv-text-muted"
                   placeholder="Enter 10-digit mobile..." 
                   value={mobile}
                   onChange={e => {
@@ -285,21 +285,21 @@ export default function AttendanceClient({ initialRecords }: { initialRecords: a
             </div>
             
             <div className="flex items-center gap-4 mb-5 relative z-10">
-              <div className="flex-1 h-px bg-sv-border"></div>
+              <div className="flex-1 h-px bg-sv-border border-[#2a2d3e]"></div>
               <span className="text-xs font-semibold text-sv-text-muted uppercase tracking-widest">OR</span>
-              <div className="flex-1 h-px bg-sv-border"></div>
+              <div className="flex-1 h-px bg-sv-border border-[#2a2d3e]"></div>
             </div>
 
             <button 
               onClick={startScanner} 
-              className="w-full py-3.5 bg-transparent border-2 border-dashed border-sv-border hover:border-sv-brand/40 hover:text-sv-brand text-sv-text-muted rounded-sv-lg text-sm font-semibold inline-flex items-center justify-center gap-2 transition-colors cursor-pointer relative z-10 uppercase tracking-wider"
+              className="w-full py-3.5 bg-transparent border-2 border-dashed border-sv-border border-[#2a2d3e] hover:border-sv-brand/40 hover:text-sv-brand text-sv-text-muted rounded-sv-lg text-sm font-semibold inline-flex items-center justify-center gap-2 transition-colors cursor-pointer relative z-10 uppercase tracking-wider"
             >
               <FiCamera size={18} /> Launch QR Scanner
             </button>
           </div>
 
           {member && (
-            <div className="bg-sv-surface border border-sv-border rounded-sv-xl p-6 border-t-[3px] border-t-sv-status-success shadow-sv-sm">
+            <div className="bg-sv-surface border border-[#2a2d3e] border-sv-border border-[#2a2d3e] rounded-sv-xl p-6 border-t-[3px] border-t-sv-status-success shadow-sv-sm">
               <div className="flex items-center gap-5 mb-6">
                 <Avatar name={member.name || "Member"} size="lg" />
                 <div>
@@ -315,7 +315,7 @@ export default function AttendanceClient({ initialRecords }: { initialRecords: a
               </h4>
               
               {member.memberships.length === 0 ? (
-                <div className="bg-sv-error-subtle text-sv-error-text p-4 rounded-sv-lg border border-sv-error-border font-semibold flex items-center gap-3 text-sm">
+                <div className="bg-sv-error-subtle text-sv-error-text p-4 rounded-sv-lg border border-[#2a2d3e] border-sv-error-border border-[#2a2d3e] font-semibold flex items-center gap-3 text-sm">
                   <FiX size={20} /> This member has no active plans.
                 </div>
               ) : (
@@ -327,20 +327,20 @@ export default function AttendanceClient({ initialRecords }: { initialRecords: a
                         key={m.id} 
                         className={
                           isActive 
-                            ? 'p-5 rounded-sv-lg bg-sv-surface-raised border border-sv-success-border/40 hover:border-sv-status-success transition-colors' 
-                            : 'p-5 rounded-sv-lg bg-sv-surface-raised border border-sv-border opacity-50'
+                            ? 'p-5 rounded-sv-lg bg-sv-surface-raised border border-[#2a2d3e] border-sv-success-border border-[#2a2d3e]/40 hover:border-sv-status-success transition-colors' 
+                            : 'p-5 rounded-sv-lg bg-sv-surface-raised border border-[#2a2d3e] border-sv-border border-[#2a2d3e] opacity-50'
                         }
                       >
                         <div className="text-sv-status-success text-xs uppercase tracking-wider font-semibold mb-1">{m.membershipPlan?.sport?.name}</div>
                         <div className="text-sv-text font-semibold mb-3">{m.membershipPlan?.name}</div>
                         
                         {m.stats && (
-                          <div className="grid grid-cols-3 gap-2 mb-4 bg-sv-bg rounded-sv-md p-2.5 border border-sv-border">
+                          <div className="grid grid-cols-3 gap-2 mb-4 bg-sv-bg rounded-sv-md p-2.5 border border-[#2a2d3e] border-sv-border border-[#2a2d3e]">
                             <div className="text-center">
                               <div className="text-[10px] text-sv-text-muted uppercase tracking-wider font-semibold">Left</div>
                               <div className="text-sv-text font-bold">{m.stats.daysLeft}d</div>
                             </div>
-                            <div className="text-center border-x border-sv-border">
+                            <div className="text-center border-x border-sv-border border-[#2a2d3e]">
                               <div className="text-[10px] text-sv-text-muted uppercase tracking-wider font-semibold">Attended</div>
                               <div className="text-sv-status-success font-bold">{m.stats.attended}</div>
                             </div>
@@ -363,7 +363,7 @@ export default function AttendanceClient({ initialRecords }: { initialRecords: a
                             {processingId === m.membershipPlanId ? "CHECKING IN..." : "CHECK IN"}
                           </Button>
                         ) : (
-                          <div className="text-xs text-sv-error-text font-semibold tracking-wider text-center py-2.5 bg-sv-error-subtle rounded-sv-md border border-sv-error-border">
+                          <div className="text-xs text-sv-error-text font-semibold tracking-wider text-center py-2.5 bg-sv-error-subtle rounded-sv-md border border-[#2a2d3e] border-sv-error-border border-[#2a2d3e]">
                             EXPIRED
                           </div>
                         )}
@@ -376,7 +376,7 @@ export default function AttendanceClient({ initialRecords }: { initialRecords: a
           )}
 
           {membersList.length > 1 && (
-            <div className="bg-sv-surface border border-sv-border rounded-sv-xl p-6 shadow-sv-sm">
+            <div className="bg-sv-surface border border-[#2a2d3e] border-sv-border border-[#2a2d3e] rounded-sv-xl p-6 shadow-sv-sm">
               <div className="flex justify-between items-center mb-4">
                 <h3 className="text-lg font-semibold text-sv-text">Select Family Member</h3>
                 <Button 
@@ -394,7 +394,7 @@ export default function AttendanceClient({ initialRecords }: { initialRecords: a
                   return (
                     <div 
                       key={m.id} 
-                      className="flex flex-col sm:flex-row sm:items-center gap-4 bg-sv-surface-raised border border-sv-border p-4 rounded-sv-lg"
+                      className="flex flex-col sm:flex-row sm:items-center gap-4 bg-sv-surface-raised border border-[#2a2d3e] border-sv-border border-[#2a2d3e] p-4 rounded-sv-lg"
                     >
                       <div 
                         className="flex items-center gap-4 cursor-pointer flex-1 hover:opacity-80 transition-opacity"
@@ -411,10 +411,10 @@ export default function AttendanceClient({ initialRecords }: { initialRecords: a
                         </div>
                       </div>
                       
-                      <div className="shrink-0 w-full sm:w-auto mt-3 sm:mt-0 pt-3 sm:pt-0 border-t border-sv-border sm:border-none">
+                      <div className="shrink-0 w-full sm:w-auto mt-3 sm:mt-0 pt-3 sm:pt-0 border-t border-sv-border border-[#2a2d3e] sm:border-none">
                         {activePlans.length > 1 ? (
                           <select 
-                            className="w-full sm:w-56 bg-sv-bg border border-sv-border rounded-sv-md px-3 py-2 text-sm text-sv-text focus:outline-none focus:border-sv-brand"
+                            className="w-full sm:w-56 bg-sv-bg border border-[#2a2d3e] border-sv-border border-[#2a2d3e] rounded-sv-md px-3 py-2 text-sm text-sv-text focus:outline-none focus:border-sv-brand"
                             value={familySelections[m.id] || ""}
                             onChange={(e) => setFamilySelections(prev => ({ ...prev, [m.id]: e.target.value }))}
                           >
@@ -444,8 +444,8 @@ export default function AttendanceClient({ initialRecords }: { initialRecords: a
 
         {/* Right Column: Check-in Feed */}
         <div className="lg:col-span-5">
-          <div className="bg-sv-surface border border-sv-border rounded-sv-xl overflow-hidden flex flex-col h-[calc(100vh-160px)] shadow-sv-sm">
-            <div className="px-6 py-4 border-b border-sv-border flex justify-between items-center shrink-0">
+          <div className="bg-sv-surface border border-[#2a2d3e] border-sv-border border-[#2a2d3e] rounded-sv-xl overflow-hidden flex flex-col h-[calc(100vh-160px)] shadow-sv-sm">
+            <div className="px-6 py-4 border-b border-sv-border border-[#2a2d3e] flex justify-between items-center shrink-0">
               <h3 className="font-semibold text-sv-text flex items-center gap-2">
                 <FiClock className="text-sv-brand" /> Today's Scans
               </h3>
@@ -457,7 +457,7 @@ export default function AttendanceClient({ initialRecords }: { initialRecords: a
             <div className="flex-1 overflow-y-auto p-4 space-y-3">
               {records.length === 0 ? (
                 <div className="h-full flex flex-col items-center justify-center gap-3">
-                  <div className="w-16 h-16 rounded-full bg-sv-surface-raised flex items-center justify-center border border-sv-border">
+                  <div className="w-16 h-16 rounded-full bg-sv-surface-raised flex items-center justify-center border border-[#2a2d3e] border-sv-border border-[#2a2d3e]">
                     <FiClock size={28} className="text-sv-text-muted" />
                   </div>
                   <p className="text-sv-text-muted text-sm">No check-ins yet today.</p>
@@ -465,7 +465,7 @@ export default function AttendanceClient({ initialRecords }: { initialRecords: a
               ) : (
                 <div className="flex flex-col gap-3">
                   {records.map((record: any) => (
-                    <div key={record.id} className="bg-sv-surface-raised rounded-sv-lg border border-sv-border p-4 flex items-center gap-4 hover:bg-sv-surface-hover transition-colors">
+                    <div key={record.id} className="bg-sv-surface-raised rounded-sv-lg border border-[#2a2d3e] border-sv-border border-[#2a2d3e] p-4 flex items-center gap-4 hover:bg-sv-surface-hover transition-colors">
                       <Avatar name={record.member?.name || "Member"} size="md" />
                       
                       <div className="flex-1 min-w-0">
@@ -493,7 +493,7 @@ export default function AttendanceClient({ initialRecords }: { initialRecords: a
 
       {showScanner && (
         <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-[100]">
-          <div className="bg-sv-surface border border-sv-border rounded-sv-xl p-8 w-full max-w-md shadow-sv-xl">
+          <div className="bg-sv-surface border border-[#2a2d3e] border-sv-border border-[#2a2d3e] rounded-sv-xl p-8 w-full max-w-md shadow-sv-xl">
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-lg font-semibold text-sv-text">Scan QR Code</h2>
               <button 
@@ -503,7 +503,7 @@ export default function AttendanceClient({ initialRecords }: { initialRecords: a
                 <FiX />
               </button>
             </div>
-            <div id="reader" className="w-full bg-black rounded-sv-lg overflow-hidden border border-sv-border html5-qrcode-custom"></div>
+            <div id="reader" className="w-full bg-black rounded-sv-lg overflow-hidden border border-[#2a2d3e] border-sv-border border-[#2a2d3e] html5-qrcode-custom"></div>
             <p className="text-center text-sv-text-muted mt-6 text-sm">Point camera at the member's Digital ID card</p>
           </div>
         </div>

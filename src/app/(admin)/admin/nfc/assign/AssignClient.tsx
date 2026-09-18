@@ -325,7 +325,7 @@ export default function AssignClient({ initialCards }: { initialCards: any[] }) 
                 </label>
 
                 {selectedMember ? (
-                  <div className="p-3.5 bg-sv-brand-subtle border border-sv-brand/30 rounded-sv-md flex items-center justify-between">
+                  <div className="p-3.5 bg-sv-brand-subtle border border-[#2a2d3e] border-sv-brand/30 rounded-sv-md flex items-center justify-between">
                     <div className="flex items-center gap-3">
                       <div className="p-2 bg-sv-brand-subtle text-sv-brand rounded-sv-sm">
                         <FiUser className="text-xl" />
@@ -364,7 +364,7 @@ export default function AssignClient({ initialCards }: { initialCards: any[] }) 
                         value={memberQuery}
                         onChange={(e) => setMemberQuery(e.target.value)}
                         placeholder="Search member by name or mobile..."
-                        className="w-full pl-10 pr-4 py-2.5 bg-sv-bg border border-sv-border rounded-sv-sm text-sv-text placeholder:text-sv-text-muted focus:outline-none focus:border-sv-brand text-sm"
+                        className="w-full pl-10 pr-4 py-2.5 bg-sv-bg border border-[#2a2d3e] border-sv-border border-[#2a2d3e] rounded-sv-sm text-sv-text placeholder:text-sv-text-muted focus:outline-none focus:border-sv-brand text-sm"
                       />
                       {isSearchingMembers && (
                         <FiRefreshCw className="absolute right-3.5 top-1/2 -translate-y-1/2 text-sv-brand animate-spin text-sm" />
@@ -373,7 +373,7 @@ export default function AssignClient({ initialCards }: { initialCards: any[] }) 
 
                     {/* Search Results Dropdown */}
                     {memberResults.length > 0 && (
-                      <div className="absolute left-0 right-0 top-full mt-1.5 max-h-56 overflow-y-auto bg-sv-surface-raised border border-sv-border rounded-sv-md shadow-sv-xl z-30 divide-y divide-sv-border-subtle styled-scrollbar">
+                      <div className="absolute left-0 right-0 top-full mt-1.5 max-h-56 overflow-y-auto bg-sv-surface-raised border border-[#2a2d3e] border-sv-border border-[#2a2d3e] rounded-sv-md shadow-sv-xl z-30 divide-y divide-sv-border-subtle styled-scrollbar">
                         {memberResults.map((m) => (
                           <div
                             key={m.id}
@@ -437,7 +437,7 @@ export default function AssignClient({ initialCards }: { initialCards: any[] }) 
                     value={cardUid}
                     onChange={(e) => handleCardUidChange(e.target.value)}
                     placeholder="e.g. 04A1B2C3 (Hardware scan auto-populates)"
-                    className="w-full pl-10 pr-4 py-2.5 bg-sv-bg border border-sv-border rounded-sv-sm text-sv-text font-mono tracking-wider placeholder:text-sv-text-muted focus:outline-none focus:border-sv-brand text-sm uppercase"
+                    className="w-full pl-10 pr-4 py-2.5 bg-sv-bg border border-[#2a2d3e] border-sv-border border-[#2a2d3e] rounded-sv-sm text-sv-text font-mono tracking-wider placeholder:text-sv-text-muted focus:outline-none focus:border-sv-brand text-sm uppercase"
                   />
                 </div>
                 <p className="text-[11px] text-sv-text-muted mt-1.5">
@@ -465,7 +465,7 @@ export default function AssignClient({ initialCards }: { initialCards: any[] }) 
                   onChange={(e) => setNotes(e.target.value)}
                   rows={2}
                   placeholder="e.g. VIP Club Member replacement card"
-                  className="w-full p-3 bg-sv-bg border border-sv-border rounded-sv-sm text-sv-text placeholder:text-sv-text-muted focus:outline-none focus:border-sv-brand text-sm resize-none"
+                  className="w-full p-3 bg-sv-bg border border-[#2a2d3e] border-sv-border border-[#2a2d3e] rounded-sv-sm text-sv-text placeholder:text-sv-text-muted focus:outline-none focus:border-sv-brand text-sm resize-none"
                 />
               </div>
 
@@ -505,7 +505,7 @@ export default function AssignClient({ initialCards }: { initialCards: any[] }) 
                     value={inventorySearch}
                     onChange={(e) => setInventorySearch(e.target.value)}
                     placeholder="Filter cards or members..."
-                    className="pl-8 pr-3 py-1.5 bg-sv-bg border border-sv-border rounded-sv-sm text-xs text-sv-text placeholder:text-sv-text-muted focus:outline-none focus:border-sv-brand w-44 sm:w-52"
+                    className="pl-8 pr-3 py-1.5 bg-sv-bg border border-[#2a2d3e] border-sv-border border-[#2a2d3e] rounded-sv-sm text-xs text-sv-text placeholder:text-sv-text-muted focus:outline-none focus:border-sv-brand w-44 sm:w-52"
                   />
                 </div>
 
@@ -513,7 +513,7 @@ export default function AssignClient({ initialCards }: { initialCards: any[] }) 
                 <select
                   value={statusFilter}
                   onChange={(e) => setStatusFilter(e.target.value)}
-                  className="px-2.5 py-1.5 bg-sv-bg border border-sv-border rounded-sv-sm text-xs text-sv-text focus:outline-none focus:border-sv-brand"
+                  className="px-2.5 py-1.5 bg-sv-bg border border-[#2a2d3e] border-sv-border border-[#2a2d3e] rounded-sv-sm text-xs text-sv-text focus:outline-none focus:border-sv-brand"
                 >
                   <option value="ALL">All Status</option>
                   <option value="ACTIVE">Active</option>
@@ -526,7 +526,7 @@ export default function AssignClient({ initialCards }: { initialCards: any[] }) 
             {/* Table */}
             <div className="overflow-x-auto styled-scrollbar">
               <table className="w-full text-left text-xs text-sv-text-secondary">
-                <thead className="bg-sv-surface-raised text-sv-text-muted uppercase tracking-wider font-semibold border-b border-sv-border">
+                <thead className="bg-sv-surface-raised text-sv-text-muted uppercase tracking-wider font-semibold border-b border-sv-border border-[#2a2d3e]">
                   <tr>
                     <th className="py-3 px-4">Card UID / Label</th>
                     <th className="py-3 px-4">Assigned Member</th>

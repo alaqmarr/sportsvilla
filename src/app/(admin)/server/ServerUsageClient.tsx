@@ -22,7 +22,7 @@ function formatUptime(seconds: number) {
 
 function ProgressBar({ percent, color }: { percent: number; color: string }) {
   return (
-    <div className="w-full bg-sv-bg rounded-full h-3 mt-3 border border-sv-border overflow-hidden">
+    <div className="w-full bg-sv-bg rounded-full h-3 mt-3 border border-[#2a2d3e] border-sv-border border-[#2a2d3e] overflow-hidden">
       <div
         className={`h-full rounded-full ${color} transition-all duration-1000 ease-in-out`}
         style={{ width: `${Math.min(100, Math.max(0, percent))}%` }}
@@ -148,7 +148,7 @@ export default function ServerUsageClient({ initialStats }: { initialStats: Serv
             </div>
           </div>
           <div className="flex flex-col gap-2">
-            <div className="bg-sv-bg border border-sv-border rounded-sv-md p-4 flex justify-center items-center">
+            <div className="bg-sv-bg border border-[#2a2d3e] border-sv-border border-[#2a2d3e] rounded-sv-md p-4 flex justify-center items-center">
               <span className="text-2xl font-black font-sans text-sv-text tracking-widest text-center">
                 {formatUptime(stats.os.uptime)}
               </span>

@@ -80,13 +80,13 @@ export default function LookupClient() {
   return (
     <div className="space-y-6">
       {error && (
-        <div className="p-4 bg-sv-error-subtle text-sv-error-text rounded-sv-md border border-sv-error-border text-sm font-medium">
+        <div className="p-4 bg-sv-error-subtle text-sv-error-text rounded-sv-md border border-[#2a2d3e] border-sv-error-border border-[#2a2d3e] text-sm font-medium">
           {error}
         </div>
       )}
 
       {data && !data.member && (
-        <div className="p-6 bg-sv-warning-subtle text-sv-warning-text rounded-sv-md border border-sv-warning-border">
+        <div className="p-6 bg-sv-warning-subtle text-sv-warning-text rounded-sv-md border border-[#2a2d3e] border-sv-warning-border border-[#2a2d3e]">
           <p className="font-semibold">Unassigned Card</p>
           <p className="text-sm mt-1 text-sv-text-muted">UID: {data.cardUid}</p>
         </div>
@@ -96,7 +96,7 @@ export default function LookupClient() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {/* Member Info */}
           <Card variant="default" padding="lg" className="col-span-1 md:col-span-3 flex flex-col md:flex-row items-center md:items-start gap-6">
-            <div className="w-20 h-20 bg-sv-brand-subtle text-sv-brand border border-sv-brand/30 rounded-full flex items-center justify-center flex-shrink-0">
+            <div className="w-20 h-20 bg-sv-brand-subtle text-sv-brand border border-[#2a2d3e] border-sv-brand/30 rounded-full flex items-center justify-center flex-shrink-0">
               <User size={40} />
             </div>
             <div className="flex-1 text-center md:text-left">
@@ -131,7 +131,7 @@ export default function LookupClient() {
             ) : (
               <div className="space-y-3">
                 {data.member.memberships.map((m) => (
-                  <div key={m.id} className="border border-sv-border bg-sv-bg rounded-sv-sm p-3">
+                  <div key={m.id} className="border border-[#2a2d3e] border-sv-border border-[#2a2d3e] bg-sv-bg rounded-sv-sm p-3">
                     <p className="font-semibold text-sv-text text-sm">{m.membershipPlan?.name}</p>
                     <p className="text-xs text-sv-text-muted mt-1">
                       {m.turf?.name} • Ends {format(new Date(m.endDate), 'PP')}
@@ -153,7 +153,7 @@ export default function LookupClient() {
             ) : (
               <div className="space-y-3">
                 {data.member.bookings.map((b) => (
-                  <div key={b.id} className="border border-sv-border bg-sv-bg rounded-sv-sm p-3">
+                  <div key={b.id} className="border border-[#2a2d3e] border-sv-border border-[#2a2d3e] bg-sv-bg rounded-sv-sm p-3">
                     <p className="font-semibold text-sv-text text-sm">
                       {format(new Date(b.startTime), 'PPp')}
                     </p>

@@ -20,8 +20,8 @@ export function MemberContextSidebar({
   onOpenRegisterUser: () => void;
 }) {
   return (
-    <aside className="w-80 border-l border-sv-border bg-sv-surface flex flex-col shrink-0 h-full overflow-y-auto styled-scrollbar">
-      <div className="p-4 border-b border-sv-border sticky top-0 bg-sv-surface z-10 flex flex-col gap-3">
+    <aside className="w-80 border-l border-sv-border border-[#2a2d3e] bg-sv-surface flex flex-col shrink-0 h-full overflow-y-auto styled-scrollbar">
+      <div className="p-4 border-b border-sv-border border-[#2a2d3e] sticky top-0 bg-sv-surface z-10 flex flex-col gap-3">
         <h2 className="text-sm font-extrabold text-sv-text flex items-center justify-between">
           <span className="flex items-center gap-2"><FiUser className="text-sv-text-muted" /> Customer CRM</span>
           {!memberContext?.found && selectedPhone && (
@@ -49,7 +49,7 @@ export function MemberContextSidebar({
                     `\n\nReply to this message if you need to book a turf or manage your memberships! 🏅`;
                   setChatInput(text);
                 }}
-                className="flex-1 bg-sv-bg hover:bg-sv-brand/10 hover:text-sv-brand hover:border-sv-brand/30 border border-sv-border text-[10px] font-bold text-sv-text py-1.5 px-2 rounded-sv-md flex items-center justify-center gap-1 transition-all"
+                className="flex-1 bg-sv-bg hover:bg-sv-brand/10 hover:text-sv-brand hover:border-sv-brand/30 border border-[#2a2d3e] border-sv-border border-[#2a2d3e] text-[10px] font-bold text-sv-text py-1.5 px-2 rounded-sv-md flex items-center justify-center gap-1 transition-all"
                 title="Share full summary of all linked family accounts"
               >
                 Share Family
@@ -60,7 +60,7 @@ export function MemberContextSidebar({
                   const text = `🔗 *Add a Family Member to SportsVilla*\nHello! You can register a family member or friend under your phone number anytime using our official portal:\n\n🌐 *Register Online*: https://sportsvilla.co.in/register?mobile=${selectedPhone}\n\nWe look forward to seeing you all on the field! 🏆`;
                   setChatInput(text);
                 }}
-                className="flex-1 bg-sv-bg hover:bg-sv-brand/10 hover:text-sv-brand hover:border-sv-brand/30 border border-sv-border text-[10px] font-bold text-sv-text py-1.5 px-2 rounded-sv-md flex items-center justify-center gap-1 transition-all"
+                className="flex-1 bg-sv-bg hover:bg-sv-brand/10 hover:text-sv-brand hover:border-sv-brand/30 border border-[#2a2d3e] border-sv-border border-[#2a2d3e] text-[10px] font-bold text-sv-text py-1.5 px-2 rounded-sv-md flex items-center justify-center gap-1 transition-all"
                 title="Send sign-up/registration link to add another family member"
               >
                 Add Member
@@ -70,7 +70,7 @@ export function MemberContextSidebar({
               <button
                 type="button"
                 onClick={onOpenGenerateCoupon}
-                className="flex-1 bg-sv-bg hover:bg-sv-info/10 hover:text-sv-info hover:border-sv-info/30 border border-sv-border text-[10px] font-bold text-sv-text py-1.5 px-2 rounded-sv-md flex items-center justify-center gap-1 transition-all"
+                className="flex-1 bg-sv-bg hover:bg-sv-info/10 hover:text-sv-info hover:border-sv-info/30 border border-[#2a2d3e] border-sv-border border-[#2a2d3e] text-[10px] font-bold text-sv-text py-1.5 px-2 rounded-sv-md flex items-center justify-center gap-1 transition-all"
                 title="Generate custom discount coupon"
               >
                 <FiGift /> Coupon
@@ -78,7 +78,7 @@ export function MemberContextSidebar({
               <button
                 type="button"
                 onClick={onOpenAssignMembership}
-                className="flex-1 bg-sv-bg hover:bg-sv-status-success/10 hover:text-sv-status-success hover:border-sv-status-success/30 border border-sv-border text-[10px] font-bold text-sv-text py-1.5 px-2 rounded-sv-md flex items-center justify-center gap-1 transition-all"
+                className="flex-1 bg-sv-bg hover:bg-sv-status-success/10 hover:text-sv-status-success hover:border-sv-status-success/30 border border-[#2a2d3e] border-sv-border border-[#2a2d3e] text-[10px] font-bold text-sv-text py-1.5 px-2 rounded-sv-md flex items-center justify-center gap-1 transition-all"
                 title="Assign active membership"
               >
                 <FiAward /> Membership
@@ -117,13 +117,13 @@ export function MemberContextSidebar({
                 </div>
                 
                 <div className="grid grid-cols-2 gap-3">
-                  <div className="bg-gradient-to-br from-sv-bg to-sv-surface-hover rounded-xl p-3 border border-sv-border shadow-sm flex flex-col justify-center items-center">
+                  <div className="bg-gradient-to-br from-sv-bg to-sv-surface-hover rounded-xl p-3 border border-[#2a2d3e] border-sv-border border-[#2a2d3e] shadow-sm flex flex-col justify-center items-center">
                     <p className="text-[10px] text-sv-text-muted font-bold uppercase tracking-wider mb-1">Wallet</p>
                     <p className="text-lg font-black text-sv-status-success tracking-tight">
                       ₹{((member.walletBalance || 0) / 100).toFixed(0)}
                     </p>
                   </div>
-                  <div className="bg-gradient-to-br from-sv-bg to-sv-surface-hover rounded-xl p-3 border border-sv-border shadow-sm flex flex-col justify-center items-center">
+                  <div className="bg-gradient-to-br from-sv-bg to-sv-surface-hover rounded-xl p-3 border border-[#2a2d3e] border-sv-border border-[#2a2d3e] shadow-sm flex flex-col justify-center items-center">
                     <p className="text-[10px] text-sv-text-muted font-bold uppercase tracking-wider mb-1">Loyalty</p>
                     <p className="text-lg font-black text-sv-brand tracking-tight">
                       {member.loyaltyPoints || 0}
@@ -132,7 +132,7 @@ export function MemberContextSidebar({
                 </div>
 
                 {activePlan && (
-                  <div className="pt-3 border-t border-sv-border mt-3">
+                  <div className="pt-3 border-t border-sv-border border-[#2a2d3e] mt-3">
                     <div className="bg-gradient-to-r from-sv-brand/10 to-transparent border-l-4 border-l-sv-brand rounded-r-xl p-3 flex items-center justify-between shadow-sm">
                       <div>
                         <p className="text-sm font-extrabold text-sv-text mb-0.5 tracking-tight">
@@ -148,11 +148,11 @@ export function MemberContextSidebar({
                 )}
 
                 {member.activeBookings?.length > 0 && (
-                  <div className="pt-2 border-t border-sv-border">
+                  <div className="pt-2 border-t border-sv-border border-[#2a2d3e]">
                     <p className="text-[10px] font-semibold text-sv-text-muted uppercase tracking-wider mb-2">Upcoming Bookings</p>
                     <div className="space-y-2">
                       {member.activeBookings.slice(0, 3).map((b: any, bIdx: number) => (
-                        <div key={bIdx} className="text-[11px] bg-sv-bg border border-sv-border p-2 rounded-sv-sm flex justify-between items-center">
+                        <div key={bIdx} className="text-[11px] bg-sv-bg border border-[#2a2d3e] border-sv-border border-[#2a2d3e] p-2 rounded-sv-sm flex justify-between items-center">
                           <span className="font-medium text-sv-text">{b.turf?.name || "Turf Booking"}</span>
                           <span className="text-sv-text-muted">{new Date(b.startTime).toLocaleDateString()}</span>
                         </div>
@@ -164,7 +164,7 @@ export function MemberContextSidebar({
             );
           })
         ) : (
-          <div className="text-center p-6 bg-sv-bg border border-sv-border border-dashed rounded-sv-md">
+          <div className="text-center p-6 bg-sv-bg border border-[#2a2d3e] border-sv-border border-[#2a2d3e] border-dashed rounded-sv-md">
             <FiAlertCircle className="w-8 h-8 text-sv-text-muted mx-auto mb-2 opacity-50" />
             <p className="text-sm font-medium text-sv-text">Unregistered User</p>
             <p className="text-xs text-sv-text-muted mt-1 mb-4">This number is not registered in the app database.</p>

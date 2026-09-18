@@ -24,8 +24,8 @@ export function ConversationList({
   );
 
   return (
-    <aside className="w-80 border-r border-sv-border bg-sv-surface flex flex-col shrink-0 h-full">
-      <div className="p-4 border-b border-sv-border bg-sv-surface-raised flex flex-col gap-3 shrink-0">
+    <aside className="w-80 border-r border-sv-border border-[#2a2d3e] bg-sv-surface flex flex-col shrink-0 h-full">
+      <div className="p-4 border-b border-sv-border border-[#2a2d3e] bg-sv-surface-raised flex flex-col gap-3 shrink-0">
         <div className="flex items-center justify-between">
           <h2 className="text-base font-extrabold text-sv-text flex items-center gap-2">
             <FaWhatsapp className="text-sv-brand text-xl" /> CRM Chat
@@ -36,7 +36,7 @@ export function ConversationList({
           <input
             type="text"
             placeholder="Search conversations..."
-            className="w-full bg-sv-bg border border-sv-border rounded-xl pl-9 pr-3 py-2.5 text-sm focus:outline-none focus:border-sv-brand focus:ring-1 focus:ring-sv-brand transition-all text-sv-text placeholder:text-sv-text-muted shadow-sm"
+            className="w-full bg-sv-bg border border-[#2a2d3e] border-sv-border border-[#2a2d3e] rounded-xl pl-9 pr-3 py-2.5 text-sm focus:outline-none focus:border-sv-brand focus:ring-1 focus:ring-sv-brand transition-all text-sv-text placeholder:text-sv-text-muted shadow-sm"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
@@ -55,7 +55,7 @@ export function ConversationList({
               <button
                 key={conv.phoneNumber}
                 onClick={() => setSelectedPhone(conv.phoneNumber)}
-                className={`w-full text-left p-3 transition-all flex items-center gap-3 border-b border-b-sv-border border-l-4 animate-in fade-in slide-in-from-right-4 duration-300 ${
+                className={`w-full text-left p-3 transition-all flex items-center gap-3 border-b border-b-sv-border border-[#2a2d3e] border-l-4 animate-in fade-in slide-in-from-right-4 duration-300 ${
                   isSelected 
                     ? "bg-sv-surface-hover border-l-sv-brand" 
                     : "border-l-transparent hover:bg-sv-surface-hover"

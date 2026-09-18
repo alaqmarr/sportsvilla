@@ -186,7 +186,7 @@ export default function SportsClient({
           <Card key={sport.id} variant="default" padding="lg" className="flex flex-col justify-between">
             <div>
               <div className="flex justify-between items-start">
-                <div className="w-11 h-11 rounded-sv-md bg-sv-brand-subtle text-sv-brand flex items-center justify-center text-xl overflow-hidden border border-sv-brand/20">
+                <div className="w-11 h-11 rounded-sv-md bg-sv-brand-subtle text-sv-brand flex items-center justify-center text-xl overflow-hidden border border-[#2a2d3e] border-sv-brand/20">
                   {sport.iconPath ? (
                     <img src={sport.iconPath} alt={sport.name} className="w-7 h-7 object-contain" />
                   ) : (
@@ -233,7 +233,7 @@ export default function SportsClient({
               <div
                 key={s}
                 className={`flex-1 h-1.5 rounded-full ${
-                  step >= s ? 'bg-sv-brand' : 'bg-sv-border'
+                  step >= s ? 'bg-sv-brand' : 'bg-sv-border border-[#2a2d3e]'
                 }`}
               />
             ))}
@@ -258,7 +258,7 @@ export default function SportsClient({
                 <label className="block text-xs uppercase tracking-wider font-semibold text-sv-text-secondary">Sport Name *</label>
                 <input
                   type="text"
-                  className="w-full bg-sv-bg border border-sv-border rounded-sv-sm px-4 py-2.5 text-sv-text placeholder:text-sv-text-muted focus:border-sv-brand focus:ring-1 focus:ring-sv-brand outline-none text-sm"
+                  className="w-full bg-sv-bg border border-[#2a2d3e] border-sv-border border-[#2a2d3e] rounded-sv-sm px-4 py-2.5 text-sv-text placeholder:text-sv-text-muted focus:border-sv-brand focus:ring-1 focus:ring-sv-brand outline-none text-sm"
                   value={name}
                   onChange={e => setName(e.target.value)}
                   placeholder="e.g. Badminton"
@@ -268,7 +268,7 @@ export default function SportsClient({
                 <label className="block text-xs uppercase tracking-wider font-semibold text-sv-text-secondary">Icon</label>
                 <div 
                   onClick={() => setShowIconModal(true)}
-                  className="w-full bg-sv-bg border border-sv-border hover:border-sv-brand/50 rounded-sv-sm px-4 py-2.5 cursor-pointer flex items-center justify-between transition-colors"
+                  className="w-full bg-sv-bg border border-[#2a2d3e] border-sv-border border-[#2a2d3e] hover:border-sv-brand/50 rounded-sv-sm px-4 py-2.5 cursor-pointer flex items-center justify-between transition-colors"
                 >
                   <div className="flex items-center gap-3">
                     {iconPath ? (
@@ -286,7 +286,7 @@ export default function SportsClient({
               <div className="mb-5 space-y-1.5">
                 <label className="block text-xs uppercase tracking-wider font-semibold text-sv-text-secondary">Description</label>
                 <textarea
-                  className="w-full bg-sv-bg border border-sv-border rounded-sv-sm px-4 py-2.5 text-sv-text placeholder:text-sv-text-muted focus:border-sv-brand focus:ring-1 focus:ring-sv-brand outline-none text-sm"
+                  className="w-full bg-sv-bg border border-[#2a2d3e] border-sv-border border-[#2a2d3e] rounded-sv-sm px-4 py-2.5 text-sv-text placeholder:text-sv-text-muted focus:border-sv-brand focus:ring-1 focus:ring-sv-brand outline-none text-sm"
                   value={description}
                   onChange={e => setDescription(e.target.value)}
                   rows={3}
@@ -301,7 +301,7 @@ export default function SportsClient({
                   <label className="block text-xs uppercase tracking-wider font-semibold text-sv-text-secondary">Open Time</label>
                   <input
                     type="time"
-                    className="w-full bg-sv-bg border border-sv-border rounded-sv-sm px-4 py-2.5 text-sv-text focus:border-sv-brand focus:ring-1 focus:ring-sv-brand outline-none text-sm [color-scheme:dark]"
+                    className="w-full bg-sv-bg border border-[#2a2d3e] border-sv-border border-[#2a2d3e] rounded-sv-sm px-4 py-2.5 text-sv-text focus:border-sv-brand focus:ring-1 focus:ring-sv-brand outline-none text-sm [color-scheme:dark]"
                     value={openTime}
                     onChange={e => setOpenTime(e.target.value)}
                   />
@@ -310,7 +310,7 @@ export default function SportsClient({
                   <label className="block text-xs uppercase tracking-wider font-semibold text-sv-text-secondary">Close Time</label>
                   <input
                     type="time"
-                    className="w-full bg-sv-bg border border-sv-border rounded-sv-sm px-4 py-2.5 text-sv-text focus:border-sv-brand focus:ring-1 focus:ring-sv-brand outline-none text-sm [color-scheme:dark]"
+                    className="w-full bg-sv-bg border border-[#2a2d3e] border-sv-border border-[#2a2d3e] rounded-sv-sm px-4 py-2.5 text-sv-text focus:border-sv-brand focus:ring-1 focus:ring-sv-brand outline-none text-sm [color-scheme:dark]"
                     value={closeTime}
                     onChange={e => setCloseTime(e.target.value)}
                   />
@@ -322,7 +322,7 @@ export default function SportsClient({
                   type="number"
                   min="15"
                   step="15"
-                  className="w-full bg-sv-bg border border-sv-border rounded-sv-sm px-4 py-2.5 text-sv-text focus:border-sv-brand focus:ring-1 focus:ring-sv-brand outline-none text-sm"
+                  className="w-full bg-sv-bg border border-[#2a2d3e] border-sv-border border-[#2a2d3e] rounded-sv-sm px-4 py-2.5 text-sv-text focus:border-sv-brand focus:ring-1 focus:ring-sv-brand outline-none text-sm"
                   value={slotDurationMinutes}
                   onChange={e => setSlotDurationMinutes(Number(e.target.value))}
                 />
@@ -332,7 +332,7 @@ export default function SportsClient({
                 <input
                   type="number"
                   min="0"
-                  className="w-full bg-sv-bg border border-sv-border rounded-sv-sm px-4 py-2.5 text-sv-text focus:border-sv-brand focus:ring-1 focus:ring-sv-brand outline-none text-sm"
+                  className="w-full bg-sv-bg border border-[#2a2d3e] border-sv-border border-[#2a2d3e] rounded-sv-sm px-4 py-2.5 text-sv-text focus:border-sv-brand focus:ring-1 focus:ring-sv-brand outline-none text-sm"
                   value={rewardPointsPerCheckin}
                   onChange={e => setRewardPointsPerCheckin(Number(e.target.value))}
                   placeholder="0"
@@ -345,10 +345,10 @@ export default function SportsClient({
                 {turfStates.map((turf, index) => (
                   <div
                     key={index}
-                    className={`border rounded-sv-sm p-4 transition-colors ${
+                    className={`border border-[#2a2d3e] rounded-sv-sm p-4 transition-colors ${
                       turf.selected
                         ? 'bg-sv-brand-subtle border-sv-brand/50'
-                        : 'bg-sv-bg border-sv-border'
+                        : 'bg-sv-bg border-sv-border border-[#2a2d3e]'
                     }`}
                   >
                     <div className="flex items-center justify-between mb-3">
@@ -373,7 +373,7 @@ export default function SportsClient({
                               setTurfStates(newTurfs);
                             }}
                             placeholder="New Turf Name" 
-                            className="bg-sv-surface border border-sv-border rounded-sv-xs px-3 py-1 text-sm text-sv-text focus:outline-none focus:border-sv-brand"
+                            className="bg-sv-surface border border-[#2a2d3e] border-sv-border border-[#2a2d3e] rounded-sv-xs px-3 py-1 text-sm text-sv-text focus:outline-none focus:border-sv-brand"
                           />
                         ) : (
                           <span className="text-sv-text font-semibold">{turf.name}</span>
@@ -394,7 +394,7 @@ export default function SportsClient({
                     </div>
                     
                     {turf.selected && (
-                      <div className="grid grid-cols-3 gap-3 mt-3 pt-3 border-t border-sv-border">
+                      <div className="grid grid-cols-3 gap-3 mt-3 pt-3 border-t border-sv-border border-[#2a2d3e]">
                         <div>
                           <label className="block text-[10px] uppercase tracking-wider text-sv-text-muted mb-1">Booking Price</label>
                           <input 
@@ -406,7 +406,7 @@ export default function SportsClient({
                               newTurfs[index].bookingPrice = Number(e.target.value);
                               setTurfStates(newTurfs);
                             }}
-                            className="w-full bg-sv-surface border border-sv-border rounded-sv-xs px-3 py-2 text-sm text-sv-text focus:outline-none focus:border-sv-brand"
+                            className="w-full bg-sv-surface border border-[#2a2d3e] border-sv-border border-[#2a2d3e] rounded-sv-xs px-3 py-2 text-sm text-sv-text focus:outline-none focus:border-sv-brand"
                           />
                         </div>
                         <div>
@@ -420,7 +420,7 @@ export default function SportsClient({
                               newTurfs[index].capacityPerSlot = Number(e.target.value);
                               setTurfStates(newTurfs);
                             }}
-                            className="w-full bg-sv-surface border border-sv-border rounded-sv-xs px-3 py-2 text-sm text-sv-text focus:outline-none focus:border-sv-brand"
+                            className="w-full bg-sv-surface border border-[#2a2d3e] border-sv-border border-[#2a2d3e] rounded-sv-xs px-3 py-2 text-sm text-sv-text focus:outline-none focus:border-sv-brand"
                           />
                         </div>
                         <div>
@@ -432,7 +432,7 @@ export default function SportsClient({
                               newTurfs[index].iconPath = e.target.value;
                               setTurfStates(newTurfs);
                             }}
-                            className="w-full bg-sv-surface border border-sv-border rounded-sv-xs px-3 py-2 text-sm text-sv-text focus:outline-none focus:border-sv-brand"
+                            className="w-full bg-sv-surface border border-[#2a2d3e] border-sv-border border-[#2a2d3e] rounded-sv-xs px-3 py-2 text-sm text-sv-text focus:outline-none focus:border-sv-brand"
                           >
                             <option value="">None</option>
                             {availableIcons.map(icon => (
@@ -457,14 +457,14 @@ export default function SportsClient({
                       selected: true
                     }]);
                   }}
-                  className="w-full py-3 border border-dashed border-sv-border text-sv-text-muted rounded-sv-sm hover:text-sv-brand hover:border-sv-brand/50 transition-colors flex items-center justify-center gap-2"
+                  className="w-full py-3 border border-[#2a2d3e] border-dashed border-sv-border border-[#2a2d3e] text-sv-text-muted rounded-sv-sm hover:text-sv-brand hover:border-sv-brand/50 transition-colors flex items-center justify-center gap-2"
                 >
                   <FiPlus size={16} /> Add New Turf
                 </button>
               </div>
             </div>
 
-            <div className="flex justify-between mt-6 pt-4 border-t border-sv-border">
+            <div className="flex justify-between mt-6 pt-4 border-t border-sv-border border-[#2a2d3e]">
               {step > 1 ? (
                 <Button type="button" variant="secondary" onClick={() => setStep(step - 1)}>
                   Back
@@ -497,10 +497,10 @@ export default function SportsClient({
             <div 
               key={icon.value}
               onClick={() => { setIconPath(icon.value); setShowIconModal(false); }}
-              className={`flex flex-col items-center justify-center gap-3 p-4 rounded-sv-md cursor-pointer border transition-all ${
+              className={`flex flex-col items-center justify-center gap-3 p-4 rounded-sv-md cursor-pointer border border-[#2a2d3e] transition-all ${
                 iconPath === icon.value
                   ? 'bg-sv-brand-subtle border-sv-brand text-sv-brand'
-                  : 'bg-sv-bg border-sv-border hover:border-sv-brand/50 text-sv-text-muted hover:text-sv-text'
+                  : 'bg-sv-bg border-sv-border border-[#2a2d3e] hover:border-sv-brand/50 text-sv-text-muted hover:text-sv-text'
               }`}
             >
               {icon.value ? (

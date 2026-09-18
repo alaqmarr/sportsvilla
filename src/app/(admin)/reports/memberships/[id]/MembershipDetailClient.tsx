@@ -241,16 +241,16 @@ export default function MembershipDetailClient({ id }: { id: string }) {
                 return (
                   <div
                     key={idx}
-                    className={`min-h-[90px] rounded-sv-sm p-2.5 flex flex-col border transition-all duration-200 ${
+                    className={`min-h-[90px] rounded-sv-sm p-2.5 flex flex-col border border-[#2a2d3e] transition-all duration-200 ${
                       !isCurrMonth
                         ? "opacity-20 bg-sv-bg border-transparent"
                         : attendedDay
-                        ? "bg-sv-success-subtle border-sv-success-border text-sv-success-text shadow-sv-sm"
+                        ? "bg-sv-success-subtle border-sv-success-border border-[#2a2d3e] text-sv-success-text shadow-sv-sm"
                         : missedDay
-                        ? "bg-sv-error-subtle border-sv-error-border text-sv-error-text"
+                        ? "bg-sv-error-subtle border-sv-error-border border-[#2a2d3e] text-sv-error-text"
                         : isFuture
-                        ? "bg-sv-surface border-sv-border opacity-50"
-                        : "bg-sv-surface-raised border-sv-border"
+                        ? "bg-sv-surface border-sv-border border-[#2a2d3e] opacity-50"
+                        : "bg-sv-surface-raised border-sv-border border-[#2a2d3e]"
                     }`}
                   >
                     <div
@@ -271,7 +271,7 @@ export default function MembershipDetailClient({ id }: { id: string }) {
                         dayAttendances.map((a: any) => (
                           <div
                             key={a.id}
-                            className="text-[10px] leading-tight flex flex-col gap-0.5 mb-1 bg-sv-status-success/15 px-2 py-1.5 rounded-sv-xs border border-sv-status-success/30"
+                            className="text-[10px] leading-tight flex flex-col gap-0.5 mb-1 bg-sv-status-success/15 px-2 py-1.5 rounded-sv-xs border border-[#2a2d3e] border-sv-status-success/30"
                             title={formatIST(new Date(a.date), "h:mm a")}
                           >
                             <span className="font-bold text-sv-text flex items-center gap-1">

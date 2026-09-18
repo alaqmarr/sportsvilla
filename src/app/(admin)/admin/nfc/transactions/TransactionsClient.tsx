@@ -156,7 +156,7 @@ export default function TransactionsClient({ initialData }: TransactionsClientPr
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search by Member Name, Mobile, Card UID, or Location..."
-            className="w-full pl-10 pr-4 py-2 bg-sv-bg border border-sv-border rounded-sv-sm text-sm text-sv-text placeholder:text-sv-text-muted focus:outline-none focus:border-sv-brand"
+            className="w-full pl-10 pr-4 py-2 bg-sv-bg border border-[#2a2d3e] border-sv-border border-[#2a2d3e] rounded-sv-sm text-sm text-sv-text placeholder:text-sv-text-muted focus:outline-none focus:border-sv-brand"
           />
         </div>
 
@@ -166,7 +166,7 @@ export default function TransactionsClient({ initialData }: TransactionsClientPr
           <select
             value={dateRangePreset}
             onChange={(e) => setDateRangePreset(e.target.value)}
-            className="px-3 py-2 bg-sv-bg border border-sv-border rounded-sv-sm text-xs font-medium text-sv-text focus:outline-none focus:border-sv-brand"
+            className="px-3 py-2 bg-sv-bg border border-[#2a2d3e] border-sv-border border-[#2a2d3e] rounded-sv-sm text-xs font-medium text-sv-text focus:outline-none focus:border-sv-brand"
           >
             <option value="ALL">All Time</option>
             <option value="TODAY">Today (IST)</option>
@@ -178,7 +178,7 @@ export default function TransactionsClient({ initialData }: TransactionsClientPr
           <select
             value={typeFilter}
             onChange={(e) => setTypeFilter(e.target.value)}
-            className="px-3 py-2 bg-sv-bg border border-sv-border rounded-sv-sm text-xs font-medium text-sv-text focus:outline-none focus:border-sv-brand"
+            className="px-3 py-2 bg-sv-bg border border-[#2a2d3e] border-sv-border border-[#2a2d3e] rounded-sv-sm text-xs font-medium text-sv-text focus:outline-none focus:border-sv-brand"
           >
             <option value="ALL">All Types</option>
             <option value="CHECKIN">CHECKIN</option>
@@ -191,7 +191,7 @@ export default function TransactionsClient({ initialData }: TransactionsClientPr
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="px-3 py-2 bg-sv-bg border border-sv-border rounded-sv-sm text-xs font-medium text-sv-text focus:outline-none focus:border-sv-brand"
+            className="px-3 py-2 bg-sv-bg border border-[#2a2d3e] border-sv-border border-[#2a2d3e] rounded-sv-sm text-xs font-medium text-sv-text focus:outline-none focus:border-sv-brand"
           >
             <option value="ALL">All Status</option>
             <option value="SUCCESS">SUCCESS</option>
@@ -204,7 +204,7 @@ export default function TransactionsClient({ initialData }: TransactionsClientPr
       <Card variant="default" padding="none" className="overflow-hidden shadow-sv-lg">
         <div className="overflow-x-auto styled-scrollbar">
           <table className="w-full text-left text-xs text-sv-text-secondary">
-            <thead className="bg-sv-surface-raised text-sv-text-muted uppercase tracking-wider font-semibold border-b border-sv-border">
+            <thead className="bg-sv-surface-raised text-sv-text-muted uppercase tracking-wider font-semibold border-b border-sv-border border-[#2a2d3e]">
               <tr>
                 <th className="py-3.5 px-4">Date & Time (IST)</th>
                 <th className="py-3.5 px-4">Card UID</th>
@@ -333,7 +333,7 @@ export default function TransactionsClient({ initialData }: TransactionsClientPr
             <button
               onClick={() => fetchFilteredData(currentPage - 1)}
               disabled={currentPage <= 1 || loading}
-              className="p-1.5 bg-sv-surface border border-sv-border rounded-sv-sm text-sv-text-muted hover:text-sv-text disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+              className="p-1.5 bg-sv-surface border border-[#2a2d3e] border-sv-border border-[#2a2d3e] rounded-sv-sm text-sv-text-muted hover:text-sv-text disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
             >
               <FiChevronLeft />
             </button>
@@ -343,7 +343,7 @@ export default function TransactionsClient({ initialData }: TransactionsClientPr
             <button
               onClick={() => fetchFilteredData(currentPage + 1)}
               disabled={currentPage >= totalPages || loading}
-              className="p-1.5 bg-sv-surface border border-sv-border rounded-sv-sm text-sv-text-muted hover:text-sv-text disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+              className="p-1.5 bg-sv-surface border border-[#2a2d3e] border-sv-border border-[#2a2d3e] rounded-sv-sm text-sv-text-muted hover:text-sv-text disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
             >
               <FiChevronRight />
             </button>
@@ -362,14 +362,14 @@ export default function TransactionsClient({ initialData }: TransactionsClientPr
         {selectedTx && (
           <div className="space-y-4 text-xs">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div className="p-3.5 bg-sv-surface-raised border border-sv-border rounded-sv-md">
+              <div className="p-3.5 bg-sv-surface-raised border border-[#2a2d3e] border-sv-border border-[#2a2d3e] rounded-sv-md">
                 <span className="text-sv-text-muted block mb-1 uppercase font-semibold">Card UID</span>
                 <span className="font-mono text-sm font-bold text-sv-text tracking-wider">
                   {selectedTx.cardUid}
                 </span>
               </div>
 
-              <div className="p-3.5 bg-sv-surface-raised border border-sv-border rounded-sv-md">
+              <div className="p-3.5 bg-sv-surface-raised border border-[#2a2d3e] border-sv-border border-[#2a2d3e] rounded-sv-md">
                 <span className="text-sv-text-muted block mb-1 uppercase font-semibold">
                   Timestamp (IST)
                 </span>
@@ -378,7 +378,7 @@ export default function TransactionsClient({ initialData }: TransactionsClientPr
                 </span>
               </div>
 
-              <div className="p-3.5 bg-sv-surface-raised border border-sv-border rounded-sv-md">
+              <div className="p-3.5 bg-sv-surface-raised border border-[#2a2d3e] border-sv-border border-[#2a2d3e] rounded-sv-md">
                 <span className="text-sv-text-muted block mb-1 uppercase font-semibold">
                   Type & Status
                 </span>
@@ -393,14 +393,14 @@ export default function TransactionsClient({ initialData }: TransactionsClientPr
                 </div>
               </div>
 
-              <div className="p-3.5 bg-sv-surface-raised border border-sv-border rounded-sv-md">
+              <div className="p-3.5 bg-sv-surface-raised border border-[#2a2d3e] border-sv-border border-[#2a2d3e] rounded-sv-md">
                 <span className="text-sv-text-muted block mb-1 uppercase font-semibold">Amount</span>
                 <span className="text-sm font-bold text-sv-brand">
                   {selectedTx.amount > 0 ? `₹${selectedTx.amount.toFixed(2)}` : "₹0.00"}
                 </span>
               </div>
 
-              <div className="p-3.5 bg-sv-surface-raised border border-sv-border rounded-sv-md sm:col-span-2">
+              <div className="p-3.5 bg-sv-surface-raised border border-[#2a2d3e] border-sv-border border-[#2a2d3e] rounded-sv-md sm:col-span-2">
                 <span className="text-sv-text-muted block mb-1 uppercase font-semibold">
                   Member Profile
                 </span>
@@ -423,7 +423,7 @@ export default function TransactionsClient({ initialData }: TransactionsClientPr
               </div>
 
               {selectedTx.failureReason && (
-                <div className="p-3.5 bg-sv-error-subtle border border-sv-error-border rounded-sv-md sm:col-span-2 text-sv-error-text">
+                <div className="p-3.5 bg-sv-error-subtle border border-[#2a2d3e] border-sv-error-border border-[#2a2d3e] rounded-sv-md sm:col-span-2 text-sv-error-text">
                   <span className="block font-semibold uppercase text-[10px] mb-1">
                     Failure Reason
                   </span>
@@ -432,7 +432,7 @@ export default function TransactionsClient({ initialData }: TransactionsClientPr
               )}
 
               {selectedTx.booking && (
-                <div className="p-3.5 bg-sv-surface-raised border border-sv-border rounded-sv-md sm:col-span-2">
+                <div className="p-3.5 bg-sv-surface-raised border border-[#2a2d3e] border-sv-border border-[#2a2d3e] rounded-sv-md sm:col-span-2">
                   <span className="text-sv-text-muted block mb-1 uppercase font-semibold">
                     Linked Booking
                   </span>
@@ -449,7 +449,7 @@ export default function TransactionsClient({ initialData }: TransactionsClientPr
               )}
 
               {selectedTx.metadata && (
-                <div className="p-3.5 bg-sv-bg border border-sv-border rounded-sv-md sm:col-span-2">
+                <div className="p-3.5 bg-sv-bg border border-[#2a2d3e] border-sv-border border-[#2a2d3e] rounded-sv-md sm:col-span-2">
                   <span className="text-sv-text-muted block mb-1 uppercase font-semibold">
                     Execution Metadata (JSON)
                   </span>

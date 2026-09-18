@@ -320,7 +320,7 @@ export default function DashboardClient({
         <Card variant="default" padding="none" className="overflow-hidden shadow-sv-md">
           <div className="overflow-x-auto styled-scrollbar">
             <table className="w-full text-sm text-left">
-              <thead className="bg-sv-surface-raised text-sv-text-muted font-semibold border-b border-sv-border text-xs uppercase tracking-wider">
+              <thead className="bg-sv-surface-raised text-sv-text-muted font-semibold border-b border-sv-border border-[#2a2d3e] text-xs uppercase tracking-wider">
                 <tr>
                   <th className="px-6 py-4">Pricing Category</th>
                   <th className="px-6 py-4">Messages</th>

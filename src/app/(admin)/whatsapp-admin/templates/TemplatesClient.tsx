@@ -31,17 +31,17 @@ export default function TemplatesClient({ initialTemplates }: { initialTemplates
       case "GREEN":
       case "CONNECTED":
       case "ONLINE":
-        return <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20"><FiCheckCircle /> {status}</span>;
+        return <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-[#2a2d3e] border-emerald-500/20"><FiCheckCircle /> {status}</span>;
       case "PENDING":
       case "YELLOW":
-        return <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-500/10 text-amber-400 border border-amber-500/20"><FiClock /> {status}</span>;
+        return <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-500/10 text-amber-400 border border-[#2a2d3e] border-amber-500/20"><FiClock /> {status}</span>;
       case "REJECTED":
       case "FAILED":
       case "RED":
       case "OFFLINE":
-        return <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-rose-500/10 text-rose-400 border border-rose-500/20"><FiAlertCircle /> {status}</span>;
+        return <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-rose-500/10 text-rose-400 border border-[#2a2d3e] border-rose-500/20"><FiAlertCircle /> {status}</span>;
       default:
-        return <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-gray-500/10 text-gray-400 border border-gray-500/20">{status || "UNKNOWN"}</span>;
+        return <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-gray-500/10 text-gray-400 border border-[#2a2d3e] border-gray-500/20">{status || "UNKNOWN"}</span>;
     }
   };
 
@@ -153,7 +153,7 @@ export default function TemplatesClient({ initialTemplates }: { initialTemplates
   return (
     <div className="flex flex-col w-full h-[100dvh] bg-sv-bg overflow-hidden text-sv-text">
       {/* Header */}
-      <div className="h-16 shrink-0 bg-sv-surface-raised border-b border-sv-border px-6 flex items-center justify-between">
+      <div className="h-16 shrink-0 bg-sv-surface-raised border-b border-sv-border border-[#2a2d3e] px-6 flex items-center justify-between">
         <div className="flex items-center gap-4">
           <Link href="/whatsapp-admin" className="p-2 hover:bg-sv-surface-hover rounded-full transition-colors text-sv-text-muted hover:text-sv-text">
             <FiCornerUpLeft className="text-xl" />
@@ -166,7 +166,7 @@ export default function TemplatesClient({ initialTemplates }: { initialTemplates
         <button
           onClick={fetchTemplates}
           disabled={loading}
-          className="flex items-center gap-2 px-3 py-1.5 bg-sv-surface hover:bg-sv-surface-hover border border-sv-border rounded-lg text-sm text-sv-text transition-colors"
+          className="flex items-center gap-2 px-3 py-1.5 bg-sv-surface hover:bg-sv-surface-hover border border-[#2a2d3e] border-sv-border border-[#2a2d3e] rounded-lg text-sm text-sv-text transition-colors"
         >
           <FiRefreshCw className={loading ? "animate-spin" : ""} /> Refresh
         </button>
@@ -175,12 +175,12 @@ export default function TemplatesClient({ initialTemplates }: { initialTemplates
       <div className="flex-1 p-6 overflow-y-auto grid grid-cols-1 lg:grid-cols-3 gap-6 max-w-7xl mx-auto w-full">
         {/* Left 2 Cols: Templates Grid */}
         <div className="lg:col-span-2 space-y-4">
-          <div className="bg-sv-surface border border-sv-border rounded-2xl p-5 shadow-xl flex items-center justify-between">
+          <div className="bg-sv-surface border border-[#2a2d3e] border-sv-border border-[#2a2d3e] rounded-2xl p-5 shadow-xl flex items-center justify-between">
             <div>
               <h3 className="font-bold text-white text-base">Approved Meta Cloud API Templates</h3>
               <p className="text-xs text-sv-text-muted">Click &ldquo;Test Template&rdquo; to send a live WhatsApp test message</p>
             </div>
-            <span className="px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+            <span className="px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-[#2a2d3e] border-emerald-500/20">
               {templates.length} Templates
             </span>
           </div>
@@ -190,7 +190,7 @@ export default function TemplatesClient({ initialTemplates }: { initialTemplates
               Fetching templates from Meta Cloud API...
             </div>
           ) : templates.length === 0 ? (
-            <div className="p-12 text-center text-sv-text-muted font-mono text-sm bg-sv-surface border border-sv-border rounded-2xl">
+            <div className="p-12 text-center text-sv-text-muted font-mono text-sm bg-sv-surface border border-[#2a2d3e] border-sv-border border-[#2a2d3e] rounded-2xl">
               No templates returned from Meta. Check your token and WABA ID in .env!
             </div>
           ) : (
@@ -200,8 +200,8 @@ export default function TemplatesClient({ initialTemplates }: { initialTemplates
                 return (
                   <div
                     key={idx}
-                    className={`bg-sv-surface border rounded-2xl p-5 flex flex-col justify-between transition-all ${
-                      isSelected ? "border-sv-brand shadow-lg shadow-sv-brand/10 bg-sv-surface-raised" : "border-sv-border hover:border-sv-border-strong"
+                    className={`bg-sv-surface border border-[#2a2d3e] rounded-2xl p-5 flex flex-col justify-between transition-all ${
+                      isSelected ? "border-sv-brand shadow-lg shadow-sv-brand/10 bg-sv-surface-raised" : "border-sv-border border-[#2a2d3e] hover:border-sv-border-strong"
                     }`}
                   >
                     <div>
@@ -211,14 +211,14 @@ export default function TemplatesClient({ initialTemplates }: { initialTemplates
                       </div>
 
                       <div className="flex items-center gap-2 text-xs text-sv-text-muted mb-4">
-                        <span className="font-mono uppercase bg-sv-bg px-2 py-0.5 rounded border border-sv-border">
+                        <span className="font-mono uppercase bg-sv-bg px-2 py-0.5 rounded border border-[#2a2d3e] border-sv-border border-[#2a2d3e]">
                           {tpl.language}
                         </span>
                         <span className="capitalize">{tpl.category}</span>
                       </div>
                     </div>
 
-                    <div className="pt-4 border-t border-sv-border flex items-center justify-between">
+                    <div className="pt-4 border-t border-sv-border border-[#2a2d3e] flex items-center justify-between">
                       <span className="text-[11px] text-sv-text-muted font-mono">ID: {tpl.id}</span>
                       <button
                         onClick={() => {
@@ -228,7 +228,7 @@ export default function TemplatesClient({ initialTemplates }: { initialTemplates
                         className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
                           isSelected
                             ? "bg-sv-brand text-white"
-                            : "bg-sv-surface hover:bg-sv-surface-hover border border-sv-border text-sv-text"
+                            : "bg-sv-surface hover:bg-sv-surface-hover border border-[#2a2d3e] border-sv-border border-[#2a2d3e] text-sv-text"
                         }`}
                       >
                         <FiSend /> {isSelected ? "Selected" : "Test Template"}
@@ -243,46 +243,46 @@ export default function TemplatesClient({ initialTemplates }: { initialTemplates
 
         {/* Right Col: Template Tester Box */}
         <div className="lg:col-span-1">
-          <div className="bg-sv-surface border border-sv-border rounded-2xl p-6 sticky top-6 shadow-2xl space-y-5">
+          <div className="bg-sv-surface border border-[#2a2d3e] border-sv-border border-[#2a2d3e] rounded-2xl p-6 sticky top-6 shadow-2xl space-y-5">
             <div className="flex items-center gap-2 text-sv-brand font-bold text-base">
               <FiSend />
               <h3>Live Template Sender</h3>
             </div>
 
             {!testingTemplate ? (
-              <div className="p-8 text-center border border-dashed border-sv-border rounded-xl text-sv-text-muted text-xs">
+              <div className="p-8 text-center border border-[#2a2d3e] border-dashed border-sv-border border-[#2a2d3e] rounded-xl text-sv-text-muted text-xs">
                 Select a template from the list on the left to configure parameters and send a live test.
               </div>
             ) : (
               <form onSubmit={handleSendTestTemplate} className="space-y-4">
-                <div className="p-3 bg-sv-brand/10 border border-sv-brand/20 rounded-xl text-xs text-sv-brand">
+                <div className="p-3 bg-sv-brand/10 border border-[#2a2d3e] border-sv-brand/20 rounded-xl text-xs text-sv-brand">
                   Selected Template: <strong className="text-white font-mono">{testingTemplate.name}</strong> ({testingTemplate.language})
                 </div>
 
                 {testingTemplate?.components?.some((c: any) => c.type === 'HEADER' && c.format === 'IMAGE') && (
-                  <div className="p-4 bg-sv-surface-raised border border-sv-border rounded-xl space-y-3">
+                  <div className="p-4 bg-sv-surface-raised border border-[#2a2d3e] border-sv-border border-[#2a2d3e] rounded-xl space-y-3">
                     <div className="flex items-center justify-between">
                       <label className="block text-xs font-bold text-sv-text-muted">
                         Default Header Image
                       </label>
                       {testingTemplate.headerImageUrl && (
-                        <span className="text-[10px] text-emerald-400 bg-emerald-400/10 px-2 py-0.5 rounded border border-emerald-400/20">Configured</span>
+                        <span className="text-[10px] text-emerald-400 bg-emerald-400/10 px-2 py-0.5 rounded border border-[#2a2d3e] border-emerald-400/20">Configured</span>
                       )}
                     </div>
                     
                     {testingTemplate.headerImageUrl ? (
-                      <div className="relative group rounded-lg overflow-hidden border border-sv-border bg-sv-bg flex items-center justify-center h-32">
+                      <div className="relative group rounded-lg overflow-hidden border border-[#2a2d3e] border-sv-border border-[#2a2d3e] bg-sv-bg flex items-center justify-center h-32">
                         {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img src={testingTemplate.headerImageUrl} alt="Header" className="max-h-full max-w-full object-contain" />
                         <div className="absolute bottom-2 right-2 flex flex-col items-center justify-center">
-                          <label className="cursor-pointer bg-white/90 backdrop-blur text-black text-xs font-bold px-3 py-1.5 rounded shadow-lg hover:bg-white transition-all">
+                          <label className="cursor-pointer bg-[#161923]/90 backdrop-blur text-white text-xs font-bold px-3 py-1.5 rounded shadow-lg hover:bg-[#161923] transition-all">
                             {uploadingImage ? "Uploading..." : "Change Image"}
                             <input type="file" accept="image/jpeg, image/png, image/webp" className="hidden" onChange={handleImageUpload} disabled={uploadingImage} />
                           </label>
                         </div>
                       </div>
                     ) : (
-                      <div className="border border-dashed border-sv-border rounded-lg p-4 text-center">
+                      <div className="border border-[#2a2d3e] border-dashed border-sv-border border-[#2a2d3e] rounded-lg p-4 text-center">
                         <label className="cursor-pointer inline-flex items-center gap-1.5 px-3 py-1.5 bg-sv-brand text-white text-xs font-bold rounded shadow hover:opacity-90 transition-colors">
                           {uploadingImage ? "Uploading..." : "Upload Image"}
                           <input type="file" accept="image/jpeg, image/png, image/webp" className="hidden" onChange={handleImageUpload} disabled={uploadingImage} />
@@ -303,7 +303,7 @@ export default function TemplatesClient({ initialTemplates }: { initialTemplates
                     value={testMobile}
                     onChange={(e) => setTestMobile(e.target.value)}
                     placeholder="e.g. 9618443558"
-                    className="w-full bg-sv-bg border border-sv-border rounded-xl px-4 py-2.5 text-white font-mono text-sm focus:border-sv-brand outline-none"
+                    className="w-full bg-sv-bg border border-[#2a2d3e] border-sv-border border-[#2a2d3e] rounded-xl px-4 py-2.5 text-white font-mono text-sm focus:border-sv-brand outline-none"
                   />
                 </div>
 
@@ -316,7 +316,7 @@ export default function TemplatesClient({ initialTemplates }: { initialTemplates
                     value={testButtonUrlParam}
                     onChange={(e) => setTestButtonUrlParam(e.target.value)}
                     placeholder="e.g. sample_token_12345"
-                    className="w-full bg-sv-bg border border-sv-border rounded-xl px-4 py-2 text-white font-mono text-xs focus:border-sv-brand outline-none"
+                    className="w-full bg-sv-bg border border-[#2a2d3e] border-sv-border border-[#2a2d3e] rounded-xl px-4 py-2 text-white font-mono text-xs focus:border-sv-brand outline-none"
                   />
                   <p className="text-[10px] text-sv-text-muted mt-1">
                     If your template has a Dynamic URL button (like Magic Login link), this value is appended to the URL.
@@ -332,7 +332,7 @@ export default function TemplatesClient({ initialTemplates }: { initialTemplates
                     value={testParam}
                     onChange={(e) => setTestParam(e.target.value)}
                     placeholder="e.g. Alaqmar"
-                    className="w-full bg-sv-bg border border-sv-border rounded-xl px-4 py-2 text-white font-mono text-xs focus:border-sv-brand outline-none"
+                    className="w-full bg-sv-bg border border-[#2a2d3e] border-sv-border border-[#2a2d3e] rounded-xl px-4 py-2 text-white font-mono text-xs focus:border-sv-brand outline-none"
                   />
                 </div>
 

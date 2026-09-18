@@ -238,11 +238,11 @@ export default function PlansClient({ initialPlans, sports }: { initialPlans: an
             />
           </div>
 
-          <div className="bg-sv-surface-raised border border-sv-border rounded-sv-md p-4 space-y-3">
+          <div className="bg-sv-surface-raised border border-[#2a2d3e] border-sv-border border-[#2a2d3e] rounded-sv-md p-4 space-y-3">
             <label className="flex items-center gap-3 cursor-pointer">
               <input
                 type="checkbox"
-                className="w-4 h-4 rounded border-sv-border bg-sv-bg text-sv-brand focus:ring-sv-brand"
+                className="w-4 h-4 rounded border-sv-border border-[#2a2d3e] bg-sv-bg text-sv-brand focus:ring-sv-brand"
                 checked={isFamilyPlan}
                 onChange={(e) => setIsFamilyPlan(e.target.checked)}
               />
@@ -267,7 +267,7 @@ export default function PlansClient({ initialPlans, sports }: { initialPlans: an
             )}
           </div>
 
-          <div className="bg-sv-surface-raised border border-sv-border rounded-sv-md p-4 space-y-3">
+          <div className="bg-sv-surface-raised border border-[#2a2d3e] border-sv-border border-[#2a2d3e] rounded-sv-md p-4 space-y-3">
             <h4 className="text-xs uppercase tracking-wider font-semibold text-sv-brand">
               Loyalty Rewards
             </h4>

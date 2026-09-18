@@ -42,7 +42,7 @@ export default function CalendarClient() {
           { label: "Calendar" },
         ]}
         actions={
-          <div className="flex items-center gap-2 bg-sv-surface border border-sv-border rounded-sv-md p-1.5 shadow-sv-sm">
+          <div className="flex items-center gap-2 bg-sv-surface border border-[#2a2d3e] border-sv-border border-[#2a2d3e] rounded-sv-md p-1.5 shadow-sv-sm">
             <Button
               variant="ghost"
               size="icon"
@@ -72,7 +72,7 @@ export default function CalendarClient() {
       <Card variant="default" className="overflow-hidden">
         {loading ? (
           <div className="p-10 space-y-4">
-            <div className="flex gap-4 border-b border-sv-border pb-4">
+            <div className="flex gap-4 border-b border-sv-border border-[#2a2d3e] pb-4">
               <Skeleton className="h-6 w-36" />
               <Skeleton className="h-6 flex-1" />
             </div>
@@ -84,15 +84,15 @@ export default function CalendarClient() {
           <div className="overflow-x-auto styled-scrollbar">
             <div style={{ minWidth: `${hours.length * HOUR_WIDTH + 150}px` }}>
               {/* Header Row */}
-              <div className="flex border-b border-sv-border bg-sv-surface-raised">
-                <div className="w-[150px] flex-shrink-0 p-4 border-r border-sv-border font-semibold text-sv-text-muted text-xs uppercase tracking-wider">
+              <div className="flex border-b border-sv-border border-[#2a2d3e] bg-sv-surface-raised">
+                <div className="w-[150px] flex-shrink-0 p-4 border-r border-sv-border border-[#2a2d3e] font-semibold text-sv-text-muted text-xs uppercase tracking-wider">
                   Turf
                 </div>
                 <div className="flex flex-1 relative">
                   {hours.map((h) => (
                     <div
                       key={h}
-                      className="border-r border-sv-border flex-shrink-0 p-2 text-center text-xs font-mono text-sv-text-muted"
+                      className="border-r border-sv-border border-[#2a2d3e] flex-shrink-0 p-2 text-center text-xs font-mono text-sv-text-muted"
                       style={{ width: `${HOUR_WIDTH}px` }}
                     >
                       {h > 12 ? `${h - 12} PM` : h === 12 ? '12 PM' : `${h} AM`}
@@ -105,9 +105,9 @@ export default function CalendarClient() {
               {data.turfs.map((turf) => (
                 <div
                   key={turf.id}
-                  className="flex border-b border-sv-border group hover:bg-sv-surface-hover/40 transition-colors"
+                  className="flex border-b border-sv-border border-[#2a2d3e] group hover:bg-sv-surface-hover/40 transition-colors"
                 >
-                  <div className="w-[150px] flex-shrink-0 p-4 border-r border-sv-border font-bold text-sv-text flex items-center text-sm">
+                  <div className="w-[150px] flex-shrink-0 p-4 border-r border-sv-border border-[#2a2d3e] font-bold text-sv-text flex items-center text-sm">
                     {turf.name}
                   </div>
 
@@ -157,7 +157,7 @@ export default function CalendarClient() {
                         return (
                           <div
                             key={`group-${index}`}
-                            className="absolute top-2 bottom-2 bg-sv-success-subtle border border-sv-success-border rounded-sv-sm p-2 overflow-hidden flex flex-col justify-center transition-all hover:brightness-110"
+                            className="absolute top-2 bottom-2 bg-sv-success-subtle border border-[#2a2d3e] border-sv-success-border border-[#2a2d3e] rounded-sv-sm p-2 overflow-hidden flex flex-col justify-center transition-all hover:brightness-110"
                             style={{ left: `${leftPos}px`, width: `${blockWidth - 4}px` }}
                             title={`${names} (${formatIST(start, 'hh:mm a')} - ${formatIST(end, 'hh:mm a')}) - Total: ${totalParticipants} Participants`}
                           >

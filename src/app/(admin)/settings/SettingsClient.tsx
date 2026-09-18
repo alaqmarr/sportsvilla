@@ -204,7 +204,7 @@ export default function SettingsClient({ initialSettings }: { initialSettings: R
               </label>
             </div>
 
-            <div className="pt-4 border-t border-sv-border flex justify-end">
+            <div className="pt-4 border-t border-sv-border border-[#2a2d3e] flex justify-end">
               <Button 
                 type="submit" 
                 disabled={loading}

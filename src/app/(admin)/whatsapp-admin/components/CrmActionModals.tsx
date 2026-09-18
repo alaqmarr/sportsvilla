@@ -44,7 +44,7 @@ export function GenerateCouponModal({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
       <Card variant="default" className="w-full max-w-sm overflow-hidden flex flex-col shadow-sv-2xl">
-        <div className="p-4 border-b border-sv-border flex items-center justify-between bg-sv-surface-raised">
+        <div className="p-4 border-b border-sv-border border-[#2a2d3e] flex items-center justify-between bg-sv-surface-raised">
           <h3 className="font-bold text-sv-text flex items-center gap-2">
             <FiGift className="text-sv-brand" /> Generate Coupon
           </h3>
@@ -59,7 +59,7 @@ export function GenerateCouponModal({
                 Select Family Member
               </label>
               <select
-                className="w-full bg-sv-bg border border-sv-border rounded-sv-md px-3 py-2 text-sm text-sv-text focus:outline-none focus:border-sv-brand focus:ring-1 focus:ring-sv-brand transition-colors"
+                className="w-full bg-sv-bg border border-[#2a2d3e] border-sv-border border-[#2a2d3e] rounded-sv-md px-3 py-2 text-sm text-sv-text focus:outline-none focus:border-sv-brand focus:ring-1 focus:ring-sv-brand transition-colors"
                 value={selectedMemberId}
                 onChange={(e) => setSelectedMemberId(e.target.value)}
                 required
@@ -85,7 +85,7 @@ export function GenerateCouponModal({
           <p className="text-xs text-sv-text-muted">
             This will create a one-time use discount code for +91 {phone}.
           </p>
-          <div className="flex justify-end gap-2 pt-2 border-t border-sv-border mt-2">
+          <div className="flex justify-end gap-2 pt-2 border-t border-sv-border border-[#2a2d3e] mt-2">
             <Button variant="ghost" onClick={onClose} type="button">
               Cancel
             </Button>
@@ -137,7 +137,7 @@ export function RegisterUserModal({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
       <Card variant="default" className="w-full max-w-sm overflow-hidden flex flex-col shadow-sv-2xl">
-        <div className="p-4 border-b border-sv-border flex items-center justify-between bg-sv-surface-raised">
+        <div className="p-4 border-b border-sv-border border-[#2a2d3e] flex items-center justify-between bg-sv-surface-raised">
           <h3 className="font-bold text-sv-text flex items-center gap-2">
             <FiUserPlus className="text-sv-info" /> Register User
           </h3>
@@ -164,7 +164,7 @@ export function RegisterUserModal({
               required
             />
           </div>
-          <div className="flex justify-end gap-2 pt-2 border-t border-sv-border mt-2">
+          <div className="flex justify-end gap-2 pt-2 border-t border-sv-border border-[#2a2d3e] mt-2">
             <Button variant="ghost" onClick={onClose} type="button">
               Cancel
             </Button>
@@ -234,7 +234,7 @@ export function AssignMembershipModal({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
       <Card variant="default" className="w-full max-w-sm overflow-hidden flex flex-col shadow-sv-2xl">
-        <div className="p-4 border-b border-sv-border flex items-center justify-between bg-sv-surface-raised">
+        <div className="p-4 border-b border-sv-border border-[#2a2d3e] flex items-center justify-between bg-sv-surface-raised">
           <h3 className="font-bold text-sv-text flex items-center gap-2">
             <FiAward className="text-sv-status-success" /> Assign Membership
           </h3>
@@ -252,7 +252,7 @@ export function AssignMembershipModal({
                   Select Family Member
                 </label>
                 <select
-                  className="w-full bg-sv-bg border border-sv-border rounded-sv-md px-3 py-2 text-sm text-sv-text focus:outline-none focus:border-sv-brand focus:ring-1 focus:ring-sv-brand transition-colors"
+                  className="w-full bg-sv-bg border border-[#2a2d3e] border-sv-border border-[#2a2d3e] rounded-sv-md px-3 py-2 text-sm text-sv-text focus:outline-none focus:border-sv-brand focus:ring-1 focus:ring-sv-brand transition-colors"
                   value={selectedMemberId}
                   onChange={(e) => setSelectedMemberId(e.target.value)}
                   required
@@ -268,7 +268,7 @@ export function AssignMembershipModal({
                 Select Plan
               </label>
               <select
-                className="w-full bg-sv-bg border border-sv-border rounded-sv-md px-3 py-2 text-sm text-sv-text focus:outline-none focus:border-sv-brand focus:ring-1 focus:ring-sv-brand transition-colors"
+                className="w-full bg-sv-bg border border-[#2a2d3e] border-sv-border border-[#2a2d3e] rounded-sv-md px-3 py-2 text-sm text-sv-text focus:outline-none focus:border-sv-brand focus:ring-1 focus:ring-sv-brand transition-colors"
                 value={selectedPlan}
                 onChange={(e) => setSelectedPlan(e.target.value)}
                 required
@@ -284,7 +284,7 @@ export function AssignMembershipModal({
             <p className="text-xs text-sv-text-muted">
               This will instantly activate the membership for +91 {phone} (Admin override).
             </p>
-            <div className="flex justify-end gap-2 pt-2 border-t border-sv-border mt-2">
+            <div className="flex justify-end gap-2 pt-2 border-t border-sv-border border-[#2a2d3e] mt-2">
               <Button variant="ghost" onClick={onClose} type="button">
                 Cancel
               </Button>

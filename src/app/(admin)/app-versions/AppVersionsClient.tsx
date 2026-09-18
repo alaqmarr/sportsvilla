@@ -160,10 +160,10 @@ export default function AppVersionsClient({ initialVersions }: { initialVersions
               />
               <label
                 htmlFor={isUploading ? undefined : "apk-upload"}
-                className={`flex items-center justify-center gap-2.5 w-full p-3.5 rounded-sv-sm border border-dashed text-sm font-medium transition-colors ${
+                className={`flex items-center justify-center gap-2.5 w-full p-3.5 rounded-sv-sm border border-[#2a2d3e] border-dashed text-sm font-medium transition-colors ${
                   isUploading
-                    ? "bg-sv-surface-raised border-sv-border cursor-not-allowed opacity-70 text-sv-text-muted"
-                    : "bg-sv-surface hover:bg-sv-surface-hover border-sv-border hover:border-sv-border-focus text-sv-text cursor-pointer"
+                    ? "bg-sv-surface-raised border-sv-border border-[#2a2d3e] cursor-not-allowed opacity-70 text-sv-text-muted"
+                    : "bg-sv-surface hover:bg-sv-surface-hover border-sv-border border-[#2a2d3e] hover:border-sv-border-focus text-sv-text cursor-pointer"
                 }`}
               >
                 {isUploading ? (
@@ -196,7 +196,7 @@ export default function AppVersionsClient({ initialVersions }: { initialVersions
               <textarea
                 value={androidData.releaseNotes || ""}
                 onChange={(e) => setAndroidData({ ...androidData, releaseNotes: e.target.value })}
-                className="w-full bg-sv-bg border border-sv-border focus:border-sv-brand focus:ring-1 focus:ring-sv-brand text-sv-text placeholder:text-sv-text-muted text-sm rounded-sv-sm p-3 outline-none h-24 resize-none transition-colors"
+                className="w-full bg-sv-bg border border-[#2a2d3e] border-sv-border border-[#2a2d3e] focus:border-sv-brand focus:ring-1 focus:ring-sv-brand text-sv-text placeholder:text-sv-text-muted text-sm rounded-sv-sm p-3 outline-none h-24 resize-none transition-colors"
                 placeholder="What's new in this version?"
               />
             </div>
@@ -217,7 +217,7 @@ export default function AppVersionsClient({ initialVersions }: { initialVersions
         {/* iOS Card */}
         <Card variant="default" padding="lg">
           <div className="flex items-center gap-3 mb-6 pb-4 border-b border-sv-border-subtle">
-            <div className="w-10 h-10 rounded-sv-md bg-sv-surface-raised text-sv-text flex items-center justify-center text-xl border border-sv-border">
+            <div className="w-10 h-10 rounded-sv-md bg-sv-surface-raised text-sv-text flex items-center justify-center text-xl border border-[#2a2d3e] border-sv-border border-[#2a2d3e]">
               <FaApple />
             </div>
             <div>
@@ -257,7 +257,7 @@ export default function AppVersionsClient({ initialVersions }: { initialVersions
               <textarea
                 value={iosData.releaseNotes || ""}
                 onChange={(e) => setIosData({ ...iosData, releaseNotes: e.target.value })}
-                className="w-full bg-sv-bg border border-sv-border focus:border-sv-brand focus:ring-1 focus:ring-sv-brand text-sv-text placeholder:text-sv-text-muted text-sm rounded-sv-sm p-3 outline-none h-24 resize-none transition-colors"
+                className="w-full bg-sv-bg border border-[#2a2d3e] border-sv-border border-[#2a2d3e] focus:border-sv-brand focus:ring-1 focus:ring-sv-brand text-sv-text placeholder:text-sv-text-muted text-sm rounded-sv-sm p-3 outline-none h-24 resize-none transition-colors"
                 placeholder="What's new in this version?"
               />
             </div>

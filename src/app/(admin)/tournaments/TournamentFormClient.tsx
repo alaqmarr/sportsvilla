@@ -143,7 +143,7 @@ export default function TournamentFormClient({ initialData, sports }: { initialD
                   value={description}
                   onChange={e => setDescription(e.target.value)}
                   rows={4}
-                  className="w-full bg-sv-bg border border-sv-border rounded-sv-sm px-4 py-2.5 text-sv-text placeholder:text-sv-text-muted focus:border-sv-brand focus:ring-1 focus:ring-sv-brand outline-none text-sm"
+                  className="w-full bg-sv-bg border border-[#2a2d3e] border-sv-border border-[#2a2d3e] rounded-sv-sm px-4 py-2.5 text-sv-text placeholder:text-sv-text-muted focus:border-sv-brand focus:ring-1 focus:ring-sv-brand outline-none text-sm"
                   placeholder="Details about the tournament..."
                 />
               </div>
@@ -189,7 +189,7 @@ export default function TournamentFormClient({ initialData, sports }: { initialD
                 <label className="block text-xs uppercase tracking-wider font-semibold text-sv-text-secondary mb-2">
                   Thumbnail
                 </label>
-                <div className="border border-dashed border-sv-border bg-sv-bg rounded-sv-lg p-4 text-center hover:bg-sv-surface-raised transition relative overflow-hidden h-40 flex flex-col justify-center items-center group cursor-pointer">
+                <div className="border border-[#2a2d3e] border-dashed border-sv-border border-[#2a2d3e] bg-sv-bg rounded-sv-lg p-4 text-center hover:bg-sv-surface-raised transition relative overflow-hidden h-40 flex flex-col justify-center items-center group cursor-pointer">
                   <input
                     type="file"
                     onChange={handleImageChange}
@@ -218,8 +218,8 @@ export default function TournamentFormClient({ initialData, sports }: { initialD
                 </div>
               </div>
 
-              <div className="bg-sv-bg p-5 rounded-sv-md border border-sv-border space-y-4">
-                <h3 className="font-semibold text-sv-text border-b border-sv-border pb-2 text-xs uppercase tracking-wider">
+              <div className="bg-sv-bg p-5 rounded-sv-md border border-[#2a2d3e] border-sv-border border-[#2a2d3e] space-y-4">
+                <h3 className="font-semibold text-sv-text border-b border-sv-border border-[#2a2d3e] pb-2 text-xs uppercase tracking-wider">
                   Entry & Capacity
                 </h3>
                 
@@ -254,8 +254,8 @@ export default function TournamentFormClient({ initialData, sports }: { initialD
                 </div>
               </div>
 
-              <div className="bg-sv-bg p-5 rounded-sv-md border border-sv-border space-y-4">
-                <h3 className="font-semibold text-sv-text border-b border-sv-border pb-2 text-xs uppercase tracking-wider">
+              <div className="bg-sv-bg p-5 rounded-sv-md border border-[#2a2d3e] border-sv-border border-[#2a2d3e] space-y-4">
+                <h3 className="font-semibold text-sv-text border-b border-sv-border border-[#2a2d3e] pb-2 text-xs uppercase tracking-wider">
                   Payment Settings
                 </h3>
                 
@@ -295,7 +295,7 @@ export default function TournamentFormClient({ initialData, sports }: { initialD
           </div>
         </div>
         
-        <div className="px-6 py-4 bg-sv-surface-raised border-t border-sv-border flex justify-end gap-3">
+        <div className="px-6 py-4 bg-sv-surface-raised border-t border-sv-border border-[#2a2d3e] flex justify-end gap-3">
           {initialData?.id && (
             <Button
               type="button"

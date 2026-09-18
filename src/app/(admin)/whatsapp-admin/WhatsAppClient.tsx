@@ -147,7 +147,7 @@ export default function WhatsAppClient({ initialConversations, initialMessages =
   const selectedConv = conversations.find(c => c.phoneNumber === selectedPhone);
 
   return (
-    <div className="flex w-full h-[calc(100vh-64px)] bg-sv-bg border-t border-sv-border font-sans overflow-hidden">
+    <div className="flex w-full h-[calc(100vh-64px)] bg-sv-bg border-t border-sv-border border-[#2a2d3e] font-sans overflow-hidden">
       
       <ConversationList
         conversations={conversations}

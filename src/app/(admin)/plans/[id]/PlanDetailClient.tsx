@@ -123,11 +123,11 @@ export default function PlanDetailClient({ id }: { id: string }) {
         ]}
         actions={
           <div className="flex gap-3">
-            <div className="bg-sv-surface border border-sv-border px-4 py-2.5 rounded-sv-md flex flex-col items-center shadow-sv-sm">
+            <div className="bg-sv-surface border border-[#2a2d3e] border-sv-border border-[#2a2d3e] px-4 py-2.5 rounded-sv-md flex flex-col items-center shadow-sv-sm">
               <span className="text-sv-status-success text-xl font-bold">{activeMemberships.length}</span>
               <span className="text-sv-text-muted text-[10px] uppercase font-bold tracking-wider">Active</span>
             </div>
-            <div className="bg-sv-surface border border-sv-border px-4 py-2.5 rounded-sv-md flex flex-col items-center shadow-sv-sm">
+            <div className="bg-sv-surface border border-[#2a2d3e] border-sv-border border-[#2a2d3e] px-4 py-2.5 rounded-sv-md flex flex-col items-center shadow-sv-sm">
               <span className="text-sv-status-error text-xl font-bold">{expiredMemberships.length}</span>
               <span className="text-sv-text-muted text-[10px] uppercase font-bold tracking-wider">Expired</span>
             </div>
@@ -136,7 +136,7 @@ export default function PlanDetailClient({ id }: { id: string }) {
       />
 
       <div className="space-y-0">
-        <div className="flex border-b border-sv-border bg-sv-surface rounded-t-sv-lg overflow-hidden">
+        <div className="flex border-b border-sv-border border-[#2a2d3e] bg-sv-surface rounded-t-sv-lg overflow-hidden">
           <button 
             onClick={() => setActiveTab('ACTIVE')}
             className={`flex-1 py-3 text-sm font-semibold transition-colors flex items-center justify-center gap-2 border-b-2 cursor-pointer ${

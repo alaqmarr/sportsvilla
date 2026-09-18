@@ -118,10 +118,10 @@ export default function WalletsClient({ initialMembers }: { initialMembers: any[
         ]}
       />
 
-      <div className="bg-sv-surface border border-sv-border rounded-sv-xl overflow-hidden flex flex-col md:flex-row shadow-sv-sm">
+      <div className="bg-sv-surface border border-[#2a2d3e] border-sv-border border-[#2a2d3e] rounded-sv-xl overflow-hidden flex flex-col md:flex-row shadow-sv-sm">
         {/* Left Side: Member List */}
-        <div className="w-full md:w-1/3 border-r border-sv-border flex flex-col h-[700px] bg-sv-surface">
-          <div className="p-4 border-b border-sv-border">
+        <div className="w-full md:w-1/3 border-r border-sv-border border-[#2a2d3e] flex flex-col h-[700px] bg-sv-surface">
+          <div className="p-4 border-b border-sv-border border-[#2a2d3e]">
             <Input
               leftIcon={<FiSearch />}
               placeholder="Search member by name or mobile..."
@@ -166,7 +166,7 @@ export default function WalletsClient({ initialMembers }: { initialMembers: any[
         <div className="w-full md:w-2/3 flex flex-col h-[700px] bg-sv-surface">
           {selectedMember ? (
             <div className="flex flex-col h-full overflow-hidden">
-              <div className="px-8 py-6 border-b border-sv-border flex justify-between items-center bg-sv-surface">
+              <div className="px-8 py-6 border-b border-sv-border border-[#2a2d3e] flex justify-between items-center bg-sv-surface">
                 <div>
                   <h2 className="text-xl font-bold text-sv-text">{selectedMember.name}</h2>
                   <p className="text-sm text-sv-text-secondary mt-1">{selectedMember.mobile}</p>
@@ -185,20 +185,20 @@ export default function WalletsClient({ initialMembers }: { initialMembers: any[
                   </h3>
                   <form onSubmit={handleTransaction} className="flex flex-col gap-4">
                     {error && (
-                      <div className="bg-sv-error-subtle border border-sv-error-border text-sv-error-text p-3 rounded-sv-md text-sm">
+                      <div className="bg-sv-error-subtle border border-[#2a2d3e] border-sv-error-border border-[#2a2d3e] text-sv-error-text p-3 rounded-sv-md text-sm">
                         {error}
                       </div>
                     )}
                     
                     {!isOtpMode ? (
                       <>
-                        <div className="flex gap-2 p-1 bg-sv-surface-raised rounded-sv-md border border-sv-border">
+                        <div className="flex gap-2 p-1 bg-sv-surface-raised rounded-sv-md border border-[#2a2d3e] border-sv-border border-[#2a2d3e]">
                           <button 
                             type="button" 
                             onClick={() => setType("CREDIT")}
                             className={`flex-1 py-2 text-sm font-semibold rounded-sv-sm flex items-center justify-center gap-2 transition-colors ${
                               type === "CREDIT"
-                                ? "bg-sv-success-subtle text-sv-success-text border border-sv-success-border"
+                                ? "bg-sv-success-subtle text-sv-success-text border border-[#2a2d3e] border-sv-success-border border-[#2a2d3e]"
                                 : "text-sv-text-muted hover:text-sv-text"
                             }`}
                           >
@@ -209,7 +209,7 @@ export default function WalletsClient({ initialMembers }: { initialMembers: any[
                             onClick={() => setType("DEBIT")}
                             className={`flex-1 py-2 text-sm font-semibold rounded-sv-sm flex items-center justify-center gap-2 transition-colors ${
                               type === "DEBIT"
-                                ? "bg-sv-error-subtle text-sv-error-text border border-sv-error-border"
+                                ? "bg-sv-error-subtle text-sv-error-text border border-[#2a2d3e] border-sv-error-border border-[#2a2d3e]"
                                 : "text-sv-text-muted hover:text-sv-text"
                             }`}
                           >
@@ -247,7 +247,7 @@ export default function WalletsClient({ initialMembers }: { initialMembers: any[
                       </>
                     ) : (
                       <>
-                        <div className="text-sm text-sv-text-secondary bg-sv-surface-raised p-4 rounded-sv-md border border-sv-border leading-relaxed">
+                        <div className="text-sm text-sv-text-secondary bg-sv-surface-raised p-4 rounded-sv-md border border-[#2a2d3e] border-sv-border border-[#2a2d3e] leading-relaxed">
                           We've sent a 6-digit OTP to the user's WhatsApp number <strong className="text-sv-text">{selectedMember.mobile}</strong>. Please ask them for the code to authorize this transaction of <strong className="text-sv-text">₹{amount}</strong> ({type}).
                         </div>
                         
@@ -291,7 +291,7 @@ export default function WalletsClient({ initialMembers }: { initialMembers: any[
                   <h3 className="text-xs uppercase tracking-wider font-semibold text-sv-text-secondary mb-4">
                     Recent Transactions
                   </h3>
-                  <div className="bg-sv-surface-raised rounded-sv-lg border border-sv-border flex-1 overflow-y-auto">
+                  <div className="bg-sv-surface-raised rounded-sv-lg border border-[#2a2d3e] border-sv-border border-[#2a2d3e] flex-1 overflow-y-auto">
                     {selectedMember.walletTransactions?.length > 0 ? (
                       <div className="divide-y divide-sv-border-subtle">
                         {selectedMember.walletTransactions.map((tx: any) => (

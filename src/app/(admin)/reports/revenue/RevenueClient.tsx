@@ -1,4 +1,4 @@
-﻿'use client'
+'use client'
 
 import React, { useState, useEffect } from 'react';
 import { fetchRevenueData } from './actions';
@@ -55,25 +55,25 @@ export default function RevenueClient() {
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
         <Stat
           label="Total Revenue"
-          value={`₹${data.totals.total.toLocaleString()}`}
+          value={`?${data.totals.total.toLocaleString()}`}
           icon={<FiDollarSign />}
           variant="brand"
         />
         <Stat
           label="Cash Collections"
-          value={`₹${data.totals.cash.toLocaleString()}`}
+          value={`?${data.totals.cash.toLocaleString()}`}
           icon={<FiDollarSign />}
           variant="success"
         />
         <Stat
           label="Online Payments"
-          value={`₹${data.totals.online.toLocaleString()}`}
+          value={`?${data.totals.online.toLocaleString()}`}
           icon={<FiCreditCard />}
           variant="info"
         />
         <Stat
           label="Wallet Recharges"
-          value={`₹${data.totals.wallet.toLocaleString()}`}
+          value={`?${data.totals.wallet.toLocaleString()}`}
           icon={<FiSmartphone />}
           variant="warning"
         />
@@ -93,7 +93,7 @@ export default function RevenueClient() {
                   <Line type="monotone" dataKey="wallet" stroke={rawAdminTokens.statusWarning} strokeWidth={3} dot={false} name="Wallet" />
                   <CartesianGrid stroke={rawAdminTokens.border} strokeDasharray="5 5" vertical={false} />
                   <XAxis dataKey="date" stroke={rawAdminTokens.textMuted} tick={{ fill: rawAdminTokens.textMuted }} axisLine={false} tickLine={false} />
-                  <YAxis stroke={rawAdminTokens.textMuted} tick={{ fill: rawAdminTokens.textMuted }} axisLine={false} tickLine={false} tickFormatter={(val) => `₹${val}`} />
+                  <YAxis stroke={rawAdminTokens.textMuted} tick={{ fill: rawAdminTokens.textMuted }} axisLine={false} tickLine={false} tickFormatter={(val) => `?${val}`} />
                   <Tooltip 
                     contentStyle={{ backgroundColor: rawAdminTokens.surfaceRaised, border: `1px solid ${rawAdminTokens.border}`, borderRadius: '8px' }}
                     itemStyle={{ color: rawAdminTokens.textPrimary }}
@@ -130,7 +130,7 @@ export default function RevenueClient() {
                   <Tooltip 
                     contentStyle={{ backgroundColor: rawAdminTokens.surfaceRaised, border: `1px solid ${rawAdminTokens.border}`, borderRadius: '8px' }}
                     itemStyle={{ color: rawAdminTokens.textPrimary }}
-                    formatter={(value: any) => `₹${Number(value).toLocaleString()}`}
+                    formatter={(value: any) => `?${Number(value).toLocaleString()}`}
                   />
                 </PieChart>
               </ResponsiveContainer>

@@ -22,10 +22,10 @@ export function ChatInputForm({
   const chatInputRef = useRef<HTMLTextAreaElement>(null);
 
   return (
-    <div className="bg-sv-surface border-t border-sv-border p-3 shrink-0 relative">
+    <div className="bg-sv-surface border-t border-sv-border border-[#2a2d3e] p-3 shrink-0 relative">
       {showQuickReplies && (
-        <div className="absolute bottom-full left-4 mb-2 w-64 bg-sv-surface border border-sv-border rounded-sv-md shadow-sv-lg overflow-hidden z-20">
-          <div className="p-2 border-b border-sv-border text-xs font-bold text-sv-text-muted uppercase tracking-wider bg-sv-surface-raised">
+        <div className="absolute bottom-full left-4 mb-2 w-64 bg-sv-surface border border-[#2a2d3e] border-sv-border border-[#2a2d3e] rounded-sv-md shadow-sv-lg overflow-hidden z-20">
+          <div className="p-2 border-b border-sv-border border-[#2a2d3e] text-xs font-bold text-sv-text-muted uppercase tracking-wider bg-sv-surface-raised">
             Quick Replies
           </div>
           <div className="max-h-48 overflow-y-auto">
@@ -38,7 +38,7 @@ export function ChatInputForm({
                   setShowQuickReplies(false);
                   chatInputRef.current?.focus();
                 }}
-                className="w-full text-left px-4 py-2.5 text-sm text-sv-text hover:bg-sv-surface-hover transition-colors border-b border-sv-border last:border-0"
+                className="w-full text-left px-4 py-2.5 text-sm text-sv-text hover:bg-sv-surface-hover transition-colors border-b border-sv-border border-[#2a2d3e] last:border-0"
               >
                 {reply}
               </button>
@@ -47,11 +47,11 @@ export function ChatInputForm({
         </div>
       )}
       {selectedConv?.is24HourWindowOpen ? (
-        <form onSubmit={handleSendChatMessage} className="flex items-end gap-2 bg-[#f0f2f5] dark:bg-[#202c33] rounded-2xl px-2 py-1.5 shadow-sm border border-black/5 dark:border-white/5">
+        <form onSubmit={handleSendChatMessage} className="flex items-end gap-2 bg-[#f0f2f5] dark:bg-[#202c33] rounded-2xl px-2 py-1.5 shadow-sm border border-[#2a2d3e] border-black/5 dark:border-white/5">
           <button
             type="button"
             onClick={() => setShowQuickReplies(!showQuickReplies)}
-            className="p-2.5 rounded-full text-[#54656f] dark:text-[#aebac1] hover:bg-black/5 dark:hover:bg-white/5 transition-colors shrink-0"
+            className="p-2.5 rounded-full text-[#54656f] dark:text-[#aebac1] hover:bg-black/5 dark:hover:bg-[#161923]/5 transition-colors shrink-0"
             title="Quick Replies"
           >
             <FiMessageSquare className="w-5 h-5" />
@@ -72,7 +72,7 @@ export function ChatInputForm({
             }}
             placeholder={replyingTo ? "Type your reply..." : "Type a message"}
             rows={1}
-            className="flex-1 bg-white dark:bg-[#2a3942] border-0 rounded-xl px-4 py-2.5 my-1 text-sv-text text-sm focus:outline-none focus:ring-0 transition-all resize-none min-h-[40px] max-h-32 styled-scrollbar shadow-sm"
+            className="flex-1 bg-[#161923] dark:bg-[#2a3942] border-0 rounded-xl px-4 py-2.5 my-1 text-sv-text text-sm focus:outline-none focus:ring-0 transition-all resize-none min-h-[40px] max-h-32 styled-scrollbar shadow-sm"
           />
           <button
             type="submit"

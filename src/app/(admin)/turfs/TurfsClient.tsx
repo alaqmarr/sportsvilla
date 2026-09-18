@@ -156,7 +156,7 @@ export default function TurfsClient({
           >
             <div>
               <div className="flex justify-between items-start">
-                <div className="w-10 h-10 rounded-sv-sm bg-sv-brand-subtle border border-sv-brand/20 text-sv-brand flex items-center justify-center text-lg overflow-hidden">
+                <div className="w-10 h-10 rounded-sv-sm bg-sv-brand-subtle border border-[#2a2d3e] border-sv-brand/20 text-sv-brand flex items-center justify-center text-lg overflow-hidden">
                   {turf.iconPath ? (
                     <img src={turf.iconPath} alt={turf.name} className="w-6 h-6 object-contain" />
                   ) : (
@@ -236,7 +236,7 @@ export default function TurfsClient({
               <label className="block text-xs font-semibold uppercase tracking-wider text-sv-text-secondary">Icon</label>
               <div 
                 onClick={() => setShowIconModal(true)}
-                className="w-full bg-sv-bg border border-sv-border hover:border-sv-brand/50 rounded-sv-sm px-4 py-2.5 cursor-pointer flex items-center justify-between transition-colors"
+                className="w-full bg-sv-bg border border-[#2a2d3e] border-sv-border border-[#2a2d3e] hover:border-sv-brand/50 rounded-sv-sm px-4 py-2.5 cursor-pointer flex items-center justify-between transition-colors"
               >
                 <div className="flex items-center gap-3">
                   {iconPath ? (
@@ -255,7 +255,7 @@ export default function TurfsClient({
             <div className="space-y-1.5">
               <label className="block text-xs font-semibold uppercase tracking-wider text-sv-text-secondary">Physical Address</label>
               <textarea
-                className="w-full bg-sv-bg border border-sv-border rounded-sv-sm px-4 py-2.5 text-sv-text placeholder:text-sv-text-muted focus:border-sv-brand focus:ring-1 focus:ring-sv-brand outline-none text-sm resize-none"
+                className="w-full bg-sv-bg border border-[#2a2d3e] border-sv-border border-[#2a2d3e] rounded-sv-sm px-4 py-2.5 text-sv-text placeholder:text-sv-text-muted focus:border-sv-brand focus:ring-1 focus:ring-sv-brand outline-none text-sm resize-none"
                 value={location}
                 onChange={e => setLocation(e.target.value)}
                 rows={2}
@@ -278,7 +278,7 @@ export default function TurfsClient({
           <div className="space-y-5">
             <div className="space-y-1.5">
               <label className="block text-xs font-semibold uppercase tracking-wider text-sv-text-secondary">Supported Sports *</label>
-              <div className="bg-sv-bg border border-sv-border rounded-sv-sm p-3 flex flex-col gap-2 max-h-40 overflow-y-auto styled-scrollbar">
+              <div className="bg-sv-bg border border-[#2a2d3e] border-sv-border border-[#2a2d3e] rounded-sv-sm p-3 flex flex-col gap-2 max-h-40 overflow-y-auto styled-scrollbar">
                 {sports.map(sport => (
                   <label key={sport.id} className="flex items-center gap-3 cursor-pointer text-sm text-sv-text-secondary hover:text-sv-text">
                     <input 
@@ -326,7 +326,7 @@ export default function TurfsClient({
             </div>
           </div>
 
-          <div className="col-span-1 md:col-span-2 pt-4 border-t border-sv-border flex justify-end">
+          <div className="col-span-1 md:col-span-2 pt-4 border-t border-sv-border border-[#2a2d3e] flex justify-end">
             <Button
               type="submit"
               variant="primary"
@@ -350,10 +350,10 @@ export default function TurfsClient({
             <div 
               key={icon.value}
               onClick={() => { setIconPath(icon.value); setShowIconModal(false); }}
-              className={`flex flex-col items-center justify-center gap-3 p-4 rounded-sv-md cursor-pointer border transition-all ${
+              className={`flex flex-col items-center justify-center gap-3 p-4 rounded-sv-md cursor-pointer border border-[#2a2d3e] transition-all ${
                 iconPath === icon.value
                   ? 'bg-sv-brand-subtle border-sv-brand text-sv-brand'
-                  : 'bg-sv-bg border-sv-border hover:border-sv-brand/50 text-sv-text-muted hover:text-sv-text'
+                  : 'bg-sv-bg border-sv-border border-[#2a2d3e] hover:border-sv-brand/50 text-sv-text-muted hover:text-sv-text'
               }`}
             >
               {icon.value ? (

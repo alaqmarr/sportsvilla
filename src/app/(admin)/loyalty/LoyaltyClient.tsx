@@ -20,17 +20,17 @@ export default function LoyaltyClient({ initialMembers }: { initialMembers: Lead
       width: "80px",
       render: (_, index) => {
         const rank = index + 1;
-        let rankStyle = "text-sv-text-muted bg-sv-surface-raised border border-sv-border";
+        let rankStyle = "text-sv-text-muted bg-sv-surface-raised border border-[#2a2d3e] border-sv-border border-[#2a2d3e]";
         let icon = null;
 
         if (rank === 1) {
-          rankStyle = "text-amber-400 bg-amber-400/10 border border-amber-400/30";
+          rankStyle = "text-amber-400 bg-amber-400/10 border border-[#2a2d3e] border-amber-400/30";
           icon = <FiAward size={16} />;
         } else if (rank === 2) {
-          rankStyle = "text-slate-300 bg-slate-400/10 border border-slate-400/30";
+          rankStyle = "text-slate-300 bg-slate-400/10 border border-[#2a2d3e] border-slate-400/30";
           icon = <FiAward size={16} />;
         } else if (rank === 3) {
-          rankStyle = "text-amber-600 bg-amber-600/10 border border-amber-600/30";
+          rankStyle = "text-amber-600 bg-amber-600/10 border border-[#2a2d3e] border-amber-600/30";
           icon = <FiAward size={16} />;
         }
 
@@ -60,7 +60,7 @@ export default function LoyaltyClient({ initialMembers }: { initialMembers: Lead
       key: "mobile",
       header: "Mobile",
       render: (member) => (
-        <span className="text-sv-text-secondary text-sm font-mono bg-sv-bg px-2.5 py-1 rounded-sv-sm border border-sv-border inline-block">
+        <span className="text-sv-text-secondary text-sm font-mono bg-sv-bg px-2.5 py-1 rounded-sv-sm border border-[#2a2d3e] border-sv-border border-[#2a2d3e] inline-block">
           {member.mobile}
         </span>
       ),

@@ -59,7 +59,7 @@ export default async function WhatsAppEventsPage() {
   return (
     <div className="flex flex-col w-full h-[100dvh] bg-sv-bg overflow-hidden text-sv-text">
       {/* Header */}
-      <div className="h-16 shrink-0 bg-sv-surface-raised border-b border-sv-border px-6 flex items-center justify-between">
+      <div className="h-16 shrink-0 bg-sv-surface-raised border-b border-sv-border border-[#2a2d3e] px-6 flex items-center justify-between">
         <div className="flex items-center gap-4">
           <Link href="/whatsapp-admin" className="p-2 hover:bg-sv-surface-hover rounded-full transition-colors text-sv-text-muted hover:text-sv-text">
             <FiCornerUpLeft className="text-xl" />

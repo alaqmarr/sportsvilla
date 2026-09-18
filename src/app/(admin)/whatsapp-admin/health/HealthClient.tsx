@@ -42,17 +42,17 @@ export default function HealthClient({ initialHealthData, initialAutoReply }: { 
       case "GREEN":
       case "CONNECTED":
       case "ONLINE":
-        return <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20"><FiCheckCircle /> {status}</span>;
+        return <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-[#2a2d3e] border-emerald-500/20"><FiCheckCircle /> {status}</span>;
       case "PENDING":
       case "YELLOW":
-        return <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-500/10 text-amber-400 border border-amber-500/20"><FiClock /> {status}</span>;
+        return <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-500/10 text-amber-400 border border-[#2a2d3e] border-amber-500/20"><FiClock /> {status}</span>;
       case "REJECTED":
       case "FAILED":
       case "RED":
       case "OFFLINE":
-        return <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-rose-500/10 text-rose-400 border border-rose-500/20"><FiAlertCircle /> {status}</span>;
+        return <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-rose-500/10 text-rose-400 border border-[#2a2d3e] border-rose-500/20"><FiAlertCircle /> {status}</span>;
       default:
-        return <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-gray-500/10 text-gray-400 border border-gray-500/20">{status || "UNKNOWN"}</span>;
+        return <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-gray-500/10 text-gray-400 border border-[#2a2d3e] border-gray-500/20">{status || "UNKNOWN"}</span>;
     }
   };
 
@@ -166,7 +166,7 @@ export default function HealthClient({ initialHealthData, initialAutoReply }: { 
   return (
     <div className="flex flex-col w-full h-[100dvh] bg-sv-bg overflow-hidden text-sv-text">
       {/* Header */}
-      <div className="h-16 shrink-0 bg-sv-surface-raised border-b border-sv-border px-6 flex items-center justify-between">
+      <div className="h-16 shrink-0 bg-sv-surface-raised border-b border-sv-border border-[#2a2d3e] px-6 flex items-center justify-between">
         <div className="flex items-center gap-4">
           <Link href="/whatsapp-admin" className="p-2 hover:bg-sv-surface-hover rounded-full transition-colors text-sv-text-muted hover:text-sv-text">
             <FiCornerUpLeft className="text-xl" />
@@ -179,7 +179,7 @@ export default function HealthClient({ initialHealthData, initialAutoReply }: { 
         <button
           onClick={fetchConfigAndHealth}
           disabled={loading}
-          className="flex items-center gap-2 px-3 py-1.5 bg-sv-surface hover:bg-sv-surface-hover border border-sv-border rounded-lg text-sm text-sv-text transition-colors"
+          className="flex items-center gap-2 px-3 py-1.5 bg-sv-surface hover:bg-sv-surface-hover border border-[#2a2d3e] border-sv-border border-[#2a2d3e] rounded-lg text-sm text-sv-text transition-colors"
         >
           <FiRefreshCw className={loading ? "animate-spin" : ""} /> Refresh
         </button>
@@ -189,7 +189,7 @@ export default function HealthClient({ initialHealthData, initialAutoReply }: { 
         {/* Top Row: 4 Live Health Status Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           {/* Card 1: Meta Connection Status */}
-          <div className="bg-sv-surface border border-sv-border rounded-2xl p-5 flex flex-col justify-between shadow-xl">
+          <div className="bg-sv-surface border border-[#2a2d3e] border-sv-border border-[#2a2d3e] rounded-2xl p-5 flex flex-col justify-between shadow-xl">
             <div className="flex items-center justify-between mb-3">
               <span className="text-xs font-bold text-sv-text-muted uppercase tracking-wider">Meta API Connection</span>
               <FiSmartphone className="text-emerald-400 text-lg" />
@@ -202,14 +202,14 @@ export default function HealthClient({ initialHealthData, initialAutoReply }: { 
                 {healthData?.metaPhoneInfo?.verified_name || "UNKNOWN"}
               </p>
             </div>
-            <div className="mt-4 pt-3 border-t border-sv-border flex items-center justify-between text-xs">
+            <div className="mt-4 pt-3 border-t border-sv-border border-[#2a2d3e] flex items-center justify-between text-xs">
               <span className="text-sv-text-muted">Quality:</span>
               {getStatusBadge(healthData?.metaPhoneInfo?.quality_rating || "UNKNOWN")}
             </div>
           </div>
 
           {/* Card 2: Active Numbers & DB Health */}
-          <div className="bg-sv-surface border border-sv-border rounded-2xl p-5 flex flex-col justify-between shadow-xl">
+          <div className="bg-sv-surface border border-[#2a2d3e] border-sv-border border-[#2a2d3e] rounded-2xl p-5 flex flex-col justify-between shadow-xl">
             <div className="flex items-center justify-between mb-3">
               <span className="text-xs font-bold text-sv-text-muted uppercase tracking-wider">Active Numbers & DB</span>
               <FiUsers className="text-blue-400 text-lg" />
@@ -220,14 +220,14 @@ export default function HealthClient({ initialHealthData, initialAutoReply }: { 
               </h3>
               <p className="text-xs text-sv-text-muted mt-1">Unique customer WhatsApp numbers</p>
             </div>
-            <div className="mt-4 pt-3 border-t border-sv-border flex items-center justify-between text-xs">
+            <div className="mt-4 pt-3 border-t border-sv-border border-[#2a2d3e] flex items-center justify-between text-xs">
               <span className="text-sv-text-muted">Database:</span>
               <span className="text-emerald-400 font-bold font-sans">sqlite (ONLINE)</span>
             </div>
           </div>
 
           {/* Card 3: Messaging Limit & Delivery Rate */}
-          <div className="bg-sv-surface border border-sv-border rounded-2xl p-5 flex flex-col justify-between shadow-xl">
+          <div className="bg-sv-surface border border-[#2a2d3e] border-sv-border border-[#2a2d3e] rounded-2xl p-5 flex flex-col justify-between shadow-xl">
             <div className="flex items-center justify-between mb-3">
               <span className="text-xs font-bold text-sv-text-muted uppercase tracking-wider">Messaging Limit Tier</span>
               <FiActivity className="text-purple-400 text-lg" />
@@ -240,7 +240,7 @@ export default function HealthClient({ initialHealthData, initialAutoReply }: { 
                 Total Msgs Processed: {healthData?.database?.stats?.totalMessages ?? 0}
               </p>
             </div>
-            <div className="mt-4 pt-3 border-t border-sv-border flex items-center justify-between text-xs">
+            <div className="mt-4 pt-3 border-t border-sv-border border-[#2a2d3e] flex items-center justify-between text-xs">
               <span className="text-sv-text-muted">Account Mode:</span>
               <span className={`font-bold ${healthData?.metaPhoneInfo?.account_mode === "LIVE" ? "text-emerald-400" : "text-sv-text-muted"}`}>
                 {healthData?.metaPhoneInfo?.account_mode || "UNKNOWN"}
@@ -249,7 +249,7 @@ export default function HealthClient({ initialHealthData, initialAutoReply }: { 
           </div>
 
           {/* Card 4: Webhook & Environment Tokens */}
-          <div className="bg-sv-surface border border-sv-border rounded-2xl p-5 flex flex-col justify-between shadow-xl">
+          <div className="bg-sv-surface border border-[#2a2d3e] border-sv-border border-[#2a2d3e] rounded-2xl p-5 flex flex-col justify-between shadow-xl">
             <div className="flex items-center justify-between mb-3">
               <span className="text-xs font-bold text-sv-text-muted uppercase tracking-wider">Meta API Tokens</span>
               <FiShield className="text-amber-400 text-lg" />
@@ -262,7 +262,7 @@ export default function HealthClient({ initialHealthData, initialAutoReply }: { 
                 {healthData?.metaApiError || "Meta Graph API v21.0 Connected"}
               </p>
             </div>
-            <div className="mt-4 pt-3 border-t border-sv-border flex items-center justify-between text-xs">
+            <div className="mt-4 pt-3 border-t border-sv-border border-[#2a2d3e] flex items-center justify-between text-xs">
               <span className="text-sv-text-muted">Webhook Hits:</span>
               <span className="text-orange-400 font-bold font-sans">
                 {healthData?.database?.stats?.webhookLogsCount ?? 0}
@@ -274,8 +274,8 @@ export default function HealthClient({ initialHealthData, initialAutoReply }: { 
         {/* Bottom Section: Auto-Reply Greeting Customizer + Live Phone Simulator */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
           {/* Left Col (7 cols): Greeting Customizer Editor */}
-          <div className="lg:col-span-7 bg-sv-surface border border-sv-border rounded-2xl p-6 shadow-2xl space-y-6">
-            <div className="flex items-center justify-between border-b border-sv-border pb-4">
+          <div className="lg:col-span-7 bg-sv-surface border border-[#2a2d3e] border-sv-border border-[#2a2d3e] rounded-2xl p-6 shadow-2xl space-y-6">
+            <div className="flex items-center justify-between border-b border-sv-border border-[#2a2d3e] pb-4">
               <div>
                 <h3 className="font-extrabold text-white text-base flex items-center gap-2">
                   <FaWhatsapp className="text-emerald-400 text-lg" /> WhatsApp Auto-Reply & Greeting Customizer
@@ -287,7 +287,7 @@ export default function HealthClient({ initialHealthData, initialAutoReply }: { 
               <button
                 type="button"
                 onClick={() => setAutoReplyEnabled(!autoReplyEnabled)}
-                className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-sv-surface-raised hover:bg-sv-surface-hover border border-sv-border text-xs font-bold text-white transition-colors"
+                className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-sv-surface-raised hover:bg-sv-surface-hover border border-[#2a2d3e] border-sv-border border-[#2a2d3e] text-xs font-bold text-white transition-colors"
               >
                 {autoReplyEnabled ? (
                   <>
@@ -313,12 +313,12 @@ export default function HealthClient({ initialHealthData, initialAutoReply }: { 
                 </div>
 
                 {/* WhatsApp Rich Text & Emoji Toolbar */}
-                <div className="flex items-center justify-between bg-sv-bg border border-b-0 border-sv-border rounded-t-xl px-3 py-2">
+                <div className="flex items-center justify-between bg-sv-bg border border-[#2a2d3e] border-b-0 border-sv-border border-[#2a2d3e] rounded-t-xl px-3 py-2">
                   <div className="flex items-center gap-1.5">
                     <button
                       type="button"
                       onClick={() => applyGreetingFormatting("*")}
-                      className="w-7 h-7 rounded-lg bg-sv-surface-raised hover:bg-emerald-500/20 hover:text-emerald-400 text-sv-text font-bold text-xs flex items-center justify-center transition-all border border-sv-border"
+                      className="w-7 h-7 rounded-lg bg-sv-surface-raised hover:bg-emerald-500/20 hover:text-emerald-400 text-sv-text font-bold text-xs flex items-center justify-center transition-all border border-[#2a2d3e] border-sv-border border-[#2a2d3e]"
                       title="Bold (*text*)"
                     >
                       B
@@ -326,7 +326,7 @@ export default function HealthClient({ initialHealthData, initialAutoReply }: { 
                     <button
                       type="button"
                       onClick={() => applyGreetingFormatting("_")}
-                      className="w-7 h-7 rounded-lg bg-sv-surface-raised hover:bg-emerald-500/20 hover:text-emerald-400 text-sv-text italic font-serif text-xs flex items-center justify-center transition-all border border-sv-border"
+                      className="w-7 h-7 rounded-lg bg-sv-surface-raised hover:bg-emerald-500/20 hover:text-emerald-400 text-sv-text italic font-serif text-xs flex items-center justify-center transition-all border border-[#2a2d3e] border-sv-border border-[#2a2d3e]"
                       title="Italics (_text_)"
                     >
                       I
@@ -334,7 +334,7 @@ export default function HealthClient({ initialHealthData, initialAutoReply }: { 
                     <button
                       type="button"
                       onClick={() => applyGreetingFormatting("~")}
-                      className="w-7 h-7 rounded-lg bg-sv-surface-raised hover:bg-emerald-500/20 hover:text-emerald-400 text-sv-text line-through text-xs flex items-center justify-center transition-all border border-sv-border"
+                      className="w-7 h-7 rounded-lg bg-sv-surface-raised hover:bg-emerald-500/20 hover:text-emerald-400 text-sv-text line-through text-xs flex items-center justify-center transition-all border border-[#2a2d3e] border-sv-border border-[#2a2d3e]"
                       title="Strikethrough (~text~)"
                     >
                       S
@@ -347,7 +347,7 @@ export default function HealthClient({ initialHealthData, initialAutoReply }: { 
                         key={eIdx}
                         type="button"
                         onClick={() => insertGreetingEmoji(emoji)}
-                        className="w-7 h-7 rounded-lg bg-sv-surface-raised hover:bg-sv-surface-hover text-sm flex items-center justify-center transition-all border border-sv-border"
+                        className="w-7 h-7 rounded-lg bg-sv-surface-raised hover:bg-sv-surface-hover text-sm flex items-center justify-center transition-all border border-[#2a2d3e] border-sv-border border-[#2a2d3e]"
                         title={`Insert ${emoji}`}
                       >
                         {emoji}
@@ -362,7 +362,7 @@ export default function HealthClient({ initialHealthData, initialAutoReply }: { 
                   value={autoReplyMessage}
                   onChange={(e) => setAutoReplyMessage(e.target.value)}
                   placeholder="Enter your welcome greeting message..."
-                  className="w-full bg-sv-bg border border-sv-border rounded-b-xl p-4 text-white font-sans text-sm focus:border-emerald-500 outline-none leading-relaxed"
+                  className="w-full bg-sv-bg border border-[#2a2d3e] border-sv-border border-[#2a2d3e] rounded-b-xl p-4 text-white font-sans text-sm focus:border-emerald-500 outline-none leading-relaxed"
                 />
               </div>
 
@@ -377,7 +377,7 @@ export default function HealthClient({ initialHealthData, initialAutoReply }: { 
                     max={1440}
                     value={autoReplyCooldown}
                     onChange={(e) => setAutoReplyCooldown(parseInt(e.target.value, 10) || 10)}
-                    className="w-full bg-sv-bg border border-sv-border rounded-xl px-4 py-2 text-white font-sans text-sm focus:border-emerald-500 outline-none"
+                    className="w-full bg-sv-bg border border-[#2a2d3e] border-sv-border border-[#2a2d3e] rounded-xl px-4 py-2 text-white font-sans text-sm focus:border-emerald-500 outline-none"
                   />
                   <p className="text-[10px] text-sv-text-muted mt-1">
                     Prevents duplicate greetings if user sends multiple messages within this window.
@@ -398,7 +398,7 @@ export default function HealthClient({ initialHealthData, initialAutoReply }: { 
           </div>
 
           {/* Right Col (5 cols): Live WhatsApp Phone Greeting Simulator */}
-          <div className="lg:col-span-5 bg-sv-surface border border-sv-border rounded-2xl p-6 shadow-2xl flex flex-col justify-between">
+          <div className="lg:col-span-5 bg-sv-surface border border-[#2a2d3e] border-sv-border border-[#2a2d3e] rounded-2xl p-6 shadow-2xl flex flex-col justify-between">
             <div>
               <h4 className="font-bold text-white text-sm mb-1 flex items-center gap-2">
                 <FiPhoneCall className="text-emerald-400" /> Live Customer Phone Simulator
@@ -409,14 +409,14 @@ export default function HealthClient({ initialHealthData, initialAutoReply }: { 
 
               {/* Simulated Phone Screen */}
               <div
-                className="border border-sv-border rounded-2xl p-4 space-y-3 min-h-[300px] flex flex-col justify-end bg-sv-bg"
+                className="border border-[#2a2d3e] border-sv-border border-[#2a2d3e] rounded-2xl p-4 space-y-3 min-h-[300px] flex flex-col justify-end bg-sv-bg"
                 style={{
                   backgroundImage: "radial-gradient(circle at 50% 50%, rgba(20, 30, 36, 0.4) 0%, transparent 100%)",
                 }}
               >
                 {/* Customer incoming message */}
                 <div className="flex justify-start">
-                  <div className="bg-sv-surface-raised text-sv-text px-3.5 py-2.5 rounded-2xl rounded-bl-none text-sm font-sans max-w-[80%] shadow border border-sv-border">
+                  <div className="bg-sv-surface-raised text-sv-text px-3.5 py-2.5 rounded-2xl rounded-bl-none text-sm font-sans max-w-[80%] shadow border border-[#2a2d3e] border-sv-border border-[#2a2d3e]">
                     <p>hello sportsvilla!</p>
                     <span className="text-[9px] text-sv-text-muted block text-right mt-1">10:42 AM</span>
                   </div>
@@ -425,7 +425,7 @@ export default function HealthClient({ initialHealthData, initialAutoReply }: { 
                 {/* Automated bot reply */}
                 {autoReplyEnabled ? (
                   <div className="flex justify-end">
-                    <div className="bg-emerald-950/80 border border-emerald-700/40 text-white px-3.5 py-2.5 rounded-2xl rounded-br-none text-sm font-sans max-w-[85%] shadow space-y-1">
+                    <div className="bg-emerald-950/80 border border-[#2a2d3e] border-emerald-700/40 text-white px-3.5 py-2.5 rounded-2xl rounded-br-none text-sm font-sans max-w-[85%] shadow space-y-1">
                       <div className="text-[10px] text-emerald-300 font-bold mb-1">
                         ⚡ Automated Greeting
                       </div>
@@ -439,14 +439,14 @@ export default function HealthClient({ initialHealthData, initialAutoReply }: { 
                     </div>
                   </div>
                 ) : (
-                  <div className="p-3 rounded-xl bg-rose-500/10 border border-rose-500/20 text-center text-rose-300 text-xs">
+                  <div className="p-3 rounded-xl bg-rose-500/10 border border-[#2a2d3e] border-rose-500/20 text-center text-rose-300 text-xs">
                     Greeting Auto-Reply is currently disabled. No automated response will be sent.
                   </div>
                 )}
               </div>
             </div>
 
-            <div className="mt-4 p-3 bg-sv-bg border border-sv-border rounded-xl text-xs text-sv-text-muted flex items-center gap-2">
+            <div className="mt-4 p-3 bg-sv-bg border border-[#2a2d3e] border-sv-border border-[#2a2d3e] rounded-xl text-xs text-sv-text-muted flex items-center gap-2">
               <FiInfo className="text-emerald-400 text-base shrink-0" />
               <span>
                 Settings are stored dynamically in <strong className="text-white font-mono">whatsapp.db</strong> and take effect immediately without server reboot.

@@ -4,9 +4,10 @@ import { notFound } from "next/navigation";
 
 export const dynamic = 'force-dynamic';
 
-export default async function TvContentPage({ params }: { params: { groupId: string } }) {
+export default async function TvContentPage({ params }: { params: Promise<{ groupId: string }> }) {
+  const { groupId } = await params;
   const group = await prisma.tvScreenGroup.findUnique({
-    where: { id: params.groupId },
+    where: { id: groupId },
     include: {
       contentItems: {
         orderBy: { sortOrder: "asc" }

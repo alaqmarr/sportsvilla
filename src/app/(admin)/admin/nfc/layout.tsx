@@ -19,7 +19,7 @@ function FloatingStatusBar() {
     <div className="sticky top-0 z-50 w-full">
       {/* If Web NFC is unsupported, just show a subtle banner */}
       {!isWebNfcSupported && (
-        <div className="bg-sv-surface-raised border-b border-sv-border px-4 py-2 flex items-center justify-center gap-2 text-xs text-sv-text-muted">
+        <div className="bg-sv-surface-raised border-b border-sv-border border-[#2a2d3e] px-4 py-2 flex items-center justify-center gap-2 text-xs text-sv-text-muted">
           <FiHardDrive /> Web NFC unsupported on this device. Using USB Wedge Scanner.
         </div>
       )}

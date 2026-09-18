@@ -11,7 +11,7 @@ export default function MembersLoading() {
         <Skeleton className="h-10 w-32 rounded-sv-sm" />
       </div>
 
-      <div className="bg-sv-surface border border-sv-border rounded-sv-lg overflow-hidden p-6 space-y-6">
+      <div className="bg-sv-surface border border-[#2a2d3e] border-sv-border border-[#2a2d3e] rounded-sv-lg overflow-hidden p-6 space-y-6">
         <Skeleton className="h-10 w-full rounded-sv-sm" />
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {[1, 2, 3, 4, 5, 6].map((i) => (

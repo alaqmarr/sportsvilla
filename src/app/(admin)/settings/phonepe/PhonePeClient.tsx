@@ -151,7 +151,7 @@ export default function PhonePeClient({ initialSettings }: { initialSettings: Re
               </div>
             </div>
 
-            <div className="flex justify-end pt-4 border-t border-sv-border">
+            <div className="flex justify-end pt-4 border-t border-sv-border border-[#2a2d3e]">
               <Button
                 type="submit"
                 disabled={loading}

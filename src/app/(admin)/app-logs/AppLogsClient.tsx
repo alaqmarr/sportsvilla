@@ -45,9 +45,9 @@ export default function AppLogsClient() {
   };
 
   const getLevelContainerBorder = (level: string) => {
-    if (level === 'ERROR') return 'border-sv-error-border bg-sv-error-subtle/30';
-    if (level === 'WARN') return 'border-sv-warning-border bg-sv-warning-subtle/30';
-    return 'border-sv-info-border bg-sv-info-subtle/30';
+    if (level === 'ERROR') return 'border-sv-error-border border-[#2a2d3e] bg-sv-error-subtle/30';
+    if (level === 'WARN') return 'border-sv-warning-border border-[#2a2d3e] bg-sv-warning-subtle/30';
+    return 'border-sv-info-border border-[#2a2d3e] bg-sv-info-subtle/30';
   };
 
   return (
@@ -77,7 +77,7 @@ export default function AppLogsClient() {
             Loading logs...
           </div>
         ) : logs.length === 0 ? (
-          <div className="p-10 text-center text-sv-text-muted bg-sv-surface-raised rounded-sv-md border border-dashed border-sv-border">
+          <div className="p-10 text-center text-sv-text-muted bg-sv-surface-raised rounded-sv-md border border-[#2a2d3e] border-dashed border-sv-border border-[#2a2d3e]">
             No logs found in app.log.
           </div>
         ) : (
@@ -89,7 +89,7 @@ export default function AppLogsClient() {
               return (
                 <div
                   key={index}
-                  className={`border rounded-sv-md overflow-hidden transition-colors ${getLevelContainerBorder(log.level)}`}
+                  className={`border border-[#2a2d3e] rounded-sv-md overflow-hidden transition-colors ${getLevelContainerBorder(log.level)}`}
                 >
                   <div
                     className={`flex items-start gap-4 p-4 ${hasMeta ? 'cursor-pointer hover:bg-sv-surface-hover/60' : ''} transition-colors`}

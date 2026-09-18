@@ -58,7 +58,7 @@ export default function BannersClient({ initialBanners, sports }: { initialBanne
         <h1 className="text-2xl font-bold">Homepage Banners</h1>
       </div>
 
-      <div className="bg-white p-6 rounded-lg shadow space-y-4">
+      <div className="bg-[#161923] p-6 rounded-lg shadow space-y-4">
         <h2 className="text-lg font-semibold">Upload New Banner</h2>
         <div className="text-sm text-gray-500 mb-2">
           Recommended resolution: 1080x450 (21:9) for optimal mobile viewing.
@@ -68,19 +68,19 @@ export default function BannersClient({ initialBanners, sports }: { initialBanne
             type="file" 
             accept="image/*"
             onChange={e => setFile(e.target.files?.[0] || null)}
-            className="border p-2 rounded"
+            className="border border-[#2a2d3e] p-2 rounded bg-[#0b0e14] text-white"
           />
           <input 
             type="text" 
             placeholder="Banner Title (Optional)" 
             value={title}
             onChange={e => setTitle(e.target.value)}
-            className="border p-2 rounded"
+            className="border border-[#2a2d3e] p-2 rounded bg-[#0b0e14] text-white"
           />
           <select 
             value={targetSportId}
             onChange={e => setTargetSportId(e.target.value)}
-            className="border p-2 rounded"
+            className="border border-[#2a2d3e] p-2 rounded bg-[#0b0e14] text-white"
           >
             <option value="">Global Banner (All Users)</option>
             {sports.map(s => (
@@ -91,7 +91,7 @@ export default function BannersClient({ initialBanners, sports }: { initialBanne
         <button 
           disabled={!file || isUploading}
           onClick={handleUpload}
-          className="bg-blue-600 text-white px-4 py-2 rounded disabled:opacity-50"
+          className="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded disabled:opacity-50"
         >
           {isUploading ? "Uploading..." : "Upload Banner"}
         </button>
@@ -99,7 +99,7 @@ export default function BannersClient({ initialBanners, sports }: { initialBanne
 
       <div className="space-y-4">
         {banners.map(b => (
-          <div key={b.id} className="bg-white p-4 rounded-lg shadow flex items-center justify-between">
+          <div key={b.id} className="bg-[#161923] p-4 rounded-lg shadow flex items-center justify-between">
             <div className="flex items-center space-x-4">
               <img src={b.imageUrl} alt={b.title || "Banner"} className="h-24 w-auto object-contain rounded" />
               <div>
@@ -118,7 +118,7 @@ export default function BannersClient({ initialBanners, sports }: { initialBanne
                   await toggleBannerStatus(b.id, !b.isActive);
                   setBanners(banners.map(banner => banner.id === b.id ? { ...banner, isActive: !b.isActive } : banner));
                 }}
-                className="px-3 py-1 bg-gray-100 rounded hover:bg-gray-200"
+                className="px-3 py-1 bg-[#0b0e14] rounded hover:bg-[#2a2d3e]"
               >
                 {b.isActive ? 'Deactivate' : 'Activate'}
               </button>

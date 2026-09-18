@@ -276,7 +276,7 @@ export default async function Dashboard() {
                     return (
                       <div
                         key={m.id}
-                        className="p-4 rounded-sv-md bg-sv-surface-raised border border-sv-border transition-colors hover:border-sv-border-strong space-y-3"
+                        className="p-4 rounded-sv-md bg-sv-surface-raised border border-[#2a2d3e] border-sv-border border-[#2a2d3e] transition-colors hover:border-sv-border-strong space-y-3"
                       >
                         <div className="flex items-start justify-between gap-3">
                           <div className="flex items-center gap-3 min-w-0">

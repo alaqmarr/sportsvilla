@@ -239,8 +239,8 @@ export default function AdminClient({ initialAdmins }: { initialAdmins: AdminUse
             className="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity"
             onClick={() => setIsModalOpen(false)}
           />
-          <div className="relative w-full max-w-2xl bg-sv-bg h-full shadow-sv-xl flex flex-col border-l border-sv-border transform transition-transform animate-in slide-in-from-right">
-            <div className="p-6 border-b border-sv-border flex justify-between items-center bg-sv-surface">
+          <div className="relative w-full max-w-2xl bg-sv-bg h-full shadow-sv-xl flex flex-col border-l border-sv-border border-[#2a2d3e] transform transition-transform animate-in slide-in-from-right">
+            <div className="p-6 border-b border-sv-border border-[#2a2d3e] flex justify-between items-center bg-sv-surface">
               <h2 className="text-xl font-bold text-sv-text font-sans">
                 {editingAdminId ? "Edit Admin User" : "Add New Admin User"}
               </h2>
@@ -300,10 +300,10 @@ export default function AdminClient({ initialAdmins }: { initialAdmins: AdminUse
                   </h3>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <label
-                      className={`cursor-pointer rounded-sv-lg border p-4 flex gap-3 transition-all ${
+                      className={`cursor-pointer rounded-sv-lg border border-[#2a2d3e] p-4 flex gap-3 transition-all ${
                         role === "ADMIN"
                           ? "bg-sv-info-subtle border-sv-status-info/50"
-                          : "bg-sv-surface border-sv-border opacity-70 hover:opacity-100"
+                          : "bg-sv-surface border-sv-border border-[#2a2d3e] opacity-70 hover:opacity-100"
                       }`}
                     >
                       <input
@@ -325,10 +325,10 @@ export default function AdminClient({ initialAdmins }: { initialAdmins: AdminUse
                     </label>
 
                     <label
-                      className={`cursor-pointer rounded-sv-lg border p-4 flex gap-3 transition-all ${
+                      className={`cursor-pointer rounded-sv-lg border border-[#2a2d3e] p-4 flex gap-3 transition-all ${
                         role === "SUPERADMIN"
                           ? "bg-sv-warning-subtle border-sv-status-warning/50"
-                          : "bg-sv-surface border-sv-border opacity-70 hover:opacity-100"
+                          : "bg-sv-surface border-sv-border border-[#2a2d3e] opacity-70 hover:opacity-100"
                       }`}
                     >
                       <input
@@ -364,7 +364,7 @@ export default function AdminClient({ initialAdmins }: { initialAdmins: AdminUse
                     </div>
 
                     {/* Role Templates */}
-                    <div className="bg-sv-info-subtle border border-sv-info-border rounded-sv-lg p-4">
+                    <div className="bg-sv-info-subtle border border-[#2a2d3e] border-sv-info-border border-[#2a2d3e] rounded-sv-lg p-4">
                       <div className="flex items-center gap-2 mb-3">
                         <FiZap className="text-sv-status-info" size={14} />
                         <h4 className="text-xs font-bold text-sv-status-info uppercase tracking-wider">
@@ -390,7 +390,7 @@ export default function AdminClient({ initialAdmins }: { initialAdmins: AdminUse
                     <div className="space-y-6">
                       {RBAC_CATEGORIES.map((category, idx) => (
                         <Card key={category.title} variant="default" padding="none" className="overflow-hidden">
-                          <div className="bg-sv-surface-raised px-4 py-2.5 border-b border-sv-border flex justify-between items-center">
+                          <div className="bg-sv-surface-raised px-4 py-2.5 border-b border-sv-border border-[#2a2d3e] flex justify-between items-center">
                             <h4 className="text-xs font-bold text-sv-text uppercase tracking-wider">
                               {category.title}
                             </h4>
@@ -474,7 +474,7 @@ export default function AdminClient({ initialAdmins }: { initialAdmins: AdminUse
               </form>
             </div>
 
-            <div className="p-6 border-t border-sv-border bg-sv-surface flex justify-end gap-3">
+            <div className="p-6 border-t border-sv-border border-[#2a2d3e] bg-sv-surface flex justify-end gap-3">
               <Button 
                 type="button"
                 variant="secondary"
