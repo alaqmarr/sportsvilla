@@ -46,7 +46,7 @@ export default function ScreensClient({ initialScreens, screenGroups }: { initia
   };
 
   const handleDeleteScreen = async (id: string) => {
-    showConfirm("Are you sure you want to delete this screen?", async () => {
+    showConfirm("Delete Screen", "Are you sure you want to delete this screen?", async () => {
       try {
         await deleteScreen(id);
         setScreens(screens.filter((s) => s.id !== id));

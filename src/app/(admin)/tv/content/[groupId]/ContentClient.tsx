@@ -39,7 +39,7 @@ export default function ContentClient({ group, initialItems, publicUrlBase }: { 
   };
 
   const handleDelete = async (id: string) => {
-    showConfirm("Delete this content?", async () => {
+    showConfirm("Delete Content", "Are you sure you want to delete this content?", async () => {
       try {
         await deleteContentItem(id);
         setItems(items.filter(i => i.id !== id));
@@ -51,7 +51,7 @@ export default function ContentClient({ group, initialItems, publicUrlBase }: { 
   };
 
   const handlePublish = async () => {
-    showConfirm("Publish this playlist to screens?", async () => {
+    showConfirm("Publish Playlist", "Publish this playlist to all paired screens?", async () => {
       try {
         const res = await fetch("/api/admin/tv/publish", {
           method: "POST",

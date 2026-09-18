@@ -23,7 +23,7 @@ export async function POST(req: NextRequest) {
       }
 
       let screen = await prisma.tvScreen.findFirst({
-        where: { name: "Google Play Review Device" }
+        where: { label: "Google Play Review Device" }
       });
       
       const token = crypto.randomBytes(32).toString('hex');
@@ -32,7 +32,7 @@ export async function POST(req: NextRequest) {
       if (!screen) {
         screen = await prisma.tvScreen.create({
           data: {
-            name: "Google Play Review Device",
+            label: "Google Play Review Device",
             screenGroupId: group.id,
             deviceToken: hashedToken
           }
