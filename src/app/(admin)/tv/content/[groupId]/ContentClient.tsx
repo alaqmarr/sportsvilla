@@ -98,14 +98,14 @@ export default function ContentClient({ group, initialItems, publicUrlBase }: { 
         </button>
       </div>
 
-      <div className="bg-white p-6 rounded shadow flex gap-4 items-end">
+      <div className="bg-[#161923] p-6 rounded-xl border border-[#2a2d3e] shadow-lg flex gap-4 items-end">
         <div className="flex-1">
           <label className="block text-sm font-semibold mb-1">Upload Media (JPG/PNG/MP4)</label>
           <input 
             type="file" 
             accept="image/*,video/mp4"
             onChange={(e) => setFile(e.target.files?.[0] || null)}
-            className="border p-2 rounded w-full"
+            className="bg-[#0b0e14] border border-[#2a2d3e] p-2 rounded-lg w-full text-white focus:border-emerald-500 outline-none"
           />
         </div>
         {file && file.type.startsWith("image/") && (
@@ -115,37 +115,37 @@ export default function ContentClient({ group, initialItems, publicUrlBase }: { 
               type="number" 
               value={duration} 
               onChange={e => setDuration(e.target.value)}
-              className="border p-2 rounded w-24"
+              className="bg-[#0b0e14] border border-[#2a2d3e] p-2 rounded-lg w-24 text-white focus:border-emerald-500 outline-none"
             />
           </div>
         )}
         <button 
           onClick={handleUpload}
           disabled={!file || isUploading}
-          className="bg-blue-600 text-white px-6 py-2 rounded disabled:opacity-50 h-[42px]"
+          className="bg-emerald-600 text-white hover:bg-emerald-700 px-6 py-2 rounded disabled:opacity-50 h-[42px]"
         >
           {isUploading ? "Uploading..." : "Upload"}
         </button>
       </div>
 
-      <div className="bg-white p-6 rounded shadow space-y-4">
+      <div className="bg-[#161923] p-6 rounded-xl border border-[#2a2d3e] shadow-lg space-y-4">
         <h2 className="text-xl font-bold">Playlist Order</h2>
-        {items.length === 0 && <p className="text-gray-500">No content added yet.</p>}
+        {items.length === 0 && <p className="text-gray-400">No content added yet.</p>}
         
         {items.map((item, idx) => (
-          <div key={item.id} className="flex items-center gap-4 border p-4 rounded bg-gray-50">
+          <div key={item.id} className="flex items-center gap-4 border border-[#2a2d3e] p-4 rounded bg-[#0b0e14]">
             <div className="flex flex-col gap-1">
               <button 
                 onClick={() => moveItem(idx, -1)} 
                 disabled={idx === 0}
-                className="p-1 bg-gray-200 rounded disabled:opacity-30"
+                className="p-1 bg-[#2a2d3e] text-white rounded hover:bg-[#3b3e4f] disabled:opacity-30"
               >
                 ↑
               </button>
               <button 
                 onClick={() => moveItem(idx, 1)} 
                 disabled={idx === items.length - 1}
-                className="p-1 bg-gray-200 rounded disabled:opacity-30"
+                className="p-1 bg-[#2a2d3e] text-white rounded hover:bg-[#3b3e4f] disabled:opacity-30"
               >
                 ↓
               </button>
@@ -160,11 +160,11 @@ export default function ContentClient({ group, initialItems, publicUrlBase }: { 
             </div>
 
             <div className="flex-1">
-              <p className="font-mono text-xs text-gray-500 truncate">{item.r2Key}</p>
+              <p className="font-mono text-xs text-gray-400 truncate">{item.r2Key}</p>
               <p className="text-sm">Type: {item.type.toUpperCase()} • {item.durationSeconds ? `${item.durationSeconds}s` : 'Full'}</p>
             </div>
 
-            <button onClick={() => handleDelete(item.id)} className="text-red-600 px-4">
+            <button onClick={() => handleDelete(item.id)} className="text-red-500 hover:text-red-400 px-4">
               Delete
             </button>
           </div>

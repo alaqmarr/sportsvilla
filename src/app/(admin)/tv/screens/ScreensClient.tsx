@@ -79,31 +79,31 @@ export default function ScreensClient({ initialScreens, screenGroups }: { initia
       <h1 className="text-2xl font-bold">TV Screens Management</h1>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        <div className="bg-white p-6 rounded shadow">
+        <div className="bg-[#161923] p-6 rounded-xl border border-[#2a2d3e] shadow-lg">
           <h2 className="text-xl font-bold mb-4">Create Screen Group</h2>
           <div className="flex gap-2">
             <input 
               type="text" 
               placeholder="e.g. Lobby Screens" 
-              className="border p-2 rounded flex-1"
+              className="bg-[#0b0e14] border border-[#2a2d3e] p-2 rounded-lg flex-1 text-white focus:border-emerald-500 outline-none"
               value={newGroupName}
               onChange={(e) => setNewGroupName(e.target.value)}
             />
             <button 
               onClick={handleCreateGroup} 
               disabled={isSubmitting || !newGroupName}
-              className="bg-blue-600 text-white px-4 py-2 rounded disabled:opacity-50"
+              className="bg-emerald-600 text-white hover:bg-emerald-700 px-4 py-2 rounded disabled:opacity-50"
             >
               Add Group
             </button>
           </div>
         </div>
 
-        <div className="bg-white p-6 rounded shadow">
+        <div className="bg-[#161923] p-6 rounded-xl border border-[#2a2d3e] shadow-lg">
           <h2 className="text-xl font-bold mb-4">Register New Screen</h2>
           <div className="space-y-3">
             <select 
-              className="border p-2 rounded w-full"
+              className="bg-[#0b0e14] border border-[#2a2d3e] p-2 rounded-lg w-full text-white focus:border-emerald-500 outline-none"
               value={selectedGroupId}
               onChange={(e) => setSelectedGroupId(e.target.value)}
             >
@@ -115,14 +115,14 @@ export default function ScreensClient({ initialScreens, screenGroups }: { initia
             <input 
               type="text" 
               placeholder="e.g. TV 1 (Entrance)" 
-              className="border p-2 rounded w-full"
+              className="bg-[#0b0e14] border border-[#2a2d3e] p-2 rounded-lg w-full text-white focus:border-emerald-500 outline-none"
               value={newScreenLabel}
               onChange={(e) => setNewScreenLabel(e.target.value)}
             />
             <button 
               onClick={handleCreateScreen} 
               disabled={isSubmitting || !newScreenLabel || !selectedGroupId}
-              className="bg-blue-600 text-white px-4 py-2 rounded w-full disabled:opacity-50"
+              className="bg-emerald-600 text-white hover:bg-emerald-700 px-4 py-2 rounded w-full disabled:opacity-50"
             >
               Register Screen
             </button>
@@ -130,11 +130,11 @@ export default function ScreensClient({ initialScreens, screenGroups }: { initia
         </div>
       </div>
 
-      <div className="bg-white p-6 rounded shadow">
+      <div className="bg-[#161923] p-6 rounded-xl border border-[#2a2d3e] shadow-lg">
         <h2 className="text-xl font-bold mb-4">Screens</h2>
         <table className="w-full text-left">
           <thead>
-            <tr className="border-b">
+            <tr className="border-b border-[#2a2d3e]">
               <th className="py-2">Label</th>
               <th className="py-2">Group</th>
               <th className="py-2">Status</th>
@@ -146,10 +146,10 @@ export default function ScreensClient({ initialScreens, screenGroups }: { initia
             {screens.map(s => {
               const isStale = s.lastHeartbeatAt && (new Date().getTime() - new Date(s.lastHeartbeatAt).getTime() > 20 * 60 * 1000);
               return (
-                <tr key={s.id} className="border-b">
+                <tr key={s.id} className="border-b border-[#2a2d3e]">
                   <td className="py-3 font-semibold">{s.label}</td>
-                  <td className="py-3 text-gray-600">
-                    <a href={`/tv/content/${s.screenGroupId}`} className="text-blue-600 underline">
+                  <td className="py-3 text-gray-400">
+                    <a href={`/tv/content/${s.screenGroupId}`} className="text-emerald-500 hover:text-emerald-400 underline">
                       {s.screenGroup?.name}
                     </a>
                   </td>
@@ -159,18 +159,18 @@ export default function ScreensClient({ initialScreens, screenGroups }: { initia
                         {isStale ? 'Stale' : 'Online'}
                       </span>
                     ) : (
-                      <span className="px-2 py-1 rounded text-xs text-gray-800 bg-gray-200">Offline</span>
+                      <span className="px-2 py-1 rounded text-xs text-gray-400 bg-[#2a2d3e]">Offline</span>
                     )}
                   </td>
                   <td className="py-3">
                     {s.deviceToken ? (
                       <span className="text-green-600">Paired</span>
                     ) : s.pairingCode ? (
-                      <span className="font-mono bg-gray-100 p-1">{s.pairingCode}</span>
+                      <span className="font-mono bg-[#0b0e14] text-emerald-400 p-1 px-2 rounded border border-[#2a2d3e]">{s.pairingCode}</span>
                     ) : (
                       <button 
                         onClick={() => handleGeneratePairCode(s.id)}
-                        className="text-sm text-blue-600 underline"
+                        className="text-sm text-emerald-500 hover:text-emerald-400 underline"
                       >
                         Generate Code
                       </button>
