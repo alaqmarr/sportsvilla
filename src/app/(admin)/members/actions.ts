@@ -8,6 +8,8 @@ import { sendWhatsAppMemberRegisteredTemplate, sendWhatsAppMembershipPurchasedTe
 import { generateMemberId } from "@/lib/memberUtils";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
+import { sendMembershipPush, sendWalletTransactionPush } from "@/lib/notifications";
+import { logger } from "@/lib/logger";
 
 async function requireAdminSession() {
   const session = await getServerSession(authOptions);
@@ -220,6 +222,10 @@ export async function assignPlan(data: { memberIds?: string[]; memberId?: string
       console.error('WhatsApp membership purchased message failed', waError);
     }
 
+    sendMembershipPush(tMemberId, plan.name, 'ASSIGNED').catch(pushError => {
+      logger.error('[Push Hook Error] Membership push notification failed', pushError);
+    });
+
     createdMemberships.push(memberMembership);
   }
   
@@ -287,12 +293,12 @@ export async function deleteMemberMembership(id: string) {
 
 export async function resetWallet(id: string) {
   await requireAdminSession();
+  const member = await prisma.member.findUnique({ where: { id }});
+  if (!member) throw new Error("Member not found");
+  
+  if (member.walletBalance === 0) return member;
+
   const result = await prisma.$transaction(async (tx) => {
-    const member = await tx.member.findUnique({ where: { id }});
-    if (!member) throw new Error("Member not found");
-    
-    if (member.walletBalance === 0) return member;
-    
     const updated = await tx.member.update({
       where: { id },
       data: { walletBalance: 0 }
@@ -308,6 +314,16 @@ export async function resetWallet(id: string) {
     });
     return updated;
   });
+
+  sendWalletTransactionPush(
+    id,
+    member.walletBalance / 100,
+    "DEBIT",
+    "Wallet reset by admin"
+  ).catch(pushErr => {
+    logger.error('[Push Hook Error] Admin resetWallet push failed', pushErr);
+  });
+
   await bumpSyncTimestamp('member');
   revalidatePath("/", "layout");
   return result;

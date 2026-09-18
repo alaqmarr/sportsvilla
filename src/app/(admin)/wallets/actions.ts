@@ -6,6 +6,8 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { whatsappDb } from '@/lib/whatsappDb';
 import { sendWhatsAppWalletCreditTemplate } from '@/lib/whatsapp';
+import { sendWalletTransactionPush } from '@/lib/notifications';
+import { logger } from '@/lib/logger';
 
 export async function addWalletTransaction(data: { memberId: string; amount: number; type: "CREDIT" | "DEBIT"; description?: string; otp?: string }) {
   if (!data.memberId || !data.amount || data.amount <= 0 || !data.otp) {
@@ -97,6 +99,15 @@ export async function addWalletTransaction(data: { memberId: string; amount: num
       console.error("Failed to send wallet credit WhatsApp message", waErr);
     }
   }
+
+  sendWalletTransactionPush(
+    data.memberId,
+    data.amount,
+    data.type,
+    data.description
+  ).catch(pushErr => {
+    logger.error('[Push Hook Error] Admin addWalletTransaction push failed', pushErr);
+  });
 
   await bumpSyncTimestamp('wallet');
   revalidatePath("/", "layout");

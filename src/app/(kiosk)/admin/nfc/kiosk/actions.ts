@@ -2,6 +2,8 @@
 
 import { prisma } from "@/lib/prisma";
 import { getISTDateBounds } from "@/lib/dateUtils";
+import { sendWalletTransactionPush, sendBookingConfirmedPush } from "@/lib/notifications";
+import { logger } from "@/lib/logger";
 
 export async function getKioskFacilities() {
   const turfs = await prisma.turf.findMany({
@@ -171,6 +173,27 @@ export async function createKioskBooking({
 
       return b;
     });
+
+    sendWalletTransactionPush(
+      memberId,
+      validatedPrice,
+      'DEBIT',
+      `Kiosk booking for ${new Date(startTime).toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })}`
+    ).catch((err) => {
+      logger.error('[Push Hook Error] Kiosk wallet payment push failed', err);
+    });
+
+    sendBookingConfirmedPush({
+      id: booking.id,
+      memberId: booking.memberId,
+      turf: { name: turfExists.name },
+      sport: { name: sportExists.name },
+      startTime: booking.startTime,
+      endTime: booking.endTime
+    }).catch((err) => {
+      logger.error('[Push Hook Error] Kiosk booking confirmed push failed', err);
+    });
+
     return { success: true, booking: JSON.parse(JSON.stringify(booking)), paymentMethod: "WALLET" };
   }
 

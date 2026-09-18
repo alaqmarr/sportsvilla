@@ -4,6 +4,8 @@ import { authenticateClient } from '@/lib/auth-middleware';
 import { jsonResponse, apiLog } from '@/lib/api-logger';
 import { whatsappDb } from '@/lib/whatsappDb';
 import { sendWhatsAppPlayerJoinedNotification } from '@/lib/whatsapp';
+import { sendWalletTransactionPush } from '@/lib/notifications';
+import { logger } from '@/lib/logger';
 
 export async function POST(request: Request, context: { params: Promise<{ id: string }> }) {
   apiLog(`[API] POST /api/client/v1/bookings/[id]/join called`);
@@ -239,6 +241,17 @@ export async function POST(request: Request, context: { params: Promise<{ id: st
         });
       }
     });
+
+    if (walletDeductionRupees > 0) {
+      sendWalletTransactionPush(
+        member.id,
+        walletDeductionRupees,
+        'DEBIT',
+        `Used wallet to join game: ${booking.turf?.name || 'Sports Court'}`
+      ).catch((err) => {
+        logger.error('[Push Hook Error] Join game wallet deduction push failed', err);
+      });
+    }
 
     const updatedBooking = await prisma.booking.findUnique({
       where: { id: bookingId },

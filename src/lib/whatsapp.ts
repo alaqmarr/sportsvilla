@@ -1,4 +1,6 @@
 import { whatsappDb } from "./whatsappDb";
+import { generateQRTicketBuffer } from "./qr-ticket";
+import { uploadTempQRToR2, deleteTempQRFromR2 } from "./r2-storage";
 
 export interface SendWhatsAppOptions {
   to: string; // Recipient mobile number with country code (e.g. "919876543210")
@@ -333,6 +335,7 @@ export async function sendEventMessage(eventName: string, phoneNumber: string, d
 }
 
 export async function sendWhatsAppBookingConfirmedTemplate(
+  bookingId: string,
   customerName: string,
   venueName: string,
   sportName: string,
@@ -342,7 +345,30 @@ export async function sendWhatsAppBookingConfirmedTemplate(
 ) {
   const formattedPhone = formatWhatsAppNumber(registeredPhone);
 
-  return await sendWhatsAppMessage({
+  // Generate and Upload ephemeral QR Ticket
+  let qrUrl = "https://sportsvilla.co.in/short-logo.png"; // Fallback image
+  let r2Key = "";
+  
+  try {
+    // Parse dateTimeString to pass to QR (e.g. "Sep 18, 5:00 PM - 6:00 PM")
+    // For simplicity, we just pass the whole string as date/time.
+    const qrBuffer = await generateQRTicketBuffer({
+      bookingId,
+      turfName: venueName,
+      date: dateTimeString.split(',')[0] || dateTimeString,
+      time: dateTimeString.split(',')[1] || ''
+    });
+
+    r2Key = `temp-qr/${bookingId}-${Date.now()}.png`;
+    const uploadedUrl = await uploadTempQRToR2(qrBuffer, r2Key);
+    if (uploadedUrl) {
+      qrUrl = uploadedUrl;
+    }
+  } catch (err) {
+    console.error("Failed to generate/upload QR ticket for WhatsApp:", err);
+  }
+
+  const response = await sendWhatsAppMessage({
     to: formattedPhone,
     type: "template",
     templateName: "sportsvilla_booking_confirmed_v1",
@@ -353,7 +379,7 @@ export async function sendWhatsAppBookingConfirmedTemplate(
         parameters: [
           {
             type: "image",
-            image: { link: "https://sportsvilla.co.in/short-logo.png" }
+            image: { link: qrUrl }
           }
         ]
       },
@@ -364,13 +390,26 @@ export async function sendWhatsAppBookingConfirmedTemplate(
           { type: "text", text: venueName },
           { type: "text", text: sportName },
           { type: "text", text: dateTimeString },
-          { type: "text", text: paymentStatusString },
-          { type: "text", text: registeredPhone },
-        ],
-      },
+          { type: "text", text: paymentStatusString }
+        ]
+      }
     ],
     metadata: { purpose: "BOOKING_CONFIRMED" },
   });
+
+  // Schedule deletion of the temp QR image after a short delay (30 seconds)
+  // to ensure WhatsApp/Meta's servers have time to fetch the image URL.
+  if (r2Key) {
+    setTimeout(async () => {
+      try {
+        await deleteTempQRFromR2(r2Key);
+      } catch (e) {
+        console.error("Failed to delete temp QR ticket:", e);
+      }
+    }, 30000); // 30 second delay
+  }
+
+  return response;
 }
 
 export async function sendWhatsAppMemberRegisteredTemplate(

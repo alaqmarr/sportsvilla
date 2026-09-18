@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/auth";
+import { PERMISSIONS } from "@/lib/rbac";
+import { requireApiPermission } from "@/lib/serverRbac";
 import { prisma } from "@/lib/prisma";
 import { PutObjectCommand } from "@aws-sdk/client-s3";
 import { s3Client } from "@/lib/s3";
@@ -10,10 +10,8 @@ const publicUrlBase = process.env.R2_PUBLIC_URL || "";
 
 export async function POST(req: NextRequest) {
   try {
-    const session = await getServerSession(authOptions);
-    if (!session?.user?.email) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
+    const { error, admin } = await requireApiPermission(PERMISSIONS.MANAGE_TV);
+    if (error) return error;
 
     const body = await req.json();
     const { screenGroupId } = body;

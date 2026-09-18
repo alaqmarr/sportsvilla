@@ -283,3 +283,19 @@ export function canViewPage(
   // If route is not explicitly mapped in RBAC, allow access by default for admin users
   return true;
 }
+
+export const PERMISSIONS = {
+  MANAGE_TV: "manage:tv",
+  VIEW_TV: "view:tv",
+  MANAGE_BOOKINGS: "manage:bookings",
+  VIEW_BOOKINGS: "view:bookings",
+  MANAGE_MEMBERS: "manage:members",
+  VIEW_MEMBERS: "view:members",
+  MANAGE_WALLETS: "manage:wallets",
+  VIEW_WALLETS: "view:wallets",
+  MANAGE_ADMINS: "manage:admins",
+} as const;
+
+export type Permission = typeof PERMISSIONS[keyof typeof PERMISSIONS] | string;
+
+

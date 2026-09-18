@@ -5,6 +5,8 @@ import { jsonResponse, apiLog } from '@/lib/api-logger';
 import { bumpSyncTimestamp } from '@/lib/sync';
 import { sendWhatsAppBookingCancelledTemplate } from "@/lib/whatsapp";
 import { BookingService } from '@/services/BookingService';
+import { sendWalletTransactionPush } from '@/lib/notifications';
+import { logger } from '@/lib/logger';
 
 export async function POST(request: Request, context: { params: Promise<{ id: string }> }) {
   apiLog(`[API] POST /api/client/v1/bookings/[id]/cancel called`);
@@ -185,6 +187,17 @@ export async function POST(request: Request, context: { params: Promise<{ id: st
       } catch (waErr) {
         console.error("Failed to send booking cancelled WhatsApp template:", waErr);
       }
+    }
+
+    if (refundAmountPaise > 0) {
+      sendWalletTransactionPush(
+        booking.memberId,
+        refundAmountPaise / 100,
+        'CREDIT',
+        `Refund for cancelled booking ${booking.id}`
+      ).catch((err) => {
+        logger.error('[Push Hook Error] User booking cancel refund push failed', err);
+      });
     }
 
     await bumpSyncTimestamp('booking_cancel');

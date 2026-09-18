@@ -1,13 +1,50 @@
 import { prisma } from '@/lib/prisma';
 import { Prisma } from '@/generated/client';
+import { sendWalletTransactionPush } from '@/lib/notifications';
+import { logger } from '@/lib/logger';
 
 export class WalletService {
   /**
+   * Safely credits wallet balance using atomic raw SQL.
+   * Dispatches push notification on successful credit.
+   */
+  static async creditBalance(memberId: string, amount: number, description: string = 'Wallet top-up'): Promise<boolean> {
+    const success = await prisma.$transaction(async (tx) => {
+      const res = await tx.$executeRaw`
+        UPDATE Member 
+        SET walletBalance = walletBalance + ${amount} 
+        WHERE id = ${memberId}
+      `;
+      if (res > 0) {
+        await tx.walletTransaction.create({
+          data: {
+            memberId,
+            amount,
+            type: 'CREDIT',
+            description
+          }
+        });
+        return true;
+      }
+      return false;
+    });
+
+    if (success) {
+      sendWalletTransactionPush(memberId, amount, 'CREDIT', description).catch((err) => {
+        logger.error('[Push Hook Error] WalletService creditBalance push failed', err);
+      });
+    }
+
+    return success;
+  }
+
+  /**
    * Safely deducts wallet balance using atomic raw SQL to prevent race conditions.
    * Returns true if successful, false if insufficient balance.
+   * Dispatches push notification on successful deduction.
    */
-  static async deductBalance(memberId: string, amount: number): Promise<boolean> {
-    return await prisma.$transaction(async (tx) => {
+  static async deductBalance(memberId: string, amount: number, description: string = 'System deduction'): Promise<boolean> {
+    const success = await prisma.$transaction(async (tx) => {
       const res = await tx.$executeRaw`
         UPDATE Member 
         SET walletBalance = walletBalance - ${amount} 
@@ -19,13 +56,21 @@ export class WalletService {
             memberId,
             amount,
             type: 'DEBIT',
-            description: 'System deduction'
+            description
           }
         });
         return true;
       }
       return false;
     });
+
+    if (success) {
+      sendWalletTransactionPush(memberId, amount, 'DEBIT', description).catch((err) => {
+        logger.error('[Push Hook Error] WalletService deductBalance push failed', err);
+      });
+    }
+
+    return success;
   }
 
   /**

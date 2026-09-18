@@ -8,6 +8,8 @@ import { bumpSyncTimestamp } from '@/lib/sync';
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { sendWhatsAppBookingConfirmedTemplate } from "@/lib/whatsapp";
+import { sendBookingConfirmedPush, sendWalletTransactionPush } from "@/lib/notifications";
+import { logger } from "@/lib/logger";
 import { NfcPaymentService } from "@/services/NfcPaymentService";
 export async function fetchBookableTurfs() {
   const session = await getServerSession(authOptions);
@@ -274,6 +276,7 @@ export async function createBooking(data: {
       const paymentStr = b.paymentStatus === "UNPAID" ? `${priceStr} (DUE)` : `${priceStr} (${b.paymentStatus})`;
       
       sendWhatsAppBookingConfirmedTemplate(
+        b.id,
         bMember.name,
         turfName,
         sportName,
@@ -281,6 +284,17 @@ export async function createBooking(data: {
         paymentStr,
         bMember.mobile
       ).catch(console.error);
+
+      sendBookingConfirmedPush({
+        id: b.id,
+        memberId: b.memberId,
+        turf: { name: turfName },
+        sport: { name: sportName },
+        startTime: b.startTime,
+        endTime: b.endTime
+      }).catch(err => {
+        logger.error('[Push Hook Error] Admin booking push notification failed', err);
+      });
     }
   } catch(e) {
     console.error("Error triggering WhatsApp booking confirmation", e);
@@ -445,6 +459,17 @@ export async function cancelBooking(id: string) {
       } catch (waErr) {
         console.error("Failed to send admin cancel WhatsApp template:", waErr);
       }
+    }
+
+    if (refundAmountPaise > 0) {
+      sendWalletTransactionPush(
+        originalPayerId,
+        refundAmountPaise / 100,
+        'CREDIT',
+        `Refund for cancelled booking ${booking.id}`
+      ).catch(err => {
+        logger.error('[Push Hook Error] Admin cancel booking refund push failed', err);
+      });
     }
   }
   

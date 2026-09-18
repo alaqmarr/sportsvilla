@@ -7,6 +7,8 @@ import { randomUUID } from 'crypto';
 import { bumpSyncTimestamp } from '@/lib/sync';
 import { whatsappDb } from '@/lib/whatsappDb';
 import { sendWhatsAppBookingConfirmedTemplate } from '@/lib/whatsapp';
+import { sendBookingConfirmedPush, sendWalletTransactionPush } from '@/lib/notifications';
+import { logger } from '@/lib/logger';
 import { createBookingSchema } from '@/lib/validations/booking';
 import { Mutex } from '@/lib/mutex';
 export async function GET(request: Request) {
@@ -524,6 +526,20 @@ export async function POST(request: Request) {
             }
           }
           await prisma.$transaction(triggerQueries);
+
+          // Dispatch wallet push for any cash rewards earned
+          for (const trigger of newAchievements) {
+            if (trigger.rewardAmount > 0) {
+              sendWalletTransactionPush(
+                member.id,
+                trigger.rewardAmount,
+                'CREDIT',
+                `Reward for ${trigger.title}`
+              ).catch((err) => {
+                logger.error('[Push Hook Error] Reward wallet push failed', err);
+              });
+            }
+          }
         }
       }
     } catch (triggerError) {
@@ -542,6 +558,7 @@ export async function POST(request: Request) {
         const paymentStr = booking.paymentStatus === 'UNPAID' ? `${priceStr} (DUE)` : `${priceStr} (${booking.paymentStatus})`;
         
         await sendWhatsAppBookingConfirmedTemplate(
+          booking.id,
           targetMemberData.name, 
           turf.name,
           sport.name,
@@ -552,6 +569,40 @@ export async function POST(request: Request) {
       }
     } catch (waError) {
       console.error('WhatsApp booking confirmed message failed', waError);
+    }
+
+    // Dispatch Wallet Deduction Push Notification if wallet was used
+    if (walletDeductionRupees > 0) {
+      try {
+        sendWalletTransactionPush(
+          member.id,
+          walletDeductionRupees,
+          'DEBIT',
+          `Payment for booking ${booking.id}`
+        ).catch((err) => {
+          logger.error('[Push Hook Error] Wallet deduction push failed', err);
+        });
+      } catch (pushErr) {
+        logger.error('[Push Hook Error] Wallet deduction push failed', pushErr);
+      }
+    }
+
+    // Send Booking Confirmation Push Notification if confirmed
+    if (bookingStatus === 'CONFIRMED') {
+      try {
+        sendBookingConfirmedPush({
+          id: booking.id,
+          memberId: targetMemberId,
+          turf: turf,
+          sport: sport,
+          startTime: booking.startTime,
+          endTime: booking.endTime
+        }).catch(pushErr => {
+          logger.error('[Push Hook Error] Booking confirmed push error:', pushErr);
+        });
+      } catch (pushErr) {
+        logger.error('[Push Hook Error] Booking confirmed push error:', pushErr);
+      }
     }
 
     await bumpSyncTimestamp('booking');

@@ -9,15 +9,15 @@ datasource db {
 }
 
 model Admin {
-  id          String   @id @default(cuid())
-  email       String   @unique
+  id          String     @id @default(cuid())
+  email       String     @unique
   password    String
   name        String?
-  role        String   @default("SUPERADMIN") // "SUPERADMIN" | "ADMIN"
-  permissions String   @default("") // Comma-separated permission keys
-  isActive    Boolean  @default(true)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  role        String     @default("SUPERADMIN") // "SUPERADMIN" | "ADMIN"
+  permissions String     @default("") // Comma-separated permission keys
+  isActive    Boolean    @default(true)
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
   auditLogs   AuditLog[]
 }
 
@@ -60,6 +60,8 @@ model Member {
   sportStats              UserSportStat[]
   nfcCards                NfcCard[]
   nfcTransactions         NfcTransaction[]
+  deviceTokens            DeviceToken[]
+  notifications           Notification[]
   createdAt               DateTime                 @default(now())
   updatedAt               DateTime                 @updatedAt
 
@@ -87,8 +89,8 @@ model Sport {
   description            String?
   iconPath               String?
   rewardPointsPerCheckin Int              @default(0)
-  openTime               String?          // e.g., "06:00"
-  closeTime              String?          // e.g., "23:00"
+  openTime               String? // e.g., "06:00"
+  closeTime              String? // e.g., "23:00"
   slotDurationMinutes    Int              @default(60)
   turfs                  TurfSport[]
   membershipPlans        MembershipPlan[]
@@ -162,9 +164,9 @@ model MemberMembership {
   endDate          DateTime
   status           String         @default("ACTIVE") // ACTIVE, EXPIRED, CANCELLED
 
-  turfId   String?
-  turf     Turf?   @relation(fields: [turfId], references: [id], onDelete: SetNull)
-  timeSlot String?
+  turfId      String?
+  turf        Turf?   @relation(fields: [turfId], references: [id], onDelete: SetNull)
+  timeSlot    String?
   allowedDays String? // Comma-separated day indices, e.g. "0,6" for Sun,Sat
 
   createdAt DateTime @default(now())
@@ -193,18 +195,18 @@ model Attendance {
 }
 
 model Booking {
-  id               String        @id @default(cuid())
+  id               String               @id @default(cuid())
   turfId           String
-  turf             Turf          @relation(fields: [turfId], references: [id], onDelete: Cascade)
+  turf             Turf                 @relation(fields: [turfId], references: [id], onDelete: Cascade)
   memberId         String
-  member           Member        @relation(fields: [memberId], references: [id], onDelete: Cascade)
+  member           Member               @relation(fields: [memberId], references: [id], onDelete: Cascade)
   sportId          String
-  sport            Sport         @relation(fields: [sportId], references: [id], onDelete: Cascade)
+  sport            Sport                @relation(fields: [sportId], references: [id], onDelete: Cascade)
   startTime        DateTime
   endTime          DateTime
   price            Float
-  paymentStatus    String        @default("PENDING") // UNPAID, PARTIAL, PAID
-  status           String        @default("CONFIRMED") // CONFIRMED, CANCELLED
+  paymentStatus    String               @default("PENDING") // UNPAID, PARTIAL, PAID
+  status           String               @default("CONFIRMED") // CONFIRMED, CANCELLED
   participantCount Int                  @default(1)
   visibility       String               @default("PRIVATE") // PRIVATE, OPEN, INVITE_ONLY
   inviteMaxCount   Int?
@@ -261,22 +263,22 @@ model Payment {
 }
 
 model Transaction {
-  id               String    @id @default(cuid())
+  id               String   @id @default(cuid())
   bookingId        String?
-  booking          Booking?  @relation(fields: [bookingId], references: [id], onDelete: SetNull)
+  booking          Booking? @relation(fields: [bookingId], references: [id], onDelete: SetNull)
   memberId         String?
-  member           Member?   @relation(fields: [memberId], references: [id], onDelete: SetNull)
-  gateway          String    // "RAZORPAY" | "PHONEPE" | "WALLET" | "MANUAL"
-  gatewayOrderId   String?   // Razorpay order_id or PhonePe merchantTransactionId
-  gatewayPaymentId String?   // Razorpay payment_id or PhonePe providerReferenceId
-  gatewaySignature String?   // Razorpay HMAC signature or PhonePe X-VERIFY hash
-  amount           Float     // Transaction amount in Rupees
-  currency         String    @default("INR")
-  status           String    @default("PENDING") // "PENDING" | "SUCCESS" | "FAILED" | "ABANDONED"
+  member           Member?  @relation(fields: [memberId], references: [id], onDelete: SetNull)
+  gateway          String // "RAZORPAY" | "PHONEPE" | "WALLET" | "MANUAL"
+  gatewayOrderId   String? // Razorpay order_id or PhonePe merchantTransactionId
+  gatewayPaymentId String? // Razorpay payment_id or PhonePe providerReferenceId
+  gatewaySignature String? // Razorpay HMAC signature or PhonePe X-VERIFY hash
+  amount           Float // Transaction amount in Rupees
+  currency         String   @default("INR")
+  status           String   @default("PENDING") // "PENDING" | "SUCCESS" | "FAILED" | "ABANDONED"
   errorMessage     String?
-  metadata         String?   // JSON string storing raw gateway response, platform, IP, user-agent
-  createdAt        DateTime  @default(now())
-  updatedAt        DateTime  @updatedAt
+  metadata         String? // JSON string storing raw gateway response, platform, IP, user-agent
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
 
   @@index([bookingId])
   @@index([memberId])
@@ -407,7 +409,7 @@ model Coupon {
   type               String    @default("DISCOUNT") // DISCOUNT, CASHBACK
   cashbackAmount     Float?
   cashbackPercentage Float?
-  validSportIds      String?   // JSON array of Sport IDs
+  validSportIds      String? // JSON array of Sport IDs
   rewardCouponId     String?
   maxDiscount        Float?
   maxUses            Int?
@@ -519,7 +521,7 @@ model AuditLog {
   entityId  String
   details   String? // JSON string
   adminName String   @default("System")
-  adminId   String?  // Relation to Admin who performed the action
+  adminId   String? // Relation to Admin who performed the action
   admin     Admin?   @relation(fields: [adminId], references: [id])
   createdAt DateTime @default(now())
 
@@ -555,8 +557,8 @@ model UserSportStat {
 model NfcCard {
   id           String           @id @default(cuid())
   cardUid      String           @unique // Normalized uppercase hex string (e.g., "04A1B2C3")
-  cardId       String?          // Optional printed label (e.g., "SV-1001")
-  memberId     String?          // Nullable when card is unassigned
+  cardId       String? // Optional printed label (e.g., "SV-1001")
+  memberId     String? // Nullable when card is unassigned
   member       Member?          @relation(fields: [memberId], references: [id], onDelete: SetNull)
   status       String           @default("ACTIVE") // "ACTIVE" | "BLOCKED" | "SUSPENDED" | "INACTIVE"
   issuedAt     DateTime         @default(now())
@@ -574,22 +576,22 @@ model NfcCard {
 }
 
 model NfcTransaction {
-  id             String    @id @default(cuid())
+  id             String   @id @default(cuid())
   cardId         String?
-  card           NfcCard?  @relation(fields: [cardId], references: [id], onDelete: SetNull)
-  cardUid        String    // Exact card UID captured
+  card           NfcCard? @relation(fields: [cardId], references: [id], onDelete: SetNull)
+  cardUid        String // Exact card UID captured
   memberId       String?
-  member         Member?   @relation(fields: [memberId], references: [id], onDelete: SetNull)
+  member         Member?  @relation(fields: [memberId], references: [id], onDelete: SetNull)
   bookingId      String?
-  booking        Booking?  @relation(fields: [bookingId], references: [id], onDelete: SetNull)
-  type           String    // "CHECKIN" | "PAYMENT" | "TOPUP" | "DROPIN"
-  status         String    @default("SUCCESS") // "SUCCESS" | "FAILED"
-  amount         Float     @default(0) // In Rupees
-  deviceType     String    @default("KEYBOARD_WEDGE") // "KEYBOARD_WEDGE" | "WEB_NFC" | "SIMULATOR"
-  readerLocation String?   @default("FRONT_DESK")
+  booking        Booking? @relation(fields: [bookingId], references: [id], onDelete: SetNull)
+  type           String // "CHECKIN" | "PAYMENT" | "TOPUP" | "DROPIN"
+  status         String   @default("SUCCESS") // "SUCCESS" | "FAILED"
+  amount         Float    @default(0) // In Rupees
+  deviceType     String   @default("KEYBOARD_WEDGE") // "KEYBOARD_WEDGE" | "WEB_NFC" | "SIMULATOR"
+  readerLocation String?  @default("FRONT_DESK")
   failureReason  String?
-  metadata       String?   // JSON payload with execution details
-  createdAt      DateTime  @default(now())
+  metadata       String? // JSON payload with execution details
+  createdAt      DateTime @default(now())
 
   @@index([cardId])
   @@index([cardUid])
@@ -599,8 +601,6 @@ model NfcTransaction {
   @@index([status])
   @@index([createdAt])
 }
-
-
 
 model TvScreenGroup {
   id           String          @id @default(cuid())
@@ -612,22 +612,22 @@ model TvScreenGroup {
 }
 
 model TvScreen {
-  id              String        @id @default(cuid())
-  screenGroupId   String
-  screenGroup     TvScreenGroup @relation(fields: [screenGroupId], references: [id], onDelete: Cascade)
-  label           String
-  pairingCode     String?       // nullable, one-time code
-  pairingExpiresAt DateTime?    // expiration for the code
-  deviceToken     String?       // nullable, hashed token for device auth
-  lastHeartbeatAt DateTime?
-  
-  // Telemetry fields from heartbeat
-  currentItemId   String?
-  cacheUsedBytes  BigInt?       // Using BigInt for file sizes
-  appVersion      String?
+  id               String        @id @default(cuid())
+  screenGroupId    String
+  screenGroup      TvScreenGroup @relation(fields: [screenGroupId], references: [id], onDelete: Cascade)
+  label            String
+  pairingCode      String? // nullable, one-time code
+  pairingExpiresAt DateTime? // expiration for the code
+  deviceToken      String? // nullable, hashed token for device auth
+  lastHeartbeatAt  DateTime?
 
-  createdAt       DateTime      @default(now())
-  updatedAt       DateTime      @updatedAt
+  // Telemetry fields from heartbeat
+  currentItemId  String?
+  cacheUsedBytes BigInt? // Using BigInt for file sizes
+  appVersion     String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@index([screenGroupId])
   @@index([pairingCode])
@@ -637,10 +637,10 @@ model TvContentItem {
   id              String        @id @default(cuid())
   screenGroupId   String
   screenGroup     TvScreenGroup @relation(fields: [screenGroupId], references: [id], onDelete: Cascade)
-  type            String        // "image" | "video"
+  type            String // "image" | "video"
   r2Key           String
-  checksum        String        // sha256 checksum of file
-  durationSeconds Int?          // null for video = play to completion
+  checksum        String // sha256 checksum of file
+  durationSeconds Int? // null for video = play to completion
   validFrom       DateTime?
   validTo         DateTime?
   sortOrder       Int           @default(0)
@@ -650,3 +650,29 @@ model TvContentItem {
   @@index([screenGroupId])
 }
 
+model DeviceToken {
+  id        String   @id @default(cuid())
+  memberId  String
+  member    Member   @relation(fields: [memberId], references: [id], onDelete: Cascade)
+  token     String   @unique
+  platform  String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([memberId])
+}
+
+model Notification {
+  id        String    @id @default(cuid())
+  memberId  String
+  member    Member    @relation(fields: [memberId], references: [id], onDelete: Cascade)
+  title     String
+  body      String
+  data      Json?
+  isRead    Boolean   @default(false)
+  readAt    DateTime?
+  createdAt DateTime  @default(now())
+
+  @@index([memberId, isRead])
+  @@index([memberId, createdAt])
+}

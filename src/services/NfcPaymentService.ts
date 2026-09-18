@@ -4,6 +4,8 @@ import { bumpSyncTimestamp } from "@/lib/sync";
 import { NfcPaymentRequest, NfcPaymentResponse, NfcDeviceType } from "@/types/nfc";
 import { normalizeCardUid } from "@/hooks/useNfcReader";
 import { randomUUID } from "crypto";
+import { sendWalletTransactionPush, sendBookingConfirmedPush } from "@/lib/notifications";
+import { logger } from "@/lib/logger";
 
 export interface ProcessPaymentOptions extends NfcPaymentRequest {
   location?: string;
@@ -195,6 +197,11 @@ export class NfcPaymentService {
       }
 
       // 3. (Moved booking lookup inside transaction)
+      const description =
+        params.description ||
+        (params.bookingId
+          ? `NFC Card Payment for booking ${params.bookingId}`
+          : `NFC Card Payment`);
 
       // 4. Atomic Execution inside prisma.$transaction
       const transactionResult = await prisma.$transaction(async (tx) => {
@@ -209,12 +216,6 @@ export class NfcPaymentService {
         if (updatedMember.walletBalance < 0) {
           throw new Error("INSUFFICIENT_FUNDS");
         }
-
-        const description =
-          params.description ||
-          (params.bookingId
-            ? `NFC Card Payment for booking ${params.bookingId}`
-            : `NFC Card Payment`);
 
         // Create WalletTransaction record
         await tx.walletTransaction.create({
@@ -338,6 +339,38 @@ export class NfcPaymentService {
 
       // 5. Bump LastUpdate timestamp for payments
       await bumpSyncTimestamp("payments");
+
+      // Dispatch push notifications (non-blocking)
+      sendWalletTransactionPush(
+        member.id,
+        amountRupees,
+        'DEBIT',
+        description
+      ).catch((pushErr) => {
+        logger.error('[Push Hook Error] NFC payment wallet push failed', pushErr);
+      });
+
+      if (params.bookingId) {
+        prisma.booking.findUnique({
+          where: { id: params.bookingId },
+          include: { turf: true, sport: true }
+        }).then((b) => {
+          if (b && b.paymentStatus === 'PAID') {
+            sendBookingConfirmedPush({
+              id: b.id,
+              memberId: b.memberId,
+              turf: b.turf,
+              sport: b.sport,
+              startTime: b.startTime,
+              endTime: b.endTime
+            }).catch((err) => {
+              logger.error('[Push Hook Error] NFC booking confirmed push failed', err);
+            });
+          }
+        }).catch((err) => {
+          logger.error('[Push Hook Error] NFC booking push lookup failed', err);
+        });
+      }
 
       return {
         success: true,

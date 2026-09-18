@@ -203,6 +203,16 @@ export type TvScreen = $Result.DefaultSelection<Prisma.$TvScreenPayload>
  * 
  */
 export type TvContentItem = $Result.DefaultSelection<Prisma.$TvContentItemPayload>
+/**
+ * Model DeviceToken
+ * 
+ */
+export type DeviceToken = $Result.DefaultSelection<Prisma.$DeviceTokenPayload>
+/**
+ * Model Notification
+ * 
+ */
+export type Notification = $Result.DefaultSelection<Prisma.$NotificationPayload>
 
 /**
  * ##  Prisma Client ʲˢ
@@ -704,6 +714,26 @@ export class PrismaClient<
     * ```
     */
   get tvContentItem(): Prisma.TvContentItemDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.deviceToken`: Exposes CRUD operations for the **DeviceToken** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more DeviceTokens
+    * const deviceTokens = await prisma.deviceToken.findMany()
+    * ```
+    */
+  get deviceToken(): Prisma.DeviceTokenDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.notification`: Exposes CRUD operations for the **Notification** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Notifications
+    * const notifications = await prisma.notification.findMany()
+    * ```
+    */
+  get notification(): Prisma.NotificationDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -1175,7 +1205,9 @@ export namespace Prisma {
     NfcTransaction: 'NfcTransaction',
     TvScreenGroup: 'TvScreenGroup',
     TvScreen: 'TvScreen',
-    TvContentItem: 'TvContentItem'
+    TvContentItem: 'TvContentItem',
+    DeviceToken: 'DeviceToken',
+    Notification: 'Notification'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -1191,7 +1223,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "admin" | "setting" | "familyGroup" | "member" | "loyaltyHistory" | "sport" | "turf" | "turfSport" | "membershipPlan" | "memberMembership" | "attendance" | "booking" | "bookingParticipant" | "payment" | "transaction" | "displaySession" | "ticket" | "otp" | "tournament" | "tournamentRegistration" | "tournamentPlayer" | "walletTransaction" | "coupon" | "couponAssignment" | "couponUsage" | "loyaltyTrigger" | "loyaltyAchievement" | "appAnnouncement" | "appVersion" | "lastUpdate" | "auditLog" | "banner" | "userSportStat" | "nfcCard" | "nfcTransaction" | "tvScreenGroup" | "tvScreen" | "tvContentItem"
+      modelProps: "admin" | "setting" | "familyGroup" | "member" | "loyaltyHistory" | "sport" | "turf" | "turfSport" | "membershipPlan" | "memberMembership" | "attendance" | "booking" | "bookingParticipant" | "payment" | "transaction" | "displaySession" | "ticket" | "otp" | "tournament" | "tournamentRegistration" | "tournamentPlayer" | "walletTransaction" | "coupon" | "couponAssignment" | "couponUsage" | "loyaltyTrigger" | "loyaltyAchievement" | "appAnnouncement" | "appVersion" | "lastUpdate" | "auditLog" | "banner" | "userSportStat" | "nfcCard" | "nfcTransaction" | "tvScreenGroup" | "tvScreen" | "tvContentItem" | "deviceToken" | "notification"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -4007,6 +4039,154 @@ export namespace Prisma {
           }
         }
       }
+      DeviceToken: {
+        payload: Prisma.$DeviceTokenPayload<ExtArgs>
+        fields: Prisma.DeviceTokenFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.DeviceTokenFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DeviceTokenPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.DeviceTokenFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DeviceTokenPayload>
+          }
+          findFirst: {
+            args: Prisma.DeviceTokenFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DeviceTokenPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.DeviceTokenFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DeviceTokenPayload>
+          }
+          findMany: {
+            args: Prisma.DeviceTokenFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DeviceTokenPayload>[]
+          }
+          create: {
+            args: Prisma.DeviceTokenCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DeviceTokenPayload>
+          }
+          createMany: {
+            args: Prisma.DeviceTokenCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.DeviceTokenCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DeviceTokenPayload>[]
+          }
+          delete: {
+            args: Prisma.DeviceTokenDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DeviceTokenPayload>
+          }
+          update: {
+            args: Prisma.DeviceTokenUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DeviceTokenPayload>
+          }
+          deleteMany: {
+            args: Prisma.DeviceTokenDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.DeviceTokenUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.DeviceTokenUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DeviceTokenPayload>[]
+          }
+          upsert: {
+            args: Prisma.DeviceTokenUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DeviceTokenPayload>
+          }
+          aggregate: {
+            args: Prisma.DeviceTokenAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateDeviceToken>
+          }
+          groupBy: {
+            args: Prisma.DeviceTokenGroupByArgs<ExtArgs>
+            result: $Utils.Optional<DeviceTokenGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.DeviceTokenCountArgs<ExtArgs>
+            result: $Utils.Optional<DeviceTokenCountAggregateOutputType> | number
+          }
+        }
+      }
+      Notification: {
+        payload: Prisma.$NotificationPayload<ExtArgs>
+        fields: Prisma.NotificationFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.NotificationFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotificationPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.NotificationFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotificationPayload>
+          }
+          findFirst: {
+            args: Prisma.NotificationFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotificationPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.NotificationFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotificationPayload>
+          }
+          findMany: {
+            args: Prisma.NotificationFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotificationPayload>[]
+          }
+          create: {
+            args: Prisma.NotificationCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotificationPayload>
+          }
+          createMany: {
+            args: Prisma.NotificationCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.NotificationCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotificationPayload>[]
+          }
+          delete: {
+            args: Prisma.NotificationDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotificationPayload>
+          }
+          update: {
+            args: Prisma.NotificationUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotificationPayload>
+          }
+          deleteMany: {
+            args: Prisma.NotificationDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.NotificationUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.NotificationUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotificationPayload>[]
+          }
+          upsert: {
+            args: Prisma.NotificationUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotificationPayload>
+          }
+          aggregate: {
+            args: Prisma.NotificationAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateNotification>
+          }
+          groupBy: {
+            args: Prisma.NotificationGroupByArgs<ExtArgs>
+            result: $Utils.Optional<NotificationGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.NotificationCountArgs<ExtArgs>
+            result: $Utils.Optional<NotificationCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -4153,6 +4333,8 @@ export namespace Prisma {
     tvScreenGroup?: TvScreenGroupOmit
     tvScreen?: TvScreenOmit
     tvContentItem?: TvContentItemOmit
+    deviceToken?: DeviceTokenOmit
+    notification?: NotificationOmit
   }
 
   /* Types for Logging */
@@ -4309,6 +4491,8 @@ export namespace Prisma {
     sportStats: number
     nfcCards: number
     nfcTransactions: number
+    deviceTokens: number
+    notifications: number
   }
 
   export type MemberCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -4326,6 +4510,8 @@ export namespace Prisma {
     sportStats?: boolean | MemberCountOutputTypeCountSportStatsArgs
     nfcCards?: boolean | MemberCountOutputTypeCountNfcCardsArgs
     nfcTransactions?: boolean | MemberCountOutputTypeCountNfcTransactionsArgs
+    deviceTokens?: boolean | MemberCountOutputTypeCountDeviceTokensArgs
+    notifications?: boolean | MemberCountOutputTypeCountNotificationsArgs
   }
 
   // Custom InputTypes
@@ -4435,6 +4621,20 @@ export namespace Prisma {
    */
   export type MemberCountOutputTypeCountNfcTransactionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: NfcTransactionWhereInput
+  }
+
+  /**
+   * MemberCountOutputType without action
+   */
+  export type MemberCountOutputTypeCountDeviceTokensArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: DeviceTokenWhereInput
+  }
+
+  /**
+   * MemberCountOutputType without action
+   */
+  export type MemberCountOutputTypeCountNotificationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: NotificationWhereInput
   }
 
 
@@ -8327,6 +8527,8 @@ export namespace Prisma {
     sportStats?: boolean | Member$sportStatsArgs<ExtArgs>
     nfcCards?: boolean | Member$nfcCardsArgs<ExtArgs>
     nfcTransactions?: boolean | Member$nfcTransactionsArgs<ExtArgs>
+    deviceTokens?: boolean | Member$deviceTokensArgs<ExtArgs>
+    notifications?: boolean | Member$notificationsArgs<ExtArgs>
     _count?: boolean | MemberCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["member"]>
 
@@ -8391,6 +8593,8 @@ export namespace Prisma {
     sportStats?: boolean | Member$sportStatsArgs<ExtArgs>
     nfcCards?: boolean | Member$nfcCardsArgs<ExtArgs>
     nfcTransactions?: boolean | Member$nfcTransactionsArgs<ExtArgs>
+    deviceTokens?: boolean | Member$deviceTokensArgs<ExtArgs>
+    notifications?: boolean | Member$notificationsArgs<ExtArgs>
     _count?: boolean | MemberCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type MemberIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -8418,6 +8622,8 @@ export namespace Prisma {
       sportStats: Prisma.$UserSportStatPayload<ExtArgs>[]
       nfcCards: Prisma.$NfcCardPayload<ExtArgs>[]
       nfcTransactions: Prisma.$NfcTransactionPayload<ExtArgs>[]
+      deviceTokens: Prisma.$DeviceTokenPayload<ExtArgs>[]
+      notifications: Prisma.$NotificationPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -8840,6 +9046,8 @@ export namespace Prisma {
     sportStats<T extends Member$sportStatsArgs<ExtArgs> = {}>(args?: Subset<T, Member$sportStatsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserSportStatPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     nfcCards<T extends Member$nfcCardsArgs<ExtArgs> = {}>(args?: Subset<T, Member$nfcCardsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NfcCardPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     nfcTransactions<T extends Member$nfcTransactionsArgs<ExtArgs> = {}>(args?: Subset<T, Member$nfcTransactionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NfcTransactionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    deviceTokens<T extends Member$deviceTokensArgs<ExtArgs> = {}>(args?: Subset<T, Member$deviceTokensArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DeviceTokenPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    notifications<T extends Member$notificationsArgs<ExtArgs> = {}>(args?: Subset<T, Member$notificationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -9631,6 +9839,54 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: NfcTransactionScalarFieldEnum | NfcTransactionScalarFieldEnum[]
+  }
+
+  /**
+   * Member.deviceTokens
+   */
+  export type Member$deviceTokensArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DeviceToken
+     */
+    select?: DeviceTokenSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DeviceToken
+     */
+    omit?: DeviceTokenOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DeviceTokenInclude<ExtArgs> | null
+    where?: DeviceTokenWhereInput
+    orderBy?: DeviceTokenOrderByWithRelationInput | DeviceTokenOrderByWithRelationInput[]
+    cursor?: DeviceTokenWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: DeviceTokenScalarFieldEnum | DeviceTokenScalarFieldEnum[]
+  }
+
+  /**
+   * Member.notifications
+   */
+  export type Member$notificationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Notification
+     */
+    select?: NotificationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Notification
+     */
+    omit?: NotificationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationInclude<ExtArgs> | null
+    where?: NotificationWhereInput
+    orderBy?: NotificationOrderByWithRelationInput | NotificationOrderByWithRelationInput[]
+    cursor?: NotificationWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: NotificationScalarFieldEnum | NotificationScalarFieldEnum[]
   }
 
   /**
@@ -48948,6 +49204,2176 @@ export namespace Prisma {
 
 
   /**
+   * Model DeviceToken
+   */
+
+  export type AggregateDeviceToken = {
+    _count: DeviceTokenCountAggregateOutputType | null
+    _min: DeviceTokenMinAggregateOutputType | null
+    _max: DeviceTokenMaxAggregateOutputType | null
+  }
+
+  export type DeviceTokenMinAggregateOutputType = {
+    id: string | null
+    memberId: string | null
+    token: string | null
+    platform: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type DeviceTokenMaxAggregateOutputType = {
+    id: string | null
+    memberId: string | null
+    token: string | null
+    platform: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type DeviceTokenCountAggregateOutputType = {
+    id: number
+    memberId: number
+    token: number
+    platform: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type DeviceTokenMinAggregateInputType = {
+    id?: true
+    memberId?: true
+    token?: true
+    platform?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type DeviceTokenMaxAggregateInputType = {
+    id?: true
+    memberId?: true
+    token?: true
+    platform?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type DeviceTokenCountAggregateInputType = {
+    id?: true
+    memberId?: true
+    token?: true
+    platform?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type DeviceTokenAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which DeviceToken to aggregate.
+     */
+    where?: DeviceTokenWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of DeviceTokens to fetch.
+     */
+    orderBy?: DeviceTokenOrderByWithRelationInput | DeviceTokenOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: DeviceTokenWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` DeviceTokens from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` DeviceTokens.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned DeviceTokens
+    **/
+    _count?: true | DeviceTokenCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: DeviceTokenMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: DeviceTokenMaxAggregateInputType
+  }
+
+  export type GetDeviceTokenAggregateType<T extends DeviceTokenAggregateArgs> = {
+        [P in keyof T & keyof AggregateDeviceToken]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateDeviceToken[P]>
+      : GetScalarType<T[P], AggregateDeviceToken[P]>
+  }
+
+
+
+
+  export type DeviceTokenGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: DeviceTokenWhereInput
+    orderBy?: DeviceTokenOrderByWithAggregationInput | DeviceTokenOrderByWithAggregationInput[]
+    by: DeviceTokenScalarFieldEnum[] | DeviceTokenScalarFieldEnum
+    having?: DeviceTokenScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: DeviceTokenCountAggregateInputType | true
+    _min?: DeviceTokenMinAggregateInputType
+    _max?: DeviceTokenMaxAggregateInputType
+  }
+
+  export type DeviceTokenGroupByOutputType = {
+    id: string
+    memberId: string
+    token: string
+    platform: string | null
+    createdAt: Date
+    updatedAt: Date
+    _count: DeviceTokenCountAggregateOutputType | null
+    _min: DeviceTokenMinAggregateOutputType | null
+    _max: DeviceTokenMaxAggregateOutputType | null
+  }
+
+  type GetDeviceTokenGroupByPayload<T extends DeviceTokenGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<DeviceTokenGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof DeviceTokenGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], DeviceTokenGroupByOutputType[P]>
+            : GetScalarType<T[P], DeviceTokenGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type DeviceTokenSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    memberId?: boolean
+    token?: boolean
+    platform?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    member?: boolean | MemberDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["deviceToken"]>
+
+  export type DeviceTokenSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    memberId?: boolean
+    token?: boolean
+    platform?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    member?: boolean | MemberDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["deviceToken"]>
+
+  export type DeviceTokenSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    memberId?: boolean
+    token?: boolean
+    platform?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    member?: boolean | MemberDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["deviceToken"]>
+
+  export type DeviceTokenSelectScalar = {
+    id?: boolean
+    memberId?: boolean
+    token?: boolean
+    platform?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type DeviceTokenOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "memberId" | "token" | "platform" | "createdAt" | "updatedAt", ExtArgs["result"]["deviceToken"]>
+  export type DeviceTokenInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    member?: boolean | MemberDefaultArgs<ExtArgs>
+  }
+  export type DeviceTokenIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    member?: boolean | MemberDefaultArgs<ExtArgs>
+  }
+  export type DeviceTokenIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    member?: boolean | MemberDefaultArgs<ExtArgs>
+  }
+
+  export type $DeviceTokenPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "DeviceToken"
+    objects: {
+      member: Prisma.$MemberPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      memberId: string
+      token: string
+      platform: string | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["deviceToken"]>
+    composites: {}
+  }
+
+  type DeviceTokenGetPayload<S extends boolean | null | undefined | DeviceTokenDefaultArgs> = $Result.GetResult<Prisma.$DeviceTokenPayload, S>
+
+  type DeviceTokenCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<DeviceTokenFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: DeviceTokenCountAggregateInputType | true
+    }
+
+  export interface DeviceTokenDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['DeviceToken'], meta: { name: 'DeviceToken' } }
+    /**
+     * Find zero or one DeviceToken that matches the filter.
+     * @param {DeviceTokenFindUniqueArgs} args - Arguments to find a DeviceToken
+     * @example
+     * // Get one DeviceToken
+     * const deviceToken = await prisma.deviceToken.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends DeviceTokenFindUniqueArgs>(args: SelectSubset<T, DeviceTokenFindUniqueArgs<ExtArgs>>): Prisma__DeviceTokenClient<$Result.GetResult<Prisma.$DeviceTokenPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one DeviceToken that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {DeviceTokenFindUniqueOrThrowArgs} args - Arguments to find a DeviceToken
+     * @example
+     * // Get one DeviceToken
+     * const deviceToken = await prisma.deviceToken.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends DeviceTokenFindUniqueOrThrowArgs>(args: SelectSubset<T, DeviceTokenFindUniqueOrThrowArgs<ExtArgs>>): Prisma__DeviceTokenClient<$Result.GetResult<Prisma.$DeviceTokenPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first DeviceToken that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DeviceTokenFindFirstArgs} args - Arguments to find a DeviceToken
+     * @example
+     * // Get one DeviceToken
+     * const deviceToken = await prisma.deviceToken.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends DeviceTokenFindFirstArgs>(args?: SelectSubset<T, DeviceTokenFindFirstArgs<ExtArgs>>): Prisma__DeviceTokenClient<$Result.GetResult<Prisma.$DeviceTokenPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first DeviceToken that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DeviceTokenFindFirstOrThrowArgs} args - Arguments to find a DeviceToken
+     * @example
+     * // Get one DeviceToken
+     * const deviceToken = await prisma.deviceToken.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends DeviceTokenFindFirstOrThrowArgs>(args?: SelectSubset<T, DeviceTokenFindFirstOrThrowArgs<ExtArgs>>): Prisma__DeviceTokenClient<$Result.GetResult<Prisma.$DeviceTokenPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more DeviceTokens that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DeviceTokenFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all DeviceTokens
+     * const deviceTokens = await prisma.deviceToken.findMany()
+     * 
+     * // Get first 10 DeviceTokens
+     * const deviceTokens = await prisma.deviceToken.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const deviceTokenWithIdOnly = await prisma.deviceToken.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends DeviceTokenFindManyArgs>(args?: SelectSubset<T, DeviceTokenFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DeviceTokenPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a DeviceToken.
+     * @param {DeviceTokenCreateArgs} args - Arguments to create a DeviceToken.
+     * @example
+     * // Create one DeviceToken
+     * const DeviceToken = await prisma.deviceToken.create({
+     *   data: {
+     *     // ... data to create a DeviceToken
+     *   }
+     * })
+     * 
+     */
+    create<T extends DeviceTokenCreateArgs>(args: SelectSubset<T, DeviceTokenCreateArgs<ExtArgs>>): Prisma__DeviceTokenClient<$Result.GetResult<Prisma.$DeviceTokenPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many DeviceTokens.
+     * @param {DeviceTokenCreateManyArgs} args - Arguments to create many DeviceTokens.
+     * @example
+     * // Create many DeviceTokens
+     * const deviceToken = await prisma.deviceToken.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends DeviceTokenCreateManyArgs>(args?: SelectSubset<T, DeviceTokenCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many DeviceTokens and returns the data saved in the database.
+     * @param {DeviceTokenCreateManyAndReturnArgs} args - Arguments to create many DeviceTokens.
+     * @example
+     * // Create many DeviceTokens
+     * const deviceToken = await prisma.deviceToken.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many DeviceTokens and only return the `id`
+     * const deviceTokenWithIdOnly = await prisma.deviceToken.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends DeviceTokenCreateManyAndReturnArgs>(args?: SelectSubset<T, DeviceTokenCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DeviceTokenPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a DeviceToken.
+     * @param {DeviceTokenDeleteArgs} args - Arguments to delete one DeviceToken.
+     * @example
+     * // Delete one DeviceToken
+     * const DeviceToken = await prisma.deviceToken.delete({
+     *   where: {
+     *     // ... filter to delete one DeviceToken
+     *   }
+     * })
+     * 
+     */
+    delete<T extends DeviceTokenDeleteArgs>(args: SelectSubset<T, DeviceTokenDeleteArgs<ExtArgs>>): Prisma__DeviceTokenClient<$Result.GetResult<Prisma.$DeviceTokenPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one DeviceToken.
+     * @param {DeviceTokenUpdateArgs} args - Arguments to update one DeviceToken.
+     * @example
+     * // Update one DeviceToken
+     * const deviceToken = await prisma.deviceToken.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends DeviceTokenUpdateArgs>(args: SelectSubset<T, DeviceTokenUpdateArgs<ExtArgs>>): Prisma__DeviceTokenClient<$Result.GetResult<Prisma.$DeviceTokenPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more DeviceTokens.
+     * @param {DeviceTokenDeleteManyArgs} args - Arguments to filter DeviceTokens to delete.
+     * @example
+     * // Delete a few DeviceTokens
+     * const { count } = await prisma.deviceToken.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends DeviceTokenDeleteManyArgs>(args?: SelectSubset<T, DeviceTokenDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more DeviceTokens.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DeviceTokenUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many DeviceTokens
+     * const deviceToken = await prisma.deviceToken.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends DeviceTokenUpdateManyArgs>(args: SelectSubset<T, DeviceTokenUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more DeviceTokens and returns the data updated in the database.
+     * @param {DeviceTokenUpdateManyAndReturnArgs} args - Arguments to update many DeviceTokens.
+     * @example
+     * // Update many DeviceTokens
+     * const deviceToken = await prisma.deviceToken.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more DeviceTokens and only return the `id`
+     * const deviceTokenWithIdOnly = await prisma.deviceToken.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends DeviceTokenUpdateManyAndReturnArgs>(args: SelectSubset<T, DeviceTokenUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DeviceTokenPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one DeviceToken.
+     * @param {DeviceTokenUpsertArgs} args - Arguments to update or create a DeviceToken.
+     * @example
+     * // Update or create a DeviceToken
+     * const deviceToken = await prisma.deviceToken.upsert({
+     *   create: {
+     *     // ... data to create a DeviceToken
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the DeviceToken we want to update
+     *   }
+     * })
+     */
+    upsert<T extends DeviceTokenUpsertArgs>(args: SelectSubset<T, DeviceTokenUpsertArgs<ExtArgs>>): Prisma__DeviceTokenClient<$Result.GetResult<Prisma.$DeviceTokenPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of DeviceTokens.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DeviceTokenCountArgs} args - Arguments to filter DeviceTokens to count.
+     * @example
+     * // Count the number of DeviceTokens
+     * const count = await prisma.deviceToken.count({
+     *   where: {
+     *     // ... the filter for the DeviceTokens we want to count
+     *   }
+     * })
+    **/
+    count<T extends DeviceTokenCountArgs>(
+      args?: Subset<T, DeviceTokenCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], DeviceTokenCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a DeviceToken.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DeviceTokenAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends DeviceTokenAggregateArgs>(args: Subset<T, DeviceTokenAggregateArgs>): Prisma.PrismaPromise<GetDeviceTokenAggregateType<T>>
+
+    /**
+     * Group by DeviceToken.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DeviceTokenGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends DeviceTokenGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: DeviceTokenGroupByArgs['orderBy'] }
+        : { orderBy?: DeviceTokenGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, DeviceTokenGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetDeviceTokenGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the DeviceToken model
+   */
+  readonly fields: DeviceTokenFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for DeviceToken.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__DeviceTokenClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    member<T extends MemberDefaultArgs<ExtArgs> = {}>(args?: Subset<T, MemberDefaultArgs<ExtArgs>>): Prisma__MemberClient<$Result.GetResult<Prisma.$MemberPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the DeviceToken model
+   */
+  interface DeviceTokenFieldRefs {
+    readonly id: FieldRef<"DeviceToken", 'String'>
+    readonly memberId: FieldRef<"DeviceToken", 'String'>
+    readonly token: FieldRef<"DeviceToken", 'String'>
+    readonly platform: FieldRef<"DeviceToken", 'String'>
+    readonly createdAt: FieldRef<"DeviceToken", 'DateTime'>
+    readonly updatedAt: FieldRef<"DeviceToken", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * DeviceToken findUnique
+   */
+  export type DeviceTokenFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DeviceToken
+     */
+    select?: DeviceTokenSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DeviceToken
+     */
+    omit?: DeviceTokenOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DeviceTokenInclude<ExtArgs> | null
+    /**
+     * Filter, which DeviceToken to fetch.
+     */
+    where: DeviceTokenWhereUniqueInput
+  }
+
+  /**
+   * DeviceToken findUniqueOrThrow
+   */
+  export type DeviceTokenFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DeviceToken
+     */
+    select?: DeviceTokenSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DeviceToken
+     */
+    omit?: DeviceTokenOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DeviceTokenInclude<ExtArgs> | null
+    /**
+     * Filter, which DeviceToken to fetch.
+     */
+    where: DeviceTokenWhereUniqueInput
+  }
+
+  /**
+   * DeviceToken findFirst
+   */
+  export type DeviceTokenFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DeviceToken
+     */
+    select?: DeviceTokenSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DeviceToken
+     */
+    omit?: DeviceTokenOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DeviceTokenInclude<ExtArgs> | null
+    /**
+     * Filter, which DeviceToken to fetch.
+     */
+    where?: DeviceTokenWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of DeviceTokens to fetch.
+     */
+    orderBy?: DeviceTokenOrderByWithRelationInput | DeviceTokenOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for DeviceTokens.
+     */
+    cursor?: DeviceTokenWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` DeviceTokens from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` DeviceTokens.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of DeviceTokens.
+     */
+    distinct?: DeviceTokenScalarFieldEnum | DeviceTokenScalarFieldEnum[]
+  }
+
+  /**
+   * DeviceToken findFirstOrThrow
+   */
+  export type DeviceTokenFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DeviceToken
+     */
+    select?: DeviceTokenSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DeviceToken
+     */
+    omit?: DeviceTokenOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DeviceTokenInclude<ExtArgs> | null
+    /**
+     * Filter, which DeviceToken to fetch.
+     */
+    where?: DeviceTokenWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of DeviceTokens to fetch.
+     */
+    orderBy?: DeviceTokenOrderByWithRelationInput | DeviceTokenOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for DeviceTokens.
+     */
+    cursor?: DeviceTokenWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` DeviceTokens from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` DeviceTokens.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of DeviceTokens.
+     */
+    distinct?: DeviceTokenScalarFieldEnum | DeviceTokenScalarFieldEnum[]
+  }
+
+  /**
+   * DeviceToken findMany
+   */
+  export type DeviceTokenFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DeviceToken
+     */
+    select?: DeviceTokenSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DeviceToken
+     */
+    omit?: DeviceTokenOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DeviceTokenInclude<ExtArgs> | null
+    /**
+     * Filter, which DeviceTokens to fetch.
+     */
+    where?: DeviceTokenWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of DeviceTokens to fetch.
+     */
+    orderBy?: DeviceTokenOrderByWithRelationInput | DeviceTokenOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing DeviceTokens.
+     */
+    cursor?: DeviceTokenWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` DeviceTokens from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` DeviceTokens.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of DeviceTokens.
+     */
+    distinct?: DeviceTokenScalarFieldEnum | DeviceTokenScalarFieldEnum[]
+  }
+
+  /**
+   * DeviceToken create
+   */
+  export type DeviceTokenCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DeviceToken
+     */
+    select?: DeviceTokenSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DeviceToken
+     */
+    omit?: DeviceTokenOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DeviceTokenInclude<ExtArgs> | null
+    /**
+     * The data needed to create a DeviceToken.
+     */
+    data: XOR<DeviceTokenCreateInput, DeviceTokenUncheckedCreateInput>
+  }
+
+  /**
+   * DeviceToken createMany
+   */
+  export type DeviceTokenCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many DeviceTokens.
+     */
+    data: DeviceTokenCreateManyInput | DeviceTokenCreateManyInput[]
+  }
+
+  /**
+   * DeviceToken createManyAndReturn
+   */
+  export type DeviceTokenCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DeviceToken
+     */
+    select?: DeviceTokenSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the DeviceToken
+     */
+    omit?: DeviceTokenOmit<ExtArgs> | null
+    /**
+     * The data used to create many DeviceTokens.
+     */
+    data: DeviceTokenCreateManyInput | DeviceTokenCreateManyInput[]
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DeviceTokenIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * DeviceToken update
+   */
+  export type DeviceTokenUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DeviceToken
+     */
+    select?: DeviceTokenSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DeviceToken
+     */
+    omit?: DeviceTokenOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DeviceTokenInclude<ExtArgs> | null
+    /**
+     * The data needed to update a DeviceToken.
+     */
+    data: XOR<DeviceTokenUpdateInput, DeviceTokenUncheckedUpdateInput>
+    /**
+     * Choose, which DeviceToken to update.
+     */
+    where: DeviceTokenWhereUniqueInput
+  }
+
+  /**
+   * DeviceToken updateMany
+   */
+  export type DeviceTokenUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update DeviceTokens.
+     */
+    data: XOR<DeviceTokenUpdateManyMutationInput, DeviceTokenUncheckedUpdateManyInput>
+    /**
+     * Filter which DeviceTokens to update
+     */
+    where?: DeviceTokenWhereInput
+    /**
+     * Limit how many DeviceTokens to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * DeviceToken updateManyAndReturn
+   */
+  export type DeviceTokenUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DeviceToken
+     */
+    select?: DeviceTokenSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the DeviceToken
+     */
+    omit?: DeviceTokenOmit<ExtArgs> | null
+    /**
+     * The data used to update DeviceTokens.
+     */
+    data: XOR<DeviceTokenUpdateManyMutationInput, DeviceTokenUncheckedUpdateManyInput>
+    /**
+     * Filter which DeviceTokens to update
+     */
+    where?: DeviceTokenWhereInput
+    /**
+     * Limit how many DeviceTokens to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DeviceTokenIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * DeviceToken upsert
+   */
+  export type DeviceTokenUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DeviceToken
+     */
+    select?: DeviceTokenSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DeviceToken
+     */
+    omit?: DeviceTokenOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DeviceTokenInclude<ExtArgs> | null
+    /**
+     * The filter to search for the DeviceToken to update in case it exists.
+     */
+    where: DeviceTokenWhereUniqueInput
+    /**
+     * In case the DeviceToken found by the `where` argument doesn't exist, create a new DeviceToken with this data.
+     */
+    create: XOR<DeviceTokenCreateInput, DeviceTokenUncheckedCreateInput>
+    /**
+     * In case the DeviceToken was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<DeviceTokenUpdateInput, DeviceTokenUncheckedUpdateInput>
+  }
+
+  /**
+   * DeviceToken delete
+   */
+  export type DeviceTokenDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DeviceToken
+     */
+    select?: DeviceTokenSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DeviceToken
+     */
+    omit?: DeviceTokenOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DeviceTokenInclude<ExtArgs> | null
+    /**
+     * Filter which DeviceToken to delete.
+     */
+    where: DeviceTokenWhereUniqueInput
+  }
+
+  /**
+   * DeviceToken deleteMany
+   */
+  export type DeviceTokenDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which DeviceTokens to delete
+     */
+    where?: DeviceTokenWhereInput
+    /**
+     * Limit how many DeviceTokens to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * DeviceToken without action
+   */
+  export type DeviceTokenDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DeviceToken
+     */
+    select?: DeviceTokenSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DeviceToken
+     */
+    omit?: DeviceTokenOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DeviceTokenInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model Notification
+   */
+
+  export type AggregateNotification = {
+    _count: NotificationCountAggregateOutputType | null
+    _min: NotificationMinAggregateOutputType | null
+    _max: NotificationMaxAggregateOutputType | null
+  }
+
+  export type NotificationMinAggregateOutputType = {
+    id: string | null
+    memberId: string | null
+    title: string | null
+    body: string | null
+    isRead: boolean | null
+    readAt: Date | null
+    createdAt: Date | null
+  }
+
+  export type NotificationMaxAggregateOutputType = {
+    id: string | null
+    memberId: string | null
+    title: string | null
+    body: string | null
+    isRead: boolean | null
+    readAt: Date | null
+    createdAt: Date | null
+  }
+
+  export type NotificationCountAggregateOutputType = {
+    id: number
+    memberId: number
+    title: number
+    body: number
+    data: number
+    isRead: number
+    readAt: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type NotificationMinAggregateInputType = {
+    id?: true
+    memberId?: true
+    title?: true
+    body?: true
+    isRead?: true
+    readAt?: true
+    createdAt?: true
+  }
+
+  export type NotificationMaxAggregateInputType = {
+    id?: true
+    memberId?: true
+    title?: true
+    body?: true
+    isRead?: true
+    readAt?: true
+    createdAt?: true
+  }
+
+  export type NotificationCountAggregateInputType = {
+    id?: true
+    memberId?: true
+    title?: true
+    body?: true
+    data?: true
+    isRead?: true
+    readAt?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type NotificationAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Notification to aggregate.
+     */
+    where?: NotificationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Notifications to fetch.
+     */
+    orderBy?: NotificationOrderByWithRelationInput | NotificationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: NotificationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Notifications from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Notifications.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Notifications
+    **/
+    _count?: true | NotificationCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: NotificationMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: NotificationMaxAggregateInputType
+  }
+
+  export type GetNotificationAggregateType<T extends NotificationAggregateArgs> = {
+        [P in keyof T & keyof AggregateNotification]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateNotification[P]>
+      : GetScalarType<T[P], AggregateNotification[P]>
+  }
+
+
+
+
+  export type NotificationGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: NotificationWhereInput
+    orderBy?: NotificationOrderByWithAggregationInput | NotificationOrderByWithAggregationInput[]
+    by: NotificationScalarFieldEnum[] | NotificationScalarFieldEnum
+    having?: NotificationScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: NotificationCountAggregateInputType | true
+    _min?: NotificationMinAggregateInputType
+    _max?: NotificationMaxAggregateInputType
+  }
+
+  export type NotificationGroupByOutputType = {
+    id: string
+    memberId: string
+    title: string
+    body: string
+    data: JsonValue | null
+    isRead: boolean
+    readAt: Date | null
+    createdAt: Date
+    _count: NotificationCountAggregateOutputType | null
+    _min: NotificationMinAggregateOutputType | null
+    _max: NotificationMaxAggregateOutputType | null
+  }
+
+  type GetNotificationGroupByPayload<T extends NotificationGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<NotificationGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof NotificationGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], NotificationGroupByOutputType[P]>
+            : GetScalarType<T[P], NotificationGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type NotificationSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    memberId?: boolean
+    title?: boolean
+    body?: boolean
+    data?: boolean
+    isRead?: boolean
+    readAt?: boolean
+    createdAt?: boolean
+    member?: boolean | MemberDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["notification"]>
+
+  export type NotificationSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    memberId?: boolean
+    title?: boolean
+    body?: boolean
+    data?: boolean
+    isRead?: boolean
+    readAt?: boolean
+    createdAt?: boolean
+    member?: boolean | MemberDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["notification"]>
+
+  export type NotificationSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    memberId?: boolean
+    title?: boolean
+    body?: boolean
+    data?: boolean
+    isRead?: boolean
+    readAt?: boolean
+    createdAt?: boolean
+    member?: boolean | MemberDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["notification"]>
+
+  export type NotificationSelectScalar = {
+    id?: boolean
+    memberId?: boolean
+    title?: boolean
+    body?: boolean
+    data?: boolean
+    isRead?: boolean
+    readAt?: boolean
+    createdAt?: boolean
+  }
+
+  export type NotificationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "memberId" | "title" | "body" | "data" | "isRead" | "readAt" | "createdAt", ExtArgs["result"]["notification"]>
+  export type NotificationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    member?: boolean | MemberDefaultArgs<ExtArgs>
+  }
+  export type NotificationIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    member?: boolean | MemberDefaultArgs<ExtArgs>
+  }
+  export type NotificationIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    member?: boolean | MemberDefaultArgs<ExtArgs>
+  }
+
+  export type $NotificationPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Notification"
+    objects: {
+      member: Prisma.$MemberPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      memberId: string
+      title: string
+      body: string
+      data: Prisma.JsonValue | null
+      isRead: boolean
+      readAt: Date | null
+      createdAt: Date
+    }, ExtArgs["result"]["notification"]>
+    composites: {}
+  }
+
+  type NotificationGetPayload<S extends boolean | null | undefined | NotificationDefaultArgs> = $Result.GetResult<Prisma.$NotificationPayload, S>
+
+  type NotificationCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<NotificationFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: NotificationCountAggregateInputType | true
+    }
+
+  export interface NotificationDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Notification'], meta: { name: 'Notification' } }
+    /**
+     * Find zero or one Notification that matches the filter.
+     * @param {NotificationFindUniqueArgs} args - Arguments to find a Notification
+     * @example
+     * // Get one Notification
+     * const notification = await prisma.notification.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends NotificationFindUniqueArgs>(args: SelectSubset<T, NotificationFindUniqueArgs<ExtArgs>>): Prisma__NotificationClient<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Notification that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {NotificationFindUniqueOrThrowArgs} args - Arguments to find a Notification
+     * @example
+     * // Get one Notification
+     * const notification = await prisma.notification.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends NotificationFindUniqueOrThrowArgs>(args: SelectSubset<T, NotificationFindUniqueOrThrowArgs<ExtArgs>>): Prisma__NotificationClient<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Notification that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NotificationFindFirstArgs} args - Arguments to find a Notification
+     * @example
+     * // Get one Notification
+     * const notification = await prisma.notification.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends NotificationFindFirstArgs>(args?: SelectSubset<T, NotificationFindFirstArgs<ExtArgs>>): Prisma__NotificationClient<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Notification that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NotificationFindFirstOrThrowArgs} args - Arguments to find a Notification
+     * @example
+     * // Get one Notification
+     * const notification = await prisma.notification.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends NotificationFindFirstOrThrowArgs>(args?: SelectSubset<T, NotificationFindFirstOrThrowArgs<ExtArgs>>): Prisma__NotificationClient<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Notifications that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NotificationFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Notifications
+     * const notifications = await prisma.notification.findMany()
+     * 
+     * // Get first 10 Notifications
+     * const notifications = await prisma.notification.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const notificationWithIdOnly = await prisma.notification.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends NotificationFindManyArgs>(args?: SelectSubset<T, NotificationFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Notification.
+     * @param {NotificationCreateArgs} args - Arguments to create a Notification.
+     * @example
+     * // Create one Notification
+     * const Notification = await prisma.notification.create({
+     *   data: {
+     *     // ... data to create a Notification
+     *   }
+     * })
+     * 
+     */
+    create<T extends NotificationCreateArgs>(args: SelectSubset<T, NotificationCreateArgs<ExtArgs>>): Prisma__NotificationClient<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Notifications.
+     * @param {NotificationCreateManyArgs} args - Arguments to create many Notifications.
+     * @example
+     * // Create many Notifications
+     * const notification = await prisma.notification.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends NotificationCreateManyArgs>(args?: SelectSubset<T, NotificationCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Notifications and returns the data saved in the database.
+     * @param {NotificationCreateManyAndReturnArgs} args - Arguments to create many Notifications.
+     * @example
+     * // Create many Notifications
+     * const notification = await prisma.notification.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Notifications and only return the `id`
+     * const notificationWithIdOnly = await prisma.notification.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends NotificationCreateManyAndReturnArgs>(args?: SelectSubset<T, NotificationCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Notification.
+     * @param {NotificationDeleteArgs} args - Arguments to delete one Notification.
+     * @example
+     * // Delete one Notification
+     * const Notification = await prisma.notification.delete({
+     *   where: {
+     *     // ... filter to delete one Notification
+     *   }
+     * })
+     * 
+     */
+    delete<T extends NotificationDeleteArgs>(args: SelectSubset<T, NotificationDeleteArgs<ExtArgs>>): Prisma__NotificationClient<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Notification.
+     * @param {NotificationUpdateArgs} args - Arguments to update one Notification.
+     * @example
+     * // Update one Notification
+     * const notification = await prisma.notification.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends NotificationUpdateArgs>(args: SelectSubset<T, NotificationUpdateArgs<ExtArgs>>): Prisma__NotificationClient<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Notifications.
+     * @param {NotificationDeleteManyArgs} args - Arguments to filter Notifications to delete.
+     * @example
+     * // Delete a few Notifications
+     * const { count } = await prisma.notification.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends NotificationDeleteManyArgs>(args?: SelectSubset<T, NotificationDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Notifications.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NotificationUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Notifications
+     * const notification = await prisma.notification.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends NotificationUpdateManyArgs>(args: SelectSubset<T, NotificationUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Notifications and returns the data updated in the database.
+     * @param {NotificationUpdateManyAndReturnArgs} args - Arguments to update many Notifications.
+     * @example
+     * // Update many Notifications
+     * const notification = await prisma.notification.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Notifications and only return the `id`
+     * const notificationWithIdOnly = await prisma.notification.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends NotificationUpdateManyAndReturnArgs>(args: SelectSubset<T, NotificationUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Notification.
+     * @param {NotificationUpsertArgs} args - Arguments to update or create a Notification.
+     * @example
+     * // Update or create a Notification
+     * const notification = await prisma.notification.upsert({
+     *   create: {
+     *     // ... data to create a Notification
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Notification we want to update
+     *   }
+     * })
+     */
+    upsert<T extends NotificationUpsertArgs>(args: SelectSubset<T, NotificationUpsertArgs<ExtArgs>>): Prisma__NotificationClient<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Notifications.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NotificationCountArgs} args - Arguments to filter Notifications to count.
+     * @example
+     * // Count the number of Notifications
+     * const count = await prisma.notification.count({
+     *   where: {
+     *     // ... the filter for the Notifications we want to count
+     *   }
+     * })
+    **/
+    count<T extends NotificationCountArgs>(
+      args?: Subset<T, NotificationCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], NotificationCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Notification.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NotificationAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends NotificationAggregateArgs>(args: Subset<T, NotificationAggregateArgs>): Prisma.PrismaPromise<GetNotificationAggregateType<T>>
+
+    /**
+     * Group by Notification.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NotificationGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends NotificationGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: NotificationGroupByArgs['orderBy'] }
+        : { orderBy?: NotificationGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, NotificationGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetNotificationGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Notification model
+   */
+  readonly fields: NotificationFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Notification.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__NotificationClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    member<T extends MemberDefaultArgs<ExtArgs> = {}>(args?: Subset<T, MemberDefaultArgs<ExtArgs>>): Prisma__MemberClient<$Result.GetResult<Prisma.$MemberPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Notification model
+   */
+  interface NotificationFieldRefs {
+    readonly id: FieldRef<"Notification", 'String'>
+    readonly memberId: FieldRef<"Notification", 'String'>
+    readonly title: FieldRef<"Notification", 'String'>
+    readonly body: FieldRef<"Notification", 'String'>
+    readonly data: FieldRef<"Notification", 'Json'>
+    readonly isRead: FieldRef<"Notification", 'Boolean'>
+    readonly readAt: FieldRef<"Notification", 'DateTime'>
+    readonly createdAt: FieldRef<"Notification", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Notification findUnique
+   */
+  export type NotificationFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Notification
+     */
+    select?: NotificationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Notification
+     */
+    omit?: NotificationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationInclude<ExtArgs> | null
+    /**
+     * Filter, which Notification to fetch.
+     */
+    where: NotificationWhereUniqueInput
+  }
+
+  /**
+   * Notification findUniqueOrThrow
+   */
+  export type NotificationFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Notification
+     */
+    select?: NotificationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Notification
+     */
+    omit?: NotificationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationInclude<ExtArgs> | null
+    /**
+     * Filter, which Notification to fetch.
+     */
+    where: NotificationWhereUniqueInput
+  }
+
+  /**
+   * Notification findFirst
+   */
+  export type NotificationFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Notification
+     */
+    select?: NotificationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Notification
+     */
+    omit?: NotificationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationInclude<ExtArgs> | null
+    /**
+     * Filter, which Notification to fetch.
+     */
+    where?: NotificationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Notifications to fetch.
+     */
+    orderBy?: NotificationOrderByWithRelationInput | NotificationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Notifications.
+     */
+    cursor?: NotificationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Notifications from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Notifications.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Notifications.
+     */
+    distinct?: NotificationScalarFieldEnum | NotificationScalarFieldEnum[]
+  }
+
+  /**
+   * Notification findFirstOrThrow
+   */
+  export type NotificationFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Notification
+     */
+    select?: NotificationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Notification
+     */
+    omit?: NotificationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationInclude<ExtArgs> | null
+    /**
+     * Filter, which Notification to fetch.
+     */
+    where?: NotificationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Notifications to fetch.
+     */
+    orderBy?: NotificationOrderByWithRelationInput | NotificationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Notifications.
+     */
+    cursor?: NotificationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Notifications from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Notifications.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Notifications.
+     */
+    distinct?: NotificationScalarFieldEnum | NotificationScalarFieldEnum[]
+  }
+
+  /**
+   * Notification findMany
+   */
+  export type NotificationFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Notification
+     */
+    select?: NotificationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Notification
+     */
+    omit?: NotificationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationInclude<ExtArgs> | null
+    /**
+     * Filter, which Notifications to fetch.
+     */
+    where?: NotificationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Notifications to fetch.
+     */
+    orderBy?: NotificationOrderByWithRelationInput | NotificationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Notifications.
+     */
+    cursor?: NotificationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Notifications from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Notifications.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Notifications.
+     */
+    distinct?: NotificationScalarFieldEnum | NotificationScalarFieldEnum[]
+  }
+
+  /**
+   * Notification create
+   */
+  export type NotificationCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Notification
+     */
+    select?: NotificationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Notification
+     */
+    omit?: NotificationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Notification.
+     */
+    data: XOR<NotificationCreateInput, NotificationUncheckedCreateInput>
+  }
+
+  /**
+   * Notification createMany
+   */
+  export type NotificationCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Notifications.
+     */
+    data: NotificationCreateManyInput | NotificationCreateManyInput[]
+  }
+
+  /**
+   * Notification createManyAndReturn
+   */
+  export type NotificationCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Notification
+     */
+    select?: NotificationSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Notification
+     */
+    omit?: NotificationOmit<ExtArgs> | null
+    /**
+     * The data used to create many Notifications.
+     */
+    data: NotificationCreateManyInput | NotificationCreateManyInput[]
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Notification update
+   */
+  export type NotificationUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Notification
+     */
+    select?: NotificationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Notification
+     */
+    omit?: NotificationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Notification.
+     */
+    data: XOR<NotificationUpdateInput, NotificationUncheckedUpdateInput>
+    /**
+     * Choose, which Notification to update.
+     */
+    where: NotificationWhereUniqueInput
+  }
+
+  /**
+   * Notification updateMany
+   */
+  export type NotificationUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Notifications.
+     */
+    data: XOR<NotificationUpdateManyMutationInput, NotificationUncheckedUpdateManyInput>
+    /**
+     * Filter which Notifications to update
+     */
+    where?: NotificationWhereInput
+    /**
+     * Limit how many Notifications to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Notification updateManyAndReturn
+   */
+  export type NotificationUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Notification
+     */
+    select?: NotificationSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Notification
+     */
+    omit?: NotificationOmit<ExtArgs> | null
+    /**
+     * The data used to update Notifications.
+     */
+    data: XOR<NotificationUpdateManyMutationInput, NotificationUncheckedUpdateManyInput>
+    /**
+     * Filter which Notifications to update
+     */
+    where?: NotificationWhereInput
+    /**
+     * Limit how many Notifications to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Notification upsert
+   */
+  export type NotificationUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Notification
+     */
+    select?: NotificationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Notification
+     */
+    omit?: NotificationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Notification to update in case it exists.
+     */
+    where: NotificationWhereUniqueInput
+    /**
+     * In case the Notification found by the `where` argument doesn't exist, create a new Notification with this data.
+     */
+    create: XOR<NotificationCreateInput, NotificationUncheckedCreateInput>
+    /**
+     * In case the Notification was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<NotificationUpdateInput, NotificationUncheckedUpdateInput>
+  }
+
+  /**
+   * Notification delete
+   */
+  export type NotificationDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Notification
+     */
+    select?: NotificationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Notification
+     */
+    omit?: NotificationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationInclude<ExtArgs> | null
+    /**
+     * Filter which Notification to delete.
+     */
+    where: NotificationWhereUniqueInput
+  }
+
+  /**
+   * Notification deleteMany
+   */
+  export type NotificationDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Notifications to delete
+     */
+    where?: NotificationWhereInput
+    /**
+     * Limit how many Notifications to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Notification without action
+   */
+  export type NotificationDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Notification
+     */
+    select?: NotificationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Notification
+     */
+    omit?: NotificationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -49516,6 +51942,32 @@ export namespace Prisma {
   export type TvContentItemScalarFieldEnum = (typeof TvContentItemScalarFieldEnum)[keyof typeof TvContentItemScalarFieldEnum]
 
 
+  export const DeviceTokenScalarFieldEnum: {
+    id: 'id',
+    memberId: 'memberId',
+    token: 'token',
+    platform: 'platform',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type DeviceTokenScalarFieldEnum = (typeof DeviceTokenScalarFieldEnum)[keyof typeof DeviceTokenScalarFieldEnum]
+
+
+  export const NotificationScalarFieldEnum: {
+    id: 'id',
+    memberId: 'memberId',
+    title: 'title',
+    body: 'body',
+    data: 'data',
+    isRead: 'isRead',
+    readAt: 'readAt',
+    createdAt: 'createdAt'
+  };
+
+  export type NotificationScalarFieldEnum = (typeof NotificationScalarFieldEnum)[keyof typeof NotificationScalarFieldEnum]
+
+
   export const SortOrder: {
     asc: 'asc',
     desc: 'desc'
@@ -49524,12 +51976,37 @@ export namespace Prisma {
   export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
 
 
+  export const NullableJsonNullValueInput: {
+    DbNull: typeof DbNull,
+    JsonNull: typeof JsonNull
+  };
+
+  export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
+
+
   export const NullsOrder: {
     first: 'first',
     last: 'last'
   };
 
   export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
+
+
+  export const JsonNullValueFilter: {
+    DbNull: typeof DbNull,
+    JsonNull: typeof JsonNull,
+    AnyNull: typeof AnyNull
+  };
+
+  export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]
+
+
+  export const QueryMode: {
+    default: 'default',
+    insensitive: 'insensitive'
+  };
+
+  export type QueryMode = (typeof QueryMode)[keyof typeof QueryMode]
 
 
   /**
@@ -49576,6 +52053,20 @@ export namespace Prisma {
    * Reference to a field of type 'BigInt'
    */
   export type BigIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BigInt'>
+    
+
+
+  /**
+   * Reference to a field of type 'Json'
+   */
+  export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Json'>
+    
+
+
+  /**
+   * Reference to a field of type 'QueryMode'
+   */
+  export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QueryMode'>
     
   /**
    * Deep Input Types
@@ -49779,6 +52270,8 @@ export namespace Prisma {
     sportStats?: UserSportStatListRelationFilter
     nfcCards?: NfcCardListRelationFilter
     nfcTransactions?: NfcTransactionListRelationFilter
+    deviceTokens?: DeviceTokenListRelationFilter
+    notifications?: NotificationListRelationFilter
   }
 
   export type MemberOrderByWithRelationInput = {
@@ -49808,6 +52301,8 @@ export namespace Prisma {
     sportStats?: UserSportStatOrderByRelationAggregateInput
     nfcCards?: NfcCardOrderByRelationAggregateInput
     nfcTransactions?: NfcTransactionOrderByRelationAggregateInput
+    deviceTokens?: DeviceTokenOrderByRelationAggregateInput
+    notifications?: NotificationOrderByRelationAggregateInput
   }
 
   export type MemberWhereUniqueInput = Prisma.AtLeast<{
@@ -49840,6 +52335,8 @@ export namespace Prisma {
     sportStats?: UserSportStatListRelationFilter
     nfcCards?: NfcCardListRelationFilter
     nfcTransactions?: NfcTransactionListRelationFilter
+    deviceTokens?: DeviceTokenListRelationFilter
+    notifications?: NotificationListRelationFilter
   }, "id">
 
   export type MemberOrderByWithAggregationInput = {
@@ -52559,6 +55056,136 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"TvContentItem"> | Date | string
   }
 
+  export type DeviceTokenWhereInput = {
+    AND?: DeviceTokenWhereInput | DeviceTokenWhereInput[]
+    OR?: DeviceTokenWhereInput[]
+    NOT?: DeviceTokenWhereInput | DeviceTokenWhereInput[]
+    id?: StringFilter<"DeviceToken"> | string
+    memberId?: StringFilter<"DeviceToken"> | string
+    token?: StringFilter<"DeviceToken"> | string
+    platform?: StringNullableFilter<"DeviceToken"> | string | null
+    createdAt?: DateTimeFilter<"DeviceToken"> | Date | string
+    updatedAt?: DateTimeFilter<"DeviceToken"> | Date | string
+    member?: XOR<MemberScalarRelationFilter, MemberWhereInput>
+  }
+
+  export type DeviceTokenOrderByWithRelationInput = {
+    id?: SortOrder
+    memberId?: SortOrder
+    token?: SortOrder
+    platform?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    member?: MemberOrderByWithRelationInput
+  }
+
+  export type DeviceTokenWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    token?: string
+    AND?: DeviceTokenWhereInput | DeviceTokenWhereInput[]
+    OR?: DeviceTokenWhereInput[]
+    NOT?: DeviceTokenWhereInput | DeviceTokenWhereInput[]
+    memberId?: StringFilter<"DeviceToken"> | string
+    platform?: StringNullableFilter<"DeviceToken"> | string | null
+    createdAt?: DateTimeFilter<"DeviceToken"> | Date | string
+    updatedAt?: DateTimeFilter<"DeviceToken"> | Date | string
+    member?: XOR<MemberScalarRelationFilter, MemberWhereInput>
+  }, "id" | "token">
+
+  export type DeviceTokenOrderByWithAggregationInput = {
+    id?: SortOrder
+    memberId?: SortOrder
+    token?: SortOrder
+    platform?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: DeviceTokenCountOrderByAggregateInput
+    _max?: DeviceTokenMaxOrderByAggregateInput
+    _min?: DeviceTokenMinOrderByAggregateInput
+  }
+
+  export type DeviceTokenScalarWhereWithAggregatesInput = {
+    AND?: DeviceTokenScalarWhereWithAggregatesInput | DeviceTokenScalarWhereWithAggregatesInput[]
+    OR?: DeviceTokenScalarWhereWithAggregatesInput[]
+    NOT?: DeviceTokenScalarWhereWithAggregatesInput | DeviceTokenScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"DeviceToken"> | string
+    memberId?: StringWithAggregatesFilter<"DeviceToken"> | string
+    token?: StringWithAggregatesFilter<"DeviceToken"> | string
+    platform?: StringNullableWithAggregatesFilter<"DeviceToken"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"DeviceToken"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"DeviceToken"> | Date | string
+  }
+
+  export type NotificationWhereInput = {
+    AND?: NotificationWhereInput | NotificationWhereInput[]
+    OR?: NotificationWhereInput[]
+    NOT?: NotificationWhereInput | NotificationWhereInput[]
+    id?: StringFilter<"Notification"> | string
+    memberId?: StringFilter<"Notification"> | string
+    title?: StringFilter<"Notification"> | string
+    body?: StringFilter<"Notification"> | string
+    data?: JsonNullableFilter<"Notification">
+    isRead?: BoolFilter<"Notification"> | boolean
+    readAt?: DateTimeNullableFilter<"Notification"> | Date | string | null
+    createdAt?: DateTimeFilter<"Notification"> | Date | string
+    member?: XOR<MemberScalarRelationFilter, MemberWhereInput>
+  }
+
+  export type NotificationOrderByWithRelationInput = {
+    id?: SortOrder
+    memberId?: SortOrder
+    title?: SortOrder
+    body?: SortOrder
+    data?: SortOrderInput | SortOrder
+    isRead?: SortOrder
+    readAt?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    member?: MemberOrderByWithRelationInput
+  }
+
+  export type NotificationWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: NotificationWhereInput | NotificationWhereInput[]
+    OR?: NotificationWhereInput[]
+    NOT?: NotificationWhereInput | NotificationWhereInput[]
+    memberId?: StringFilter<"Notification"> | string
+    title?: StringFilter<"Notification"> | string
+    body?: StringFilter<"Notification"> | string
+    data?: JsonNullableFilter<"Notification">
+    isRead?: BoolFilter<"Notification"> | boolean
+    readAt?: DateTimeNullableFilter<"Notification"> | Date | string | null
+    createdAt?: DateTimeFilter<"Notification"> | Date | string
+    member?: XOR<MemberScalarRelationFilter, MemberWhereInput>
+  }, "id">
+
+  export type NotificationOrderByWithAggregationInput = {
+    id?: SortOrder
+    memberId?: SortOrder
+    title?: SortOrder
+    body?: SortOrder
+    data?: SortOrderInput | SortOrder
+    isRead?: SortOrder
+    readAt?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    _count?: NotificationCountOrderByAggregateInput
+    _max?: NotificationMaxOrderByAggregateInput
+    _min?: NotificationMinOrderByAggregateInput
+  }
+
+  export type NotificationScalarWhereWithAggregatesInput = {
+    AND?: NotificationScalarWhereWithAggregatesInput | NotificationScalarWhereWithAggregatesInput[]
+    OR?: NotificationScalarWhereWithAggregatesInput[]
+    NOT?: NotificationScalarWhereWithAggregatesInput | NotificationScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"Notification"> | string
+    memberId?: StringWithAggregatesFilter<"Notification"> | string
+    title?: StringWithAggregatesFilter<"Notification"> | string
+    body?: StringWithAggregatesFilter<"Notification"> | string
+    data?: JsonNullableWithAggregatesFilter<"Notification">
+    isRead?: BoolWithAggregatesFilter<"Notification"> | boolean
+    readAt?: DateTimeNullableWithAggregatesFilter<"Notification"> | Date | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"Notification"> | Date | string
+  }
+
   export type AdminCreateInput = {
     id?: string
     email: string
@@ -52768,6 +55395,8 @@ export namespace Prisma {
     sportStats?: UserSportStatCreateNestedManyWithoutMemberInput
     nfcCards?: NfcCardCreateNestedManyWithoutMemberInput
     nfcTransactions?: NfcTransactionCreateNestedManyWithoutMemberInput
+    deviceTokens?: DeviceTokenCreateNestedManyWithoutMemberInput
+    notifications?: NotificationCreateNestedManyWithoutMemberInput
   }
 
   export type MemberUncheckedCreateInput = {
@@ -52796,6 +55425,8 @@ export namespace Prisma {
     sportStats?: UserSportStatUncheckedCreateNestedManyWithoutMemberInput
     nfcCards?: NfcCardUncheckedCreateNestedManyWithoutMemberInput
     nfcTransactions?: NfcTransactionUncheckedCreateNestedManyWithoutMemberInput
+    deviceTokens?: DeviceTokenUncheckedCreateNestedManyWithoutMemberInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutMemberInput
   }
 
   export type MemberUpdateInput = {
@@ -52824,6 +55455,8 @@ export namespace Prisma {
     sportStats?: UserSportStatUpdateManyWithoutMemberNestedInput
     nfcCards?: NfcCardUpdateManyWithoutMemberNestedInput
     nfcTransactions?: NfcTransactionUpdateManyWithoutMemberNestedInput
+    deviceTokens?: DeviceTokenUpdateManyWithoutMemberNestedInput
+    notifications?: NotificationUpdateManyWithoutMemberNestedInput
   }
 
   export type MemberUncheckedUpdateInput = {
@@ -52852,6 +55485,8 @@ export namespace Prisma {
     sportStats?: UserSportStatUncheckedUpdateManyWithoutMemberNestedInput
     nfcCards?: NfcCardUncheckedUpdateManyWithoutMemberNestedInput
     nfcTransactions?: NfcTransactionUncheckedUpdateManyWithoutMemberNestedInput
+    deviceTokens?: DeviceTokenUncheckedUpdateManyWithoutMemberNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutMemberNestedInput
   }
 
   export type MemberCreateManyInput = {
@@ -55797,6 +58432,144 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type DeviceTokenCreateInput = {
+    id?: string
+    token: string
+    platform?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    member: MemberCreateNestedOneWithoutDeviceTokensInput
+  }
+
+  export type DeviceTokenUncheckedCreateInput = {
+    id?: string
+    memberId: string
+    token: string
+    platform?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type DeviceTokenUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    token?: StringFieldUpdateOperationsInput | string
+    platform?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    member?: MemberUpdateOneRequiredWithoutDeviceTokensNestedInput
+  }
+
+  export type DeviceTokenUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    memberId?: StringFieldUpdateOperationsInput | string
+    token?: StringFieldUpdateOperationsInput | string
+    platform?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type DeviceTokenCreateManyInput = {
+    id?: string
+    memberId: string
+    token: string
+    platform?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type DeviceTokenUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    token?: StringFieldUpdateOperationsInput | string
+    platform?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type DeviceTokenUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    memberId?: StringFieldUpdateOperationsInput | string
+    token?: StringFieldUpdateOperationsInput | string
+    platform?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type NotificationCreateInput = {
+    id?: string
+    title: string
+    body: string
+    data?: NullableJsonNullValueInput | InputJsonValue
+    isRead?: boolean
+    readAt?: Date | string | null
+    createdAt?: Date | string
+    member: MemberCreateNestedOneWithoutNotificationsInput
+  }
+
+  export type NotificationUncheckedCreateInput = {
+    id?: string
+    memberId: string
+    title: string
+    body: string
+    data?: NullableJsonNullValueInput | InputJsonValue
+    isRead?: boolean
+    readAt?: Date | string | null
+    createdAt?: Date | string
+  }
+
+  export type NotificationUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    body?: StringFieldUpdateOperationsInput | string
+    data?: NullableJsonNullValueInput | InputJsonValue
+    isRead?: BoolFieldUpdateOperationsInput | boolean
+    readAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    member?: MemberUpdateOneRequiredWithoutNotificationsNestedInput
+  }
+
+  export type NotificationUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    memberId?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    body?: StringFieldUpdateOperationsInput | string
+    data?: NullableJsonNullValueInput | InputJsonValue
+    isRead?: BoolFieldUpdateOperationsInput | boolean
+    readAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type NotificationCreateManyInput = {
+    id?: string
+    memberId: string
+    title: string
+    body: string
+    data?: NullableJsonNullValueInput | InputJsonValue
+    isRead?: boolean
+    readAt?: Date | string | null
+    createdAt?: Date | string
+  }
+
+  export type NotificationUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    body?: StringFieldUpdateOperationsInput | string
+    data?: NullableJsonNullValueInput | InputJsonValue
+    isRead?: BoolFieldUpdateOperationsInput | boolean
+    readAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type NotificationUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    memberId?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    body?: StringFieldUpdateOperationsInput | string
+    data?: NullableJsonNullValueInput | InputJsonValue
+    isRead?: BoolFieldUpdateOperationsInput | boolean
+    readAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type StringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[]
@@ -56119,6 +58892,18 @@ export namespace Prisma {
     none?: NfcTransactionWhereInput
   }
 
+  export type DeviceTokenListRelationFilter = {
+    every?: DeviceTokenWhereInput
+    some?: DeviceTokenWhereInput
+    none?: DeviceTokenWhereInput
+  }
+
+  export type NotificationListRelationFilter = {
+    every?: NotificationWhereInput
+    some?: NotificationWhereInput
+    none?: NotificationWhereInput
+  }
+
   export type MemberMembershipOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -56172,6 +58957,14 @@ export namespace Prisma {
   }
 
   export type NfcTransactionOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type DeviceTokenOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type NotificationOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -57977,6 +60770,103 @@ export namespace Prisma {
     sortOrder?: SortOrder
   }
 
+  export type DeviceTokenCountOrderByAggregateInput = {
+    id?: SortOrder
+    memberId?: SortOrder
+    token?: SortOrder
+    platform?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type DeviceTokenMaxOrderByAggregateInput = {
+    id?: SortOrder
+    memberId?: SortOrder
+    token?: SortOrder
+    platform?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type DeviceTokenMinOrderByAggregateInput = {
+    id?: SortOrder
+    memberId?: SortOrder
+    token?: SortOrder
+    platform?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+  export type JsonNullableFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<JsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonNullableFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonNullableFilterBase<$PrismaModel>>, 'path'>>
+
+  export type JsonNullableFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+  }
+
+  export type NotificationCountOrderByAggregateInput = {
+    id?: SortOrder
+    memberId?: SortOrder
+    title?: SortOrder
+    body?: SortOrder
+    data?: SortOrder
+    isRead?: SortOrder
+    readAt?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type NotificationMaxOrderByAggregateInput = {
+    id?: SortOrder
+    memberId?: SortOrder
+    title?: SortOrder
+    body?: SortOrder
+    isRead?: SortOrder
+    readAt?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type NotificationMinOrderByAggregateInput = {
+    id?: SortOrder
+    memberId?: SortOrder
+    title?: SortOrder
+    body?: SortOrder
+    isRead?: SortOrder
+    readAt?: SortOrder
+    createdAt?: SortOrder
+  }
+  export type JsonNullableWithAggregatesFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, 'path'>>
+
+  export type JsonNullableWithAggregatesFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedJsonNullableFilter<$PrismaModel>
+    _max?: NestedJsonNullableFilter<$PrismaModel>
+  }
+
   export type AuditLogCreateNestedManyWithoutAdminInput = {
     create?: XOR<AuditLogCreateWithoutAdminInput, AuditLogUncheckedCreateWithoutAdminInput> | AuditLogCreateWithoutAdminInput[] | AuditLogUncheckedCreateWithoutAdminInput[]
     connectOrCreate?: AuditLogCreateOrConnectWithoutAdminInput | AuditLogCreateOrConnectWithoutAdminInput[]
@@ -58181,6 +61071,20 @@ export namespace Prisma {
     connect?: NfcTransactionWhereUniqueInput | NfcTransactionWhereUniqueInput[]
   }
 
+  export type DeviceTokenCreateNestedManyWithoutMemberInput = {
+    create?: XOR<DeviceTokenCreateWithoutMemberInput, DeviceTokenUncheckedCreateWithoutMemberInput> | DeviceTokenCreateWithoutMemberInput[] | DeviceTokenUncheckedCreateWithoutMemberInput[]
+    connectOrCreate?: DeviceTokenCreateOrConnectWithoutMemberInput | DeviceTokenCreateOrConnectWithoutMemberInput[]
+    createMany?: DeviceTokenCreateManyMemberInputEnvelope
+    connect?: DeviceTokenWhereUniqueInput | DeviceTokenWhereUniqueInput[]
+  }
+
+  export type NotificationCreateNestedManyWithoutMemberInput = {
+    create?: XOR<NotificationCreateWithoutMemberInput, NotificationUncheckedCreateWithoutMemberInput> | NotificationCreateWithoutMemberInput[] | NotificationUncheckedCreateWithoutMemberInput[]
+    connectOrCreate?: NotificationCreateOrConnectWithoutMemberInput | NotificationCreateOrConnectWithoutMemberInput[]
+    createMany?: NotificationCreateManyMemberInputEnvelope
+    connect?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
+  }
+
   export type MemberMembershipUncheckedCreateNestedManyWithoutMemberInput = {
     create?: XOR<MemberMembershipCreateWithoutMemberInput, MemberMembershipUncheckedCreateWithoutMemberInput> | MemberMembershipCreateWithoutMemberInput[] | MemberMembershipUncheckedCreateWithoutMemberInput[]
     connectOrCreate?: MemberMembershipCreateOrConnectWithoutMemberInput | MemberMembershipCreateOrConnectWithoutMemberInput[]
@@ -58277,6 +61181,20 @@ export namespace Prisma {
     connectOrCreate?: NfcTransactionCreateOrConnectWithoutMemberInput | NfcTransactionCreateOrConnectWithoutMemberInput[]
     createMany?: NfcTransactionCreateManyMemberInputEnvelope
     connect?: NfcTransactionWhereUniqueInput | NfcTransactionWhereUniqueInput[]
+  }
+
+  export type DeviceTokenUncheckedCreateNestedManyWithoutMemberInput = {
+    create?: XOR<DeviceTokenCreateWithoutMemberInput, DeviceTokenUncheckedCreateWithoutMemberInput> | DeviceTokenCreateWithoutMemberInput[] | DeviceTokenUncheckedCreateWithoutMemberInput[]
+    connectOrCreate?: DeviceTokenCreateOrConnectWithoutMemberInput | DeviceTokenCreateOrConnectWithoutMemberInput[]
+    createMany?: DeviceTokenCreateManyMemberInputEnvelope
+    connect?: DeviceTokenWhereUniqueInput | DeviceTokenWhereUniqueInput[]
+  }
+
+  export type NotificationUncheckedCreateNestedManyWithoutMemberInput = {
+    create?: XOR<NotificationCreateWithoutMemberInput, NotificationUncheckedCreateWithoutMemberInput> | NotificationCreateWithoutMemberInput[] | NotificationUncheckedCreateWithoutMemberInput[]
+    connectOrCreate?: NotificationCreateOrConnectWithoutMemberInput | NotificationCreateOrConnectWithoutMemberInput[]
+    createMany?: NotificationCreateManyMemberInputEnvelope
+    connect?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
   }
 
   export type NullableDateTimeFieldUpdateOperationsInput = {
@@ -58505,6 +61423,34 @@ export namespace Prisma {
     deleteMany?: NfcTransactionScalarWhereInput | NfcTransactionScalarWhereInput[]
   }
 
+  export type DeviceTokenUpdateManyWithoutMemberNestedInput = {
+    create?: XOR<DeviceTokenCreateWithoutMemberInput, DeviceTokenUncheckedCreateWithoutMemberInput> | DeviceTokenCreateWithoutMemberInput[] | DeviceTokenUncheckedCreateWithoutMemberInput[]
+    connectOrCreate?: DeviceTokenCreateOrConnectWithoutMemberInput | DeviceTokenCreateOrConnectWithoutMemberInput[]
+    upsert?: DeviceTokenUpsertWithWhereUniqueWithoutMemberInput | DeviceTokenUpsertWithWhereUniqueWithoutMemberInput[]
+    createMany?: DeviceTokenCreateManyMemberInputEnvelope
+    set?: DeviceTokenWhereUniqueInput | DeviceTokenWhereUniqueInput[]
+    disconnect?: DeviceTokenWhereUniqueInput | DeviceTokenWhereUniqueInput[]
+    delete?: DeviceTokenWhereUniqueInput | DeviceTokenWhereUniqueInput[]
+    connect?: DeviceTokenWhereUniqueInput | DeviceTokenWhereUniqueInput[]
+    update?: DeviceTokenUpdateWithWhereUniqueWithoutMemberInput | DeviceTokenUpdateWithWhereUniqueWithoutMemberInput[]
+    updateMany?: DeviceTokenUpdateManyWithWhereWithoutMemberInput | DeviceTokenUpdateManyWithWhereWithoutMemberInput[]
+    deleteMany?: DeviceTokenScalarWhereInput | DeviceTokenScalarWhereInput[]
+  }
+
+  export type NotificationUpdateManyWithoutMemberNestedInput = {
+    create?: XOR<NotificationCreateWithoutMemberInput, NotificationUncheckedCreateWithoutMemberInput> | NotificationCreateWithoutMemberInput[] | NotificationUncheckedCreateWithoutMemberInput[]
+    connectOrCreate?: NotificationCreateOrConnectWithoutMemberInput | NotificationCreateOrConnectWithoutMemberInput[]
+    upsert?: NotificationUpsertWithWhereUniqueWithoutMemberInput | NotificationUpsertWithWhereUniqueWithoutMemberInput[]
+    createMany?: NotificationCreateManyMemberInputEnvelope
+    set?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
+    disconnect?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
+    delete?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
+    connect?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
+    update?: NotificationUpdateWithWhereUniqueWithoutMemberInput | NotificationUpdateWithWhereUniqueWithoutMemberInput[]
+    updateMany?: NotificationUpdateManyWithWhereWithoutMemberInput | NotificationUpdateManyWithWhereWithoutMemberInput[]
+    deleteMany?: NotificationScalarWhereInput | NotificationScalarWhereInput[]
+  }
+
   export type MemberMembershipUncheckedUpdateManyWithoutMemberNestedInput = {
     create?: XOR<MemberMembershipCreateWithoutMemberInput, MemberMembershipUncheckedCreateWithoutMemberInput> | MemberMembershipCreateWithoutMemberInput[] | MemberMembershipUncheckedCreateWithoutMemberInput[]
     connectOrCreate?: MemberMembershipCreateOrConnectWithoutMemberInput | MemberMembershipCreateOrConnectWithoutMemberInput[]
@@ -58699,6 +61645,34 @@ export namespace Prisma {
     update?: NfcTransactionUpdateWithWhereUniqueWithoutMemberInput | NfcTransactionUpdateWithWhereUniqueWithoutMemberInput[]
     updateMany?: NfcTransactionUpdateManyWithWhereWithoutMemberInput | NfcTransactionUpdateManyWithWhereWithoutMemberInput[]
     deleteMany?: NfcTransactionScalarWhereInput | NfcTransactionScalarWhereInput[]
+  }
+
+  export type DeviceTokenUncheckedUpdateManyWithoutMemberNestedInput = {
+    create?: XOR<DeviceTokenCreateWithoutMemberInput, DeviceTokenUncheckedCreateWithoutMemberInput> | DeviceTokenCreateWithoutMemberInput[] | DeviceTokenUncheckedCreateWithoutMemberInput[]
+    connectOrCreate?: DeviceTokenCreateOrConnectWithoutMemberInput | DeviceTokenCreateOrConnectWithoutMemberInput[]
+    upsert?: DeviceTokenUpsertWithWhereUniqueWithoutMemberInput | DeviceTokenUpsertWithWhereUniqueWithoutMemberInput[]
+    createMany?: DeviceTokenCreateManyMemberInputEnvelope
+    set?: DeviceTokenWhereUniqueInput | DeviceTokenWhereUniqueInput[]
+    disconnect?: DeviceTokenWhereUniqueInput | DeviceTokenWhereUniqueInput[]
+    delete?: DeviceTokenWhereUniqueInput | DeviceTokenWhereUniqueInput[]
+    connect?: DeviceTokenWhereUniqueInput | DeviceTokenWhereUniqueInput[]
+    update?: DeviceTokenUpdateWithWhereUniqueWithoutMemberInput | DeviceTokenUpdateWithWhereUniqueWithoutMemberInput[]
+    updateMany?: DeviceTokenUpdateManyWithWhereWithoutMemberInput | DeviceTokenUpdateManyWithWhereWithoutMemberInput[]
+    deleteMany?: DeviceTokenScalarWhereInput | DeviceTokenScalarWhereInput[]
+  }
+
+  export type NotificationUncheckedUpdateManyWithoutMemberNestedInput = {
+    create?: XOR<NotificationCreateWithoutMemberInput, NotificationUncheckedCreateWithoutMemberInput> | NotificationCreateWithoutMemberInput[] | NotificationUncheckedCreateWithoutMemberInput[]
+    connectOrCreate?: NotificationCreateOrConnectWithoutMemberInput | NotificationCreateOrConnectWithoutMemberInput[]
+    upsert?: NotificationUpsertWithWhereUniqueWithoutMemberInput | NotificationUpsertWithWhereUniqueWithoutMemberInput[]
+    createMany?: NotificationCreateManyMemberInputEnvelope
+    set?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
+    disconnect?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
+    delete?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
+    connect?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
+    update?: NotificationUpdateWithWhereUniqueWithoutMemberInput | NotificationUpdateWithWhereUniqueWithoutMemberInput[]
+    updateMany?: NotificationUpdateManyWithWhereWithoutMemberInput | NotificationUpdateManyWithWhereWithoutMemberInput[]
+    deleteMany?: NotificationScalarWhereInput | NotificationScalarWhereInput[]
   }
 
   export type MemberCreateNestedOneWithoutLoyaltyHistoryInput = {
@@ -60473,6 +63447,34 @@ export namespace Prisma {
     update?: XOR<XOR<TvScreenGroupUpdateToOneWithWhereWithoutContentItemsInput, TvScreenGroupUpdateWithoutContentItemsInput>, TvScreenGroupUncheckedUpdateWithoutContentItemsInput>
   }
 
+  export type MemberCreateNestedOneWithoutDeviceTokensInput = {
+    create?: XOR<MemberCreateWithoutDeviceTokensInput, MemberUncheckedCreateWithoutDeviceTokensInput>
+    connectOrCreate?: MemberCreateOrConnectWithoutDeviceTokensInput
+    connect?: MemberWhereUniqueInput
+  }
+
+  export type MemberUpdateOneRequiredWithoutDeviceTokensNestedInput = {
+    create?: XOR<MemberCreateWithoutDeviceTokensInput, MemberUncheckedCreateWithoutDeviceTokensInput>
+    connectOrCreate?: MemberCreateOrConnectWithoutDeviceTokensInput
+    upsert?: MemberUpsertWithoutDeviceTokensInput
+    connect?: MemberWhereUniqueInput
+    update?: XOR<XOR<MemberUpdateToOneWithWhereWithoutDeviceTokensInput, MemberUpdateWithoutDeviceTokensInput>, MemberUncheckedUpdateWithoutDeviceTokensInput>
+  }
+
+  export type MemberCreateNestedOneWithoutNotificationsInput = {
+    create?: XOR<MemberCreateWithoutNotificationsInput, MemberUncheckedCreateWithoutNotificationsInput>
+    connectOrCreate?: MemberCreateOrConnectWithoutNotificationsInput
+    connect?: MemberWhereUniqueInput
+  }
+
+  export type MemberUpdateOneRequiredWithoutNotificationsNestedInput = {
+    create?: XOR<MemberCreateWithoutNotificationsInput, MemberUncheckedCreateWithoutNotificationsInput>
+    connectOrCreate?: MemberCreateOrConnectWithoutNotificationsInput
+    upsert?: MemberUpsertWithoutNotificationsInput
+    connect?: MemberWhereUniqueInput
+    update?: XOR<XOR<MemberUpdateToOneWithWhereWithoutNotificationsInput, MemberUpdateWithoutNotificationsInput>, MemberUncheckedUpdateWithoutNotificationsInput>
+  }
+
   export type NestedStringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[]
@@ -60732,6 +63734,24 @@ export namespace Prisma {
     _min?: NestedBigIntNullableFilter<$PrismaModel>
     _max?: NestedBigIntNullableFilter<$PrismaModel>
   }
+  export type NestedJsonNullableFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<NestedJsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<NestedJsonNullableFilterBase<$PrismaModel>>, 'path'>>,
+        Required<NestedJsonNullableFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<NestedJsonNullableFilterBase<$PrismaModel>>, 'path'>>
+
+  export type NestedJsonNullableFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+  }
 
   export type AuditLogCreateWithoutAdminInput = {
     id?: string
@@ -60817,6 +63837,8 @@ export namespace Prisma {
     sportStats?: UserSportStatCreateNestedManyWithoutMemberInput
     nfcCards?: NfcCardCreateNestedManyWithoutMemberInput
     nfcTransactions?: NfcTransactionCreateNestedManyWithoutMemberInput
+    deviceTokens?: DeviceTokenCreateNestedManyWithoutMemberInput
+    notifications?: NotificationCreateNestedManyWithoutMemberInput
   }
 
   export type MemberUncheckedCreateWithoutFamilyInput = {
@@ -60844,6 +63866,8 @@ export namespace Prisma {
     sportStats?: UserSportStatUncheckedCreateNestedManyWithoutMemberInput
     nfcCards?: NfcCardUncheckedCreateNestedManyWithoutMemberInput
     nfcTransactions?: NfcTransactionUncheckedCreateNestedManyWithoutMemberInput
+    deviceTokens?: DeviceTokenUncheckedCreateNestedManyWithoutMemberInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutMemberInput
   }
 
   export type MemberCreateOrConnectWithoutFamilyInput = {
@@ -61353,6 +64377,60 @@ export namespace Prisma {
     data: NfcTransactionCreateManyMemberInput | NfcTransactionCreateManyMemberInput[]
   }
 
+  export type DeviceTokenCreateWithoutMemberInput = {
+    id?: string
+    token: string
+    platform?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type DeviceTokenUncheckedCreateWithoutMemberInput = {
+    id?: string
+    token: string
+    platform?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type DeviceTokenCreateOrConnectWithoutMemberInput = {
+    where: DeviceTokenWhereUniqueInput
+    create: XOR<DeviceTokenCreateWithoutMemberInput, DeviceTokenUncheckedCreateWithoutMemberInput>
+  }
+
+  export type DeviceTokenCreateManyMemberInputEnvelope = {
+    data: DeviceTokenCreateManyMemberInput | DeviceTokenCreateManyMemberInput[]
+  }
+
+  export type NotificationCreateWithoutMemberInput = {
+    id?: string
+    title: string
+    body: string
+    data?: NullableJsonNullValueInput | InputJsonValue
+    isRead?: boolean
+    readAt?: Date | string | null
+    createdAt?: Date | string
+  }
+
+  export type NotificationUncheckedCreateWithoutMemberInput = {
+    id?: string
+    title: string
+    body: string
+    data?: NullableJsonNullValueInput | InputJsonValue
+    isRead?: boolean
+    readAt?: Date | string | null
+    createdAt?: Date | string
+  }
+
+  export type NotificationCreateOrConnectWithoutMemberInput = {
+    where: NotificationWhereUniqueInput
+    create: XOR<NotificationCreateWithoutMemberInput, NotificationUncheckedCreateWithoutMemberInput>
+  }
+
+  export type NotificationCreateManyMemberInputEnvelope = {
+    data: NotificationCreateManyMemberInput | NotificationCreateManyMemberInput[]
+  }
+
   export type FamilyGroupUpsertWithoutMembersInput = {
     update: XOR<FamilyGroupUpdateWithoutMembersInput, FamilyGroupUncheckedUpdateWithoutMembersInput>
     create: XOR<FamilyGroupCreateWithoutMembersInput, FamilyGroupUncheckedCreateWithoutMembersInput>
@@ -61810,6 +64888,64 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"NfcTransaction"> | Date | string
   }
 
+  export type DeviceTokenUpsertWithWhereUniqueWithoutMemberInput = {
+    where: DeviceTokenWhereUniqueInput
+    update: XOR<DeviceTokenUpdateWithoutMemberInput, DeviceTokenUncheckedUpdateWithoutMemberInput>
+    create: XOR<DeviceTokenCreateWithoutMemberInput, DeviceTokenUncheckedCreateWithoutMemberInput>
+  }
+
+  export type DeviceTokenUpdateWithWhereUniqueWithoutMemberInput = {
+    where: DeviceTokenWhereUniqueInput
+    data: XOR<DeviceTokenUpdateWithoutMemberInput, DeviceTokenUncheckedUpdateWithoutMemberInput>
+  }
+
+  export type DeviceTokenUpdateManyWithWhereWithoutMemberInput = {
+    where: DeviceTokenScalarWhereInput
+    data: XOR<DeviceTokenUpdateManyMutationInput, DeviceTokenUncheckedUpdateManyWithoutMemberInput>
+  }
+
+  export type DeviceTokenScalarWhereInput = {
+    AND?: DeviceTokenScalarWhereInput | DeviceTokenScalarWhereInput[]
+    OR?: DeviceTokenScalarWhereInput[]
+    NOT?: DeviceTokenScalarWhereInput | DeviceTokenScalarWhereInput[]
+    id?: StringFilter<"DeviceToken"> | string
+    memberId?: StringFilter<"DeviceToken"> | string
+    token?: StringFilter<"DeviceToken"> | string
+    platform?: StringNullableFilter<"DeviceToken"> | string | null
+    createdAt?: DateTimeFilter<"DeviceToken"> | Date | string
+    updatedAt?: DateTimeFilter<"DeviceToken"> | Date | string
+  }
+
+  export type NotificationUpsertWithWhereUniqueWithoutMemberInput = {
+    where: NotificationWhereUniqueInput
+    update: XOR<NotificationUpdateWithoutMemberInput, NotificationUncheckedUpdateWithoutMemberInput>
+    create: XOR<NotificationCreateWithoutMemberInput, NotificationUncheckedCreateWithoutMemberInput>
+  }
+
+  export type NotificationUpdateWithWhereUniqueWithoutMemberInput = {
+    where: NotificationWhereUniqueInput
+    data: XOR<NotificationUpdateWithoutMemberInput, NotificationUncheckedUpdateWithoutMemberInput>
+  }
+
+  export type NotificationUpdateManyWithWhereWithoutMemberInput = {
+    where: NotificationScalarWhereInput
+    data: XOR<NotificationUpdateManyMutationInput, NotificationUncheckedUpdateManyWithoutMemberInput>
+  }
+
+  export type NotificationScalarWhereInput = {
+    AND?: NotificationScalarWhereInput | NotificationScalarWhereInput[]
+    OR?: NotificationScalarWhereInput[]
+    NOT?: NotificationScalarWhereInput | NotificationScalarWhereInput[]
+    id?: StringFilter<"Notification"> | string
+    memberId?: StringFilter<"Notification"> | string
+    title?: StringFilter<"Notification"> | string
+    body?: StringFilter<"Notification"> | string
+    data?: JsonNullableFilter<"Notification">
+    isRead?: BoolFilter<"Notification"> | boolean
+    readAt?: DateTimeNullableFilter<"Notification"> | Date | string | null
+    createdAt?: DateTimeFilter<"Notification"> | Date | string
+  }
+
   export type MemberCreateWithoutLoyaltyHistoryInput = {
     id?: string
     mobile: string
@@ -61835,6 +64971,8 @@ export namespace Prisma {
     sportStats?: UserSportStatCreateNestedManyWithoutMemberInput
     nfcCards?: NfcCardCreateNestedManyWithoutMemberInput
     nfcTransactions?: NfcTransactionCreateNestedManyWithoutMemberInput
+    deviceTokens?: DeviceTokenCreateNestedManyWithoutMemberInput
+    notifications?: NotificationCreateNestedManyWithoutMemberInput
   }
 
   export type MemberUncheckedCreateWithoutLoyaltyHistoryInput = {
@@ -61862,6 +65000,8 @@ export namespace Prisma {
     sportStats?: UserSportStatUncheckedCreateNestedManyWithoutMemberInput
     nfcCards?: NfcCardUncheckedCreateNestedManyWithoutMemberInput
     nfcTransactions?: NfcTransactionUncheckedCreateNestedManyWithoutMemberInput
+    deviceTokens?: DeviceTokenUncheckedCreateNestedManyWithoutMemberInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutMemberInput
   }
 
   export type MemberCreateOrConnectWithoutLoyaltyHistoryInput = {
@@ -61905,6 +65045,8 @@ export namespace Prisma {
     sportStats?: UserSportStatUpdateManyWithoutMemberNestedInput
     nfcCards?: NfcCardUpdateManyWithoutMemberNestedInput
     nfcTransactions?: NfcTransactionUpdateManyWithoutMemberNestedInput
+    deviceTokens?: DeviceTokenUpdateManyWithoutMemberNestedInput
+    notifications?: NotificationUpdateManyWithoutMemberNestedInput
   }
 
   export type MemberUncheckedUpdateWithoutLoyaltyHistoryInput = {
@@ -61932,6 +65074,8 @@ export namespace Prisma {
     sportStats?: UserSportStatUncheckedUpdateManyWithoutMemberNestedInput
     nfcCards?: NfcCardUncheckedUpdateManyWithoutMemberNestedInput
     nfcTransactions?: NfcTransactionUncheckedUpdateManyWithoutMemberNestedInput
+    deviceTokens?: DeviceTokenUncheckedUpdateManyWithoutMemberNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutMemberNestedInput
   }
 
   export type TurfSportCreateWithoutSportInput = {
@@ -63091,6 +66235,8 @@ export namespace Prisma {
     sportStats?: UserSportStatCreateNestedManyWithoutMemberInput
     nfcCards?: NfcCardCreateNestedManyWithoutMemberInput
     nfcTransactions?: NfcTransactionCreateNestedManyWithoutMemberInput
+    deviceTokens?: DeviceTokenCreateNestedManyWithoutMemberInput
+    notifications?: NotificationCreateNestedManyWithoutMemberInput
   }
 
   export type MemberUncheckedCreateWithoutMembershipsInput = {
@@ -63118,6 +66264,8 @@ export namespace Prisma {
     sportStats?: UserSportStatUncheckedCreateNestedManyWithoutMemberInput
     nfcCards?: NfcCardUncheckedCreateNestedManyWithoutMemberInput
     nfcTransactions?: NfcTransactionUncheckedCreateNestedManyWithoutMemberInput
+    deviceTokens?: DeviceTokenUncheckedCreateNestedManyWithoutMemberInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutMemberInput
   }
 
   export type MemberCreateOrConnectWithoutMembershipsInput = {
@@ -63239,6 +66387,8 @@ export namespace Prisma {
     sportStats?: UserSportStatUpdateManyWithoutMemberNestedInput
     nfcCards?: NfcCardUpdateManyWithoutMemberNestedInput
     nfcTransactions?: NfcTransactionUpdateManyWithoutMemberNestedInput
+    deviceTokens?: DeviceTokenUpdateManyWithoutMemberNestedInput
+    notifications?: NotificationUpdateManyWithoutMemberNestedInput
   }
 
   export type MemberUncheckedUpdateWithoutMembershipsInput = {
@@ -63266,6 +66416,8 @@ export namespace Prisma {
     sportStats?: UserSportStatUncheckedUpdateManyWithoutMemberNestedInput
     nfcCards?: NfcCardUncheckedUpdateManyWithoutMemberNestedInput
     nfcTransactions?: NfcTransactionUncheckedUpdateManyWithoutMemberNestedInput
+    deviceTokens?: DeviceTokenUncheckedUpdateManyWithoutMemberNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutMemberNestedInput
   }
 
   export type MembershipPlanUpsertWithoutMembershipsInput = {
@@ -63383,6 +66535,8 @@ export namespace Prisma {
     sportStats?: UserSportStatCreateNestedManyWithoutMemberInput
     nfcCards?: NfcCardCreateNestedManyWithoutMemberInput
     nfcTransactions?: NfcTransactionCreateNestedManyWithoutMemberInput
+    deviceTokens?: DeviceTokenCreateNestedManyWithoutMemberInput
+    notifications?: NotificationCreateNestedManyWithoutMemberInput
   }
 
   export type MemberUncheckedCreateWithoutAttendancesInput = {
@@ -63410,6 +66564,8 @@ export namespace Prisma {
     sportStats?: UserSportStatUncheckedCreateNestedManyWithoutMemberInput
     nfcCards?: NfcCardUncheckedCreateNestedManyWithoutMemberInput
     nfcTransactions?: NfcTransactionUncheckedCreateNestedManyWithoutMemberInput
+    deviceTokens?: DeviceTokenUncheckedCreateNestedManyWithoutMemberInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutMemberInput
   }
 
   export type MemberCreateOrConnectWithoutAttendancesInput = {
@@ -63533,6 +66689,8 @@ export namespace Prisma {
     sportStats?: UserSportStatUpdateManyWithoutMemberNestedInput
     nfcCards?: NfcCardUpdateManyWithoutMemberNestedInput
     nfcTransactions?: NfcTransactionUpdateManyWithoutMemberNestedInput
+    deviceTokens?: DeviceTokenUpdateManyWithoutMemberNestedInput
+    notifications?: NotificationUpdateManyWithoutMemberNestedInput
   }
 
   export type MemberUncheckedUpdateWithoutAttendancesInput = {
@@ -63560,6 +66718,8 @@ export namespace Prisma {
     sportStats?: UserSportStatUncheckedUpdateManyWithoutMemberNestedInput
     nfcCards?: NfcCardUncheckedUpdateManyWithoutMemberNestedInput
     nfcTransactions?: NfcTransactionUncheckedUpdateManyWithoutMemberNestedInput
+    deviceTokens?: DeviceTokenUncheckedUpdateManyWithoutMemberNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutMemberNestedInput
   }
 
   export type SportUpsertWithoutAttendancesInput = {
@@ -63720,6 +66880,8 @@ export namespace Prisma {
     sportStats?: UserSportStatCreateNestedManyWithoutMemberInput
     nfcCards?: NfcCardCreateNestedManyWithoutMemberInput
     nfcTransactions?: NfcTransactionCreateNestedManyWithoutMemberInput
+    deviceTokens?: DeviceTokenCreateNestedManyWithoutMemberInput
+    notifications?: NotificationCreateNestedManyWithoutMemberInput
   }
 
   export type MemberUncheckedCreateWithoutBookingsInput = {
@@ -63747,6 +66909,8 @@ export namespace Prisma {
     sportStats?: UserSportStatUncheckedCreateNestedManyWithoutMemberInput
     nfcCards?: NfcCardUncheckedCreateNestedManyWithoutMemberInput
     nfcTransactions?: NfcTransactionUncheckedCreateNestedManyWithoutMemberInput
+    deviceTokens?: DeviceTokenUncheckedCreateNestedManyWithoutMemberInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutMemberInput
   }
 
   export type MemberCreateOrConnectWithoutBookingsInput = {
@@ -64058,6 +67222,8 @@ export namespace Prisma {
     sportStats?: UserSportStatUpdateManyWithoutMemberNestedInput
     nfcCards?: NfcCardUpdateManyWithoutMemberNestedInput
     nfcTransactions?: NfcTransactionUpdateManyWithoutMemberNestedInput
+    deviceTokens?: DeviceTokenUpdateManyWithoutMemberNestedInput
+    notifications?: NotificationUpdateManyWithoutMemberNestedInput
   }
 
   export type MemberUncheckedUpdateWithoutBookingsInput = {
@@ -64085,6 +67251,8 @@ export namespace Prisma {
     sportStats?: UserSportStatUncheckedUpdateManyWithoutMemberNestedInput
     nfcCards?: NfcCardUncheckedUpdateManyWithoutMemberNestedInput
     nfcTransactions?: NfcTransactionUncheckedUpdateManyWithoutMemberNestedInput
+    deviceTokens?: DeviceTokenUncheckedUpdateManyWithoutMemberNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutMemberNestedInput
   }
 
   export type SportUpsertWithoutBookingsInput = {
@@ -64340,6 +67508,8 @@ export namespace Prisma {
     sportStats?: UserSportStatCreateNestedManyWithoutMemberInput
     nfcCards?: NfcCardCreateNestedManyWithoutMemberInput
     nfcTransactions?: NfcTransactionCreateNestedManyWithoutMemberInput
+    deviceTokens?: DeviceTokenCreateNestedManyWithoutMemberInput
+    notifications?: NotificationCreateNestedManyWithoutMemberInput
   }
 
   export type MemberUncheckedCreateWithoutJoinedBookingsInput = {
@@ -64367,6 +67537,8 @@ export namespace Prisma {
     sportStats?: UserSportStatUncheckedCreateNestedManyWithoutMemberInput
     nfcCards?: NfcCardUncheckedCreateNestedManyWithoutMemberInput
     nfcTransactions?: NfcTransactionUncheckedCreateNestedManyWithoutMemberInput
+    deviceTokens?: DeviceTokenUncheckedCreateNestedManyWithoutMemberInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutMemberInput
   }
 
   export type MemberCreateOrConnectWithoutJoinedBookingsInput = {
@@ -64475,6 +67647,8 @@ export namespace Prisma {
     sportStats?: UserSportStatUpdateManyWithoutMemberNestedInput
     nfcCards?: NfcCardUpdateManyWithoutMemberNestedInput
     nfcTransactions?: NfcTransactionUpdateManyWithoutMemberNestedInput
+    deviceTokens?: DeviceTokenUpdateManyWithoutMemberNestedInput
+    notifications?: NotificationUpdateManyWithoutMemberNestedInput
   }
 
   export type MemberUncheckedUpdateWithoutJoinedBookingsInput = {
@@ -64502,6 +67676,8 @@ export namespace Prisma {
     sportStats?: UserSportStatUncheckedUpdateManyWithoutMemberNestedInput
     nfcCards?: NfcCardUncheckedUpdateManyWithoutMemberNestedInput
     nfcTransactions?: NfcTransactionUncheckedUpdateManyWithoutMemberNestedInput
+    deviceTokens?: DeviceTokenUncheckedUpdateManyWithoutMemberNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutMemberNestedInput
   }
 
   export type BookingCreateWithoutPaymentsInput = {
@@ -64712,6 +67888,8 @@ export namespace Prisma {
     sportStats?: UserSportStatCreateNestedManyWithoutMemberInput
     nfcCards?: NfcCardCreateNestedManyWithoutMemberInput
     nfcTransactions?: NfcTransactionCreateNestedManyWithoutMemberInput
+    deviceTokens?: DeviceTokenCreateNestedManyWithoutMemberInput
+    notifications?: NotificationCreateNestedManyWithoutMemberInput
   }
 
   export type MemberUncheckedCreateWithoutTransactionsInput = {
@@ -64739,6 +67917,8 @@ export namespace Prisma {
     sportStats?: UserSportStatUncheckedCreateNestedManyWithoutMemberInput
     nfcCards?: NfcCardUncheckedCreateNestedManyWithoutMemberInput
     nfcTransactions?: NfcTransactionUncheckedCreateNestedManyWithoutMemberInput
+    deviceTokens?: DeviceTokenUncheckedCreateNestedManyWithoutMemberInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutMemberInput
   }
 
   export type MemberCreateOrConnectWithoutTransactionsInput = {
@@ -64847,6 +68027,8 @@ export namespace Prisma {
     sportStats?: UserSportStatUpdateManyWithoutMemberNestedInput
     nfcCards?: NfcCardUpdateManyWithoutMemberNestedInput
     nfcTransactions?: NfcTransactionUpdateManyWithoutMemberNestedInput
+    deviceTokens?: DeviceTokenUpdateManyWithoutMemberNestedInput
+    notifications?: NotificationUpdateManyWithoutMemberNestedInput
   }
 
   export type MemberUncheckedUpdateWithoutTransactionsInput = {
@@ -64874,6 +68056,8 @@ export namespace Prisma {
     sportStats?: UserSportStatUncheckedUpdateManyWithoutMemberNestedInput
     nfcCards?: NfcCardUncheckedUpdateManyWithoutMemberNestedInput
     nfcTransactions?: NfcTransactionUncheckedUpdateManyWithoutMemberNestedInput
+    deviceTokens?: DeviceTokenUncheckedUpdateManyWithoutMemberNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutMemberNestedInput
   }
 
   export type BookingCreateWithoutTicketsInput = {
@@ -65221,6 +68405,8 @@ export namespace Prisma {
     sportStats?: UserSportStatCreateNestedManyWithoutMemberInput
     nfcCards?: NfcCardCreateNestedManyWithoutMemberInput
     nfcTransactions?: NfcTransactionCreateNestedManyWithoutMemberInput
+    deviceTokens?: DeviceTokenCreateNestedManyWithoutMemberInput
+    notifications?: NotificationCreateNestedManyWithoutMemberInput
   }
 
   export type MemberUncheckedCreateWithoutTournamentRegistrationsInput = {
@@ -65248,6 +68434,8 @@ export namespace Prisma {
     sportStats?: UserSportStatUncheckedCreateNestedManyWithoutMemberInput
     nfcCards?: NfcCardUncheckedCreateNestedManyWithoutMemberInput
     nfcTransactions?: NfcTransactionUncheckedCreateNestedManyWithoutMemberInput
+    deviceTokens?: DeviceTokenUncheckedCreateNestedManyWithoutMemberInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutMemberInput
   }
 
   export type MemberCreateOrConnectWithoutTournamentRegistrationsInput = {
@@ -65377,6 +68565,8 @@ export namespace Prisma {
     sportStats?: UserSportStatUpdateManyWithoutMemberNestedInput
     nfcCards?: NfcCardUpdateManyWithoutMemberNestedInput
     nfcTransactions?: NfcTransactionUpdateManyWithoutMemberNestedInput
+    deviceTokens?: DeviceTokenUpdateManyWithoutMemberNestedInput
+    notifications?: NotificationUpdateManyWithoutMemberNestedInput
   }
 
   export type MemberUncheckedUpdateWithoutTournamentRegistrationsInput = {
@@ -65404,6 +68594,8 @@ export namespace Prisma {
     sportStats?: UserSportStatUncheckedUpdateManyWithoutMemberNestedInput
     nfcCards?: NfcCardUncheckedUpdateManyWithoutMemberNestedInput
     nfcTransactions?: NfcTransactionUncheckedUpdateManyWithoutMemberNestedInput
+    deviceTokens?: DeviceTokenUncheckedUpdateManyWithoutMemberNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutMemberNestedInput
   }
 
   export type TournamentPlayerUpsertWithWhereUniqueWithoutRegistrationInput = {
@@ -65528,6 +68720,8 @@ export namespace Prisma {
     sportStats?: UserSportStatCreateNestedManyWithoutMemberInput
     nfcCards?: NfcCardCreateNestedManyWithoutMemberInput
     nfcTransactions?: NfcTransactionCreateNestedManyWithoutMemberInput
+    deviceTokens?: DeviceTokenCreateNestedManyWithoutMemberInput
+    notifications?: NotificationCreateNestedManyWithoutMemberInput
   }
 
   export type MemberUncheckedCreateWithoutWalletTransactionsInput = {
@@ -65555,6 +68749,8 @@ export namespace Prisma {
     sportStats?: UserSportStatUncheckedCreateNestedManyWithoutMemberInput
     nfcCards?: NfcCardUncheckedCreateNestedManyWithoutMemberInput
     nfcTransactions?: NfcTransactionUncheckedCreateNestedManyWithoutMemberInput
+    deviceTokens?: DeviceTokenUncheckedCreateNestedManyWithoutMemberInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutMemberInput
   }
 
   export type MemberCreateOrConnectWithoutWalletTransactionsInput = {
@@ -65598,6 +68794,8 @@ export namespace Prisma {
     sportStats?: UserSportStatUpdateManyWithoutMemberNestedInput
     nfcCards?: NfcCardUpdateManyWithoutMemberNestedInput
     nfcTransactions?: NfcTransactionUpdateManyWithoutMemberNestedInput
+    deviceTokens?: DeviceTokenUpdateManyWithoutMemberNestedInput
+    notifications?: NotificationUpdateManyWithoutMemberNestedInput
   }
 
   export type MemberUncheckedUpdateWithoutWalletTransactionsInput = {
@@ -65625,6 +68823,8 @@ export namespace Prisma {
     sportStats?: UserSportStatUncheckedUpdateManyWithoutMemberNestedInput
     nfcCards?: NfcCardUncheckedUpdateManyWithoutMemberNestedInput
     nfcTransactions?: NfcTransactionUncheckedUpdateManyWithoutMemberNestedInput
+    deviceTokens?: DeviceTokenUncheckedUpdateManyWithoutMemberNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutMemberNestedInput
   }
 
   export type CouponUsageCreateWithoutCouponInput = {
@@ -65783,6 +68983,8 @@ export namespace Prisma {
     sportStats?: UserSportStatCreateNestedManyWithoutMemberInput
     nfcCards?: NfcCardCreateNestedManyWithoutMemberInput
     nfcTransactions?: NfcTransactionCreateNestedManyWithoutMemberInput
+    deviceTokens?: DeviceTokenCreateNestedManyWithoutMemberInput
+    notifications?: NotificationCreateNestedManyWithoutMemberInput
   }
 
   export type MemberUncheckedCreateWithoutCouponAssignmentsInput = {
@@ -65810,6 +69012,8 @@ export namespace Prisma {
     sportStats?: UserSportStatUncheckedCreateNestedManyWithoutMemberInput
     nfcCards?: NfcCardUncheckedCreateNestedManyWithoutMemberInput
     nfcTransactions?: NfcTransactionUncheckedCreateNestedManyWithoutMemberInput
+    deviceTokens?: DeviceTokenUncheckedCreateNestedManyWithoutMemberInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutMemberInput
   }
 
   export type MemberCreateOrConnectWithoutCouponAssignmentsInput = {
@@ -65912,6 +69116,8 @@ export namespace Prisma {
     sportStats?: UserSportStatUpdateManyWithoutMemberNestedInput
     nfcCards?: NfcCardUpdateManyWithoutMemberNestedInput
     nfcTransactions?: NfcTransactionUpdateManyWithoutMemberNestedInput
+    deviceTokens?: DeviceTokenUpdateManyWithoutMemberNestedInput
+    notifications?: NotificationUpdateManyWithoutMemberNestedInput
   }
 
   export type MemberUncheckedUpdateWithoutCouponAssignmentsInput = {
@@ -65939,6 +69145,8 @@ export namespace Prisma {
     sportStats?: UserSportStatUncheckedUpdateManyWithoutMemberNestedInput
     nfcCards?: NfcCardUncheckedUpdateManyWithoutMemberNestedInput
     nfcTransactions?: NfcTransactionUncheckedUpdateManyWithoutMemberNestedInput
+    deviceTokens?: DeviceTokenUncheckedUpdateManyWithoutMemberNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutMemberNestedInput
   }
 
   export type CouponCreateWithoutUsagesInput = {
@@ -66019,6 +69227,8 @@ export namespace Prisma {
     sportStats?: UserSportStatCreateNestedManyWithoutMemberInput
     nfcCards?: NfcCardCreateNestedManyWithoutMemberInput
     nfcTransactions?: NfcTransactionCreateNestedManyWithoutMemberInput
+    deviceTokens?: DeviceTokenCreateNestedManyWithoutMemberInput
+    notifications?: NotificationCreateNestedManyWithoutMemberInput
   }
 
   export type MemberUncheckedCreateWithoutCouponUsagesInput = {
@@ -66046,6 +69256,8 @@ export namespace Prisma {
     sportStats?: UserSportStatUncheckedCreateNestedManyWithoutMemberInput
     nfcCards?: NfcCardUncheckedCreateNestedManyWithoutMemberInput
     nfcTransactions?: NfcTransactionUncheckedCreateNestedManyWithoutMemberInput
+    deviceTokens?: DeviceTokenUncheckedCreateNestedManyWithoutMemberInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutMemberInput
   }
 
   export type MemberCreateOrConnectWithoutCouponUsagesInput = {
@@ -66207,6 +69419,8 @@ export namespace Prisma {
     sportStats?: UserSportStatUpdateManyWithoutMemberNestedInput
     nfcCards?: NfcCardUpdateManyWithoutMemberNestedInput
     nfcTransactions?: NfcTransactionUpdateManyWithoutMemberNestedInput
+    deviceTokens?: DeviceTokenUpdateManyWithoutMemberNestedInput
+    notifications?: NotificationUpdateManyWithoutMemberNestedInput
   }
 
   export type MemberUncheckedUpdateWithoutCouponUsagesInput = {
@@ -66234,6 +69448,8 @@ export namespace Prisma {
     sportStats?: UserSportStatUncheckedUpdateManyWithoutMemberNestedInput
     nfcCards?: NfcCardUncheckedUpdateManyWithoutMemberNestedInput
     nfcTransactions?: NfcTransactionUncheckedUpdateManyWithoutMemberNestedInput
+    deviceTokens?: DeviceTokenUncheckedUpdateManyWithoutMemberNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutMemberNestedInput
   }
 
   export type BookingUpsertWithoutCouponUsagesInput = {
@@ -66392,6 +69608,8 @@ export namespace Prisma {
     sportStats?: UserSportStatCreateNestedManyWithoutMemberInput
     nfcCards?: NfcCardCreateNestedManyWithoutMemberInput
     nfcTransactions?: NfcTransactionCreateNestedManyWithoutMemberInput
+    deviceTokens?: DeviceTokenCreateNestedManyWithoutMemberInput
+    notifications?: NotificationCreateNestedManyWithoutMemberInput
   }
 
   export type MemberUncheckedCreateWithoutLoyaltyAchievementsInput = {
@@ -66419,6 +69637,8 @@ export namespace Prisma {
     sportStats?: UserSportStatUncheckedCreateNestedManyWithoutMemberInput
     nfcCards?: NfcCardUncheckedCreateNestedManyWithoutMemberInput
     nfcTransactions?: NfcTransactionUncheckedCreateNestedManyWithoutMemberInput
+    deviceTokens?: DeviceTokenUncheckedCreateNestedManyWithoutMemberInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutMemberInput
   }
 
   export type MemberCreateOrConnectWithoutLoyaltyAchievementsInput = {
@@ -66497,6 +69717,8 @@ export namespace Prisma {
     sportStats?: UserSportStatUpdateManyWithoutMemberNestedInput
     nfcCards?: NfcCardUpdateManyWithoutMemberNestedInput
     nfcTransactions?: NfcTransactionUpdateManyWithoutMemberNestedInput
+    deviceTokens?: DeviceTokenUpdateManyWithoutMemberNestedInput
+    notifications?: NotificationUpdateManyWithoutMemberNestedInput
   }
 
   export type MemberUncheckedUpdateWithoutLoyaltyAchievementsInput = {
@@ -66524,6 +69746,8 @@ export namespace Prisma {
     sportStats?: UserSportStatUncheckedUpdateManyWithoutMemberNestedInput
     nfcCards?: NfcCardUncheckedUpdateManyWithoutMemberNestedInput
     nfcTransactions?: NfcTransactionUncheckedUpdateManyWithoutMemberNestedInput
+    deviceTokens?: DeviceTokenUncheckedUpdateManyWithoutMemberNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutMemberNestedInput
   }
 
   export type AdminCreateWithoutAuditLogsInput = {
@@ -66707,6 +69931,8 @@ export namespace Prisma {
     loyaltyAchievements?: LoyaltyAchievementCreateNestedManyWithoutMemberInput
     nfcCards?: NfcCardCreateNestedManyWithoutMemberInput
     nfcTransactions?: NfcTransactionCreateNestedManyWithoutMemberInput
+    deviceTokens?: DeviceTokenCreateNestedManyWithoutMemberInput
+    notifications?: NotificationCreateNestedManyWithoutMemberInput
   }
 
   export type MemberUncheckedCreateWithoutSportStatsInput = {
@@ -66734,6 +69960,8 @@ export namespace Prisma {
     loyaltyAchievements?: LoyaltyAchievementUncheckedCreateNestedManyWithoutMemberInput
     nfcCards?: NfcCardUncheckedCreateNestedManyWithoutMemberInput
     nfcTransactions?: NfcTransactionUncheckedCreateNestedManyWithoutMemberInput
+    deviceTokens?: DeviceTokenUncheckedCreateNestedManyWithoutMemberInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutMemberInput
   }
 
   export type MemberCreateOrConnectWithoutSportStatsInput = {
@@ -66820,6 +70048,8 @@ export namespace Prisma {
     loyaltyAchievements?: LoyaltyAchievementUpdateManyWithoutMemberNestedInput
     nfcCards?: NfcCardUpdateManyWithoutMemberNestedInput
     nfcTransactions?: NfcTransactionUpdateManyWithoutMemberNestedInput
+    deviceTokens?: DeviceTokenUpdateManyWithoutMemberNestedInput
+    notifications?: NotificationUpdateManyWithoutMemberNestedInput
   }
 
   export type MemberUncheckedUpdateWithoutSportStatsInput = {
@@ -66847,6 +70077,8 @@ export namespace Prisma {
     loyaltyAchievements?: LoyaltyAchievementUncheckedUpdateManyWithoutMemberNestedInput
     nfcCards?: NfcCardUncheckedUpdateManyWithoutMemberNestedInput
     nfcTransactions?: NfcTransactionUncheckedUpdateManyWithoutMemberNestedInput
+    deviceTokens?: DeviceTokenUncheckedUpdateManyWithoutMemberNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutMemberNestedInput
   }
 
   export type SportUpsertWithoutSportStatsInput = {
@@ -66923,6 +70155,8 @@ export namespace Prisma {
     loyaltyAchievements?: LoyaltyAchievementCreateNestedManyWithoutMemberInput
     sportStats?: UserSportStatCreateNestedManyWithoutMemberInput
     nfcTransactions?: NfcTransactionCreateNestedManyWithoutMemberInput
+    deviceTokens?: DeviceTokenCreateNestedManyWithoutMemberInput
+    notifications?: NotificationCreateNestedManyWithoutMemberInput
   }
 
   export type MemberUncheckedCreateWithoutNfcCardsInput = {
@@ -66950,6 +70184,8 @@ export namespace Prisma {
     loyaltyAchievements?: LoyaltyAchievementUncheckedCreateNestedManyWithoutMemberInput
     sportStats?: UserSportStatUncheckedCreateNestedManyWithoutMemberInput
     nfcTransactions?: NfcTransactionUncheckedCreateNestedManyWithoutMemberInput
+    deviceTokens?: DeviceTokenUncheckedCreateNestedManyWithoutMemberInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutMemberInput
   }
 
   export type MemberCreateOrConnectWithoutNfcCardsInput = {
@@ -67032,6 +70268,8 @@ export namespace Prisma {
     loyaltyAchievements?: LoyaltyAchievementUpdateManyWithoutMemberNestedInput
     sportStats?: UserSportStatUpdateManyWithoutMemberNestedInput
     nfcTransactions?: NfcTransactionUpdateManyWithoutMemberNestedInput
+    deviceTokens?: DeviceTokenUpdateManyWithoutMemberNestedInput
+    notifications?: NotificationUpdateManyWithoutMemberNestedInput
   }
 
   export type MemberUncheckedUpdateWithoutNfcCardsInput = {
@@ -67059,6 +70297,8 @@ export namespace Prisma {
     loyaltyAchievements?: LoyaltyAchievementUncheckedUpdateManyWithoutMemberNestedInput
     sportStats?: UserSportStatUncheckedUpdateManyWithoutMemberNestedInput
     nfcTransactions?: NfcTransactionUncheckedUpdateManyWithoutMemberNestedInput
+    deviceTokens?: DeviceTokenUncheckedUpdateManyWithoutMemberNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutMemberNestedInput
   }
 
   export type NfcTransactionUpsertWithWhereUniqueWithoutCardInput = {
@@ -67135,6 +70375,8 @@ export namespace Prisma {
     loyaltyAchievements?: LoyaltyAchievementCreateNestedManyWithoutMemberInput
     sportStats?: UserSportStatCreateNestedManyWithoutMemberInput
     nfcCards?: NfcCardCreateNestedManyWithoutMemberInput
+    deviceTokens?: DeviceTokenCreateNestedManyWithoutMemberInput
+    notifications?: NotificationCreateNestedManyWithoutMemberInput
   }
 
   export type MemberUncheckedCreateWithoutNfcTransactionsInput = {
@@ -67162,6 +70404,8 @@ export namespace Prisma {
     loyaltyAchievements?: LoyaltyAchievementUncheckedCreateNestedManyWithoutMemberInput
     sportStats?: UserSportStatUncheckedCreateNestedManyWithoutMemberInput
     nfcCards?: NfcCardUncheckedCreateNestedManyWithoutMemberInput
+    deviceTokens?: DeviceTokenUncheckedCreateNestedManyWithoutMemberInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutMemberInput
   }
 
   export type MemberCreateOrConnectWithoutNfcTransactionsInput = {
@@ -67303,6 +70547,8 @@ export namespace Prisma {
     loyaltyAchievements?: LoyaltyAchievementUpdateManyWithoutMemberNestedInput
     sportStats?: UserSportStatUpdateManyWithoutMemberNestedInput
     nfcCards?: NfcCardUpdateManyWithoutMemberNestedInput
+    deviceTokens?: DeviceTokenUpdateManyWithoutMemberNestedInput
+    notifications?: NotificationUpdateManyWithoutMemberNestedInput
   }
 
   export type MemberUncheckedUpdateWithoutNfcTransactionsInput = {
@@ -67330,6 +70576,8 @@ export namespace Prisma {
     loyaltyAchievements?: LoyaltyAchievementUncheckedUpdateManyWithoutMemberNestedInput
     sportStats?: UserSportStatUncheckedUpdateManyWithoutMemberNestedInput
     nfcCards?: NfcCardUncheckedUpdateManyWithoutMemberNestedInput
+    deviceTokens?: DeviceTokenUncheckedUpdateManyWithoutMemberNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutMemberNestedInput
   }
 
   export type BookingUpsertWithoutNfcTransactionsInput = {
@@ -67632,6 +70880,270 @@ export namespace Prisma {
     screens?: TvScreenUncheckedUpdateManyWithoutScreenGroupNestedInput
   }
 
+  export type MemberCreateWithoutDeviceTokensInput = {
+    id?: string
+    mobile: string
+    name: string
+    email?: string | null
+    dateOfBirth?: Date | string | null
+    loyaltyPoints?: number
+    walletBalance?: number
+    joinDate?: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    family?: FamilyGroupCreateNestedOneWithoutMembersInput
+    memberships?: MemberMembershipCreateNestedManyWithoutMemberInput
+    attendances?: AttendanceCreateNestedManyWithoutMemberInput
+    bookings?: BookingCreateNestedManyWithoutMemberInput
+    joinedBookings?: BookingParticipantCreateNestedManyWithoutMemberInput
+    loyaltyHistory?: LoyaltyHistoryCreateNestedManyWithoutMemberInput
+    tournamentRegistrations?: TournamentRegistrationCreateNestedManyWithoutRegisteredByInput
+    walletTransactions?: WalletTransactionCreateNestedManyWithoutMemberInput
+    transactions?: TransactionCreateNestedManyWithoutMemberInput
+    couponAssignments?: CouponAssignmentCreateNestedManyWithoutMemberInput
+    couponUsages?: CouponUsageCreateNestedManyWithoutMemberInput
+    loyaltyAchievements?: LoyaltyAchievementCreateNestedManyWithoutMemberInput
+    sportStats?: UserSportStatCreateNestedManyWithoutMemberInput
+    nfcCards?: NfcCardCreateNestedManyWithoutMemberInput
+    nfcTransactions?: NfcTransactionCreateNestedManyWithoutMemberInput
+    notifications?: NotificationCreateNestedManyWithoutMemberInput
+  }
+
+  export type MemberUncheckedCreateWithoutDeviceTokensInput = {
+    id?: string
+    mobile: string
+    familyId?: string | null
+    name: string
+    email?: string | null
+    dateOfBirth?: Date | string | null
+    loyaltyPoints?: number
+    walletBalance?: number
+    joinDate?: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    memberships?: MemberMembershipUncheckedCreateNestedManyWithoutMemberInput
+    attendances?: AttendanceUncheckedCreateNestedManyWithoutMemberInput
+    bookings?: BookingUncheckedCreateNestedManyWithoutMemberInput
+    joinedBookings?: BookingParticipantUncheckedCreateNestedManyWithoutMemberInput
+    loyaltyHistory?: LoyaltyHistoryUncheckedCreateNestedManyWithoutMemberInput
+    tournamentRegistrations?: TournamentRegistrationUncheckedCreateNestedManyWithoutRegisteredByInput
+    walletTransactions?: WalletTransactionUncheckedCreateNestedManyWithoutMemberInput
+    transactions?: TransactionUncheckedCreateNestedManyWithoutMemberInput
+    couponAssignments?: CouponAssignmentUncheckedCreateNestedManyWithoutMemberInput
+    couponUsages?: CouponUsageUncheckedCreateNestedManyWithoutMemberInput
+    loyaltyAchievements?: LoyaltyAchievementUncheckedCreateNestedManyWithoutMemberInput
+    sportStats?: UserSportStatUncheckedCreateNestedManyWithoutMemberInput
+    nfcCards?: NfcCardUncheckedCreateNestedManyWithoutMemberInput
+    nfcTransactions?: NfcTransactionUncheckedCreateNestedManyWithoutMemberInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutMemberInput
+  }
+
+  export type MemberCreateOrConnectWithoutDeviceTokensInput = {
+    where: MemberWhereUniqueInput
+    create: XOR<MemberCreateWithoutDeviceTokensInput, MemberUncheckedCreateWithoutDeviceTokensInput>
+  }
+
+  export type MemberUpsertWithoutDeviceTokensInput = {
+    update: XOR<MemberUpdateWithoutDeviceTokensInput, MemberUncheckedUpdateWithoutDeviceTokensInput>
+    create: XOR<MemberCreateWithoutDeviceTokensInput, MemberUncheckedCreateWithoutDeviceTokensInput>
+    where?: MemberWhereInput
+  }
+
+  export type MemberUpdateToOneWithWhereWithoutDeviceTokensInput = {
+    where?: MemberWhereInput
+    data: XOR<MemberUpdateWithoutDeviceTokensInput, MemberUncheckedUpdateWithoutDeviceTokensInput>
+  }
+
+  export type MemberUpdateWithoutDeviceTokensInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    mobile?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    loyaltyPoints?: IntFieldUpdateOperationsInput | number
+    walletBalance?: FloatFieldUpdateOperationsInput | number
+    joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    family?: FamilyGroupUpdateOneWithoutMembersNestedInput
+    memberships?: MemberMembershipUpdateManyWithoutMemberNestedInput
+    attendances?: AttendanceUpdateManyWithoutMemberNestedInput
+    bookings?: BookingUpdateManyWithoutMemberNestedInput
+    joinedBookings?: BookingParticipantUpdateManyWithoutMemberNestedInput
+    loyaltyHistory?: LoyaltyHistoryUpdateManyWithoutMemberNestedInput
+    tournamentRegistrations?: TournamentRegistrationUpdateManyWithoutRegisteredByNestedInput
+    walletTransactions?: WalletTransactionUpdateManyWithoutMemberNestedInput
+    transactions?: TransactionUpdateManyWithoutMemberNestedInput
+    couponAssignments?: CouponAssignmentUpdateManyWithoutMemberNestedInput
+    couponUsages?: CouponUsageUpdateManyWithoutMemberNestedInput
+    loyaltyAchievements?: LoyaltyAchievementUpdateManyWithoutMemberNestedInput
+    sportStats?: UserSportStatUpdateManyWithoutMemberNestedInput
+    nfcCards?: NfcCardUpdateManyWithoutMemberNestedInput
+    nfcTransactions?: NfcTransactionUpdateManyWithoutMemberNestedInput
+    notifications?: NotificationUpdateManyWithoutMemberNestedInput
+  }
+
+  export type MemberUncheckedUpdateWithoutDeviceTokensInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    mobile?: StringFieldUpdateOperationsInput | string
+    familyId?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    loyaltyPoints?: IntFieldUpdateOperationsInput | number
+    walletBalance?: FloatFieldUpdateOperationsInput | number
+    joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    memberships?: MemberMembershipUncheckedUpdateManyWithoutMemberNestedInput
+    attendances?: AttendanceUncheckedUpdateManyWithoutMemberNestedInput
+    bookings?: BookingUncheckedUpdateManyWithoutMemberNestedInput
+    joinedBookings?: BookingParticipantUncheckedUpdateManyWithoutMemberNestedInput
+    loyaltyHistory?: LoyaltyHistoryUncheckedUpdateManyWithoutMemberNestedInput
+    tournamentRegistrations?: TournamentRegistrationUncheckedUpdateManyWithoutRegisteredByNestedInput
+    walletTransactions?: WalletTransactionUncheckedUpdateManyWithoutMemberNestedInput
+    transactions?: TransactionUncheckedUpdateManyWithoutMemberNestedInput
+    couponAssignments?: CouponAssignmentUncheckedUpdateManyWithoutMemberNestedInput
+    couponUsages?: CouponUsageUncheckedUpdateManyWithoutMemberNestedInput
+    loyaltyAchievements?: LoyaltyAchievementUncheckedUpdateManyWithoutMemberNestedInput
+    sportStats?: UserSportStatUncheckedUpdateManyWithoutMemberNestedInput
+    nfcCards?: NfcCardUncheckedUpdateManyWithoutMemberNestedInput
+    nfcTransactions?: NfcTransactionUncheckedUpdateManyWithoutMemberNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutMemberNestedInput
+  }
+
+  export type MemberCreateWithoutNotificationsInput = {
+    id?: string
+    mobile: string
+    name: string
+    email?: string | null
+    dateOfBirth?: Date | string | null
+    loyaltyPoints?: number
+    walletBalance?: number
+    joinDate?: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    family?: FamilyGroupCreateNestedOneWithoutMembersInput
+    memberships?: MemberMembershipCreateNestedManyWithoutMemberInput
+    attendances?: AttendanceCreateNestedManyWithoutMemberInput
+    bookings?: BookingCreateNestedManyWithoutMemberInput
+    joinedBookings?: BookingParticipantCreateNestedManyWithoutMemberInput
+    loyaltyHistory?: LoyaltyHistoryCreateNestedManyWithoutMemberInput
+    tournamentRegistrations?: TournamentRegistrationCreateNestedManyWithoutRegisteredByInput
+    walletTransactions?: WalletTransactionCreateNestedManyWithoutMemberInput
+    transactions?: TransactionCreateNestedManyWithoutMemberInput
+    couponAssignments?: CouponAssignmentCreateNestedManyWithoutMemberInput
+    couponUsages?: CouponUsageCreateNestedManyWithoutMemberInput
+    loyaltyAchievements?: LoyaltyAchievementCreateNestedManyWithoutMemberInput
+    sportStats?: UserSportStatCreateNestedManyWithoutMemberInput
+    nfcCards?: NfcCardCreateNestedManyWithoutMemberInput
+    nfcTransactions?: NfcTransactionCreateNestedManyWithoutMemberInput
+    deviceTokens?: DeviceTokenCreateNestedManyWithoutMemberInput
+  }
+
+  export type MemberUncheckedCreateWithoutNotificationsInput = {
+    id?: string
+    mobile: string
+    familyId?: string | null
+    name: string
+    email?: string | null
+    dateOfBirth?: Date | string | null
+    loyaltyPoints?: number
+    walletBalance?: number
+    joinDate?: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    memberships?: MemberMembershipUncheckedCreateNestedManyWithoutMemberInput
+    attendances?: AttendanceUncheckedCreateNestedManyWithoutMemberInput
+    bookings?: BookingUncheckedCreateNestedManyWithoutMemberInput
+    joinedBookings?: BookingParticipantUncheckedCreateNestedManyWithoutMemberInput
+    loyaltyHistory?: LoyaltyHistoryUncheckedCreateNestedManyWithoutMemberInput
+    tournamentRegistrations?: TournamentRegistrationUncheckedCreateNestedManyWithoutRegisteredByInput
+    walletTransactions?: WalletTransactionUncheckedCreateNestedManyWithoutMemberInput
+    transactions?: TransactionUncheckedCreateNestedManyWithoutMemberInput
+    couponAssignments?: CouponAssignmentUncheckedCreateNestedManyWithoutMemberInput
+    couponUsages?: CouponUsageUncheckedCreateNestedManyWithoutMemberInput
+    loyaltyAchievements?: LoyaltyAchievementUncheckedCreateNestedManyWithoutMemberInput
+    sportStats?: UserSportStatUncheckedCreateNestedManyWithoutMemberInput
+    nfcCards?: NfcCardUncheckedCreateNestedManyWithoutMemberInput
+    nfcTransactions?: NfcTransactionUncheckedCreateNestedManyWithoutMemberInput
+    deviceTokens?: DeviceTokenUncheckedCreateNestedManyWithoutMemberInput
+  }
+
+  export type MemberCreateOrConnectWithoutNotificationsInput = {
+    where: MemberWhereUniqueInput
+    create: XOR<MemberCreateWithoutNotificationsInput, MemberUncheckedCreateWithoutNotificationsInput>
+  }
+
+  export type MemberUpsertWithoutNotificationsInput = {
+    update: XOR<MemberUpdateWithoutNotificationsInput, MemberUncheckedUpdateWithoutNotificationsInput>
+    create: XOR<MemberCreateWithoutNotificationsInput, MemberUncheckedCreateWithoutNotificationsInput>
+    where?: MemberWhereInput
+  }
+
+  export type MemberUpdateToOneWithWhereWithoutNotificationsInput = {
+    where?: MemberWhereInput
+    data: XOR<MemberUpdateWithoutNotificationsInput, MemberUncheckedUpdateWithoutNotificationsInput>
+  }
+
+  export type MemberUpdateWithoutNotificationsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    mobile?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    loyaltyPoints?: IntFieldUpdateOperationsInput | number
+    walletBalance?: FloatFieldUpdateOperationsInput | number
+    joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    family?: FamilyGroupUpdateOneWithoutMembersNestedInput
+    memberships?: MemberMembershipUpdateManyWithoutMemberNestedInput
+    attendances?: AttendanceUpdateManyWithoutMemberNestedInput
+    bookings?: BookingUpdateManyWithoutMemberNestedInput
+    joinedBookings?: BookingParticipantUpdateManyWithoutMemberNestedInput
+    loyaltyHistory?: LoyaltyHistoryUpdateManyWithoutMemberNestedInput
+    tournamentRegistrations?: TournamentRegistrationUpdateManyWithoutRegisteredByNestedInput
+    walletTransactions?: WalletTransactionUpdateManyWithoutMemberNestedInput
+    transactions?: TransactionUpdateManyWithoutMemberNestedInput
+    couponAssignments?: CouponAssignmentUpdateManyWithoutMemberNestedInput
+    couponUsages?: CouponUsageUpdateManyWithoutMemberNestedInput
+    loyaltyAchievements?: LoyaltyAchievementUpdateManyWithoutMemberNestedInput
+    sportStats?: UserSportStatUpdateManyWithoutMemberNestedInput
+    nfcCards?: NfcCardUpdateManyWithoutMemberNestedInput
+    nfcTransactions?: NfcTransactionUpdateManyWithoutMemberNestedInput
+    deviceTokens?: DeviceTokenUpdateManyWithoutMemberNestedInput
+  }
+
+  export type MemberUncheckedUpdateWithoutNotificationsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    mobile?: StringFieldUpdateOperationsInput | string
+    familyId?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    loyaltyPoints?: IntFieldUpdateOperationsInput | number
+    walletBalance?: FloatFieldUpdateOperationsInput | number
+    joinDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    memberships?: MemberMembershipUncheckedUpdateManyWithoutMemberNestedInput
+    attendances?: AttendanceUncheckedUpdateManyWithoutMemberNestedInput
+    bookings?: BookingUncheckedUpdateManyWithoutMemberNestedInput
+    joinedBookings?: BookingParticipantUncheckedUpdateManyWithoutMemberNestedInput
+    loyaltyHistory?: LoyaltyHistoryUncheckedUpdateManyWithoutMemberNestedInput
+    tournamentRegistrations?: TournamentRegistrationUncheckedUpdateManyWithoutRegisteredByNestedInput
+    walletTransactions?: WalletTransactionUncheckedUpdateManyWithoutMemberNestedInput
+    transactions?: TransactionUncheckedUpdateManyWithoutMemberNestedInput
+    couponAssignments?: CouponAssignmentUncheckedUpdateManyWithoutMemberNestedInput
+    couponUsages?: CouponUsageUncheckedUpdateManyWithoutMemberNestedInput
+    loyaltyAchievements?: LoyaltyAchievementUncheckedUpdateManyWithoutMemberNestedInput
+    sportStats?: UserSportStatUncheckedUpdateManyWithoutMemberNestedInput
+    nfcCards?: NfcCardUncheckedUpdateManyWithoutMemberNestedInput
+    nfcTransactions?: NfcTransactionUncheckedUpdateManyWithoutMemberNestedInput
+    deviceTokens?: DeviceTokenUncheckedUpdateManyWithoutMemberNestedInput
+  }
+
   export type AuditLogCreateManyAdminInput = {
     id?: string
     action: string
@@ -67710,6 +71222,8 @@ export namespace Prisma {
     sportStats?: UserSportStatUpdateManyWithoutMemberNestedInput
     nfcCards?: NfcCardUpdateManyWithoutMemberNestedInput
     nfcTransactions?: NfcTransactionUpdateManyWithoutMemberNestedInput
+    deviceTokens?: DeviceTokenUpdateManyWithoutMemberNestedInput
+    notifications?: NotificationUpdateManyWithoutMemberNestedInput
   }
 
   export type MemberUncheckedUpdateWithoutFamilyInput = {
@@ -67737,6 +71251,8 @@ export namespace Prisma {
     sportStats?: UserSportStatUncheckedUpdateManyWithoutMemberNestedInput
     nfcCards?: NfcCardUncheckedUpdateManyWithoutMemberNestedInput
     nfcTransactions?: NfcTransactionUncheckedUpdateManyWithoutMemberNestedInput
+    deviceTokens?: DeviceTokenUncheckedUpdateManyWithoutMemberNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutMemberNestedInput
   }
 
   export type MemberUncheckedUpdateManyWithoutFamilyInput = {
@@ -67901,6 +71417,24 @@ export namespace Prisma {
     readerLocation?: string | null
     failureReason?: string | null
     metadata?: string | null
+    createdAt?: Date | string
+  }
+
+  export type DeviceTokenCreateManyMemberInput = {
+    id?: string
+    token: string
+    platform?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type NotificationCreateManyMemberInput = {
+    id?: string
+    title: string
+    body: string
+    data?: NullableJsonNullValueInput | InputJsonValue
+    isRead?: boolean
+    readAt?: Date | string | null
     createdAt?: Date | string
   }
 
@@ -68373,6 +71907,60 @@ export namespace Prisma {
     readerLocation?: NullableStringFieldUpdateOperationsInput | string | null
     failureReason?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type DeviceTokenUpdateWithoutMemberInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    token?: StringFieldUpdateOperationsInput | string
+    platform?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type DeviceTokenUncheckedUpdateWithoutMemberInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    token?: StringFieldUpdateOperationsInput | string
+    platform?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type DeviceTokenUncheckedUpdateManyWithoutMemberInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    token?: StringFieldUpdateOperationsInput | string
+    platform?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type NotificationUpdateWithoutMemberInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    body?: StringFieldUpdateOperationsInput | string
+    data?: NullableJsonNullValueInput | InputJsonValue
+    isRead?: BoolFieldUpdateOperationsInput | boolean
+    readAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type NotificationUncheckedUpdateWithoutMemberInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    body?: StringFieldUpdateOperationsInput | string
+    data?: NullableJsonNullValueInput | InputJsonValue
+    isRead?: BoolFieldUpdateOperationsInput | boolean
+    readAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type NotificationUncheckedUpdateManyWithoutMemberInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    body?: StringFieldUpdateOperationsInput | string
+    data?: NullableJsonNullValueInput | InputJsonValue
+    isRead?: BoolFieldUpdateOperationsInput | boolean
+    readAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 

@@ -3,6 +3,8 @@
 import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 import type { Prisma } from "@/generated/client";
+import { sendWalletTransactionPush } from "@/lib/notifications";
+import { logger } from "@/lib/logger";
 
 export async function lookupCardOwner(uid: string) {
   try {
@@ -75,6 +77,15 @@ export async function creditWallet(userId: string, amount: number, description: 
       });
     });
 
+    sendWalletTransactionPush(
+      userId,
+      amount,
+      "CREDIT",
+      description || "NFC Wallet Top-up"
+    ).catch((pushErr) => {
+      logger.error("[Push Hook Error] Failed to send NFC credit push notification", pushErr);
+    });
+
     revalidatePath("/admin/nfc/wallet");
     return { success: true };
   } catch (error: any) {
@@ -122,6 +133,15 @@ export async function deductWallet(userId: string, amount: number, description: 
       });
 
       return { success: true };
+    });
+
+    sendWalletTransactionPush(
+      userId,
+      amount,
+      "DEBIT",
+      description || "NFC Wallet Deduction"
+    ).catch((pushErr) => {
+      logger.error("[Push Hook Error] Failed to send NFC debit push notification", pushErr);
     });
 
     revalidatePath("/admin/nfc/wallet");

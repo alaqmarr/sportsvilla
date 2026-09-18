@@ -3,6 +3,8 @@ import { prisma } from '@/lib/prisma';
 import { authenticateClient } from '@/lib/auth-middleware';
 import { jsonResponse, apiLog } from '@/lib/api-logger';
 import { bumpSyncTimestamp } from '@/lib/sync';
+import { sendWalletTransactionPush } from '@/lib/notifications';
+import { logger } from '@/lib/logger';
 
 export async function POST(request: Request) {
   apiLog(`[API] POST /api/client/v1/wallet/redeem called`);
@@ -31,6 +33,8 @@ export async function POST(request: Request) {
       return jsonResponse({ error: 'Unauthorized member.' }, { status: 403 });
     }
 
+    let addedRupees = 0;
+
     // Run transaction
     const result = await prisma.$transaction(async (tx) => {
       const member = await tx.member.findUnique({
@@ -47,6 +51,7 @@ export async function POST(request: Request) {
       const conversionRate = conversionSetting ? parseFloat(conversionSetting.value) : 1;
       // walletBalance is stored in paise
       const amountToAdd = Math.round(points * conversionRate * 100);
+      addedRupees = Math.round(points * conversionRate);
 
       // Update member using raw SQL to prevent race conditions on loyalty points
       const updatedCount = await tx.$executeRaw`
@@ -84,6 +89,15 @@ export async function POST(request: Request) {
       });
 
       return updatedMember;
+    });
+
+    sendWalletTransactionPush(
+      targetMemberId,
+      addedRupees,
+      'CREDIT',
+      `Redeemed ${points} SV Points`
+    ).catch((err) => {
+      logger.error('[Push Hook Error] Wallet redeem push failed', err);
     });
 
     await bumpSyncTimestamp('wallet');

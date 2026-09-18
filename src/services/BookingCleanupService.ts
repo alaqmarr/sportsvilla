@@ -1,5 +1,6 @@
 import { prisma } from '@/lib/prisma';
 import { logger } from '@/lib/logger';
+import { sendWalletTransactionPush } from '@/lib/notifications';
 
 export interface CleanupSummary {
   expiredCount: number;
@@ -113,6 +114,15 @@ export class BookingCleanupService {
                 bookingId: booking.id,
                 memberId: refundMemberId,
                 refundPaise
+              });
+
+              sendWalletTransactionPush(
+                refundMemberId,
+                booking.advancePaid,
+                'CREDIT',
+                'Refund: Booking expired (payment not completed)'
+              ).catch((err) => {
+                logger.error('[Push Hook Error] Auto-refund push failed for expired booking', err);
               });
             }
 

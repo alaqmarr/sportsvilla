@@ -4,6 +4,7 @@ import { logger } from '@/lib/logger';
 import { BookingCleanupService } from '@/services/BookingCleanupService';
 import crypto from 'crypto';
 import Razorpay from 'razorpay';
+import { sendBookingConfirmedPush, sendWalletTransactionPush } from '@/lib/notifications';
 
 export interface SettlePaymentParams {
   bookingId: string;
@@ -435,6 +436,15 @@ export class PaymentService {
           });
         }
 
+        sendWalletTransactionPush(
+          booking.memberId,
+          totalRefundRupees,
+          'CREDIT',
+          'Refund: Slot claimed or booking cancelled'
+        ).catch((err) => {
+          logger.error('[Push Hook Error] Failed to send wallet transaction push for auto-refund', err);
+        });
+
         return {
           success: false,
           status: 'OVERBOOKED_REFUNDED',
@@ -573,6 +583,7 @@ export class PaymentService {
       const paymentStr = `${priceStr} (PAID)`;
 
       await sendWhatsAppBookingConfirmedTemplate(
+        booking.id,
         booking.member.name,
         booking.turf.name,
         booking.sport.name,
@@ -580,6 +591,29 @@ export class PaymentService {
         paymentStr,
         booking.member.mobile
       );
+
+      // Send Push Notification
+      try {
+        let turfData = booking.turf;
+        let sportData = booking.sport;
+        if (!turfData && booking.turfId) {
+          turfData = await prisma.turf.findUnique({ where: { id: booking.turfId } });
+        }
+        if (!sportData && booking.sportId) {
+          sportData = await prisma.sport.findUnique({ where: { id: booking.sportId } });
+        }
+
+        await sendBookingConfirmedPush({
+          id: booking.id,
+          memberId: booking.memberId,
+          turf: turfData,
+          sport: sportData,
+          startTime: booking.startTime,
+          endTime: booking.endTime
+        });
+      } catch (pushError) {
+        logger.error('[Push Hook Error] Push notification failed after payment', pushError);
+      }
     } catch (waError) {
       logger.error('WhatsApp confirmation / ticket generation failed after payment', waError);
     }

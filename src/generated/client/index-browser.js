@@ -561,14 +561,50 @@ exports.Prisma.TvContentItemScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.DeviceTokenScalarFieldEnum = {
+  id: 'id',
+  memberId: 'memberId',
+  token: 'token',
+  platform: 'platform',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.NotificationScalarFieldEnum = {
+  id: 'id',
+  memberId: 'memberId',
+  title: 'title',
+  body: 'body',
+  data: 'data',
+  isRead: 'isRead',
+  readAt: 'readAt',
+  createdAt: 'createdAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
 };
 
+exports.Prisma.NullableJsonNullValueInput = {
+  DbNull: Prisma.DbNull,
+  JsonNull: Prisma.JsonNull
+};
+
 exports.Prisma.NullsOrder = {
   first: 'first',
   last: 'last'
+};
+
+exports.Prisma.JsonNullValueFilter = {
+  DbNull: Prisma.DbNull,
+  JsonNull: Prisma.JsonNull,
+  AnyNull: Prisma.AnyNull
+};
+
+exports.Prisma.QueryMode = {
+  default: 'default',
+  insensitive: 'insensitive'
 };
 
 
@@ -610,7 +646,9 @@ exports.Prisma.ModelName = {
   NfcTransaction: 'NfcTransaction',
   TvScreenGroup: 'TvScreenGroup',
   TvScreen: 'TvScreen',
-  TvContentItem: 'TvContentItem'
+  TvContentItem: 'TvContentItem',
+  DeviceToken: 'DeviceToken',
+  Notification: 'Notification'
 };
 
 /**

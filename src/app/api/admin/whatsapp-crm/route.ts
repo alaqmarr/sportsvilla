@@ -3,6 +3,8 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { hasPermission } from "@/lib/rbac";
+import { sendMembershipPush } from "@/lib/notifications";
+import { logger } from "@/lib/logger";
 
 export async function POST(req: NextRequest) {
   try {
@@ -75,6 +77,10 @@ export async function POST(req: NextRequest) {
           startDate: new Date(),
           endDate,
         },
+      });
+
+      sendMembershipPush(member.id, plan.name, 'ASSIGNED').catch((pushErr) => {
+        logger.error('[Push Hook Error] WhatsApp CRM membership push failed', pushErr);
       });
 
       return NextResponse.json({ success: true, membership });
