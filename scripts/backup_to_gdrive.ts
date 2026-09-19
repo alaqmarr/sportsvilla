@@ -9,12 +9,15 @@ dotenv.config();
 const ROOT_DIR = path.join(__dirname, '..');
 const LOGS_DIR = path.join(ROOT_DIR, 'logs');
 const PRISMA_DIR = path.join(ROOT_DIR, 'prisma');
-const KEY_PATH = path.join(ROOT_DIR, 'gdrive-service-account.json');
+const credentialsPath = path.join(ROOT_DIR, 'gdrive-service-account.json');
+const credentials = JSON.parse(fs.readFileSync(credentialsPath, 'utf8'));
 
-// Google Drive Auth
-const auth = new google.auth.GoogleAuth({
-  keyFile: KEY_PATH,
-  scopes: ['https://www.googleapis.com/auth/drive'], // Full drive access
+// We use google.auth.JWT to explicitly impersonate the provided workspace email
+// This bypasses the Service Account 0-byte quota issue via Domain-Wide Delegation
+const auth = new google.auth.JWT({
+  email: credentials.client_email,
+  key: credentials.private_key,
+  scopes: ['https://www.googleapis.com/auth/drive']
 });
 const drive = google.drive({ version: 'v3', auth });
 
@@ -35,7 +38,8 @@ async function uploadFile(filePath: string, folderId: string, mimeType: string =
   const response = await drive.files.create({
     requestBody: fileMetadata,
     media: media,
-    fields: 'id'
+    fields: 'id',
+    supportsAllDrives: true
   });
   
   console.log(`[Backup] Uploaded ${fileName} with ID: ${response.data.id}`);
@@ -50,7 +54,9 @@ async function getOrCreateFolder(folderName: string, parentId?: string): Promise
   const res = await drive.files.list({
     q: query,
     fields: 'files(id, name)',
-    spaces: 'drive'
+    spaces: 'drive',
+    supportsAllDrives: true,
+    includeItemsFromAllDrives: true
   });
   
   if (res.data.files && res.data.files.length > 0) {
@@ -69,7 +75,8 @@ async function getOrCreateFolder(folderName: string, parentId?: string): Promise
   
   const folder = await drive.files.create({
     requestBody: folderMetadata,
-    fields: 'id'
+    fields: 'id',
+    supportsAllDrives: true
   });
   
   return folder.data.id!;

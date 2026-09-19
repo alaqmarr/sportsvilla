@@ -4,6 +4,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/core/auth/auth";
 import { google } from "googleapis";
 import path from "path";
+import fs from "fs";
 import { prisma } from "@/core/database/prisma";
 import { exec } from "child_process";
 
@@ -17,9 +18,11 @@ async function requireAdminSession() {
 function getDriveClient() {
   const ROOT_DIR = process.cwd();
   const KEY_PATH = path.join(ROOT_DIR, 'gdrive-service-account.json');
-  const auth = new google.auth.GoogleAuth({
-    keyFile: KEY_PATH,
-    scopes: ['https://www.googleapis.com/auth/drive'],
+  const credentials = JSON.parse(fs.readFileSync(KEY_PATH, 'utf8'));
+  const auth = new google.auth.JWT({
+    email: credentials.client_email,
+    key: credentials.private_key,
+    scopes: ['https://www.googleapis.com/auth/drive']
   });
   return google.drive({ version: 'v3', auth });
 }
@@ -41,6 +44,8 @@ export async function listBackups() {
       fields: 'files(id, name, mimeType, createdTime, webViewLink, webContentLink)',
       orderBy: 'createdTime desc',
       pageSize: 100,
+      supportsAllDrives: true,
+      includeItemsFromAllDrives: true
     });
     
     return { success: true, files: res.data.files || [] };
