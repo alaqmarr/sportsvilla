@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "cross-env NODE_OPTIONS=\"--max_old_space_size=4096\" next build",
     "start": "next start",
     "lint": "eslint",
     "db:push": "npx prisma generate && npx prisma db push && npx prisma generate --config=prisma.whatsapp.config.ts && npx prisma db push --config=prisma.whatsapp.config.ts",
@@ -56,6 +56,7 @@
     "@types/react-dom": "^19",
     "@types/uuid": "^10.0.0",
     "autoprefixer": "^10.5.0",
+    "cross-env": "^10.1.0",
     "eslint": "^9",
     "eslint-config-next": "16.2.6",
     "postcss": "^8.5.15",
