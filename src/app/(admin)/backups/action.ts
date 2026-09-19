@@ -54,12 +54,13 @@ export async function triggerManualBackup(): Promise<{ success: boolean; error?:
   await requireAdminSession();
   
   return new Promise((resolve) => {
-    // Run backup in background asynchronously without blocking Next.js completely
-    const scriptPath = path.join(process.cwd(), 'backup.sh');
-    exec(`bash ${scriptPath}`, { cwd: process.cwd() }, (error, stdout, stderr) => {
+    // Run backup script directly to capture raw output and avoid bash wrapper issues in PM2
+    exec('npx tsx scripts/backup_to_gdrive.ts', { cwd: process.cwd() }, (error, stdout, stderr) => {
       if (error) {
-        console.error(`Backup execution error: ${error}`);
-        resolve({ success: false, error: error.message });
+        console.error(`Backup execution error:`, error);
+        // Combine stderr and stdout to capture the exact failure reason (e.g. Google Drive auth, missing npx)
+        const errorDetails = stderr || stdout || error.message;
+        resolve({ success: false, error: errorDetails });
         return;
       }
       resolve({ success: true });
