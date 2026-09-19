@@ -625,6 +625,7 @@ model TvScreen {
   currentItemId  String?
   cacheUsedBytes BigInt? // Using BigInt for file sizes
   appVersion     String?
+  orientation    String   @default("landscape") // "landscape" or "portrait"
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
