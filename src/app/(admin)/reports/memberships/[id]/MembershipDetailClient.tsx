@@ -1,8 +1,8 @@
-﻿"use client";
+"use client";
 
 import React, { useState, useEffect } from "react";
-import { formatIST } from "@/lib/dateUtils";
-import { fetchMembershipDetail } from "./actions";
+import { formatIST } from "@/core/utils/dateUtils";
+import { fetchMembershipDetail } from "@/modules/reports/reports.action";
 import {
   startOfMonth,
   endOfMonth,

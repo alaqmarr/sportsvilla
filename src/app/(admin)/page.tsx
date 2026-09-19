@@ -12,8 +12,8 @@ import {
   FiArrowRight,
 } from "react-icons/fi";
 import { FaWhatsapp } from "react-icons/fa";
-import { prisma } from "@/lib/prisma";
-import { formatIST } from "@/lib/dateUtils";
+import { prisma } from "@/core/database/prisma";
+import { formatIST } from "@/core/utils/dateUtils";
 import CheckinScanner from "@/components/CheckinScanner";
 import {
   PageHeader,

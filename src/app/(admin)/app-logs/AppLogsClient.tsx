@@ -2,8 +2,9 @@
 
 import React, { useState, useEffect } from 'react';
 import { FiRefreshCw, FiInfo, FiAlertTriangle, FiXCircle, FiChevronDown, FiChevronUp } from 'react-icons/fi';
-import { fetchLogs, AppLog } from './actions';
-import { formatIST } from '@/lib/dateUtils';
+import { fetchLogs } from '@/modules/system/system.action';
+import type { AppLog } from '@/modules/system/system.lib';
+import { formatIST } from '@/core/utils/dateUtils';
 import { PageHeader, Button, Badge, Card } from '@/components/admin/ui';
 
 export default function AppLogsClient() {

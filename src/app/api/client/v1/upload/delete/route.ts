@@ -1,12 +1,12 @@
 import { NextResponse } from 'next/server';
 import { DeleteObjectCommand } from '@aws-sdk/client-s3';
-import { s3Client } from '@/lib/s3';
-import { logger } from '@/lib/logger';
-import { jsonResponse, apiLog } from '@/lib/api-logger';
-import { authenticateClient } from '@/lib/auth-middleware';
+import { s3Client } from '@/core/storage/s3';
+import { logger } from '@/core/logging/logger';
+import { jsonResponse, apiLog } from '@/core/logging/api-logger';
+import { authenticateClient } from '@/core/auth/auth-middleware';
 import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth';
-import { prisma } from '@/lib/prisma';
+import { authOptions } from '@/core/auth/auth';
+import { prisma } from '@/core/database/prisma';
 
 const bucketName = process.env.R2_BUCKET_NAME || '';
 

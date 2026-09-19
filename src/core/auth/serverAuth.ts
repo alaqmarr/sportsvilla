@@ -1,6 +1,6 @@
 import { cookies } from 'next/headers';
 import jwt from 'jsonwebtoken';
-import { prisma } from '@/lib/prisma';
+import { prisma } from '@/core/database/prisma';
 import { redirect } from 'next/navigation';
 
 export async function getServerMember() {

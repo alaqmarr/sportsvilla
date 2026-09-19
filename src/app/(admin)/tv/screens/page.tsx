@@ -1,4 +1,4 @@
-import { prisma } from "@/lib/prisma";
+import { prisma } from "@/core/database/prisma";
 import ScreensClient from "./ScreensClient";
 
 export const dynamic = 'force-dynamic';

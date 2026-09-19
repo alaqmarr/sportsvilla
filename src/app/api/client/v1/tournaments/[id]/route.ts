@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
-import { logger } from "@/lib/logger";
+import { prisma } from "@/core/database/prisma";
+import { logger } from "@/core/logging/logger";
 import jwt from 'jsonwebtoken';
-import { jsonResponse, apiLog } from '@/lib/api-logger';
+import { jsonResponse, apiLog } from '@/core/logging/api-logger';
 
 export async function GET(
   request: Request,

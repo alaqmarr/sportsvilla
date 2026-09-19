@@ -1,6 +1,6 @@
 "use client";
 import { FiAward, FiStar, FiTrendingUp } from "react-icons/fi";
-import { formatIST } from "@/lib/dateUtils";
+import { formatIST } from "@/core/utils/dateUtils";
 import { PageHeader, DataTable, ColumnDef, Avatar } from "@/components/admin/ui";
 
 interface LeaderboardMember {

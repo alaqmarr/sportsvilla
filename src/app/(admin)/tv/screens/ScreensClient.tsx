@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { createScreenGroup, createScreen, deleteScreen } from "./actions";
+import { createScreenGroup, createScreen, deleteScreen } from "@/modules/tv/tv.action";
 import { useAlert } from "@/components/AlertProvider";
 
 export default function ScreensClient({ initialScreens, screenGroups }: { initialScreens: any[], screenGroups: any[] }) {

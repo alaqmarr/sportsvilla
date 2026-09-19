@@ -1,6 +1,6 @@
-import { withApiHandler, ApiError } from '@/lib/api-handler';
-import { authenticateClient } from '@/lib/auth-middleware';
-import { prisma } from '@/lib/prisma';
+import { withApiHandler, ApiError } from '@/core/http/api-handler';
+import { authenticateClient } from '@/core/auth/auth-middleware';
+import { prisma } from '@/core/database/prisma';
 import { Expo } from 'expo-server-sdk';
 
 export const POST = withApiHandler(async (request: Request) => {

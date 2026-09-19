@@ -1,9 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { formatIST } from "@/lib/dateUtils";
+import { formatIST } from "@/core/utils/dateUtils";
 import { FiTag, FiPlus, FiX, FiSearch, FiBarChart2, FiEyeOff } from "react-icons/fi";
-import { createCoupon, toggleCouponStatus } from "./actions";
+import { createCoupon, toggleCouponStatus } from "@/modules/coupons/coupons.action";
 import Link from "next/link";
 import toast from "react-hot-toast";
 import { PageHeader, Card, Badge, Button, Modal, Input, Select, EmptyState } from "@/components/admin/ui";

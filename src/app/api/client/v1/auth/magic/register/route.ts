@@ -1,10 +1,10 @@
 import { NextResponse } from 'next/server';
-import { prisma } from '@/lib/prisma';
-import { whatsappDb } from '@/lib/whatsappDb';
+import { prisma } from '@/core/database/prisma';
+import { whatsappDb } from '@/core/database/whatsappDb';
 import jwt from 'jsonwebtoken';
-import { jsonResponse } from '@/lib/api-logger';
-import { sendWhatsAppMemberRegisteredTemplate } from '@/lib/whatsapp';
-import { generateMemberId } from '@/lib/memberUtils';
+import { jsonResponse } from '@/core/logging/api-logger';
+import { sendWhatsAppMemberRegisteredTemplate } from '@/modules/whatsapp/member-registered.template';
+import { generateMemberId } from '@/modules/members/members.helper';
 const JWT_SECRET = process.env.NEXTAUTH_SECRET;
 
 export async function POST(request: Request) {

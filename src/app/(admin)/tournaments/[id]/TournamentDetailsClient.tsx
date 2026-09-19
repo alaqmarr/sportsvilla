@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import TournamentFormClient from '../TournamentFormClient';
-import { manualEnrolment, updateRegistrationStatus } from '../actions';
+import { manualEnrolment, updateRegistrationStatus } from '@/modules/tournaments/tournaments.action';
 import toast from 'react-hot-toast';
 import { FiUsers, FiSettings, FiPlus } from 'react-icons/fi';
 import {

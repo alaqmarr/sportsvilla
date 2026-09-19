@@ -1,4 +1,4 @@
-import { prisma } from '@/lib/prisma';
+import { prisma } from '@/core/database/prisma';
 
 /**
  * Bumps the LastUpdate singleton row to notify all polling admin clients

@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/auth";
-import { prisma } from "@/lib/prisma";
-import { hasPermission } from "@/lib/rbac";
+import { authOptions } from "@/core/auth/auth";
+import { prisma } from "@/core/database/prisma";
+import { hasPermission } from "@/core/auth/rbac";
 import bcrypt from "bcryptjs";
 
 export async function GET(req: NextRequest) {

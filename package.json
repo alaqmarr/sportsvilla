@@ -26,6 +26,7 @@
     "dotenv": "^17.4.2",
     "expo-server-sdk": "^7.2.0",
     "framer-motion": "^13.2.0",
+    "googleapis": "^181.0.0",
     "html2canvas": "^1.4.1",
     "html5-qrcode": "^2.3.8",
     "jsonwebtoken": "^9.0.3",

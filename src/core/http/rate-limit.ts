@@ -10,15 +10,30 @@ interface RateLimitEntry {
 
 const rateLimitStore = new Map<string, RateLimitEntry>();
 
-// Clean up expired entries every 5 minutes
-setInterval(() => {
+export function purgeExpiredRateLimits(): number {
   const now = Date.now();
+  let purged = 0;
   for (const [key, entry] of rateLimitStore.entries()) {
     if (now > entry.resetTime) {
       rateLimitStore.delete(key);
+      purged++;
     }
   }
+  return purged;
+}
+
+export function getRateLimitStoreSize(): number {
+  return rateLimitStore.size;
+}
+
+// Clean up expired entries every 5 minutes (unref'd to prevent process hangs)
+const cleanupInterval = setInterval(() => {
+  purgeExpiredRateLimits();
 }, 5 * 60 * 1000);
+
+if (typeof cleanupInterval.unref === 'function') {
+  cleanupInterval.unref();
+}
 
 /**
  * Checks if a key (e.g. IP + endpoint) has exceeded its rate limit.

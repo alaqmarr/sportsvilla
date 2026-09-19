@@ -1,7 +1,8 @@
-import { BookingCleanupService } from '@/services/BookingCleanupService';
-import { jsonResponse } from '@/lib/api-logger';
+import { runner } from '@/automations';
+import { BookingCleanupDetails } from '@/automations/tasks/booking-cleanup.task';
+import { jsonResponse } from '@/core/logging/api-logger';
 import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth';
+import { authOptions } from '@/core/auth/auth';
 
 async function isAuthorized(request: Request): Promise<boolean> {
   const authHeader = request.headers.get('authorization');
@@ -41,13 +42,15 @@ export async function POST(request: Request) {
       // Body is optional, default to 15m
     }
 
-    const summary = await BookingCleanupService.cleanupAbandonedBookings(timeoutMinutes);
+    const result = await runner.runTask('booking-cleanup', { timeoutMinutes });
+    const details = result.details as BookingCleanupDetails | undefined;
+
     return jsonResponse({
-      success: true,
-      cleaned: summary.expiredCount,
-      refunded: summary.refundedCount,
-      totalRefundPaise: summary.totalRefundPaise,
-      errors: summary.errors
+      success: result.success,
+      cleaned: details?.expiredCount ?? result.processedCount,
+      refunded: details?.refundedCount ?? 0,
+      totalRefundPaise: details?.totalRefundPaise ?? 0,
+      errors: details?.errors ?? result.errors ?? [],
     });
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : 'Cleanup execution failed';
@@ -65,13 +68,15 @@ export async function GET(request: Request) {
       return jsonResponse({ success: false, error: 'Unauthorized' }, { status: 401 });
     }
 
-    const summary = await BookingCleanupService.cleanupAbandonedBookings(15);
+    const result = await runner.runTask('booking-cleanup', { timeoutMinutes: 15 });
+    const details = result.details as BookingCleanupDetails | undefined;
+
     return jsonResponse({
-      success: true,
-      cleaned: summary.expiredCount,
-      refunded: summary.refundedCount,
-      totalRefundPaise: summary.totalRefundPaise,
-      errors: summary.errors
+      success: result.success,
+      cleaned: details?.expiredCount ?? result.processedCount,
+      refunded: details?.refundedCount ?? 0,
+      totalRefundPaise: details?.totalRefundPaise ?? 0,
+      errors: details?.errors ?? result.errors ?? [],
     });
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : 'Cleanup execution failed';

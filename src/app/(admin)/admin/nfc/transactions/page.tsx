@@ -1,6 +1,6 @@
 export const dynamic = "force-dynamic";
 
-import { getNfcTransactions } from "./actions";
+import { getNfcTransactions } from "@/modules/nfc/nfc.action";
 import TransactionsClient from "./TransactionsClient";
 
 export default async function NfcTransactionsPage() {

@@ -1,7 +1,7 @@
-import { withApiHandler, ApiError } from '@/lib/api-handler';
-import { authenticateClient } from '@/lib/auth-middleware';
-import { PaymentService } from '@/services/PaymentService';
-import { prisma } from '@/lib/prisma';
+import { withApiHandler, ApiError } from '@/core/http/api-handler';
+import { authenticateClient } from '@/core/auth/auth-middleware';
+import { createOrder } from '@/modules/payments/payments.services';
+import { prisma } from '@/core/database/prisma';
 
 export const POST = withApiHandler(async (request: Request) => {
   const authRes = await authenticateClient(request);
@@ -34,7 +34,7 @@ export const POST = withApiHandler(async (request: Request) => {
   const proto = request.headers.get('x-forwarded-proto') || 'http';
   const origin = host ? `${proto}://${host}` : undefined;
 
-  const result = await PaymentService.createOrder(bookingId, gateway, platform, origin);
+  const result = await createOrder(bookingId, gateway, platform, origin);
   
   return { success: true, ...result };
 });

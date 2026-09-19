@@ -29,8 +29,8 @@ import {
   generateRandomHexUid,
   simulateCustomEventTap,
   simulateKeyboardWedgeKeystrokes,
-} from "@/lib/nfcSimulator";
-import { playNfcSound } from "@/lib/soundUtils";
+} from "@/modules/nfc/nfc-simulator.lib";
+import { playNfcSound } from "@/core/utils/soundUtils";
 import { useAlert } from "@/components/AlertProvider";
 
 interface NfcSimulatorClientProps {

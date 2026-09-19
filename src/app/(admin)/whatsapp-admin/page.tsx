@@ -1,10 +1,10 @@
 import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/auth";
+import { authOptions } from "@/core/auth/auth";
 import { redirect } from "next/navigation";
-import { prisma } from "@/lib/prisma";
-import { hasPermission } from "@/lib/rbac";
+import { prisma } from "@/core/database/prisma";
+import { hasPermission } from "@/core/auth/rbac";
 import WhatsAppClient from "./WhatsAppClient";
-import { whatsappDb } from "@/lib/whatsappDb";
+import { whatsappDb } from "@/core/database/whatsappDb";
 
 export const metadata = {
   title: "WhatsApp CRM | SportsVilla Admin",

@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/auth";
-import { prisma } from "@/lib/prisma";
+import { authOptions } from "@/core/auth/auth";
+import { prisma } from "@/core/database/prisma";
 import { PutObjectCommand } from "@aws-sdk/client-s3";
-import { s3Client } from "@/lib/s3";
+import { s3Client } from "@/core/storage/s3";
 import crypto from "crypto";
 
 const bucketName = process.env.R2_BUCKET_NAME || "";

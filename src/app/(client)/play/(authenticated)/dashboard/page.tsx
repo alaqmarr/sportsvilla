@@ -1,5 +1,5 @@
-import { prisma } from '@/lib/prisma';
-import { requireServerMember } from '@/lib/serverAuth';
+import { prisma } from '@/core/database/prisma';
+import { requireServerMember } from '@/core/auth/serverAuth';
 import Link from 'next/link';
 import {
   Calendar,
@@ -26,7 +26,7 @@ import {
 import { PlayAvatar } from '@/components/play/ui/PlayAvatar';
 import { PlayBadge } from '@/components/play/ui/PlayBadge';
 import { PlayButton } from '@/components/play/ui/PlayButton';
-import { formatIST } from '@/lib/dateUtils';
+import { formatIST } from '@/core/utils/dateUtils';
 
 export default async function DashboardPage() {
   const member = await requireServerMember();

@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
-import { PaymentService } from '@/services/PaymentService';
-import { logger } from '@/lib/logger';
+import { checkPhonePeStatus } from '@/modules/payments/phonepe.services';
+import { logger } from '@/core/logging/logger';
 
 const ALLOWED_HOSTS = new Set([
   'sportsvilla.co.in',
@@ -65,7 +65,7 @@ export const POST = async (request: Request) => {
     }
 
     if (code === 'PAYMENT_SUCCESS' || code === 'PAYMENT_PENDING') {
-      const { success, status } = await PaymentService.checkPhonePeStatus(bookingId, transactionId);
+      const { success, status } = await checkPhonePeStatus(bookingId, transactionId);
       
       if (success && status === 'PAID') {
         return NextResponse.redirect(buildRedirectUrl('/play/booking-success', { bookingId }), 303);

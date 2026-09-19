@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
-import { prisma } from '@/lib/prisma';
-import { authenticateClient } from '@/lib/auth-middleware';
+import { prisma } from '@/core/database/prisma';
+import { authenticateClient } from '@/core/auth/auth-middleware';
 import jwt from 'jsonwebtoken';
 
 export async function POST(request: Request) {

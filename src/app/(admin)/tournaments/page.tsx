@@ -1,4 +1,4 @@
-import { getTournaments } from './actions';
+import { getTournaments } from '@/modules/tournaments/tournaments.action';
 import TournamentsListClient from './TournamentsListClient';
 
 export default async function TournamentsPage() {

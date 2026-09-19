@@ -1,8 +1,8 @@
 import { NextResponse } from 'next/server';
-import { prisma } from '@/lib/prisma';
-import { authenticateClient } from '@/lib/auth-middleware';
-import { jsonResponse, apiLog } from '@/lib/api-logger';
-import { bumpSyncTimestamp } from '@/lib/sync';
+import { prisma } from '@/core/database/prisma';
+import { authenticateClient } from '@/core/auth/auth-middleware';
+import { jsonResponse, apiLog } from '@/core/logging/api-logger';
+import { bumpSyncTimestamp } from '@/core/database/sync';
 
 export async function POST(request: Request, context: { params: Promise<{ id: string }> }) {
   apiLog(`[API] POST /api/client/v1/bookings/[id]/reschedule called`);

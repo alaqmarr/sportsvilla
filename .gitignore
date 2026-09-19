@@ -22,8 +22,9 @@
 *.db-wal
 *.log
 *.logs
-
+.agents/
 *.md
+logs/
 
 *.firebase-admin.jsons
 firebase-admin.json
@@ -57,3 +58,6 @@ next-env.d.ts
 /src/generated/prisma
 prisma/dev.db
 prisma/dev.db-journal
+
+# Google Drive Service Account
+gdrive-service-account.json

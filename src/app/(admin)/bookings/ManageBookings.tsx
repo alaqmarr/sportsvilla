@@ -1,13 +1,13 @@
 "use client";
 import React, { useState, useEffect, useMemo } from "react";
-import { fetchAllBookingsByDate, cancelBooking, updateBookingPayment, previewExtension, confirmExtension, getUpiId, addPayment, updateDisplaySession } from "./actions";
+import { fetchAllBookingsByDate, cancelBooking, updateBookingPayment, previewExtension, confirmExtension, getUpiId, addPayment, updateDisplaySession, rescheduleBooking } from "@/modules/bookings/bookings.action";
 import { useAlert } from "@/components/AlertProvider";
 import QRCodeLib from "qrcode";
-import { formatIST, todayIST } from "@/lib/dateUtils";
+import { formatIST, todayIST } from "@/core/utils/dateUtils";
 import { FiXCircle, FiCheckCircle, FiClock, FiCreditCard, FiTrash2, FiMaximize2, FiUser, FiMapPin, FiX, FiCheck, FiMonitor, FiPrinter, FiCalendar, FiFileText } from "react-icons/fi";
-import { rescheduleBooking } from "./actions";
+
 import { useNfcReader } from "@/hooks/useNfcReader";
-import { playNfcSound } from "@/lib/soundUtils";
+import { playNfcSound } from "@/core/utils/soundUtils";
 import { TableSkeleton } from "@/components/ui/Skeleton";
 import { AnimatePresence, motion } from "framer-motion";
 import { Button, Badge, Card, EmptyState } from "@/components/admin/ui";

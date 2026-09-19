@@ -1,12 +1,12 @@
 import { NextResponse } from 'next/server';
 import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/auth";
+import { authOptions } from "@/core/auth/auth";
 import { PutObjectCommand } from '@aws-sdk/client-s3';
-import { s3Client } from '@/lib/s3';
+import { s3Client } from '@/core/storage/s3';
 import { v4 as uuidv4 } from 'uuid';
-import { logger } from '@/lib/logger';
-import { jsonResponse, apiLog } from '@/lib/api-logger';
-import { authenticateClient } from '@/lib/auth-middleware';
+import { logger } from '@/core/logging/logger';
+import { jsonResponse, apiLog } from '@/core/logging/api-logger';
+import { authenticateClient } from '@/core/auth/auth-middleware';
 
 const bucketName = process.env.R2_BUCKET_NAME || '';
 

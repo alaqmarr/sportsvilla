@@ -20,11 +20,11 @@ import {
   unblockCard,
   revokeCard,
   getCardInventory,
-} from "./actions";
-import { playNfcSound } from "@/lib/soundUtils";
+} from "@/modules/nfc/nfc.action";
+import { playNfcSound } from "@/core/utils/soundUtils";
 import { useAlert } from "@/components/AlertProvider";
 import { useNfc } from "@/components/nfc/NfcProvider";
-import { formatIST } from "@/lib/dateUtils";
+import { formatIST } from "@/core/utils/dateUtils";
 import {
   Card,
   Button,

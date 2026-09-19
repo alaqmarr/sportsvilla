@@ -7,7 +7,7 @@ import { useState, useEffect } from "react";
 import QRCode from "qrcode";
 import { Modal } from "@/components/play/Modal";
 import { useAlert } from "@/components/AlertProvider";
-import { rawPlayTokens } from "@/lib/tokens";
+import { rawPlayTokens } from "@/core/tokens/play.tokens";
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 

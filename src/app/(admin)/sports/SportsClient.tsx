@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import { createSport, updateSport, deleteSport } from "./actions";
+import { createSport, updateSport, deleteSport } from "@/modules/sports/sports.action";
 import { useAlert } from "@/components/AlertProvider";
 import { FiTrash2, FiEdit2, FiPlus, FiActivity } from "react-icons/fi";
 import {

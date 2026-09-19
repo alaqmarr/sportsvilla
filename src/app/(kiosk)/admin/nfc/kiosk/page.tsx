@@ -1,7 +1,7 @@
 export const dynamic = "force-dynamic";
 
-import { prisma } from "@/lib/prisma";
-import { getISTDateBounds } from "@/lib/dateUtils";
+import { prisma } from "@/core/database/prisma";
+import { getISTDateBounds } from "@/core/utils/dateUtils";
 import KioskClient from "./KioskClient";
 
 export default async function NfcKioskPage() {

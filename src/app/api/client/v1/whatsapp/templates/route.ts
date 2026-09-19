@@ -1,8 +1,8 @@
 import { NextResponse } from 'next/server';
 import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/auth";
-import { jsonResponse } from '@/lib/api-logger';
-import { whatsappDb } from '@/lib/whatsappDb';
+import { authOptions } from "@/core/auth/auth";
+import { jsonResponse } from '@/core/logging/api-logger';
+import { whatsappDb } from '@/core/database/whatsappDb';
 
 export const dynamic = 'force-dynamic';
 

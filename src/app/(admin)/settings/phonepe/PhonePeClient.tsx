@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import { updatePhonePeSettings } from "./actions";
+import { updatePhonePeSettings } from "@/modules/settings/settings.action";
 import { useAlert } from "@/components/AlertProvider";
 import { FiSave, FiCreditCard } from "react-icons/fi";
 import {

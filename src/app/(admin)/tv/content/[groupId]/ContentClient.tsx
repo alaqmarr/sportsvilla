@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { deleteContentItem, reorderContentItems } from "./actions";
+import { deleteContentItem, reorderContentItems } from "@/modules/tv/tv.action";
 import { useAlert } from "@/components/AlertProvider";
 
 export default function ContentClient({ group, initialItems, publicUrlBase }: { group: any, initialItems: any[], publicUrlBase: string }) {

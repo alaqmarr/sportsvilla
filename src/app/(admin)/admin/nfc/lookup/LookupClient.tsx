@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { useNfc } from "@/components/nfc/NfcProvider";
-import { getMemberDetailsByCard } from "./actions";
+import { getMemberDetailsByCard } from "@/modules/nfc/nfc.action";
 import { Loader2, User, Calendar, CreditCard, Activity, Wifi } from "lucide-react";
 import { format } from "date-fns";
 import { Prisma } from "@/generated/client";

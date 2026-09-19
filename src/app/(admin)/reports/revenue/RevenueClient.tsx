@@ -1,11 +1,11 @@
 'use client'
 
 import React, { useState, useEffect } from 'react';
-import { fetchRevenueData } from './actions';
+import { fetchRevenueData } from '@/modules/reports/reports.action';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 import { FiDollarSign, FiCreditCard, FiSmartphone } from 'react-icons/fi';
 import { PageHeader, Stat, Card, CardHeader, CardTitle, CardContent, Skeleton, SkeletonCard } from '@/components/admin/ui';
-import { rawAdminTokens } from '@/lib/tokens';
+import { rawAdminTokens } from '@/core/tokens/admin.tokens';
 
 const CHART_COLORS = [
   rawAdminTokens.statusSuccess,

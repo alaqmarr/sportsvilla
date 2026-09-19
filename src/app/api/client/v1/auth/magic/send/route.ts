@@ -1,9 +1,9 @@
 import { NextResponse } from 'next/server';
-import { whatsappDb } from '@/lib/whatsappDb';
-import { sendWhatsAppMagicLogin } from '@/lib/whatsapp';
-import { jsonResponse } from '@/lib/api-logger';
+import { whatsappDb } from '@/core/database/whatsappDb';
+import { sendWhatsAppMagicLogin } from '@/modules/whatsapp/magic-login.template';
+import { jsonResponse } from '@/core/logging/api-logger';
 import { randomBytes } from 'crypto';
-import { logger } from '@/lib/logger';
+import { logger } from '@/core/logging/logger';
 
 export async function POST(request: Request) {
   logger.info(`[API] POST /api/client/v1/auth/magic/send called`);

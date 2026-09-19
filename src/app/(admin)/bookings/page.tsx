@@ -1,8 +1,8 @@
 export const dynamic = "force-dynamic";
 
 import BookingsClient from "./BookingsClient";
-import { fetchBookableTurfs } from "./actions";
-import { getSettings } from "../settings/actions";
+import { fetchBookableTurfs } from "@/modules/bookings/bookings.action";
+import { getSettings } from "@/modules/settings/settings.action";
 
 export default async function BookingsPage() {
   const turfs = await fetchBookableTurfs();

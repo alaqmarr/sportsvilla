@@ -1,6 +1,6 @@
 import Database from 'better-sqlite3';
 import { PrismaBetterSqlite3 } from '@prisma/adapter-better-sqlite3';
-import { PrismaClient } from '../generated/whatsapp-client/client';
+import { PrismaClient } from '@/generated/whatsapp-client/client';
 
 const dbPath = (process.env.WHATSAPP_DB_URL || process.env.WHATSAPP_DB_UL || 'file:./whatsapp.db').replace('file:', '').replace('./', '');
 

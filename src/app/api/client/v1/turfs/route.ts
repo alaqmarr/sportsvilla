@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
-import { prisma } from '@/lib/prisma';
-import { jsonResponse, apiLog } from '@/lib/api-logger';
+import { prisma } from '@/core/database/prisma';
+import { jsonResponse, apiLog } from '@/core/logging/api-logger';
 
 export async function GET(request: Request) {
   apiLog(`[API] GET /api/client/v1/turfs called`);

@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { useAlert } from "@/components/AlertProvider";
 import { FiTrash2, FiEdit2, FiShield, FiCheck, FiX, FiPlus, FiZap } from "react-icons/fi";
-import { RBAC_CATEGORIES, AdminUser } from "@/lib/rbac";
+import { RBAC_CATEGORIES, AdminUser } from "@/core/auth/rbac-definitions";
 import {
   Card,
   Button,

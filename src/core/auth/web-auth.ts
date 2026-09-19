@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import jwt from 'jsonwebtoken';
-import { prisma } from '@/lib/prisma';
+import { prisma } from '@/core/database/prisma';
 
 const COOKIE_NAME = 'sv_session';
 const COOKIE_MAX_AGE = 30 * 24 * 60 * 60; // 30 days in seconds

@@ -1,8 +1,8 @@
-import { prisma } from '@/lib/prisma';
-import { requireServerMember } from '@/lib/serverAuth';
-import { todayIST } from '@/lib/dateUtils';
+import { prisma } from '@/core/database/prisma';
+import { requireServerMember } from '@/core/auth/serverAuth';
+import { todayIST } from '@/core/utils/dateUtils';
 import { BookCourtClient } from './BookCourtClient';
-import { AvailabilityService } from '@/services/AvailabilityService';
+import { AvailabilityService } from '@/modules/bookings/bookings.services';
 import { PlayEmptyState } from '@/components/play/ui/PlayEmptyState';
 
 export default async function BookCourtPage(props: {

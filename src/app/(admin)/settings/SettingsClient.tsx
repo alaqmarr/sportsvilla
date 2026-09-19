@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import { updateSettings } from "./actions";
+import { updateSettings } from "@/modules/settings/settings.action";
 import { useAlert } from "@/components/AlertProvider";
 import { FiSave, FiSettings, FiCreditCard } from "react-icons/fi";
 import {
@@ -22,6 +22,7 @@ export default function SettingsClient({ initialSettings }: { initialSettings: R
   const [allowCancellation, setAllowCancellation] = useState(initialSettings.ALLOW_CANCELLATION !== "false");
   const [allowOnlineBooking, setAllowOnlineBooking] = useState(initialSettings.ALLOW_ONLINE_BOOKING !== "false");
   const [maintenanceMode, setMaintenanceMode] = useState(initialSettings.MAINTENANCE_MODE === "true");
+  const [gdriveFolderId, setGdriveFolderId] = useState(initialSettings.GDRIVE_BACKUP_FOLDER_ID || "");
   const [loading, setLoading] = useState(false);
 
   async function handleSave(e: React.FormEvent) {
@@ -38,7 +39,8 @@ export default function SettingsClient({ initialSettings }: { initialSettings: R
         ALLOW_RESCHEDULING: allowRescheduling ? "true" : "false",
         ALLOW_CANCELLATION: allowCancellation ? "true" : "false",
         ALLOW_ONLINE_BOOKING: allowOnlineBooking ? "true" : "false",
-        MAINTENANCE_MODE: maintenanceMode ? "true" : "false"
+        MAINTENANCE_MODE: maintenanceMode ? "true" : "false",
+        GDRIVE_BACKUP_FOLDER_ID: gdriveFolderId
       });
       showAlert("Settings Saved", "Your configuration has been updated successfully.", "success");
     } catch (err) {
@@ -202,6 +204,23 @@ export default function SettingsClient({ initialSettings }: { initialSettings: R
                   <span className="block text-xs text-sv-text-muted">Block all users from accessing the mobile app. Show a maintenance screen instead.</span>
                 </div>
               </label>
+            </div>
+
+            <div className="pt-6 border-t border-sv-border-subtle">
+              <h3 className="text-sm font-bold font-sans text-sv-text flex items-center gap-2 mb-4">
+                <FiSettings className="text-sv-brand" /> Automated Backups
+              </h3>
+            </div>
+
+            <div>
+              <Input
+                label="Google Drive Backup Folder ID"
+                type="text"
+                value={gdriveFolderId}
+                onChange={e => setGdriveFolderId(e.target.value)}
+                placeholder="e.g. 10Ulnl1CQugl9Otfrau3hkNeR6Urb5PO-"
+                helperText="Folder ID where automated nightly database and log backups will be stored."
+              />
             </div>
 
             <div className="pt-4 border-t border-sv-border border-[#2a2d3e] flex justify-end">

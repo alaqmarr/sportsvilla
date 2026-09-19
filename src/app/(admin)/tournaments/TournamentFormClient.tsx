@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { createTournament, updateTournament } from './actions';
+import { createTournament, updateTournament } from '@/modules/tournaments/tournaments.action';
 import toast from 'react-hot-toast';
 import { FiUploadCloud } from 'react-icons/fi';
 import {

@@ -1,6 +1,6 @@
-import { withApiHandler } from '@/lib/api-handler';
-import { authenticateClient } from '@/lib/auth-middleware';
-import { prisma } from '@/lib/prisma';
+import { withApiHandler } from '@/core/http/api-handler';
+import { authenticateClient } from '@/core/auth/auth-middleware';
+import { prisma } from '@/core/database/prisma';
 
 export const GET = withApiHandler(async (request: Request) => {
   const authRes = await authenticateClient(request);

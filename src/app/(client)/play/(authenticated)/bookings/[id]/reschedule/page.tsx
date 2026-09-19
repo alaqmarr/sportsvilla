@@ -14,7 +14,7 @@ import { PlayButton } from '@/components/play/ui/PlayButton';
 import { PlayBadge } from '@/components/play/ui/PlayBadge';
 import { PlaySkeleton } from '@/components/play/ui/PlaySkeleton';
 import { PlayEmptyState } from '@/components/play/ui/PlayEmptyState';
-import { formatIST } from '@/lib/dateUtils';
+import { formatIST } from '@/core/utils/dateUtils';
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { authenticateTvDevice } from "@/lib/tv-auth";
+import { authenticateTvDevice } from "@/modules/tv/tv-auth.lib";
 
 const publicUrlBase = process.env.R2_PUBLIC_URL || "";
 

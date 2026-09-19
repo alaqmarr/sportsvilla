@@ -1,9 +1,9 @@
 'use client';
 
 import React, { useState } from 'react';
-import { formatIST } from '@/lib/dateUtils';
+import { formatIST } from '@/core/utils/dateUtils';
 import { useRouter } from 'next/navigation';
-import { deleteTournament } from './actions';
+import { deleteTournament } from '@/modules/tournaments/tournaments.action';
 import { FiCalendar, FiMapPin, FiUsers, FiEdit2, FiTrash2, FiPlus } from 'react-icons/fi';
 import { useAlert } from '@/components/AlertProvider';
 import {

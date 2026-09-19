@@ -1,6 +1,6 @@
-import { prisma } from "@/lib/prisma";
+import { prisma } from "@/core/database/prisma";
 import QRCodeLib from "qrcode";
-import { formatIST } from "@/lib/dateUtils";
+import { formatIST } from "@/core/utils/dateUtils";
 
 export default async function PrintTicketPage({ params }: { params: Promise<{ bookingId: string }> }) {
   const { bookingId } = await params;

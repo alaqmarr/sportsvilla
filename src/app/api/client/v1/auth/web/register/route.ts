@@ -1,9 +1,9 @@
-import { prisma } from '@/lib/prisma';
-import { jsonResponse, apiLog } from '@/lib/api-logger';
-import { logger } from '@/lib/logger';
-import { setSessionCookie, mintWebToken } from '@/lib/web-auth';
-import { sendWhatsAppMemberRegisteredTemplate } from '@/lib/whatsapp';
-import { generateMemberId } from '@/lib/memberUtils';
+import { prisma } from '@/core/database/prisma';
+import { jsonResponse, apiLog } from '@/core/logging/api-logger';
+import { logger } from '@/core/logging/logger';
+import { setSessionCookie, mintWebToken } from '@/core/auth/web-auth';
+import { sendWhatsAppMemberRegisteredTemplate } from '@/modules/whatsapp/member-registered.template';
+import { generateMemberId } from '@/modules/members/members.helper';
 
 export async function POST(request: Request) {
   apiLog(`[API] POST /api/client/v1/auth/web/register called`);

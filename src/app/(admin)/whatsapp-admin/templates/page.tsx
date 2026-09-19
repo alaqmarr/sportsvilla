@@ -1,9 +1,9 @@
 import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/auth";
+import { authOptions } from "@/core/auth/auth";
 import { redirect } from "next/navigation";
-import { prisma } from "@/lib/prisma";
-import { whatsappDb } from "@/lib/whatsappDb";
-import { hasPermission } from "@/lib/rbac";
+import { prisma } from "@/core/database/prisma";
+import { whatsappDb } from "@/core/database/whatsappDb";
+import { hasPermission } from "@/core/auth/rbac";
 import TemplatesClient from "./TemplatesClient";
 
 export const metadata = {

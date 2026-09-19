@@ -1,8 +1,8 @@
 'use client'
 
 import React, { useState, useEffect } from 'react';
-import { fetchAuditLogs } from './actions';
-import { formatIST } from '@/lib/dateUtils';
+import { fetchAuditLogs } from '@/modules/system/system.action';
+import { formatIST } from '@/core/utils/dateUtils';
 import { FiClock, FiActivity } from 'react-icons/fi';
 import { PageHeader, DataTable, ColumnDef, Badge } from '@/components/admin/ui';
 

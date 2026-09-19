@@ -1,7 +1,7 @@
 "use client";
-import { formatIST } from "@/lib/dateUtils";
+import { formatIST } from "@/core/utils/dateUtils";
 import { useState, useEffect } from "react";
-import { fetchPlanDetail } from "./actions";
+import { fetchPlanDetail } from "@/modules/plans/plans.action";
 import { startOfDay } from "date-fns";
 import { FiClock, FiCheckCircle, FiXCircle } from "react-icons/fi";
 import { useRouter } from "next/navigation";

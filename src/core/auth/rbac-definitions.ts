@@ -1,0 +1,215 @@
+// Granular Role-Based Access Control (RBAC) Definitions for SportsVilla
+
+export interface AdminUser {
+  id?: string;
+  email?: string;
+  name?: string | null;
+  role?: string; // "SUPERADMIN" | "ADMIN"
+  permissions?: string; // Comma-separated string of permission keys
+  isActive?: boolean;
+}
+
+export interface PermissionModule {
+  id: string;
+  name: string;
+  description: string;
+  viewKey: string;
+  manageKey?: string;
+}
+
+export interface PermissionCategory {
+  title: string;
+  modules: PermissionModule[];
+}
+
+// Hierarchical modules organized from smallest to biggest operational impact
+export const RBAC_CATEGORIES: PermissionCategory[] = [
+  {
+    title: "Operations",
+    modules: [
+      {
+        id: "calendar",
+        name: "Booking Calendar",
+        description: "View and manage daily turf schedule & availability",
+        viewKey: "view:calendar",
+        manageKey: "manage:calendar",
+      },
+      {
+        id: "bookings",
+        name: "Turf Bookings",
+        description: "View bookings, confirm slots, and manage reservations",
+        viewKey: "view:bookings",
+        manageKey: "manage:bookings",
+      },
+      {
+        id: "checkin",
+        name: "Entry Check-in",
+        description: "QR scan and customer venue check-ins",
+        viewKey: "view:checkin",
+        manageKey: "manage:checkin",
+      },
+      {
+        id: "attendance",
+        name: "Attendance Kiosk",
+        description: "Member check-in kiosk and daily attendance logs",
+        viewKey: "view:attendance",
+        manageKey: "manage:attendance",
+      },
+      {
+        id: "tournaments",
+        name: "Tournaments",
+        description: "Organize tournaments, brackets, and team registrations",
+        viewKey: "view:tournaments",
+        manageKey: "manage:tournaments",
+      },
+      {
+        id: "nfc",
+        name: "NFC Operations",
+        description: "Manage NFC cards, card assignments, transaction ledger, and kiosk check-in",
+        viewKey: "view:nfc",
+        manageKey: "manage:nfc",
+      },
+    ],
+  },
+  {
+    title: "Management",
+    modules: [
+      {
+        id: "members",
+        name: "Members Directory",
+        description: "Customer database, family accounts, and profiles",
+        viewKey: "view:members",
+        manageKey: "manage:members",
+      },
+      {
+        id: "wallets",
+        name: "Member Wallets",
+        description: "Member wallet balances, recharges, and transactions",
+        viewKey: "view:wallets",
+        manageKey: "manage:wallets",
+      },
+      {
+        id: "plans",
+        name: "Memberships & Plans",
+        description: "Subscription plans, pricing, and active memberships",
+        viewKey: "view:plans",
+        manageKey: "manage:plans",
+      },
+      {
+        id: "coupons",
+        name: "Coupons & Discounts",
+        description: "Promotional discount codes, validity, and usage limits",
+        viewKey: "view:coupons",
+        manageKey: "manage:coupons",
+      },
+      {
+        id: "banners",
+        name: "Homepage Banners",
+        description: "Mobile & web promotional hero banners",
+        viewKey: "view:banners",
+        manageKey: "manage:banners",
+      },
+      {
+        id: "loyalty",
+        name: "Loyalty Leaderboard",
+        description: "Loyalty points, achievements, and leaderboard rankings",
+        viewKey: "view:loyalty",
+        manageKey: "manage:loyalty",
+      },
+      {
+        id: "sports",
+        name: "Sports Setup",
+        description: "Available sports, rules, and icon configurations",
+        viewKey: "view:sports",
+        manageKey: "manage:sports",
+      },
+      {
+        id: "turfs",
+        name: "Grounds & Turfs",
+        description: "Turf arenas, pricing per slot, and capacities",
+        viewKey: "view:turfs",
+        manageKey: "manage:turfs",
+      },
+      {
+        id: "whatsapp",
+        name: "WhatsApp CRM & Bots",
+        description: "Live WhatsApp conversations, auto-reply, and broadcast templates",
+        viewKey: "view:whatsapp",
+        manageKey: "manage:whatsapp",
+      },
+    ],
+  },
+  {
+    title: "Reports & Analytics",
+    modules: [
+      {
+        id: "reports",
+        name: "Analytics & Reports",
+        description: "Revenue reports, utilization charts, and exportable data",
+        viewKey: "view:reports",
+        manageKey: "manage:reports",
+      },
+    ],
+  },
+  {
+    title: "System & Governance",
+    modules: [
+      {
+        id: "settings",
+        name: "Global Settings",
+        description: "Company details, contact numbers, and site configurations",
+        viewKey: "view:settings",
+        manageKey: "manage:settings",
+      },
+      {
+        id: "logs",
+        name: "Application Logs",
+        description: "System error logs, debugging, and webhook traces",
+        viewKey: "view:logs",
+        manageKey: "manage:logs",
+      },
+      {
+        id: "versions",
+        name: "Mobile App Versions",
+        description: "Manage Android/iOS build versions and forced updates",
+        viewKey: "view:versions",
+        manageKey: "manage:versions",
+      },
+      {
+        id: "audit",
+        name: "Audit Logs",
+        description: "Track administrator activities and audit trails",
+        viewKey: "view:audit",
+        manageKey: "manage:audit",
+      },
+      {
+        id: "server",
+        name: "Server Status",
+        description: "SQLite database health, backups, and server diagnostics",
+        viewKey: "view:server",
+        manageKey: "manage:server",
+      },
+      {
+        id: "admins",
+        name: "Role & Admin Users",
+        description: "Manage admin accounts, roles, and granular RBAC permissions",
+        viewKey: "manage:admins",
+        manageKey: "manage:admins",
+      },
+    ],
+  },
+];
+
+export const PERMISSIONS = {
+  MANAGE_TV: "manage:tv",
+  VIEW_TV: "view:tv",
+  MANAGE_BOOKINGS: "manage:bookings",
+  VIEW_BOOKINGS: "view:bookings",
+  MANAGE_MEMBERS: "manage:members",
+  VIEW_MEMBERS: "view:members",
+  MANAGE_WALLETS: "manage:wallets",
+  VIEW_WALLETS: "view:wallets",
+  MANAGE_ADMINS: "manage:admins",
+} as const;
+
+export type Permission = typeof PERMISSIONS[keyof typeof PERMISSIONS] | string;

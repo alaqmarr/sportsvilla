@@ -1,6 +1,6 @@
-import { prisma } from '@/lib/prisma';
-import { jsonResponse, apiLog } from '@/lib/api-logger';
-import { getSessionFromCookie } from '@/lib/web-auth';
+import { prisma } from '@/core/database/prisma';
+import { jsonResponse, apiLog } from '@/core/logging/api-logger';
+import { getSessionFromCookie } from '@/core/auth/web-auth';
 
 export async function GET(request: Request) {
   apiLog(`[API] GET /api/client/v1/auth/web/session called`);

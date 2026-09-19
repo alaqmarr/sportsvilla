@@ -1,8 +1,8 @@
 "use client";
-import { formatIST, todayIST } from "@/lib/dateUtils";
+import { formatIST, todayIST } from "@/core/utils/dateUtils";
 import { useState, useRef, useMemo, useEffect } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
-import { createMember, updateMember, deleteMember, assignPlan, createFamily, updateMemberMembership, deleteMemberMembership, resetWallet } from "./actions";
+import { createMember, updateMember, deleteMember, assignPlan, createFamily, updateMemberMembership, deleteMemberMembership, resetWallet } from "@/modules/members/members.action";
 import { useAlert } from "@/components/AlertProvider";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -11,7 +11,7 @@ import jsPDF from "jspdf";
 import QRCodeLib from "qrcode";
 import { FiTrash2, FiEdit2, FiPlus, FiX, FiDownload, FiImage, FiMessageCircle, FiUserCheck, FiUsers, FiFileText, FiRefreshCcw } from "react-icons/fi";
 import { PageHeader, Button, Badge, Card, EmptyState, Avatar, TableSkeleton } from "@/components/admin/ui";
-import { rawAdminTokens } from "@/lib/tokens";
+import { rawAdminTokens } from "@/core/tokens/admin.tokens";
 
 export default function MembersClient({ initialMembers, plans, turfs = [] }: { initialMembers: any[], plans: any[], turfs?: any[] }) {
   const { showAlert, showConfirm } = useAlert();

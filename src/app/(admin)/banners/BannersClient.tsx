@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { createBanner, toggleBannerStatus, deleteBanner, getAdminPresignedUrl } from "./actions";
+import { createBanner, toggleBannerStatus, deleteBanner, getAdminPresignedUrl } from "@/modules/banners/banners.action";
 import { useAlert } from "@/components/AlertProvider";
 
 export default function BannersClient({ initialBanners, sports }: { initialBanners: any[], sports: any[] }) {

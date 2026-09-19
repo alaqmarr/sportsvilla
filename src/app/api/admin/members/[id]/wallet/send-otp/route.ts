@@ -1,11 +1,11 @@
 import { NextResponse } from 'next/server';
-import { prisma } from '@/lib/prisma';
-import { whatsappDb } from '@/lib/whatsappDb';
+import { prisma } from '@/core/database/prisma';
+import { whatsappDb } from '@/core/database/whatsappDb';
 import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/auth";
-import { jsonResponse, apiLog } from '@/lib/api-logger';
+import { authOptions } from "@/core/auth/auth";
+import { jsonResponse, apiLog } from '@/core/logging/api-logger';
 import { randomInt } from 'crypto';
-import { sendWhatsAppOtp } from '@/lib/whatsapp';
+import { sendWhatsAppOtp } from '@/modules/whatsapp/otp.template';
 
 export async function POST(
   request: Request,

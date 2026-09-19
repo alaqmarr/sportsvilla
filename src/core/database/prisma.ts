@@ -1,6 +1,6 @@
 import Database from 'better-sqlite3';
 import { PrismaBetterSqlite3 } from '@prisma/adapter-better-sqlite3';
-import { PrismaClient } from '../generated/client/client';
+import { PrismaClient } from '@/generated/client/client';
 
 const dbPath = (process.env.DATABASE_URL || 'file:./dev.db').replace('file:', '').replace('./', '');
 

@@ -1,5 +1,5 @@
 "use client";
-import { formatIST } from "@/lib/dateUtils";
+import { formatIST } from "@/core/utils/dateUtils";
 import { startOfMonth, endOfMonth, startOfWeek, endOfWeek, isSameMonth, isSameDay, addMonths, subMonths, startOfDay } from "date-fns";
 
 import { useEffect, useState } from "react";

@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/auth";
-import { prisma } from "@/lib/prisma";
+import { authOptions } from "@/core/auth/auth";
+import { prisma } from "@/core/database/prisma";
 
 const publicUrlBase = process.env.R2_PUBLIC_URL || "";
 

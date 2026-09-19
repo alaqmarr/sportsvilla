@@ -1,11 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
-import { NfcCheckinService } from "@/services/NfcCheckinService";
-import { checkRateLimit } from "@/lib/rate-limit";
+import { NfcCheckinService } from "@/modules/nfc/nfc-checkin.services";
+import { checkRateLimit } from "@/core/http/rate-limit";
 import { NfcCheckinRequest, NfcCheckinResponse } from "@/types/nfc";
 import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/auth";
-import { authenticateClient } from "@/lib/auth-middleware";
-import { Mutex } from "@/lib/mutex";
+import { authOptions } from "@/core/auth/auth";
+import { authenticateClient } from "@/core/auth/auth-middleware";
+import { Mutex } from "@/core/utils/mutex";
 
 // Per-card tap timestamp cache for debouncing physical double-taps
 const checkinTapCooldowns = new Map<string, number>();

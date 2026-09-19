@@ -1,7 +1,7 @@
-import { withApiHandler, ApiError } from '@/lib/api-handler';
-import { authenticateClient } from '@/lib/auth-middleware';
-import { CouponService } from '@/services/CouponService';
-import { checkRateLimit } from '@/lib/rate-limit';
+import { withApiHandler, ApiError } from '@/core/http/api-handler';
+import { authenticateClient } from '@/core/auth/auth-middleware';
+import { CouponService } from '@/modules/coupons/coupons.services';
+import { checkRateLimit } from '@/core/http/rate-limit';
 
 export const POST = withApiHandler(async (request: Request) => {
   const authRes = await authenticateClient(request);

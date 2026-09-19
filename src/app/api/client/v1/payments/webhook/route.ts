@@ -1,7 +1,8 @@
-import { withApiHandler, ApiError } from '@/lib/api-handler';
-import { PaymentService } from '@/services/PaymentService';
-import { prisma } from '@/lib/prisma';
-import { logger } from '@/lib/logger';
+import { withApiHandler, ApiError } from '@/core/http/api-handler';
+import { settleSuccessfulPayment, sendConfirmationAndTickets } from '@/modules/payments/payment-settlement.services';
+import { verifyPhonePeWebhook } from '@/modules/payments/phonepe.services';
+import { prisma } from '@/core/database/prisma';
+import { logger } from '@/core/logging/logger';
 import crypto from 'crypto';
 
 export const POST = withApiHandler(async (request: Request) => {
@@ -71,7 +72,7 @@ export const POST = withApiHandler(async (request: Request) => {
         }
 
         if (booking) {
-          const settleResult = await PaymentService.settleSuccessfulPayment({
+          const settleResult = await settleSuccessfulPayment({
             bookingId: booking.id,
             gateway: 'RAZORPAY',
             gatewayOrderId: orderId,
@@ -81,7 +82,7 @@ export const POST = withApiHandler(async (request: Request) => {
           });
 
           if (settleResult.success && settleResult.status === 'PAID') {
-            await PaymentService.sendConfirmationAndTickets(settleResult.booking);
+            await sendConfirmationAndTickets(settleResult.booking);
           }
         }
       } else if (event === 'payment_link.paid') {
@@ -124,7 +125,7 @@ export const POST = withApiHandler(async (request: Request) => {
               }
 
               if (allocatedAmount > 0) {
-                const settleResult = await PaymentService.settleSuccessfulPayment({
+                const settleResult = await settleSuccessfulPayment({
                   bookingId: booking.id,
                   gateway: 'RAZORPAY',
                   gatewayOrderId: linkEntity.order_id,
@@ -134,7 +135,7 @@ export const POST = withApiHandler(async (request: Request) => {
                 });
 
                 if (settleResult.success && settleResult.status === 'PAID') {
-                  await PaymentService.sendConfirmationAndTickets(settleResult.booking);
+                  await sendConfirmationAndTickets(settleResult.booking);
                 }
               }
             }
@@ -180,7 +181,7 @@ export const POST = withApiHandler(async (request: Request) => {
     throw new ApiError('Missing x-verify signature header', 401);
   }
 
-  const data = await PaymentService.verifyPhonePeWebhook(payload.response, xVerify);
+  const data = await verifyPhonePeWebhook(payload.response, xVerify);
 
   if (data.code === 'PAYMENT_SUCCESS') {
     let bookingId = urlBookingId;
@@ -204,7 +205,7 @@ export const POST = withApiHandler(async (request: Request) => {
         const paidAmount = data.data?.amount ? data.data.amount / 100 : booking.amountDue;
         const providerRef = data.data?.transactionId || data.data?.providerReferenceId || null;
 
-        const settleResult = await PaymentService.settleSuccessfulPayment({
+        const settleResult = await settleSuccessfulPayment({
           bookingId: booking.id,
           gateway: 'PHONEPE',
           gatewayOrderId: merchantTxId,
@@ -214,7 +215,7 @@ export const POST = withApiHandler(async (request: Request) => {
         });
 
         if (settleResult.success && settleResult.status === 'PAID') {
-          await PaymentService.sendConfirmationAndTickets(settleResult.booking);
+          await sendConfirmationAndTickets(settleResult.booking);
         }
       }
     }

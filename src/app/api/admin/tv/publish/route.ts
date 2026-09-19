@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
-import { PERMISSIONS } from "@/lib/rbac";
-import { requireApiPermission } from "@/lib/serverRbac";
-import { prisma } from "@/lib/prisma";
+import { PERMISSIONS } from "@/core/auth/rbac-definitions";
+import { requireApiPermission } from "@/core/auth/serverRbac";
+import { prisma } from "@/core/database/prisma";
 import { PutObjectCommand } from "@aws-sdk/client-s3";
-import { s3Client } from "@/lib/s3";
+import { s3Client } from "@/core/storage/s3";
 
 const bucketName = process.env.R2_BUCKET_NAME || "";
 const publicUrlBase = process.env.R2_PUBLIC_URL || "";

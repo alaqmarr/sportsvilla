@@ -1,8 +1,8 @@
 import { NextResponse } from 'next/server';
 import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/auth";
-import { sendWhatsAppMessage } from '@/lib/whatsapp';
-import { jsonResponse } from '@/lib/api-logger';
+import { authOptions } from "@/core/auth/auth";
+import { sendWhatsAppMessage } from '@/modules/whatsapp/whatsapp.service';
+import { jsonResponse } from '@/core/logging/api-logger';
 
 export async function POST(request: Request) {
   try {

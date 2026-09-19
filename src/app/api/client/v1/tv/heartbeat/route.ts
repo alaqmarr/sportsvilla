@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { authenticateTvDevice } from "@/lib/tv-auth";
-import { prisma } from "@/lib/prisma";
+import { authenticateTvDevice } from "@/modules/tv/tv-auth.lib";
+import { prisma } from "@/core/database/prisma";
 
 export async function POST(req: NextRequest) {
   try {

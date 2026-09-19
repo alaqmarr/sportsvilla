@@ -1,5 +1,5 @@
-import { prisma } from '@/lib/prisma';
-import { requireServerMember } from '@/lib/serverAuth';
+import { prisma } from '@/core/database/prisma';
+import { requireServerMember } from '@/core/auth/serverAuth';
 import { Calendar, CheckCircle2, XCircle, Activity, CreditCard, Clock } from 'lucide-react';
 
 export default async function MembershipsPage() {

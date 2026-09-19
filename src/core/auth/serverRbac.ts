@@ -1,9 +1,9 @@
 import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/auth";
-import { prisma } from "@/lib/prisma";
+import { authOptions } from "@/core/auth/auth";
+import { prisma } from "@/core/database/prisma";
 import { NextResponse } from "next/server";
 import { redirect } from "next/navigation";
-import { Permission } from "@/lib/rbac";
+import { Permission } from "./rbac-definitions";
 
 export async function checkPermission(requiredPermission: Permission): Promise<{ authorized: boolean; admin: any }> {
   const session = await getServerSession(authOptions);

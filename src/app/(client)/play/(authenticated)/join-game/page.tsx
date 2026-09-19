@@ -1,5 +1,5 @@
-import { prisma } from '@/lib/prisma';
-import { requireServerMember } from '@/lib/serverAuth';
+import { prisma } from '@/core/database/prisma';
+import { requireServerMember } from '@/core/auth/serverAuth';
 import { JoinGameClient } from './JoinGameClient';
 
 export default async function JoinGamePage() {

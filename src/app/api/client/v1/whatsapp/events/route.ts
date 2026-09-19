@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/auth";
-import { whatsappDb } from "@/lib/whatsappDb";
-import { jsonResponse } from "@/lib/api-logger";
+import { authOptions } from "@/core/auth/auth";
+import { whatsappDb } from "@/core/database/whatsappDb";
+import { jsonResponse } from "@/core/logging/api-logger";
 
 export async function GET() {
   try {

@@ -1,7 +1,7 @@
 "use client";
-import { formatIST } from "@/lib/dateUtils";
+import { formatIST } from "@/core/utils/dateUtils";
 import { useState, useEffect } from "react";
-import { fetchMembers, markAttendance } from "./actions";
+import { fetchMembers, markAttendance } from "@/modules/attendance/attendance.action";
 import { useAlert } from "@/components/AlertProvider";
 
 import { FiCheckCircle, FiUser, FiCamera, FiX, FiClock, FiActivity, FiLink } from "react-icons/fi";

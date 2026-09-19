@@ -1,8 +1,8 @@
 import LoginClient from "./LoginClient";
 import { getServerSession } from "next-auth/next";
-import { authOptions } from "@/lib/auth";
+import { authOptions } from "@/core/auth/auth";
 import { redirect } from "next/navigation";
-import { prisma } from "@/lib/prisma";
+import { prisma } from "@/core/database/prisma";
 
 export const dynamic = 'force-dynamic';
 

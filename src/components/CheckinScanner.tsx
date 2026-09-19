@@ -1,10 +1,10 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { lookupTicket, confirmTicketCheckin } from "@/app/(admin)/checkin/actions";
+import { lookupTicket, confirmTicketCheckin } from "@/modules/checkin/checkin.action";
 import { useAlert } from "@/components/AlertProvider";
 import { FiCheckCircle, FiXCircle, FiSearch, FiCamera, FiX, FiLink, FiRadio } from "react-icons/fi";
-import { formatIST } from "@/lib/dateUtils";
+import { formatIST } from "@/core/utils/dateUtils";
 import { Html5QrcodeScanner } from "html5-qrcode";
 import { useNfc } from "@/components/nfc/NfcProvider";
 

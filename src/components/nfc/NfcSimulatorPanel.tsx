@@ -34,8 +34,8 @@ import {
   simulateCustomEventTap,
   simulateKeyboardWedgeKeystrokes,
   DEFAULT_PRESET_CARDS,
-} from "@/lib/nfcSimulator";
-import { playNfcSound } from "@/lib/soundUtils";
+} from "@/modules/nfc/nfc-simulator.lib";
+import { playNfcSound } from "@/core/utils/soundUtils";
 
 export function NfcSimulatorPanel() {
   const [isOpen, setIsOpen] = useState(false);

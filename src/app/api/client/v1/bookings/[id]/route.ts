@@ -1,9 +1,9 @@
 import { NextResponse } from 'next/server';
-import { prisma } from '@/lib/prisma';
-import { authenticateClient } from '@/lib/auth-middleware';
-import { jsonResponse, apiLog } from '@/lib/api-logger';
+import { prisma } from '@/core/database/prisma';
+import { authenticateClient } from '@/core/auth/auth-middleware';
+import { jsonResponse, apiLog } from '@/core/logging/api-logger';
 import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth';
+import { authOptions } from '@/core/auth/auth';
 
 export async function GET(request: Request, context: { params: Promise<{ id: string }> }) {
   apiLog(`[API] GET /api/client/v1/bookings/[id] called`);

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { getDisplaySession } from "@/app/(admin)/bookings/actions";
+import { getDisplaySession } from "@/modules/bookings/bookings.action";
 import { FiCheckCircle } from "react-icons/fi";
 
 export default function DisplayPage() {

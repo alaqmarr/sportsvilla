@@ -1,8 +1,8 @@
-import { prisma } from "@/lib/prisma";
+import { prisma } from "@/core/database/prisma";
 import ContentClient from "./ContentClient";
 import { notFound } from "next/navigation";
-import { PERMISSIONS } from "@/lib/rbac";
-import { requirePagePermission } from "@/lib/serverRbac";
+import { PERMISSIONS } from "@/core/auth/rbac-definitions";
+import { requirePagePermission } from "@/core/auth/serverRbac";
 
 
 export const dynamic = 'force-dynamic';

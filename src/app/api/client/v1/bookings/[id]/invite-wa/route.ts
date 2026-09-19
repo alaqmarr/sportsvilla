@@ -1,8 +1,8 @@
 import { NextResponse } from 'next/server';
-import { prisma } from '@/lib/prisma';
-import { authenticateClient } from '@/lib/auth-middleware';
-import { jsonResponse, apiLog } from '@/lib/api-logger';
-import { sendWhatsAppGameInviteTemplate } from '@/lib/whatsapp';
+import { prisma } from '@/core/database/prisma';
+import { authenticateClient } from '@/core/auth/auth-middleware';
+import { jsonResponse, apiLog } from '@/core/logging/api-logger';
+import { sendWhatsAppGameInviteTemplate } from '@/modules/whatsapp/game-invite.template';
 
 export async function POST(request: Request, context: { params: Promise<{ id: string }> }) {
   apiLog(`[API] POST /api/client/v1/bookings/[id]/invite-wa called`);

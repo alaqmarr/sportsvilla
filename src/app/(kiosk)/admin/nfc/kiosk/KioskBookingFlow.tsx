@@ -1,11 +1,11 @@
 "use client";
 
 import React, { useState, useEffect, useMemo } from "react";
-import { getKioskFacilities, fetchKioskAvailableSlots, createKioskBooking } from "./actions";
-import { formatIST, todayIST } from "@/lib/dateUtils";
+import { getKioskFacilities, fetchKioskAvailableSlots, createKioskBooking } from "@/modules/nfc/nfc.action";
+import { formatIST, todayIST } from "@/core/utils/dateUtils";
 import { FiCheckCircle, FiClock, FiCreditCard, FiSmartphone, FiArrowLeft } from "react-icons/fi";
 import { useAlert } from "@/components/AlertProvider";
-import { playNfcSound } from "@/lib/soundUtils";
+import { playNfcSound } from "@/core/utils/soundUtils";
 
 function generateSlots(dateStr: string, durationMin: number, openTime: string, closeTime: string) {
   const slots = [];
@@ -156,7 +156,7 @@ export default function KioskBookingFlow({ member, onComplete, onCancel }: { mem
         paymentMethod: "PHONEPE"
       });
 
-      if (!res.success || !res.orderData || !res.orderData.redirectUrl) {
+      if (!res.success || res.paymentMethod !== "PHONEPE" || !res.orderData?.redirectUrl) {
         throw new Error("Could not initialize PhonePe booking");
       }
 
@@ -180,7 +180,7 @@ export default function KioskBookingFlow({ member, onComplete, onCancel }: { mem
         paymentMethod: "RAZORPAY"
       });
 
-      if (!res.success || !res.orderData) throw new Error("Could not initialize booking");
+      if (!res.success || res.paymentMethod !== "RAZORPAY" || !res.orderData) throw new Error("Could not initialize booking");
 
       const options = {
         key: res.orderData.keyId,
@@ -191,7 +191,7 @@ export default function KioskBookingFlow({ member, onComplete, onCancel }: { mem
         order_id: res.orderData.orderId,
         handler: async function (response: any) {
           try {
-            const { confirmKioskRazorpayPayment } = await import("./actions");
+            const { confirmKioskRazorpayPayment } = await import("@/modules/nfc/nfc.action");
             await confirmKioskRazorpayPayment(
               res.booking.id,
               member.id,

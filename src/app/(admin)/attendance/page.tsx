@@ -1,5 +1,5 @@
 export const dynamic = 'force-dynamic';
-import { prisma } from "@/lib/prisma";
+import { prisma } from "@/core/database/prisma";
 import AttendanceClient from "./AttendanceClient";
 
 export default async function AttendancePage() {

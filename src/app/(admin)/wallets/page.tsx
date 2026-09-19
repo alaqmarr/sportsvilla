@@ -1,5 +1,5 @@
 export const dynamic = 'force-dynamic';
-import { prisma } from "@/lib/prisma";
+import { prisma } from "@/core/database/prisma";
 import WalletsClient from "./WalletsClient";
 
 export default async function WalletsPage() {

@@ -22,6 +22,7 @@ import {
   FiAward,
   FiCheckCircle,
   FiTag,
+  FiDatabase,
   FiCreditCard,
   FiSmartphone,
   FiHeart,
@@ -32,7 +33,8 @@ import {
   FiClock,
 } from "react-icons/fi";
 import { FaWhatsapp } from "react-icons/fa";
-import { canViewPage, AdminUser } from "@/lib/rbac";
+import { canViewPage } from "@/core/auth/rbac";
+import { AdminUser } from "@/core/auth/rbac-definitions";
 import { useNfc } from "@/components/nfc/NfcProvider";
 import { Avatar } from "@/components/admin/ui/Avatar";
 import { Badge } from "@/components/admin/ui/Badge";
@@ -245,6 +247,7 @@ export function Navigation({
           { href: "/admin", label: "Role & Admin Users", icon: <FiShield /> },
           { href: "/settings", label: "General Settings", icon: <FiSettings /> },
           { href: "/settings/phonepe", label: "PhonePe Config", icon: <FiCreditCard /> },
+          { href: "/backups", label: "Automated Backups", icon: <FiDatabase /> },
           { href: "/app-versions", label: "App Versions", icon: <FiSmartphone /> },
           { href: "/server", label: "Server Health", icon: <FiServer /> },
           { href: "/app-logs", label: "System Logs", icon: <FiFileText /> },

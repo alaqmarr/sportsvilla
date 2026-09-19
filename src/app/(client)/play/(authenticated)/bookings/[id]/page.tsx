@@ -1,6 +1,6 @@
-import { prisma } from "@/lib/prisma";
+import { prisma } from "@/core/database/prisma";
 import { notFound } from "next/navigation";
-import { requireServerMember } from "@/lib/serverAuth";
+import { requireServerMember } from "@/core/auth/serverAuth";
 import { BookingDetailClient } from "./BookingDetailClient";
 
 export default async function BookingDetailPage({ params }: { params: Promise<{ id: string }> }) {

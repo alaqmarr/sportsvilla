@@ -8,7 +8,7 @@ import { PlayCard } from '@/components/play/ui/PlayCard';
 import { PlayBadge } from '@/components/play/ui/PlayBadge';
 import { PlayButton } from '@/components/play/ui/PlayButton';
 import { PlayEmptyState } from '@/components/play/ui/PlayEmptyState';
-import { formatIST } from '@/lib/dateUtils';
+import { formatIST } from '@/core/utils/dateUtils';
 
 export function BookingsClient({ initialBookings }: { initialBookings: any[] }) {
   const router = useRouter();

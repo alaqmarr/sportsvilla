@@ -1,9 +1,9 @@
 import { NextResponse } from 'next/server';
-import { prisma } from '@/lib/prisma';
-import { authenticateClient } from '@/lib/auth-middleware';
-import { jsonResponse, apiLog } from '@/lib/api-logger';
-import { formatIST } from '@/lib/dateUtils';
-import { AvailabilityService } from '@/services/AvailabilityService';
+import { prisma } from '@/core/database/prisma';
+import { authenticateClient } from '@/core/auth/auth-middleware';
+import { jsonResponse, apiLog } from '@/core/logging/api-logger';
+import { formatIST } from '@/core/utils/dateUtils';
+import { AvailabilityService } from '@/modules/bookings/bookings.services';
 
 export async function GET(request: Request) {
   apiLog(`[API] GET /api/client/v1/availability called`);

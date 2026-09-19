@@ -1,7 +1,7 @@
-import { apiLog } from '@/lib/api-logger';
+import { apiLog } from '@/core/logging/api-logger';
 import { NextRequest, NextResponse } from "next/server";
-import { whatsappDb } from "@/lib/whatsappDb";
-import { sendWhatsAppMessage } from "@/lib/whatsapp";
+import { whatsappDb } from "@/core/database/whatsappDb";
+import { sendWhatsAppMessage } from "@/modules/whatsapp/whatsapp.service";
 
 const DEFAULT_VERIFY_TOKEN = "sportsvilla_whatsapp_webhook_token_2026";
 

@@ -1,9 +1,9 @@
 import { NextResponse } from 'next/server';
-import { prisma } from '@/lib/prisma';
-import { whatsappDb } from '@/lib/whatsappDb';
+import { prisma } from '@/core/database/prisma';
+import { whatsappDb } from '@/core/database/whatsappDb';
 import jwt from 'jsonwebtoken';
-import { jsonResponse } from '@/lib/api-logger';
-import { logger } from '@/lib/logger';
+import { jsonResponse } from '@/core/logging/api-logger';
+import { logger } from '@/core/logging/logger';
 
 const JWT_SECRET = process.env.NEXTAUTH_SECRET || 'fallback_secret_for_dev';
 

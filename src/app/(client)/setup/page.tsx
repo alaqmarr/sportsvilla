@@ -1,5 +1,5 @@
 import SetupClient from "./SetupClient";
-import { prisma } from "@/lib/prisma";
+import { prisma } from "@/core/database/prisma";
 import { redirect } from "next/navigation";
 
 export const dynamic = 'force-dynamic';

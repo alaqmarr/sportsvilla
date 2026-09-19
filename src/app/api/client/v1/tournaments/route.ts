@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
-import { prisma } from '@/lib/prisma';
-import { logger } from '@/lib/logger';
-import { jsonResponse } from '@/lib/api-logger';
+import { prisma } from '@/core/database/prisma';
+import { logger } from '@/core/logging/logger';
+import { jsonResponse } from '@/core/logging/api-logger';
 
 export async function GET(request: Request) {
   logger.debug(`[API] GET /api/client/v1/tournaments called`);

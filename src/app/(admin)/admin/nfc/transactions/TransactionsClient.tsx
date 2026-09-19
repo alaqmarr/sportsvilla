@@ -13,8 +13,8 @@ import {
   FiChevronLeft,
   FiChevronRight,
 } from "react-icons/fi";
-import { getNfcTransactions } from "./actions";
-import { formatIST, getISTDateBounds, getISTDateRange } from "@/lib/dateUtils";
+import { getNfcTransactions } from "@/modules/nfc/nfc.action";
+import { formatIST, getISTDateBounds, getISTDateRange } from "@/core/utils/dateUtils";
 import { NfcTransactionStats } from "@/types/nfc";
 import {
   Card,

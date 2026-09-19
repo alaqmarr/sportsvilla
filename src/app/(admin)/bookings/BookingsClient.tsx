@@ -2,19 +2,19 @@
 
 import { useState, useEffect, useMemo } from "react";
 import { fetchBookingsByDate, createBooking, searchMember, getUpiId, addPayment, updateDisplaySession, searchMemberByNfc, generateRazorpayPaymentLink, createAdminRazorpayOrder,
-  createAdminPhonePeOrder, verifyAdminRazorpayOrder } from "./actions";
+  createAdminPhonePeOrder, verifyAdminRazorpayOrder } from "@/modules/bookings/bookings.action";
 import { useAlert } from "@/components/AlertProvider";
 import QRCodeLib from "qrcode";
-import { formatIST, todayIST } from "@/lib/dateUtils";
+import { formatIST, todayIST } from "@/core/utils/dateUtils";
 import { TableSkeleton } from "@/components/ui/Skeleton";
 import { AnimatePresence, motion } from "framer-motion";
 import { FiCalendar, FiClock, FiCheck, FiX, FiUser, FiCreditCard, FiMapPin, FiList, FiPlus, FiRadio } from "react-icons/fi";
 import ManageBookings from "./ManageBookings";
-import { allocateTurfsForSlots, Allocation } from "@/lib/allocationEngine";
+import { allocateTurfsForSlots, Allocation } from "@/engines/bookings.engine";
 import { useNfc } from "@/components/nfc/NfcProvider";
 import Script from "next/script";
 import { PageHeader, Button, Card, CardContent, Badge } from "@/components/admin/ui";
-import { rawAdminTokens } from "@/lib/tokens";
+import { rawAdminTokens } from "@/core/tokens/admin.tokens";
 
 // Generate slots based on duration and facility open/close time
 function generateSlots(dateStr: string, durationMin: number, openTime: string = "06:00", closeTime: string = "23:00") {

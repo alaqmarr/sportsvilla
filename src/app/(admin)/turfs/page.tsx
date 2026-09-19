@@ -1,7 +1,7 @@
 export const dynamic = 'force-dynamic';
-import { prisma } from "@/lib/prisma";
+import { prisma } from "@/core/database/prisma";
 import TurfsClient from "./TurfsClient";
-import { getAvailableIcons } from "@/lib/icons";
+import { getAvailableIcons } from "@/core/utils/icons";
 
 export default async function TurfsPage() {
   const turfs = await prisma.turf.findMany({

@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Script from "next/script";
-import { formatIST, todayIST } from "@/lib/dateUtils";
+import { formatIST, todayIST } from "@/core/utils/dateUtils";
 import { NfcCheckinResponse, NfcDeviceType } from "@/types/nfc";
 import {
   FiZap,
@@ -27,7 +27,7 @@ import {
   FiHardDrive,
 } from "react-icons/fi";
 import { useNfc } from "@/components/nfc/NfcProvider";
-import { playNfcSound } from "@/lib/soundUtils";
+import { playNfcSound } from "@/core/utils/soundUtils";
 import KioskBookingFlow from "./KioskBookingFlow";
 import KioskPhoneFlow from "./KioskPhoneFlow";
 import { useAlert } from "@/components/AlertProvider";

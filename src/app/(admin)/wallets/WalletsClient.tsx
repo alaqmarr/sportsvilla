@@ -2,8 +2,8 @@
 
 import { useState } from "react";
 import { FiSearch, FiCreditCard, FiArrowUpCircle, FiArrowDownCircle } from "react-icons/fi";
-import { addWalletTransaction } from "./actions";
-import { formatIST } from "@/lib/dateUtils";
+import { addWalletTransaction } from "@/modules/wallets/wallets.action";
+import { formatIST } from "@/core/utils/dateUtils";
 import { PageHeader, Button, Input, EmptyState } from "@/components/admin/ui";
 
 export default function WalletsClient({ initialMembers }: { initialMembers: any[] }) {

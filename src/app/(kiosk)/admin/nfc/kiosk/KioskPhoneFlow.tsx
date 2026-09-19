@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { findMembersByMobile } from "./actions";
+import { findMembersByMobile } from "@/modules/nfc/nfc.action";
 import { FiDelete, FiUser, FiArrowLeft, FiCheck } from "react-icons/fi";
 import { useAlert } from "@/components/AlertProvider";
 

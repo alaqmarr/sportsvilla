@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/auth";
-import { prisma } from "@/lib/prisma";
-import { hasPermission } from "@/lib/rbac";
-import { sendMembershipPush } from "@/lib/notifications";
-import { logger } from "@/lib/logger";
+import { authOptions } from "@/core/auth/auth";
+import { prisma } from "@/core/database/prisma";
+import { hasPermission } from "@/core/auth/rbac";
+import { sendMembershipPush } from "@/modules/notifications/notifications.services";
+import { logger } from "@/core/logging/logger";
 
 export async function POST(req: NextRequest) {
   try {

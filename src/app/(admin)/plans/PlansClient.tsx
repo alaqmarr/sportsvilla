@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { createPlan, updatePlan, deletePlan } from "./actions";
+import { createPlan, updatePlan, deletePlan } from "@/modules/plans/plans.action";
 import { useAlert } from "@/components/AlertProvider";
 import { FiTrash2, FiEdit2, FiPlus, FiCheck, FiUsers } from "react-icons/fi";
 import { PageHeader, Card, Badge, Button, Modal, Input, Select } from "@/components/admin/ui";

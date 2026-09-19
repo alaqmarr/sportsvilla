@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { apiLog, jsonResponse } from '@/lib/api-logger';
+import { apiLog, jsonResponse } from '@/core/logging/api-logger';
 import { ZodError } from 'zod';
 
 export class ApiError extends Error {

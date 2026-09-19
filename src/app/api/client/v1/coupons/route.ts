@@ -1,6 +1,6 @@
-import { withApiHandler } from '@/lib/api-handler';
-import { authenticateClient } from '@/lib/auth-middleware';
-import { CouponService } from '@/services/CouponService';
+import { withApiHandler } from '@/core/http/api-handler';
+import { authenticateClient } from '@/core/auth/auth-middleware';
+import { CouponService } from '@/modules/coupons/coupons.services';
 
 export const GET = withApiHandler(async (request: Request) => {
   const authRes = await authenticateClient(request);

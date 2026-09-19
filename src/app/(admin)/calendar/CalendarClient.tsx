@@ -1,9 +1,9 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { fetchCalendarData } from './actions';
+import { fetchCalendarData } from '@/modules/calendar/calendar.action';
 import { addDays, subDays } from 'date-fns';
-import { formatIST } from '@/lib/dateUtils';
+import { formatIST } from '@/core/utils/dateUtils';
 import { FiChevronLeft, FiChevronRight, FiCalendar } from 'react-icons/fi';
 import { PageHeader, Button, Card, Skeleton } from '@/components/admin/ui';
 

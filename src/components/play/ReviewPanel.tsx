@@ -4,7 +4,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import useSWR from 'swr';
 import { Tag, Shield, FileText, CalendarDays, X, ChevronRight, Check, Coins, Loader2, CreditCard, AlertCircle } from 'lucide-react';
 import { useNfcReader } from '@/hooks/useNfcReader';
-import { playNfcSound } from '@/lib/soundUtils';
+import { playNfcSound } from '@/core/utils/soundUtils';
 import { useAlert } from '@/components/AlertProvider';
 
 interface ReviewPanelProps {

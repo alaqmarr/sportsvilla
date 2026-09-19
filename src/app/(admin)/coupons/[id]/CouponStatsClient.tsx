@@ -1,7 +1,7 @@
 "use client";
 
 import { FiTag, FiUsers, FiDollarSign, FiCalendar, FiTrendingUp } from "react-icons/fi";
-import { formatIST } from "@/lib/dateUtils";
+import { formatIST } from "@/core/utils/dateUtils";
 import { PageHeader, Stat, DataTable, ColumnDef, Badge } from "@/components/admin/ui";
 
 interface CouponUsage {

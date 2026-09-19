@@ -1,5 +1,5 @@
-import { prisma } from '@/lib/prisma';
-import { requireServerMember } from '@/lib/serverAuth';
+import { prisma } from '@/core/database/prisma';
+import { requireServerMember } from '@/core/auth/serverAuth';
 import { BookingsClient } from './BookingsClient';
 
 export default async function BookingsPage() {

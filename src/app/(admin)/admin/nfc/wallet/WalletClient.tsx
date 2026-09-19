@@ -3,7 +3,7 @@
 import React, { useEffect, useState, useTransition } from "react";
 import { useNfc } from "@/components/nfc/NfcProvider";
 import { useAlert } from "@/components/AlertProvider";
-import { lookupCardOwner, creditWallet, deductWallet } from "./actions";
+import { lookupCardOwner, creditWallet, deductWallet } from "@/modules/nfc/nfc.action";
 import { FiCreditCard, FiPlus, FiMinus, FiRefreshCw, FiUser, FiPhone, FiDollarSign } from "react-icons/fi";
 import {
   Card,

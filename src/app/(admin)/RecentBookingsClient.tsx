@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { formatIST } from "@/lib/dateUtils";
+import { formatIST } from "@/core/utils/dateUtils";
 import { Avatar, Badge, DataTable, ColumnDef } from "@/components/admin/ui";
 
 export interface RecentBookingRow {

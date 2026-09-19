@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import { createTurf, updateTurf, deleteTurf } from "./actions";
+import { createTurf, updateTurf, deleteTurf } from "@/modules/turfs/turfs.action";
 import { useAlert } from "@/components/AlertProvider";
 import { FiTrash2, FiEdit2, FiPlus, FiMapPin, FiMap, FiActivity } from "react-icons/fi";
 import {

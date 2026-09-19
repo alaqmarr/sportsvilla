@@ -1,10 +1,10 @@
 import { NextResponse } from 'next/server';
-import { prisma } from '@/lib/prisma';
-import { authenticateClient } from '@/lib/auth-middleware';
-import { jsonResponse, apiLog } from '@/lib/api-logger';
-import { bumpSyncTimestamp } from '@/lib/sync';
-import { sendMembershipPush, sendWalletTransactionPush } from '@/lib/notifications';
-import { logger } from '@/lib/logger';
+import { prisma } from '@/core/database/prisma';
+import { authenticateClient } from '@/core/auth/auth-middleware';
+import { jsonResponse, apiLog } from '@/core/logging/api-logger';
+import { bumpSyncTimestamp } from '@/core/database/sync';
+import { sendMembershipPush, sendWalletTransactionPush } from '@/modules/notifications/notifications.services';
+import { logger } from '@/core/logging/logger';
 import { addDays } from 'date-fns';
 
 export async function GET(request: Request) {

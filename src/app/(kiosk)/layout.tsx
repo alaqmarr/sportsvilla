@@ -1,7 +1,7 @@
 import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/auth";
+import { authOptions } from "@/core/auth/auth";
 import { redirect } from "next/navigation";
-import { prisma } from "@/lib/prisma";
+import { prisma } from "@/core/database/prisma";
 import React from "react";
 import { NfcProvider } from "@/components/nfc/NfcProvider";
 import { FloatingStatusBar } from "./KioskNfcHeader";

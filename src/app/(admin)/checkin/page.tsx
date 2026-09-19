@@ -1,4 +1,4 @@
-import { prisma } from "@/lib/prisma";
+import { prisma } from "@/core/database/prisma";
 import CheckinScanner from "@/components/CheckinScanner";
 import { PageHeader, Card, CardContent, Badge } from "@/components/admin/ui";
 

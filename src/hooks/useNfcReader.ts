@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState, useCallback } from "react";
 import { NfcDeviceType } from "@/types/nfc";
-import { playNfcSound } from "@/lib/soundUtils";
+import { playNfcSound } from "@/core/utils/soundUtils";
 
 export interface UseNfcReaderOptions {
   onScan?: (cardUid: string, deviceType: NfcDeviceType) => void | Promise<void>;

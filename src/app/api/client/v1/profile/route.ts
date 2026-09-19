@@ -1,6 +1,6 @@
-import { withApiHandler } from '@/lib/api-handler';
-import { authenticateClient } from '@/lib/auth-middleware';
-import { MemberService } from '@/services/MemberService';
+import { withApiHandler } from '@/core/http/api-handler';
+import { authenticateClient } from '@/core/auth/auth-middleware';
+import { MemberService } from '@/modules/members/members.services';
 
 export const GET = withApiHandler(async (request: Request) => {
   const authRes = await authenticateClient(request);

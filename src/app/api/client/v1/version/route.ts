@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
-import { prisma } from '@/lib/prisma';
-import { jsonResponse } from '@/lib/api-logger';
+import { prisma } from '@/core/database/prisma';
+import { jsonResponse } from '@/core/logging/api-logger';
 
 /**
  * Native semantic version comparator helper (major.minor.patch[-prerelease]).

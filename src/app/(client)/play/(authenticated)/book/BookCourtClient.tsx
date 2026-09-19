@@ -21,9 +21,9 @@ import { PlayButton } from '@/components/play/ui/PlayButton';
 import { PlayEmptyState } from '@/components/play/ui/PlayEmptyState';
 import { ReviewPanel } from '@/components/play/ReviewPanel';
 import { ProcessingDialog, ProcessStatus } from '@/components/play/ProcessingDialog';
-import { formatIST } from '@/lib/dateUtils';
-import { allocateTurfsForSlots, Booking as AllocBooking } from '@/lib/allocationEngine';
-import { rawPlayTokens } from '@/lib/tokens';
+import { formatIST } from '@/core/utils/dateUtils';
+import { allocateTurfsForSlots, Booking as AllocBooking } from '@/engines/bookings.engine';
+import { rawPlayTokens } from '@/core/tokens/play.tokens';
 
 function generateSlots(dateStr: string, durationMin: number, openTime: string = "06:00", closeTime: string = "23:00") {
   const slots = [];

@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { fetchServerStats, ServerStats } from "./actions";
+import { fetchServerStats } from "@/modules/system/system.action";
+import type { ServerStats } from "@/modules/system/system.lib";
 import { FiCpu, FiHardDrive, FiActivity, FiServer } from "react-icons/fi";
 import { PageHeader, Card, Badge } from "@/components/admin/ui";
 

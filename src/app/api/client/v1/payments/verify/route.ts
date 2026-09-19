@@ -1,7 +1,8 @@
-import { withApiHandler, ApiError } from '@/lib/api-handler';
-import { authenticateClient } from '@/lib/auth-middleware';
-import { PaymentService } from '@/services/PaymentService';
-import { prisma } from '@/lib/prisma';
+import { withApiHandler, ApiError } from '@/core/http/api-handler';
+import { authenticateClient } from '@/core/auth/auth-middleware';
+import { verifyRazorpayPayment } from '@/modules/payments/razorpay.services';
+import { checkPhonePeStatus } from '@/modules/payments/phonepe.services';
+import { prisma } from '@/core/database/prisma';
 
 export const POST = withApiHandler(async (request: Request) => {
   const authRes = await authenticateClient(request);
@@ -34,7 +35,7 @@ export const POST = withApiHandler(async (request: Request) => {
     if (!transactionId) {
       throw new ApiError('Transaction ID is required for PhonePe verification', 400);
     }
-    const result = await PaymentService.checkPhonePeStatus(bookingId, transactionId);
+    const result = await checkPhonePeStatus(bookingId, transactionId);
     return result;
   }
 
@@ -42,7 +43,7 @@ export const POST = withApiHandler(async (request: Request) => {
     if (!orderId || !paymentId || !signature) {
       throw new ApiError('Missing required Razorpay parameters', 400);
     }
-    const result = await PaymentService.verifyRazorpayPayment(bookingId, orderId, paymentId, signature);
+    const result = await verifyRazorpayPayment(bookingId, orderId, paymentId, signature);
     return result;
   }
 

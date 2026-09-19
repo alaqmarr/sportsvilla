@@ -1,16 +1,16 @@
-import { CouponService } from '@/services/CouponService';
+import { CouponService } from '@/modules/coupons/coupons.services';
 import { NextResponse } from 'next/server';
-import { prisma } from '@/lib/prisma';
-import { authenticateClient } from '@/lib/auth-middleware';
-import { jsonResponse, apiLog } from '@/lib/api-logger';
+import { prisma } from '@/core/database/prisma';
+import { authenticateClient } from '@/core/auth/auth-middleware';
+import { jsonResponse, apiLog } from '@/core/logging/api-logger';
 import { randomUUID } from 'crypto';
-import { bumpSyncTimestamp } from '@/lib/sync';
-import { whatsappDb } from '@/lib/whatsappDb';
-import { sendWhatsAppBookingConfirmedTemplate } from '@/lib/whatsapp';
-import { sendBookingConfirmedPush, sendWalletTransactionPush } from '@/lib/notifications';
-import { logger } from '@/lib/logger';
-import { createBookingSchema } from '@/lib/validations/booking';
-import { Mutex } from '@/lib/mutex';
+import { bumpSyncTimestamp } from '@/core/database/sync';
+import { whatsappDb } from '@/core/database/whatsappDb';
+import { sendWhatsAppBookingConfirmedTemplate } from '@/modules/whatsapp/booking-confirmation.template';
+import { sendBookingConfirmedPush, sendWalletTransactionPush } from '@/modules/notifications/notifications.services';
+import { logger } from '@/core/logging/logger';
+import { createBookingSchema } from '@/modules/bookings/bookings.schema';
+import { Mutex } from '@/core/utils/mutex';
 export async function GET(request: Request) {
   apiLog(`[API] GET /api/client/v1/bookings called`);
   const authRes = await authenticateClient(request);

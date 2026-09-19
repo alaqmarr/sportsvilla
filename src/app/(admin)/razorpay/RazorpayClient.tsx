@@ -2,7 +2,7 @@
 
 import React from "react";
 import { useRouter } from "next/navigation";
-import { formatIST } from "@/lib/dateUtils";
+import { formatIST } from "@/core/utils/dateUtils";
 import { PageHeader, Stat, Badge, DataTable, ColumnDef } from "@/components/admin/ui";
 import { FiDollarSign, FiActivity, FiCheckCircle } from "react-icons/fi";
 

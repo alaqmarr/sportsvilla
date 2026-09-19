@@ -2,7 +2,7 @@
 
 import React, { useState, useRef } from "react";
 import toast from "react-hot-toast";
-import { saveAppVersion } from "./actions";
+import { saveAppVersion } from "@/modules/system/system.action";
 import { FiUploadCloud, FiSmartphone, FiSave } from "react-icons/fi";
 import { FaApple } from "react-icons/fa";
 import { PageHeader, Card, Button, Input, Switch } from "@/components/admin/ui";

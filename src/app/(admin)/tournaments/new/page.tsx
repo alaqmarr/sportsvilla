@@ -1,4 +1,4 @@
-import { prisma } from '@/lib/prisma';
+import { prisma } from '@/core/database/prisma';
 import TournamentFormClient from '../TournamentFormClient';
 
 export default async function NewTournamentPage() {
