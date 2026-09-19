@@ -291,3 +291,26 @@ export async function sendWalletTransactionPush(
     logger.error(`[Push Notification Failed] Wallet transaction push error:`, error);
   }
 }
+
+/**
+ * Event helper: Sends push notification to all Admins
+ */
+export async function sendPushNotificationToAdmin(
+  title: string,
+  body: string,
+  data?: Record<string, any>
+): Promise<void> {
+  try {
+    const adminTokens = await prisma.adminDeviceToken.findMany({
+      select: { token: true }
+    });
+
+    if (adminTokens.length === 0) return;
+
+    const tokens = adminTokens.map(dt => dt.token);
+    await sendPushNotification(tokens, title, body, data);
+  } catch (error) {
+    logger.error(`[Push Notification Failed] Admin push error:`, error);
+  }
+}
+

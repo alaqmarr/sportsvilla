@@ -19,6 +19,19 @@ model Admin {
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt
   auditLogs   AuditLog[]
+  deviceTokens AdminDeviceToken[]
+}
+
+model AdminDeviceToken {
+  id        String   @id @default(cuid())
+  adminId   String
+  admin     Admin    @relation(fields: [adminId], references: [id], onDelete: Cascade)
+  token     String   @unique
+  platform  String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([adminId])
 }
 
 model Setting {

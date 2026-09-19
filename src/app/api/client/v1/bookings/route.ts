@@ -605,6 +605,20 @@ export async function POST(request: Request) {
       }
     }
 
+    // Send Admin Push Notification for the new booking
+    try {
+      const { sendPushNotificationToAdmin } = await import('@/modules/notifications/notifications.services');
+      sendPushNotificationToAdmin(
+        'New Booking Received \ud83d\udcc5',
+        `${member.name} booked ${sport.name} at ${turf.name}.`,
+        { type: 'NEW_BOOKING', bookingId: booking.id }
+      ).catch(pushErr => {
+        logger.error('[Push Hook Error] Admin push error:', pushErr);
+      });
+    } catch (pushErr) {
+      logger.error('[Push Hook Error] Admin push error:', pushErr);
+    }
+
     await bumpSyncTimestamp('booking');
     return jsonResponse({ success: true, booking });
   } catch (error: any) {
