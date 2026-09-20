@@ -9,16 +9,29 @@ datasource db {
 }
 
 model Admin {
-  id          String     @id @default(cuid())
-  email       String     @unique
-  password    String
-  name        String?
-  role        String     @default("SUPERADMIN") // "SUPERADMIN" | "ADMIN"
-  permissions String     @default("") // Comma-separated permission keys
-  isActive    Boolean    @default(true)
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
-  auditLogs   AuditLog[]
+  id           String             @id @default(cuid())
+  email        String             @unique
+  password     String
+  name         String?
+  role         String             @default("SUPERADMIN") // "SUPERADMIN" | "ADMIN"
+  permissions  String             @default("") // Comma-separated permission keys
+  isActive     Boolean            @default(true)
+  createdAt    DateTime           @default(now())
+  updatedAt    DateTime           @updatedAt
+  auditLogs    AuditLog[]
+  deviceTokens AdminDeviceToken[]
+}
+
+model AdminDeviceToken {
+  id        String   @id @default(cuid())
+  adminId   String
+  admin     Admin    @relation(fields: [adminId], references: [id], onDelete: Cascade)
+  token     String   @unique
+  platform  String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([adminId])
 }
 
 model Setting {
@@ -625,6 +638,7 @@ model TvScreen {
   currentItemId  String?
   cacheUsedBytes BigInt? // Using BigInt for file sizes
   appVersion     String?
+  orientation    String  @default("landscape") // "landscape" or "portrait"
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

@@ -307,7 +307,7 @@ export async function sendPushNotificationToAdmin(
 
     if (adminTokens.length === 0) return;
 
-    const tokens = adminTokens.map(dt => dt.token);
+    const tokens = adminTokens.map((dt: { token: string }) => dt.token);
     await sendPushNotification(tokens, title, body, data);
   } catch (error) {
     logger.error(`[Push Notification Failed] Admin push error:`, error);

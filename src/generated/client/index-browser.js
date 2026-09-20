@@ -129,6 +129,15 @@ exports.Prisma.AdminScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.AdminDeviceTokenScalarFieldEnum = {
+  id: 'id',
+  adminId: 'adminId',
+  token: 'token',
+  platform: 'platform',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SettingScalarFieldEnum = {
   key: 'key',
   value: 'value',
@@ -543,6 +552,7 @@ exports.Prisma.TvScreenScalarFieldEnum = {
   currentItemId: 'currentItemId',
   cacheUsedBytes: 'cacheUsedBytes',
   appVersion: 'appVersion',
+  orientation: 'orientation',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -610,6 +620,7 @@ exports.Prisma.QueryMode = {
 
 exports.Prisma.ModelName = {
   Admin: 'Admin',
+  AdminDeviceToken: 'AdminDeviceToken',
   Setting: 'Setting',
   FamilyGroup: 'FamilyGroup',
   Member: 'Member',

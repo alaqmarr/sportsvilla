@@ -19,6 +19,11 @@ export type PrismaPromise<T> = $Public.PrismaPromise<T>
  */
 export type Admin = $Result.DefaultSelection<Prisma.$AdminPayload>
 /**
+ * Model AdminDeviceToken
+ * 
+ */
+export type AdminDeviceToken = $Result.DefaultSelection<Prisma.$AdminDeviceTokenPayload>
+/**
  * Model Setting
  * 
  */
@@ -344,6 +349,16 @@ export class PrismaClient<
     * ```
     */
   get admin(): Prisma.AdminDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.adminDeviceToken`: Exposes CRUD operations for the **AdminDeviceToken** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more AdminDeviceTokens
+    * const adminDeviceTokens = await prisma.adminDeviceToken.findMany()
+    * ```
+    */
+  get adminDeviceToken(): Prisma.AdminDeviceTokenDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.setting`: Exposes CRUD operations for the **Setting** model.
@@ -1169,6 +1184,7 @@ export namespace Prisma {
 
   export const ModelName: {
     Admin: 'Admin',
+    AdminDeviceToken: 'AdminDeviceToken',
     Setting: 'Setting',
     FamilyGroup: 'FamilyGroup',
     Member: 'Member',
@@ -1223,7 +1239,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "admin" | "setting" | "familyGroup" | "member" | "loyaltyHistory" | "sport" | "turf" | "turfSport" | "membershipPlan" | "memberMembership" | "attendance" | "booking" | "bookingParticipant" | "payment" | "transaction" | "displaySession" | "ticket" | "otp" | "tournament" | "tournamentRegistration" | "tournamentPlayer" | "walletTransaction" | "coupon" | "couponAssignment" | "couponUsage" | "loyaltyTrigger" | "loyaltyAchievement" | "appAnnouncement" | "appVersion" | "lastUpdate" | "auditLog" | "banner" | "userSportStat" | "nfcCard" | "nfcTransaction" | "tvScreenGroup" | "tvScreen" | "tvContentItem" | "deviceToken" | "notification"
+      modelProps: "admin" | "adminDeviceToken" | "setting" | "familyGroup" | "member" | "loyaltyHistory" | "sport" | "turf" | "turfSport" | "membershipPlan" | "memberMembership" | "attendance" | "booking" | "bookingParticipant" | "payment" | "transaction" | "displaySession" | "ticket" | "otp" | "tournament" | "tournamentRegistration" | "tournamentPlayer" | "walletTransaction" | "coupon" | "couponAssignment" | "couponUsage" | "loyaltyTrigger" | "loyaltyAchievement" | "appAnnouncement" | "appVersion" | "lastUpdate" | "auditLog" | "banner" | "userSportStat" | "nfcCard" | "nfcTransaction" | "tvScreenGroup" | "tvScreen" | "tvContentItem" | "deviceToken" | "notification"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1298,6 +1314,80 @@ export namespace Prisma {
           count: {
             args: Prisma.AdminCountArgs<ExtArgs>
             result: $Utils.Optional<AdminCountAggregateOutputType> | number
+          }
+        }
+      }
+      AdminDeviceToken: {
+        payload: Prisma.$AdminDeviceTokenPayload<ExtArgs>
+        fields: Prisma.AdminDeviceTokenFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.AdminDeviceTokenFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdminDeviceTokenPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.AdminDeviceTokenFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdminDeviceTokenPayload>
+          }
+          findFirst: {
+            args: Prisma.AdminDeviceTokenFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdminDeviceTokenPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.AdminDeviceTokenFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdminDeviceTokenPayload>
+          }
+          findMany: {
+            args: Prisma.AdminDeviceTokenFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdminDeviceTokenPayload>[]
+          }
+          create: {
+            args: Prisma.AdminDeviceTokenCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdminDeviceTokenPayload>
+          }
+          createMany: {
+            args: Prisma.AdminDeviceTokenCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.AdminDeviceTokenCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdminDeviceTokenPayload>[]
+          }
+          delete: {
+            args: Prisma.AdminDeviceTokenDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdminDeviceTokenPayload>
+          }
+          update: {
+            args: Prisma.AdminDeviceTokenUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdminDeviceTokenPayload>
+          }
+          deleteMany: {
+            args: Prisma.AdminDeviceTokenDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.AdminDeviceTokenUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.AdminDeviceTokenUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdminDeviceTokenPayload>[]
+          }
+          upsert: {
+            args: Prisma.AdminDeviceTokenUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdminDeviceTokenPayload>
+          }
+          aggregate: {
+            args: Prisma.AdminDeviceTokenAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateAdminDeviceToken>
+          }
+          groupBy: {
+            args: Prisma.AdminDeviceTokenGroupByArgs<ExtArgs>
+            result: $Utils.Optional<AdminDeviceTokenGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.AdminDeviceTokenCountArgs<ExtArgs>
+            result: $Utils.Optional<AdminDeviceTokenCountAggregateOutputType> | number
           }
         }
       }
@@ -4296,6 +4386,7 @@ export namespace Prisma {
   }
   export type GlobalOmitConfig = {
     admin?: AdminOmit
+    adminDeviceToken?: AdminDeviceTokenOmit
     setting?: SettingOmit
     familyGroup?: FamilyGroupOmit
     member?: MemberOmit
@@ -4416,10 +4507,12 @@ export namespace Prisma {
 
   export type AdminCountOutputType = {
     auditLogs: number
+    deviceTokens: number
   }
 
   export type AdminCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     auditLogs?: boolean | AdminCountOutputTypeCountAuditLogsArgs
+    deviceTokens?: boolean | AdminCountOutputTypeCountDeviceTokensArgs
   }
 
   // Custom InputTypes
@@ -4438,6 +4531,13 @@ export namespace Prisma {
    */
   export type AdminCountOutputTypeCountAuditLogsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: AuditLogWhereInput
+  }
+
+  /**
+   * AdminCountOutputType without action
+   */
+  export type AdminCountOutputTypeCountDeviceTokensArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AdminDeviceTokenWhereInput
   }
 
 
@@ -5302,6 +5402,7 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     auditLogs?: boolean | Admin$auditLogsArgs<ExtArgs>
+    deviceTokens?: boolean | Admin$deviceTokensArgs<ExtArgs>
     _count?: boolean | AdminCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["admin"]>
 
@@ -5344,6 +5445,7 @@ export namespace Prisma {
   export type AdminOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "email" | "password" | "name" | "role" | "permissions" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["admin"]>
   export type AdminInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     auditLogs?: boolean | Admin$auditLogsArgs<ExtArgs>
+    deviceTokens?: boolean | Admin$deviceTokensArgs<ExtArgs>
     _count?: boolean | AdminCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type AdminIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -5353,6 +5455,7 @@ export namespace Prisma {
     name: "Admin"
     objects: {
       auditLogs: Prisma.$AuditLogPayload<ExtArgs>[]
+      deviceTokens: Prisma.$AdminDeviceTokenPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -5759,6 +5862,7 @@ export namespace Prisma {
   export interface Prisma__AdminClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     auditLogs<T extends Admin$auditLogsArgs<ExtArgs> = {}>(args?: Subset<T, Admin$auditLogsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AuditLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    deviceTokens<T extends Admin$deviceTokensArgs<ExtArgs> = {}>(args?: Subset<T, Admin$deviceTokensArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AdminDeviceTokenPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -6212,6 +6316,30 @@ export namespace Prisma {
   }
 
   /**
+   * Admin.deviceTokens
+   */
+  export type Admin$deviceTokensArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminDeviceToken
+     */
+    select?: AdminDeviceTokenSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminDeviceToken
+     */
+    omit?: AdminDeviceTokenOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminDeviceTokenInclude<ExtArgs> | null
+    where?: AdminDeviceTokenWhereInput
+    orderBy?: AdminDeviceTokenOrderByWithRelationInput | AdminDeviceTokenOrderByWithRelationInput[]
+    cursor?: AdminDeviceTokenWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: AdminDeviceTokenScalarFieldEnum | AdminDeviceTokenScalarFieldEnum[]
+  }
+
+  /**
    * Admin without action
    */
   export type AdminDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -6227,6 +6355,1080 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: AdminInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model AdminDeviceToken
+   */
+
+  export type AggregateAdminDeviceToken = {
+    _count: AdminDeviceTokenCountAggregateOutputType | null
+    _min: AdminDeviceTokenMinAggregateOutputType | null
+    _max: AdminDeviceTokenMaxAggregateOutputType | null
+  }
+
+  export type AdminDeviceTokenMinAggregateOutputType = {
+    id: string | null
+    adminId: string | null
+    token: string | null
+    platform: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type AdminDeviceTokenMaxAggregateOutputType = {
+    id: string | null
+    adminId: string | null
+    token: string | null
+    platform: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type AdminDeviceTokenCountAggregateOutputType = {
+    id: number
+    adminId: number
+    token: number
+    platform: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type AdminDeviceTokenMinAggregateInputType = {
+    id?: true
+    adminId?: true
+    token?: true
+    platform?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type AdminDeviceTokenMaxAggregateInputType = {
+    id?: true
+    adminId?: true
+    token?: true
+    platform?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type AdminDeviceTokenCountAggregateInputType = {
+    id?: true
+    adminId?: true
+    token?: true
+    platform?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type AdminDeviceTokenAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which AdminDeviceToken to aggregate.
+     */
+    where?: AdminDeviceTokenWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AdminDeviceTokens to fetch.
+     */
+    orderBy?: AdminDeviceTokenOrderByWithRelationInput | AdminDeviceTokenOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: AdminDeviceTokenWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AdminDeviceTokens from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AdminDeviceTokens.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned AdminDeviceTokens
+    **/
+    _count?: true | AdminDeviceTokenCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: AdminDeviceTokenMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: AdminDeviceTokenMaxAggregateInputType
+  }
+
+  export type GetAdminDeviceTokenAggregateType<T extends AdminDeviceTokenAggregateArgs> = {
+        [P in keyof T & keyof AggregateAdminDeviceToken]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateAdminDeviceToken[P]>
+      : GetScalarType<T[P], AggregateAdminDeviceToken[P]>
+  }
+
+
+
+
+  export type AdminDeviceTokenGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AdminDeviceTokenWhereInput
+    orderBy?: AdminDeviceTokenOrderByWithAggregationInput | AdminDeviceTokenOrderByWithAggregationInput[]
+    by: AdminDeviceTokenScalarFieldEnum[] | AdminDeviceTokenScalarFieldEnum
+    having?: AdminDeviceTokenScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: AdminDeviceTokenCountAggregateInputType | true
+    _min?: AdminDeviceTokenMinAggregateInputType
+    _max?: AdminDeviceTokenMaxAggregateInputType
+  }
+
+  export type AdminDeviceTokenGroupByOutputType = {
+    id: string
+    adminId: string
+    token: string
+    platform: string | null
+    createdAt: Date
+    updatedAt: Date
+    _count: AdminDeviceTokenCountAggregateOutputType | null
+    _min: AdminDeviceTokenMinAggregateOutputType | null
+    _max: AdminDeviceTokenMaxAggregateOutputType | null
+  }
+
+  type GetAdminDeviceTokenGroupByPayload<T extends AdminDeviceTokenGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<AdminDeviceTokenGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof AdminDeviceTokenGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], AdminDeviceTokenGroupByOutputType[P]>
+            : GetScalarType<T[P], AdminDeviceTokenGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type AdminDeviceTokenSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    adminId?: boolean
+    token?: boolean
+    platform?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    admin?: boolean | AdminDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["adminDeviceToken"]>
+
+  export type AdminDeviceTokenSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    adminId?: boolean
+    token?: boolean
+    platform?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    admin?: boolean | AdminDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["adminDeviceToken"]>
+
+  export type AdminDeviceTokenSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    adminId?: boolean
+    token?: boolean
+    platform?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    admin?: boolean | AdminDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["adminDeviceToken"]>
+
+  export type AdminDeviceTokenSelectScalar = {
+    id?: boolean
+    adminId?: boolean
+    token?: boolean
+    platform?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type AdminDeviceTokenOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "adminId" | "token" | "platform" | "createdAt" | "updatedAt", ExtArgs["result"]["adminDeviceToken"]>
+  export type AdminDeviceTokenInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    admin?: boolean | AdminDefaultArgs<ExtArgs>
+  }
+  export type AdminDeviceTokenIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    admin?: boolean | AdminDefaultArgs<ExtArgs>
+  }
+  export type AdminDeviceTokenIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    admin?: boolean | AdminDefaultArgs<ExtArgs>
+  }
+
+  export type $AdminDeviceTokenPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "AdminDeviceToken"
+    objects: {
+      admin: Prisma.$AdminPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      adminId: string
+      token: string
+      platform: string | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["adminDeviceToken"]>
+    composites: {}
+  }
+
+  type AdminDeviceTokenGetPayload<S extends boolean | null | undefined | AdminDeviceTokenDefaultArgs> = $Result.GetResult<Prisma.$AdminDeviceTokenPayload, S>
+
+  type AdminDeviceTokenCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<AdminDeviceTokenFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: AdminDeviceTokenCountAggregateInputType | true
+    }
+
+  export interface AdminDeviceTokenDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['AdminDeviceToken'], meta: { name: 'AdminDeviceToken' } }
+    /**
+     * Find zero or one AdminDeviceToken that matches the filter.
+     * @param {AdminDeviceTokenFindUniqueArgs} args - Arguments to find a AdminDeviceToken
+     * @example
+     * // Get one AdminDeviceToken
+     * const adminDeviceToken = await prisma.adminDeviceToken.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends AdminDeviceTokenFindUniqueArgs>(args: SelectSubset<T, AdminDeviceTokenFindUniqueArgs<ExtArgs>>): Prisma__AdminDeviceTokenClient<$Result.GetResult<Prisma.$AdminDeviceTokenPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one AdminDeviceToken that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {AdminDeviceTokenFindUniqueOrThrowArgs} args - Arguments to find a AdminDeviceToken
+     * @example
+     * // Get one AdminDeviceToken
+     * const adminDeviceToken = await prisma.adminDeviceToken.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends AdminDeviceTokenFindUniqueOrThrowArgs>(args: SelectSubset<T, AdminDeviceTokenFindUniqueOrThrowArgs<ExtArgs>>): Prisma__AdminDeviceTokenClient<$Result.GetResult<Prisma.$AdminDeviceTokenPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first AdminDeviceToken that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AdminDeviceTokenFindFirstArgs} args - Arguments to find a AdminDeviceToken
+     * @example
+     * // Get one AdminDeviceToken
+     * const adminDeviceToken = await prisma.adminDeviceToken.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends AdminDeviceTokenFindFirstArgs>(args?: SelectSubset<T, AdminDeviceTokenFindFirstArgs<ExtArgs>>): Prisma__AdminDeviceTokenClient<$Result.GetResult<Prisma.$AdminDeviceTokenPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first AdminDeviceToken that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AdminDeviceTokenFindFirstOrThrowArgs} args - Arguments to find a AdminDeviceToken
+     * @example
+     * // Get one AdminDeviceToken
+     * const adminDeviceToken = await prisma.adminDeviceToken.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends AdminDeviceTokenFindFirstOrThrowArgs>(args?: SelectSubset<T, AdminDeviceTokenFindFirstOrThrowArgs<ExtArgs>>): Prisma__AdminDeviceTokenClient<$Result.GetResult<Prisma.$AdminDeviceTokenPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more AdminDeviceTokens that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AdminDeviceTokenFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all AdminDeviceTokens
+     * const adminDeviceTokens = await prisma.adminDeviceToken.findMany()
+     * 
+     * // Get first 10 AdminDeviceTokens
+     * const adminDeviceTokens = await prisma.adminDeviceToken.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const adminDeviceTokenWithIdOnly = await prisma.adminDeviceToken.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends AdminDeviceTokenFindManyArgs>(args?: SelectSubset<T, AdminDeviceTokenFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AdminDeviceTokenPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a AdminDeviceToken.
+     * @param {AdminDeviceTokenCreateArgs} args - Arguments to create a AdminDeviceToken.
+     * @example
+     * // Create one AdminDeviceToken
+     * const AdminDeviceToken = await prisma.adminDeviceToken.create({
+     *   data: {
+     *     // ... data to create a AdminDeviceToken
+     *   }
+     * })
+     * 
+     */
+    create<T extends AdminDeviceTokenCreateArgs>(args: SelectSubset<T, AdminDeviceTokenCreateArgs<ExtArgs>>): Prisma__AdminDeviceTokenClient<$Result.GetResult<Prisma.$AdminDeviceTokenPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many AdminDeviceTokens.
+     * @param {AdminDeviceTokenCreateManyArgs} args - Arguments to create many AdminDeviceTokens.
+     * @example
+     * // Create many AdminDeviceTokens
+     * const adminDeviceToken = await prisma.adminDeviceToken.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends AdminDeviceTokenCreateManyArgs>(args?: SelectSubset<T, AdminDeviceTokenCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many AdminDeviceTokens and returns the data saved in the database.
+     * @param {AdminDeviceTokenCreateManyAndReturnArgs} args - Arguments to create many AdminDeviceTokens.
+     * @example
+     * // Create many AdminDeviceTokens
+     * const adminDeviceToken = await prisma.adminDeviceToken.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many AdminDeviceTokens and only return the `id`
+     * const adminDeviceTokenWithIdOnly = await prisma.adminDeviceToken.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends AdminDeviceTokenCreateManyAndReturnArgs>(args?: SelectSubset<T, AdminDeviceTokenCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AdminDeviceTokenPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a AdminDeviceToken.
+     * @param {AdminDeviceTokenDeleteArgs} args - Arguments to delete one AdminDeviceToken.
+     * @example
+     * // Delete one AdminDeviceToken
+     * const AdminDeviceToken = await prisma.adminDeviceToken.delete({
+     *   where: {
+     *     // ... filter to delete one AdminDeviceToken
+     *   }
+     * })
+     * 
+     */
+    delete<T extends AdminDeviceTokenDeleteArgs>(args: SelectSubset<T, AdminDeviceTokenDeleteArgs<ExtArgs>>): Prisma__AdminDeviceTokenClient<$Result.GetResult<Prisma.$AdminDeviceTokenPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one AdminDeviceToken.
+     * @param {AdminDeviceTokenUpdateArgs} args - Arguments to update one AdminDeviceToken.
+     * @example
+     * // Update one AdminDeviceToken
+     * const adminDeviceToken = await prisma.adminDeviceToken.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends AdminDeviceTokenUpdateArgs>(args: SelectSubset<T, AdminDeviceTokenUpdateArgs<ExtArgs>>): Prisma__AdminDeviceTokenClient<$Result.GetResult<Prisma.$AdminDeviceTokenPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more AdminDeviceTokens.
+     * @param {AdminDeviceTokenDeleteManyArgs} args - Arguments to filter AdminDeviceTokens to delete.
+     * @example
+     * // Delete a few AdminDeviceTokens
+     * const { count } = await prisma.adminDeviceToken.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends AdminDeviceTokenDeleteManyArgs>(args?: SelectSubset<T, AdminDeviceTokenDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more AdminDeviceTokens.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AdminDeviceTokenUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many AdminDeviceTokens
+     * const adminDeviceToken = await prisma.adminDeviceToken.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends AdminDeviceTokenUpdateManyArgs>(args: SelectSubset<T, AdminDeviceTokenUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more AdminDeviceTokens and returns the data updated in the database.
+     * @param {AdminDeviceTokenUpdateManyAndReturnArgs} args - Arguments to update many AdminDeviceTokens.
+     * @example
+     * // Update many AdminDeviceTokens
+     * const adminDeviceToken = await prisma.adminDeviceToken.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more AdminDeviceTokens and only return the `id`
+     * const adminDeviceTokenWithIdOnly = await prisma.adminDeviceToken.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends AdminDeviceTokenUpdateManyAndReturnArgs>(args: SelectSubset<T, AdminDeviceTokenUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AdminDeviceTokenPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one AdminDeviceToken.
+     * @param {AdminDeviceTokenUpsertArgs} args - Arguments to update or create a AdminDeviceToken.
+     * @example
+     * // Update or create a AdminDeviceToken
+     * const adminDeviceToken = await prisma.adminDeviceToken.upsert({
+     *   create: {
+     *     // ... data to create a AdminDeviceToken
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the AdminDeviceToken we want to update
+     *   }
+     * })
+     */
+    upsert<T extends AdminDeviceTokenUpsertArgs>(args: SelectSubset<T, AdminDeviceTokenUpsertArgs<ExtArgs>>): Prisma__AdminDeviceTokenClient<$Result.GetResult<Prisma.$AdminDeviceTokenPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of AdminDeviceTokens.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AdminDeviceTokenCountArgs} args - Arguments to filter AdminDeviceTokens to count.
+     * @example
+     * // Count the number of AdminDeviceTokens
+     * const count = await prisma.adminDeviceToken.count({
+     *   where: {
+     *     // ... the filter for the AdminDeviceTokens we want to count
+     *   }
+     * })
+    **/
+    count<T extends AdminDeviceTokenCountArgs>(
+      args?: Subset<T, AdminDeviceTokenCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], AdminDeviceTokenCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a AdminDeviceToken.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AdminDeviceTokenAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends AdminDeviceTokenAggregateArgs>(args: Subset<T, AdminDeviceTokenAggregateArgs>): Prisma.PrismaPromise<GetAdminDeviceTokenAggregateType<T>>
+
+    /**
+     * Group by AdminDeviceToken.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AdminDeviceTokenGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends AdminDeviceTokenGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: AdminDeviceTokenGroupByArgs['orderBy'] }
+        : { orderBy?: AdminDeviceTokenGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, AdminDeviceTokenGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetAdminDeviceTokenGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the AdminDeviceToken model
+   */
+  readonly fields: AdminDeviceTokenFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for AdminDeviceToken.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__AdminDeviceTokenClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    admin<T extends AdminDefaultArgs<ExtArgs> = {}>(args?: Subset<T, AdminDefaultArgs<ExtArgs>>): Prisma__AdminClient<$Result.GetResult<Prisma.$AdminPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the AdminDeviceToken model
+   */
+  interface AdminDeviceTokenFieldRefs {
+    readonly id: FieldRef<"AdminDeviceToken", 'String'>
+    readonly adminId: FieldRef<"AdminDeviceToken", 'String'>
+    readonly token: FieldRef<"AdminDeviceToken", 'String'>
+    readonly platform: FieldRef<"AdminDeviceToken", 'String'>
+    readonly createdAt: FieldRef<"AdminDeviceToken", 'DateTime'>
+    readonly updatedAt: FieldRef<"AdminDeviceToken", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * AdminDeviceToken findUnique
+   */
+  export type AdminDeviceTokenFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminDeviceToken
+     */
+    select?: AdminDeviceTokenSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminDeviceToken
+     */
+    omit?: AdminDeviceTokenOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminDeviceTokenInclude<ExtArgs> | null
+    /**
+     * Filter, which AdminDeviceToken to fetch.
+     */
+    where: AdminDeviceTokenWhereUniqueInput
+  }
+
+  /**
+   * AdminDeviceToken findUniqueOrThrow
+   */
+  export type AdminDeviceTokenFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminDeviceToken
+     */
+    select?: AdminDeviceTokenSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminDeviceToken
+     */
+    omit?: AdminDeviceTokenOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminDeviceTokenInclude<ExtArgs> | null
+    /**
+     * Filter, which AdminDeviceToken to fetch.
+     */
+    where: AdminDeviceTokenWhereUniqueInput
+  }
+
+  /**
+   * AdminDeviceToken findFirst
+   */
+  export type AdminDeviceTokenFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminDeviceToken
+     */
+    select?: AdminDeviceTokenSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminDeviceToken
+     */
+    omit?: AdminDeviceTokenOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminDeviceTokenInclude<ExtArgs> | null
+    /**
+     * Filter, which AdminDeviceToken to fetch.
+     */
+    where?: AdminDeviceTokenWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AdminDeviceTokens to fetch.
+     */
+    orderBy?: AdminDeviceTokenOrderByWithRelationInput | AdminDeviceTokenOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for AdminDeviceTokens.
+     */
+    cursor?: AdminDeviceTokenWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AdminDeviceTokens from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AdminDeviceTokens.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of AdminDeviceTokens.
+     */
+    distinct?: AdminDeviceTokenScalarFieldEnum | AdminDeviceTokenScalarFieldEnum[]
+  }
+
+  /**
+   * AdminDeviceToken findFirstOrThrow
+   */
+  export type AdminDeviceTokenFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminDeviceToken
+     */
+    select?: AdminDeviceTokenSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminDeviceToken
+     */
+    omit?: AdminDeviceTokenOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminDeviceTokenInclude<ExtArgs> | null
+    /**
+     * Filter, which AdminDeviceToken to fetch.
+     */
+    where?: AdminDeviceTokenWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AdminDeviceTokens to fetch.
+     */
+    orderBy?: AdminDeviceTokenOrderByWithRelationInput | AdminDeviceTokenOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for AdminDeviceTokens.
+     */
+    cursor?: AdminDeviceTokenWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AdminDeviceTokens from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AdminDeviceTokens.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of AdminDeviceTokens.
+     */
+    distinct?: AdminDeviceTokenScalarFieldEnum | AdminDeviceTokenScalarFieldEnum[]
+  }
+
+  /**
+   * AdminDeviceToken findMany
+   */
+  export type AdminDeviceTokenFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminDeviceToken
+     */
+    select?: AdminDeviceTokenSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminDeviceToken
+     */
+    omit?: AdminDeviceTokenOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminDeviceTokenInclude<ExtArgs> | null
+    /**
+     * Filter, which AdminDeviceTokens to fetch.
+     */
+    where?: AdminDeviceTokenWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AdminDeviceTokens to fetch.
+     */
+    orderBy?: AdminDeviceTokenOrderByWithRelationInput | AdminDeviceTokenOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing AdminDeviceTokens.
+     */
+    cursor?: AdminDeviceTokenWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AdminDeviceTokens from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AdminDeviceTokens.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of AdminDeviceTokens.
+     */
+    distinct?: AdminDeviceTokenScalarFieldEnum | AdminDeviceTokenScalarFieldEnum[]
+  }
+
+  /**
+   * AdminDeviceToken create
+   */
+  export type AdminDeviceTokenCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminDeviceToken
+     */
+    select?: AdminDeviceTokenSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminDeviceToken
+     */
+    omit?: AdminDeviceTokenOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminDeviceTokenInclude<ExtArgs> | null
+    /**
+     * The data needed to create a AdminDeviceToken.
+     */
+    data: XOR<AdminDeviceTokenCreateInput, AdminDeviceTokenUncheckedCreateInput>
+  }
+
+  /**
+   * AdminDeviceToken createMany
+   */
+  export type AdminDeviceTokenCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many AdminDeviceTokens.
+     */
+    data: AdminDeviceTokenCreateManyInput | AdminDeviceTokenCreateManyInput[]
+  }
+
+  /**
+   * AdminDeviceToken createManyAndReturn
+   */
+  export type AdminDeviceTokenCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminDeviceToken
+     */
+    select?: AdminDeviceTokenSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminDeviceToken
+     */
+    omit?: AdminDeviceTokenOmit<ExtArgs> | null
+    /**
+     * The data used to create many AdminDeviceTokens.
+     */
+    data: AdminDeviceTokenCreateManyInput | AdminDeviceTokenCreateManyInput[]
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminDeviceTokenIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * AdminDeviceToken update
+   */
+  export type AdminDeviceTokenUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminDeviceToken
+     */
+    select?: AdminDeviceTokenSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminDeviceToken
+     */
+    omit?: AdminDeviceTokenOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminDeviceTokenInclude<ExtArgs> | null
+    /**
+     * The data needed to update a AdminDeviceToken.
+     */
+    data: XOR<AdminDeviceTokenUpdateInput, AdminDeviceTokenUncheckedUpdateInput>
+    /**
+     * Choose, which AdminDeviceToken to update.
+     */
+    where: AdminDeviceTokenWhereUniqueInput
+  }
+
+  /**
+   * AdminDeviceToken updateMany
+   */
+  export type AdminDeviceTokenUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update AdminDeviceTokens.
+     */
+    data: XOR<AdminDeviceTokenUpdateManyMutationInput, AdminDeviceTokenUncheckedUpdateManyInput>
+    /**
+     * Filter which AdminDeviceTokens to update
+     */
+    where?: AdminDeviceTokenWhereInput
+    /**
+     * Limit how many AdminDeviceTokens to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * AdminDeviceToken updateManyAndReturn
+   */
+  export type AdminDeviceTokenUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminDeviceToken
+     */
+    select?: AdminDeviceTokenSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminDeviceToken
+     */
+    omit?: AdminDeviceTokenOmit<ExtArgs> | null
+    /**
+     * The data used to update AdminDeviceTokens.
+     */
+    data: XOR<AdminDeviceTokenUpdateManyMutationInput, AdminDeviceTokenUncheckedUpdateManyInput>
+    /**
+     * Filter which AdminDeviceTokens to update
+     */
+    where?: AdminDeviceTokenWhereInput
+    /**
+     * Limit how many AdminDeviceTokens to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminDeviceTokenIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * AdminDeviceToken upsert
+   */
+  export type AdminDeviceTokenUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminDeviceToken
+     */
+    select?: AdminDeviceTokenSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminDeviceToken
+     */
+    omit?: AdminDeviceTokenOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminDeviceTokenInclude<ExtArgs> | null
+    /**
+     * The filter to search for the AdminDeviceToken to update in case it exists.
+     */
+    where: AdminDeviceTokenWhereUniqueInput
+    /**
+     * In case the AdminDeviceToken found by the `where` argument doesn't exist, create a new AdminDeviceToken with this data.
+     */
+    create: XOR<AdminDeviceTokenCreateInput, AdminDeviceTokenUncheckedCreateInput>
+    /**
+     * In case the AdminDeviceToken was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<AdminDeviceTokenUpdateInput, AdminDeviceTokenUncheckedUpdateInput>
+  }
+
+  /**
+   * AdminDeviceToken delete
+   */
+  export type AdminDeviceTokenDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminDeviceToken
+     */
+    select?: AdminDeviceTokenSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminDeviceToken
+     */
+    omit?: AdminDeviceTokenOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminDeviceTokenInclude<ExtArgs> | null
+    /**
+     * Filter which AdminDeviceToken to delete.
+     */
+    where: AdminDeviceTokenWhereUniqueInput
+  }
+
+  /**
+   * AdminDeviceToken deleteMany
+   */
+  export type AdminDeviceTokenDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which AdminDeviceTokens to delete
+     */
+    where?: AdminDeviceTokenWhereInput
+    /**
+     * Limit how many AdminDeviceTokens to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * AdminDeviceToken without action
+   */
+  export type AdminDeviceTokenDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminDeviceToken
+     */
+    select?: AdminDeviceTokenSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminDeviceToken
+     */
+    omit?: AdminDeviceTokenOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminDeviceTokenInclude<ExtArgs> | null
   }
 
 
@@ -46871,6 +48073,7 @@ export namespace Prisma {
     currentItemId: string | null
     cacheUsedBytes: bigint | null
     appVersion: string | null
+    orientation: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -46886,6 +48089,7 @@ export namespace Prisma {
     currentItemId: string | null
     cacheUsedBytes: bigint | null
     appVersion: string | null
+    orientation: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -46901,6 +48105,7 @@ export namespace Prisma {
     currentItemId: number
     cacheUsedBytes: number
     appVersion: number
+    orientation: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -46926,6 +48131,7 @@ export namespace Prisma {
     currentItemId?: true
     cacheUsedBytes?: true
     appVersion?: true
+    orientation?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -46941,6 +48147,7 @@ export namespace Prisma {
     currentItemId?: true
     cacheUsedBytes?: true
     appVersion?: true
+    orientation?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -46956,6 +48163,7 @@ export namespace Prisma {
     currentItemId?: true
     cacheUsedBytes?: true
     appVersion?: true
+    orientation?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -47058,6 +48266,7 @@ export namespace Prisma {
     currentItemId: string | null
     cacheUsedBytes: bigint | null
     appVersion: string | null
+    orientation: string
     createdAt: Date
     updatedAt: Date
     _count: TvScreenCountAggregateOutputType | null
@@ -47092,6 +48301,7 @@ export namespace Prisma {
     currentItemId?: boolean
     cacheUsedBytes?: boolean
     appVersion?: boolean
+    orientation?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     screenGroup?: boolean | TvScreenGroupDefaultArgs<ExtArgs>
@@ -47108,6 +48318,7 @@ export namespace Prisma {
     currentItemId?: boolean
     cacheUsedBytes?: boolean
     appVersion?: boolean
+    orientation?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     screenGroup?: boolean | TvScreenGroupDefaultArgs<ExtArgs>
@@ -47124,6 +48335,7 @@ export namespace Prisma {
     currentItemId?: boolean
     cacheUsedBytes?: boolean
     appVersion?: boolean
+    orientation?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     screenGroup?: boolean | TvScreenGroupDefaultArgs<ExtArgs>
@@ -47140,11 +48352,12 @@ export namespace Prisma {
     currentItemId?: boolean
     cacheUsedBytes?: boolean
     appVersion?: boolean
+    orientation?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type TvScreenOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "screenGroupId" | "label" | "pairingCode" | "pairingExpiresAt" | "deviceToken" | "lastHeartbeatAt" | "currentItemId" | "cacheUsedBytes" | "appVersion" | "createdAt" | "updatedAt", ExtArgs["result"]["tvScreen"]>
+  export type TvScreenOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "screenGroupId" | "label" | "pairingCode" | "pairingExpiresAt" | "deviceToken" | "lastHeartbeatAt" | "currentItemId" | "cacheUsedBytes" | "appVersion" | "orientation" | "createdAt" | "updatedAt", ExtArgs["result"]["tvScreen"]>
   export type TvScreenInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     screenGroup?: boolean | TvScreenGroupDefaultArgs<ExtArgs>
   }
@@ -47171,6 +48384,7 @@ export namespace Prisma {
       currentItemId: string | null
       cacheUsedBytes: bigint | null
       appVersion: string | null
+      orientation: string
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["tvScreen"]>
@@ -47607,6 +48821,7 @@ export namespace Prisma {
     readonly currentItemId: FieldRef<"TvScreen", 'String'>
     readonly cacheUsedBytes: FieldRef<"TvScreen", 'BigInt'>
     readonly appVersion: FieldRef<"TvScreen", 'String'>
+    readonly orientation: FieldRef<"TvScreen", 'String'>
     readonly createdAt: FieldRef<"TvScreen", 'DateTime'>
     readonly updatedAt: FieldRef<"TvScreen", 'DateTime'>
   }
@@ -51399,6 +52614,18 @@ export namespace Prisma {
   export type AdminScalarFieldEnum = (typeof AdminScalarFieldEnum)[keyof typeof AdminScalarFieldEnum]
 
 
+  export const AdminDeviceTokenScalarFieldEnum: {
+    id: 'id',
+    adminId: 'adminId',
+    token: 'token',
+    platform: 'platform',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type AdminDeviceTokenScalarFieldEnum = (typeof AdminDeviceTokenScalarFieldEnum)[keyof typeof AdminDeviceTokenScalarFieldEnum]
+
+
   export const SettingScalarFieldEnum: {
     key: 'key',
     value: 'value',
@@ -51918,6 +53145,7 @@ export namespace Prisma {
     currentItemId: 'currentItemId',
     cacheUsedBytes: 'cacheUsedBytes',
     appVersion: 'appVersion',
+    orientation: 'orientation',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -52087,6 +53315,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"Admin"> | Date | string
     updatedAt?: DateTimeFilter<"Admin"> | Date | string
     auditLogs?: AuditLogListRelationFilter
+    deviceTokens?: AdminDeviceTokenListRelationFilter
   }
 
   export type AdminOrderByWithRelationInput = {
@@ -52100,6 +53329,7 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     auditLogs?: AuditLogOrderByRelationAggregateInput
+    deviceTokens?: AdminDeviceTokenOrderByRelationAggregateInput
   }
 
   export type AdminWhereUniqueInput = Prisma.AtLeast<{
@@ -52116,6 +53346,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"Admin"> | Date | string
     updatedAt?: DateTimeFilter<"Admin"> | Date | string
     auditLogs?: AuditLogListRelationFilter
+    deviceTokens?: AdminDeviceTokenListRelationFilter
   }, "id" | "email">
 
   export type AdminOrderByWithAggregationInput = {
@@ -52146,6 +53377,66 @@ export namespace Prisma {
     isActive?: BoolWithAggregatesFilter<"Admin"> | boolean
     createdAt?: DateTimeWithAggregatesFilter<"Admin"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Admin"> | Date | string
+  }
+
+  export type AdminDeviceTokenWhereInput = {
+    AND?: AdminDeviceTokenWhereInput | AdminDeviceTokenWhereInput[]
+    OR?: AdminDeviceTokenWhereInput[]
+    NOT?: AdminDeviceTokenWhereInput | AdminDeviceTokenWhereInput[]
+    id?: StringFilter<"AdminDeviceToken"> | string
+    adminId?: StringFilter<"AdminDeviceToken"> | string
+    token?: StringFilter<"AdminDeviceToken"> | string
+    platform?: StringNullableFilter<"AdminDeviceToken"> | string | null
+    createdAt?: DateTimeFilter<"AdminDeviceToken"> | Date | string
+    updatedAt?: DateTimeFilter<"AdminDeviceToken"> | Date | string
+    admin?: XOR<AdminScalarRelationFilter, AdminWhereInput>
+  }
+
+  export type AdminDeviceTokenOrderByWithRelationInput = {
+    id?: SortOrder
+    adminId?: SortOrder
+    token?: SortOrder
+    platform?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    admin?: AdminOrderByWithRelationInput
+  }
+
+  export type AdminDeviceTokenWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    token?: string
+    AND?: AdminDeviceTokenWhereInput | AdminDeviceTokenWhereInput[]
+    OR?: AdminDeviceTokenWhereInput[]
+    NOT?: AdminDeviceTokenWhereInput | AdminDeviceTokenWhereInput[]
+    adminId?: StringFilter<"AdminDeviceToken"> | string
+    platform?: StringNullableFilter<"AdminDeviceToken"> | string | null
+    createdAt?: DateTimeFilter<"AdminDeviceToken"> | Date | string
+    updatedAt?: DateTimeFilter<"AdminDeviceToken"> | Date | string
+    admin?: XOR<AdminScalarRelationFilter, AdminWhereInput>
+  }, "id" | "token">
+
+  export type AdminDeviceTokenOrderByWithAggregationInput = {
+    id?: SortOrder
+    adminId?: SortOrder
+    token?: SortOrder
+    platform?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: AdminDeviceTokenCountOrderByAggregateInput
+    _max?: AdminDeviceTokenMaxOrderByAggregateInput
+    _min?: AdminDeviceTokenMinOrderByAggregateInput
+  }
+
+  export type AdminDeviceTokenScalarWhereWithAggregatesInput = {
+    AND?: AdminDeviceTokenScalarWhereWithAggregatesInput | AdminDeviceTokenScalarWhereWithAggregatesInput[]
+    OR?: AdminDeviceTokenScalarWhereWithAggregatesInput[]
+    NOT?: AdminDeviceTokenScalarWhereWithAggregatesInput | AdminDeviceTokenScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"AdminDeviceToken"> | string
+    adminId?: StringWithAggregatesFilter<"AdminDeviceToken"> | string
+    token?: StringWithAggregatesFilter<"AdminDeviceToken"> | string
+    platform?: StringNullableWithAggregatesFilter<"AdminDeviceToken"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"AdminDeviceToken"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"AdminDeviceToken"> | Date | string
   }
 
   export type SettingWhereInput = {
@@ -54891,6 +56182,7 @@ export namespace Prisma {
     currentItemId?: StringNullableFilter<"TvScreen"> | string | null
     cacheUsedBytes?: BigIntNullableFilter<"TvScreen"> | bigint | number | null
     appVersion?: StringNullableFilter<"TvScreen"> | string | null
+    orientation?: StringFilter<"TvScreen"> | string
     createdAt?: DateTimeFilter<"TvScreen"> | Date | string
     updatedAt?: DateTimeFilter<"TvScreen"> | Date | string
     screenGroup?: XOR<TvScreenGroupScalarRelationFilter, TvScreenGroupWhereInput>
@@ -54907,6 +56199,7 @@ export namespace Prisma {
     currentItemId?: SortOrderInput | SortOrder
     cacheUsedBytes?: SortOrderInput | SortOrder
     appVersion?: SortOrderInput | SortOrder
+    orientation?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     screenGroup?: TvScreenGroupOrderByWithRelationInput
@@ -54926,6 +56219,7 @@ export namespace Prisma {
     currentItemId?: StringNullableFilter<"TvScreen"> | string | null
     cacheUsedBytes?: BigIntNullableFilter<"TvScreen"> | bigint | number | null
     appVersion?: StringNullableFilter<"TvScreen"> | string | null
+    orientation?: StringFilter<"TvScreen"> | string
     createdAt?: DateTimeFilter<"TvScreen"> | Date | string
     updatedAt?: DateTimeFilter<"TvScreen"> | Date | string
     screenGroup?: XOR<TvScreenGroupScalarRelationFilter, TvScreenGroupWhereInput>
@@ -54942,6 +56236,7 @@ export namespace Prisma {
     currentItemId?: SortOrderInput | SortOrder
     cacheUsedBytes?: SortOrderInput | SortOrder
     appVersion?: SortOrderInput | SortOrder
+    orientation?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: TvScreenCountOrderByAggregateInput
@@ -54965,6 +56260,7 @@ export namespace Prisma {
     currentItemId?: StringNullableWithAggregatesFilter<"TvScreen"> | string | null
     cacheUsedBytes?: BigIntNullableWithAggregatesFilter<"TvScreen"> | bigint | number | null
     appVersion?: StringNullableWithAggregatesFilter<"TvScreen"> | string | null
+    orientation?: StringWithAggregatesFilter<"TvScreen"> | string
     createdAt?: DateTimeWithAggregatesFilter<"TvScreen"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"TvScreen"> | Date | string
   }
@@ -55197,6 +56493,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     auditLogs?: AuditLogCreateNestedManyWithoutAdminInput
+    deviceTokens?: AdminDeviceTokenCreateNestedManyWithoutAdminInput
   }
 
   export type AdminUncheckedCreateInput = {
@@ -55210,6 +56507,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     auditLogs?: AuditLogUncheckedCreateNestedManyWithoutAdminInput
+    deviceTokens?: AdminDeviceTokenUncheckedCreateNestedManyWithoutAdminInput
   }
 
   export type AdminUpdateInput = {
@@ -55223,6 +56521,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     auditLogs?: AuditLogUpdateManyWithoutAdminNestedInput
+    deviceTokens?: AdminDeviceTokenUpdateManyWithoutAdminNestedInput
   }
 
   export type AdminUncheckedUpdateInput = {
@@ -55236,6 +56535,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     auditLogs?: AuditLogUncheckedUpdateManyWithoutAdminNestedInput
+    deviceTokens?: AdminDeviceTokenUncheckedUpdateManyWithoutAdminNestedInput
   }
 
   export type AdminCreateManyInput = {
@@ -55270,6 +56570,68 @@ export namespace Prisma {
     role?: StringFieldUpdateOperationsInput | string
     permissions?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AdminDeviceTokenCreateInput = {
+    id?: string
+    token: string
+    platform?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    admin: AdminCreateNestedOneWithoutDeviceTokensInput
+  }
+
+  export type AdminDeviceTokenUncheckedCreateInput = {
+    id?: string
+    adminId: string
+    token: string
+    platform?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AdminDeviceTokenUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    token?: StringFieldUpdateOperationsInput | string
+    platform?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    admin?: AdminUpdateOneRequiredWithoutDeviceTokensNestedInput
+  }
+
+  export type AdminDeviceTokenUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    adminId?: StringFieldUpdateOperationsInput | string
+    token?: StringFieldUpdateOperationsInput | string
+    platform?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AdminDeviceTokenCreateManyInput = {
+    id?: string
+    adminId: string
+    token: string
+    platform?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AdminDeviceTokenUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    token?: StringFieldUpdateOperationsInput | string
+    platform?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AdminDeviceTokenUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    adminId?: StringFieldUpdateOperationsInput | string
+    token?: StringFieldUpdateOperationsInput | string
+    platform?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -58241,6 +59603,7 @@ export namespace Prisma {
     currentItemId?: string | null
     cacheUsedBytes?: bigint | number | null
     appVersion?: string | null
+    orientation?: string
     createdAt?: Date | string
     updatedAt?: Date | string
     screenGroup: TvScreenGroupCreateNestedOneWithoutScreensInput
@@ -58257,6 +59620,7 @@ export namespace Prisma {
     currentItemId?: string | null
     cacheUsedBytes?: bigint | number | null
     appVersion?: string | null
+    orientation?: string
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -58271,6 +59635,7 @@ export namespace Prisma {
     currentItemId?: NullableStringFieldUpdateOperationsInput | string | null
     cacheUsedBytes?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
     appVersion?: NullableStringFieldUpdateOperationsInput | string | null
+    orientation?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     screenGroup?: TvScreenGroupUpdateOneRequiredWithoutScreensNestedInput
@@ -58287,6 +59652,7 @@ export namespace Prisma {
     currentItemId?: NullableStringFieldUpdateOperationsInput | string | null
     cacheUsedBytes?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
     appVersion?: NullableStringFieldUpdateOperationsInput | string | null
+    orientation?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -58302,6 +59668,7 @@ export namespace Prisma {
     currentItemId?: string | null
     cacheUsedBytes?: bigint | number | null
     appVersion?: string | null
+    orientation?: string
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -58316,6 +59683,7 @@ export namespace Prisma {
     currentItemId?: NullableStringFieldUpdateOperationsInput | string | null
     cacheUsedBytes?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
     appVersion?: NullableStringFieldUpdateOperationsInput | string | null
+    orientation?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -58331,6 +59699,7 @@ export namespace Prisma {
     currentItemId?: NullableStringFieldUpdateOperationsInput | string | null
     cacheUsedBytes?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
     appVersion?: NullableStringFieldUpdateOperationsInput | string | null
+    orientation?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -58620,12 +59989,22 @@ export namespace Prisma {
     none?: AuditLogWhereInput
   }
 
+  export type AdminDeviceTokenListRelationFilter = {
+    every?: AdminDeviceTokenWhereInput
+    some?: AdminDeviceTokenWhereInput
+    none?: AdminDeviceTokenWhereInput
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
   }
 
   export type AuditLogOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type AdminDeviceTokenOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -58719,6 +60098,38 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedDateTimeFilter<$PrismaModel>
     _max?: NestedDateTimeFilter<$PrismaModel>
+  }
+
+  export type AdminScalarRelationFilter = {
+    is?: AdminWhereInput
+    isNot?: AdminWhereInput
+  }
+
+  export type AdminDeviceTokenCountOrderByAggregateInput = {
+    id?: SortOrder
+    adminId?: SortOrder
+    token?: SortOrder
+    platform?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type AdminDeviceTokenMaxOrderByAggregateInput = {
+    id?: SortOrder
+    adminId?: SortOrder
+    token?: SortOrder
+    platform?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type AdminDeviceTokenMinOrderByAggregateInput = {
+    id?: SortOrder
+    adminId?: SortOrder
+    token?: SortOrder
+    platform?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type SettingCountOrderByAggregateInput = {
@@ -60660,6 +62071,7 @@ export namespace Prisma {
     currentItemId?: SortOrder
     cacheUsedBytes?: SortOrder
     appVersion?: SortOrder
+    orientation?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -60679,6 +62091,7 @@ export namespace Prisma {
     currentItemId?: SortOrder
     cacheUsedBytes?: SortOrder
     appVersion?: SortOrder
+    orientation?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -60694,6 +62107,7 @@ export namespace Prisma {
     currentItemId?: SortOrder
     cacheUsedBytes?: SortOrder
     appVersion?: SortOrder
+    orientation?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -60874,11 +62288,25 @@ export namespace Prisma {
     connect?: AuditLogWhereUniqueInput | AuditLogWhereUniqueInput[]
   }
 
+  export type AdminDeviceTokenCreateNestedManyWithoutAdminInput = {
+    create?: XOR<AdminDeviceTokenCreateWithoutAdminInput, AdminDeviceTokenUncheckedCreateWithoutAdminInput> | AdminDeviceTokenCreateWithoutAdminInput[] | AdminDeviceTokenUncheckedCreateWithoutAdminInput[]
+    connectOrCreate?: AdminDeviceTokenCreateOrConnectWithoutAdminInput | AdminDeviceTokenCreateOrConnectWithoutAdminInput[]
+    createMany?: AdminDeviceTokenCreateManyAdminInputEnvelope
+    connect?: AdminDeviceTokenWhereUniqueInput | AdminDeviceTokenWhereUniqueInput[]
+  }
+
   export type AuditLogUncheckedCreateNestedManyWithoutAdminInput = {
     create?: XOR<AuditLogCreateWithoutAdminInput, AuditLogUncheckedCreateWithoutAdminInput> | AuditLogCreateWithoutAdminInput[] | AuditLogUncheckedCreateWithoutAdminInput[]
     connectOrCreate?: AuditLogCreateOrConnectWithoutAdminInput | AuditLogCreateOrConnectWithoutAdminInput[]
     createMany?: AuditLogCreateManyAdminInputEnvelope
     connect?: AuditLogWhereUniqueInput | AuditLogWhereUniqueInput[]
+  }
+
+  export type AdminDeviceTokenUncheckedCreateNestedManyWithoutAdminInput = {
+    create?: XOR<AdminDeviceTokenCreateWithoutAdminInput, AdminDeviceTokenUncheckedCreateWithoutAdminInput> | AdminDeviceTokenCreateWithoutAdminInput[] | AdminDeviceTokenUncheckedCreateWithoutAdminInput[]
+    connectOrCreate?: AdminDeviceTokenCreateOrConnectWithoutAdminInput | AdminDeviceTokenCreateOrConnectWithoutAdminInput[]
+    createMany?: AdminDeviceTokenCreateManyAdminInputEnvelope
+    connect?: AdminDeviceTokenWhereUniqueInput | AdminDeviceTokenWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -60911,6 +62339,20 @@ export namespace Prisma {
     deleteMany?: AuditLogScalarWhereInput | AuditLogScalarWhereInput[]
   }
 
+  export type AdminDeviceTokenUpdateManyWithoutAdminNestedInput = {
+    create?: XOR<AdminDeviceTokenCreateWithoutAdminInput, AdminDeviceTokenUncheckedCreateWithoutAdminInput> | AdminDeviceTokenCreateWithoutAdminInput[] | AdminDeviceTokenUncheckedCreateWithoutAdminInput[]
+    connectOrCreate?: AdminDeviceTokenCreateOrConnectWithoutAdminInput | AdminDeviceTokenCreateOrConnectWithoutAdminInput[]
+    upsert?: AdminDeviceTokenUpsertWithWhereUniqueWithoutAdminInput | AdminDeviceTokenUpsertWithWhereUniqueWithoutAdminInput[]
+    createMany?: AdminDeviceTokenCreateManyAdminInputEnvelope
+    set?: AdminDeviceTokenWhereUniqueInput | AdminDeviceTokenWhereUniqueInput[]
+    disconnect?: AdminDeviceTokenWhereUniqueInput | AdminDeviceTokenWhereUniqueInput[]
+    delete?: AdminDeviceTokenWhereUniqueInput | AdminDeviceTokenWhereUniqueInput[]
+    connect?: AdminDeviceTokenWhereUniqueInput | AdminDeviceTokenWhereUniqueInput[]
+    update?: AdminDeviceTokenUpdateWithWhereUniqueWithoutAdminInput | AdminDeviceTokenUpdateWithWhereUniqueWithoutAdminInput[]
+    updateMany?: AdminDeviceTokenUpdateManyWithWhereWithoutAdminInput | AdminDeviceTokenUpdateManyWithWhereWithoutAdminInput[]
+    deleteMany?: AdminDeviceTokenScalarWhereInput | AdminDeviceTokenScalarWhereInput[]
+  }
+
   export type AuditLogUncheckedUpdateManyWithoutAdminNestedInput = {
     create?: XOR<AuditLogCreateWithoutAdminInput, AuditLogUncheckedCreateWithoutAdminInput> | AuditLogCreateWithoutAdminInput[] | AuditLogUncheckedCreateWithoutAdminInput[]
     connectOrCreate?: AuditLogCreateOrConnectWithoutAdminInput | AuditLogCreateOrConnectWithoutAdminInput[]
@@ -60923,6 +62365,34 @@ export namespace Prisma {
     update?: AuditLogUpdateWithWhereUniqueWithoutAdminInput | AuditLogUpdateWithWhereUniqueWithoutAdminInput[]
     updateMany?: AuditLogUpdateManyWithWhereWithoutAdminInput | AuditLogUpdateManyWithWhereWithoutAdminInput[]
     deleteMany?: AuditLogScalarWhereInput | AuditLogScalarWhereInput[]
+  }
+
+  export type AdminDeviceTokenUncheckedUpdateManyWithoutAdminNestedInput = {
+    create?: XOR<AdminDeviceTokenCreateWithoutAdminInput, AdminDeviceTokenUncheckedCreateWithoutAdminInput> | AdminDeviceTokenCreateWithoutAdminInput[] | AdminDeviceTokenUncheckedCreateWithoutAdminInput[]
+    connectOrCreate?: AdminDeviceTokenCreateOrConnectWithoutAdminInput | AdminDeviceTokenCreateOrConnectWithoutAdminInput[]
+    upsert?: AdminDeviceTokenUpsertWithWhereUniqueWithoutAdminInput | AdminDeviceTokenUpsertWithWhereUniqueWithoutAdminInput[]
+    createMany?: AdminDeviceTokenCreateManyAdminInputEnvelope
+    set?: AdminDeviceTokenWhereUniqueInput | AdminDeviceTokenWhereUniqueInput[]
+    disconnect?: AdminDeviceTokenWhereUniqueInput | AdminDeviceTokenWhereUniqueInput[]
+    delete?: AdminDeviceTokenWhereUniqueInput | AdminDeviceTokenWhereUniqueInput[]
+    connect?: AdminDeviceTokenWhereUniqueInput | AdminDeviceTokenWhereUniqueInput[]
+    update?: AdminDeviceTokenUpdateWithWhereUniqueWithoutAdminInput | AdminDeviceTokenUpdateWithWhereUniqueWithoutAdminInput[]
+    updateMany?: AdminDeviceTokenUpdateManyWithWhereWithoutAdminInput | AdminDeviceTokenUpdateManyWithWhereWithoutAdminInput[]
+    deleteMany?: AdminDeviceTokenScalarWhereInput | AdminDeviceTokenScalarWhereInput[]
+  }
+
+  export type AdminCreateNestedOneWithoutDeviceTokensInput = {
+    create?: XOR<AdminCreateWithoutDeviceTokensInput, AdminUncheckedCreateWithoutDeviceTokensInput>
+    connectOrCreate?: AdminCreateOrConnectWithoutDeviceTokensInput
+    connect?: AdminWhereUniqueInput
+  }
+
+  export type AdminUpdateOneRequiredWithoutDeviceTokensNestedInput = {
+    create?: XOR<AdminCreateWithoutDeviceTokensInput, AdminUncheckedCreateWithoutDeviceTokensInput>
+    connectOrCreate?: AdminCreateOrConnectWithoutDeviceTokensInput
+    upsert?: AdminUpsertWithoutDeviceTokensInput
+    connect?: AdminWhereUniqueInput
+    update?: XOR<XOR<AdminUpdateToOneWithWhereWithoutDeviceTokensInput, AdminUpdateWithoutDeviceTokensInput>, AdminUncheckedUpdateWithoutDeviceTokensInput>
   }
 
   export type MemberCreateNestedManyWithoutFamilyInput = {
@@ -63782,6 +65252,31 @@ export namespace Prisma {
     data: AuditLogCreateManyAdminInput | AuditLogCreateManyAdminInput[]
   }
 
+  export type AdminDeviceTokenCreateWithoutAdminInput = {
+    id?: string
+    token: string
+    platform?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AdminDeviceTokenUncheckedCreateWithoutAdminInput = {
+    id?: string
+    token: string
+    platform?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AdminDeviceTokenCreateOrConnectWithoutAdminInput = {
+    where: AdminDeviceTokenWhereUniqueInput
+    create: XOR<AdminDeviceTokenCreateWithoutAdminInput, AdminDeviceTokenUncheckedCreateWithoutAdminInput>
+  }
+
+  export type AdminDeviceTokenCreateManyAdminInputEnvelope = {
+    data: AdminDeviceTokenCreateManyAdminInput | AdminDeviceTokenCreateManyAdminInput[]
+  }
+
   export type AuditLogUpsertWithWhereUniqueWithoutAdminInput = {
     where: AuditLogWhereUniqueInput
     update: XOR<AuditLogUpdateWithoutAdminInput, AuditLogUncheckedUpdateWithoutAdminInput>
@@ -63810,6 +65305,102 @@ export namespace Prisma {
     adminName?: StringFilter<"AuditLog"> | string
     adminId?: StringNullableFilter<"AuditLog"> | string | null
     createdAt?: DateTimeFilter<"AuditLog"> | Date | string
+  }
+
+  export type AdminDeviceTokenUpsertWithWhereUniqueWithoutAdminInput = {
+    where: AdminDeviceTokenWhereUniqueInput
+    update: XOR<AdminDeviceTokenUpdateWithoutAdminInput, AdminDeviceTokenUncheckedUpdateWithoutAdminInput>
+    create: XOR<AdminDeviceTokenCreateWithoutAdminInput, AdminDeviceTokenUncheckedCreateWithoutAdminInput>
+  }
+
+  export type AdminDeviceTokenUpdateWithWhereUniqueWithoutAdminInput = {
+    where: AdminDeviceTokenWhereUniqueInput
+    data: XOR<AdminDeviceTokenUpdateWithoutAdminInput, AdminDeviceTokenUncheckedUpdateWithoutAdminInput>
+  }
+
+  export type AdminDeviceTokenUpdateManyWithWhereWithoutAdminInput = {
+    where: AdminDeviceTokenScalarWhereInput
+    data: XOR<AdminDeviceTokenUpdateManyMutationInput, AdminDeviceTokenUncheckedUpdateManyWithoutAdminInput>
+  }
+
+  export type AdminDeviceTokenScalarWhereInput = {
+    AND?: AdminDeviceTokenScalarWhereInput | AdminDeviceTokenScalarWhereInput[]
+    OR?: AdminDeviceTokenScalarWhereInput[]
+    NOT?: AdminDeviceTokenScalarWhereInput | AdminDeviceTokenScalarWhereInput[]
+    id?: StringFilter<"AdminDeviceToken"> | string
+    adminId?: StringFilter<"AdminDeviceToken"> | string
+    token?: StringFilter<"AdminDeviceToken"> | string
+    platform?: StringNullableFilter<"AdminDeviceToken"> | string | null
+    createdAt?: DateTimeFilter<"AdminDeviceToken"> | Date | string
+    updatedAt?: DateTimeFilter<"AdminDeviceToken"> | Date | string
+  }
+
+  export type AdminCreateWithoutDeviceTokensInput = {
+    id?: string
+    email: string
+    password: string
+    name?: string | null
+    role?: string
+    permissions?: string
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    auditLogs?: AuditLogCreateNestedManyWithoutAdminInput
+  }
+
+  export type AdminUncheckedCreateWithoutDeviceTokensInput = {
+    id?: string
+    email: string
+    password: string
+    name?: string | null
+    role?: string
+    permissions?: string
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    auditLogs?: AuditLogUncheckedCreateNestedManyWithoutAdminInput
+  }
+
+  export type AdminCreateOrConnectWithoutDeviceTokensInput = {
+    where: AdminWhereUniqueInput
+    create: XOR<AdminCreateWithoutDeviceTokensInput, AdminUncheckedCreateWithoutDeviceTokensInput>
+  }
+
+  export type AdminUpsertWithoutDeviceTokensInput = {
+    update: XOR<AdminUpdateWithoutDeviceTokensInput, AdminUncheckedUpdateWithoutDeviceTokensInput>
+    create: XOR<AdminCreateWithoutDeviceTokensInput, AdminUncheckedCreateWithoutDeviceTokensInput>
+    where?: AdminWhereInput
+  }
+
+  export type AdminUpdateToOneWithWhereWithoutDeviceTokensInput = {
+    where?: AdminWhereInput
+    data: XOR<AdminUpdateWithoutDeviceTokensInput, AdminUncheckedUpdateWithoutDeviceTokensInput>
+  }
+
+  export type AdminUpdateWithoutDeviceTokensInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: StringFieldUpdateOperationsInput | string
+    permissions?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    auditLogs?: AuditLogUpdateManyWithoutAdminNestedInput
+  }
+
+  export type AdminUncheckedUpdateWithoutDeviceTokensInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: StringFieldUpdateOperationsInput | string
+    permissions?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    auditLogs?: AuditLogUncheckedUpdateManyWithoutAdminNestedInput
   }
 
   export type MemberCreateWithoutFamilyInput = {
@@ -69760,6 +71351,7 @@ export namespace Prisma {
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    deviceTokens?: AdminDeviceTokenCreateNestedManyWithoutAdminInput
   }
 
   export type AdminUncheckedCreateWithoutAuditLogsInput = {
@@ -69772,6 +71364,7 @@ export namespace Prisma {
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    deviceTokens?: AdminDeviceTokenUncheckedCreateNestedManyWithoutAdminInput
   }
 
   export type AdminCreateOrConnectWithoutAuditLogsInput = {
@@ -69800,6 +71393,7 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deviceTokens?: AdminDeviceTokenUpdateManyWithoutAdminNestedInput
   }
 
   export type AdminUncheckedUpdateWithoutAuditLogsInput = {
@@ -69812,6 +71406,7 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deviceTokens?: AdminDeviceTokenUncheckedUpdateManyWithoutAdminNestedInput
   }
 
   export type SportCreateWithoutBannersInput = {
@@ -70655,6 +72250,7 @@ export namespace Prisma {
     currentItemId?: string | null
     cacheUsedBytes?: bigint | number | null
     appVersion?: string | null
+    orientation?: string
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -70669,6 +72265,7 @@ export namespace Prisma {
     currentItemId?: string | null
     cacheUsedBytes?: bigint | number | null
     appVersion?: string | null
+    orientation?: string
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -70747,6 +72344,7 @@ export namespace Prisma {
     currentItemId?: StringNullableFilter<"TvScreen"> | string | null
     cacheUsedBytes?: BigIntNullableFilter<"TvScreen"> | bigint | number | null
     appVersion?: StringNullableFilter<"TvScreen"> | string | null
+    orientation?: StringFilter<"TvScreen"> | string
     createdAt?: DateTimeFilter<"TvScreen"> | Date | string
     updatedAt?: DateTimeFilter<"TvScreen"> | Date | string
   }
@@ -71154,6 +72752,14 @@ export namespace Prisma {
     createdAt?: Date | string
   }
 
+  export type AdminDeviceTokenCreateManyAdminInput = {
+    id?: string
+    token: string
+    platform?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
   export type AuditLogUpdateWithoutAdminInput = {
     id?: StringFieldUpdateOperationsInput | string
     action?: StringFieldUpdateOperationsInput | string
@@ -71182,6 +72788,30 @@ export namespace Prisma {
     details?: NullableStringFieldUpdateOperationsInput | string | null
     adminName?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AdminDeviceTokenUpdateWithoutAdminInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    token?: StringFieldUpdateOperationsInput | string
+    platform?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AdminDeviceTokenUncheckedUpdateWithoutAdminInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    token?: StringFieldUpdateOperationsInput | string
+    platform?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AdminDeviceTokenUncheckedUpdateManyWithoutAdminInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    token?: StringFieldUpdateOperationsInput | string
+    platform?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type MemberCreateManyFamilyInput = {
@@ -73138,6 +74768,7 @@ export namespace Prisma {
     currentItemId?: string | null
     cacheUsedBytes?: bigint | number | null
     appVersion?: string | null
+    orientation?: string
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -73165,6 +74796,7 @@ export namespace Prisma {
     currentItemId?: NullableStringFieldUpdateOperationsInput | string | null
     cacheUsedBytes?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
     appVersion?: NullableStringFieldUpdateOperationsInput | string | null
+    orientation?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -73179,6 +74811,7 @@ export namespace Prisma {
     currentItemId?: NullableStringFieldUpdateOperationsInput | string | null
     cacheUsedBytes?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
     appVersion?: NullableStringFieldUpdateOperationsInput | string | null
+    orientation?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -73193,6 +74826,7 @@ export namespace Prisma {
     currentItemId?: NullableStringFieldUpdateOperationsInput | string | null
     cacheUsedBytes?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
     appVersion?: NullableStringFieldUpdateOperationsInput | string | null
+    orientation?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
