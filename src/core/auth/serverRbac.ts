@@ -12,13 +12,13 @@ export async function checkPermission(requiredPermission: Permission): Promise<{
   let userEmail = session?.user?.email;
 
   if (!userEmail) {
-    const headersList = headers();
+    const headersList = await headers();
     const authHeader = headersList.get('authorization');
     if (authHeader && authHeader.startsWith('Bearer ')) {
       try {
         const token = authHeader.substring(7);
-        const decoded = jwt.verify(token, process.env.NEXTAUTH_SECRET || 'fallback-secret');
-        if (decoded && decoded.email) userEmail = decoded.email;
+        const decoded = jwt.verify(token, process.env.NEXTAUTH_SECRET || 'fallback-secret') as jwt.JwtPayload;
+        if (decoded && typeof decoded !== 'string' && decoded.email) userEmail = decoded.email;
       } catch (e) {
         console.error('JWT error:', e);
       }
